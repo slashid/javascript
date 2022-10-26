@@ -8,6 +8,11 @@ import React, {
 
 import { SlashID, User } from "@slashid/slashid";
 
+export interface LoginOptions {
+  factor: unknown;
+  options: unknown;
+}
+
 export interface SlashIDProviderProps {
   oid: string;
   children: React.ReactNode;
@@ -17,7 +22,7 @@ export interface ISlashIDContext {
   sid: SlashID | undefined;
   user: User | undefined;
   logout: () => void;
-  login: (args: any) => Promise<User | null>;
+  login: (l: LoginOptions) => Promise<User | null>;
   validateToken: (token: string) => Promise<boolean>;
 }
 
@@ -26,11 +31,11 @@ export const SlashIDContext = createContext<ISlashIDContext>({
   user: undefined,
   logout: () => undefined,
   login: () => Promise.reject("NYI"),
-  validateToken: (t) => Promise.resolve(false),
+  validateToken: () => Promise.resolve(false),
 });
 SlashIDContext.displayName = "SlashIDContext";
 
-const STORAGE_IDENTIFIER_KEY = "@slashid/IDENTIFIERS"
+const STORAGE_IDENTIFIER_KEY = "@slashid/IDENTIFIERS";
 const STORAGE_TOKEN_KEY = "@slashid/USER_TOKEN";
 
 export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({

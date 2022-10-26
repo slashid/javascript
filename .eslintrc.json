@@ -5,9 +5,10 @@
     "plugin:react/recommended",
     "plugin:react-hooks/recommended",
     "plugin:@typescript-eslint/recommended",
+    "turbo",
     // This disables the formatting rules in ESLint that Prettier is going to be responsible for handling.
     // Make sure it's always the last config, so it gets the chance to override other configs.
-    "eslint-config-prettier"
+    "prettier"
   ],
   "settings": {
     "react": {
@@ -23,7 +24,8 @@
   "rules": {
     // Add your own rules here to override ones from the extended configs.
     "@typescript-eslint/ban-ts-comment": "off",
-    "react/react-in-jsx-scope": "off"
+    "react/react-in-jsx-scope": "off",
+    "@typescript-eslint/no-unused-vars": "error"
   },
   "root": true
 }
