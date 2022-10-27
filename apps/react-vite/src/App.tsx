@@ -1,5 +1,4 @@
-/* eslint-disable react/react-in-jsx-scope */
-import { useSlashID } from "../hooks/useSlashID";
+import { useSlashID } from "@slashid/react";
 import "./App.css";
 
 function App() {

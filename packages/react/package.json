@@ -27,9 +27,7 @@
     }
   },
   "scripts": {
-    "dev": "vite",
     "build": "vite build && tsc",
-    "preview": "vite preview",
     "lint": "eslint ./src",
     "test:types": "tsc --no-emit"
   },
