@@ -1,47 +1,24 @@
+<p align="center">
+  <a href="https://slashid.dev/" target="_blank" align="center">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="./slashid_logo-dark.svg">
+      <img src="./slashid_logo-light.png" height="32">
+    </picture>
+  </a>
+  <br />
+</p>
+
 # /id - JavaScript
 
-This monorepo hosts all the JavaScript resources for `/id`.
+This monorepo contains the public `/id` JavaScript packages.
+All packages require the `/id` SDK to be installed - please [request access](https://slashid.dev/request-access) here.
 
-## What's inside?
+## Packages
 
-This turborepo uses [pnpm](https://pnpm.io) as a package manager. It includes the following packages/apps:
+We maintain and publish the following packages:
 
-### Apps and Packages
+- [@slashid/react](./packages/react): React wrapper for the `/id` SDK
 
-- `tsconfig`: `tsconfig.json`s used throughout the monorepo
+## Documentation
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-pnpm run build
-```
-
-### Develop
-
-To develop all apps and packages, run the following command:
-
-```
-pnpm run dev
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Pipelines](https://turborepo.org/docs/core-concepts/pipelines)
-- [Caching](https://turborepo.org/docs/core-concepts/caching)
-- [Remote Caching](https://turborepo.org/docs/core-concepts/remote-caching)
-- [Scoped Tasks](https://turborepo.org/docs/core-concepts/scopes)
-- [Configuration Options](https://turborepo.org/docs/reference/configuration)
-- [CLI Usage](https://turborepo.org/docs/reference/command-line-reference)
+Check out our [developer docs](https://developer.slashid.dev/) for guides and API documentation.

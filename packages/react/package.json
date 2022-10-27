@@ -26,6 +26,9 @@
       "import": "./dist/main.js"
     }
   },
+  "files": [
+    "dist/*"
+  ],
   "scripts": {
     "build": "vite build && tsc",
     "lint": "eslint ./src",

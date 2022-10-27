@@ -25,7 +25,9 @@ function App() {
           <code>{user && user.token}</code>
         </p>
       </div>
-      <p className="read-the-docs">TODO /id Developer Docs link here</p>
+      <p className="read-the-docs">
+        <a href="https://developer.slashid.dev/">Read the docs</a>
+      </p>
     </div>
   );
 }
