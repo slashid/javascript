@@ -1,16 +1,29 @@
 {
   "name": "@slashid/react",
   "version": "0.0.0",
-  "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/slashid/javascript.git"
   },
+  "keywords": [
+    "slashid",
+    "/id",
+    "react",
+    "auth",
+    "authentication",
+    "webauthn",
+    "passwordless",
+    "jwt"
+  ],
+  "type": "module",
+  "types": "dist/main.d.ts",
+  "main": "dist/main.js",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "vite build && tsc",
     "preview": "vite preview",
-    "lint": "eslint ./src"
+    "lint": "eslint ./src",
+    "test:types": "tsc --no-emit"
   },
   "dependencies": {
     "react": "^18.2.0",
