@@ -5,7 +5,9 @@
       <img src="./../../slashid_logo-light.png" height="32">
     </picture>   
   </a>
-  <img style="padding-left: 12px" src="./react.svg" height="32">
+  <a href="https://reactjs.org/" target="_blank" align="center" style="padding-left: 12px">
+    <img src="./react.svg" height="32">
+  </a>
   <br />
 </p>
 
