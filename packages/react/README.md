@@ -61,23 +61,21 @@ function App() {
 
     return (
       <>
-        <div className="card">
-            <button
-              onClick={() =>
-                login({
-                  factor: {
-                    type: "email_address",
-                    value: "example@email.com",
-                  },
-                  options: { method: "email_link" },
-                })
-              }
-            >
-              Log in
-            </button>
-            <div>
-              <code>{user}</code>
-            </div>
+        <button
+          onClick={() =>
+            login({
+              factor: {
+                type: "email_address",
+                value: "example@email.com",
+              },
+              options: { method: "email_link" },
+            })
+          }
+        >
+          Log in
+        </button>
+        <div>
+          <code>{user}</code>
         </div>
       </>
   );
