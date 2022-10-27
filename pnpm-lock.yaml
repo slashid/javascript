@@ -4,7 +4,6 @@ importers:
 
   .:
     specifiers:
-      '@slashid/slashid': ^1.8.2
       '@typescript-eslint/eslint-plugin': ^5.41.0
       '@typescript-eslint/parser': ^5.41.0
       eslint: ^7.32.0
@@ -12,14 +11,8 @@ importers:
       eslint-plugin-react: ^7.31.10
       eslint-plugin-react-hooks: ^4.6.0
       prettier: ^2.7.1
-      react: 18.2.0
-      react-dom: 18.2.0
       turbo: ^1.6.1
       typescript: ^4.6.4
-    dependencies:
-      '@slashid/slashid': 1.8.2
-      react: 18.2.0
-      react-dom: 18.2.0_react@18.2.0
     devDependencies:
       '@typescript-eslint/eslint-plugin': 5.41.0_df7bmmpvcdp26iorckypvaliia
       '@typescript-eslint/parser': 5.41.0_3rubbgt5ekhqrcgx4uwls3neim
