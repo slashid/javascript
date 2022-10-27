@@ -2,7 +2,7 @@
   <a href="https://slashid.dev/" target="_blank" align="center">
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="./../../slashid_logo-dark.svg">
-      <img src="./../../slashid_logo-light.png" height="32">
+      <img src="./../../slashid_logo-light.svg" height="32">
     </picture>   
   </a>
   <a href="https://reactjs.org/" target="_blank" align="center" style="padding-left: 12px">
