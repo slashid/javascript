@@ -4,8 +4,8 @@
       <source media="(prefers-color-scheme: dark)" srcset="./../../slashid_logo-dark.svg">
       <img src="./../../slashid_logo-light.png" height="32">
     </picture>   
-    <img style="padding-left: 12px" src="./react.svg" height="32">
   </a>
+  <img style="padding-left: 12px" src="./react.svg" height="32">
   <br />
 </p>
 
