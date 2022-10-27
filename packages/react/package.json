@@ -5,6 +5,8 @@
     "type": "git",
     "url": "https://github.com/slashid/javascript.git"
   },
+  "description": "React SDK for the /id platform",
+  "homepage": "https://slashid.dev",
   "keywords": [
     "slashid",
     "/id",
@@ -18,6 +20,12 @@
   "type": "module",
   "types": "dist/main.d.ts",
   "main": "dist/main.js",
+  "module": "dist/main.js",
+  "exports": {
+    ".": {
+      "import": "./dist/main.js"
+    }
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build && tsc",
@@ -25,10 +33,7 @@
     "lint": "eslint ./src",
     "test:types": "tsc --no-emit"
   },
-  "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
@@ -37,7 +42,9 @@
     "vite": "^3.1.0"
   },
   "peerDependencies": {
-    "@slashid/slashid": ">= 1.8.2"
+    "@slashid/slashid": ">= 1.8.2",
+    "react": ">=16",
+    "react-dom": ">=16"
   },
   "publishConfig": {
     "access": "public"

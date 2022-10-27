@@ -12,10 +12,14 @@ importers:
       eslint-plugin-react: ^7.31.10
       eslint-plugin-react-hooks: ^4.6.0
       prettier: ^2.7.1
+      react: 18.2.0
+      react-dom: 18.2.0
       turbo: ^1.6.1
       typescript: ^4.6.4
     dependencies:
       '@slashid/slashid': 1.8.2
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
     devDependencies:
       '@typescript-eslint/eslint-plugin': 5.41.0_df7bmmpvcdp26iorckypvaliia
       '@typescript-eslint/parser': 5.41.0_3rubbgt5ekhqrcgx4uwls3neim
@@ -32,13 +36,8 @@ importers:
       '@types/react': ^18.0.17
       '@types/react-dom': ^18.0.6
       '@vitejs/plugin-react': ^2.1.0
-      react: ^18.2.0
-      react-dom: ^18.2.0
       tsconfig: workspace:*
       vite: ^3.1.0
-    dependencies:
-      react: 18.2.0
-      react-dom: 18.2.0_react@18.2.0
     devDependencies:
       '@types/react': 18.0.22
       '@types/react-dom': 18.0.7
@@ -48,22 +47,6 @@ importers:
 
   packages/tsconfig:
     specifiers: {}
-
-  packages/ui:
-    specifiers:
-      '@types/react': ^18.0.17
-      '@types/react-dom': ^18.0.6
-      eslint: ^7.32.0
-      react: ^18.2.0
-      tsconfig: workspace:*
-      typescript: ^4.5.2
-    devDependencies:
-      '@types/react': 18.0.22
-      '@types/react-dom': 18.0.7
-      eslint: 7.32.0
-      react: 18.2.0
-      tsconfig: link:../tsconfig
-      typescript: 4.8.4
 
 packages:
 
@@ -2008,6 +1991,7 @@ packages:
     engines: {node: '>=0.10.0'}
     dependencies:
       loose-envify: 1.4.0
+    dev: false
 
   /regenerator-runtime/0.13.10:
     resolution: {integrity: sha512-KepLsg4dU12hryUO7bp/axHAKvwGOCV0sGloQtpagJ12ai+ojVDqkeGSiRX1zlq+kjIMZ1t7gpze+26QqtdGqw==}
