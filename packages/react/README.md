@@ -57,13 +57,13 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
 );
 
 function App() {
-    const { user, login } = useSlashID();
+    const { user, logIn } = useSlashID();
 
     return (
       <>
         <button
           onClick={() =>
-            login({
+            logIn({
               factor: {
                 type: "email_address",
                 value: "example@email.com",

@@ -1,19 +1,11 @@
-# Development workflow
+# Development
 
-This is the proposed dev workflow:
+This document describes the development workflow. We are using [Turborepo](https://turbo.build/repo/docs) and [pnpm](https://pnpm.io/motivation).
 
-- Create a feature branch
-- Push changes to your branch
-- Add a changeset (if the changes should result in a new version)
+## Managing dependencies
 
-```bash
-pnpm changeset
-```
+Check the Turborepo [docs](https://turbo.build/repo/docs/handbook/package-installation#addingremovingupgrading-packages) - make sure you use the `pnpm` code examples.
 
-- Create a pull request
-- Merge the pull request into the main (default) branch
-- If the pull request contained a changeset, the changesets action will create a "Version Packages" pull request
-- Continue merging changes into the main (default) branch
-- Merge the "Version Packages" pull request to trigger a release
+## Internal packages
 
-Make sure the CI has a valid automation NPM access token.
+`packages/react` is published to NPM but it is also registered as an [internal package](https://turbo.build/repo/docs/handbook/sharing-code/internal-packages). Demo app in `apps/react-vite` depends on this internal package. This means that it will use the build output of `packages/react` instead of the published NPM package. If you want to test the changes you just made in `packages/react`, make sure you run `pnpm build` from the repo root so that `apps/react-vite` will read the new build.

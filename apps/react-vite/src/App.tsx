@@ -2,7 +2,7 @@ import { useSlashID } from "@slashid/react";
 import "./App.css";
 
 function App() {
-  const { user, login } = useSlashID();
+  const { user, logIn } = useSlashID();
 
   return (
     <div className="App">
@@ -10,12 +10,12 @@ function App() {
       <div className="card">
         <button
           onClick={() =>
-            login({
-              factor: {
+            logIn({
+              handle: {
                 type: import.meta.env.VITE_IDENTIFIER_TYPE,
                 value: import.meta.env.VITE_IDENTIFIER_VALUE,
               },
-              options: { method: import.meta.env.VITE_AUTH_METHOD },
+              factor: { method: import.meta.env.VITE_AUTH_METHOD },
             })
           }
         >
