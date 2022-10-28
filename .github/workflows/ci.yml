@@ -2,39 +2,37 @@ name: ci
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        node-version: [16.14.0]    
+        node-version: [16.14.0]
 
     steps:
-    - uses: actions/checkout@v3
-    - uses: pnpm/action-setup@v2.2.4
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2.2.4
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'pnpm'
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "pnpm"
 
-    - name: Install dependencies
-      run: pnpm install
+      - name: Install dependencies
+        run: pnpm install
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-    - name: Check types
-      run: pnpm test:types
+      - name: Check types
+        run: pnpm test:types
 
-    - name: Lint
-      run: pnpm lint
+      - name: Lint
+        run: pnpm lint
 
-    - name: Build
-      run: pnpm build
-
-
-
-
+      - name: Build
+        run: pnpm build
