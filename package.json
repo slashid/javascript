@@ -15,7 +15,8 @@
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
     "test:types": "turbo run test:types",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "ci:publish": "pnpm build && changeset publish"
   },
   "devDependencies": {
     "@changesets/cli": "^2.25.0",
