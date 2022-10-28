@@ -16,6 +16,7 @@
     "lint": "turbo run lint",
     "test:types": "turbo run test:types",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "changeset": "changeset",
     "ci:publish": "pnpm build && changeset publish"
   },
   "devDependencies": {

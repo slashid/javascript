@@ -15,3 +15,5 @@ pnpm changeset
 - If the pull request contained a changeset, the changesets action will create a "Version Packages" pull request
 - Continue merging changes into the main (default) branch
 - Merge the "Version Packages" pull request to trigger a release
+
+Make sure the CI has a valid automation NPM access token.
