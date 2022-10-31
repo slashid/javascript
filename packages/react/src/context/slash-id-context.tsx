@@ -3,10 +3,12 @@ import React, {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 
 import { PersonHandleType, SlashID, User } from "@slashid/slashid";
+import { MemoryStorage } from "../browser/memory-storage";
 
 interface Handle {
   type: PersonHandleType;
@@ -23,8 +25,13 @@ export interface LoginOptions {
   factor: Factor;
 }
 
+export type StorageOption = "memory" | "localStorage";
+
+export type DirectIdOption = boolean;
 export interface SlashIDProviderProps {
   oid: string;
+  storage?: StorageOption;
+  directId?: DirectIdOption;
   children: React.ReactNode;
 }
 
@@ -48,27 +55,48 @@ SlashIDContext.displayName = "SlashIDContext";
 const STORAGE_IDENTIFIER_KEY = "@slashid/IDENTIFIERS";
 const STORAGE_TOKEN_KEY = "@slashid/USER_TOKEN";
 
+const createStorageFactory = () => {
+  const memoryStorage = new MemoryStorage();
+
+  return function getStorage(storageType: StorageOption) {
+    switch (storageType) {
+      case "memory":
+        return memoryStorage;
+      case "localStorage":
+        return window.localStorage;
+      default:
+        return memoryStorage;
+    }
+  };
+};
+
 export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
   oid,
+  storage = "memory",
+  directId = false,
   children,
 }) => {
   const [sid, setSid] = useState<SlashID | undefined>(undefined);
   const [user, setUser] = useState<User | undefined>(undefined);
+  const { current: getStorage } = useRef(createStorageFactory());
 
-  const storeUser = (newUser: User) => {
-    setUser(newUser);
-    window.localStorage.setItem(STORAGE_TOKEN_KEY, newUser.token);
-  };
+  const storeUser = useCallback(
+    (newUser: User) => {
+      setUser(newUser);
+      getStorage(storage).setItem(STORAGE_TOKEN_KEY, newUser.token);
+    },
+    [getStorage, storage]
+  );
 
   const logOut = useCallback(() => {
-    window.localStorage.removeItem(STORAGE_TOKEN_KEY);
+    getStorage(storage).removeItem(STORAGE_TOKEN_KEY);
     if (!user) {
       return;
     }
 
     user.logout();
     setUser(undefined);
-  }, [user]);
+  }, [getStorage, storage, user]);
 
   const logIn = useCallback(
     async ({ factor, handle }: LoginOptions) => {
@@ -77,14 +105,14 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
         const user = await sid.id(oid, handle, factor);
 
         storeUser(user);
-        window.localStorage.setItem(STORAGE_IDENTIFIER_KEY, handle.value);
+        getStorage(storage).setItem(STORAGE_IDENTIFIER_KEY, handle.value);
 
         return user;
       } else {
         return null;
       }
     },
-    [oid, sid]
+    [getStorage, oid, sid, storage, storeUser]
   );
 
   const validateToken = useCallback(async (token: string): Promise<boolean> => {
@@ -108,19 +136,22 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
         const tempUser = await sid.getUserFromURL();
         if (tempUser) {
           storeUser(tempUser);
+          return true;
+        } else {
+          return false;
         }
       } catch (e) {
         console.log(e);
-        return;
+        return false;
       }
     };
 
     const loginStoredToken = async (): Promise<boolean> => {
-      const storedToken = window.localStorage.getItem(STORAGE_TOKEN_KEY);
+      const storedToken = getStorage(storage).getItem(STORAGE_TOKEN_KEY);
       if (storedToken) {
         const isValidToken = await validateToken(storedToken);
         if (!isValidToken) {
-          window.localStorage.removeItem(STORAGE_TOKEN_KEY);
+          getStorage(storage).removeItem(STORAGE_TOKEN_KEY);
           return false;
         }
 
@@ -132,14 +163,18 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
     };
 
     const tryImmediateLogin = async () => {
-      const loggedInStoredUser = await loginStoredToken();
-      if (!loggedInStoredUser) {
-        await loginDirectIdIfPresent();
+      let isDone = false;
+      if (directId) {
+        isDone = await loginDirectIdIfPresent();
+      }
+
+      if (!isDone) {
+        await loginStoredToken();
       }
     };
 
     tryImmediateLogin();
-  }, [logOut, sid, validateToken]);
+  }, [directId, getStorage, logOut, sid, storage, storeUser, validateToken]);
 
   const contextValue = useMemo(
     () => ({ sid, user, logOut, logIn, validateToken }),

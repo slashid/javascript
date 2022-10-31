@@ -1,4 +1,4 @@
-import { SlashIDContext, SlashIDProvider } from "./context/SlashIDContext";
-import { useSlashID } from "./hooks/useSlashID";
+import { SlashIDContext, SlashIDProvider } from "./context/slash-id-context";
+import { useSlashID } from "./hooks/use-slash-id";
 
 export { SlashIDContext, SlashIDProvider, useSlashID };
