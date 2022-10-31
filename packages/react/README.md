@@ -1,20 +1,7 @@
-<p align="center">
-  <a href="https://slashid.dev/" target="_blank" align="center">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="./../../slashid_logo-dark.svg">
-      <img src="./../../slashid_logo-light.svg" height="32">
-    </picture>   
-  </a>
-  <a href="https://reactjs.org/" target="_blank" align="center" style="padding-left: 12px">
-    <img src="./react.svg" height="32">
-  </a>
-  <br />
-</p>
+![SlashID React SDK](./slashid_react_banner.png)
 
-# @slashid/react
-
-Official React wrapper for the `/id` SDK.
-
+![npm](https://img.shields.io/npm/v/@slashid/react)
+![build](https://github.com/slashid/javascript/actions/workflows/ci.yml/badge.svg)
 ## Documentation
 
 Check out our [developer docs](https://developer.slashid.dev/) for guides and API documentation.

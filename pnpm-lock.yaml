@@ -29,7 +29,7 @@ importers:
   apps/react-vite:
     specifiers:
       '@slashid/react': workspace:*
-      '@slashid/slashid': ^1.8.2
+      '@slashid/slashid': ^1.9.2
       '@types/react': ^18.0.22
       '@types/react-dom': ^18.0.7
       '@vitejs/plugin-react': ^2.2.0
@@ -39,7 +39,7 @@ importers:
       vite: ^3.2.0
     dependencies:
       '@slashid/react': link:../../packages/react
-      '@slashid/slashid': 1.8.2
+      '@slashid/slashid': 1.9.2
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     devDependencies:
@@ -51,14 +51,14 @@ importers:
 
   packages/react:
     specifiers:
-      '@slashid/slashid': ^1.8.2
+      '@slashid/slashid': ^1.9.2
       '@types/react': ^18.0.17
       '@vitejs/plugin-react': ^2.1.0
       react: 18.2.0
       tsconfig: workspace:*
       vite: ^3.1.0
     devDependencies:
-      '@slashid/slashid': 1.8.2
+      '@slashid/slashid': 1.9.2
       '@types/react': 18.0.22
       '@vitejs/plugin-react': 2.1.0_vite@3.1.8
       react: 18.2.0
@@ -662,8 +662,8 @@ packages:
       fastq: 1.13.0
     dev: true
 
-  /@slashid/slashid/1.8.2:
-    resolution: {integrity: sha512-VAYITn6CaEOZjGvhMEHxYkaycHMXBQEQDBw9UeohGgev6xfWyOuoc+RJoHp+iDyE4i72GF3drJueqyYBKGR5Jw==}
+  /@slashid/slashid/1.9.2:
+    resolution: {integrity: sha512-uwqc2Z/I+yzSDdOhimkrsd/RVsB9XTYiohj6lhgxvu3qImMNhG8S/vpw+Up+2l0a5hZ441JbtPcgrQvTP0Tcgw==}
     dependencies:
       '@swc/helpers': 0.3.17
       '@types/uuid': 8.3.4

@@ -61,9 +61,14 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
   };
 
   const logOut = useCallback(() => {
-    setUser(undefined);
     window.localStorage.removeItem(STORAGE_TOKEN_KEY);
-  }, []);
+    if (!user) {
+      return;
+    }
+
+    user.logout();
+    setUser(undefined);
+  }, [user]);
 
   const logIn = useCallback(
     async ({ factor, handle }: LoginOptions) => {
@@ -83,14 +88,9 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
   );
 
   const validateToken = useCallback(async (token: string): Promise<boolean> => {
-    const tempUser = new User(token);
-    const ret = await tempUser.validateToken();
-    if (ret.valid) {
-      const newUser = new User(token);
-      setUser(newUser);
-      return true;
-    }
-    return false;
+    const tokenUser = new User(token);
+    const ret = await tokenUser.validateToken();
+    return ret.valid;
   }, []);
 
   useEffect(() => {
@@ -118,7 +118,14 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
     const loginStoredToken = async (): Promise<boolean> => {
       const storedToken = window.localStorage.getItem(STORAGE_TOKEN_KEY);
       if (storedToken) {
-        return await validateToken(storedToken);
+        const isValidToken = await validateToken(storedToken);
+        if (!isValidToken) {
+          window.localStorage.removeItem(STORAGE_TOKEN_KEY);
+          return false;
+        }
+
+        storeUser(new User(storedToken));
+        return true;
       } else {
         return false;
       }
