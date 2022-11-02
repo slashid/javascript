@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 0.0.4
+
+### Patch Changes
+
+- 60eb247: Fixed the incorrect casing in docs and exposed the correctly cased function names
+
 ## 0.0.3
 
 ### Patch Changes
