@@ -69,4 +69,4 @@ function App() {
 }
 ```
 
-Once the `login` function resolves, your component will render again with the newly logged-in `user` object.
+Once the `logIn` function resolves, your component will render again with the newly logged-in `user` object.
