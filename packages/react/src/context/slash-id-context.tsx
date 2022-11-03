@@ -36,18 +36,21 @@ export interface SlashIDProviderProps {
 export interface ISlashIDContext {
   sid: SlashID | undefined;
   user: User | undefined;
-  logOut: () => void;
-  logIn: (l: LoginOptions) => Promise<User | null>;
+  logOut: () => undefined;
+  logIn: (l: LoginOptions) => Promise<User | undefined>;
   validateToken: (token: string) => Promise<boolean>;
 }
 
-export const SlashIDContext = createContext<ISlashIDContext>({
+const initialContextValue = {
   sid: undefined,
   user: undefined,
   logOut: () => undefined,
   logIn: () => Promise.reject("NYI"),
   validateToken: () => Promise.resolve(false),
-});
+};
+
+export const SlashIDContext =
+  createContext<ISlashIDContext>(initialContextValue);
 SlashIDContext.displayName = "SlashIDContext";
 
 const STORAGE_IDENTIFIER_KEY = "@slashid/LAST_IDENTIFIER";
@@ -73,15 +76,26 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
 }) => {
   const [state, setState] = useState<SDKState>("initial");
   const [user, setUser] = useState<User | undefined>(undefined);
-  const storageRef = useRef<Storage | null>(null);
-  const sidRef = useRef<SlashID | null>(null);
+  const storageRef = useRef<Storage | undefined>(undefined);
+  const sidRef = useRef<SlashID | undefined>(undefined);
 
-  const storeUser = useCallback((newUser: User) => {
-    setUser(newUser);
-    storageRef.current?.setItem(STORAGE_TOKEN_KEY, newUser.token);
-  }, []);
+  const storeUser = useCallback(
+    (newUser: User) => {
+      if (state === "initial") {
+        return;
+      }
 
-  const logOut = useCallback(() => {
+      setUser(newUser);
+      storageRef.current?.setItem(STORAGE_TOKEN_KEY, newUser.token);
+    },
+    [state]
+  );
+
+  const logOut = useCallback((): undefined => {
+    if (state === "initial") {
+      return;
+    }
+
     storageRef.current?.removeItem(STORAGE_TOKEN_KEY);
     if (!user) {
       return;
@@ -89,10 +103,14 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
 
     user.logout();
     setUser(undefined);
-  }, [user]);
+  }, [user, state]);
 
   const logIn = useCallback(
-    async ({ factor, handle }: LoginOptions) => {
+    async ({ factor, handle }: LoginOptions): Promise<User | undefined> => {
+      if (state === "initial") {
+        return;
+      }
+
       const sid = sidRef.current;
       if (sid) {
         // @ts-expect-error TODO export Factor type and use it here
@@ -103,10 +121,10 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
 
         return user;
       } else {
-        return null;
+        return;
       }
     },
-    [oid, storeUser]
+    [oid, state, storeUser]
   );
 
   const validateToken = useCallback(async (token: string): Promise<boolean> => {
@@ -179,10 +197,13 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
     tryImmediateLogin();
   }, [state, storeUser, validateToken]);
 
-  const contextValue = useMemo(
-    () => ({ sid: sidRef.current!, user, logOut, logIn, validateToken }),
-    [logIn, logOut, user, validateToken]
-  );
+  const contextValue = useMemo(() => {
+    if (state === "initial") {
+      return { sid: undefined, user, logOut, logIn, validateToken };
+    }
+
+    return { sid: sidRef.current!, user, logOut, logIn, validateToken };
+  }, [logIn, logOut, user, validateToken, state]);
 
   return (
     <SlashIDContext.Provider value={contextValue}>
