@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 0.0.5
+
+### Patch Changes
+
+- cf5b3b9: Implemented a state machine to control the SDK lifecycle
+
 ## 0.0.4
 
 ### Patch Changes
