@@ -1,5 +1,12 @@
 # react-vite
 
+## 0.0.5
+
+### Patch Changes
+
+- Updated dependencies [cf5b3b9]
+  - @slashid/react@0.0.5
+
 ## 0.0.4
 
 ### Patch Changes
