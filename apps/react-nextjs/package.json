@@ -1,0 +1,24 @@
+{
+  "name": "react-nextjs",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@types/node": "18.11.9",
+    "@types/react": "18.0.25",
+    "@types/react-dom": "^18.0.7",
+    "eslint": "^7.32.0",
+    "eslint-config-next": "13.0.2",
+    "next": "13.0.2",
+    "react": "18.2.0",
+    "react-dom": "^18.2.0",
+    "typescript": "^4.6.4",
+    "@slashid/slashid": "^1.9.2",
+    "@slashid/react": "workspace:*"
+  }
+}

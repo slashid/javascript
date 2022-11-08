@@ -57,6 +57,7 @@ const STORAGE_IDENTIFIER_KEY = "@slashid/LAST_IDENTIFIER";
 const STORAGE_TOKEN_KEY = "@slashid/USER_TOKEN";
 
 const createStorage = (storageType: StorageOption) => {
+  console.log("Called createStorage");
   switch (storageType) {
     case "memory":
       return new MemoryStorage();
@@ -78,6 +79,13 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
   const [user, setUser] = useState<User | undefined>(undefined);
   const storageRef = useRef<Storage | undefined>(undefined);
   const sidRef = useRef<SlashID | undefined>(undefined);
+
+  console.log("Rendered the SlashID provider", {
+    state,
+    user,
+    storageRef,
+    sidRef,
+  });
 
   const storeUser = useCallback(
     (newUser: User) => {
@@ -135,6 +143,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
 
   useEffect(() => {
     if (state === "initial") {
+      console.log("initial state transition");
       const slashId = new SlashID();
       const storage = createStorage(tokenStorage);
 
