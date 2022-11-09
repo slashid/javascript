@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 0.0.7
+
+### Patch Changes
+
+- 6402664: Exposed the Factor type to enable autocomplete of logIn parameters
+
 ## 0.0.6
 
 ### Patch Changes
