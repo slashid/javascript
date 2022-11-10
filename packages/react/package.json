@@ -1,6 +1,6 @@
 {
   "name": "@slashid/react",
-  "version": "0.0.5",
+  "version": "0.0.7",
   "repository": {
     "type": "git",
     "url": "https://github.com/slashid/javascript.git"
@@ -37,14 +37,14 @@
   "dependencies": {},
   "devDependencies": {
     "react": "18.2.0",
-    "@slashid/slashid": "^1.9.2",
+    "@slashid/slashid": "^1.9.3",
     "@types/react": "^18.0.17",
     "@vitejs/plugin-react": "^2.1.0",
     "tsconfig": "workspace:*",
     "vite": "^3.1.0"
   },
   "peerDependencies": {
-    "@slashid/slashid": ">= 1.9.2",
+    "@slashid/slashid": ">= 1.9.3",
     "react": ">=16"
   }
 }

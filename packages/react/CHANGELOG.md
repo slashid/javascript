@@ -1,5 +1,17 @@
 # @slashid/react
 
+## 0.0.7
+
+### Patch Changes
+
+- 6402664: Exposed the Factor type to enable autocomplete of logIn parameters
+
+## 0.0.6
+
+### Patch Changes
+
+- 1ce72a4: Sync the state so that the sid value is updated
+
 ## 0.0.5
 
 ### Patch Changes

@@ -7,7 +7,7 @@ import React, {
   useState,
 } from "react";
 
-import { PersonHandleType, SlashID, User } from "@slashid/slashid";
+import { PersonHandleType, Factor, SlashID, User } from "@slashid/slashid";
 import { MemoryStorage } from "../browser/memory-storage";
 
 interface Handle {
@@ -15,11 +15,6 @@ interface Handle {
   value: string;
 }
 
-// TODO export this from the base package
-interface Factor {
-  method: string;
-  options?: { [key: string]: string | number | boolean };
-}
 export interface LoginOptions {
   handle: Handle;
   factor: Factor;
@@ -121,7 +116,6 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
 
       const sid = sidRef.current;
       if (sid) {
-        // @ts-expect-error TODO export Factor type and use it here
         const user = await sid.id(oid, handle, factor);
 
         storeUser(user);
