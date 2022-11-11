@@ -1,9 +1,34 @@
+@font-face {
+  font-family: 'Inter';
+  src: url(../public/fonts/Inter-400.woff);
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url(../public/fonts/Inter-500.woff);
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url(../public/fonts/Inter-600.woff);
+  font-weight: 600;
+}
+
 html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+
+  width: 100%;
+  min-height: 100vh;
+
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  background-color: white;
 }
 
 a {
@@ -14,6 +39,11 @@ a {
 * {
   box-sizing: border-box;
 }
+
+svg {
+  display: block;
+}
+
 
 @media (prefers-color-scheme: dark) {
   html {

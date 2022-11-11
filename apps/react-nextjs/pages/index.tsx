@@ -1,38 +1,6 @@
 import Head from "next/head";
-import { useSlashID } from "@slashid/react";
+import { SlashIDForm } from "../components/SlashIDForm";
 import styles from "../styles/Home.module.css";
-
-const Login = () => {
-  const { user, logIn } = useSlashID();
-  return (
-    <div>
-      <div className="card">
-        <button
-          onClick={() =>
-            logIn({
-              handle: {
-                // @ts-ignore
-                type: process.env.NEXT_PUBLIC_IDENTIFIER_TYPE,
-                // @ts-ignore
-                value: process.env.NEXT_PUBLIC_IDENTIFIER_VALUE,
-              },
-              // @ts-ignore
-              factor: { method: process.env.NEXT_PUBLIC_AUTH_METHOD },
-            })
-          }
-        >
-          Log in
-        </button>
-        <p>
-          <code>{user && user.token}</code>
-        </p>
-      </div>
-      <p className="read-the-docs">
-        <a href="https://developer.slashid.dev/">Read the docs</a>
-      </p>
-    </div>
-  );
-};
 
 function Home() {
   return (
@@ -52,7 +20,11 @@ function Home() {
           Login powered by <code className={styles.code}>/id</code>
         </p>
 
-        <Login />
+        <SlashIDForm />
+
+        <p className={styles.docs}>
+          <a href="https://developer.slashid.dev/">Read the docs</a>
+        </p>
       </main>
     </div>
   );

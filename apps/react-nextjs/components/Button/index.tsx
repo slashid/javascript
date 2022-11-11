@@ -14,6 +14,7 @@ interface Props {
   isGoogle?: boolean;
   label: string;
   onClick?: () => void;
+  htmlType?: "button" | "submit" | "reset";
 }
 
 const Button: FC<Props> = ({
@@ -24,6 +25,7 @@ const Button: FC<Props> = ({
   isSmall,
   isGoogle,
   label,
+  htmlType = "button",
   onClick,
 }) => {
   return (
@@ -35,6 +37,7 @@ const Button: FC<Props> = ({
       id={id}
       onClick={onClick}
       tabIndex={1}
+      type={htmlType}
     >
       <span
         className={`${isLoading ? css.invisible : ""} ${

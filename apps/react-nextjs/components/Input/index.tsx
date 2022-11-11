@@ -1,6 +1,6 @@
-import { FC } from 'react';
+import { FC } from "react";
 
-import css from './input.module.css';
+import css from "./input.module.css";
 
 interface Props {
   id?: string;
@@ -8,6 +8,7 @@ interface Props {
   isSmall?: boolean;
   label?: string;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
+  onBlur?: React.FocusEventHandler<HTMLInputElement>;
   placeholder: string;
   value: string | number;
   autoFocus?: boolean;
@@ -19,14 +20,15 @@ const Input: FC<Props> = ({
   isSmall,
   label,
   onChange,
+  onBlur,
   placeholder,
   value,
   autoFocus,
 }) => {
   return (
     <div
-      className={`${css.host} ${isSmall ? css.small : ''} ${
-        isDisabled ? css.disabled : ''
+      className={`${css.host} ${isSmall ? css.small : ""} ${
+        isDisabled ? css.disabled : ""
       }`}
     >
       {label && <p className={css.label}>{label}</p>}
@@ -34,6 +36,7 @@ const Input: FC<Props> = ({
         id={id}
         className={css.input}
         onChange={onChange}
+        onBlur={onBlur}
         placeholder={placeholder}
         value={value}
         tabIndex={1}

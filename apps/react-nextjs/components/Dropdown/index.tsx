@@ -1,16 +1,16 @@
-import { FC, useState } from 'react';
-import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
+import { FC, useState } from "react";
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 
-import parseOptionString from '../../helpers/parseOptionString';
+import parseOptionString from "../../helpers/parseOptionString";
 
-import ChevronDown from '../Icons/ChevronDown';
-import ChevronUp from '../Icons/ChevronUp';
+import ChevronDown from "../Icons/ChevronDown";
+import ChevronUp from "../Icons/ChevronUp";
 
-import css from './dropdown.module.css';
-import Checkmark from '../Icons/Checkmark';
+import css from "./dropdown.module.css";
+import Checkmark from "../Icons/Checkmark";
 
 interface Props {
-  changeChosenOption: React.Dispatch<React.SetStateAction<any>>;
+  changeChosenOption: (option: string) => void;
   chosenOption?: string;
   isSmall?: boolean;
   label: string;
@@ -29,20 +29,20 @@ const Dropdown: FC<Props> = ({
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   return (
-    <div className={`${css.host} ${isSmall ? css.small : ''}`}>
+    <div className={`${css.host} ${isSmall ? css.small : ""}`}>
       <DropdownMenu.Root onOpenChange={(open) => setIsDropdownOpen(open)}>
         <p className={css.label}>{label}</p>
 
         <DropdownMenu.Trigger asChild disabled={options === undefined}>
           <div
             className={`${css.dropdownTrigger} ${
-              isDropdownOpen ? css.open : ''
+              isDropdownOpen ? css.open : ""
             }`}
             tabIndex={1}
           >
             <span
               className={`${css.chosenOption} ${
-                !chosenOption ? css.placeholder : ''
+                !chosenOption ? css.placeholder : ""
               }`}
             >
               {chosenOption
@@ -56,11 +56,11 @@ const Dropdown: FC<Props> = ({
         </DropdownMenu.Trigger>
 
         <DropdownMenu.Content
-          side='bottom'
-          align='start'
+          side="bottom"
+          align="start"
           sideOffset={10}
           className={`${css.optionsContainer} ${
-            isDropdownOpen ? css.open : ''
+            isDropdownOpen ? css.open : ""
           }`}
         >
           {options?.map((option, key) => {
@@ -70,7 +70,7 @@ const Dropdown: FC<Props> = ({
                 onSelect={() => changeChosenOption(option)}
                 key={key}
                 className={`${css.option} ${
-                  option === chosenOption ? css.selected : ''
+                  option === chosenOption ? css.selected : ""
                 }`}
               >
                 {option === chosenOption && (

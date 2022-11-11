@@ -1,8 +1,8 @@
-import { Dispatch, FC, SetStateAction } from 'react';
-import PhoneInput from 'react-phone-input-2';
-import 'react-phone-input-2/lib/style.css';
+import { Dispatch, FC, SetStateAction } from "react";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 
-import css from './phone-number-input.module.css';
+import css from "./phone-number-input.module.css";
 
 interface Props {
   id?: string;
@@ -10,6 +10,7 @@ interface Props {
   isSmall?: boolean;
   label?: string;
   onChange: Dispatch<SetStateAction<string>>;
+  onBlur?: React.FocusEventHandler<HTMLInputElement>;
   placeholder: string;
   value: string;
 }
@@ -19,13 +20,14 @@ const PhoneNumberInput: FC<Props> = ({
   isSmall,
   label,
   onChange,
+  onBlur,
   placeholder,
   value,
 }) => {
   return (
     <div
-      className={`${css.host} ${isSmall ? css.small : ''} ${
-        isDisabled ? css.disabled : ''
+      className={`${css.host} ${isSmall ? css.small : ""} ${
+        isDisabled ? css.disabled : ""
       }`}
     >
       {label && <p className={css.label}>{label}</p>}
@@ -33,12 +35,13 @@ const PhoneNumberInput: FC<Props> = ({
         autoFormat={false}
         buttonClass={css.dropdownButton}
         containerClass={css.container}
-        country='us'
+        country="us"
         dropdownClass={css.dropdown}
         inputClass={css.input}
         onChange={(value, data, _, formattedValue) => {
           onChange(formattedValue);
         }}
+        onBlur={onBlur}
         placeholder={placeholder}
         value={value}
       />

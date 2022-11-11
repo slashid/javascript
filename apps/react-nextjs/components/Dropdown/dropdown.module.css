@@ -180,3 +180,26 @@
     width: calc(100vw - 40px - 40px);
   }
 }
+
+@media (prefers-color-scheme: dark) {
+  .label {
+    color: hsl(60, 10%, 70%);
+  }
+
+  .dropdownTrigger {
+    background-color: hsla(0, 0%, 0%, 1);
+    color: hsl(60, 10%, 70%);
+  }
+
+  .optionsContainer {
+    background-color: hsla(0, 0%, 0%, 1);
+  }
+
+  .option {
+    color: hsl(60, 10%, 70%);
+  }
+
+  .option.selected {
+    color: hsla(222, 87%, 58%, 1);
+  }
+}
