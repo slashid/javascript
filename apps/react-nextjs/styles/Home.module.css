@@ -4,7 +4,7 @@
 
 .main {
   min-height: 100vh;
-  padding: 4rem 0;
+  padding: 2rem 0;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -109,7 +109,8 @@
 }
 
 .docs {
-  margin: 4rem 0;
+  margin: 1rem 0;
+  color: #366ef2;
 }
 
 @media (max-width: 600px) {
@@ -130,4 +131,8 @@
   .logo img {
     filter: invert(1);
   }
+}
+
+.form {
+  margin-top: 2rem;
 }

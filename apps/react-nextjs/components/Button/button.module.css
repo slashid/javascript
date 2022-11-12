@@ -6,8 +6,9 @@
 
   position: relative;
 
-  background-color: hsla(222, 88%, 58%, 1);
+  background-color: #366ef2;
 
+  border: none;
   border-radius: 4px;
 
   cursor: pointer;
@@ -99,4 +100,11 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
+}
+
+@media (prefers-color-scheme: dark) {
+  .host:disabled {
+    background-color: #454555;
+    color: #9c9caf;
+  }
 }

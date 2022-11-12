@@ -16,11 +16,9 @@ function Home() {
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
 
-        <p className={styles.description}>
-          Login powered by <code className={styles.code}>/id</code>
-        </p>
-
-        <SlashIDForm />
+        <div className={styles.form}>
+          <SlashIDForm />
+        </div>
 
         <p className={styles.docs}>
           <a href="https://developer.slashid.dev/">Read the docs</a>

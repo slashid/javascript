@@ -14,7 +14,7 @@
   height: 50px;
   width: 100%;
 
-  background-color: hsla(0, 0%, 100%, 1);
+  background-color: transparent;
 
   border: 1.2px solid hsla(240, 29%, 92%, 1);
   border-radius: 4px;
@@ -73,5 +73,16 @@
     letter-spacing: 0.2px;
     color: hsla(240, 10%, 45%, 1);
     font-weight: 400;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .label {
+    color: #9c9caf;
+  }
+
+  .input {
+    color: #ededf5;
+    border-color: #67677f;
   }
 }

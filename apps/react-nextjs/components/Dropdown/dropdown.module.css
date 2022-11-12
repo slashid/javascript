@@ -18,7 +18,7 @@
   height: 50px;
   width: 100%;
 
-  background-color: hsla(0, 0%, 100%, 1);
+  background-color: transparent;
 
   border: 1.2px solid hsla(240, 29%, 92%, 1);
   border-radius: 4px;
@@ -183,23 +183,29 @@
 
 @media (prefers-color-scheme: dark) {
   .label {
-    color: hsl(60, 10%, 70%);
+    color: #9c9caf;
   }
 
   .dropdownTrigger {
-    background-color: hsla(0, 0%, 0%, 1);
-    color: hsl(60, 10%, 70%);
+    color: #ededf5;
+    border-color: #67677f;
   }
 
   .optionsContainer {
-    background-color: hsla(0, 0%, 0%, 1);
+    background-color: #22222a;
+    border-color: #67677f;
+    box-shadow: 0px 4px 20px #000000;
   }
 
   .option {
-    color: hsl(60, 10%, 70%);
+    color: #ededf5;
   }
 
   .option.selected {
     color: hsla(222, 87%, 58%, 1);
+  }
+
+  .option:hover {
+    background-color: #454555;
   }
 }

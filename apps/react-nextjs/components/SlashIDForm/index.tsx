@@ -7,6 +7,7 @@ import { AuthMethodDropdown } from "./AuthMethodDropdown";
 import Button from "../Button";
 import { useSlashID } from "@slashid/react";
 import { PersonHandleType } from "@slashid/slashid";
+import Logo from "../Icons/Logo";
 
 export const SlashIDForm = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -46,7 +47,11 @@ export const SlashIDForm = () => {
   return (
     <div className={css.host}>
       <div className={css.content}>
-        <div className={css.header}>TODO Add logo here?</div>
+        <div className={css.header}>
+          <i className={css.logo}>
+            <Logo />
+          </i>
+        </div>
 
         {state.status === "INITIAL" && (
           <form
