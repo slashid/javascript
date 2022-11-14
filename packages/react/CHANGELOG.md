@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 0.0.8
+
+### Patch Changes
+
+- 399ee1c: React SDK will now sync its state by listening to the core SDK events
+
 ## 0.0.7
 
 ### Patch Changes
