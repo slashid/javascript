@@ -25,31 +25,34 @@
   display: block;
 }
 
-@media (prefers-color-scheme: dark) {
-  .content {
-    border: 1px solid #454555;
-    box-shadow: none;
-  }
+.header {
+  margin-bottom: 24px;
 
-  .logo > svg > path:not(:last-child) {
-    fill: white;
-  }
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.title {
-  margin-bottom: 48px;
+.goBackButton {
+  display: flex;
+  align-items: center;
 
-  font-size: 34px;
-  line-height: 42px;
-  letter-spacing: 0.24px;
-  color: hsla(240, 10%, 15%, 1);
-  font-weight: 600;
+  font-size: 14px;
+  line-height: 22px;
+  letter-spacing: 0.2px;
+  color: hsla(240, 10%, 45%, 1);
+  font-weight: 400;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease-in-out;
 }
 
 .title {
   margin-bottom: 12px;
 
   font-size: 18px;
+  letter-spacing: 0.24px;
   line-height: 28px;
   color: hsla(240, 10%, 15%, 1);
   font-weight: 500;
@@ -65,23 +68,6 @@
 
 .description:not(:last-of-type) {
   margin-bottom: 12px;
-}
-
-.otpButtonContainer {
-  display: grid;
-  align-items: center;
-  grid-template-columns: 2fr 1fr;
-  gap: 10px;
-}
-
-.divider {
-  margin-top: 40px;
-  height: 1.2px;
-  width: 100%;
-
-  background-color: hsla(240, 23%, 97%, 1);
-
-  border: 0px;
 }
 
 .verificationInfo {
@@ -106,27 +92,61 @@
   color: hsla(222, 88%, 46%, 1);
 }
 
-.header {
-  margin-bottom: 24px;
+.divider {
+  margin-top: 40px;
+  height: 1.2px;
+  width: 100%;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background-color: hsla(240, 23%, 97%, 1);
+
+  border: 0px;
 }
 
-.goBackButton {
-  display: flex;
+@media (prefers-color-scheme: dark) {
+  .content {
+    border: 1px solid #454555;
+    box-shadow: none;
+  }
+
+  .logo > svg > path:not(:last-child) {
+    fill: white;
+  }
+
+  .goBackButton {
+    color: #ededf5;
+    background-color: transparent;
+    border: none;
+  }
+
+  .goBackButton svg {
+    fill: #ededf5;
+  }
+
+  .title {
+    color: #ededf5;
+  }
+
+  .description,
+  .verificationInfo {
+    color: #bdbdcd;
+  }
+
+  .resendButton {
+    border: none;
+    background-color: transparent;
+    font-size: 16px;
+  }
+
+  .divider {
+    background-color: #454555;
+  }
+}
+
+.otpButtonContainer {
+  display: grid;
   align-items: center;
-
-  font-size: 14px;
-  line-height: 22px;
-  letter-spacing: 0.2px;
-  color: hsla(240, 10%, 45%, 1);
-  font-weight: 400;
-
-  cursor: pointer;
-
-  transition: all 0.2s ease-in-out;
+  grid-template-columns: 2fr 1fr;
+  gap: 10px;
 }
 
 .chevronLeft {
@@ -172,4 +192,10 @@
 
 .controls {
   padding-top: 2rem;
+}
+
+.spinner {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0 4rem 0;
 }

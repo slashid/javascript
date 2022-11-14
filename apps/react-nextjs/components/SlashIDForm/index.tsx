@@ -8,12 +8,14 @@ import Button from "../Button";
 import { useSlashID } from "@slashid/react";
 import { PersonHandleType } from "@slashid/slashid";
 import Logo from "../Icons/Logo";
+import ChevronLeft from "../Icons/ChevronLeft";
+import { Authenticating } from "./Authenticating";
 
 export const SlashIDForm = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { logIn } = useSlashID();
 
-  useEffect(() => {
+  /* useEffect(() => {
     const performAuth = async () => {
       const handle = {
         type: state.handleType as unknown as PersonHandleType,
@@ -42,7 +44,7 @@ export const SlashIDForm = () => {
     state.handleType,
     state.handleValue,
     state.status,
-  ]);
+  ]); */
 
   return (
     <div className={css.host}>
@@ -51,6 +53,19 @@ export const SlashIDForm = () => {
           <i className={css.logo}>
             <Logo />
           </i>
+          {state.status === "AUTHENTICATING" && (
+            <button
+              onClick={() => {
+                console.log("Should go to the previous state");
+              }}
+              className={css.goBackButton}
+            >
+              <i className={css.chevroLeft}>
+                <ChevronLeft />
+              </i>
+              Go back
+            </button>
+          )}
         </div>
 
         {state.status === "INITIAL" && (
@@ -78,7 +93,13 @@ export const SlashIDForm = () => {
           </form>
         )}
 
-        {state.status === "AUTHENTICATING" && <div>Auth</div>}
+        {state.status === "AUTHENTICATING" && (
+          <Authenticating authMethod={state.authMethod!} />
+        )}
+
+        {state.status === "AUTH_FAILURE" && <div>Auth failure</div>}
+
+        {state.status === "AUTH_SUCCESS" && <div>Auth success</div>}
       </div>
     </div>
   );

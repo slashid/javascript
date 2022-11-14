@@ -5,7 +5,7 @@ export type HandleType = "email_address" | "phone_number";
 export type AuthMethod = FactorMethod;
 
 export interface FormState {
-  status: "INITIAL" | "AUTHENTICATING" | "AUTH_SUCCESS";
+  status: "INITIAL" | "AUTHENTICATING" | "AUTH_SUCCESS" | "AUTH_FAILURE";
   canSubmit: boolean;
   handleType: HandleType;
   handleValue: string;
@@ -14,11 +14,11 @@ export interface FormState {
 }
 
 export const initialState: FormState = {
-  status: "INITIAL",
-  canSubmit: false,
+  status: "AUTHENTICATING",
+  canSubmit: true,
   handleType: "email_address",
-  handleValue: "",
-  authMethod: undefined,
+  handleValue: "ivan@slashid.dev",
+  authMethod: "email_link",
   authOptions: undefined,
 };
 
@@ -139,6 +139,8 @@ export function reducer(state: FormState, action: Action): FormState {
       switch (action.type) {
         case "COMPLETE_AUTH":
           return { ...state, status: "AUTH_SUCCESS" };
+        case "FAIL_AUTH":
+          return { ...state, status: "AUTH_FAILURE" };
         default:
           return state;
       }
