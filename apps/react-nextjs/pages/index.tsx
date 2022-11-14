@@ -1,8 +1,7 @@
 import { useSlashID } from "@slashid/react";
 import Head from "next/head";
-import { Profile } from "../components/Profile";
-import { SlashIDForm } from "../components/SlashIDForm";
-import styles from "../styles/Home.module.css";
+import { Profile, SlashIDForm } from "demo-form";
+import styles from "./index.module.css";
 
 function Home() {
   const { user } = useSlashID();

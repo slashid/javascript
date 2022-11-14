@@ -36,7 +36,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "react": "18.2.0",
+    "react": "17.0.1",
     "@slashid/slashid": "^1.9.3",
     "@types/react": "^18.0.17",
     "@vitejs/plugin-react": "^2.1.0",
