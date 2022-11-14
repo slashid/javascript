@@ -1,0 +1,50 @@
+.container {
+  padding: 0 2rem;
+}
+
+.main {
+  min-height: 100vh;
+  padding: 2rem 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.title a {
+  color: #0070f3;
+  text-decoration: none;
+}
+
+.title a:hover,
+.title a:focus,
+.title a:active {
+  text-decoration: underline;
+}
+
+.title {
+  margin: 4rem 0 0 0;
+  line-height: 1.15;
+  font-size: 4rem;
+}
+
+.title,
+.description {
+  text-align: center;
+}
+
+.docs {
+  margin: 1rem 0;
+  color: #366ef2;
+}
+
+@media (max-width: 600px) {
+  .title {
+    margin-top: 0;
+  }
+}
+
+.form {
+  margin-top: 2rem;
+}

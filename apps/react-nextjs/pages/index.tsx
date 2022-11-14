@@ -1,15 +1,22 @@
 import { useSlashID } from "@slashid/react";
+import Head from "next/head";
 import { Profile, SlashIDForm } from "demo-form";
-import styles from "./app.module.css";
+import styles from "./index.module.css";
 
-function App() {
+function Home() {
   const { user } = useSlashID();
 
   return (
-    <div className="App">
+    <div className={styles.container}>
+      <Head>
+        <title>/id | Next.js</title>
+        <meta name="description" content="/id Next.js demo" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Welcome to <a href="https://vitejs.dev/">Vite!</a>
+          Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
 
         {user ? (
@@ -28,4 +35,4 @@ function App() {
   );
 }
 
-export default App;
+export default Home;
