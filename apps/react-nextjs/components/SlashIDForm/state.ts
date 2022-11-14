@@ -14,11 +14,11 @@ export interface FormState {
 }
 
 export const initialState: FormState = {
-  status: "AUTHENTICATING",
+  status: "INITIAL",
   canSubmit: true,
   handleType: "email_address",
-  handleValue: "ivan@slashid.dev",
-  authMethod: "email_link",
+  handleValue: "",
+  authMethod: undefined,
   authOptions: undefined,
 };
 
@@ -27,6 +27,7 @@ export type Action =
   | SetHandleAction
   | SetAuthMethodAction
   | StartAuthAction
+  | RestartAuthAction
   | CompleteAuthAction
   | FailAuthAction;
 
@@ -47,6 +48,10 @@ export interface SetAuthMethodAction {
 
 export interface StartAuthAction {
   type: "START_AUTH";
+}
+
+export interface RestartAuthAction {
+  type: "RESTART_AUTH";
 }
 
 export interface CompleteAuthAction {
@@ -137,6 +142,8 @@ export function reducer(state: FormState, action: Action): FormState {
 
     case "AUTHENTICATING": {
       switch (action.type) {
+        case "RESTART_AUTH":
+          return { ...state, status: "AUTHENTICATING" };
         case "COMPLETE_AUTH":
           return { ...state, status: "AUTH_SUCCESS" };
         case "FAIL_AUTH":

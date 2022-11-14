@@ -1,9 +1,9 @@
 import Spinner, { SpinnerColorType } from "../Spinner";
-import { AuthMethod } from "./state";
+import { Action, AuthMethod } from "./state";
 import css from "./slashidform.module.css";
 import Input from "../Input";
 import Button from "../Button";
-import { useState } from "react";
+import { Dispatch, useState } from "react";
 
 const getMethodText = (method: string) => {
   switch (method) {
@@ -25,10 +25,11 @@ const getMethodText = (method: string) => {
 };
 
 type Props = {
+  dispatch: Dispatch<Action>;
   authMethod: AuthMethod;
 };
 
-export const Authenticating: React.FC<Props> = ({ authMethod }) => {
+export const Authenticating: React.FC<Props> = ({ dispatch, authMethod }) => {
   const [otpValue, setOtpValue] = useState("");
   const [canResendEmail, setCanResendEmail] = useState(true);
 
@@ -68,7 +69,7 @@ export const Authenticating: React.FC<Props> = ({ authMethod }) => {
         <button
           onClick={() => {
             setCanResendEmail(false);
-            /* triggerLogin(); */
+            dispatch({ type: "RESTART_AUTH" });
             setTimeout(() => setCanResendEmail(true), 10000);
           }}
           className={canResendEmail ? css.resendButton : css.disabled}
