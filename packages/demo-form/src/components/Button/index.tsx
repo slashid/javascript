@@ -1,5 +1,4 @@
 import React, { FC } from "react";
-import Image from "next/image";
 
 import Spinner, { SpinnerColorType } from "../Spinner";
 import css from "./button.module.css";
@@ -46,7 +45,7 @@ const Button: FC<Props> = ({
       >
         {isGoogle ? (
           <div>
-            <Image src={googleSrc} height={24} width={24} alt="google logo" />
+            <img src={googleSrc} height={24} width={24} alt="google logo" />
           </div>
         ) : null}
         {label}

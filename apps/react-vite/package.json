@@ -12,7 +12,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "@slashid/slashid": "^1.9.2",
-    "@slashid/react": "workspace:*"
+    "@slashid/react": "workspace:*",
+    "demo-form": "workspace:*"
   },
   "devDependencies": {
     "@types/react": "^18.0.22",
