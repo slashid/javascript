@@ -113,26 +113,36 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
       }
 
       const sid = sidRef.current;
-      if (sid) {
-        setState("authenticating");
-        const user = await sid.id(oid, handle, factor);
-
-        storeUser(user);
-        storageRef.current?.setItem(STORAGE_IDENTIFIER_KEY, handle.value);
-
-        setState("ready");
-        return user;
-      } else {
+      if (!sid) {
         return;
       }
+
+      setState("authenticating");
+
+      try {
+        const user = await sid.id(oid, handle, factor);
+        storeUser(user);
+        storageRef.current?.setItem(STORAGE_IDENTIFIER_KEY, handle.value);
+        setState("ready");
+        return user;
+      } catch (e) {
+        setState("ready");
+        logOut();
+        throw e;
+      }
     },
-    [oid, state, storeUser]
+    [oid, state, storeUser, logOut]
   );
 
   const validateToken = useCallback(async (token: string): Promise<boolean> => {
     const tokenUser = new User(token);
-    const ret = await tokenUser.validateToken();
-    return ret.valid;
+    try {
+      const ret = await tokenUser.validateToken();
+      return ret.valid;
+    } catch (e) {
+      console.error(e);
+      return false;
+    }
   }, []);
 
   useEffect(() => {
