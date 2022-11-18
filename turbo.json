@@ -7,12 +7,16 @@
     "lint": {
       "outputs": []
     },
+    "test:unit": {
+      "dependsOn": ["test:types", "lint"],
+      "outputs": []
+    },
     "build": {
       "dependsOn": ["^build", "test:types", "lint"],
       "outputs": ["dist/**", ".next/**"]
-    },    
+    },
     "dev": {
       "cache": false
-    }    
+    }
   }
 }

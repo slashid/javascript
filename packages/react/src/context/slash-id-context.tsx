@@ -43,7 +43,7 @@ export interface ISlashIDContext {
   validateToken: (token: string) => Promise<boolean>;
 }
 
-const initialContextValue = {
+export const initialContextValue = {
   sid: undefined,
   user: undefined,
   sdkState: "initial" as const,
