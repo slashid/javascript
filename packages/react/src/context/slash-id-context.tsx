@@ -28,7 +28,12 @@ export interface SlashIDProviderProps {
   children: React.ReactNode;
 }
 
-type SDKState = "initial" | "loaded" | "retrievingToken" | "ready";
+type SDKState =
+  | "initial"
+  | "loaded"
+  | "retrievingToken"
+  | "authenticating"
+  | "ready";
 export interface ISlashIDContext {
   sid: SlashID | undefined;
   user: User | undefined;
@@ -109,11 +114,13 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
 
       const sid = sidRef.current;
       if (sid) {
+        setState("authenticating");
         const user = await sid.id(oid, handle, factor);
 
         storeUser(user);
         storageRef.current?.setItem(STORAGE_IDENTIFIER_KEY, handle.value);
 
+        setState("ready");
         return user;
       } else {
         return;
