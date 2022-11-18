@@ -28,17 +28,25 @@ export interface SlashIDProviderProps {
   children: React.ReactNode;
 }
 
+type SDKState =
+  | "initial"
+  | "loaded"
+  | "retrievingToken"
+  | "authenticating"
+  | "ready";
 export interface ISlashIDContext {
   sid: SlashID | undefined;
   user: User | undefined;
+  sdkState: SDKState;
   logOut: () => undefined;
   logIn: (l: LoginOptions) => Promise<User | undefined>;
   validateToken: (token: string) => Promise<boolean>;
 }
 
-const initialContextValue = {
+export const initialContextValue = {
   sid: undefined,
   user: undefined,
+  sdkState: "initial" as const,
   logOut: () => undefined,
   logIn: () => Promise.reject("NYI"),
   validateToken: () => Promise.resolve(false),
@@ -62,14 +70,12 @@ const createStorage = (storageType: StorageOption) => {
   }
 };
 
-type SDKState = "initial" | "loaded" | "retrievingToken" | "ready";
-
 export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
   oid,
   tokenStorage = "memory",
   children,
 }) => {
-  const [state, setState] = useState<SDKState>("initial");
+  const [state, setState] = useState<SDKState>(initialContextValue.sdkState);
   const [user, setUser] = useState<User | undefined>(undefined);
   const storageRef = useRef<Storage | undefined>(undefined);
   const sidRef = useRef<SlashID | undefined>(undefined);
@@ -107,24 +113,36 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
       }
 
       const sid = sidRef.current;
-      if (sid) {
-        const user = await sid.id(oid, handle, factor);
-
-        storeUser(user);
-        storageRef.current?.setItem(STORAGE_IDENTIFIER_KEY, handle.value);
-
-        return user;
-      } else {
+      if (!sid) {
         return;
       }
+
+      setState("authenticating");
+
+      try {
+        const user = await sid.id(oid, handle, factor);
+        storeUser(user);
+        storageRef.current?.setItem(STORAGE_IDENTIFIER_KEY, handle.value);
+        setState("ready");
+        return user;
+      } catch (e) {
+        setState("ready");
+        logOut();
+        throw e;
+      }
     },
-    [oid, state, storeUser]
+    [oid, state, storeUser, logOut]
   );
 
   const validateToken = useCallback(async (token: string): Promise<boolean> => {
     const tokenUser = new User(token);
-    const ret = await tokenUser.validateToken();
-    return ret.valid;
+    try {
+      const ret = await tokenUser.validateToken();
+      return ret.valid;
+    } catch (e) {
+      console.error(e);
+      return false;
+    }
   }, []);
 
   useEffect(() => {
@@ -210,10 +228,24 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
 
   const contextValue = useMemo(() => {
     if (state === "initial") {
-      return { sid: undefined, user, logOut, logIn, validateToken };
+      return {
+        sid: undefined,
+        user,
+        sdkState: state,
+        logOut,
+        logIn,
+        validateToken,
+      };
     }
 
-    return { sid: sidRef.current!, user, logOut, logIn, validateToken };
+    return {
+      sid: sidRef.current!,
+      user,
+      sdkState: state,
+      logOut,
+      logIn,
+      validateToken,
+    };
   }, [logIn, logOut, user, validateToken, state]);
 
   return (
