@@ -1,5 +1,15 @@
 # @slashid/react
 
+## 0.1.0
+
+### Minor Changes
+
+- f14f357: Exposed the SDK state and components for rendering based on user state
+
+### Patch Changes
+
+- 7d3f673: Added unit tests
+
 ## 0.0.8
 
 ### Patch Changes
