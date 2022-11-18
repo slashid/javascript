@@ -28,9 +28,11 @@ export interface SlashIDProviderProps {
   children: React.ReactNode;
 }
 
+type SDKState = "initial" | "loaded" | "retrievingToken" | "ready";
 export interface ISlashIDContext {
   sid: SlashID | undefined;
   user: User | undefined;
+  sdkState: SDKState;
   logOut: () => undefined;
   logIn: (l: LoginOptions) => Promise<User | undefined>;
   validateToken: (token: string) => Promise<boolean>;
@@ -39,6 +41,7 @@ export interface ISlashIDContext {
 const initialContextValue = {
   sid: undefined,
   user: undefined,
+  sdkState: "initial" as const,
   logOut: () => undefined,
   logIn: () => Promise.reject("NYI"),
   validateToken: () => Promise.resolve(false),
@@ -62,14 +65,12 @@ const createStorage = (storageType: StorageOption) => {
   }
 };
 
-type SDKState = "initial" | "loaded" | "retrievingToken" | "ready";
-
 export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
   oid,
   tokenStorage = "memory",
   children,
 }) => {
-  const [state, setState] = useState<SDKState>("initial");
+  const [state, setState] = useState<SDKState>(initialContextValue.sdkState);
   const [user, setUser] = useState<User | undefined>(undefined);
   const storageRef = useRef<Storage | undefined>(undefined);
   const sidRef = useRef<SlashID | undefined>(undefined);
@@ -210,10 +211,24 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
 
   const contextValue = useMemo(() => {
     if (state === "initial") {
-      return { sid: undefined, user, logOut, logIn, validateToken };
+      return {
+        sid: undefined,
+        user,
+        sdkState: state,
+        logOut,
+        logIn,
+        validateToken,
+      };
     }
 
-    return { sid: sidRef.current!, user, logOut, logIn, validateToken };
+    return {
+      sid: sidRef.current!,
+      user,
+      sdkState: state,
+      logOut,
+      logIn,
+      validateToken,
+    };
   }, [logIn, logOut, user, validateToken, state]);
 
   return (
