@@ -51,11 +51,11 @@ function App() {
         <button
           onClick={() =>
             logIn({
-              factor: {
+              handle: {
                 type: "email_address",
                 value: "example@email.com",
               },
-              options: { method: "email_link" },
+              factor: { method: "email_link" },
             })
           }
         >
