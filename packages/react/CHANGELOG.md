@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 0.1.1
+
+### Patch Changes
+
+- 55917b6: Make the package public
+
 ## 0.1.0
 
 ### Minor Changes
