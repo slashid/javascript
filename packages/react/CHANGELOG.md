@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 0.1.3
+
+### Patch Changes
+
+- 1fe9d8e: Fix the readme example
+
 ## 0.1.2
 
 ### Patch Changes
