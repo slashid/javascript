@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 0.1.2
+
+### Patch Changes
+
+- d0145d6: Prepare for public release
+
 ## 0.1.1
 
 ### Patch Changes
