@@ -1,7 +1,6 @@
 {
   "name": "@slashid/react",
   "version": "0.1.1",
-  "access": "public",
   "repository": {
     "type": "git",
     "url": "https://github.com/slashid/javascript.git"

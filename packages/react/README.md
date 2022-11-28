@@ -1,4 +1,4 @@
-![SlashID React SDK](./slashid_react_banner.png)
+![SlashID React SDK](https://raw.githubusercontent.com/slashid/javascript/main/packages/react/slashid_react_banner.png)
 
 ![npm](https://img.shields.io/npm/v/@slashid/react)
 ![build](https://github.com/slashid/javascript/actions/workflows/ci.yml/badge.svg)
