@@ -1,6 +1,7 @@
 {
   "name": "@slashid/react",
   "version": "0.1.0",
+  "access": "public",
   "repository": {
     "type": "git",
     "url": "https://github.com/slashid/javascript.git"
@@ -21,6 +22,7 @@
   "types": "dist/main.d.ts",
   "main": "dist/main.js",
   "module": "dist/main.js",
+  "sideEffects": false,
   "exports": {
     ".": {
       "import": "./dist/main.js"
