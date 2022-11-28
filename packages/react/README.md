@@ -2,9 +2,12 @@
 
 ![npm](https://img.shields.io/npm/v/@slashid/react)
 ![build](https://github.com/slashid/javascript/actions/workflows/ci.yml/badge.svg)
+
 ## Documentation
 
-Check out our [developer docs](https://developer.slashid.dev/) for guides and API documentation.
+Check out our [developer docs](https://developer.slashid.dev/) for guides and API documentation. You can also check out the demo on CodeSandbox:
+
+[![Try on CodeSandbox](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/hopeful-austin-486cco?fontsize=14&hidenavigation=1&theme=dark)
 
 ## Setup
 
@@ -51,11 +54,11 @@ function App() {
         <button
           onClick={() =>
             logIn({
-              factor: {
+              handle: {
                 type: "email_address",
                 value: "example@email.com",
               },
-              options: { method: "email_link" },
+              factor: { method: "email_link" },
             })
           }
         >
