@@ -36,13 +36,17 @@
     "test:types": "tsc --noEmit --emitDeclarationOnly false",
     "test:unit": "vitest run"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@vanilla-extract/css": "^1.9.2",
+    "@vanilla-extract/recipes": "^0.3.0"
+  },
   "devDependencies": {
     "@slashid/slashid": "^1.9.3",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@types/react": "18.0.8",
     "@types/testing-library__jest-dom": "^5.14.5",
+    "@vanilla-extract/vite-plugin": "^3.7.0",
     "@vitejs/plugin-react": "^2.1.0",
     "jsdom": "^20.0.2",
     "react": "^18.2.0",
