@@ -11,4 +11,4 @@ export interface LoginOptions {
 }
 
 export type LogIn = (options: LoginOptions) => Promise<User | undefined>;
-export type Retry = LogIn;
+export type Retry = () => void;
