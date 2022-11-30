@@ -121,7 +121,6 @@ importers:
       '@vanilla-extract/recipes': ^0.3.0
       '@vanilla-extract/vite-plugin': ^3.7.0
       '@vitejs/plugin-react': ^2.1.0
-      i: ^0.3.7
       jsdom: ^20.0.2
       react: ^18.2.0
       react-dom: ^18.2.0
@@ -129,16 +128,15 @@ importers:
       vite: ^3.1.0
       vitest: ^0.25.2
     dependencies:
-      '@types/react-dom': 18.0.9
       '@vanilla-extract/css': 1.9.2
       '@vanilla-extract/dynamic': 2.0.3
       '@vanilla-extract/recipes': 0.3.0_@vanilla-extract+css@1.9.2
-      i: 0.3.7
     devDependencies:
       '@slashid/slashid': 1.9.3
       '@testing-library/jest-dom': 5.16.5
       '@testing-library/react': 13.4.0_biqbaboplfbrettd7655fr4n2y
       '@types/react': 18.0.8
+      '@types/react-dom': 18.0.9
       '@types/testing-library__jest-dom': 5.14.5
       '@vanilla-extract/vite-plugin': 3.7.0_vite@3.1.8
       '@vitejs/plugin-react': 2.1.0_vite@3.1.8
@@ -1395,6 +1393,7 @@ packages:
     resolution: {integrity: sha512-qnVvHxASt/H7i+XG1U1xMiY5t+IHcPGUK7TDMDzom08xa7e86eCeKOiLZezwCKVxJn6NEiiy2ekgX8aQssjIKg==}
     dependencies:
       '@types/react': 18.0.25
+    dev: true
 
   /@types/react/18.0.22:
     resolution: {integrity: sha512-4yWc5PyCkZN8ke8K9rQHkTXxHIWHxLzzW6RI1kXVoepkD3vULpKzC2sDtAMKn78h92BRYuzf+7b/ms7ajE6hFw==}
@@ -3241,11 +3240,6 @@ packages:
   /human-id/1.0.2:
     resolution: {integrity: sha512-UNopramDEhHJD+VR+ehk8rOslwSfByxPIZyJRfV739NDhN5LF1fa1MqnzKm2lGTQRjNrjK19Q5fhkgIfjlVUKw==}
     dev: true
-
-  /i/0.3.7:
-    resolution: {integrity: sha512-FYz4wlXgkQwIPqhzC5TdNMLSE5+GS1IIDJZY/1ZiEPCT2S3COUVZeT5OW4BmW4r5LHLQuOosSwsvnroG9GR59Q==}
-    engines: {node: '>=0.4'}
-    dev: false
 
   /iconv-lite/0.4.24:
     resolution: {integrity: sha512-v3MXnZAcvnywkTUEZomIActle7RXXeedOR31wwl7VlyoXO4Qi9arvSenNQWne1TcRwhCL1HwLI21bEqdpj8/rA==}
