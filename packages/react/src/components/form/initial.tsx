@@ -19,7 +19,7 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
       }}
     >
       <h1>initial form</h1>
-      <button type="submit">Log in</button>
+      <button data-testid="sid-form-initial-submit-button" type="submit">Log in</button>
     </form>
   );
 };

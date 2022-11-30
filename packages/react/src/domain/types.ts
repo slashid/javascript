@@ -12,3 +12,4 @@ export interface LoginOptions {
 
 export type LogIn = (options: LoginOptions) => Promise<User | undefined>;
 export type Retry = () => void;
+export type Cancel = () => void;

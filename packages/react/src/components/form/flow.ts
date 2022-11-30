@@ -1,4 +1,4 @@
-import { LogIn, LoginOptions, Retry } from "../../domain/types";
+import { Cancel, LogIn, LoginOptions, Retry } from "../../domain/types";
 
 export interface InitialState {
   status: "initial";
@@ -9,8 +9,10 @@ export interface AuthenticatingState {
   status: "authenticating";
   context: {
     options: LoginOptions;
+    attempt: number;
   };
   retry: Retry;
+  cancel: Cancel;
 }
 
 export interface SuccessState {
@@ -26,11 +28,15 @@ interface LoginEvent {
   options: LoginOptions;
 }
 
+interface CancelEvent {
+  type: "sid_cancel";
+}
+
 interface RetryEvent {
   type: "sid_retry";
 }
 
-type Event = LoginEvent | RetryEvent;
+type Event = LoginEvent | RetryEvent | CancelEvent;
 
 export type FlowState =
   | InitialState
@@ -56,9 +62,15 @@ const createAuthenticatingState = (
 ): AuthenticatingState => {
   return {
     status: "authenticating",
-    context,
+    context: {
+      attempt: 0,
+      options: context.options,
+    },
     retry: () => {
       send({ type: "sid_retry" });
+    },
+    cancel: () => {
+      send({ type: "sid_cancel" });
     },
   };
 };
@@ -89,17 +101,51 @@ export function createFlow() {
   }
 
   async function processEvent(e: Event) {
-    switch (e.type) {
-      case "sid_login":
-        if (logInFn) {
-          setState(createAuthenticatingState(send, { options: e.options }));
-          try {
-            await logInFn(e.options);
-            setState(createSuccessState());
-          } catch (e) {
-            setState(createErrorState());
-          }
+    switch (state.status) {
+      case "initial": {
+        switch (e.type) {
+          case "sid_login":
+            if (logInFn) {
+              setState(createAuthenticatingState(send, { options: e.options }));
+              try {
+                await logInFn(e.options);
+                setState(createSuccessState());
+              } catch (e) {
+                setState(createErrorState());
+              }
+            }
         }
+        break;
+      }
+
+      case "authenticating": {
+        switch (e.type) {
+          case "sid_retry":
+            {
+              if (logInFn) {
+                try {
+                  setState({
+                    ...state,
+                    context: {
+                      ...state.context,
+                      attempt: state.context.attempt + 1,
+                    },
+                  });
+                  await logInFn(state.context.options);
+                  setState(createSuccessState());
+                } catch (e) {
+                  setState(createErrorState());
+                }
+              }
+            }
+            break;
+          case "sid_cancel":
+            {
+              setState(createInitialState(send));
+            }
+            break;
+        }
+      }
     }
   }
 
