@@ -31,6 +31,7 @@
     "dist/*"
   ],
   "scripts": {
+    "dev": "vite",
     "build": "vite build && tsc",
     "lint": "eslint ./src",
     "test:types": "tsc --noEmit --emitDeclarationOnly false",
@@ -38,6 +39,7 @@
   },
   "dependencies": {
     "@vanilla-extract/css": "^1.9.2",
+    "@vanilla-extract/dynamic": "^2.0.3",
     "@vanilla-extract/recipes": "^0.3.0"
   },
   "devDependencies": {
@@ -45,6 +47,7 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@types/react": "18.0.8",
+    "@types/react-dom": "^18.0.9",
     "@types/testing-library__jest-dom": "^5.14.5",
     "@vanilla-extract/vite-plugin": "^3.7.0",
     "@vitejs/plugin-react": "^2.1.0",
