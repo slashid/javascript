@@ -111,6 +111,7 @@ importers:
   packages/react:
     specifiers:
       '@slashid/slashid': ^1.9.3
+      '@testing-library/dom': ^8.19.0
       '@testing-library/jest-dom': ^5.16.5
       '@testing-library/react': ^13.4.0
       '@testing-library/user-event': ^14.4.3
@@ -129,14 +130,15 @@ importers:
       vite: ^3.1.0
       vitest: ^0.25.2
     dependencies:
-      '@testing-library/user-event': 14.4.3
       '@vanilla-extract/css': 1.9.2
       '@vanilla-extract/dynamic': 2.0.3
       '@vanilla-extract/recipes': 0.3.0_@vanilla-extract+css@1.9.2
     devDependencies:
       '@slashid/slashid': 1.9.3
+      '@testing-library/dom': 8.19.0
       '@testing-library/jest-dom': 5.16.5
       '@testing-library/react': 13.4.0_biqbaboplfbrettd7655fr4n2y
+      '@testing-library/user-event': 14.4.3_aaq3sbffpfe3jnxzm2zngsddei
       '@types/react': 18.0.8
       '@types/react-dom': 18.0.9
       '@types/testing-library__jest-dom': 5.14.5
@@ -1313,12 +1315,14 @@ packages:
       react-dom: 18.2.0_react@18.2.0
     dev: true
 
-  /@testing-library/user-event/14.4.3:
+  /@testing-library/user-event/14.4.3_aaq3sbffpfe3jnxzm2zngsddei:
     resolution: {integrity: sha512-kCUc5MEwaEMakkO5x7aoD+DLi02ehmEM2QCGWvNqAS1dV/fAvORWEjnjsEIvml59M7Y5kCkWN6fCCyPOe8OL6Q==}
     engines: {node: '>=12', npm: '>=6'}
     peerDependencies:
       '@testing-library/dom': '>=7.21.4'
-    dev: false
+    dependencies:
+      '@testing-library/dom': 8.19.0
+    dev: true
 
   /@tootallnate/once/2.0.0:
     resolution: {integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==}
