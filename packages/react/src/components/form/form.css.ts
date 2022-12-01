@@ -1,10 +1,6 @@
 import { style } from "@vanilla-extract/css";
-import { theme } from "../../theme/theme.css";
+import { publicVariables } from "../../theme/theme.css";
 
-const form = style({
-  color: theme.color.brand,
+export const form = style({
+  fontFamily: publicVariables.font.fontFamily,
 });
-
-export const styles = {
-  form,
-};
