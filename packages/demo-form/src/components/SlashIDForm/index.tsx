@@ -6,7 +6,6 @@ import { HandleInput } from "./HandleInput";
 import { AuthMethodDropdown } from "./AuthMethodDropdown";
 import Button from "../Button";
 import { useSlashID } from "@slashid/react";
-import { PersonHandleType } from "@slashid/slashid";
 import Logo from "../Icons/Logo";
 import ChevronLeft from "../Icons/ChevronLeft";
 import { Authenticating } from "./Authenticating";
@@ -18,7 +17,7 @@ export const SlashIDForm = () => {
   useEffect(() => {
     const performAuth = async () => {
       const handle = {
-        type: state.handleType as unknown as PersonHandleType,
+        type: state.handleType,
         value: state.handleValue,
       };
       const factor = {

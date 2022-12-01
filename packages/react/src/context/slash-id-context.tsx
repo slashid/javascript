@@ -7,18 +7,9 @@ import React, {
   useState,
 } from "react";
 
-import { PersonHandleType, Factor, SlashID, User } from "@slashid/slashid";
+import { PersonHandleType, SlashID, User } from "@slashid/slashid";
 import { MemoryStorage } from "../browser/memory-storage";
-
-interface Handle {
-  type: PersonHandleType;
-  value: string;
-}
-
-export interface LoginOptions {
-  handle: Handle;
-  factor: Factor;
-}
+import { LogIn, LoginOptions } from "../domain/types";
 
 export type StorageOption = "memory" | "localStorage";
 
@@ -39,7 +30,7 @@ export interface ISlashIDContext {
   user: User | undefined;
   sdkState: SDKState;
   logOut: () => undefined;
-  logIn: (l: LoginOptions) => Promise<User | undefined>;
+  logIn: LogIn;
   validateToken: (token: string) => Promise<boolean>;
 }
 
@@ -120,7 +111,10 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
       setState("authenticating");
 
       try {
-        const user = await sid.id(oid, handle, factor);
+        // TS magic to circumvent the PersonHandleType enum
+        const type: PersonHandleType =
+          handle.type as unknown as PersonHandleType;
+        const user = await sid.id(oid, { type, value: handle.value }, factor);
         storeUser(user);
         storageRef.current?.setItem(STORAGE_IDENTIFIER_KEY, handle.value);
         setState("ready");
