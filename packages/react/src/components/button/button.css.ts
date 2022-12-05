@@ -8,7 +8,18 @@ export const button = style({
   fontWeight: theme.font.weight.medium,
   fontSize: theme.font.size.base,
   color: publicVariables.color.textWhite,
+
   padding: "19px 22px",
   lineHeight: "118%",
   border: "none",
+  height: theme.input.height,
+
+  ":hover": {
+    cursor: "pointer",
+    backgroundColor: publicVariables.color.accent,
+  },
+
+  ":active": {
+    transform: "scale(.98)",
+  },
 });
