@@ -1,5 +1,6 @@
 import { Button } from "../button";
 import { LinkButton } from "../button/link-button";
+import { Google } from "../icon/google";
 import { InitialState } from "./flow";
 
 type Props = {
@@ -25,7 +26,17 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
         Log in
       </button>
       <Button className="custom-css" onClick={() => console.log("click")}>
-        Delete me
+        Primary
+      </Button>
+      <Button variant="secondary" onClick={() => console.log("click")}>
+        Secondary
+      </Button>
+      <Button
+        icon={<Google />}
+        variant="secondary"
+        onClick={() => console.log("click")}
+      >
+        Sign in with Google
       </Button>
       <LinkButton onClick={() => console.log("click")}>Link button</LinkButton>
     </form>

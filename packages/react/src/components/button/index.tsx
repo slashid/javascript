@@ -7,6 +7,8 @@ type Props = {
   onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
   className?: string;
   type?: "button" | "submit";
+  variant?: keyof typeof styles.button;
+  icon?: ReactNode;
 };
 
 export const Button: React.FC<Props> = ({
@@ -14,13 +16,20 @@ export const Button: React.FC<Props> = ({
   onClick,
   className,
   type = "button",
+  variant = "primary",
+  icon,
 }) => {
   return (
     <button
       type={type}
-      className={clsx("sid-button", styles.button, className)}
+      className={clsx(
+        `sid-button--${variant}`,
+        styles.button[variant],
+        className
+      )}
       onClick={onClick}
     >
+      {icon ? <i className={styles.icon}>{icon}</i> : null}
       {children}
     </button>
   );
