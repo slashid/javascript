@@ -1,5 +1,6 @@
 import { Button } from "../button";
 import { LinkButton } from "../button/link-button";
+import { Text } from "../text";
 import { Google } from "../icon/google";
 import { InitialState } from "./flow";
 
@@ -21,7 +22,7 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
         });
       }}
     >
-      <h1>initial form</h1>
+      <Text as="h1" t="initial.title" />
       <button data-testid="sid-form-initial-submit-button" type="submit">
         Log in
       </button>
