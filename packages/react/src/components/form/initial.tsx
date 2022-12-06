@@ -1,4 +1,5 @@
 import { Button } from "../button";
+import { LinkButton } from "../button/link-button";
 import { InitialState } from "./flow";
 
 type Props = {
@@ -26,6 +27,7 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
       <Button className="custom-css" onClick={() => console.log("click")}>
         Delete me
       </Button>
+      <LinkButton onClick={() => console.log("click")}>Link button</LinkButton>
     </form>
   );
 };

@@ -1,25 +1,29 @@
 import { style } from "@vanilla-extract/css";
 import { publicVariables, theme } from "../../theme/theme.css";
+import { sprinkles } from "../../theme/sprinkles.css";
 
 export const button = style({
-  backgroundColor: publicVariables.color.brand,
   fontFamily: publicVariables.font.fontFamily,
-  borderRadius: publicVariables.button.borderRadius,
-  fontWeight: theme.font.weight.medium,
-  fontSize: theme.font.size.base,
-  color: publicVariables.color.white,
+  fontWeight: theme.font.weight.semibold,
+  fontSize: theme.font.size.sm,
 
-  padding: "19px 22px",
+  backgroundColor: "transparent",
   lineHeight: "118%",
   border: "none",
-  height: theme.input.height,
 
   ":hover": {
     cursor: "pointer",
-    backgroundColor: publicVariables.color.accent,
+    opacity: 0.6,
   },
 
   ":active": {
     transform: "scale(.98)",
+  },
+});
+
+export const test = sprinkles({
+  color: {
+    lightMode: "blue900",
+    darkMode: "grey100",
   },
 });
