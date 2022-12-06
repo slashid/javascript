@@ -110,6 +110,7 @@ importers:
 
   packages/react:
     specifiers:
+      '@fontsource/inter': ^4.5.14
       '@slashid/slashid': ^1.9.3
       '@testing-library/dom': ^8.19.0
       '@testing-library/jest-dom': ^5.16.5
@@ -121,8 +122,10 @@ importers:
       '@vanilla-extract/css': ^1.9.2
       '@vanilla-extract/dynamic': ^2.0.3
       '@vanilla-extract/recipes': ^0.3.0
+      '@vanilla-extract/sprinkles': ^1.5.1
       '@vanilla-extract/vite-plugin': ^3.7.0
       '@vitejs/plugin-react': ^2.1.0
+      clsx: ^1.2.1
       jsdom: ^20.0.2
       react: ^18.2.0
       react-dom: ^18.2.0
@@ -130,9 +133,11 @@ importers:
       vite: ^3.1.0
       vitest: ^0.25.2
     dependencies:
+      '@fontsource/inter': 4.5.14
       '@vanilla-extract/css': 1.9.2
       '@vanilla-extract/dynamic': 2.0.3
       '@vanilla-extract/recipes': 0.3.0_@vanilla-extract+css@1.9.2
+      '@vanilla-extract/sprinkles': 1.5.1_@vanilla-extract+css@1.9.2
     devDependencies:
       '@slashid/slashid': 1.9.3
       '@testing-library/dom': 8.19.0
@@ -144,6 +149,7 @@ importers:
       '@types/testing-library__jest-dom': 5.14.5
       '@vanilla-extract/vite-plugin': 3.7.0_vite@3.1.8
       '@vitejs/plugin-react': 2.1.0_vite@3.1.8
+      clsx: 1.2.1
       jsdom: 20.0.2
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
@@ -673,6 +679,10 @@ packages:
       strip-json-comments: 3.1.1
     transitivePeerDependencies:
       - supports-color
+
+  /@fontsource/inter/4.5.14:
+    resolution: {integrity: sha512-JDC9AocdPLuGsASkvWw9hS5gtHE7K9dOwL98XLrk5yjYqxy4uVnScG58NUvFMJDVJRl/7c8Wnap6PEs+7Zvj1Q==}
+    dev: false
 
   /@humanwhocodes/config-array/0.5.0:
     resolution: {integrity: sha512-FagtKFz74XrTl7y6HCzQpwDfXP0yhxe9lHLD1UZxjvZIcbyRz8zTFF/yYNfSfzU414eDwZ1SrO0Qvtyf+wFMQg==}
@@ -1641,6 +1651,14 @@ packages:
       '@vanilla-extract/css': 1.9.2
     dev: false
 
+  /@vanilla-extract/sprinkles/1.5.1_@vanilla-extract+css@1.9.2:
+    resolution: {integrity: sha512-xPYpeEZEC1mhiPqWCBPGdIHkpFaaQIbaAfG9W2JyIW0byqTP7CoaxdYNMPjhZuoV5lkTI14SJg8Bt+fZqmV5yQ==}
+    peerDependencies:
+      '@vanilla-extract/css': ^1.0.0
+    dependencies:
+      '@vanilla-extract/css': 1.9.2
+    dev: false
+
   /@vanilla-extract/vite-plugin/3.7.0_vite@3.1.8:
     resolution: {integrity: sha512-Sq54d1f+Bww09e9Q5acFsNKjlSYMQ4GewJthdb3CVwUeGVzV10rJBChw6zufs7ndmJVCzQ4I2IcNMy2OiAlkmA==}
     peerDependencies:
@@ -2022,6 +2040,11 @@ packages:
   /clone/1.0.4:
     resolution: {integrity: sha512-JQHZ2QMW6l3aH/j6xCqQThY/9OH4D/9ls34cgkUBiEeocRTU04tHfKPBsUK1PqZCUQM7GiA0IIXJSuXHI64Kbg==}
     engines: {node: '>=0.8'}
+    dev: true
+
+  /clsx/1.2.1:
+    resolution: {integrity: sha512-EcR6r5a8bj6pu3ycsa/E/cKVGuTgZJZdsyUYHOksG/UHIiKfjxzRxYJpyVBwYaQeOvghal9fcc4PidlgzugAQg==}
+    engines: {node: '>=6'}
     dev: true
 
   /color-convert/1.9.3:
