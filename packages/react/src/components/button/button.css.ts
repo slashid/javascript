@@ -10,6 +10,7 @@ export const button = style({
   color: publicVariables.color.white,
 
   padding: "19px 22px",
+  userSelect: "none",
   lineHeight: "118%",
   border: "none",
   height: theme.input.height,

@@ -8,6 +8,7 @@ export const button = style({
   fontSize: theme.font.size.sm,
 
   backgroundColor: "transparent",
+  userSelect: "none",
   lineHeight: "118%",
   border: "none",
 
@@ -21,7 +22,7 @@ export const button = style({
   },
 });
 
-export const test = sprinkles({
+export const color = sprinkles({
   color: {
     lightMode: "blue900",
     darkMode: "grey100",

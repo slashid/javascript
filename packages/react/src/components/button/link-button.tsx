@@ -18,7 +18,12 @@ export const LinkButton: React.FC<Props> = ({
   return (
     <button
       type={type}
-      className={clsx("sid-link-button", styles.button, className)}
+      className={clsx(
+        "sid-link-button",
+        styles.button,
+        styles.color,
+        className
+      )}
       onClick={onClick}
     >
       {children}
