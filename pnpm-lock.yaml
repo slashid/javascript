@@ -126,6 +126,7 @@ importers:
       '@vanilla-extract/vite-plugin': ^3.7.0
       '@vitejs/plugin-react': ^2.1.0
       clsx: ^1.2.1
+      country-list-with-dial-code-and-flag: ^3.0.2
       jsdom: ^20.0.2
       react: ^18.2.0
       react-dom: ^18.2.0
@@ -138,6 +139,7 @@ importers:
       '@vanilla-extract/dynamic': 2.0.3
       '@vanilla-extract/recipes': 0.3.0_@vanilla-extract+css@1.9.2
       '@vanilla-extract/sprinkles': 1.5.1_@vanilla-extract+css@1.9.2
+      country-list-with-dial-code-and-flag: 3.0.2
     devDependencies:
       '@slashid/slashid': 1.9.3
       '@testing-library/dom': 8.19.0
@@ -2081,6 +2083,10 @@ packages:
   /core-js-pure/3.26.0:
     resolution: {integrity: sha512-LiN6fylpVBVwT8twhhluD9TzXmZQQsr2I2eIKtWNbZI1XMfBT7CV18itaN6RA7EtQd/SDdRx/wzvAShX2HvhQA==}
     requiresBuild: true
+    dev: false
+
+  /country-list-with-dial-code-and-flag/3.0.2:
+    resolution: {integrity: sha512-9dfosIYjtuPRyFJzt/zDSeYzlRmZ7B6UU7Sm6eG9mldPIhaEscwajQZeZSlrP8c35x+8TlodU/fcF16D+8biiw==}
     dev: false
 
   /cross-spawn/5.1.0:

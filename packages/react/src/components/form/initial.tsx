@@ -11,7 +11,8 @@ type Props = {
 };
 
 export const Initial: React.FC<Props> = ({ flowState }) => {
-  const [text, setText] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
 
   return (
     <form
@@ -49,8 +50,17 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
         name="test"
         label="Test input"
         placeholder="Write something"
-        value={text}
-        onChange={(e) => setText(e.target.value)}
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <Input
+        id="phone"
+        name="phone"
+        label="Phone input"
+        placeholder="Write something"
+        value={phone}
+        onChange={(e) => setPhone(e.target.value)}
+        type="tel"
       />
     </form>
   );
