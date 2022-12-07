@@ -3,7 +3,7 @@ import { style, styleVariants } from "@vanilla-extract/css";
 
 const base = style({
   fontFamily: publicVariables.font.fontFamily,
-  borderRadius: publicVariables.button.borderRadius,
+  borderRadius: publicVariables.border.radius,
   fontWeight: theme.font.weight.medium,
   fontSize: theme.font.size.base,
   height: theme.input.height,
@@ -23,7 +23,7 @@ const base = style({
   },
 
   ":focus-visible": {
-    outline: "4px solid rgba(20, 32, 73, 0.12)",
+    outline: `4px solid ${publicVariables.color.smooth}`,
   },
 });
 

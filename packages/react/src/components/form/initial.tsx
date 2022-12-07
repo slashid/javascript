@@ -3,12 +3,16 @@ import { LinkButton } from "../button/link-button";
 import { Text } from "../text";
 import { Google } from "../icon/google";
 import { InitialState } from "./flow";
+import { Input } from "../input";
+import { useState } from "react";
 
 type Props = {
   flowState: InitialState;
 };
 
 export const Initial: React.FC<Props> = ({ flowState }) => {
+  const [text, setText] = useState("");
+
   return (
     <form
       data-testid="sid-form-initial-state"
@@ -40,6 +44,14 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
         Sign in with Google
       </Button>
       <LinkButton onClick={() => console.log("click")}>Link button</LinkButton>
+      <Input
+        id="test"
+        name="test"
+        label="Test input"
+        placeholder="Write something"
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+      />
     </form>
   );
 };
