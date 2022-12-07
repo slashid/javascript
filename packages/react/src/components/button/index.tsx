@@ -23,6 +23,7 @@ export const Button: React.FC<Props> = ({
     <button
       type={type}
       className={clsx(
+        "sid-button",
         `sid-button--${variant}`,
         styles.button[variant],
         className

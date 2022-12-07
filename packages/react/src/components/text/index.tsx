@@ -1,3 +1,4 @@
+import { clsx } from "clsx";
 import { useConfiguration } from "../../hooks/use-configuration";
 import { TextConfigKey } from "./constants";
 import * as styles from "./text.css";
@@ -12,5 +13,11 @@ export const Text: React.FC<Props> = ({ as, t, variant }) => {
   const { text } = useConfiguration();
   const Component = as ? as : "p";
 
-  return <Component className={styles.text(variant)}>{text[t]}</Component>;
+  return (
+    <Component
+      className={clsx("sid-text", `sid-text--${as}`, styles.text(variant))}
+    >
+      {text[t]}
+    </Component>
+  );
 };
