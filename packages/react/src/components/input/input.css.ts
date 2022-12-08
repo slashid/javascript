@@ -1,4 +1,4 @@
-import { style } from "@vanilla-extract/css";
+import { style, styleVariants } from "@vanilla-extract/css";
 import { publicVariables, theme } from "../../theme/theme.css";
 
 export const input = style({
@@ -28,6 +28,18 @@ export const countryHost = style({
   height: "100%",
   width: "122px",
   borderRight: `1px solid ${publicVariables.color.subtle}`,
+
+  selectors: {
+    [`&:has(${select}:active)`]: {
+      borderRight: `1px solid ${publicVariables.color.tertiary}`,
+    },
+    [`&:has(${select}:focus)`]: {
+      borderRight: `1px solid ${publicVariables.color.tertiary}`,
+    },
+    [`&:has(${select}:hover)`]: {
+      borderRight: `1px solid ${publicVariables.color.placeholder}`,
+    },
+  },
 });
 
 export const host = style({
@@ -63,13 +75,35 @@ export const host = style({
   },
 });
 
-export const inputHost = style({
+const inputHostBase = style({
   display: "flex",
   alignItems: "flex-start",
   justifyContent: "center",
   flexDirection: "column",
   height: "100%",
   padding: `0 ${theme.input.paddingHorizontal}`,
+  borderLeft: "1px solid transparent",
+});
+
+export const inputHost = styleVariants({
+  text: [inputHostBase, {}],
+  email: [inputHostBase, {}],
+  tel: [
+    inputHostBase,
+    {
+      selectors: {
+        [`&:has(${input}:active)`]: {
+          borderLeft: `1px solid ${publicVariables.color.tertiary}`,
+        },
+        [`&:has(${input}:focus)`]: {
+          borderLeft: `1px solid ${publicVariables.color.tertiary}`,
+        },
+        [`&:has(${input}:hover)`]: {
+          borderLeft: `1px solid ${publicVariables.color.placeholder}`,
+        },
+      },
+    },
+  ],
 });
 
 export const label = style({

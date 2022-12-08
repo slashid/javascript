@@ -59,7 +59,7 @@ export const Input: React.FC<Props> = ({
           </select>
         </div>
       ) : null}
-      <div className={styles.inputHost}>
+      <div className={styles.inputHost[type]}>
         <label htmlFor={id} className={styles.label}>
           {label}
         </label>
