@@ -1,10 +1,8 @@
 import { clsx } from "clsx";
 import { ChangeEventHandler, useState } from "react";
-import {
-  getList,
-  findFlagByDialCode,
-} from "country-list-with-dial-code-and-flag";
+import { getList, findFlag } from "country-list-with-dial-code-and-flag";
 import * as styles from "./input.css";
+import { ChevronDown } from "../icon/chevron-down";
 
 type Props = {
   id: string;
@@ -27,30 +25,34 @@ export const Input: React.FC<Props> = ({
   value,
   onChange,
 }) => {
-  const [countryCode, setCountryCode] = useState("");
+  const [countryCode, setCountryCode] = useState("GB");
   const countries = getList();
+  const selectedCountry = findFlag(countryCode);
 
   return (
     <div className={clsx("sid-input", styles.host, className)}>
-      {type === "tel" ? (
-        <div>
-          Phone
-          <div>
-            <>{countryCode ? findFlagByDialCode(countryCode).flag : null}</>
-            <select
-              value={countryCode}
-              onChange={(e) => setCountryCode(e.target.value)}
-            >
-              {countries.map((country) => (
-                <option key={country.code} value={country.dial_code}>
-                  {country.name} {country.dial_code}
-                </option>
-              ))}
-            </select>
+      {type === "tel" && selectedCountry ? (
+        <div className={styles.countryHost}>
+          <div className={styles.countryCode}>
+            <div>
+              {selectedCountry.flag} {selectedCountry.dial_code}
+            </div>
+            <ChevronDown />
           </div>
+          <select
+            className={styles.select}
+            value={countryCode}
+            onChange={(e) => setCountryCode(e.target.value)}
+          >
+            {countries.map((country) => (
+              <option key={country.code} value={country.code}>
+                {country.name} {country.dial_code}
+              </option>
+            ))}
+          </select>
         </div>
       ) : null}
-      <div>
+      <div className={styles.inputHost}>
         <label htmlFor={id} className={styles.label}>
           {label}
         </label>
