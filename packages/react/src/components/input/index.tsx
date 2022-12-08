@@ -10,8 +10,44 @@ type BaseProps = {
   label: string;
   placeholder?: string;
   className?: string;
+  type: "text" | "email" | "tel";
   value: string;
   onChange: (value: string) => void;
+};
+
+const BaseInput: React.FC<BaseProps> = ({
+  id,
+  name,
+  label,
+  placeholder = "",
+  value,
+  onChange,
+  type,
+}) => {
+  const handleChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const { value: val } = e.target;
+      onChange(val);
+    },
+    [onChange]
+  );
+
+  return (
+    <div className={styles.inputHost[type]}>
+      <label htmlFor={id} className={styles.label}>
+        {label}
+      </label>
+      <input
+        type={type}
+        id={id}
+        name={name}
+        className={styles.input}
+        placeholder={placeholder}
+        value={value}
+        onChange={handleChange}
+      />
+    </div>
+  );
 };
 
 type InputProps = BaseProps & {
@@ -28,14 +64,6 @@ export const Input: React.FC<InputProps> = ({
   value,
   onChange,
 }) => {
-  const handleChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      const { value: val } = e.target;
-      onChange(val);
-    },
-    [onChange]
-  );
-
   return (
     <div
       className={clsx(
@@ -45,20 +73,16 @@ export const Input: React.FC<InputProps> = ({
         className
       )}
     >
-      <div className={styles.inputHost[type]}>
-        <label htmlFor={id} className={styles.label}>
-          {label}
-        </label>
-        <input
-          type={type}
-          id={id}
-          name={name}
-          className={styles.input}
-          placeholder={placeholder}
-          value={value}
-          onChange={handleChange}
-        />
-      </div>
+      <BaseInput
+        id={id}
+        name={name}
+        label={label}
+        placeholder={placeholder}
+        className={className}
+        type={type}
+        value={value}
+        onChange={onChange}
+      />
     </div>
   );
 };
@@ -84,14 +108,6 @@ export const PhoneInput: React.FC<PhoneProps> = ({
   onFlagChange,
 }) => {
   const countries = getList();
-
-  const handleChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      const { value: val } = e.target;
-      onChange(val);
-    },
-    [onChange]
-  );
 
   const handleChangeCountryCode = useCallback(
     (e: ChangeEvent<HTMLSelectElement>) => {
@@ -126,20 +142,16 @@ export const PhoneInput: React.FC<PhoneProps> = ({
           </select>
         </div>
       ) : null}
-      <div className={styles.inputHost["tel"]}>
-        <label htmlFor={id} className={styles.label}>
-          {label}
-        </label>
-        <input
-          type={"tel"}
-          id={id}
-          name={name}
-          className={styles.input}
-          placeholder={placeholder}
-          value={value}
-          onChange={handleChange}
-        />
-      </div>
+      <BaseInput
+        id={id}
+        name={name}
+        label={label}
+        placeholder={placeholder}
+        className={className}
+        type={"tel"}
+        value={value}
+        onChange={onChange}
+      />
     </div>
   );
 };
