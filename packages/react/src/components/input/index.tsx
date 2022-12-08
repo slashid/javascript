@@ -10,7 +10,7 @@ type BaseProps = {
   label: string;
   placeholder?: string;
   className?: string;
-  type: "text" | "email" | "tel";
+  type?: "text" | "email" | "tel";
   value: string;
   onChange: (value: string) => void;
 };
@@ -22,7 +22,7 @@ const BaseInput: React.FC<BaseProps> = ({
   placeholder = "",
   value,
   onChange,
-  type,
+  type = "text",
 }) => {
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
