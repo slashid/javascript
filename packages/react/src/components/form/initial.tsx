@@ -3,8 +3,10 @@ import { LinkButton } from "../button/link-button";
 import { Text } from "../text";
 import { Google } from "../icon/google";
 import { InitialState } from "./flow";
-import { Input } from "../input";
+import { Input, PhoneInput } from "../input";
 import { useState } from "react";
+import { Flag } from "country-list-with-dial-code-and-flag/dist/types";
+import { findFlag } from "country-list-with-dial-code-and-flag";
 
 type Props = {
   flowState: InitialState;
@@ -13,6 +15,7 @@ type Props = {
 export const Initial: React.FC<Props> = ({ flowState }) => {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [flag, setFlag] = useState<Flag>(findFlag("GB")!);
 
   return (
     <form
@@ -51,16 +54,17 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
         label="Test input"
         placeholder="Write something"
         value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        onChange={(value) => setEmail(value)}
       />
-      <Input
+      <PhoneInput
         id="phone"
         name="phone"
         label="Phone input"
         placeholder="Write something"
         value={phone}
-        onChange={(e) => setPhone(e.target.value)}
-        type="tel"
+        onChange={(value) => setPhone(value)}
+        flag={flag}
+        onFlagChange={setFlag}
       />
     </form>
   );
