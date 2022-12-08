@@ -6,6 +6,7 @@ import { InitialState } from "./flow";
 import { GB_FLAG, Input, PhoneInput } from "../input";
 import { useState } from "react";
 import { Flag } from "country-list-with-dial-code-and-flag/dist/types";
+import { Dropdown } from "../dropdown";
 
 type Props = {
   flowState: InitialState;
@@ -65,6 +66,7 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
         flag={flag}
         onFlagChange={setFlag}
       />
+      <Dropdown />
     </form>
   );
 };
