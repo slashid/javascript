@@ -13,6 +13,16 @@ export const input = style({
   },
 });
 
+export const select = style({
+  opacity: 0,
+  width: "100%",
+  height: "100%",
+
+  ":hover": {
+    cursor: "pointer",
+  },
+});
+
 export const host = style({
   display: "flex",
   alignItems: "flex-start",
@@ -32,6 +42,15 @@ export const host = style({
       border: `1px solid ${publicVariables.color.tertiary}`,
     },
     [`&:has(${input}:hover)`]: {
+      border: `1px solid ${publicVariables.color.placeholder}`,
+    },
+    [`&:has(${select}:active)`]: {
+      border: `1px solid ${publicVariables.color.tertiary}`,
+    },
+    [`&:has(${select}:focus)`]: {
+      border: `1px solid ${publicVariables.color.tertiary}`,
+    },
+    [`&:has(${select}:hover)`]: {
       border: `1px solid ${publicVariables.color.placeholder}`,
     },
   },
@@ -70,14 +89,4 @@ export const countryCode = style({
   transform: "translateY(-50%)",
   fontSize: theme.font.size.base,
   color: publicVariables.color.contrast,
-});
-
-export const select = style({
-  opacity: 0,
-  width: "100%",
-  height: "100%",
-
-  ":hover": {
-    cursor: "pointer",
-  },
 });
