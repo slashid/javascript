@@ -23,6 +23,13 @@ export const select = style({
   },
 });
 
+export const countryHost = style({
+  position: "relative",
+  height: "100%",
+  width: "122px",
+  borderRight: `1px solid ${publicVariables.color.subtle}`,
+});
+
 export const host = style({
   display: "flex",
   alignItems: "flex-start",
@@ -69,13 +76,6 @@ export const label = style({
   fontSize: theme.font.size.xs,
   fontWeight: theme.font.weight.semibold,
   color: publicVariables.color.contrast,
-});
-
-export const countryHost = style({
-  position: "relative",
-  height: "100%",
-  width: "122px",
-  borderRight: `1px solid ${publicVariables.color.subtle}`,
 });
 
 export const countryCode = style({

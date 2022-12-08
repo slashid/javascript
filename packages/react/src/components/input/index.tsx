@@ -30,7 +30,14 @@ export const Input: React.FC<Props> = ({
   const selectedCountry = findFlag(countryCode);
 
   return (
-    <div className={clsx("sid-input", styles.host, className)}>
+    <div
+      className={clsx(
+        "sid-input",
+        `sid-input--${type}`,
+        styles.host,
+        className
+      )}
+    >
       {type === "tel" && selectedCountry ? (
         <div className={styles.countryHost}>
           <div className={styles.countryCode}>
