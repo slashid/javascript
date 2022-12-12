@@ -3,12 +3,22 @@ import { LinkButton } from "../button/link-button";
 import { Text } from "../text";
 import { Google } from "../icon/google";
 import { InitialState } from "./flow";
+import { GB_FLAG, Input, PhoneInput } from "../input";
+import { useState } from "react";
+import { Flag } from "country-list-with-dial-code-and-flag/dist/types";
+import { Dropdown } from "../dropdown";
+import { Check } from "../icon/check";
+import { ChevronDown } from "../icon/chevron-down";
 
 type Props = {
   flowState: InitialState;
 };
 
 export const Initial: React.FC<Props> = ({ flowState }) => {
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [flag, setFlag] = useState<Flag>(GB_FLAG);
+
   return (
     <form
       data-testid="sid-form-initial-state"
@@ -40,6 +50,37 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
         Sign in with Google
       </Button>
       <LinkButton onClick={() => console.log("click")}>Link button</LinkButton>
+      <Input
+        id="test"
+        name="test"
+        label="Test input"
+        placeholder="Write something"
+        value={email}
+        onChange={(value) => setEmail(value)}
+      />
+      <PhoneInput
+        id="phone"
+        name="phone"
+        label="Phone input"
+        placeholder="Write something"
+        value={phone}
+        onChange={(value) => setPhone(value)}
+        flag={flag}
+        onFlagChange={setFlag}
+      />
+      <Dropdown label="Authentication method" />
+
+      <div
+        style={{
+          margin: 12,
+          backgroundColor: "#222131",
+          width: "320px",
+          padding: 8,
+        }}
+      >
+        <h3 style={{ color: "white" }}>Icons</h3>
+        <Check /> <ChevronDown /> <Google />
+      </div>
     </form>
   );
 };
