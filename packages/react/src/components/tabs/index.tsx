@@ -1,23 +1,40 @@
+import { clsx } from "clsx";
 import * as RadixTabs from "@radix-ui/react-tabs";
 import * as styles from "./tabs.css";
 
-export const Tabs = () => {
+export type Tab = {
+  id: string;
+  title: string;
+  content: React.ReactNode;
+};
+
+type Props = {
+  tabs: Tab[];
+  className?: string;
+};
+
+export const Tabs: React.FC<Props> = ({ className, tabs }) => {
+  if (!tabs.length) {
+    return null;
+  }
+
   return (
-    <RadixTabs.Root className="sid-tabs" defaultValue="tab1">
-      <RadixTabs.List className={styles.list} aria-label="Tabs">
-        <RadixTabs.Trigger className={styles.trigger} value="tab1">
-          Account
-        </RadixTabs.Trigger>
-        <RadixTabs.Trigger className={styles.trigger} value="tab2">
-          Password
-        </RadixTabs.Trigger>
+    <RadixTabs.Root
+      className={clsx("sid-tabs", className)}
+      defaultValue={tabs[0].id}
+    >
+      <RadixTabs.List className={styles.list} aria-label="SlashID Tabs">
+        {tabs.map(({ id, title }) => (
+          <RadixTabs.Trigger key={id} className={styles.trigger} value={id}>
+            {title}
+          </RadixTabs.Trigger>
+        ))}
       </RadixTabs.List>
-      <RadixTabs.Content className="RadixTabsContent" value="tab1">
-        <h2>Tab 1</h2>
-      </RadixTabs.Content>
-      <RadixTabs.Content className="RadixTabsContent" value="tab2">
-        <h2>Tab 2</h2>
-      </RadixTabs.Content>
+      {tabs.map(({ id, content }) => (
+        <RadixTabs.Content key={id} value={id}>
+          {content}
+        </RadixTabs.Content>
+      ))}
     </RadixTabs.Root>
   );
 };

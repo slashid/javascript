@@ -92,7 +92,12 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
         }}
       >
         <h3 style={{ color: "white" }}>Tabs</h3>
-        <Tabs />
+        <Tabs
+          tabs={[
+            { id: "tab1", title: "Email", content: <p>Tab 1 Content</p> },
+            { id: "tab2", title: "Phone", content: <p>Tab 2 Content</p> },
+          ]}
+        />
       </div>
     </form>
   );
