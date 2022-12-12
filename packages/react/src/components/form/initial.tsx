@@ -7,6 +7,8 @@ import { GB_FLAG, Input, PhoneInput } from "../input";
 import { useState } from "react";
 import { Flag } from "country-list-with-dial-code-and-flag/dist/types";
 import { Dropdown } from "../dropdown";
+import { Check } from "../icon/check";
+import { ChevronDown } from "../icon/chevron-down";
 
 type Props = {
   flowState: InitialState;
@@ -66,7 +68,19 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
         flag={flag}
         onFlagChange={setFlag}
       />
-      <Dropdown />
+      <Dropdown label="Authentication method" />
+
+      <div
+        style={{
+          margin: 12,
+          backgroundColor: "#222131",
+          width: "320px",
+          padding: 8,
+        }}
+      >
+        <h3 style={{ color: "white" }}>Icons</h3>
+        <Check /> <ChevronDown /> <Google />
+      </div>
     </form>
   );
 };

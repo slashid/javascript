@@ -13,6 +13,7 @@ export const publicVariables = createGlobalThemeContract(
       foreground: "color-foreground",
       placeholder: "color-placeholder",
       smooth: "color-smooth",
+      soft: "color-soft",
       tertiary: "color-tertiary",
       subtle: "color-subtle",
       white: "color-white",
@@ -45,6 +46,7 @@ createGlobalTheme(".sid-theme-root", publicVariables, {
     placeholder: "rgba(20, 32, 73, 0.3)",
     tertiary: "rgba(20, 32, 73, 0.5)",
     subtle: "rgba(20, 32, 73, 0.06)",
+    soft: "rgba(20, 32, 73, 0.04)",
     white: "#FFFFFF",
     black: "#000000",
     grey100: "#F3F3F5",
@@ -66,6 +68,7 @@ export const [themeClass, theme] = createTheme({
     weight: {
       medium: "500",
       semibold: "600",
+      bold: "700",
     },
     size: {
       xs: "12px",
@@ -76,5 +79,9 @@ export const [themeClass, theme] = createTheme({
   input: {
     height: "58px",
     paddingHorizontal: "16px",
+  },
+  color: {
+    panel: "#FFFFFF",
+    md: "4px 0px 24px rgba(29, 25, 77, 0.03), 0px 12px 32px rgba(29, 25, 77, 0.04)",
   },
 });
