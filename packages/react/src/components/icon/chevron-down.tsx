@@ -1,8 +1,14 @@
 import { publicVariables } from "../../theme/theme.css";
+import { clsx } from "clsx";
 
-export const ChevronDown = () => (
+type Props = {
+  className?: string;
+};
+
+export const ChevronDown: React.FC<Props> = ({ className }) => (
   <svg
     width="16"
+    className={clsx(className)}
     height="16"
     viewBox="0 0 16 16"
     fill="none"

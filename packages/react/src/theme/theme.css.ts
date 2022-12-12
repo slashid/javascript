@@ -79,6 +79,7 @@ export const [themeClass, theme] = createTheme({
   input: {
     height: "58px",
     paddingHorizontal: "16px",
+    minWidth: "240px",
   },
   color: {
     panel: "#FFFFFF",

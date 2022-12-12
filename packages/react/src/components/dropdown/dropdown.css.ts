@@ -7,6 +7,7 @@ export const trigger = style({
   justifyContent: "center",
   flexDirection: "column",
   width: "fit-content",
+  minWidth: theme.input.minWidth,
   height: theme.input.height,
   padding: `0 ${theme.input.paddingHorizontal}`,
   boxSizing: "border-box",
@@ -41,7 +42,7 @@ export const input = style({
   fontWeight: theme.font.weight.semibold,
   color: publicVariables.color.foreground,
   display: "flex",
-  alignItems: "flex-start",
+  justifyContent: "space-between",
 });
 
 export const content = style({
@@ -73,4 +74,9 @@ export const item = style({
     border: "none",
     outline: "none",
   },
+});
+
+export const icon = style({
+  position: "relative",
+  top: "-8px",
 });

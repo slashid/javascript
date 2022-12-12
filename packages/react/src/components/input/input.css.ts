@@ -48,6 +48,7 @@ export const host = style({
   justifyContent: "center",
   border: `1px solid ${publicVariables.color.subtle}`,
   width: "fit-content",
+  minWidth: theme.input.minWidth,
   boxSizing: "border-box",
   fontFamily: publicVariables.font.fontFamily,
   borderRadius: publicVariables.border.radius,
