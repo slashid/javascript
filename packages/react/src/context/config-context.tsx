@@ -1,13 +1,16 @@
+import { Factor } from "@slashid/slashid";
 import { createContext, ReactNode, useMemo } from "react";
 import { TEXT, TextConfig } from "../components/text/constants";
 
-export const initialContextValue = {
-  text: TEXT,
-};
-
 export interface IConfigurationContext {
   text: TextConfig;
+  factors: Factor[];
 }
+
+export const initialContextValue: IConfigurationContext = {
+  text: TEXT,
+  factors: [{ method: "webauthn" }, { method: "email_link" }],
+};
 
 export const ConfigurationContext =
   createContext<IConfigurationContext>(initialContextValue);
@@ -15,21 +18,21 @@ ConfigurationContext.displayName = "SlashIDConfigurationContext";
 
 type Props = {
   text?: Partial<TextConfig>;
+  factors?: Factor[];
   children: ReactNode;
 };
 
 export const ConfigurationProvider: React.FC<Props> = ({
   text,
+  factors,
   children,
 }) => {
   const contextValue = useMemo(() => {
-    if (!text) {
-      return { text: TEXT };
-    }
     return {
-      text: { ...TEXT, ...text },
+      text: text ? { ...TEXT, ...text } : initialContextValue.text,
+      factors: factors || initialContextValue.factors,
     };
-  }, [text]);
+  }, [text, factors]);
 
   return (
     <ConfigurationContext.Provider value={contextValue}>

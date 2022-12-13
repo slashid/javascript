@@ -1,104 +1,90 @@
-import { Button } from "../button";
-import { LinkButton } from "../button/link-button";
 import { Text } from "../text";
-import { Google } from "../icon/google";
 import { InitialState } from "./flow";
-import { GB_FLAG, Input, PhoneInput } from "../input";
-import { useState } from "react";
-import { Flag } from "country-list-with-dial-code-and-flag/dist/types";
-import { Dropdown } from "../dropdown";
-import { Check } from "../icon/check";
-import { ChevronDown } from "../icon/chevron-down";
+import { useMemo } from "react";
 import { Tabs } from "../tabs";
+import { getHandleTypes } from "../../domain/handles";
+import { useConfiguration } from "../../hooks/use-configuration";
+import { Button } from "../button";
+import { FactorOIDC, isFactorOidc } from "../../domain/types";
+
+type OidcProps = {
+  providers: FactorOIDC[];
+};
+
+const Oidc: React.FC<OidcProps> = ({ providers }) => {
+  if (!providers.length) {
+    return null;
+  }
+
+  return (
+    <div>
+      {providers.map((p) => (
+        <Button
+          key={p.options?.provider}
+          onClick={() => console.log({ p })}
+          variant="secondary"
+        >
+          Sign in with {p.options?.provider}
+        </Button>
+      ))}
+    </div>
+  );
+};
 
 type Props = {
   flowState: InitialState;
 };
 
 export const Initial: React.FC<Props> = ({ flowState }) => {
-  const [email, setEmail] = useState("");
+  /* const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [flag, setFlag] = useState<Flag>(GB_FLAG);
+  const [flag, setFlag] = useState<Flag>(GB_FLAG); */
+  const { factors } = useConfiguration();
+
+  const oidcProviders: FactorOIDC[] = factors.filter(isFactorOidc);
+
+  const handleTypes = useMemo(() => {
+    return getHandleTypes(factors);
+  }, [factors]);
+
+  const showTabs = handleTypes.length > 1;
+
+  console.log({ showTabs });
 
   return (
-    <form
-      data-testid="sid-form-initial-state"
-      onSubmit={(e) => {
-        e.preventDefault();
-        flowState.logIn({
-          factor: {
-            method: "email_link",
-          },
-          handle: { type: "email_address", value: "ivan@slashid.dev" },
-        });
-      }}
-    >
-      <Text as="h1" t="initial.title" />
-      <button data-testid="sid-form-initial-submit-button" type="submit">
-        Log in
-      </button>
-      <Button className="custom-css" onClick={() => console.log("click")}>
-        Primary
-      </Button>
-      <Button variant="secondary" onClick={() => console.log("click")}>
-        Secondary
-      </Button>
-      <Button
-        icon={<Google />}
-        variant="secondary"
-        onClick={() => console.log("click")}
-      >
-        Sign in with Google
-      </Button>
-      <LinkButton onClick={() => console.log("click")}>Link button</LinkButton>
-      <Input
-        id="test"
-        name="test"
-        label="Test input"
-        placeholder="Write something"
-        value={email}
-        onChange={(value) => setEmail(value)}
-      />
-      <PhoneInput
-        id="phone"
-        name="phone"
-        label="Phone input"
-        placeholder="Write something"
-        value={phone}
-        onChange={(value) => setPhone(value)}
-        flag={flag}
-        onFlagChange={setFlag}
-      />
-      <Dropdown label="Authentication method" />
-
-      <div
-        style={{
-          margin: 12,
-          backgroundColor: "#222131",
-          width: "320px",
-          padding: 8,
+    <article>
+      <form
+        data-testid="sid-form-initial-state"
+        onSubmit={(e) => {
+          e.preventDefault();
+          flowState.logIn({
+            factor: {
+              method: "email_link",
+            },
+            handle: { type: "email_address", value: "ivan@slashid.dev" },
+          });
         }}
       >
-        <h3 style={{ color: "white" }}>Icons</h3>
-        <Check /> <ChevronDown /> <Google />
-      </div>
+        <Text as="h1" t="initial.title" />
 
-      <div
-        style={{
-          margin: 12,
-          backgroundColor: "#222131",
-          width: "360px",
-          padding: 8,
-        }}
-      >
-        <h3 style={{ color: "white" }}>Tabs</h3>
-        <Tabs
-          tabs={[
-            { id: "tab1", title: "Email", content: <p>Tab 1 Content</p> },
-            { id: "tab2", title: "Phone", content: <p>Tab 2 Content</p> },
-          ]}
-        />
-      </div>
-    </form>
+        <div
+          style={{
+            margin: 12,
+            backgroundColor: "#222131",
+            width: "360px",
+            padding: 8,
+          }}
+        >
+          <h3 style={{ color: "white" }}>Tabs</h3>
+          <Tabs
+            tabs={[
+              { id: "tab1", title: "Email", content: <p>Tab 1 Content</p> },
+              { id: "tab2", title: "Phone", content: <p>Tab 2 Content</p> },
+            ]}
+          />
+        </div>
+      </form>
+      <Oidc providers={oidcProviders} />
+    </article>
   );
 };

@@ -10,6 +10,12 @@ export interface LoginOptions {
   factor: Factor;
 }
 
+export type FactorOIDC = Extract<Factor, { method: "oidc" }>;
+
+export function isFactorOidc(factor: Factor): factor is FactorOIDC {
+  return factor.method === "oidc";
+}
+
 export type LogIn = (options: LoginOptions) => Promise<User | undefined>;
 export type Retry = () => void;
 export type Cancel = () => void;
