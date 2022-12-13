@@ -9,6 +9,7 @@ import { Flag } from "country-list-with-dial-code-and-flag/dist/types";
 import { Dropdown } from "../dropdown";
 import { Check } from "../icon/check";
 import { ChevronDown } from "../icon/chevron-down";
+import { Tabs } from "../tabs";
 
 type Props = {
   flowState: InitialState;
@@ -80,6 +81,23 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
       >
         <h3 style={{ color: "white" }}>Icons</h3>
         <Check /> <ChevronDown /> <Google />
+      </div>
+
+      <div
+        style={{
+          margin: 12,
+          backgroundColor: "#222131",
+          width: "360px",
+          padding: 8,
+        }}
+      >
+        <h3 style={{ color: "white" }}>Tabs</h3>
+        <Tabs
+          tabs={[
+            { id: "tab1", title: "Email", content: <p>Tab 1 Content</p> },
+            { id: "tab2", title: "Phone", content: <p>Tab 2 Content</p> },
+          ]}
+        />
       </div>
     </form>
   );

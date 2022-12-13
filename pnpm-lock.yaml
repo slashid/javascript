@@ -112,6 +112,7 @@ importers:
     specifiers:
       '@fontsource/inter': ^4.5.14
       '@radix-ui/react-select': ^1.1.2
+      '@radix-ui/react-tabs': ^1.0.1
       '@slashid/slashid': ^1.9.3
       '@testing-library/dom': ^8.19.0
       '@testing-library/jest-dom': ^5.16.5
@@ -137,6 +138,7 @@ importers:
     dependencies:
       '@fontsource/inter': 4.5.14
       '@radix-ui/react-select': 1.1.2_sd644w7yfdyrvmykkrrqd5kd4a
+      '@radix-ui/react-tabs': 1.0.1_biqbaboplfbrettd7655fr4n2y
       '@vanilla-extract/css': 1.9.2
       '@vanilla-extract/dynamic': 2.0.3
       '@vanilla-extract/recipes': 0.3.0_@vanilla-extract+css@1.9.2
@@ -1236,6 +1238,19 @@ packages:
       react: 18.2.0
     dev: false
 
+  /@radix-ui/react-presence/1.0.0_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-A+6XEvN01NfVWiKu38ybawfHsBjWum42MRPnEuqPsBZ4eV7e/7K321B5VgYMPv3Xx5An6o1/l9ZuDBgmcmWK3w==}
+    peerDependencies:
+      react: ^16.8 || ^17.0 || ^18.0
+      react-dom: ^16.8 || ^17.0 || ^18.0
+    dependencies:
+      '@babel/runtime': 7.20.0
+      '@radix-ui/react-compose-refs': 1.0.0_react@18.2.0
+      '@radix-ui/react-use-layout-effect': 1.0.0_react@18.2.0
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    dev: false
+
   /@radix-ui/react-primitive/0.1.4_react@18.2.0:
     resolution: {integrity: sha512-6gSl2IidySupIMJFjYnDIkIWRyQdbu/AHK7rbICPani+LW4b0XdxBXc46og/iZvuwW8pjCS8I2SadIerv84xYA==}
     peerDependencies:
@@ -1273,6 +1288,26 @@ packages:
       '@radix-ui/react-use-callback-ref': 0.1.0_react@18.2.0
       '@radix-ui/react-use-controllable-state': 0.1.0_react@18.2.0
       react: 18.2.0
+    dev: false
+
+  /@radix-ui/react-roving-focus/1.0.1_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-TB76u5TIxKpqMpUAuYH2VqMhHYKa+4Vs1NHygo/llLvlffN6mLVsFhz0AnSFlSBAvTBYVHYAkHAyEt7x1gPJOA==}
+    peerDependencies:
+      react: ^16.8 || ^17.0 || ^18.0
+      react-dom: ^16.8 || ^17.0 || ^18.0
+    dependencies:
+      '@babel/runtime': 7.20.0
+      '@radix-ui/primitive': 1.0.0
+      '@radix-ui/react-collection': 1.0.1_biqbaboplfbrettd7655fr4n2y
+      '@radix-ui/react-compose-refs': 1.0.0_react@18.2.0
+      '@radix-ui/react-context': 1.0.0_react@18.2.0
+      '@radix-ui/react-direction': 1.0.0_react@18.2.0
+      '@radix-ui/react-id': 1.0.0_react@18.2.0
+      '@radix-ui/react-primitive': 1.0.1_biqbaboplfbrettd7655fr4n2y
+      '@radix-ui/react-use-callback-ref': 1.0.0_react@18.2.0
+      '@radix-ui/react-use-controllable-state': 1.0.0_react@18.2.0
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
     dev: false
 
   /@radix-ui/react-select/1.1.2_sd644w7yfdyrvmykkrrqd5kd4a:
@@ -1326,6 +1361,25 @@ packages:
       '@babel/runtime': 7.20.0
       '@radix-ui/react-compose-refs': 1.0.0_react@18.2.0
       react: 18.2.0
+    dev: false
+
+  /@radix-ui/react-tabs/1.0.1_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-mVNEwHwgjy2G9F7b39f9VY+jF0QUZykTm0Sdv+Uz6KC4KOEIa4HLDiHU8MeEZluRtZE3aqGYDhl93O7QbJDwhg==}
+    peerDependencies:
+      react: ^16.8 || ^17.0 || ^18.0
+      react-dom: ^16.8 || ^17.0 || ^18.0
+    dependencies:
+      '@babel/runtime': 7.20.0
+      '@radix-ui/primitive': 1.0.0
+      '@radix-ui/react-context': 1.0.0_react@18.2.0
+      '@radix-ui/react-direction': 1.0.0_react@18.2.0
+      '@radix-ui/react-id': 1.0.0_react@18.2.0
+      '@radix-ui/react-presence': 1.0.0_biqbaboplfbrettd7655fr4n2y
+      '@radix-ui/react-primitive': 1.0.1_biqbaboplfbrettd7655fr4n2y
+      '@radix-ui/react-roving-focus': 1.0.1_biqbaboplfbrettd7655fr4n2y
+      '@radix-ui/react-use-controllable-state': 1.0.0_react@18.2.0
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
     dev: false
 
   /@radix-ui/react-use-body-pointer-events/0.1.1_react@18.2.0:

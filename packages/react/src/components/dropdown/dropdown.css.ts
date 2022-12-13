@@ -47,7 +47,7 @@ export const input = style({
 
 export const content = style({
   position: "relative",
-  backgroundColor: theme.color.panel,
+  backgroundColor: publicVariables.color.panel,
   border: `1px solid ${publicVariables.color.subtle}`,
   boxShadow: theme.color.md,
   borderRadius: "20px",
