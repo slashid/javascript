@@ -3,9 +3,9 @@ import "@fontsource/inter/500.css";
 import "@fontsource/inter/600.css";
 import { ConfigurationProvider } from "../../context/config-context";
 
-import { Form as BaseForm } from "./form";
+import { Form as BaseForm, Props } from "./form";
 
-export const Form = () => {
+export const Form: React.FC<Props> = ({ className }) => {
   return (
     <ConfigurationProvider
       factors={[
@@ -19,7 +19,7 @@ export const Form = () => {
         { method: "oidc", options: { provider: "github" } },
       ]}
     >
-      <BaseForm />
+      <BaseForm className={className} />
     </ConfigurationProvider>
   );
 };

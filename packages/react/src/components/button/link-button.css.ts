@@ -1,6 +1,5 @@
 import { style } from "@vanilla-extract/css";
 import { publicVariables, theme } from "../../theme/theme.css";
-import { sprinkles } from "../../theme/sprinkles.css";
 
 export const button = style({
   fontFamily: publicVariables.font.fontFamily,
@@ -11,6 +10,7 @@ export const button = style({
   userSelect: "none",
   lineHeight: "118%",
   border: "none",
+  color: publicVariables.color.foreground,
 
   ":hover": {
     cursor: "pointer",
@@ -19,12 +19,5 @@ export const button = style({
 
   ":active": {
     transform: "scale(.98)",
-  },
-});
-
-export const color = sprinkles({
-  color: {
-    lightMode: "blue900",
-    darkMode: "grey100",
   },
 });

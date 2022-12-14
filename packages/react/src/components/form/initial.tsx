@@ -6,6 +6,22 @@ import { getHandleTypes } from "../../domain/handles";
 import { useConfiguration } from "../../hooks/use-configuration";
 import { Button } from "../button";
 import { FactorOIDC, isFactorOidc } from "../../domain/types";
+import { Logo as TLogo } from "../../context/config-context";
+import { sprinkles } from "../../theme/sprinkles.css";
+
+type LogoProps = {
+  logo?: TLogo;
+};
+
+const Logo: React.FC<LogoProps> = ({ logo }) => {
+  if (typeof logo === "string") {
+    return (
+      <img className="sid-logo sid-logo--image" src={logo} alt="Company logo" />
+    );
+  }
+
+  return <div className="sid-logo sid-logo--component">{logo}</div>;
+};
 
 type OidcProps = {
   providers: FactorOIDC[];
@@ -39,7 +55,7 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
   /* const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [flag, setFlag] = useState<Flag>(GB_FLAG); */
-  const { factors } = useConfiguration();
+  const { factors, logo } = useConfiguration();
 
   const oidcProviders: FactorOIDC[] = factors.filter(isFactorOidc);
 
@@ -53,6 +69,19 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
 
   return (
     <article>
+      <Logo logo={logo} />
+      <Text
+        as="h1"
+        variant={{ size: "2xl-title", weight: "bold" }}
+        t="initial.title"
+      />
+      <Text
+        className={sprinkles({
+          color: { darkMode: "contrast", lightMode: "contrast" },
+        })}
+        as="h2"
+        t="initial.subtitle"
+      />
       <form
         data-testid="sid-form-initial-state"
         onSubmit={(e) => {
@@ -65,8 +94,6 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
           });
         }}
       >
-        <Text as="h1" t="initial.title" />
-
         <div
           style={{
             margin: 12,

@@ -15,6 +15,7 @@ export const text = recipe({
       sm: { fontSize: "14px" },
       base: { fontSize: "16px" },
       xl: { fontSize: "20px" },
+      "2xl-title": { fontSize: "24px" },
     },
     weight: {
       medium: { fontWeight: "500" },

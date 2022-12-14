@@ -2,31 +2,43 @@ import {
   createTheme,
   createGlobalThemeContract,
   createGlobalTheme,
+  style,
+  assignVars,
 } from "@vanilla-extract/css";
 
+// private color palette
+export const colors = {
+  white: "#FFFFFF",
+  black: "#000000",
+  grey50: "#F7F7F8",
+  grey100: "#F3F3F5",
+  grey700: "#222131",
+  grey800: "#171625",
+  grey900: "#0F0E1B",
+  blue500: "#2A6AFF",
+  blue600: "#2761E8",
+  blue900: "#142049",
+};
+
+// public CSS variables that can be customised
 export const publicVariables = createGlobalThemeContract(
   {
     color: {
-      brand: "color-brand",
-      accent: "color-accent",
-      contrast: "color-contrast",
+      background: "color-background",
+      mute: "color-mute",
+      panel: "color-panel",
       foreground: "color-foreground",
+      contrast: "color-contrast",
+      secondary: "color-secondary",
+      tertiary: "color-tertiary",
       placeholder: "color-placeholder",
       smooth: "color-smooth",
-      soft: "color-soft",
-      tertiary: "color-tertiary",
       subtle: "color-subtle",
-      mute: "color-mute",
-      white: "color-white",
-      black: "color-black",
+      soft: "color-soft",
+      offset: "color-offset",
+      primary: "color-primary",
+      primaryHover: "color-primary-hover",
       transparent: "color-transparent",
-      panel: "color-panel",
-      grey50: "color-grey-50",
-      grey100: "color-grey-100",
-      grey700: "color-grey-700",
-      blue500: "color-blue-500",
-      blue600: "color-blue-600",
-      blue900: "color-blue-900",
     },
     font: {
       fontFamily: "font-family",
@@ -38,28 +50,24 @@ export const publicVariables = createGlobalThemeContract(
   (value) => `sid-${value}`
 );
 
+// default: light theme
 createGlobalTheme(".sid-theme-root", publicVariables, {
   color: {
-    transparent: "color-transparent",
-    brand: publicVariables.color.blue500,
-    accent: publicVariables.color.blue600,
+    background: colors.grey100,
+    mute: colors.grey50,
+    panel: colors.white,
+    foreground: colors.blue900,
     contrast: "rgba(20, 32, 73, 0.8)",
-    foreground: publicVariables.color.blue900,
-    smooth: "rgba(20, 32, 73, 0.12)",
-    placeholder: "rgba(20, 32, 73, 0.3)",
+    secondary: "rgba(20, 32, 73, 0.6)",
     tertiary: "rgba(20, 32, 73, 0.5)",
+    placeholder: "rgba(20, 32, 73, 0.3)",
+    smooth: "rgba(20, 32, 73, 0.12)",
     subtle: "rgba(20, 32, 73, 0.06)",
     soft: "rgba(20, 32, 73, 0.04)",
-    mute: publicVariables.color.grey50,
-    panel: publicVariables.color.white,
-    white: "#FFFFFF",
-    black: "#000000",
-    grey50: "#F7F7F8",
-    grey100: "#F3F3F5",
-    grey700: "#222131",
-    blue500: "#2A6AFF",
-    blue600: "#2761E8",
-    blue900: "#142049",
+    offset: "rgba(20, 32, 73, 0.01)",
+    primary: colors.blue500,
+    primaryHover: colors.blue600,
+    transparent: "transparent",
   },
   font: {
     fontFamily: "Inter",
@@ -69,6 +77,32 @@ createGlobalTheme(".sid-theme-root", publicVariables, {
   },
 });
 
+// overrides the color theme if dark mode is preferred
+export const darkTheme = style({
+  "@media": {
+    "(prefers-color-scheme: dark)": {
+      vars: assignVars(publicVariables.color, {
+        background: colors.grey900,
+        mute: colors.grey800,
+        panel: colors.grey700,
+        foreground: colors.grey100,
+        contrast: "rgba(243, 243, 245, 0.8)",
+        secondary: "rgba(243, 243, 245, 0.6",
+        tertiary: "rgba(243, 243, 245, 0.5)",
+        placeholder: "rgba(243, 243, 245, 0.3)",
+        smooth: "rgba(243, 243, 245, 0.12)",
+        subtle: "rgba(243, 243, 245, 0.06)",
+        soft: "rgba(243, 243, 245, 0.04)",
+        offset: "rgba(243, 243, 245, 0.01)",
+        primary: colors.blue500,
+        primaryHover: colors.blue600,
+        transparent: "transparent",
+      }),
+    },
+  },
+});
+
+// constants to be reused across the app
 export const [themeClass, theme] = createTheme({
   font: {
     weight: {
@@ -80,6 +114,7 @@ export const [themeClass, theme] = createTheme({
       xs: "12px",
       sm: "14px",
       base: "16px",
+      "2xl-title": "24px",
     },
   },
   input: {
@@ -88,7 +123,6 @@ export const [themeClass, theme] = createTheme({
     minWidth: "240px",
   },
   color: {
-    panel: "#FFFFFF",
     md: "4px 0px 24px rgba(29, 25, 77, 0.03), 0px 12px 32px rgba(29, 25, 77, 0.04)",
   },
 });
