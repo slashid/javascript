@@ -6,6 +6,7 @@ export const text = recipe({
     fontFamily: publicVariables.font.fontFamily,
     fontWeight: theme.font.weight.medium,
     fontSize: theme.font.size.base,
+    color: publicVariables.color.foreground,
     margin: 0,
   },
 

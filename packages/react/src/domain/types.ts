@@ -1,7 +1,9 @@
 import { Factor, User } from "@slashid/slashid";
 
+export type HandleType = "email_address" | "phone_number";
+
 export interface Handle {
-  type: "email_address" | "phone_number";
+  type: HandleType;
   value: string;
 }
 

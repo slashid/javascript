@@ -47,6 +47,8 @@ export const publicVariables = createGlobalThemeContract(
       radius: "button-border-radius",
     },
   },
+  // TODO consider using the second argument to generate the names based on the object path
+  // https://github.com/buildo/bento-design-system/blob/a0bfb585a3216988f1945d5c8c448c32426e61f2/packages/bento-design-system/src/vars.css.ts#L232
   (value) => `sid-${value}`
 );
 
@@ -78,6 +80,7 @@ createGlobalTheme(".sid-theme-root", publicVariables, {
 });
 
 // overrides the color theme if dark mode is preferred
+// TODO: expose this so customers could set the dark theme as default
 export const darkTheme = style({
   "@media": {
     "(prefers-color-scheme: dark)": {
@@ -87,7 +90,7 @@ export const darkTheme = style({
         panel: colors.grey700,
         foreground: colors.grey100,
         contrast: "rgba(243, 243, 245, 0.8)",
-        secondary: "rgba(243, 243, 245, 0.6",
+        secondary: "rgba(243, 243, 245, 0.6)",
         tertiary: "rgba(243, 243, 245, 0.5)",
         placeholder: "rgba(243, 243, 245, 0.3)",
         smooth: "rgba(243, 243, 245, 0.12)",
@@ -116,6 +119,47 @@ export const [themeClass, theme] = createTheme({
       base: "16px",
       "2xl-title": "24px",
     },
+  },
+  space: {
+    "0": "0",
+    px: "1px",
+    "0.5": "0.125rem",
+    "1": "0.25rem",
+    "1.5": "0.375rem",
+    "2": "0.5rem",
+    "2.5": "0.625rem",
+    "3": "0.75rem",
+    "3.5": "0.875rem",
+    "4": "1rem",
+    "5": "1.25rem",
+    "6": "1.5rem",
+    "7": "1.75rem",
+    "8": "2rem",
+    "9": "2.25rem",
+    "10": "2.5rem",
+    "11": "2.75rem",
+    "12": "3rem",
+    "13": "3.25rem",
+    "14": "3.5rem",
+    "15": "3.75rem",
+    "16": "4rem",
+    "20": "5rem",
+    "24": "6rem",
+    "28": "7rem",
+    "32": "8rem",
+    "36": "9rem",
+    "40": "10rem",
+    "44": "11rem",
+    "48": "12rem",
+    "52": "13rem",
+    "56": "14rem",
+    "60": "15rem",
+    "64": "16rem",
+    "68": "17rem",
+    "72": "18rem",
+    "76": "19rem",
+    "80": "20rem",
+    "96": "24rem",
   },
   input: {
     height: "58px",
