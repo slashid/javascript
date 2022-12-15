@@ -27,6 +27,7 @@ import { Github } from "../icon/github";
 import { Gitlab } from "../icon/gitlab";
 import { Line } from "../icon/line";
 import { Bitbucket } from "../icon/bitbucket";
+import { Divider } from "../divider";
 
 type LogoProps = {
   logo?: TLogo;
@@ -228,42 +229,48 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
 
     if (handleTypes.length === 1) {
       return (
-        <HandleForm
-          handleSubmit={handleSubmit}
-          factors={factors}
-          handleType={handleTypes[0]}
-        />
+        <>
+          <HandleForm
+            handleSubmit={handleSubmit}
+            factors={factors}
+            handleType={handleTypes[0]}
+          />
+          <Divider>{text["initial.divider"]}</Divider>
+        </>
       );
     }
 
     return (
-      <Tabs
-        className={sprinkles({ marginY: "6" })}
-        tabs={[
-          {
-            id: TAB_NAME.email,
-            title: text["initial.handle.email"],
-            content: (
-              <HandleForm
-                handleSubmit={handleSubmit}
-                factors={factors}
-                handleType="email_address"
-              />
-            ),
-          },
-          {
-            id: TAB_NAME.phone,
-            title: text["initial.handle.phone"],
-            content: (
-              <HandleForm
-                handleSubmit={handleSubmit}
-                factors={factors}
-                handleType="phone_number"
-              />
-            ),
-          },
-        ]}
-      />
+      <>
+        <Tabs
+          className={sprinkles({ marginY: "6" })}
+          tabs={[
+            {
+              id: TAB_NAME.email,
+              title: text["initial.handle.email"],
+              content: (
+                <HandleForm
+                  handleSubmit={handleSubmit}
+                  factors={factors}
+                  handleType="email_address"
+                />
+              ),
+            },
+            {
+              id: TAB_NAME.phone,
+              title: text["initial.handle.phone"],
+              content: (
+                <HandleForm
+                  handleSubmit={handleSubmit}
+                  factors={factors}
+                  handleType="phone_number"
+                />
+              ),
+            },
+          ]}
+        />
+        <Divider>{text["initial.divider"]}</Divider>
+      </>
     );
   }, [factors, handleSubmit, handleTypes, nonOidcFactors.length, text]);
 

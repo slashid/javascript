@@ -3,6 +3,7 @@ export type TextConfigKey = keyof TextConfig;
 
 export const TEXT = {
   "": "NYI",
+  "footer.branding": "Top-tier security by SlashID",
   "initial.title": "Welcome",
   "initial.subtitle": "Sign in to your account",
   "initial.oidc": "Sign in with",
@@ -12,6 +13,7 @@ export const TEXT = {
   "initial.handle.phone.email": "Type your email",
   "initial.handle.phone.placeholder": "Type your phone number",
   "initial.submit": "Continue",
+  "initial.divider": "or",
   "factor.webauthn": "Webauthn",
   "factor.otpViaSms": "OTP via SMS",
   "factor.emailLink": "Email link",
