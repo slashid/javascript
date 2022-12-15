@@ -7,9 +7,11 @@ const base = style({
   fontWeight: theme.font.weight.medium,
   fontSize: theme.font.size.base,
   height: theme.input.height,
+  width: "100%",
 
   display: "flex",
   alignItems: "center",
+  justifyContent: "center",
   padding: "19px 22px",
   userSelect: "none",
   lineHeight: "118%",

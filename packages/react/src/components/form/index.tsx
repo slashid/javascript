@@ -10,6 +10,7 @@ export const Form: React.FC<Props> = ({ className }) => {
     <ConfigurationProvider
       factors={[
         { method: "email_link" },
+        { method: "webauthn" },
         { method: "otp_via_sms" },
         // @ts-expect-error TODO fix the enum related problems
         { method: "oidc", options: { provider: "google" } },

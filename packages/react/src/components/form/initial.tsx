@@ -1,4 +1,7 @@
-import { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
+import { Factor } from "@slashid/slashid";
+
+import { Dropdown } from "../dropdown";
 import { Text } from "../text";
 import { InitialState } from "./flow";
 import { Tabs } from "../tabs";
@@ -12,11 +15,18 @@ import {
   isFactorOidc,
 } from "../../domain/types";
 import { Logo as TLogo } from "../../context/config-context";
-import * as styles from "./initial.css";
-import { sprinkles } from "../../theme/sprinkles.css";
-import { Factor } from "@slashid/slashid";
-import { Dropdown } from "../dropdown";
 import { Flag, GB_FLAG, Input, PhoneInput } from "../input";
+import { TextConfigKey } from "../text/constants";
+
+import * as styles from "./initial.css";
+import { sprinkles, stack } from "../../theme/sprinkles.css";
+import { Google } from "../icon/google";
+import { Apple } from "../icon/apple";
+import { Facebook } from "../icon/facebook";
+import { Github } from "../icon/github";
+import { Gitlab } from "../icon/gitlab";
+import { Line } from "../icon/line";
+import { Bitbucket } from "../icon/bitbucket";
 
 type LogoProps = {
   logo?: TLogo;
@@ -32,6 +42,16 @@ const Logo: React.FC<LogoProps> = ({ logo }) => {
   return <div className="sid-logo sid-logo--component">{logo}</div>;
 };
 
+const PROVIDER_TO_ICON: Record<string, React.ReactNode> = {
+  google: <Google />,
+  apple: <Apple />,
+  facebook: <Facebook />,
+  github: <Github />,
+  gitlab: <Gitlab />,
+  line: <Line />,
+  bitbucket: <Bitbucket />,
+};
+
 type OidcProps = {
   providers: FactorOIDC[];
 };
@@ -43,19 +63,36 @@ const Oidc: React.FC<OidcProps> = ({ providers }) => {
   }
 
   return (
-    <div>
-      {providers.map((p) => (
-        <Button
-          key={p.options?.provider}
-          onClick={() => console.log({ p })}
-          variant="secondary"
-        >
-          {text["initial.oidc"]}
-          <span className={styles.oidcProvider}>{p.options?.provider}</span>
-        </Button>
-      ))}
+    <div className={stack}>
+      {providers.map((p) => {
+        if (!p.options?.provider) {
+          return null;
+        }
+
+        return (
+          <Button
+            key={p.options?.provider}
+            onClick={() => console.log({ p })}
+            variant="secondary"
+            icon={PROVIDER_TO_ICON[p.options?.provider]}
+          >
+            {text["initial.oidc"]}
+            <span className={styles.oidcProvider}>{p.options?.provider}</span>
+          </Button>
+        );
+      })}
     </div>
   );
+};
+
+const FACTOR_LABEL_MAP: Record<Factor["method"], TextConfigKey> = {
+  email_link: "factor.emailLink",
+  otp_via_sms: "factor.otpViaSms",
+  sms_link: "factor.smsLink",
+  webauthn: "factor.webauthn",
+  oidc: "",
+  webauthn_via_email: "",
+  webauthn_via_sms: "",
 };
 
 type HandleFormProps = {
@@ -72,7 +109,7 @@ const HandleForm: React.FC<HandleFormProps> = ({
   const filteredFactors = filterFactors(factors, handleType).filter(
     (f) => !isFactorOidc(f)
   );
-  const shouldRenderFactorDropdown = filterFactors.length > 1;
+  const shouldRenderFactorDropdown = filteredFactors.length > 1;
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [flag, setFlag] = useState<Flag>(GB_FLAG);
@@ -83,6 +120,7 @@ const HandleForm: React.FC<HandleFormProps> = ({
     if (handleType === "phone_number") {
       return (
         <PhoneInput
+          className={sprinkles({ marginTop: "3" })}
           id={`sid-input-${handleType}`}
           name={handleType}
           label={text["initial.handle.email"]}
@@ -97,6 +135,7 @@ const HandleForm: React.FC<HandleFormProps> = ({
 
     return (
       <Input
+        className={sprinkles({ marginTop: "3" })}
         id={`sid-input-${handleType}`}
         name={handleType}
         label={text["initial.handle.email"]}
@@ -127,7 +166,7 @@ const HandleForm: React.FC<HandleFormProps> = ({
           className={sprinkles({ marginBottom: "3", marginTop: "5" })}
           label={text["initial.authenticationMethod"]}
           items={filteredFactors.map((f) => ({
-            label: f.method,
+            label: text[FACTOR_LABEL_MAP[f.method]],
             value: f.method,
           }))}
           onChange={(method) =>
@@ -136,6 +175,13 @@ const HandleForm: React.FC<HandleFormProps> = ({
         />
       )}
       {input}
+      <Button
+        className={sprinkles({ marginTop: "5" })}
+        type="submit"
+        variant="primary"
+      >
+        {text["initial.submit"]}
+      </Button>
     </form>
   );
 };
@@ -152,7 +198,14 @@ type Props = {
 export const Initial: React.FC<Props> = ({ flowState }) => {
   const { factors, logo, text } = useConfiguration();
 
-  const oidcProviders: FactorOIDC[] = factors.filter(isFactorOidc);
+  const oidcProviders: FactorOIDC[] = useMemo(
+    () => factors.filter(isFactorOidc),
+    [factors]
+  );
+  const nonOidcFactors: Factor[] = useMemo(
+    () => factors.filter((f) => !isFactorOidc(f)),
+    [factors]
+  );
 
   const handleTypes = useMemo(() => {
     return getHandleTypes(factors);
@@ -169,9 +222,11 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
   );
 
   const ConfiguredForm = useMemo(() => {
-    const showTabs = handleTypes.length > 1;
+    if (nonOidcFactors.length === 0) {
+      return null;
+    }
 
-    if (!showTabs) {
+    if (handleTypes.length === 1) {
       return (
         <HandleForm
           handleSubmit={handleSubmit}
@@ -210,7 +265,7 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
         ]}
       />
     );
-  }, [factors, handleSubmit, handleTypes, text]);
+  }, [factors, handleSubmit, handleTypes, nonOidcFactors.length, text]);
 
   return (
     <article data-testid="sid-form-initial-state">

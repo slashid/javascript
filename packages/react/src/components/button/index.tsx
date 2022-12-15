@@ -4,7 +4,7 @@ import * as styles from "./button.css";
 
 type Props = {
   children: ReactNode;
-  onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   className?: string;
   type?: "button" | "submit";
   variant?: keyof typeof styles.button;
