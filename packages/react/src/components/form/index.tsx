@@ -21,7 +21,7 @@ export const Form: React.FC<Props> = ({ className }) => {
           },
         },
         // @ts-expect-error TODO fix the enum related problems
-        { method: "oidc", options: { provider: "apple" } },
+        { method: "oidc", options: { provider: "facebook" } },
         // @ts-expect-error TODO fix the enum related problems
         { method: "oidc", options: { provider: "github" } },
       ]}

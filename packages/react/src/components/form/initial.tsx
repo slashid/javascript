@@ -28,6 +28,7 @@ import { Gitlab } from "../icon/gitlab";
 import { Line } from "../icon/line";
 import { Bitbucket } from "../icon/bitbucket";
 import { Divider } from "../divider";
+import { clsx } from "clsx";
 
 type LogoProps = {
   logo?: TLogo;
@@ -65,7 +66,7 @@ const Oidc: React.FC<OidcProps> = ({ providers, handleClick }) => {
   }
 
   return (
-    <div className={stack}>
+    <div className={clsx(stack, sprinkles({ marginTop: "4" }))}>
       {providers.map((p) => {
         if (!p.options?.provider) {
           return null;
@@ -125,7 +126,7 @@ const HandleForm: React.FC<HandleFormProps> = ({
           className={sprinkles({ marginTop: "3" })}
           id={`sid-input-${handleType}`}
           name={handleType}
-          label={text["initial.handle.email"]}
+          label={text["initial.handle.phone"]}
           placeholder={text["initial.handle.phone.placeholder"]}
           value={phone}
           flag={flag}
@@ -288,6 +289,7 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
       />
       <Text className={styles.subtitle} as="h2" t="initial.subtitle" />
       {ConfiguredForm}
+      {/* // TODO add top margin if no other factors are here */}
       <Oidc providers={oidcFactors} handleClick={handleSubmit} />
     </article>
   );
