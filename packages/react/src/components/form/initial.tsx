@@ -158,7 +158,10 @@ const HandleForm: React.FC<HandleFormProps> = ({
         e.preventDefault();
         handleSubmit(factor, {
           type: handleType,
-          value: "ivan@slashid.dev",
+          value:
+            handleType === "email_address"
+              ? email
+              : `${flag.dial_code}${phone}`,
         });
       }}
     >

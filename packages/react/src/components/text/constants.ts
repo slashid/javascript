@@ -14,6 +14,8 @@ export const TEXT = {
   "initial.handle.phone.placeholder": "Type your phone number",
   "initial.submit": "Continue",
   "initial.divider": "or",
+  "authenticating.retryPrompt": "Did not work?",
+  "authenticating.retry": "Retry",
   "factor.webauthn": "Webauthn",
   "factor.otpViaSms": "OTP via SMS",
   "factor.emailLink": "Email link",
