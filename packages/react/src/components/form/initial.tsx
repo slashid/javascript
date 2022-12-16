@@ -55,9 +55,10 @@ const PROVIDER_TO_ICON: Record<string, React.ReactNode> = {
 
 type OidcProps = {
   providers: FactorOIDC[];
+  handleClick: (factor: Factor) => void;
 };
 
-const Oidc: React.FC<OidcProps> = ({ providers }) => {
+const Oidc: React.FC<OidcProps> = ({ providers, handleClick }) => {
   const { text } = useConfiguration();
   if (!providers.length) {
     return null;
@@ -73,7 +74,7 @@ const Oidc: React.FC<OidcProps> = ({ providers }) => {
         return (
           <Button
             key={p.options?.provider}
-            onClick={() => console.log({ p })}
+            onClick={() => handleClick({ method: "oidc", options: p.options })}
             variant="secondary"
             icon={PROVIDER_TO_ICON[p.options?.provider]}
           >
@@ -199,7 +200,7 @@ type Props = {
 export const Initial: React.FC<Props> = ({ flowState }) => {
   const { factors, logo, text } = useConfiguration();
 
-  const oidcProviders: FactorOIDC[] = useMemo(
+  const oidcFactors: FactorOIDC[] = useMemo(
     () => factors.filter(isFactorOidc),
     [factors]
   );
@@ -213,7 +214,7 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
   }, [factors]);
 
   const handleSubmit = useCallback(
-    (factor: Factor, handle: Handle) => {
+    (factor: Factor, handle?: Handle) => {
       flowState.logIn({
         factor,
         handle,
@@ -284,7 +285,7 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
       />
       <Text className={styles.subtitle} as="h2" t="initial.subtitle" />
       {ConfiguredForm}
-      <Oidc providers={oidcProviders} />
+      <Oidc providers={oidcFactors} handleClick={handleSubmit} />
     </article>
   );
 };

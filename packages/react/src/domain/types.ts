@@ -8,7 +8,7 @@ export interface Handle {
 }
 
 export interface LoginOptions {
-  handle: Handle;
+  handle?: Handle;
   factor: Factor;
 }
 

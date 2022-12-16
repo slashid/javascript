@@ -12,8 +12,14 @@ export const Form: React.FC<Props> = ({ className }) => {
         { method: "email_link" },
         { method: "webauthn" },
         { method: "otp_via_sms" },
-        // @ts-expect-error TODO fix the enum related problems
-        { method: "oidc", options: { provider: "google" } },
+        {
+          method: "oidc",
+          options: {
+            // @ts-expect-error TODO fix the enum related problems
+            provider: "google",
+            client_id: import.meta.env.VITE_GOOGLE_SSO_CLIENT_ID,
+          },
+        },
         // @ts-expect-error TODO fix the enum related problems
         { method: "oidc", options: { provider: "apple" } },
         // @ts-expect-error TODO fix the enum related problems
