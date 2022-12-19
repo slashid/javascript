@@ -149,10 +149,6 @@ const HandleForm: React.FC<HandleFormProps> = ({
     );
   }, [email, flag, handleType, phone, text]);
 
-  // TODO
-  // validation
-  // submit button
-  // on submit needs to call the provided callback
   return (
     <form
       onSubmit={(e) => {
@@ -185,6 +181,7 @@ const HandleForm: React.FC<HandleFormProps> = ({
         className={sprinkles({ marginTop: "5" })}
         type="submit"
         variant="primary"
+        testId="sid-form-initial-submit-button"
       >
         {text["initial.submit"]}
       </Button>
@@ -289,7 +286,6 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
       />
       <Text className={styles.subtitle} as="h2" t="initial.subtitle" />
       {ConfiguredForm}
-      {/* // TODO add top margin if no other factors are here */}
       <Oidc providers={oidcFactors} handleClick={handleSubmit} />
     </article>
   );

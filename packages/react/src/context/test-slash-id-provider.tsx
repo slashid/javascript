@@ -1,5 +1,5 @@
 import { User } from "@slashid/slashid";
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 import {
   SlashIDContext,
   ISlashIDContext,

@@ -9,6 +9,7 @@ type Props = {
   type?: "button" | "submit";
   variant?: keyof typeof styles.button;
   icon?: ReactNode;
+  testId?: string;
 };
 
 export const Button: React.FC<Props> = ({
@@ -17,10 +18,12 @@ export const Button: React.FC<Props> = ({
   className,
   type = "button",
   variant = "primary",
+  testId,
   icon,
 }) => {
   return (
     <button
+      data-testid={testId}
       type={type}
       className={clsx(
         "sid-button",
