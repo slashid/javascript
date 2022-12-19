@@ -111,12 +111,20 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
       setState("authenticating");
 
       try {
-        // TS magic to circumvent the PersonHandleType enum
-        const type: PersonHandleType =
-          handle.type as unknown as PersonHandleType;
-        const user = await sid.id(oid, { type, value: handle.value }, factor);
+        const identifier =
+          factor.method === "oidc" || handle === undefined
+            ? null
+            : {
+                type: handle.type as unknown as PersonHandleType,
+                value: handle.value,
+              };
+
+        // @ts-expect-error TODO make the identifier optional
+        const user = await sid.id(oid, identifier, factor);
         storeUser(user);
-        storageRef.current?.setItem(STORAGE_IDENTIFIER_KEY, handle.value);
+        if (handle) {
+          storageRef.current?.setItem(STORAGE_IDENTIFIER_KEY, handle.value);
+        }
         setState("ready");
         return user;
       } catch (e) {

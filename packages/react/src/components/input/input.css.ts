@@ -7,6 +7,7 @@ export const input = style({
   fontSize: theme.font.size.base,
   fontWeight: theme.font.weight.semibold,
   color: publicVariables.color.foreground,
+  backgroundColor: publicVariables.color.panel,
 
   "::placeholder": {
     color: publicVariables.color.placeholder,
@@ -26,7 +27,7 @@ export const select = style({
 export const countryHost = style({
   position: "relative",
   height: "100%",
-  width: "122px",
+  width: "212px",
   borderRight: `1px solid ${publicVariables.color.subtle}`,
 
   selectors: {
@@ -45,9 +46,8 @@ export const countryHost = style({
 export const host = style({
   display: "flex",
   alignItems: "flex-start",
-  justifyContent: "center",
   border: `1px solid ${publicVariables.color.subtle}`,
-  width: "fit-content",
+  width: "100%",
   minWidth: theme.input.minWidth,
   boxSizing: "border-box",
   fontFamily: publicVariables.font.fontFamily,
@@ -82,6 +82,7 @@ const inputHostBase = style({
   justifyContent: "center",
   flexDirection: "column",
   height: "100%",
+  width: "100%",
   padding: `0 ${theme.input.paddingHorizontal}`,
   borderLeft: "1px solid transparent",
 });

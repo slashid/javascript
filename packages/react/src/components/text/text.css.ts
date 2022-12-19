@@ -6,6 +6,7 @@ export const text = recipe({
     fontFamily: publicVariables.font.fontFamily,
     fontWeight: theme.font.weight.medium,
     fontSize: theme.font.size.base,
+    color: publicVariables.color.foreground,
     margin: 0,
   },
 
@@ -15,12 +16,14 @@ export const text = recipe({
       sm: { fontSize: "14px" },
       base: { fontSize: "16px" },
       xl: { fontSize: "20px" },
+      "2xl-title": { fontSize: "24px" },
     },
     weight: {
       medium: { fontWeight: "500" },
       semibold: { fontWeight: "600" },
       bold: { fontWeight: "700" },
     },
+    color: publicVariables.color,
   },
 
   defaultVariants: {

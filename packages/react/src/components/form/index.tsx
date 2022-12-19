@@ -1,28 +1,32 @@
 import "@fontsource/inter/400.css";
 import "@fontsource/inter/500.css";
 import "@fontsource/inter/600.css";
+import { ConfigurationProvider } from "../../context/config-context";
 
-import * as styles from "./form.css";
-import { themeClass } from "../../theme/theme.css";
-import { useFlowState } from "./useFlowState";
-import { Initial } from "./initial";
-import { Authenticating } from "./authenticating";
-import { Error } from "./error";
-import { Success } from "./success";
+import { Form as BaseForm, Props } from "./form";
 
-export const Form = () => {
-  const flowState = useFlowState();
-
+export const Form: React.FC<Props> = ({ className }) => {
   return (
-    <div className={`sid-theme-root ${themeClass}`}>
-      <div className={styles.form}>Form</div>
-      <p>Flow state: {flowState.status}</p>
-      {flowState.status === "initial" && <Initial flowState={flowState} />}
-      {flowState.status === "authenticating" && (
-        <Authenticating flowState={flowState} />
-      )}
-      {flowState.status === "error" && <Error flowState={flowState} />}
-      {flowState.status === "success" && <Success flowState={flowState} />}
-    </div>
+    <ConfigurationProvider
+      factors={[
+        { method: "email_link" },
+        { method: "webauthn" },
+        { method: "otp_via_sms" },
+        {
+          method: "oidc",
+          options: {
+            // @ts-expect-error TODO fix the enum related problems
+            provider: "google",
+            client_id: import.meta.env.VITE_GOOGLE_SSO_CLIENT_ID,
+          },
+        },
+        // @ts-expect-error TODO fix the enum related problems
+        { method: "oidc", options: { provider: "facebook" } },
+        // @ts-expect-error TODO fix the enum related problems
+        { method: "oidc", options: { provider: "github" } },
+      ]}
+    >
+      <BaseForm className={className} />
+    </ConfigurationProvider>
   );
 };

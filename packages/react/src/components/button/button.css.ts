@@ -1,4 +1,4 @@
-import { publicVariables, theme } from "../../theme/theme.css";
+import { colors, publicVariables, theme } from "../../theme/theme.css";
 import { style, styleVariants } from "@vanilla-extract/css";
 
 const base = style({
@@ -7,9 +7,11 @@ const base = style({
   fontWeight: theme.font.weight.medium,
   fontSize: theme.font.size.base,
   height: theme.input.height,
+  width: "100%",
 
   display: "flex",
   alignItems: "center",
+  justifyContent: "center",
   padding: "19px 22px",
   userSelect: "none",
   lineHeight: "118%",
@@ -31,34 +33,24 @@ export const button = styleVariants({
   primary: [
     base,
     {
-      backgroundColor: publicVariables.color.brand,
-      color: publicVariables.color.white,
+      backgroundColor: publicVariables.color.primary,
+      color: colors.white,
       border: "none",
       ":hover": {
-        backgroundColor: publicVariables.color.accent,
+        backgroundColor: publicVariables.color.primaryHover,
       },
     },
   ],
   secondary: [
     base,
     {
-      "@media": {
-        "(prefers-color-scheme: light)": {
-          backgroundColor: publicVariables.color.white,
-          color: publicVariables.color.blue900,
-          ":hover": {
-            backgroundColor: "rgba(20, 32, 73, 0.04);",
-          },
-        },
-        "(prefers-color-scheme: dark)": {
-          backgroundColor: publicVariables.color.grey700,
-          color: publicVariables.color.grey100,
-          ":hover": {
-            backgroundColor: "rgba(243, 243, 245, 0.1)",
-          },
-        },
+      backgroundColor: publicVariables.color.panel,
+      color: publicVariables.color.foreground,
+      border: `1px solid ${publicVariables.color.smooth}`,
+
+      ":hover": {
+        backgroundColor: publicVariables.color.soft,
       },
-      border: "1px solid rgba(20, 32, 73, 0.12)",
     },
   ],
 });

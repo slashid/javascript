@@ -4,11 +4,12 @@ import * as styles from "./button.css";
 
 type Props = {
   children: ReactNode;
-  onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   className?: string;
   type?: "button" | "submit";
   variant?: keyof typeof styles.button;
   icon?: ReactNode;
+  testId?: string;
 };
 
 export const Button: React.FC<Props> = ({
@@ -17,10 +18,12 @@ export const Button: React.FC<Props> = ({
   className,
   type = "button",
   variant = "primary",
+  testId,
   icon,
 }) => {
   return (
     <button
+      data-testid={testId}
       type={type}
       className={clsx(
         "sid-button",

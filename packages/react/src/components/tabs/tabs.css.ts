@@ -5,8 +5,7 @@ export const list = style({
   display: "flex",
   backgroundColor: publicVariables.color.mute,
   borderRadius: publicVariables.border.radius,
-  width: "100%",
-  padding: "4px",
+  padding: "3px",
   fontFamily: publicVariables.font.fontFamily,
   fontSize: theme.font.size.base,
 });
@@ -16,6 +15,7 @@ export const trigger = style({
   padding: "12px 24px",
   display: "flex",
   alignItems: "center",
+  justifyContent: "center",
   flex: "1",
 
   selectors: {

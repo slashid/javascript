@@ -6,14 +6,16 @@ export const trigger = style({
   alignItems: "flex-start",
   justifyContent: "center",
   flexDirection: "column",
-  width: "fit-content",
+  width: "100%",
   minWidth: theme.input.minWidth,
   height: theme.input.height,
   padding: `0 ${theme.input.paddingHorizontal}`,
   boxSizing: "border-box",
+  backgroundColor: publicVariables.color.offset,
   border: `1px solid ${publicVariables.color.subtle}`,
   borderRadius: publicVariables.border.radius,
   fontFamily: publicVariables.font.fontFamily,
+  
 
   ":active": {
     border: `1px solid ${publicVariables.color.tertiary}`,

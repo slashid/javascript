@@ -1,5 +1,6 @@
+import { style } from "@vanilla-extract/css";
 import { defineProperties, createSprinkles } from "@vanilla-extract/sprinkles";
-import { publicVariables } from "./theme.css";
+import { publicVariables, theme } from "./theme.css";
 
 const colorProperties = defineProperties({
   conditions: {
@@ -15,5 +16,21 @@ const colorProperties = defineProperties({
   },
 });
 
-export const sprinkles = createSprinkles(colorProperties);
+const space = defineProperties({
+  properties: {
+    marginTop: theme.space,
+    marginBottom: theme.space,
+  },
+  shorthands: {
+    marginY: ["marginTop", "marginBottom"],
+  },
+});
+
+export const stack = style({
+  display: "flex",
+  flexDirection: "column",
+  gap: theme.space[2],
+});
+
+export const sprinkles = createSprinkles(colorProperties, space);
 export type Sprinkles = Parameters<typeof sprinkles>[0];
