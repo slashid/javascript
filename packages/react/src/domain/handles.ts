@@ -1,5 +1,6 @@
 import { HandleType } from "./types";
 import { Factor } from "@slashid/slashid";
+import { TextConfigKey } from "../components/text/constants";
 
 const FACTORS_WITH_EMAIL = ["webauthn", "email_link"];
 const FACTORS_WITH_PHONE = ["otp_via_sms", "sms_link"];
@@ -41,4 +42,42 @@ export function filterFactors(factors: Factor[], handleType: HandleType) {
 
 export function isFactorOidc(factor: Factor) {
   return factor.method === "oidc";
+}
+
+export type AuthenticatingMessage = {
+  title: TextConfigKey;
+  message: TextConfigKey;
+};
+export function getAuthenticatingMessage(
+  factor: Factor
+): AuthenticatingMessage {
+  switch (factor.method) {
+    case "oidc":
+      return {
+        message: "authenticating.message.oidc",
+        title: "authenticating.title.oidc",
+      };
+    case "webauthn":
+      return {
+        message: "authenticating.message.webauthn",
+        title: "authenticating.title.webauthn",
+      };
+
+    case "sms_link":
+      return {
+        message: "authenticating.message.smsLink",
+        title: "authenticating.title.smsLink",
+      };
+    case "otp_via_sms":
+      return {
+        message: "authenticating.message.smsOtp",
+        title: "authenticating.title.smsOtp",
+      };
+    case "email_link":
+    default:
+      return {
+        message: "authenticating.message.emailLink",
+        title: "authenticating.title.emailLink",
+      };
+  }
 }
