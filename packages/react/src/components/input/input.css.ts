@@ -7,6 +7,7 @@ export const input = style({
   fontSize: theme.font.size.base,
   fontWeight: theme.font.weight.semibold,
   color: publicVariables.color.foreground,
+  backgroundColor: publicVariables.color.panel,
 
   "::placeholder": {
     color: publicVariables.color.placeholder,
