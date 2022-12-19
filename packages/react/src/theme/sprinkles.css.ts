@@ -20,9 +20,12 @@ const space = defineProperties({
   properties: {
     marginTop: theme.space,
     marginBottom: theme.space,
+    marginLeft: theme.space,
+    marginRight: theme.space,
   },
   shorthands: {
     marginY: ["marginTop", "marginBottom"],
+    marginX: ["marginLeft", "marginRight"],
   },
 });
 

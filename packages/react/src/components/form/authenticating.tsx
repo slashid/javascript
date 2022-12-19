@@ -97,10 +97,11 @@ export const Authenticating: React.FC<Props> = ({ flowState }) => {
       {factor.method === "otp_via_sms" ? <OtpForm /> : <Loader />}
       <div className={styles.retryPrompt}>
         <Text
-          variant={{ size: "sm", color: "tertiary" }}
+          variant={{ size: "sm", color: "tertiary", weight: "semibold" }}
           t="authenticating.retryPrompt"
         />
         <LinkButton
+          className={sprinkles({ marginLeft: "1" })}
           type="button"
           testId="sid-form-authenticating-cancel-button"
           onClick={() => flowState.retry()}
