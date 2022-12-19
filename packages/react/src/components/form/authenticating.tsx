@@ -1,5 +1,4 @@
 import { centered, sprinkles } from "../../theme/sprinkles.css";
-import { Button } from "../button";
 import { AuthenticatingState } from "./flow";
 import { Text } from "../text";
 import { LinkButton } from "../button/link-button";
@@ -9,9 +8,66 @@ import { getAuthenticatingMessage } from "../../domain/handles";
 import { Circle } from "../spinner/circle";
 import { Spinner } from "../spinner/spinner";
 import { clsx } from "clsx";
+import { FormEventHandler, useCallback, useEffect, useState } from "react";
+import { Input } from "../input";
+import { Button } from "../button";
+import { useSlashID } from "../../main";
+
+const Loader = () => (
+  <div className={clsx(sprinkles({ marginY: "12" }), centered)}>
+    <Circle>
+      <Spinner />
+    </Circle>
+  </div>
+);
 
 type Props = {
   flowState: AuthenticatingState;
+};
+
+const OtpForm = () => {
+  const { text } = useConfiguration();
+  const { sid } = useSlashID();
+  const [otp, setOtp] = useState("");
+  const [formState, setFormState] = useState<
+    "initial" | "input" | "submitting"
+  >("initial");
+
+  const handleSubmit: FormEventHandler<HTMLFormElement> = useCallback(
+    (e) => {
+      e.preventDefault();
+      setFormState("submitting");
+      sid?.publish("otpCodeSubmitted", otp);
+    },
+    [otp, sid]
+  );
+
+  useEffect(() => {
+    const onOtpSmsSent = () => setFormState("input");
+    if (formState === "initial") {
+      sid?.subscribe("otpSmsSent", onOtpSmsSent);
+    }
+  }, [formState, sid]);
+
+  if (formState !== "input") {
+    return <Loader />;
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className={styles.otpForm}>
+      <Input
+        id="sid-otp-input"
+        name="otp"
+        label={text["authenticating.otpInput"]}
+        type="text"
+        value={otp}
+        onChange={setOtp}
+      />
+      <Button type="submit" variant="primary">
+        {text["authenticating.otpInput.submit"]}
+      </Button>
+    </form>
+  );
 };
 
 export const Authenticating: React.FC<Props> = ({ flowState }) => {
@@ -22,7 +78,7 @@ export const Authenticating: React.FC<Props> = ({ flowState }) => {
   const factor = flowState.context.options.factor;
 
   return (
-    <div data-testid="sid-form-authenticating-state">
+    <article data-testid="sid-form-authenticating-state">
       <LinkButton
         className={sprinkles({ marginBottom: "6" })}
         variant="back"
@@ -38,31 +94,20 @@ export const Authenticating: React.FC<Props> = ({ flowState }) => {
         ) : undefined}
       </Text>
       <Text t={message} variant={{ color: "contrast" }} />
-      <div className={clsx(sprinkles({ marginY: "12" }), centered)}>
-        <Circle>
-          <Spinner />
-        </Circle>
-      </div>
-      <div>
-        <div className={styles.retryPrompt}>
-          <Text
-            variant={{ size: "sm", color: "tertiary" }}
-            t="authenticating.retryPrompt"
-          />
-          <LinkButton type="button" onClick={() => flowState.retry()}>
-            {text["authenticating.retry"]}
-          </LinkButton>
-        </div>
-        <Button
-          className={sprinkles({ marginY: "3" })}
-          data-testid="sid-form-authenticating-cancel-button"
+      {factor.method === "otp_via_sms" ? <OtpForm /> : <Loader />}
+      <div className={styles.retryPrompt}>
+        <Text
+          variant={{ size: "sm", color: "tertiary" }}
+          t="authenticating.retryPrompt"
+        />
+        <LinkButton
           type="button"
-          variant="secondary"
-          onClick={() => flowState.cancel()}
+          testId="sid-form-authenticating-cancel-button"
+          onClick={() => flowState.retry()}
         >
-          Cancel
-        </Button>
+          {text["authenticating.retry"]}
+        </LinkButton>
       </div>
-    </div>
+    </article>
   );
 };

@@ -33,6 +33,8 @@ export const TEXT = {
   "authenticating.message.oidc":
     "Please follow the instructions in the login screen from your SSO provider.",
   "authenticating.title.oidc": "Sign in with ",
+  "authenticating.otpInput": "OTP",
+  "authenticating.otpInput.submit": "Submit",
   "factor.webauthn": "Webauthn",
   "factor.otpViaSms": "OTP via SMS",
   "factor.emailLink": "Email link",

@@ -9,6 +9,7 @@ type Props = {
   className?: string;
   type?: "button" | "submit";
   variant?: styles.Variants;
+  testId?: string;
 };
 
 export const LinkButton: React.FC<Props> = ({
@@ -17,9 +18,11 @@ export const LinkButton: React.FC<Props> = ({
   className,
   type = "button",
   variant = "base",
+  testId,
 }) => {
   return (
     <button
+      data-testid={testId}
       type={type}
       className={clsx("sid-link-button", styles.variants[variant], className)}
       onClick={onClick}

@@ -7,3 +7,11 @@ export const retryPrompt = style({
 export const oidcTitle = style({
   textTransform: "capitalize",
 });
+
+export const otpForm = style({
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "space-between",
+  margin: "28px 0",
+  gap: "8px",
+});
