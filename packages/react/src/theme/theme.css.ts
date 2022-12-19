@@ -56,9 +56,9 @@ export const publicVariables = createGlobalThemeContract(
 createGlobalTheme(".sid-theme-root", publicVariables, {
   color: {
     background: colors.grey100,
-    mute: colors.grey50,
+    mute: colors.grey100,
     panel: colors.white,
-    foreground: colors.blue900,
+    foreground: colors.blue900, 
     contrast: "rgba(20, 32, 73, 0.8)",
     secondary: "rgba(20, 32, 73, 0.6)",
     tertiary: "rgba(20, 32, 73, 0.5)",

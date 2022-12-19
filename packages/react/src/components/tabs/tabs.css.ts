@@ -5,7 +5,7 @@ export const list = style({
   display: "flex",
   backgroundColor: publicVariables.color.mute,
   borderRadius: publicVariables.border.radius,
-  padding: "4px",
+  padding: "3px",
   fontFamily: publicVariables.font.fontFamily,
   fontSize: theme.font.size.base,
 });
