@@ -16,6 +16,7 @@ export const TEXT = {
   "initial.divider": "or",
   "authenticating.retryPrompt": "Did not work?",
   "authenticating.retry": "Retry",
+  "authenticating.back": "Back",
   "authenticating.message.webauthn":
     "If you are registering for the first time, you will receive an email to verify your email address.",
   "authenticating.title.webauthn":

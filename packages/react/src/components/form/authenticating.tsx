@@ -1,4 +1,4 @@
-import { sprinkles } from "../../theme/sprinkles.css";
+import { centered, sprinkles } from "../../theme/sprinkles.css";
 import { Button } from "../button";
 import { AuthenticatingState } from "./flow";
 import { Text } from "../text";
@@ -6,6 +6,9 @@ import { LinkButton } from "../button/link-button";
 import * as styles from "./authenticating.css";
 import { useConfiguration } from "../../hooks/use-configuration";
 import { getAuthenticatingMessage } from "../../domain/handles";
+import { Circle } from "../spinner/circle";
+import { Spinner } from "../spinner/spinner";
+import { clsx } from "clsx";
 
 type Props = {
   flowState: AuthenticatingState;
@@ -20,7 +23,13 @@ export const Authenticating: React.FC<Props> = ({ flowState }) => {
 
   return (
     <div data-testid="sid-form-authenticating-state">
-      <span>TODO BACK CANCELF</span>
+      <LinkButton
+        className={sprinkles({ marginBottom: "6" })}
+        variant="back"
+        onClick={() => flowState.cancel()}
+      >
+        {text["authenticating.back"]}
+      </LinkButton>
       <Text as="h1" t={title} variant={{ size: "2xl-title" }}>
         {factor.method === "oidc" ? (
           <span className={styles.oidcTitle}>
@@ -29,9 +38,10 @@ export const Authenticating: React.FC<Props> = ({ flowState }) => {
         ) : undefined}
       </Text>
       <Text t={message} variant={{ color: "contrast" }} />
-      <h2>Auth method:</h2>
-      <div>
-        <pre>{JSON.stringify(flowState.context.options, null, 2)}</pre>
+      <div className={clsx(sprinkles({ marginY: "12" }), centered)}>
+        <Circle>
+          <Spinner />
+        </Circle>
       </div>
       <div>
         <div className={styles.retryPrompt}>

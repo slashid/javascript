@@ -32,5 +32,11 @@ export const stack = style({
   gap: theme.space[2],
 });
 
+export const centered = style({
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+});
+
 export const sprinkles = createSprinkles(colorProperties, space);
 export type Sprinkles = Parameters<typeof sprinkles>[0];
