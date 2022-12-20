@@ -35,6 +35,11 @@ export const TEXT = {
   "authenticating.title.oidc": "Sign in with ",
   "authenticating.otpInput": "OTP",
   "authenticating.otpInput.submit": "Submit",
+  "success.title": "You are now authenticated!",
+  "success.subtitle": "You can now close this page.",
+  "error.title": "Something went wrong...",
+  "error.subtitle":
+    "There has been an error whilte submitting your form. Please try again.",
   "factor.webauthn": "Webauthn",
   "factor.otpViaSms": "OTP via SMS",
   "factor.emailLink": "Email link",

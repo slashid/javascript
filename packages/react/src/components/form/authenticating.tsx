@@ -81,6 +81,7 @@ export const Authenticating: React.FC<Props> = ({ flowState }) => {
     <article data-testid="sid-form-authenticating-state">
       <LinkButton
         className={sprinkles({ marginBottom: "6" })}
+        testId="sid-form-authenticating-cancel-button"
         variant="back"
         onClick={() => flowState.cancel()}
       >
@@ -103,7 +104,7 @@ export const Authenticating: React.FC<Props> = ({ flowState }) => {
         <LinkButton
           className={sprinkles({ marginLeft: "1" })}
           type="button"
-          testId="sid-form-authenticating-cancel-button"
+          testId="sid-form-authenticating-retry-button"
           onClick={() => flowState.retry()}
         >
           {text["authenticating.retry"]}

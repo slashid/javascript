@@ -1,4 +1,4 @@
-// import { User } from "@slashid/slashid";
+import { User } from "@slashid/slashid";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Form } from ".";
@@ -38,8 +38,7 @@ describe("#Form", () => {
     ).resolves.toBeInTheDocument();
   });
 
-  // TODO add back once the Go back button is implemented
-  /*   test("should transition from authenticating to initial state on cancel", async () => {
+  test("should transition from authenticating to initial state on the back button click", async () => {
     const logInMock = vi.fn(
       () =>
         new Promise<User>((resolve) => setTimeout(() => resolve(TEST_USER), 50))
@@ -61,7 +60,7 @@ describe("#Form", () => {
     await expect(
       screen.findByTestId("sid-form-initial-state")
     ).resolves.toBeInTheDocument();
-  }); */
+  });
 
   test("should show the success state on successful login", async () => {
     const logInMock = vi.fn(() => Promise.resolve(TEST_USER));
@@ -95,6 +94,33 @@ describe("#Form", () => {
     await expect(logInMock).rejects.toMatch("login error");
     await expect(
       screen.findByTestId("sid-form-error-state")
+    ).resolves.toBeInTheDocument();
+  });
+
+  test("should allow going back to the initial state if login fails", async () => {
+    const logInMock = vi.fn(() => Promise.reject("login error"));
+    const user = userEvent.setup();
+
+    render(
+      <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+        <Form />
+      </TestSlashIDProvider>
+    );
+
+    user.click(screen.getByTestId("sid-form-initial-submit-button"));
+
+    await expect(logInMock).rejects.toMatch("login error");
+    await expect(
+      screen.findByTestId("sid-form-error-state")
+    ).resolves.toBeInTheDocument();
+
+    const cancelButton = await screen.findByTestId(
+      "sid-form-authenticating-cancel-button"
+    );
+    user.click(cancelButton);
+
+    await expect(
+      screen.findByTestId("sid-form-initial-state")
     ).resolves.toBeInTheDocument();
   });
 });
