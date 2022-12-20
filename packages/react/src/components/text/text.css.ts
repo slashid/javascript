@@ -23,7 +23,10 @@ export const text = recipe({
       semibold: { fontWeight: "600" },
       bold: { fontWeight: "700" },
     },
-    color: publicVariables.color,
+    color: {
+      contrast: { color: publicVariables.color.contrast },
+      tertiary: { color: publicVariables.color.tertiary },
+    },
   },
 
   defaultVariants: {

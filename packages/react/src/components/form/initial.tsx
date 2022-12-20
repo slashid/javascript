@@ -284,7 +284,7 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
         variant={{ size: "2xl-title", weight: "bold" }}
         t="initial.title"
       />
-      <Text className={styles.subtitle} as="h2" t="initial.subtitle" />
+      <Text variant={{ color: "tertiary" }} as="h2" t="initial.subtitle" />
       {ConfiguredForm}
       <Oidc providers={oidcFactors} handleClick={handleSubmit} />
     </article>

@@ -20,9 +20,12 @@ const space = defineProperties({
   properties: {
     marginTop: theme.space,
     marginBottom: theme.space,
+    marginLeft: theme.space,
+    marginRight: theme.space,
   },
   shorthands: {
     marginY: ["marginTop", "marginBottom"],
+    marginX: ["marginLeft", "marginRight"],
   },
 });
 
@@ -30,6 +33,12 @@ export const stack = style({
   display: "flex",
   flexDirection: "column",
   gap: theme.space[2],
+});
+
+export const centered = style({
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
 });
 
 export const sprinkles = createSprinkles(colorProperties, space);
