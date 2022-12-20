@@ -96,4 +96,31 @@ describe("#Form", () => {
       screen.findByTestId("sid-form-error-state")
     ).resolves.toBeInTheDocument();
   });
+
+  test("should allow going back to the initial state if login fails", async () => {
+    const logInMock = vi.fn(() => Promise.reject("login error"));
+    const user = userEvent.setup();
+
+    render(
+      <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+        <Form />
+      </TestSlashIDProvider>
+    );
+
+    user.click(screen.getByTestId("sid-form-initial-submit-button"));
+
+    await expect(logInMock).rejects.toMatch("login error");
+    await expect(
+      screen.findByTestId("sid-form-error-state")
+    ).resolves.toBeInTheDocument();
+
+    const cancelButton = await screen.findByTestId(
+      "sid-form-authenticating-cancel-button"
+    );
+    user.click(cancelButton);
+
+    await expect(
+      screen.findByTestId("sid-form-initial-state")
+    ).resolves.toBeInTheDocument();
+  });
 });

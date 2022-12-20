@@ -21,6 +21,7 @@ export interface SuccessState {
 
 export interface ErrorState {
   status: "error";
+  cancel: Cancel;
 }
 
 interface LoginEvent {
@@ -81,9 +82,12 @@ const createSuccessState = (): SuccessState => {
   };
 };
 
-const createErrorState = (): ErrorState => {
+const createErrorState = (send: Send): ErrorState => {
   return {
     status: "error",
+    cancel: () => {
+      send({ type: "sid_cancel" });
+    },
   };
 };
 
@@ -111,7 +115,7 @@ export function createFlow() {
                 await logInFn(e.options);
                 setState(createSuccessState());
               } catch (e) {
-                setState(createErrorState());
+                setState(createErrorState(send));
               }
             }
         }
@@ -134,11 +138,22 @@ export function createFlow() {
                   await logInFn(state.context.options);
                   setState(createSuccessState());
                 } catch (e) {
-                  setState(createErrorState());
+                  setState(createErrorState(send));
                 }
               }
             }
             break;
+          case "sid_cancel":
+            {
+              setState(createInitialState(send));
+            }
+            break;
+        }
+        break;
+      }
+
+      case "error": {
+        switch (e.type) {
           case "sid_cancel":
             {
               setState(createInitialState(send));

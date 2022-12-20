@@ -4,7 +4,7 @@ import { Text } from "../text";
 import { centered, sprinkles } from "../../theme/sprinkles.css";
 import * as styles from "./success.css";
 
-const Check = () => (
+const CheckIcon = () => (
   <svg
     stroke="currentColor"
     fill="currentColor"
@@ -30,7 +30,7 @@ export const Success: React.FC<Props> = () => {
       <div
         className={clsx(styles.check, sprinkles({ marginY: "12" }), centered)}
       >
-        <Check />
+        <CheckIcon />
       </div>
     </article>
   );
