@@ -1,7 +1,13 @@
+import { clsx } from "clsx";
 import { DARK_MODE } from ".";
 
-export const Check = () => (
+type Props = {
+  className?: string;
+};
+
+export const Check: React.FC<Props> = ({ className }) => (
   <svg
+    className={clsx(className)}
     width="16"
     height="16"
     viewBox="0 0 16 16"
