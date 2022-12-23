@@ -8,15 +8,16 @@ export const text = recipe({
     fontSize: theme.font.size.base,
     color: publicVariables.color.foreground,
     margin: 0,
+    lineHeight: "100%",
   },
 
   variants: {
     size: {
       xs: { fontSize: "12px" },
-      sm: { fontSize: "14px" },
-      base: { fontSize: "16px" },
+      sm: { fontSize: "14px", lineHeight: "112%" },
+      base: { fontSize: "16px", lineHeight: "122%" },
       xl: { fontSize: "20px" },
-      "2xl-title": { fontSize: "24px" },
+      "2xl-title": { fontSize: "24px", lineHeight: "118%" },
     },
     weight: {
       medium: { fontWeight: "500" },

@@ -1,4 +1,4 @@
-import { useSlashID } from "../main";
+import { useSlashID } from "../../main";
 
 type Props = {
   children: React.ReactNode;

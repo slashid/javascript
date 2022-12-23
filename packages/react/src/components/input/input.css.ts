@@ -112,6 +112,7 @@ export const label = style({
   fontSize: theme.font.size.xs,
   fontWeight: theme.font.weight.semibold,
   color: publicVariables.color.contrast,
+  lineHeight: "100%",
 });
 
 export const countryCode = style({

@@ -1,20 +1,20 @@
 import { render, screen } from "@testing-library/react";
 
-import { LoggedOut } from "./logged-out";
+import { LoggedIn } from ".";
 import {
   TestSlashIDProvider,
   TEST_USER,
-} from "../context/test-slash-id-provider";
+} from "../../context/test-slash-id-provider";
 
 const TestComponent = () => <h1>Test</h1>;
 
-describe("LoggedOut", () => {
-  test("should render children when the SDK is ready and a user is not logged in", () => {
+describe("LoggedIn", () => {
+  test("should render children when the SDK is ready and a user is logged in", () => {
     render(
-      <TestSlashIDProvider sdkState="ready" user={undefined}>
-        <LoggedOut>
+      <TestSlashIDProvider sdkState="ready" user={TEST_USER}>
+        <LoggedIn>
           <TestComponent />
-        </LoggedOut>
+        </LoggedIn>
       </TestSlashIDProvider>
     );
     expect(screen.getByText("Test")).toBeInTheDocument();
@@ -23,20 +23,20 @@ describe("LoggedOut", () => {
   test("should not render children when the SDK is not ready", () => {
     render(
       <TestSlashIDProvider sdkState="initial">
-        <LoggedOut>
+        <LoggedIn>
           <TestComponent />
-        </LoggedOut>
+        </LoggedIn>
       </TestSlashIDProvider>
     );
     expect(screen.queryByText("Test")).not.toBeInTheDocument();
   });
 
-  test("should not render children when the SDK is ready and a user is logged in", () => {
+  test("should not render children when the SDK is ready but there is no user", () => {
     render(
-      <TestSlashIDProvider sdkState="ready" user={TEST_USER}>
-        <LoggedOut>
+      <TestSlashIDProvider sdkState="ready" user={undefined}>
+        <LoggedIn>
           <TestComponent />
-        </LoggedOut>
+        </LoggedIn>
       </TestSlashIDProvider>
     );
     expect(screen.queryByText("Test")).not.toBeInTheDocument();
