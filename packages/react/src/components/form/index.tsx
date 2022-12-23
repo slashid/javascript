@@ -5,6 +5,9 @@ import { ConfigurationProvider } from "../../context/config-context";
 
 import { Form as BaseForm, Props } from "./form";
 
+/**
+ * Default configuration provider - used internally
+ */
 export const Form: React.FC<Props> = ({ className }) => {
   return (
     <ConfigurationProvider
