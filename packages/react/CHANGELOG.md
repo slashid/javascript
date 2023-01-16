@@ -1,5 +1,15 @@
 # @slashid/react
 
+## 0.2.0
+
+### Minor Changes
+
+- db50139: Expose the authentication form component
+
+### Patch Changes
+
+- 757d7d9: Make the package private
+
 ## 0.1.3
 
 ### Patch Changes
