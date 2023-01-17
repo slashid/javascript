@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 0.3.0
+
+### Minor Changes
+
+- 910a8c5: Added the theme config prop
+
 ## 0.2.0
 
 ### Minor Changes
