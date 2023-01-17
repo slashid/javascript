@@ -52,25 +52,45 @@ export const publicVariables = createGlobalThemeContract(
   (value) => `sid-${value}`
 );
 
+const lightThemeColors = {
+  background: colors.grey100,
+  mute: colors.grey100,
+  panel: colors.white,
+  foreground: colors.blue900,
+  contrast: "rgba(20, 32, 73, 0.8)",
+  secondary: "rgba(20, 32, 73, 0.6)",
+  tertiary: "rgba(20, 32, 73, 0.5)",
+  placeholder: "rgba(20, 32, 73, 0.3)",
+  smooth: "rgba(20, 32, 73, 0.12)",
+  subtle: "rgba(20, 32, 73, 0.06)",
+  soft: "rgba(20, 32, 73, 0.04)",
+  offset: "rgba(20, 32, 73, 0.01)",
+  primary: colors.blue500,
+  primaryHover: colors.blue600,
+  transparent: "transparent",
+};
+
+const darkThemeColors = {
+  background: colors.grey900,
+  mute: colors.grey800,
+  panel: colors.grey700,
+  foreground: colors.grey100,
+  contrast: "rgba(243, 243, 245, 0.8)",
+  secondary: "rgba(243, 243, 245, 0.6)",
+  tertiary: "rgba(243, 243, 245, 0.5)",
+  placeholder: "rgba(243, 243, 245, 0.3)",
+  smooth: "rgba(243, 243, 245, 0.12)",
+  subtle: "rgba(243, 243, 245, 0.06)",
+  soft: "rgba(243, 243, 245, 0.04)",
+  offset: "rgba(243, 243, 245, 0.01)",
+  primary: colors.blue500,
+  primaryHover: colors.blue600,
+  transparent: "transparent",
+};
+
 // default: light theme
 createGlobalTheme(".sid-theme-root", publicVariables, {
-  color: {
-    background: colors.grey100,
-    mute: colors.grey100,
-    panel: colors.white,
-    foreground: colors.blue900,
-    contrast: "rgba(20, 32, 73, 0.8)",
-    secondary: "rgba(20, 32, 73, 0.6)",
-    tertiary: "rgba(20, 32, 73, 0.5)",
-    placeholder: "rgba(20, 32, 73, 0.3)",
-    smooth: "rgba(20, 32, 73, 0.12)",
-    subtle: "rgba(20, 32, 73, 0.06)",
-    soft: "rgba(20, 32, 73, 0.04)",
-    offset: "rgba(20, 32, 73, 0.01)",
-    primary: colors.blue500,
-    primaryHover: colors.blue600,
-    transparent: "transparent",
-  },
+  color: lightThemeColors,
   font: {
     fontFamily: "Inter",
   },
@@ -79,28 +99,15 @@ createGlobalTheme(".sid-theme-root", publicVariables, {
   },
 });
 
-// overrides the color theme if dark mode is preferred
-// TODO: expose this so customers could set the dark theme as default
 export const darkTheme = style({
+  vars: assignVars(publicVariables.color, darkThemeColors),
+});
+
+// overrides the color theme based on system settings
+export const autoTheme = style({
   "@media": {
     "(prefers-color-scheme: dark)": {
-      vars: assignVars(publicVariables.color, {
-        background: colors.grey900,
-        mute: colors.grey800,
-        panel: colors.grey700,
-        foreground: colors.grey100,
-        contrast: "rgba(243, 243, 245, 0.8)",
-        secondary: "rgba(243, 243, 245, 0.6)",
-        tertiary: "rgba(243, 243, 245, 0.5)",
-        placeholder: "rgba(243, 243, 245, 0.3)",
-        smooth: "rgba(243, 243, 245, 0.12)",
-        subtle: "rgba(243, 243, 245, 0.06)",
-        soft: "rgba(243, 243, 245, 0.04)",
-        offset: "rgba(243, 243, 245, 0.01)",
-        primary: colors.blue500,
-        primaryHover: colors.blue600,
-        transparent: "transparent",
-      }),
+      vars: assignVars(publicVariables.color, darkThemeColors),
     },
   },
 });
