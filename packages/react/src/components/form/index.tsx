@@ -11,6 +11,7 @@ import { Form as BaseForm, Props } from "./form";
 export const Form: React.FC<Props> = ({ className }) => {
   return (
     <ConfigurationProvider
+      theme='dark'
       factors={[
         { method: "email_link" },
         { method: "webauthn" },
