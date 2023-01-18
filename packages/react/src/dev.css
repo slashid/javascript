@@ -8,3 +8,8 @@ body {
   width: 390px;
   margin: 32px;
 }
+
+.sid-logo--image {
+  height: 38px;
+  margin-bottom: 4px;
+}
