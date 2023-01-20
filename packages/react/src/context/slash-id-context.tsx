@@ -66,7 +66,7 @@ const createStorage = (storageType: StorageOption) => {
 export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
   oid,
   tokenStorage = "memory",
-  baseApiUrl: baseApiUrl,
+  baseApiUrl,
   sdkUrl,
   children,
 }) => {
