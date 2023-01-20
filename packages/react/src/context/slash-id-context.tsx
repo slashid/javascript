@@ -16,6 +16,8 @@ export type StorageOption = "memory" | "localStorage";
 export interface SlashIDProviderProps {
   oid: string;
   tokenStorage?: StorageOption;
+  baseApiUrl?: string;
+  sdkUrl?: string;
   children: React.ReactNode;
 }
 
@@ -64,6 +66,8 @@ const createStorage = (storageType: StorageOption) => {
 export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
   oid,
   tokenStorage = "memory",
+  baseApiUrl,
+  sdkUrl,
   children,
 }) => {
   const [state, setState] = useState<SDKState>(initialContextValue.sdkState);
@@ -149,7 +153,11 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
 
   useEffect(() => {
     if (state === "initial") {
-      const slashId = new SlashID();
+      const slashId = new SlashID({
+        oid,
+        ...(baseApiUrl && { baseURL: baseApiUrl }),
+        ...(sdkUrl && { sdkURL: sdkUrl }),
+      });
       const storage = createStorage(tokenStorage);
 
       storageRef.current = storage;
@@ -157,7 +165,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
 
       setState("loaded");
     }
-  }, [state, tokenStorage]);
+  }, [oid, baseApiUrl, sdkUrl, state, tokenStorage]);
 
   useEffect(() => {
     if (state !== "initial") {
