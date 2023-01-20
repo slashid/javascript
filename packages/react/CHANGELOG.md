@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 0.4.0
+
+### Minor Changes
+
+- e0e6949: Expose the SlashID SDK constructor options in the SlashIDProvider
+
 ## 0.3.0
 
 ### Minor Changes
