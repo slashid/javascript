@@ -7,6 +7,7 @@ export const form = style({
   backgroundColor: publicVariables.color.panel,
   width: "100%",
   padding: "20px",
+  boxSizing: "border-box",
 
   "@media": {
     "screen and (min-width: 768px)": {
