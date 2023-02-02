@@ -29,6 +29,7 @@ import { Line } from "../icon/line";
 import { Bitbucket } from "../icon/bitbucket";
 import { Divider } from "../divider";
 import { clsx } from "clsx";
+import { isValidEmail, isValidPhoneNumber } from "./validation";
 
 type LogoProps = {
   logo?: TLogo;
@@ -98,16 +99,22 @@ const FACTOR_LABEL_MAP: Record<Factor["method"], TextConfigKey> = {
   webauthn_via_sms: "",
 };
 
+type ValidationError = {
+  message: string;
+};
+
 type HandleFormProps = {
   handleType: HandleType;
   factors: Factor[];
   handleSubmit: (factor: Factor, handle: Handle) => void;
+  validate?: (value: string) => ValidationError | undefined;
 };
 
 const HandleForm: React.FC<HandleFormProps> = ({
   handleType,
   factors,
   handleSubmit,
+  validate,
 }) => {
   const filteredFactors = filterFactors(factors, handleType).filter(
     (f) => !isFactorOidc(f)
@@ -117,6 +124,8 @@ const HandleForm: React.FC<HandleFormProps> = ({
   const [phone, setPhone] = useState("");
   const [flag, setFlag] = useState<Flag>(GB_FLAG);
   const [factor, setFactor] = useState<Factor>(filteredFactors[0]);
+  const [error, setError] = useState<ValidationError | undefined>();
+  const [dirty, setDirty] = useState(false);
   const { text } = useConfiguration();
 
   const input = useMemo(() => {
@@ -149,19 +158,32 @@ const HandleForm: React.FC<HandleFormProps> = ({
     );
   }, [email, flag, handleType, phone, text]);
 
+  const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
+    e.preventDefault();
+
+    setDirty(true);
+
+    const value =
+      handleType === "email_address" ? email : `${flag.dial_code}${phone}`;
+
+    if (validate) {
+      const formError = validate(value);
+      console.log({ formError });
+
+      if (formError) {
+        setError(formError);
+        return;
+      }
+    }
+
+    handleSubmit(factor, {
+      type: handleType,
+      value,
+    });
+  };
+
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        handleSubmit(factor, {
-          type: handleType,
-          value:
-            handleType === "email_address"
-              ? email
-              : `${flag.dial_code}${phone}`,
-        });
-      }}
-    >
+    <form onSubmit={onSubmit}>
       {shouldRenderFactorDropdown && (
         <Dropdown
           defaultValue={filteredFactors[0].method}
@@ -177,6 +199,7 @@ const HandleForm: React.FC<HandleFormProps> = ({
         />
       )}
       {input}
+      {dirty && error ? <span>{error.message}</span> : null}
       <Button
         className={sprinkles({ marginTop: "5" })}
         type="submit"
@@ -255,6 +278,12 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
                   handleSubmit={handleSubmit}
                   factors={factors}
                   handleType="email_address"
+                  validate={(value) => {
+                    console.log(value);
+                    if (!isValidEmail(value)) {
+                      return { message: "invalid email" };
+                    }
+                  }}
                 />
               ),
             },
@@ -266,6 +295,11 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
                   handleSubmit={handleSubmit}
                   factors={factors}
                   handleType="phone_number"
+                  validate={(value) => {
+                    if (!isValidPhoneNumber(value)) {
+                      return { message: "invalid phone number" };
+                    }
+                  }}
                 />
               ),
             },
