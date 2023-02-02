@@ -1,5 +1,5 @@
 import { User } from "@slashid/slashid";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Form } from ".";
 
@@ -57,9 +57,11 @@ describe("#Form", () => {
     );
     user.click(cancelButton);
 
-    await expect(
-      screen.findByTestId("sid-form-initial-state")
-    ).resolves.toBeInTheDocument();
+    await waitFor(() =>
+      expect(
+        screen.findByTestId("sid-form-initial-state")
+      ).resolves.toBeInTheDocument()
+    );
   });
 
   test("should show the success state on successful login", async () => {
