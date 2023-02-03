@@ -21,3 +21,9 @@ export function isFactorOidc(factor: Factor): factor is FactorOIDC {
 export type LogIn = (options: LoginOptions) => Promise<User | undefined>;
 export type Retry = () => void;
 export type Cancel = () => void;
+
+export type ValidationError = {
+  message: string;
+};
+
+export type Validate<T = any> = (value: T) => ValidationError | undefined;

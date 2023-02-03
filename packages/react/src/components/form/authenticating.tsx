@@ -11,7 +11,10 @@ import { clsx } from "clsx";
 import { FormEventHandler, useCallback, useEffect, useState } from "react";
 import { Input } from "../input";
 import { Button } from "../button";
+import { ErrorMessage } from "./error-message";
 import { useSlashID } from "../../main";
+import { isValidOTPCode } from "./validation";
+import { Validate, ValidationError } from "../../domain/types";
 
 const Loader = () => (
   <div className={clsx(sprinkles({ marginY: "12" }), centered)}>
@@ -25,21 +28,37 @@ type Props = {
   flowState: AuthenticatingState;
 };
 
-const OtpForm = () => {
+type OtpFormProps = {
+  validate?: Validate<string>;
+};
+
+const OtpForm = ({ validate }: OtpFormProps) => {
   const { text } = useConfiguration();
   const { sid } = useSlashID();
   const [otp, setOtp] = useState("");
   const [formState, setFormState] = useState<
     "initial" | "input" | "submitting"
   >("initial");
+  const [dirty, setDirty] = useState(false);
+  const [error, setError] = useState<ValidationError | undefined>();
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = useCallback(
     (e) => {
       e.preventDefault();
+      setDirty(true);
+
+      if (validate) {
+        const formError = validate(otp);
+        if (formError) {
+          setError(formError);
+          return;
+        }
+      }
+
       setFormState("submitting");
       sid?.publish("otpCodeSubmitted", otp);
     },
-    [otp, sid]
+    [otp, sid, validate]
   );
 
   useEffect(() => {
@@ -63,6 +82,7 @@ const OtpForm = () => {
         value={otp}
         onChange={setOtp}
       />
+      {dirty && error ? <ErrorMessage error={error} /> : null}
       <Button type="submit" variant="primary">
         {text["authenticating.otpInput.submit"]}
       </Button>
@@ -95,7 +115,17 @@ export const Authenticating: React.FC<Props> = ({ flowState }) => {
         ) : undefined}
       </Text>
       <Text t={message} variant={{ color: "contrast" }} />
-      {factor.method === "otp_via_sms" ? <OtpForm /> : <Loader />}
+      {factor.method === "otp_via_sms" ? (
+        <OtpForm
+          validate={(value) => {
+            if (!isValidOTPCode(value)) {
+              return { message: text["validationError.otp"] };
+            }
+          }}
+        />
+      ) : (
+        <Loader />
+      )}
       <div className={styles.retryPrompt}>
         <Text
           variant={{ size: "sm", color: "tertiary", weight: "semibold" }}

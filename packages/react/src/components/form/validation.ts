@@ -19,3 +19,11 @@ export const isValidEmail: ValidatorFn<string> = (value) => {
 
   return EMAIL_REGEX.test(value);
 };
+
+export const isValidOTPCode: ValidatorFn<string> = (value) => {
+  if (Number.isNaN(Number(value)) || value.length !== 6) {
+    return false;
+  }
+
+  return true;
+};
