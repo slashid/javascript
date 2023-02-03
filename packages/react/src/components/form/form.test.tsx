@@ -9,6 +9,11 @@ import {
   TEST_USER,
 } from "../../context/test-slash-id-provider";
 
+const inputEmail = (value: string) => {
+  const input = screen.getByPlaceholderText(TEXT["initial.handle.phone.email"]);
+  fireEvent.change(input, { target: { value } });
+};
+
 describe("#Form", () => {
   test("should render in the initial state", () => {
     const logInMock = vi.fn(() => Promise.resolve(TEST_USER));
@@ -49,10 +54,7 @@ describe("#Form", () => {
       </TestSlashIDProvider>
     );
 
-    const input = screen.getByPlaceholderText(
-      TEXT["initial.handle.phone.email"]
-    );
-    fireEvent.change(input, { target: { value: "invalid-email" } });
+    inputEmail("invalid-email");
 
     user.click(screen.getByTestId("sid-form-initial-submit-button"));
 
@@ -71,10 +73,7 @@ describe("#Form", () => {
       </TestSlashIDProvider>
     );
 
-    const input = screen.getByPlaceholderText(
-      TEXT["initial.handle.phone.email"]
-    );
-    fireEvent.change(input, { target: { value: "valid@email.com" } });
+    inputEmail("valid@email.com");
 
     user.click(screen.getByTestId("sid-form-initial-submit-button"));
 
@@ -96,10 +95,7 @@ describe("#Form", () => {
       </TestSlashIDProvider>
     );
 
-    const input = screen.getByPlaceholderText(
-      TEXT["initial.handle.phone.email"]
-    );
-    fireEvent.change(input, { target: { value: "valid@email.com" } });
+    inputEmail("valid@email.com");
 
     user.click(screen.getByTestId("sid-form-initial-submit-button"));
     const cancelButton = await screen.findByTestId(
@@ -122,10 +118,7 @@ describe("#Form", () => {
       </TestSlashIDProvider>
     );
 
-    const input = screen.getByPlaceholderText(
-      TEXT["initial.handle.phone.email"]
-    );
-    fireEvent.change(input, { target: { value: "valid@email.com" } });
+    inputEmail("valid@email.com");
 
     user.click(screen.getByTestId("sid-form-initial-submit-button"));
 
@@ -144,10 +137,7 @@ describe("#Form", () => {
       </TestSlashIDProvider>
     );
 
-    const input = screen.getByPlaceholderText(
-      TEXT["initial.handle.phone.email"]
-    );
-    fireEvent.change(input, { target: { value: "valid@email.com" } });
+    inputEmail("valid@email.com");
 
     user.click(screen.getByTestId("sid-form-initial-submit-button"));
 
@@ -167,10 +157,7 @@ describe("#Form", () => {
       </TestSlashIDProvider>
     );
 
-    const input = screen.getByPlaceholderText(
-      TEXT["initial.handle.phone.email"]
-    );
-    fireEvent.change(input, { target: { value: "valid@email.com" } });
+    inputEmail("valid@email.com");
 
     user.click(screen.getByTestId("sid-form-initial-submit-button"));
 
