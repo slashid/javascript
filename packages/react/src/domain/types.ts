@@ -26,4 +26,4 @@ export type ValidationError = {
   message: string;
 };
 
-export type Validate<T = any> = (value: T) => ValidationError | undefined;
+export type Validate<T = unknown> = (value: T) => ValidationError | undefined;
