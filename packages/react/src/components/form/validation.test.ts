@@ -1,5 +1,5 @@
 import { describe, expect } from "vitest";
-import { isValidEmail } from "./validation";
+import { isValidEmail, isValidOTPCode, isValidPhoneNumber } from "./validation";
 
 const validEmails = [
   "jwiza@bogan.info",
@@ -81,8 +81,25 @@ describe.concurrent("validation tests", () => {
 
   it("should be invalid email address", () => {
     invalidEmails.forEach((email) => {
-      console.log(email);
       expect(isValidEmail(email)).toBe(false);
     });
+  });
+
+  it("should be valid OTP code", () => {
+    expect(isValidOTPCode("123456")).toBe(true);
+  });
+
+  it("should be invalid OTP code", () => {
+    ["1", "1234567", "test"].forEach((code) => {
+      expect(isValidOTPCode(code)).toBe(false);
+    });
+  });
+
+  it("should be valid phone number", () => {
+    expect(isValidPhoneNumber("+44123456789")).toBe(true);
+  });
+
+  it("should be invalid phone number", () => {
+    expect(isValidPhoneNumber("")).toBe(false);
   });
 });
