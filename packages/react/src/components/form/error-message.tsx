@@ -6,5 +6,9 @@ type ErrorMessageProps = {
 };
 
 export const ErrorMessage = ({ error }: ErrorMessageProps) => {
-  return <span className={styles.errorMessage}>{error.message}</span>;
+  return (
+    <span data-testid="sid-form-error-message" className={styles.errorMessage}>
+      {error.message}
+    </span>
+  );
 };
