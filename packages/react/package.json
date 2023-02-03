@@ -36,8 +36,7 @@
     "build": "vite build && tsc",
     "lint": "eslint ./src",
     "test:types": "tsc --noEmit --emitDeclarationOnly false",
-    "test:unit": "vitest run",
-    "test:watch": "vitest watch"
+    "test:unit": "vitest run"
   },
   "dependencies": {
     "@fontsource/inter": "^4.5.14",
