@@ -18,6 +18,7 @@ export const colors = {
   blue500: "#2A6AFF",
   blue600: "#2761E8",
   blue900: "#142049",
+  red500: "#FF0042",
 };
 
 // public CSS variables that can be customised
@@ -39,6 +40,7 @@ export const publicVariables = createGlobalThemeContract(
       primary: "color-primary",
       primaryHover: "color-primary-hover",
       transparent: "color-transparent",
+      error: "color-error",
     },
     font: {
       fontFamily: "font-family",
@@ -68,6 +70,7 @@ const lightThemeColors = {
   primary: colors.blue500,
   primaryHover: colors.blue600,
   transparent: "transparent",
+  error: colors.red500,
 };
 
 const darkThemeColors = {
@@ -86,6 +89,7 @@ const darkThemeColors = {
   primary: colors.blue500,
   primaryHover: colors.blue600,
   transparent: "transparent",
+  error: colors.red500,
 };
 
 // default: light theme

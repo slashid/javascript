@@ -199,7 +199,7 @@ const HandleForm: React.FC<HandleFormProps> = ({
       {input}
       {dirty && error ? <ErrorMessage error={error} /> : null}
       <Button
-        className={sprinkles({ marginTop: "5" })}
+        className={sprinkles({ marginTop: "4" })}
         type="submit"
         variant="primary"
         testId="sid-form-initial-submit-button"
