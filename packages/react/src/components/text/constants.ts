@@ -44,7 +44,7 @@ export const TEXT = {
   "factor.otpViaSms": "OTP via SMS",
   "factor.emailLink": "Email link",
   "factor.smsLink": "SMS link",
-  "validationError.otp": "Please enter OTP code.",
+  "validationError.otp": "Please enter the OTP code.",
   "validationError.email": "Please enter your email address.",
   "validationError.phoneNumber": "Please enter your phone number.",
 };

@@ -74,18 +74,20 @@ const OtpForm = ({ validate }: OtpFormProps) => {
 
   return (
     <form onSubmit={handleSubmit} className={styles.otpForm}>
-      <Input
-        id="sid-otp-input"
-        name="otp"
-        label={text["authenticating.otpInput"]}
-        type="text"
-        value={otp}
-        onChange={setOtp}
-      />
+      <section className={styles.otpFormSection}>
+        <Input
+          id="sid-otp-input"
+          name="otp"
+          label={text["authenticating.otpInput"]}
+          type="text"
+          value={otp}
+          onChange={setOtp}
+        />
+        <Button type="submit" variant="primary">
+          {text["authenticating.otpInput.submit"]}
+        </Button>
+      </section>
       {dirty && error ? <ErrorMessage error={error} /> : null}
-      <Button type="submit" variant="primary">
-        {text["authenticating.otpInput.submit"]}
-      </Button>
     </form>
   );
 };
