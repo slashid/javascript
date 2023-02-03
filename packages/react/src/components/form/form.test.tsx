@@ -39,9 +39,14 @@ describe("#Form", () => {
   });
 
   test("should transition from authenticating to initial state on the back button click", async () => {
+    // used to store the resolve callback
+    let r: undefined | ((u: User) => void);
     const logInMock = vi.fn(
       () =>
-        new Promise<User>((resolve) => setTimeout(() => resolve(TEST_USER), 50))
+        new Promise<User>((resolve) => {
+          // keep a reference to resolve so we can resolve the promise to prevent memory leaks after the test is done
+          r = resolve;
+        })
     );
     const user = userEvent.setup();
 
@@ -60,6 +65,11 @@ describe("#Form", () => {
     await expect(
       screen.findByTestId("sid-form-initial-state")
     ).resolves.toBeInTheDocument();
+
+    // resolve the promise to prevent memory leak
+    if (typeof r === "function") {
+      r(TEST_USER);
+    }
   });
 
   test("should show the success state on successful login", async () => {
