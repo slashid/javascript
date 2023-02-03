@@ -61,7 +61,6 @@ const invalidEmails = [
   "bernardo~~+.west@yahoo.-com",
   "ipadberg@jaku@.bowski.com",
   "stamm.maximil%ian@wolf,,f.st",
-  "kihn.ward@abernathy.info",
   "esteban52@bla{}nda.b1",
   "rickey.rice@yahoo<..<>xyz0-",
   "julie49@ri||ce.id||",
@@ -80,11 +79,10 @@ describe.concurrent("validation tests", () => {
     });
   });
 
-  console.log(invalidEmails);
-
-  // it("should be invalid email address", () => {
-  //   invalidEmails.forEach((email) => {
-  //     expect(isValidEmail(email)).toBe(false);
-  //   });
-  // });
+  it("should be invalid email address", () => {
+    invalidEmails.forEach((email) => {
+      console.log(email);
+      expect(isValidEmail(email)).toBe(false);
+    });
+  });
 });
