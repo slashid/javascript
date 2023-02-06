@@ -60,6 +60,7 @@ export const FormProvider = ({ children }: FormProviderProps) => {
       return (e) => {
         setValues((v) => ({ ...v, [fieldName]: e.currentTarget.value }));
         if (validator && status === "invalid") {
+          setStatus("valid");
           setErrors({});
         }
       };
