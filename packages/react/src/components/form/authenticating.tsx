@@ -14,7 +14,7 @@ import { Button } from "../button";
 import { ErrorMessage } from "./error-message";
 import { useSlashID } from "../../main";
 import { isValidOTPCode } from "./validation";
-import { Validate, ValidationError } from "../../domain/types";
+import { Validator, ValidationError } from "../../domain/types";
 
 const Loader = () => (
   <div className={clsx(sprinkles({ marginY: "12" }), centered)}>
@@ -29,7 +29,7 @@ type Props = {
 };
 
 type OtpFormProps = {
-  validate?: Validate<string>;
+  validate?: Validator<string>;
 };
 
 const OtpForm = ({ validate }: OtpFormProps) => {

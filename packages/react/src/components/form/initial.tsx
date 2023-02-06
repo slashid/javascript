@@ -14,7 +14,7 @@ import {
   HandleType,
   isFactorOidc,
   ValidationError,
-  Validate,
+  Validator,
 } from "../../domain/types";
 import { Logo as TLogo } from "../../context/config-context";
 import { Flag, GB_FLAG, Input, PhoneInput } from "../input";
@@ -106,7 +106,7 @@ type HandleFormProps = {
   handleType: HandleType;
   factors: Factor[];
   handleSubmit: (factor: Factor, handle: Handle) => void;
-  validate?: Validate<string>;
+  validate?: Validator<string>;
 };
 
 const HandleForm: React.FC<HandleFormProps> = ({
@@ -245,7 +245,7 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
     [flowState]
   );
 
-  const validators = useMemo<Record<HandleType, Validate<string>>>(
+  const validators = useMemo<Record<HandleType, Validator<string>>>(
     () => ({
       email_address: (value) => {
         if (!isValidEmail(value)) {
