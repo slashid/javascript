@@ -1,5 +1,16 @@
 # @slashid/react
 
+## 1.1.0
+
+### Minor Changes
+
+- 153fa4c: Added the Groups component
+
+### Patch Changes
+
+- 8b71da1: Set `box-sizing: border-box` on <Form/>
+- cd15f0c: Bundle fonts CSS files with <Form />
+
 ## 1.0.0
 
 ### Major Changes
