@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState, useEffect } from "react";
 import { Factor } from "@slashid/slashid";
 
 import { Dropdown } from "../dropdown";
@@ -13,7 +13,6 @@ import {
   Handle,
   HandleType,
   isFactorOidc,
-  ValidationError,
   Validator,
 } from "../../domain/types";
 import { Logo as TLogo } from "../../context/config-context";
@@ -33,6 +32,7 @@ import { Divider } from "../divider";
 import { clsx } from "clsx";
 import { isValidEmail, isValidPhoneNumber } from "./validation";
 import { ErrorMessage } from "./error-message";
+import { useForm } from "../../hooks/use-form";
 
 type LogoProps = {
   logo?: TLogo;
@@ -113,19 +113,22 @@ const HandleForm: React.FC<HandleFormProps> = ({
   handleType,
   factors,
   handleSubmit,
-  validate,
 }) => {
   const filteredFactors = filterFactors(factors, handleType).filter(
     (f) => !isFactorOidc(f)
   );
   const shouldRenderFactorDropdown = filteredFactors.length > 1;
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
+  const { registerField, registerSubmit, values, status, resetForm } =
+    useForm();
   const [flag, setFlag] = useState<Flag>(GB_FLAG);
   const [factor, setFactor] = useState<Factor>(filteredFactors[0]);
-  const [error, setError] = useState<ValidationError | undefined>();
-  const [dirty, setDirty] = useState(false);
   const { text } = useConfiguration();
+
+  useEffect(() => {
+    return () => {
+      resetForm();
+    };
+  }, [resetForm]);
 
   const input = useMemo(() => {
     if (handleType === "phone_number") {
@@ -136,9 +139,13 @@ const HandleForm: React.FC<HandleFormProps> = ({
           name={handleType}
           label={text["initial.handle.phone"]}
           placeholder={text["initial.handle.phone.placeholder"]}
-          value={phone}
+          value={values[handleType] ?? ""}
           flag={flag}
-          onChange={setPhone}
+          onChange={registerField(handleType, (value) => {
+            if (!isValidPhoneNumber(value)) {
+              return { message: text["validationError.phoneNumber"] };
+            }
+          })}
           onFlagChange={setFlag}
         />
       );
@@ -151,37 +158,27 @@ const HandleForm: React.FC<HandleFormProps> = ({
         name={handleType}
         label={text["initial.handle.email"]}
         placeholder={text["initial.handle.phone.email"]}
-        value={email}
-        onChange={setEmail}
+        value={values[handleType] ?? ""}
+        onChange={registerField(handleType, (value) => {
+          if (!isValidEmail(value)) {
+            return { message: text["validationError.email"] };
+          }
+        })}
       />
     );
-  }, [email, flag, handleType, phone, text]);
+  }, [flag, handleType, text, registerField, values]);
 
   const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
 
-    setDirty(true);
-
-    if (validate) {
-      const formError = validate(
-        handleType === "email_address" ? email : phone
-      );
-
-      if (formError) {
-        setError(formError);
-        return;
-      }
-    }
-
     handleSubmit(factor, {
       type: handleType,
-      value:
-        handleType === "email_address" ? email : `${flag.dial_code}${phone}`,
+      value: values[handleType],
     });
   };
 
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={registerSubmit(onSubmit)}>
       {shouldRenderFactorDropdown && (
         <Dropdown
           defaultValue={filteredFactors[0].method}
@@ -197,12 +194,13 @@ const HandleForm: React.FC<HandleFormProps> = ({
         />
       )}
       {input}
-      {dirty && error ? <ErrorMessage error={error} /> : null}
+      <ErrorMessage name={handleType} />
       <Button
         className={sprinkles({ marginTop: "4" })}
         type="submit"
         variant="primary"
         testId="sid-form-initial-submit-button"
+        disabled={status === "invalid"}
       >
         {text["initial.submit"]}
       </Button>
@@ -245,22 +243,6 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
     [flowState]
   );
 
-  const validators = useMemo<Record<HandleType, Validator<string>>>(
-    () => ({
-      email_address: (value) => {
-        if (!isValidEmail(value)) {
-          return { message: text["validationError.email"] };
-        }
-      },
-      phone_number: (value) => {
-        if (!isValidPhoneNumber(value)) {
-          return { message: text["validationError.phoneNumber"] };
-        }
-      },
-    }),
-    [text]
-  );
-
   const ConfiguredForm = useMemo(() => {
     if (nonOidcFactors.length === 0) {
       return null;
@@ -274,7 +256,6 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
             handleSubmit={handleSubmit}
             factors={factors}
             handleType={handle}
-            validate={validators[handle]}
           />
           <Divider>{text["initial.divider"]}</Divider>
         </>
@@ -294,7 +275,6 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
                   handleSubmit={handleSubmit}
                   factors={factors}
                   handleType="email_address"
-                  validate={validators["email_address"]}
                 />
               ),
             },
@@ -306,7 +286,6 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
                   handleSubmit={handleSubmit}
                   factors={factors}
                   handleType="phone_number"
-                  validate={validators["phone_number"]}
                 />
               ),
             },
@@ -315,14 +294,7 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
         <Divider>{text["initial.divider"]}</Divider>
       </>
     );
-  }, [
-    factors,
-    handleSubmit,
-    handleTypes,
-    nonOidcFactors.length,
-    text,
-    validators,
-  ]);
+  }, [factors, handleSubmit, handleTypes, nonOidcFactors.length, text]);
 
   return (
     <article data-testid="sid-form-initial-state">

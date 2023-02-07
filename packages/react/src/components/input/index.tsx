@@ -1,5 +1,5 @@
 import { clsx } from "clsx";
-import { ChangeEvent, useCallback } from "react";
+import { ChangeEvent, useCallback, ChangeEventHandler } from "react";
 import { getList, findFlag } from "country-list-with-dial-code-and-flag";
 import * as styles from "./input.css";
 import { ChevronDown } from "../icon/chevron-down";
@@ -12,7 +12,7 @@ type BaseProps = {
   className?: string;
   type?: "text" | "email" | "tel";
   value: string;
-  onChange: (value: string) => void;
+  onChange: ChangeEventHandler<HTMLInputElement>;
 };
 
 const BaseInput: React.FC<BaseProps> = ({
@@ -24,10 +24,9 @@ const BaseInput: React.FC<BaseProps> = ({
   onChange,
   type = "text",
 }) => {
-  const handleChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      const { value: val } = e.target;
-      onChange(val);
+  const handleChange = useCallback<ChangeEventHandler<HTMLInputElement>>(
+    (e) => {
+      onChange(e);
     },
     [onChange]
   );

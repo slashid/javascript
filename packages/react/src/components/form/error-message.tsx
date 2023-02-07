@@ -1,11 +1,18 @@
-import { ValidationError } from "../../domain/types";
+import { useForm } from "../../hooks/use-form";
 import * as styles from "./error-message.css";
 
 type ErrorMessageProps = {
-  error: ValidationError;
+  name: string;
 };
 
-export const ErrorMessage = ({ error }: ErrorMessageProps) => {
+export const ErrorMessage = ({ name }: ErrorMessageProps) => {
+  const { errors } = useForm();
+  const error = errors[name]
+
+  if (!error) {
+    return null
+  }
+
   return (
     <span data-testid="sid-form-error-message" className={styles.errorMessage}>
       {error.message}

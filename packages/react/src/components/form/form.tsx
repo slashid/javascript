@@ -8,6 +8,7 @@ import { themeClass, darkTheme, autoTheme } from "../../theme/theme.css";
 import * as styles from "./form.css";
 import { Footer } from "./footer";
 import { useConfiguration } from "../../hooks/use-configuration";
+import { FormProvider } from "../../context/form-context";
 
 export type Props = {
   className?: string;
@@ -28,9 +29,15 @@ export const Form: React.FC<Props> = ({ className }) => {
         className
       )}
     >
-      {flowState.status === "initial" && <Initial flowState={flowState} />}
+      {flowState.status === "initial" && (
+        <FormProvider>
+          <Initial flowState={flowState} />
+        </FormProvider>
+      )}
       {flowState.status === "authenticating" && (
-        <Authenticating flowState={flowState} />
+        <FormProvider>
+          <Authenticating flowState={flowState} />
+        </FormProvider>
       )}
       {flowState.status === "error" && <Error flowState={flowState} />}
       {flowState.status === "success" && <Success flowState={flowState} />}
