@@ -55,6 +55,14 @@ export const button = styleVariants({
   ],
 });
 
+export const buttonDisabled = style({
+  opacity: "0.6",
+  ":hover": {
+    backgroundColor: publicVariables.color.primary,
+    cursor: "not-allowed",
+  },
+});
+
 export const icon = style({
   marginRight: "22px",
   display: "flex",

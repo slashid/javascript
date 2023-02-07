@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, MouseEventHandler } from "react";
 import { clsx } from "clsx";
 import * as styles from "./button.css";
 
@@ -10,6 +10,7 @@ type Props = {
   variant?: keyof typeof styles.button;
   icon?: ReactNode;
   testId?: string;
+  disabled?: boolean;
 };
 
 export const Button: React.FC<Props> = ({
@@ -20,18 +21,30 @@ export const Button: React.FC<Props> = ({
   variant = "primary",
   testId,
   icon,
+  disabled,
 }) => {
+  const handleClick: MouseEventHandler<HTMLButtonElement> = (e) => {
+    if (disabled) {
+      return;
+    }
+
+    if (onClick) {
+      onClick(e);
+    }
+  };
   return (
     <button
       data-testid={testId}
       type={type}
+      disabled={disabled}
       className={clsx(
         "sid-button",
         `sid-button--${variant}`,
         styles.button[variant],
+        { [styles.buttonDisabled]: disabled },
         className
       )}
-      onClick={onClick}
+      onClick={handleClick}
     >
       {icon ? <i className={styles.icon}>{icon}</i> : null}
       {children}
