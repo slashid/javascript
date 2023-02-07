@@ -23,6 +23,7 @@ export interface IFormContext {
   registerField: RegisterFieldFn;
   registerSubmit: RegisterSubmitFn;
   values: Record<string, string>;
+  errors: Record<string, ValidationError>;
   status: FormStatus;
 }
 
@@ -34,6 +35,7 @@ const initialContextValues: IFormContext = {
     return null;
   },
   values: {},
+  errors: {},
   status: "valid",
 };
 
@@ -100,8 +102,9 @@ export const FormProvider = ({ children }: FormProviderProps) => {
       registerSubmit,
       values,
       status,
+      errors,
     }),
-    [registerField, registerSubmit, status, values]
+    [registerField, registerSubmit, status, values, errors]
   );
 
   return <FormContext.Provider value={value}>{children}</FormContext.Provider>;
