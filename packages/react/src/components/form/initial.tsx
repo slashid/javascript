@@ -125,9 +125,7 @@ const HandleForm: React.FC<HandleFormProps> = ({
   const { text } = useConfiguration();
 
   useEffect(() => {
-    return () => {
-      resetForm();
-    };
+    return resetForm;
   }, [resetForm]);
 
   const input = useMemo(() => {
@@ -173,7 +171,10 @@ const HandleForm: React.FC<HandleFormProps> = ({
 
     handleSubmit(factor, {
       type: handleType,
-      value: values[handleType],
+      value:
+        handleType === "email_address"
+          ? values[handleType]
+          : `${flag.dial_code}${values[handleType]}`,
     });
   };
 
