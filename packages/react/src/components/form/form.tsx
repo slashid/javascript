@@ -11,9 +11,10 @@ import { useConfiguration } from "../../hooks/use-configuration";
 
 export type Props = {
   className?: string;
+  onSuccess?: () => void;
 };
 
-export const Form: React.FC<Props> = ({ className }) => {
+export const Form: React.FC<Props> = ({ className, onSuccess }) => {
   const flowState = useFlowState();
   const { theme } = useConfiguration();
 
@@ -33,7 +34,9 @@ export const Form: React.FC<Props> = ({ className }) => {
         <Authenticating flowState={flowState} />
       )}
       {flowState.status === "error" && <Error flowState={flowState} />}
-      {flowState.status === "success" && <Success flowState={flowState} />}
+      {flowState.status === "success" && (
+        <Success flowState={flowState} onSuccess={onSuccess} />
+      )}
       <Footer />
     </div>
   );
