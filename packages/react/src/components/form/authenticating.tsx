@@ -31,8 +31,7 @@ type Props = {
 const OtpForm = () => {
   const { text } = useConfiguration();
   const { sid } = useSlashID();
-  const { values, registerField, registerSubmit, resetForm, status } =
-    useForm();
+  const { values, registerField, registerSubmit, status } = useForm();
   const [formState, setFormState] = useState<
     "initial" | "input" | "submitting"
   >("initial");
@@ -53,10 +52,6 @@ const OtpForm = () => {
       sid?.subscribe("otpSmsSent", onOtpSmsSent);
     }
   }, [formState, sid]);
-
-  useEffect(() => {
-    return resetForm;
-  }, [resetForm]);
 
   if (formState !== "input") {
     return <Loader />;
