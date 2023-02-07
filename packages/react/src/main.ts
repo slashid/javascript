@@ -5,6 +5,7 @@ import {
 } from "./context/config-context";
 import { LoggedIn } from "./components/logged-in";
 import { LoggedOut } from "./components/logged-out";
+import { Groups } from "./components/groups";
 import { Form } from "./components/form";
 import { useSlashID } from "./hooks/use-slash-id";
 
@@ -18,6 +19,7 @@ export {
   ConfigurationProvider,
   LoggedIn,
   LoggedOut,
+  Groups,
   Form,
   useSlashID,
 };

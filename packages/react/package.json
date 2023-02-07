@@ -1,6 +1,6 @@
 {
   "name": "@slashid/react",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/slashid/javascript.git"
@@ -50,7 +50,7 @@
     "country-list-with-dial-code-and-flag": "^3.0.2"
   },
   "devDependencies": {
-    "@slashid/slashid": "^3.0.0",
+    "@slashid/slashid": "^3.1.0",
     "@testing-library/dom": "^8.19.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
@@ -69,7 +69,7 @@
     "vitest": "^0.25.2"
   },
   "peerDependencies": {
-    "@slashid/slashid": ">= 3.0.0",
+    "@slashid/slashid": ">= 3.1.0",
     "react": ">=16"
   }
 }

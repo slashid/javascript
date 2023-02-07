@@ -1,6 +1,6 @@
 {
   "name": "react-nextjs",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@slashid/react": "workspace:*",
-    "@slashid/slashid": "^3.0.0",
+    "@slashid/slashid": "^3.1.0",
     "@types/node": "18.11.9",
     "@types/react": "18.0.25",
     "@types/react-dom": "18.0.7",
