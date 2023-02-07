@@ -31,7 +31,8 @@ type Props = {
 const OtpForm = () => {
   const { text } = useConfiguration();
   const { sid } = useSlashID();
-  const { values, registerField, registerSubmit, resetForm, status } = useForm();
+  const { values, registerField, registerSubmit, resetForm, status } =
+    useForm();
   const [formState, setFormState] = useState<
     "initial" | "input" | "submitting"
   >("initial");
@@ -54,8 +55,8 @@ const OtpForm = () => {
   }, [formState, sid]);
 
   useEffect(() => {
-    return resetForm
-  }, [resetForm])
+    return resetForm;
+  }, [resetForm]);
 
   if (formState !== "input") {
     return <Loader />;
@@ -69,7 +70,7 @@ const OtpForm = () => {
           name="otp"
           label={text["authenticating.otpInput"]}
           type="text"
-          value={values["otp"]}
+          value={values["otp"] ?? ""}
           onChange={registerField("otp", (value) => {
             if (!isValidOTPCode(value)) {
               return { message: text["validationError.otp"] };
