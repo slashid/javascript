@@ -75,10 +75,11 @@ describe("#Form", () => {
   test("should show the success state on successful login", async () => {
     const logInMock = vi.fn(() => Promise.resolve(TEST_USER));
     const user = userEvent.setup();
+    const onSuccess = vi.fn();
 
     render(
       <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
-        <Form />
+        <Form onSuccess={onSuccess} />
       </TestSlashIDProvider>
     );
 
@@ -87,6 +88,8 @@ describe("#Form", () => {
     await expect(
       screen.findByTestId("sid-form-success-state")
     ).resolves.toBeInTheDocument();
+
+    expect(onSuccess).toBeCalledTimes(1);
   });
 
   test("should show the error state if login fails", async () => {
