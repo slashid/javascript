@@ -250,13 +250,12 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
     }
 
     if (handleTypes.length === 1) {
-      const handle = handleTypes[0];
       return (
         <>
           <HandleForm
             handleSubmit={handleSubmit}
             factors={factors}
-            handleType={handle}
+            handleType={handleTypes[0]}
           />
           <Divider>{text["initial.divider"]}</Divider>
         </>
