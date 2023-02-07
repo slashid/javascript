@@ -1,7 +1,7 @@
 {
   "name": "react-vite",
   "private": true,
-  "version": "0.0.15",
+  "version": "0.0.16",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -11,7 +11,7 @@
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "@slashid/slashid": "^1.9.2",
+    "@slashid/slashid": "^3.0.0",
     "@slashid/react": "workspace:*",
     "demo-form": "workspace:*"
   },

@@ -6,7 +6,7 @@ import {
 import { LoggedIn } from "./components/logged-in";
 import { LoggedOut } from "./components/logged-out";
 import { Groups } from "./components/groups";
-import { Form } from "./components";
+import { Form } from "./components/form";
 import { useSlashID } from "./hooks/use-slash-id";
 
 /**

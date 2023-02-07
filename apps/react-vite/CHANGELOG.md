@@ -1,5 +1,13 @@
 # react-vite
 
+## 0.0.16
+
+### Patch Changes
+
+- Updated dependencies [51eb920]
+  - @slashid/react@1.0.0
+  - demo-form@0.0.9
+
 ## 0.0.15
 
 ### Patch Changes

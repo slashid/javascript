@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 1.0.0
+
+### Major Changes
+
+- 51eb920: Upgrade the core SDK dependency to @slashid/slashid 3.0.0.
+
 ## 0.4.0
 
 ### Minor Changes
