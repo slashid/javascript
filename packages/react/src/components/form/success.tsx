@@ -1,5 +1,4 @@
 import { clsx } from "clsx";
-import { useEffect, useCallback } from "react";
 import { SuccessState } from "./flow";
 import { Text } from "../text";
 import { centered, sprinkles } from "../../theme/sprinkles.css";
@@ -21,20 +20,9 @@ const CheckIcon = () => (
 
 type Props = {
   flowState: SuccessState;
-  onSuccess?: () => void;
 };
 
-export const Success: React.FC<Props> = ({ onSuccess }) => {
-  const handleSuccess = useCallback(() => {
-    if (onSuccess) {
-      onSuccess();
-    }
-  }, [onSuccess]);
-
-  useEffect(() => {
-    handleSuccess();
-  }, [handleSuccess]);
-
+export const Success: React.FC<Props> = () => {
   return (
     <article data-testid="sid-form-success-state">
       <Text as="h1" t="success.title" variant={{ size: "2xl-title" }} />

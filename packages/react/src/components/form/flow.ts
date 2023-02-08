@@ -1,3 +1,4 @@
+import { User } from "@slashid/slashid";
 import { Cancel, LogIn, LoginOptions, Retry } from "../../domain/types";
 
 export interface InitialState {
@@ -91,13 +92,18 @@ const createErrorState = (send: Send): ErrorState => {
   };
 };
 
-export function createFlow() {
+export type CreateFlowOptions = {
+  onSuccess?: (user: User) => void;
+};
+
+export function createFlow(opts: CreateFlowOptions = {}) {
   let observers: Observer[] = [];
   const send = (event: Event) => {
     processEvent(event);
   };
   let state: FlowState = createInitialState(send);
   let logInFn: undefined | LogIn = undefined;
+  const { onSuccess } = opts;
 
   function setState(s: FlowState) {
     state = s;
@@ -112,7 +118,11 @@ export function createFlow() {
             if (logInFn) {
               setState(createAuthenticatingState(send, { options: e.options }));
               try {
-                await logInFn(e.options);
+                const user = await logInFn(e.options);
+                if (onSuccess && user) {
+                  onSuccess(user);
+                }
+
                 setState(createSuccessState());
               } catch (e) {
                 setState(createErrorState(send));
@@ -135,7 +145,12 @@ export function createFlow() {
                       attempt: state.context.attempt + 1,
                     },
                   });
-                  await logInFn(state.context.options);
+
+                  const user = await logInFn(state.context.options);
+                  if (onSuccess && user) {
+                    onSuccess(user);
+                  }
+
                   setState(createSuccessState());
                 } catch (e) {
                   setState(createErrorState(send));

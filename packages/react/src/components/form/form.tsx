@@ -1,5 +1,6 @@
 import { clsx } from "clsx";
 import { useFlowState } from "./useFlowState";
+import { CreateFlowOptions } from "./flow";
 import { Initial } from "./initial";
 import { Authenticating } from "./authenticating";
 import { Error } from "./error";
@@ -11,11 +12,11 @@ import { useConfiguration } from "../../hooks/use-configuration";
 
 export type Props = {
   className?: string;
-  onSuccess?: () => void;
+  onSuccess?: CreateFlowOptions["onSuccess"];
 };
 
 export const Form: React.FC<Props> = ({ className, onSuccess }) => {
-  const flowState = useFlowState();
+  const flowState = useFlowState({ onSuccess });
   const { theme } = useConfiguration();
 
   return (
@@ -34,9 +35,7 @@ export const Form: React.FC<Props> = ({ className, onSuccess }) => {
         <Authenticating flowState={flowState} />
       )}
       {flowState.status === "error" && <Error flowState={flowState} />}
-      {flowState.status === "success" && (
-        <Success flowState={flowState} onSuccess={onSuccess} />
-      )}
+      {flowState.status === "success" && <Success flowState={flowState} />}
       <Footer />
     </div>
   );
