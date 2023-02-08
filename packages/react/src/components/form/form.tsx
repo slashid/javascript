@@ -1,5 +1,6 @@
 import { clsx } from "clsx";
 import { useFlowState } from "./useFlowState";
+import { CreateFlowOptions } from "./flow";
 import { Initial } from "./initial";
 import { Authenticating } from "./authenticating";
 import { Error } from "./error";
@@ -11,10 +12,11 @@ import { useConfiguration } from "../../hooks/use-configuration";
 
 export type Props = {
   className?: string;
+  onSuccess?: CreateFlowOptions["onSuccess"];
 };
 
-export const Form: React.FC<Props> = ({ className }) => {
-  const flowState = useFlowState();
+export const Form: React.FC<Props> = ({ className, onSuccess }) => {
+  const flowState = useFlowState({ onSuccess });
   const { theme } = useConfiguration();
 
   return (
