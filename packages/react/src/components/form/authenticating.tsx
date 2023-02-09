@@ -11,7 +11,10 @@ import { clsx } from "clsx";
 import { FormEventHandler, useCallback, useEffect, useState } from "react";
 import { Input } from "../input";
 import { Button } from "../button";
+import { ErrorMessage } from "./error-message";
 import { useSlashID } from "../../main";
+import { isValidOTPCode } from "./validation";
+import { useForm } from "../../hooks/use-form";
 
 const Loader = () => (
   <div className={clsx(sprinkles({ marginY: "12" }), centered)}>
@@ -28,7 +31,7 @@ type Props = {
 const OtpForm = () => {
   const { text } = useConfiguration();
   const { sid } = useSlashID();
-  const [otp, setOtp] = useState("");
+  const { values, registerField, registerSubmit, status } = useForm();
   const [formState, setFormState] = useState<
     "initial" | "input" | "submitting"
   >("initial");
@@ -36,10 +39,11 @@ const OtpForm = () => {
   const handleSubmit: FormEventHandler<HTMLFormElement> = useCallback(
     (e) => {
       e.preventDefault();
+
       setFormState("submitting");
-      sid?.publish("otpCodeSubmitted", otp);
+      sid?.publish("otpCodeSubmitted", values["otp"]);
     },
-    [otp, sid]
+    [sid, values]
   );
 
   useEffect(() => {
@@ -54,18 +58,25 @@ const OtpForm = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit} className={styles.otpForm}>
-      <Input
-        id="sid-otp-input"
-        name="otp"
-        label={text["authenticating.otpInput"]}
-        type="text"
-        value={otp}
-        onChange={setOtp}
-      />
-      <Button type="submit" variant="primary">
-        {text["authenticating.otpInput.submit"]}
-      </Button>
+    <form onSubmit={registerSubmit(handleSubmit)} className={styles.otpForm}>
+      <section className={styles.otpFormSection}>
+        <Input
+          id="sid-otp-input"
+          name="otp"
+          label={text["authenticating.otpInput"]}
+          type="text"
+          value={values["otp"] ?? ""}
+          onChange={registerField("otp", (value) => {
+            if (!isValidOTPCode(value)) {
+              return { message: text["validationError.otp"] };
+            }
+          })}
+        />
+        <Button type="submit" variant="primary" disabled={status === "invalid"}>
+          {text["authenticating.otpInput.submit"]}
+        </Button>
+      </section>
+      <ErrorMessage name="otp" />
     </form>
   );
 };

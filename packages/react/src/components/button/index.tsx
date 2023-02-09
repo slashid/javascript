@@ -10,6 +10,7 @@ type Props = {
   variant?: keyof typeof styles.button;
   icon?: ReactNode;
   testId?: string;
+  disabled?: boolean;
 };
 
 export const Button: React.FC<Props> = ({
@@ -20,15 +21,18 @@ export const Button: React.FC<Props> = ({
   variant = "primary",
   testId,
   icon,
+  disabled,
 }) => {
   return (
     <button
       data-testid={testId}
       type={type}
+      disabled={disabled}
       className={clsx(
         "sid-button",
         `sid-button--${variant}`,
         styles.button[variant],
+        { [styles.buttonDisabled]: disabled },
         className
       )}
       onClick={onClick}

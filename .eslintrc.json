@@ -26,7 +26,8 @@
     "react/react-in-jsx-scope": "off",
     "react/prop-types": "off",
     "@typescript-eslint/no-unused-vars": "error",
-    "prefer-const": "off"
+    "prefer-const": "off",
+    "no-control-regex": "off"
   },
   "root": true
 }

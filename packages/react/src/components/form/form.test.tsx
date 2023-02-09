@@ -1,12 +1,18 @@
 import { User } from "@slashid/slashid";
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Form } from ".";
+import { TEXT } from "../text/constants";
 
 import {
   TestSlashIDProvider,
   TEST_USER,
 } from "../../context/test-slash-id-provider";
+
+const inputEmail = (value: string) => {
+  const input = screen.getByPlaceholderText(TEXT["initial.handle.phone.email"]);
+  fireEvent.change(input, { target: { value } });
+};
 
 describe("#Form", () => {
   test("should render in the initial state", () => {
@@ -21,6 +27,65 @@ describe("#Form", () => {
     expect(screen.getByTestId("sid-form-initial-state")).toBeInTheDocument();
   });
 
+  test("should render error message - empty email input", async () => {
+    const logInMock = vi.fn(() => Promise.resolve(TEST_USER));
+    const user = userEvent.setup();
+
+    render(
+      <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+        <Form />
+      </TestSlashIDProvider>
+    );
+
+    user.click(screen.getByTestId("sid-form-initial-submit-button"));
+
+    await expect(
+      screen.findByTestId("sid-form-error-message")
+    ).resolves.toBeInTheDocument();
+  });
+
+  test("should render error message - invalid email input", async () => {
+    const logInMock = vi.fn(() => Promise.resolve(TEST_USER));
+    const user = userEvent.setup();
+
+    render(
+      <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+        <Form />
+      </TestSlashIDProvider>
+    );
+
+    inputEmail("invalid-email");
+
+    user.click(screen.getByTestId("sid-form-initial-submit-button"));
+
+    await expect(
+      screen.findByTestId("sid-form-error-message")
+    ).resolves.toBeInTheDocument();
+  });
+
+  test("should clear error message after changing input value", async () => {
+    const logInMock = vi.fn(() => Promise.resolve(TEST_USER));
+    const user = userEvent.setup();
+
+    render(
+      <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+        <Form />
+      </TestSlashIDProvider>
+    );
+
+    user.click(screen.getByTestId("sid-form-initial-submit-button"));
+
+    await expect(
+      screen.findByTestId("sid-form-error-message")
+    ).resolves.toBeInTheDocument();
+
+    inputEmail("valid@email.com");
+
+    expect(
+      screen.queryByTestId("sid-form-error-message")
+    ).not.toBeInTheDocument();
+  });
+
   test("should transition from initial to authenticating state", async () => {
     const logInMock = vi.fn(() => Promise.resolve(TEST_USER));
     const user = userEvent.setup();
@@ -30,6 +95,8 @@ describe("#Form", () => {
         <Form />
       </TestSlashIDProvider>
     );
+
+    inputEmail("valid@email.com");
 
     user.click(screen.getByTestId("sid-form-initial-submit-button"));
 
@@ -55,6 +122,8 @@ describe("#Form", () => {
         <Form />
       </TestSlashIDProvider>
     );
+
+    inputEmail("valid@email.com");
 
     user.click(screen.getByTestId("sid-form-initial-submit-button"));
     const cancelButton = await screen.findByTestId(
@@ -82,6 +151,8 @@ describe("#Form", () => {
       </TestSlashIDProvider>
     );
 
+    inputEmail("valid@email.com");
+
     user.click(screen.getByTestId("sid-form-initial-submit-button"));
 
     await expect(
@@ -99,6 +170,8 @@ describe("#Form", () => {
         <Form onSuccess={onSuccess} />
       </TestSlashIDProvider>
     );
+
+    inputEmail("valid@email.com");
 
     user.click(screen.getByTestId("sid-form-initial-submit-button"));
 
@@ -120,6 +193,8 @@ describe("#Form", () => {
       </TestSlashIDProvider>
     );
 
+    inputEmail("valid@email.com");
+
     user.click(screen.getByTestId("sid-form-initial-submit-button"));
 
     await expect(logInMock).rejects.toMatch("login error");
@@ -137,6 +212,8 @@ describe("#Form", () => {
         <Form />
       </TestSlashIDProvider>
     );
+
+    inputEmail("valid@email.com");
 
     user.click(screen.getByTestId("sid-form-initial-submit-button"));
 

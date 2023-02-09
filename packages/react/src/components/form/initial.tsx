@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState, useEffect } from "react";
 import { Factor } from "@slashid/slashid";
 
 import { Dropdown } from "../dropdown";
@@ -13,6 +13,7 @@ import {
   Handle,
   HandleType,
   isFactorOidc,
+  Validator,
 } from "../../domain/types";
 import { Logo as TLogo } from "../../context/config-context";
 import { Flag, GB_FLAG, Input, PhoneInput } from "../input";
@@ -29,6 +30,9 @@ import { Line } from "../icon/line";
 import { Bitbucket } from "../icon/bitbucket";
 import { Divider } from "../divider";
 import { clsx } from "clsx";
+import { isValidEmail, isValidPhoneNumber } from "./validation";
+import { ErrorMessage } from "./error-message";
+import { useForm } from "../../hooks/use-form";
 
 type LogoProps = {
   logo?: TLogo;
@@ -102,6 +106,7 @@ type HandleFormProps = {
   handleType: HandleType;
   factors: Factor[];
   handleSubmit: (factor: Factor, handle: Handle) => void;
+  validate?: Validator<string>;
 };
 
 const HandleForm: React.FC<HandleFormProps> = ({
@@ -113,11 +118,15 @@ const HandleForm: React.FC<HandleFormProps> = ({
     (f) => !isFactorOidc(f)
   );
   const shouldRenderFactorDropdown = filteredFactors.length > 1;
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
+  const { registerField, registerSubmit, values, status, resetForm } =
+    useForm();
   const [flag, setFlag] = useState<Flag>(GB_FLAG);
   const [factor, setFactor] = useState<Factor>(filteredFactors[0]);
   const { text } = useConfiguration();
+
+  useEffect(() => {
+    return resetForm;
+  }, [resetForm]);
 
   const input = useMemo(() => {
     if (handleType === "phone_number") {
@@ -128,9 +137,13 @@ const HandleForm: React.FC<HandleFormProps> = ({
           name={handleType}
           label={text["initial.handle.phone"]}
           placeholder={text["initial.handle.phone.placeholder"]}
-          value={phone}
+          value={values[handleType] ?? ""}
           flag={flag}
-          onChange={setPhone}
+          onChange={registerField(handleType, (value) => {
+            if (!isValidPhoneNumber(value)) {
+              return { message: text["validationError.phoneNumber"] };
+            }
+          })}
           onFlagChange={setFlag}
         />
       );
@@ -143,25 +156,30 @@ const HandleForm: React.FC<HandleFormProps> = ({
         name={handleType}
         label={text["initial.handle.email"]}
         placeholder={text["initial.handle.phone.email"]}
-        value={email}
-        onChange={setEmail}
+        value={values[handleType] ?? ""}
+        onChange={registerField(handleType, (value) => {
+          if (!isValidEmail(value)) {
+            return { message: text["validationError.email"] };
+          }
+        })}
       />
     );
-  }, [email, flag, handleType, phone, text]);
+  }, [flag, handleType, text, registerField, values]);
+
+  const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
+    e.preventDefault();
+
+    handleSubmit(factor, {
+      type: handleType,
+      value:
+        handleType === "email_address"
+          ? values[handleType]
+          : `${flag.dial_code}${values[handleType]}`,
+    });
+  };
 
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        handleSubmit(factor, {
-          type: handleType,
-          value:
-            handleType === "email_address"
-              ? email
-              : `${flag.dial_code}${phone}`,
-        });
-      }}
-    >
+    <form onSubmit={registerSubmit(onSubmit)}>
       {shouldRenderFactorDropdown && (
         <Dropdown
           defaultValue={filteredFactors[0].method}
@@ -177,11 +195,13 @@ const HandleForm: React.FC<HandleFormProps> = ({
         />
       )}
       {input}
+      <ErrorMessage name={handleType} />
       <Button
-        className={sprinkles({ marginTop: "5" })}
+        className={sprinkles({ marginTop: "4" })}
         type="submit"
         variant="primary"
         testId="sid-form-initial-submit-button"
+        disabled={status === "invalid"}
       >
         {text["initial.submit"]}
       </Button>
