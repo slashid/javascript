@@ -1,4 +1,4 @@
-import { ReactNode, MouseEventHandler } from "react";
+import { ReactNode } from "react";
 import { clsx } from "clsx";
 import * as styles from "./button.css";
 
@@ -23,15 +23,6 @@ export const Button: React.FC<Props> = ({
   icon,
   disabled,
 }) => {
-  const handleClick: MouseEventHandler<HTMLButtonElement> = (e) => {
-    if (disabled) {
-      return;
-    }
-
-    if (onClick) {
-      onClick(e);
-    }
-  };
   return (
     <button
       data-testid={testId}
@@ -44,7 +35,7 @@ export const Button: React.FC<Props> = ({
         { [styles.buttonDisabled]: disabled },
         className
       )}
-      onClick={handleClick}
+      onClick={onClick}
     >
       {icon ? <i className={styles.icon}>{icon}</i> : null}
       {children}
