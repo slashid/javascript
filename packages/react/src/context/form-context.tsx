@@ -2,6 +2,7 @@ import {
   useState,
   useCallback,
   useMemo,
+  useRef,
   createContext,
   ReactNode,
   ChangeEventHandler,
@@ -52,19 +53,19 @@ type FormProviderProps = {
 export const FormProvider = ({ children }: FormProviderProps) => {
   const [status, setStatus] = useState<FormStatus>("valid");
   const [values, setValues] = useState<Record<string, string>>({});
-  const [validators, setValidators] = useState<
-    Record<string, Validator<string>>
-  >({});
   const [errors, setErrors] = useState<Record<string, ValidationError>>({});
+
+  const validators = useRef<Record<string, Validator<string>>>({});
+  const registeredFields = useRef<string[]>([]);
 
   const registerField = useCallback<RegisterFieldFn>(
     (fieldName, validator) => {
-      if (values[fieldName] === undefined) {
-        setValues((v) => ({ ...v, [fieldName]: "" }));
+      if (!registeredFields.current.includes(fieldName)) {
+        registeredFields.current.push(fieldName);
       }
 
-      if (!validators[fieldName] && validator) {
-        setValidators((v) => ({ ...v, [fieldName]: validator }));
+      if (!validators.current[fieldName] && validator) {
+        validators.current[fieldName] = validator;
       }
 
       return (e) => {
@@ -75,7 +76,7 @@ export const FormProvider = ({ children }: FormProviderProps) => {
         }
       };
     },
-    [status, setValidators, values, validators]
+    [status]
   );
 
   const registerSubmit = useCallback<RegisterSubmitFn>(
@@ -85,9 +86,11 @@ export const FormProvider = ({ children }: FormProviderProps) => {
 
         let hasError = false;
 
-        Object.entries(values).forEach(([fieldName, value]) => {
-          if (fieldName in validators) {
-            const validate = validators[fieldName];
+        registeredFields.current.forEach((fieldName) => {
+          const value = values[fieldName];
+
+          if (fieldName in validators.current) {
+            const validate = validators.current[fieldName];
             const error = validate(value);
             if (error) {
               hasError = true;
@@ -110,9 +113,10 @@ export const FormProvider = ({ children }: FormProviderProps) => {
   const resetForm = useCallback(() => {
     setValues({});
     setErrors({});
-    setValidators({});
     setStatus("valid");
-  }, [setValues, setErrors, setValidators, setStatus]);
+    validators.current = {};
+    registeredFields.current = [];
+  }, [setValues, setErrors, setStatus]);
 
   const value = useMemo<IFormContext>(
     () => ({
