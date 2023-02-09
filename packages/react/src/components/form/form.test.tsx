@@ -171,6 +171,8 @@ describe("#Form", () => {
       </TestSlashIDProvider>
     );
 
+    inputEmail("valid@email.com");
+
     user.click(screen.getByTestId("sid-form-initial-submit-button"));
 
     await expect(
