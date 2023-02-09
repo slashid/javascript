@@ -63,6 +63,29 @@ describe("#Form", () => {
     ).resolves.toBeInTheDocument();
   });
 
+  test("should clear error message after changing input value", async () => {
+    const logInMock = vi.fn(() => Promise.resolve(TEST_USER));
+    const user = userEvent.setup();
+
+    render(
+      <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+        <Form />
+      </TestSlashIDProvider>
+    );
+
+    user.click(screen.getByTestId("sid-form-initial-submit-button"));
+
+    await expect(
+      screen.findByTestId("sid-form-error-message")
+    ).resolves.toBeInTheDocument();
+
+    inputEmail("valid@email.com");
+
+    expect(
+      screen.queryByTestId("sid-form-error-message")
+    ).not.toBeInTheDocument();
+  });
+
   test("should transition from initial to authenticating state", async () => {
     const logInMock = vi.fn(() => Promise.resolve(TEST_USER));
     const user = userEvent.setup();
