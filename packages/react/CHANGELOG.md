@@ -1,5 +1,15 @@
 # @slashid/react
 
+## 1.2.0
+
+### Minor Changes
+
+- 70e685f: Add onSuccess callback prop to <Form /> component
+
+### Patch Changes
+
+- c73ad11: Added validation for <Form /> component inputs (email, phone number, OTP code)
+
 ## 1.1.0
 
 ### Minor Changes
