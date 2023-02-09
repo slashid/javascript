@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 
 import { useSlashID } from "../../hooks/use-slash-id";
-import { Flow, createFlow, FlowState } from "./flow";
+import { Flow, createFlow, FlowState, CreateFlowOptions } from "./flow";
 
-export function useFlowState() {
+export function useFlowState(opts: CreateFlowOptions = {}) {
   const { logIn } = useSlashID();
-  const flowRef = useRef<Flow>(createFlow());
+  const flowRef = useRef<Flow>(createFlow(opts));
   const [state, setState] = useState<FlowState>(flowRef.current.state);
 
   useEffect(() => {

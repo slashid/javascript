@@ -160,6 +160,27 @@ describe("#Form", () => {
     ).resolves.toBeInTheDocument();
   });
 
+  test("should call the onSuccess callback if provided on a successful login", async () => {
+    const logInMock = vi.fn(() => Promise.resolve(TEST_USER));
+    const user = userEvent.setup();
+    const onSuccess = vi.fn();
+
+    render(
+      <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+        <Form onSuccess={onSuccess} />
+      </TestSlashIDProvider>
+    );
+
+    user.click(screen.getByTestId("sid-form-initial-submit-button"));
+
+    await expect(
+      screen.findByTestId("sid-form-success-state")
+    ).resolves.toBeInTheDocument();
+
+    expect(onSuccess).toBeCalledTimes(1);
+    expect(onSuccess).toBeCalledWith(TEST_USER);
+  });
+
   test("should show the error state if login fails", async () => {
     const logInMock = vi.fn(() => Promise.reject("login error"));
     const user = userEvent.setup();
