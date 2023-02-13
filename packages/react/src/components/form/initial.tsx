@@ -225,6 +225,8 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
     () => factors.filter(isFactorOidc),
     [factors]
   );
+  const hasOidcFactors = Boolean(oidcFactors.length);
+
   const nonOidcFactors: Factor[] = useMemo(
     () => factors.filter((f) => !isFactorOidc(f)),
     [factors]
@@ -257,7 +259,7 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
             factors={factors}
             handleType={handleTypes[0]}
           />
-          <Divider>{text["initial.divider"]}</Divider>
+          {hasOidcFactors ? <Divider>{text["initial.divider"]}</Divider> : null}
         </>
       );
     }
@@ -291,10 +293,17 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
             },
           ]}
         />
-        <Divider>{text["initial.divider"]}</Divider>
+        {hasOidcFactors ? <Divider>{text["initial.divider"]}</Divider> : null}
       </>
     );
-  }, [factors, handleSubmit, handleTypes, nonOidcFactors.length, text]);
+  }, [
+    factors,
+    handleSubmit,
+    handleTypes,
+    nonOidcFactors.length,
+    text,
+    hasOidcFactors,
+  ]);
 
   return (
     <article data-testid="sid-form-initial-state">
