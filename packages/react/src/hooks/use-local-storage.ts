@@ -4,8 +4,9 @@ export const useLocalStorage = <T>(
   storageKey: string,
   fallbackState: T
 ): [T, Dispatch<SetStateAction<T>>] => {
+  const storedValue = localStorage.getItem(storageKey);
   const [value, setValue] = useState<T>(
-    JSON.parse(localStorage.getItem(storageKey) ?? "") ?? fallbackState
+    storedValue ? JSON.parse(storedValue) : fallbackState
   );
 
   useEffect(() => {
