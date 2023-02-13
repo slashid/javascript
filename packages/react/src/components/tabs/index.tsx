@@ -11,9 +11,10 @@ export type Tab = {
 type Props = {
   tabs: Tab[];
   className?: string;
+  defaultValue?: string;
 };
 
-export const Tabs: React.FC<Props> = ({ className, tabs }) => {
+export const Tabs: React.FC<Props> = ({ className, tabs, defaultValue }) => {
   if (!tabs.length) {
     return null;
   }
@@ -21,7 +22,7 @@ export const Tabs: React.FC<Props> = ({ className, tabs }) => {
   return (
     <RadixTabs.Root
       className={clsx("sid-tabs", className)}
-      defaultValue={tabs[0].id}
+      defaultValue={defaultValue ?? tabs[0].id}
     >
       <RadixTabs.List className={styles.list} aria-label="SlashID Tabs">
         {tabs.map(({ id, title }) => (

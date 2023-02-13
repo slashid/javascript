@@ -3,6 +3,7 @@ import {
   useCallback,
   useMemo,
   useRef,
+  useEffect,
   createContext,
   ReactNode,
   ChangeEventHandler,
@@ -81,6 +82,16 @@ export const FormProvider = ({ children }: FormProviderProps) => {
     },
     [status]
   );
+
+  useEffect(() => {
+    Object.entries(registeredFields.current).forEach(
+      ([field, { defaultValue }]) => {
+        if (defaultValue && values[field] === undefined) {
+          setValues((v) => ({ ...v, [field]: defaultValue }));
+        }
+      }
+    );
+  }, [values]);
 
   const registerSubmit = useCallback<RegisterSubmitFn>(
     (onSubmit) => {

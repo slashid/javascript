@@ -33,6 +33,7 @@ import { clsx } from "clsx";
 import { isValidEmail, isValidPhoneNumber } from "./validation";
 import { ErrorMessage } from "./error-message";
 import { useForm } from "../../hooks/use-form";
+import { useLastIdentifier } from "../../hooks/use-last-identifier";
 
 type LogoProps = {
   logo?: TLogo;
@@ -122,7 +123,8 @@ const HandleForm: React.FC<HandleFormProps> = ({
     useForm();
   const [flag, setFlag] = useState<Flag>(GB_FLAG);
   const [factor, setFactor] = useState<Factor>(filteredFactors[0]);
-  const { text } = useConfiguration();
+  const { text, storeLastIdentifier: shouldStoreLastID } = useConfiguration();
+  const { lastIdentifier, storeLastIdentifier } = useLastIdentifier();
 
   useEffect(() => {
     return resetForm;
@@ -140,6 +142,12 @@ const HandleForm: React.FC<HandleFormProps> = ({
           value={values[handleType] ?? ""}
           flag={flag}
           onChange={registerField(handleType, {
+            defaultValue:
+              shouldStoreLastID &&
+              lastIdentifier.handleType === "phone_number" &&
+              lastIdentifier.value
+                ? lastIdentifier.value
+                : undefined,
             validator: (value) => {
               if (!isValidPhoneNumber(value)) {
                 return { message: text["validationError.phoneNumber"] };
@@ -160,6 +168,12 @@ const HandleForm: React.FC<HandleFormProps> = ({
         placeholder={text["initial.handle.phone.email"]}
         value={values[handleType] ?? ""}
         onChange={registerField(handleType, {
+          defaultValue:
+            shouldStoreLastID &&
+            lastIdentifier.handleType === "email_address" &&
+            lastIdentifier.value
+              ? lastIdentifier.value
+              : undefined,
           validator: (value) => {
             if (!isValidEmail(value)) {
               return { message: text["validationError.email"] };
@@ -168,10 +182,26 @@ const HandleForm: React.FC<HandleFormProps> = ({
         })}
       />
     );
-  }, [flag, handleType, text, registerField, values]);
+  }, [
+    flag,
+    handleType,
+    text,
+    registerField,
+    values,
+    lastIdentifier.handleType,
+    lastIdentifier.value,
+    shouldStoreLastID,
+  ]);
 
   const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
+
+    if (shouldStoreLastID) {
+      storeLastIdentifier({
+        handleType,
+        value: values[handleType],
+      });
+    }
 
     handleSubmit(factor, {
       type: handleType,
@@ -223,7 +253,10 @@ type Props = {
 };
 
 export const Initial: React.FC<Props> = ({ flowState }) => {
-  const { factors, logo, text } = useConfiguration();
+  const { factors, logo, text, storeLastIdentifier } = useConfiguration();
+  const {
+    lastIdentifier: { handleType },
+  } = useLastIdentifier();
 
   const oidcFactors: FactorOIDC[] = useMemo(
     () => factors.filter(isFactorOidc),
@@ -266,10 +299,20 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
       );
     }
 
+    const tabIDByHandle: Record<HandleType, string> = {
+      phone_number: TAB_NAME.phone,
+      email_address: TAB_NAME.email,
+    };
+
     return (
       <>
         <Tabs
           className={sprinkles({ marginY: "6" })}
+          defaultValue={
+            storeLastIdentifier && handleType
+              ? tabIDByHandle[handleType]
+              : undefined
+          }
           tabs={[
             {
               id: TAB_NAME.email,
@@ -298,7 +341,15 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
         <Divider>{text["initial.divider"]}</Divider>
       </>
     );
-  }, [factors, handleSubmit, handleTypes, nonOidcFactors.length, text]);
+  }, [
+    factors,
+    handleSubmit,
+    handleType,
+    handleTypes,
+    nonOidcFactors.length,
+    storeLastIdentifier,
+    text,
+  ]);
 
   return (
     <article data-testid="sid-form-initial-state">
