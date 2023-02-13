@@ -139,10 +139,12 @@ const HandleForm: React.FC<HandleFormProps> = ({
           placeholder={text["initial.handle.phone.placeholder"]}
           value={values[handleType] ?? ""}
           flag={flag}
-          onChange={registerField(handleType, (value) => {
-            if (!isValidPhoneNumber(value)) {
-              return { message: text["validationError.phoneNumber"] };
-            }
+          onChange={registerField(handleType, {
+            validator: (value) => {
+              if (!isValidPhoneNumber(value)) {
+                return { message: text["validationError.phoneNumber"] };
+              }
+            },
           })}
           onFlagChange={setFlag}
         />
@@ -157,10 +159,12 @@ const HandleForm: React.FC<HandleFormProps> = ({
         label={text["initial.handle.email"]}
         placeholder={text["initial.handle.phone.email"]}
         value={values[handleType] ?? ""}
-        onChange={registerField(handleType, (value) => {
-          if (!isValidEmail(value)) {
-            return { message: text["validationError.email"] };
-          }
+        onChange={registerField(handleType, {
+          validator: (value) => {
+            if (!isValidEmail(value)) {
+              return { message: text["validationError.email"] };
+            }
+          },
         })}
       />
     );

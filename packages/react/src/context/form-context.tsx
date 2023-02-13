@@ -11,9 +11,14 @@ import { Validator, ValidationError } from "../domain/types";
 
 type FormStatus = "valid" | "invalid";
 
+type RegisteredFieldOptions = {
+  defaultValue?: string;
+  validator?: Validator<string>;
+};
+
 type RegisterFieldFn = (
   fieldName: string,
-  validator?: Validator<string>
+  opts: RegisteredFieldOptions
 ) => ChangeEventHandler<HTMLInputElement>;
 
 type RegisterSubmitFn = (
@@ -55,17 +60,15 @@ export const FormProvider = ({ children }: FormProviderProps) => {
   const [values, setValues] = useState<Record<string, string>>({});
   const [errors, setErrors] = useState<Record<string, ValidationError>>({});
 
-  const validators = useRef<Record<string, Validator<string>>>({});
-  const registeredFields = useRef<string[]>([]);
+  const registeredFields = useRef<Record<string, RegisteredFieldOptions>>({});
 
   const registerField = useCallback<RegisterFieldFn>(
-    (fieldName, validator) => {
-      if (!registeredFields.current.includes(fieldName)) {
-        registeredFields.current.push(fieldName);
-      }
-
-      if (!validators.current[fieldName] && validator) {
-        validators.current[fieldName] = validator;
+    (fieldName, { validator, defaultValue } = {}) => {
+      if (!Object.keys(registeredFields.current).includes(fieldName)) {
+        registeredFields.current[fieldName] = {
+          defaultValue: defaultValue,
+          validator: validator,
+        };
       }
 
       return (e) => {
@@ -86,18 +89,19 @@ export const FormProvider = ({ children }: FormProviderProps) => {
 
         let hasError = false;
 
-        registeredFields.current.forEach((fieldName) => {
-          const value = values[fieldName];
+        Object.entries(registeredFields.current).forEach(
+          ([fieldName, { validator }]) => {
+            const value = values[fieldName];
 
-          if (fieldName in validators.current) {
-            const validate = validators.current[fieldName];
-            const error = validate(value);
-            if (error) {
-              hasError = true;
-              setErrors((e) => ({ ...e, [fieldName]: error }));
+            if (validator) {
+              const error = validator(value);
+              if (error) {
+                hasError = true;
+                setErrors((e) => ({ ...e, [fieldName]: error }));
+              }
             }
           }
-        });
+        );
 
         if (hasError) {
           setStatus("invalid");
@@ -107,15 +111,14 @@ export const FormProvider = ({ children }: FormProviderProps) => {
         onSubmit(e);
       };
     },
-    [values, validators]
+    [values]
   );
 
   const resetForm = useCallback(() => {
     setValues({});
     setErrors({});
     setStatus("valid");
-    validators.current = {};
-    registeredFields.current = [];
+    registeredFields.current = {};
   }, [setValues, setErrors, setStatus]);
 
   const value = useMemo<IFormContext>(
