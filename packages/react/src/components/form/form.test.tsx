@@ -26,6 +26,23 @@ describe("#Form", () => {
     );
 
     expect(screen.getByTestId("sid-form-initial-state")).toBeInTheDocument();
+  });
+
+  test("should not render divider when OIDC factors are NOT present", () => {
+    const logInMock = vi.fn(() => Promise.resolve(TEST_USER));
+    const factors = [{ method: "email_link" }, { method: "webauthn" }];
+    render(
+      <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+        <ConfigurationProvider
+          // @ts-expect-error
+          factors={factors}
+        >
+          <Form />
+        </ConfigurationProvider>
+      </TestSlashIDProvider>
+    );
+
+    expect(screen.getByTestId("sid-form-initial-state")).toBeInTheDocument();
 
     expect(screen.queryByText(TEXT["initial.divider"])).not.toBeInTheDocument();
   });
