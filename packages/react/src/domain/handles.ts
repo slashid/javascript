@@ -1,4 +1,4 @@
-import { HandleType } from "./types";
+import { HandleType, FactorOIDC } from "./types";
 import { Factor } from "@slashid/slashid";
 import { TextConfigKey } from "../components/text/constants";
 
@@ -40,8 +40,12 @@ export function filterFactors(factors: Factor[], handleType: HandleType) {
   return factors.filter((f) => getHandleType(f) === handleType);
 }
 
-export function isFactorOidc(factor: Factor) {
+export function isFactorOidc(factor: Factor): factor is FactorOIDC {
   return factor.method === "oidc";
+}
+
+export function hasOidcAndNonOidcFactors(factors: Factor[]): boolean {
+  return factors.some(isFactorOidc) && factors.some((f) => !isFactorOidc(f));
 }
 
 export type AuthenticatingMessage = {

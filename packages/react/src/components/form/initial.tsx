@@ -12,9 +12,12 @@ import {
   FactorOIDC,
   Handle,
   HandleType,
-  isFactorOidc,
   Validator,
 } from "../../domain/types";
+import {
+  isFactorOidc,
+  hasOidcAndNonOidcFactors,
+} from "../../domain/handles";
 import { Logo as TLogo } from "../../context/config-context";
 import { Flag, GB_FLAG, Input, PhoneInput } from "../input";
 import { TextConfigKey } from "../text/constants";
@@ -225,8 +228,14 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
     () => factors.filter(isFactorOidc),
     [factors]
   );
+
   const nonOidcFactors: Factor[] = useMemo(
     () => factors.filter((f) => !isFactorOidc(f)),
+    [factors]
+  );
+
+  const shouldRenderDivider = useMemo(
+    () => hasOidcAndNonOidcFactors(factors),
     [factors]
   );
 
@@ -257,7 +266,9 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
             factors={factors}
             handleType={handleTypes[0]}
           />
-          <Divider>{text["initial.divider"]}</Divider>
+          {shouldRenderDivider ? (
+            <Divider>{text["initial.divider"]}</Divider>
+          ) : null}
         </>
       );
     }
@@ -291,10 +302,19 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
             },
           ]}
         />
-        <Divider>{text["initial.divider"]}</Divider>
+        {shouldRenderDivider ? (
+          <Divider>{text["initial.divider"]}</Divider>
+        ) : null}
       </>
     );
-  }, [factors, handleSubmit, handleTypes, nonOidcFactors.length, text]);
+  }, [
+    factors,
+    handleSubmit,
+    handleTypes,
+    nonOidcFactors.length,
+    text,
+    shouldRenderDivider,
+  ]);
 
   return (
     <article data-testid="sid-form-initial-state">
