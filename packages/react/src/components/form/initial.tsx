@@ -12,10 +12,12 @@ import {
   FactorOIDC,
   Handle,
   HandleType,
-  isFactorOidc,
-  hasOidcAndNonOidcFactors,
   Validator,
 } from "../../domain/types";
+import {
+  isFactorOidc,
+  hasOidcAndNonOidcFactors,
+} from "../../domain/handles";
 import { Logo as TLogo } from "../../context/config-context";
 import { Flag, GB_FLAG, Input, PhoneInput } from "../input";
 import { TextConfigKey } from "../text/constants";

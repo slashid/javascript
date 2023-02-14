@@ -1,4 +1,4 @@
-import { getHandleTypes } from "./handles";
+import { getHandleTypes, hasOidcAndNonOidcFactors } from "./handles";
 
 describe("handles", () => {
   describe("getHandleTypes", () => {
@@ -36,6 +36,37 @@ describe("handles", () => {
       ]);
 
       expect(handleTypes).toEqual(["email_address"]);
+    });
+  });
+
+  describe("hasOidcAndNonOidcFactors", () => {
+    test("should return false when only non-OIDC factors are present", () => {
+      const factors = [{ method: "email_link" }, { method: "webauthn" }];
+
+      // @ts-expect-error
+      expect(hasOidcAndNonOidcFactors(factors)).toBe(false);
+    });
+
+    test("should return false when only OIDC factors are present", () => {
+      const factors = [
+        { method: "oidc", options: { provider: "facebook" } },
+        { method: "oidc", options: { provider: "github" } },
+      ];
+
+      // @ts-expect-error
+      expect(hasOidcAndNonOidcFactors(factors)).toBe(false);
+    });
+
+    test("should return true when both OIDC and non-OIDC factors are present", () => {
+      const factors = [
+        { method: "email_link" },
+        { method: "webauthn" },
+        { method: "oidc", options: { provider: "facebook" } },
+        { method: "oidc", options: { provider: "github" } },
+      ];
+
+      // @ts-expect-error
+      expect(hasOidcAndNonOidcFactors(factors)).toBe(true);
     });
   });
 });
