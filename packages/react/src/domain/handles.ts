@@ -1,4 +1,4 @@
-import { HandleType, FactorOIDC } from "./types";
+import { HandleType, FactorOIDC, Handle } from "./types";
 import { Factor } from "@slashid/slashid";
 import { TextConfigKey } from "../components/text/constants";
 
@@ -46,6 +46,17 @@ export function isFactorOidc(factor: Factor): factor is FactorOIDC {
 
 export function hasOidcAndNonOidcFactors(factors: Factor[]): boolean {
   return factors.some(isFactorOidc) && factors.some((f) => !isFactorOidc(f));
+}
+
+export function resolveLastHandleValue(
+  handle: Handle | undefined,
+  handleType: HandleType
+): string | undefined {
+  if (!handle || handle.type !== handleType) {
+    return undefined;
+  }
+
+  return handle.value;
 }
 
 export type AuthenticatingMessage = {

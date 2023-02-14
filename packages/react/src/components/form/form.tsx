@@ -35,7 +35,7 @@ export const Form: React.FC<Props> = ({ className, onSuccess }) => {
     >
       {flowState.status === "initial" && (
         <FormProvider>
-          <Initial flowState={flowState} />
+          <Initial flowState={flowState} lastHandle={lastHandle} />
         </FormProvider>
       )}
       {flowState.status === "authenticating" && (

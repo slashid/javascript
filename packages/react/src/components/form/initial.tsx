@@ -5,19 +5,15 @@ import { Dropdown } from "../dropdown";
 import { Text } from "../text";
 import { InitialState } from "./flow";
 import { Tabs } from "../tabs";
-import { filterFactors, getHandleTypes } from "../../domain/handles";
+import {
+  filterFactors,
+  getHandleTypes,
+  resolveLastHandleValue,
+} from "../../domain/handles";
 import { useConfiguration } from "../../hooks/use-configuration";
 import { Button } from "../button";
-import {
-  FactorOIDC,
-  Handle,
-  HandleType,
-  Validator,
-} from "../../domain/types";
-import {
-  isFactorOidc,
-  hasOidcAndNonOidcFactors,
-} from "../../domain/handles";
+import { FactorOIDC, Handle, HandleType, Validator } from "../../domain/types";
+import { isFactorOidc, hasOidcAndNonOidcFactors } from "../../domain/handles";
 import { Logo as TLogo } from "../../context/config-context";
 import { Flag, GB_FLAG, Input, PhoneInput } from "../input";
 import { TextConfigKey } from "../text/constants";
@@ -227,10 +223,10 @@ const TAB_NAME = {
 
 type Props = {
   flowState: InitialState;
-  lastHandle?: LastHandle;
+  lastHandle?: Handle;
 };
 
-export const Initial: React.FC<Props> = ({ flowState }) => {
+export const Initial: React.FC<Props> = ({ flowState, lastHandle }) => {
   const { factors, logo, text } = useConfiguration();
 
   const oidcFactors: FactorOIDC[] = useMemo(
@@ -274,6 +270,7 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
             handleSubmit={handleSubmit}
             factors={factors}
             handleType={handleTypes[0]}
+            defaultValue={resolveLastHandleValue(lastHandle, handleTypes[0])}
           />
           {shouldRenderDivider ? (
             <Divider>{text["initial.divider"]}</Divider>
@@ -282,10 +279,16 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
       );
     }
 
+    const tabIDByHandle: Record<HandleType, string> = {
+      phone_number: TAB_NAME.phone,
+      email_address: TAB_NAME.email,
+    };
+
     return (
       <>
         <Tabs
           className={sprinkles({ marginY: "6" })}
+          defaultValue={tabIDByHandle[lastHandle?.type ?? "email_address"]}
           tabs={[
             {
               id: TAB_NAME.email,
@@ -295,6 +298,10 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
                   handleSubmit={handleSubmit}
                   factors={factors}
                   handleType="email_address"
+                  defaultValue={resolveLastHandleValue(
+                    lastHandle,
+                    "email_address"
+                  )}
                 />
               ),
             },
@@ -306,6 +313,10 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
                   handleSubmit={handleSubmit}
                   factors={factors}
                   handleType="phone_number"
+                  defaultValue={resolveLastHandleValue(
+                    lastHandle,
+                    "phone_number"
+                  )}
                 />
               ),
             },
@@ -323,6 +334,7 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
     nonOidcFactors.length,
     text,
     shouldRenderDivider,
+    lastHandle,
   ]);
 
   return (
