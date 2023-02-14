@@ -28,6 +28,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         theme="dark"
         // @ts-expect-error TODO fix the enum related problems
         factors={factors}
+        storeLastHandle={true}
       >
         <div className="formWrapper">
           <Form />

@@ -10,6 +10,7 @@ import * as styles from "./form.css";
 import { Footer } from "./footer";
 import { useConfiguration } from "../../hooks/use-configuration";
 import { FormProvider } from "../../context/form-context";
+import { useLastHandle } from "../../hooks/use-last-handle";
 
 export type Props = {
   className?: string;
@@ -19,6 +20,7 @@ export type Props = {
 export const Form: React.FC<Props> = ({ className, onSuccess }) => {
   const flowState = useFlowState({ onSuccess });
   const { theme } = useConfiguration();
+  const { lastHandle } = useLastHandle();
 
   return (
     <div
