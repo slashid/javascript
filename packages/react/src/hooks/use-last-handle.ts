@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
-import { useConfiguration } from "./use-configuration";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { Handle } from "../domain/types";
+import { useConfiguration } from "./use-configuration";
+import { useSlashID } from "./use-slash-id";
 
 const STORAGE_LAST_HANDLE_KEY = "@slashid/LAST_HANDLE";
 
@@ -8,9 +9,22 @@ type UseLastHandle = () => {
   lastHandle: Handle | undefined;
 };
 
+type SuccessEvent = {
+  identifier: Handle | undefined;
+};
+
 export const useLastHandle: UseLastHandle = () => {
   const { storeLastHandle } = useConfiguration();
+  const { sid, sdkState } = useSlashID();
   const [lastHandle, setLastHandle] = useState<Handle | undefined>(undefined);
+  const subscribed = useRef(false);
+
+  const handler = useCallback((e: SuccessEvent) => {
+    window.localStorage.setItem(
+      STORAGE_LAST_HANDLE_KEY,
+      JSON.stringify(e.identifier)
+    );
+  }, []);
 
   useEffect(() => {
     if (storeLastHandle) {
@@ -22,20 +36,25 @@ export const useLastHandle: UseLastHandle = () => {
   }, [storeLastHandle]);
 
   useEffect(() => {
-    if (!storeLastHandle) {
+    if (!storeLastHandle || sdkState !== "loaded" || sid === undefined) {
       return;
     }
 
-    const listener = (msg: unknown) => {
-      console.log(msg);
-    };
+    if (!subscribed.current) {
+      subscribed.current = true;
+      // @ts-expect-error
+      sid.subscribe("idFlowSucceeded", handler);
+    }
+  }, [storeLastHandle, sid, sdkState, handler]);
 
-    window.addEventListener("message", listener);
-
+  useEffect(() => {
     return () => {
-      window.removeEventListener("message", listener);
+      if (subscribed.current) {
+        // @ts-expect-error
+        sid?.unsubscribe("idFlowSucceeded", handler);
+      }
     };
-  }, [storeLastHandle]);
+  }, [handler, sid]);
 
   return { lastHandle };
 };
