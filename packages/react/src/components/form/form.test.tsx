@@ -28,7 +28,7 @@ describe("#Form", () => {
     expect(screen.getByTestId("sid-form-initial-state")).toBeInTheDocument();
   });
 
-  test("should not render divider when OIDC factors are NOT present", () => {
+  test("should not render divider when only non-OIDC factors are present", () => {
     const logInMock = vi.fn(() => Promise.resolve(TEST_USER));
     const factors = [{ method: "email_link" }, { method: "webauthn" }];
     render(
@@ -47,7 +47,29 @@ describe("#Form", () => {
     expect(screen.queryByText(TEXT["initial.divider"])).not.toBeInTheDocument();
   });
 
-  test("should render divider when OIDC factors are present", () => {
+  test("should not render divider when only OIDC factors are present", () => {
+    const logInMock = vi.fn(() => Promise.resolve(TEST_USER));
+    const factors = [
+      { method: "oidc", options: { provider: "facebook" } },
+      { method: "oidc", options: { provider: "github" } },
+    ];
+    render(
+      <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+        <ConfigurationProvider
+          // @ts-expect-error
+          factors={factors}
+        >
+          <Form />
+        </ConfigurationProvider>
+      </TestSlashIDProvider>
+    );
+
+    expect(screen.getByTestId("sid-form-initial-state")).toBeInTheDocument();
+
+    expect(screen.queryByText(TEXT["initial.divider"])).not.toBeInTheDocument();
+  });
+
+  test("should render divider when both OIDC and non OIDC factors are present", () => {
     const logInMock = vi.fn(() => Promise.resolve(TEST_USER));
     const factors = [
       { method: "email_link" },

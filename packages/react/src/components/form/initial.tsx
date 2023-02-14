@@ -13,6 +13,7 @@ import {
   Handle,
   HandleType,
   isFactorOidc,
+  hasOidcAndNonOidcFactors,
   Validator,
 } from "../../domain/types";
 import { Logo as TLogo } from "../../context/config-context";
@@ -225,10 +226,14 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
     () => factors.filter(isFactorOidc),
     [factors]
   );
-  const hasOidcFactors = Boolean(oidcFactors.length);
 
   const nonOidcFactors: Factor[] = useMemo(
     () => factors.filter((f) => !isFactorOidc(f)),
+    [factors]
+  );
+
+  const shouldRenderDivider = useMemo(
+    () => hasOidcAndNonOidcFactors(factors),
     [factors]
   );
 
@@ -259,7 +264,9 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
             factors={factors}
             handleType={handleTypes[0]}
           />
-          {hasOidcFactors ? <Divider>{text["initial.divider"]}</Divider> : null}
+          {shouldRenderDivider ? (
+            <Divider>{text["initial.divider"]}</Divider>
+          ) : null}
         </>
       );
     }
@@ -293,7 +300,9 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
             },
           ]}
         />
-        {hasOidcFactors ? <Divider>{text["initial.divider"]}</Divider> : null}
+        {shouldRenderDivider ? (
+          <Divider>{text["initial.divider"]}</Divider>
+        ) : null}
       </>
     );
   }, [
@@ -302,7 +311,7 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
     handleTypes,
     nonOidcFactors.length,
     text,
-    hasOidcFactors,
+    shouldRenderDivider,
   ]);
 
   return (

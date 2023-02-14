@@ -18,6 +18,10 @@ export function isFactorOidc(factor: Factor): factor is FactorOIDC {
   return factor.method === "oidc";
 }
 
+export function hasOidcAndNonOidcFactors(factors: Factor[]): boolean {
+  return factors.some(isFactorOidc) && factors.some((f) => !isFactorOidc(f));
+}
+
 export type LogIn = (options: LoginOptions) => Promise<User | undefined>;
 export type Retry = () => void;
 export type Cancel = () => void;

@@ -2,4 +2,4 @@
 "@slashid/react": patch
 ---
 
-Render divider only when OIDC factors are present.
+Render divider only when both OIDC and non-OIDC factors are present.
