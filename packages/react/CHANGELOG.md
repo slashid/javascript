@@ -1,5 +1,12 @@
 # @slashid/react
 
+## 1.2.1
+
+### Patch Changes
+
+- cf33415: Render divider only when both OIDC and non-OIDC factors are present.
+- d6f8e2b: Fix rendering logic in <LoggedIn /> and <LoggedOut />
+
 ## 1.2.0
 
 ### Minor Changes
