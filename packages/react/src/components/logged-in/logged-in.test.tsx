@@ -9,9 +9,9 @@ import {
 const TestComponent = () => <h1>Test</h1>;
 
 describe("LoggedIn", () => {
-  test("should render children when the SDK is ready and a user is logged in", () => {
+  test("should render children when a user is logged in", () => {
     render(
-      <TestSlashIDProvider sdkState="ready" user={TEST_USER}>
+      <TestSlashIDProvider user={TEST_USER}>
         <LoggedIn>
           <TestComponent />
         </LoggedIn>
@@ -20,20 +20,9 @@ describe("LoggedIn", () => {
     expect(screen.getByText("Test")).toBeInTheDocument();
   });
 
-  test("should not render children when the SDK is not ready", () => {
+  test("should not render children when a user not is logged in", () => {
     render(
-      <TestSlashIDProvider sdkState="initial">
-        <LoggedIn>
-          <TestComponent />
-        </LoggedIn>
-      </TestSlashIDProvider>
-    );
-    expect(screen.queryByText("Test")).not.toBeInTheDocument();
-  });
-
-  test("should not render children when the SDK is ready but there is no user", () => {
-    render(
-      <TestSlashIDProvider sdkState="ready" user={undefined}>
+      <TestSlashIDProvider user={undefined}>
         <LoggedIn>
           <TestComponent />
         </LoggedIn>
