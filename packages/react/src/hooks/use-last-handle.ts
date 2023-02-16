@@ -3,7 +3,7 @@ import { Handle } from "../domain/types";
 import { useConfiguration } from "./use-configuration";
 import { useSlashID } from "./use-slash-id";
 
-const STORAGE_LAST_HANDLE_KEY = "@slashid/LAST_HANDLE";
+export const STORAGE_LAST_HANDLE_KEY = "@slashid/LAST_HANDLE";
 
 type UseLastHandle = () => {
   lastHandle: Handle | undefined;

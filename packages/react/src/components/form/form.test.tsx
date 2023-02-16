@@ -1,8 +1,10 @@
 import { User } from "@slashid/slashid";
 import { render, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { vi, describe, afterEach } from "vitest";
 import { Form } from ".";
 import { TEXT } from "../text/constants";
+import { STORAGE_LAST_HANDLE_KEY } from "../../hooks/use-last-handle";
 
 import {
   TestSlashIDProvider,
@@ -296,5 +298,71 @@ describe("#Form", () => {
     await expect(
       screen.findByTestId("sid-form-initial-state")
     ).resolves.toBeInTheDocument();
+  });
+});
+
+describe("<Form /> configuration", () => {
+  const getItemSpy = vi.spyOn(Storage.prototype, "getItem");
+
+  afterEach(() => {
+    localStorage.clear();
+    getItemSpy.mockClear();
+  });
+
+  test("should use stored email address", async () => {
+    const testEmail = "test@email.com";
+
+    getItemSpy.mockReturnValueOnce(
+      JSON.stringify({
+        type: "email_address",
+        value: testEmail,
+      })
+    );
+
+    render(
+      <TestSlashIDProvider sdkState="ready">
+        <ConfigurationProvider storeLastHandle={true}>
+          <Form />
+        </ConfigurationProvider>
+      </TestSlashIDProvider>
+    );
+
+    expect(screen.getByTestId("sid-form-initial-state")).toBeInTheDocument();
+
+    expect(getItemSpy).toHaveBeenCalledWith(STORAGE_LAST_HANDLE_KEY);
+    expect(
+      screen.getByPlaceholderText(TEXT["initial.handle.phone.email"])
+    ).toHaveValue(testEmail);
+  });
+
+  test("should use stored phone number", async () => {
+    const dialCode = "+48";
+    const phoneNumber = "123123123";
+    const testPhoneNumber = dialCode + phoneNumber;
+
+    getItemSpy.mockReturnValueOnce(
+      JSON.stringify({
+        type: "phone_number",
+        value: testPhoneNumber,
+      })
+    );
+
+    render(
+      <TestSlashIDProvider sdkState="ready">
+        <ConfigurationProvider
+          storeLastHandle={true}
+          factors={[{ method: "email_link" }, { method: "otp_via_sms" }]}
+        >
+          <Form />
+        </ConfigurationProvider>
+      </TestSlashIDProvider>
+    );
+
+    expect(screen.getByTestId("sid-form-initial-state")).toBeInTheDocument();
+
+    expect(getItemSpy).toHaveBeenCalledWith(STORAGE_LAST_HANDLE_KEY);
+    expect(
+      screen.getByPlaceholderText(TEXT["initial.handle.phone.placeholder"])
+    ).toHaveValue(phoneNumber);
   });
 });
