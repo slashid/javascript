@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 1.3.0
+
+### Minor Changes
+
+- fd3853e: Add new config property `storeLastHandle` (boolean, defaults to `false`) to enable Form autofilling with previously used handle stored in localStorage.
+
 ## 1.2.1
 
 ### Patch Changes
