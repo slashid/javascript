@@ -1,5 +1,9 @@
 import { HandleType, FactorOIDC, Handle } from "./types";
 import { Factor } from "@slashid/slashid";
+import {
+  getList,
+  findFlagByDialCode,
+} from "country-list-with-dial-code-and-flag";
 import { TextConfigKey } from "../components/text/constants";
 
 const FACTORS_WITH_EMAIL = ["webauthn", "email_link"];
@@ -57,6 +61,26 @@ export function resolveLastHandleValue(
   }
 
   return handle.value;
+}
+
+export type ParsedPhoneNumber = {
+  dialCode: string;
+  number: string;
+  countryCode: string;
+};
+
+export function parsePhoneNumber(
+  number: string
+): ParsedPhoneNumber | undefined {
+  for (const flag of getList()) {
+    if (number.startsWith(flag.dial_code)) {
+      return {
+        dialCode: flag.dial_code,
+        number: number.substring(flag.dial_code.length).trim(),
+        countryCode: findFlagByDialCode(flag.dial_code).code,
+      };
+    }
+  }
 }
 
 export type AuthenticatingMessage = {

@@ -8,6 +8,7 @@ import { Tabs } from "../tabs";
 import {
   filterFactors,
   getHandleTypes,
+  parsePhoneNumber,
   resolveLastHandleValue,
 } from "../../domain/handles";
 import { useConfiguration } from "../../hooks/use-configuration";
@@ -32,6 +33,7 @@ import { clsx } from "clsx";
 import { isValidEmail, isValidPhoneNumber } from "./validation";
 import { ErrorMessage } from "./error-message";
 import { useForm } from "../../hooks/use-form";
+import { findFlag } from "country-list-with-dial-code-and-flag";
 
 type LogoProps = {
   logo?: TLogo;
@@ -121,7 +123,10 @@ const HandleForm: React.FC<HandleFormProps> = ({
   const shouldRenderFactorDropdown = filteredFactors.length > 1;
   const { registerField, registerSubmit, values, status, resetForm } =
     useForm();
-  const [flag, setFlag] = useState<Flag>(GB_FLAG);
+  const parsedPhoneNumber = parsePhoneNumber(defaultValue ?? "");
+  const [flag, setFlag] = useState<Flag>(
+    findFlag(parsedPhoneNumber?.countryCode ?? "") ?? GB_FLAG
+  );
   const [factor, setFactor] = useState<Factor>(filteredFactors[0]);
   const { text } = useConfiguration();
 
@@ -141,7 +146,7 @@ const HandleForm: React.FC<HandleFormProps> = ({
           value={values[handleType] ?? ""}
           flag={flag}
           onChange={registerField(handleType, {
-            defaultValue,
+            defaultValue: parsedPhoneNumber?.number,
             validator: (value) => {
               if (!isValidPhoneNumber(value)) {
                 return { message: text["validationError.phoneNumber"] };
@@ -171,7 +176,15 @@ const HandleForm: React.FC<HandleFormProps> = ({
         })}
       />
     );
-  }, [flag, handleType, text, registerField, values, defaultValue]);
+  }, [
+    flag,
+    handleType,
+    text,
+    registerField,
+    values,
+    defaultValue,
+    parsedPhoneNumber,
+  ]);
 
   const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
