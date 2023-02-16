@@ -49,7 +49,6 @@ export const SlashIDContext =
   createContext<ISlashIDContext>(initialContextValue);
 SlashIDContext.displayName = "SlashIDContext";
 
-const STORAGE_IDENTIFIER_KEY = "@slashid/LAST_IDENTIFIER";
 const STORAGE_TOKEN_KEY = "@slashid/USER_TOKEN";
 
 const createStorage = (storageType: StorageOption) => {
@@ -126,9 +125,6 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
         // @ts-expect-error TODO make the identifier optional
         const user = await sid.id(oid, identifier, factor);
         storeUser(user);
-        if (handle) {
-          storageRef.current?.setItem(STORAGE_IDENTIFIER_KEY, handle.value);
-        }
         setState("ready");
         return user;
       } catch (e) {

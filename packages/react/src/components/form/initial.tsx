@@ -5,19 +5,16 @@ import { Dropdown } from "../dropdown";
 import { Text } from "../text";
 import { InitialState } from "./flow";
 import { Tabs } from "../tabs";
-import { filterFactors, getHandleTypes } from "../../domain/handles";
+import {
+  filterFactors,
+  getHandleTypes,
+  parsePhoneNumber,
+  resolveLastHandleValue,
+} from "../../domain/handles";
 import { useConfiguration } from "../../hooks/use-configuration";
 import { Button } from "../button";
-import {
-  FactorOIDC,
-  Handle,
-  HandleType,
-  Validator,
-} from "../../domain/types";
-import {
-  isFactorOidc,
-  hasOidcAndNonOidcFactors,
-} from "../../domain/handles";
+import { FactorOIDC, Handle, HandleType, Validator } from "../../domain/types";
+import { isFactorOidc, hasOidcAndNonOidcFactors } from "../../domain/handles";
 import { Logo as TLogo } from "../../context/config-context";
 import { Flag, GB_FLAG, Input, PhoneInput } from "../input";
 import { TextConfigKey } from "../text/constants";
@@ -36,6 +33,7 @@ import { clsx } from "clsx";
 import { isValidEmail, isValidPhoneNumber } from "./validation";
 import { ErrorMessage } from "./error-message";
 import { useForm } from "../../hooks/use-form";
+import { findFlag } from "country-list-with-dial-code-and-flag";
 
 type LogoProps = {
   logo?: TLogo;
@@ -110,12 +108,14 @@ type HandleFormProps = {
   factors: Factor[];
   handleSubmit: (factor: Factor, handle: Handle) => void;
   validate?: Validator<string>;
+  defaultValue?: string;
 };
 
 const HandleForm: React.FC<HandleFormProps> = ({
   handleType,
   factors,
   handleSubmit,
+  defaultValue,
 }) => {
   const filteredFactors = filterFactors(factors, handleType).filter(
     (f) => !isFactorOidc(f)
@@ -123,7 +123,10 @@ const HandleForm: React.FC<HandleFormProps> = ({
   const shouldRenderFactorDropdown = filteredFactors.length > 1;
   const { registerField, registerSubmit, values, status, resetForm } =
     useForm();
-  const [flag, setFlag] = useState<Flag>(GB_FLAG);
+  const parsedPhoneNumber = parsePhoneNumber(defaultValue ?? "");
+  const [flag, setFlag] = useState<Flag>(
+    findFlag(parsedPhoneNumber?.countryCode ?? "") ?? GB_FLAG
+  );
   const [factor, setFactor] = useState<Factor>(filteredFactors[0]);
   const { text } = useConfiguration();
 
@@ -142,10 +145,13 @@ const HandleForm: React.FC<HandleFormProps> = ({
           placeholder={text["initial.handle.phone.placeholder"]}
           value={values[handleType] ?? ""}
           flag={flag}
-          onChange={registerField(handleType, (value) => {
-            if (!isValidPhoneNumber(value)) {
-              return { message: text["validationError.phoneNumber"] };
-            }
+          onChange={registerField(handleType, {
+            defaultValue: parsedPhoneNumber?.number,
+            validator: (value) => {
+              if (!isValidPhoneNumber(value)) {
+                return { message: text["validationError.phoneNumber"] };
+              }
+            },
           })}
           onFlagChange={setFlag}
         />
@@ -160,14 +166,25 @@ const HandleForm: React.FC<HandleFormProps> = ({
         label={text["initial.handle.email"]}
         placeholder={text["initial.handle.phone.email"]}
         value={values[handleType] ?? ""}
-        onChange={registerField(handleType, (value) => {
-          if (!isValidEmail(value)) {
-            return { message: text["validationError.email"] };
-          }
+        onChange={registerField(handleType, {
+          defaultValue,
+          validator: (value) => {
+            if (!isValidEmail(value)) {
+              return { message: text["validationError.email"] };
+            }
+          },
         })}
       />
     );
-  }, [flag, handleType, text, registerField, values]);
+  }, [
+    flag,
+    handleType,
+    text,
+    registerField,
+    values,
+    defaultValue,
+    parsedPhoneNumber,
+  ]);
 
   const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
@@ -219,9 +236,10 @@ const TAB_NAME = {
 
 type Props = {
   flowState: InitialState;
+  lastHandle?: Handle;
 };
 
-export const Initial: React.FC<Props> = ({ flowState }) => {
+export const Initial: React.FC<Props> = ({ flowState, lastHandle }) => {
   const { factors, logo, text } = useConfiguration();
 
   const oidcFactors: FactorOIDC[] = useMemo(
@@ -265,6 +283,7 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
             handleSubmit={handleSubmit}
             factors={factors}
             handleType={handleTypes[0]}
+            defaultValue={resolveLastHandleValue(lastHandle, handleTypes[0])}
           />
           {shouldRenderDivider ? (
             <Divider>{text["initial.divider"]}</Divider>
@@ -273,10 +292,16 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
       );
     }
 
+    const tabIDByHandle: Record<HandleType, string> = {
+      phone_number: TAB_NAME.phone,
+      email_address: TAB_NAME.email,
+    };
+
     return (
       <>
         <Tabs
           className={sprinkles({ marginY: "6" })}
+          defaultValue={tabIDByHandle[lastHandle?.type ?? "email_address"]}
           tabs={[
             {
               id: TAB_NAME.email,
@@ -286,6 +311,10 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
                   handleSubmit={handleSubmit}
                   factors={factors}
                   handleType="email_address"
+                  defaultValue={resolveLastHandleValue(
+                    lastHandle,
+                    "email_address"
+                  )}
                 />
               ),
             },
@@ -297,6 +326,10 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
                   handleSubmit={handleSubmit}
                   factors={factors}
                   handleType="phone_number"
+                  defaultValue={resolveLastHandleValue(
+                    lastHandle,
+                    "phone_number"
+                  )}
                 />
               ),
             },
@@ -314,6 +347,7 @@ export const Initial: React.FC<Props> = ({ flowState }) => {
     nonOidcFactors.length,
     text,
     shouldRenderDivider,
+    lastHandle,
   ]);
 
   return (

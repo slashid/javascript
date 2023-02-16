@@ -66,10 +66,12 @@ const OtpForm = () => {
           label={text["authenticating.otpInput"]}
           type="text"
           value={values["otp"] ?? ""}
-          onChange={registerField("otp", (value) => {
-            if (!isValidOTPCode(value)) {
-              return { message: text["validationError.otp"] };
-            }
+          onChange={registerField("otp", {
+            validator: (value) => {
+              if (!isValidOTPCode(value)) {
+                return { message: text["validationError.otp"] };
+              }
+            },
           })}
         />
         <Button type="submit" variant="primary" disabled={status === "invalid"}>

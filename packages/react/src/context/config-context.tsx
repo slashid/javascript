@@ -11,6 +11,7 @@ export interface IConfigurationContext {
   factors: Factor[];
   logo: Logo;
   theme: Theme;
+  storeLastHandle: boolean;
 }
 
 export const initialContextValue: IConfigurationContext = {
@@ -18,6 +19,7 @@ export const initialContextValue: IConfigurationContext = {
   factors: [{ method: "webauthn" }, { method: "email_link" }],
   logo: <SlashID />,
   theme: "auto",
+  storeLastHandle: false,
 };
 
 export const ConfigurationContext =
@@ -29,6 +31,7 @@ type Props = {
   factors?: Factor[];
   logo?: Logo;
   theme?: Theme;
+  storeLastHandle?: boolean;
   children: ReactNode;
 };
 
@@ -38,6 +41,7 @@ export const ConfigurationProvider: React.FC<Props> = ({
   logo,
   theme,
   children,
+  storeLastHandle,
 }) => {
   const contextValue = useMemo(() => {
     return {
@@ -45,8 +49,9 @@ export const ConfigurationProvider: React.FC<Props> = ({
       factors: factors || initialContextValue.factors,
       logo: logo || initialContextValue.logo,
       theme: theme || initialContextValue.theme,
+      storeLastHandle: storeLastHandle || initialContextValue.storeLastHandle,
     };
-  }, [text, factors, logo, theme]);
+  }, [text, factors, logo, theme, storeLastHandle]);
 
   return (
     <ConfigurationContext.Provider value={contextValue}>
