@@ -14,6 +14,7 @@ export const input = style({
   },
 });
 
+// WebKit browsers can override font and background styles on autocomplete, so we want to make sure that styling is consistent
 globalStyle(`${input}:-webkit-autofill`, {
   fontSize: theme.font.size.base,
   fontWeight: theme.font.weight.semibold,
