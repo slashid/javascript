@@ -1,4 +1,4 @@
-import { style, styleVariants } from "@vanilla-extract/css";
+import { style, styleVariants, globalStyle } from "@vanilla-extract/css";
 import { publicVariables, theme } from "../../theme/theme.css";
 
 export const input = style({
@@ -12,6 +12,15 @@ export const input = style({
   "::placeholder": {
     color: publicVariables.color.placeholder,
   },
+});
+
+globalStyle(`${input}:-webkit-autofill`, {
+  fontSize: theme.font.size.base,
+  fontWeight: theme.font.weight.semibold,
+  color: publicVariables.color.foreground,
+  backgroundColor: publicVariables.color.panel,
+  WebkitBoxShadow: `0 0 0 30px ${publicVariables.color.panel} inset`,
+  WebkitTextFillColor: publicVariables.color.foreground,
 });
 
 export const select = style({
