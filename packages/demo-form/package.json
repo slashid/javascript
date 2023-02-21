@@ -4,6 +4,12 @@
   "private": true,
   "module": "./dist/demo-form.es.js",
   "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/demo-form.es.js"
+    },
+    "./style.css": "./dist/style.css"
+  },
   "scripts": {
     "build": "vite build"
   },

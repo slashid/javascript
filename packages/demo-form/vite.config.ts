@@ -14,17 +14,12 @@ export default defineConfig({
     lib: {
       entry: path.resolve(__dirname, "src/index.ts"),
       name: "DemoForm",
-      formats: ["es", "umd", "cjs"],
+      formats: ["es"],
       fileName: (format) => `demo-form.${format}.js`,
     },
     rollupOptions: {
-      external: ["react", "react-dom"],
-      output: {
-        globals: {
-          react: "React",
-          "react-dom": "ReactDOM",
-        },
-      },
+      external: ["react", "react-dom", "@slashid/slashid", "@slashid/react"],
     },
+    sourcemap: true,
   },
 });
