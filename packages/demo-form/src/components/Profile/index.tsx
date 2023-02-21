@@ -12,7 +12,7 @@ export const Profile = () => {
   useEffect(() => {
     if (user) {
       const fetchAttributes = async () => {
-        const bucket = await user.getBucket();
+        const bucket = user.getBucket();
         const attributes = await bucket.get();
         setUserAttributes(attributes);
       };
