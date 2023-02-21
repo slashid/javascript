@@ -11,7 +11,7 @@ type UseLastHandle = () => {
 };
 
 type SuccessEvent = {
-  identifier: Handle | undefined;
+  handle: Handle | undefined;
 };
 
 export const useLastHandle: UseLastHandle = () => {
@@ -39,7 +39,7 @@ export const useLastHandle: UseLastHandle = () => {
 
     window.localStorage.setItem(
       STORAGE_LAST_HANDLE_KEY,
-      JSON.stringify(e.identifier)
+      JSON.stringify(e.handle)
     );
   }, []);
 
