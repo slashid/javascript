@@ -12,7 +12,7 @@ export const SlashID = ({ children }: Props) => {
   return (
     <SlashIDProvider
       baseApiUrl="https://api.sandbox.slashid.com"
-      oid="f978a6bd-3e45-bcda-cb4e-573d0bad155b"
+      oid="ORGANISATION_ID"
       tokenStorage="localStorage"
     >
       <ConfigurationProvider factors={factors} storeLastHandle={true}>

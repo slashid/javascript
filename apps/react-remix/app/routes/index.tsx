@@ -3,9 +3,11 @@ import { LoggedOut, LoggedIn, Form } from "@slashid/react";
 import { Profile } from "demo-form";
 
 import slashIDstyles from "@slashid/react/style.css";
+import profileStyles from "demo-form/style.css";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: slashIDstyles },
+  { rel: "stylesheet", href: profileStyles },
 ];
 
 export default function Index() {
