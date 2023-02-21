@@ -1,6 +1,6 @@
 import type { LinksFunction } from "@remix-run/node";
 import { LoggedOut, LoggedIn, Form } from "@slashid/react";
-import { Storage } from '~/storage';
+import { Profile } from "demo-form";
 
 import slashIDstyles from "@slashid/react/style.css";
 
@@ -17,7 +17,7 @@ export default function Index() {
         </div>
       </LoggedOut>
       <LoggedIn>
-        <Storage />
+        <Profile />
       </LoggedIn>
     </div>
   );
