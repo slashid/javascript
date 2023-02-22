@@ -15,7 +15,7 @@ export const SlashID = ({ children }: Props) => {
       oid="ORGANISATION_ID"
       tokenStorage="localStorage"
     >
-      <ConfigurationProvider factors={factors} storeLastHandle={true}>
+      <ConfigurationProvider factors={factors}>
         {children}
       </ConfigurationProvider>
     </SlashIDProvider>

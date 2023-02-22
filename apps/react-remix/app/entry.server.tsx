@@ -39,7 +39,9 @@ function handleBotRequest(
     let didError = false;
 
     const { pipe, abort } = renderToPipeableStream(
-      <RemixServer context={remixContext} url={request.url} />,
+      <SlashID>
+        <RemixServer context={remixContext} url={request.url} />
+      </SlashID>,
       {
         onAllReady() {
           const body = new PassThrough();
