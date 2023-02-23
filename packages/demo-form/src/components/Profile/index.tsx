@@ -12,7 +12,8 @@ export const Profile = () => {
   useEffect(() => {
     if (user) {
       const fetchAttributes = async () => {
-        const attributes = await user.get('person_pool-end_user_read_write');
+        const bucket = user.getBucket();
+        const attributes = await bucket.get();
         setUserAttributes(attributes);
       };
 

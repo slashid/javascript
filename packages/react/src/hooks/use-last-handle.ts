@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useCallback } from "react";
 import { Handle } from "../domain/types";
 import { useConfiguration } from "./use-configuration";
 import { useSlashID } from "./use-slash-id";
+import { isBrowser } from "../browser/is-browser";
 
 export const STORAGE_LAST_HANDLE_KEY = "@slashid/LAST_HANDLE";
 
@@ -10,7 +11,7 @@ type UseLastHandle = () => {
 };
 
 type SuccessEvent = {
-  identifier: Handle | undefined;
+  handle: Handle | undefined;
 };
 
 export const useLastHandle: UseLastHandle = () => {
@@ -19,6 +20,10 @@ export const useLastHandle: UseLastHandle = () => {
   const subscribed = useRef(false);
 
   const lastHandle = useMemo(() => {
+    if (!isBrowser()) {
+      return undefined;
+    }
+
     const storedHandle = window.localStorage.getItem(STORAGE_LAST_HANDLE_KEY);
     if (!storeLastHandle || !storedHandle) {
       return undefined;
@@ -28,9 +33,13 @@ export const useLastHandle: UseLastHandle = () => {
   }, [storeLastHandle]);
 
   const handler = useCallback((e: SuccessEvent) => {
+    if (!isBrowser()) {
+      return;
+    }
+
     window.localStorage.setItem(
       STORAGE_LAST_HANDLE_KEY,
-      JSON.stringify(e.identifier)
+      JSON.stringify(e.handle)
     );
   }, []);
 
