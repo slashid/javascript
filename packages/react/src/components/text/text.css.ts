@@ -1,4 +1,4 @@
-import { publicVariables, theme } from "../../theme/theme.css";
+import { colors, publicVariables, theme } from "../../theme/theme.css";
 import { recipe, RecipeVariants } from "@vanilla-extract/recipes";
 
 export const text = recipe({
@@ -27,6 +27,10 @@ export const text = recipe({
     color: {
       contrast: { color: publicVariables.color.contrast },
       tertiary: { color: publicVariables.color.tertiary },
+      // KYC
+      white: { color: colors.white },
+      success: { color: publicVariables.color.foregroundSuccess },
+      failure: { color: publicVariables.color.foregroundFailure },
     },
   },
 

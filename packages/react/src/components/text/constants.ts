@@ -47,4 +47,71 @@ export const TEXT = {
   "validationError.otp": "Please enter the OTP code.",
   "validationError.email": "Please enter your email address.",
   "validationError.phoneNumber": "Please enter your phone number.",
+  // KYC
+  "kyc.mobile.end.title": "Upload was successful.",
+  "kyc.mobile.end.description": "Please return to desktop.",
+  "kyc.mobile.failure.generic.title": "Something went wrong",
+  "kyc.mobile.failure.generic.description": "Please try again",
+  "kyc.mobile.failure.upload_not_supported.title": "Upload not supported",
+  "kyc.mobile.failure.upload_not_supported.description":
+    "Please try with a different browser or device",
+  // Technical message to alert the consumer
+  "kyc.mobile.failure.invalid_state.title": "Invalid State",
+  "kyc.mobile.failure.invalid_state.description":
+    "Cannot render anything due to inconsistent state",
+  "kyc.upload.mobile.empty.id_card.front":
+    "Upload the front side of your ID card",
+  "kyc.upload.mobile.empty.id_card.back":
+    "Upload the back side of your ID card",
+  "kyc.upload.mobile.empty.driver_license.front":
+    "Upload the front side of your driver license",
+  "kyc.upload.mobile.empty.driver_license.back":
+    "Upload the back side of your driver license",
+  "kyc.upload.mobile.empty.passport.front":
+    "Upload the front side of your passport",
+  "kyc.upload.mobile.empty.passport.back":
+    "Upload the back side of your passport",
+  "kyc.upload.mobile.empty.cta": "Upload",
+  "kyc.upload.mobile.loading.message": "Checking image quality",
+  "kyc.upload.mobile.failure.generic.title": "Cannot load image",
+  "kyc.upload.mobile.failure.generic.description":
+    "Please try with a different image",
+  "kyc.upload.mobile.failure.quality.title": "Invalid Image",
+  "kyc.upload.mobile.failure.quality.description":
+    "Please try with a different image",
+  "kyc.upload.mobile.failure.quality.detect_blur.title": "Image is too blurry",
+  "kyc.upload.mobile.failure.quality.detect_blur.description":
+    "Please try with a different image",
+  "kyc.upload.mobile.failure.quality.detect_cutoff.title":
+    "Document is not entirely visible",
+  "kyc.upload.mobile.failure.quality.detect_cutoff.description":
+    "Please try with a different image",
+  "kyc.upload.mobile.failure.quality.document_detection.title":
+    "Document not found",
+  "kyc.upload.mobile.failure.quality.document_detection.description":
+    "Please try with a different image",
+  "kyc.upload.mobile.success.title": "Image looks good",
+  "kyc.upload.mobile.upload.cta.continue": "Continue",
+  "kyc.upload.mobile.upload.cta.again": "Upload again",
+  "kyc.upload.mobile.title": "Your document",
+  "kyc.upload.mobile.subtitle": "Upload the required images of your documents",
+  "kyc.livephoto.mobile.upload.cta.continue": "Continue",
+  "kyc.livephoto.mobile.upload.cta.again": "Upload again",
+  "kyc.livephoto.mobile.empty": "Upload a selfie picture.",
+  "kyc.livephoto.mobile.empty.cta": "Upload",
+  "kyc.livephoto.mobile.loading.message": "Validating picture",
+  "kyc.livephoto.mobile.failure.generic.title": "Cannot load image",
+  "kyc.livephoto.mobile.failure.generic.description":
+    "Please try with a different image",
+  "kyc.livephoto.mobile.failure.validation.title": "An error occurred",
+  "kyc.livephoto.mobile.failure.validation.description":
+    "Please try with a different image",
+  "kyc.livephoto.mobile.failure.validation.face_detection.title":
+    "Face not detected",
+  "kyc.livephoto.mobile.failure.validation.face_detection.description":
+    "Please try with a different image",
+  "kyc.livephoto.mobile.success.title": "Image looks good",
+  "kyc.livephoto.mobile.title": "Selfie Check",
+  "kyc.livephoto.mobile.subtitle":
+    "Upload a selfie picture to confirm your identity.",
 };

@@ -18,6 +18,7 @@ const colorProperties = defineProperties({
 
 const space = defineProperties({
   properties: {
+    gap: theme.space,
     marginTop: theme.space,
     marginBottom: theme.space,
     marginLeft: theme.space,

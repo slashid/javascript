@@ -7,6 +7,7 @@ import { LoggedIn } from "./components/logged-in";
 import { LoggedOut } from "./components/logged-out";
 import { Groups } from "./components/groups";
 import { Form } from "./components/form";
+import { MobileFlow } from "./components/mobile-flow";
 import { useSlashID } from "./hooks/use-slash-id";
 
 /**
@@ -21,5 +22,6 @@ export {
   LoggedOut,
   Groups,
   Form,
+  MobileFlow,
   useSlashID,
 };

@@ -157,6 +157,7 @@ importers:
       '@testing-library/jest-dom': ^5.16.5
       '@testing-library/react': ^13.4.0
       '@testing-library/user-event': ^14.4.3
+      '@types/compress.js': ^1.1.1
       '@types/react': 18.0.8
       '@types/react-dom': ^18.0.9
       '@types/testing-library__jest-dom': ^5.14.5
@@ -167,6 +168,7 @@ importers:
       '@vanilla-extract/vite-plugin': ^3.7.0
       '@vitejs/plugin-react': ^2.1.0
       clsx: ^1.2.1
+      compress.js: ^1.2.2
       country-list-with-dial-code-and-flag: ^3.0.2
       jsdom: ^20.0.2
       react: ^18.2.0
@@ -182,6 +184,7 @@ importers:
       '@vanilla-extract/dynamic': 2.0.3
       '@vanilla-extract/recipes': 0.3.0_@vanilla-extract+css@1.9.2
       '@vanilla-extract/sprinkles': 1.5.1_@vanilla-extract+css@1.9.2
+      compress.js: 1.2.2
       country-list-with-dial-code-and-flag: 3.0.2
     devDependencies:
       '@slashid/slashid': 3.2.0
@@ -189,6 +192,7 @@ importers:
       '@testing-library/jest-dom': 5.16.5
       '@testing-library/react': 13.4.0_biqbaboplfbrettd7655fr4n2y
       '@testing-library/user-event': 14.4.3_aaq3sbffpfe3jnxzm2zngsddei
+      '@types/compress.js': 1.1.1
       '@types/react': 18.0.8
       '@types/react-dom': 18.0.9
       '@types/testing-library__jest-dom': 5.14.5
@@ -1626,7 +1630,7 @@ packages:
     resolution: {integrity: sha512-NDYdls71fTXoU8TZHfbBWg7DiZfNzClcKui/+kyi6ppD2L1qnWW3VV6CjtaBXSUGGhiTWJ6ereOIkUvenif66Q==}
     engines: {node: '>=6.9.0'}
     dependencies:
-      regenerator-runtime: 0.13.10
+      regenerator-runtime: 0.13.11
 
   /@babel/runtime/7.20.13:
     resolution: {integrity: sha512-gt3PKXs0DBoL9xCvOIIZ2NEqAGZqHjAnmVbfQtB620V0uReIQutpel14KcneZuer7UioY8ALKZ7iocavvzTNFA==}
@@ -3853,6 +3857,10 @@ packages:
     resolution: {integrity: sha512-KnRanxnpfpjUTqTCXslZSEdLfXExwgNxYPdiO2WGUj8+HDjFi8R3k5RVKPeSCzLjCcshCAtVO2QBbVuAV4kTnw==}
     dev: true
 
+  /@types/compress.js/1.1.1:
+    resolution: {integrity: sha512-6ShoR1Qu7jyD/Q2T5m6b+rt/iu/4WvMx+UD6QHFwUE3iVlmQgcoEU5Vc+oQvc41XLsCp2QQ4OWWkc0WeL46v/A==}
+    dev: true
+
   /@types/cookie/0.4.1:
     resolution: {integrity: sha512-XW/Aa8APYr6jSVVA1y/DEIZX0/GMKLEVekNG727R8cs56ahETkRAy/3DR7+fJyh7oUgGwNQaRfXCun0+KbWY7Q==}
 
@@ -5217,6 +5225,12 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
+
+  /compress.js/1.2.2:
+    resolution: {integrity: sha512-eIsMmzyBtPVDdPtpmPXTRB6uiLjgTXygYl0KCVVp0I/U/++YzZtEkhVTuWH97dzTxKvzAcZMFwYUHGC09BSUqg==}
+    dependencies:
+      regenerator-runtime: 0.13.11
+    dev: false
 
   /compressible/2.0.18:
     resolution: {integrity: sha512-AF3r7P5dWxL8MxyITRMlORQNaOA2IkAFaTr4k7BUumjPtRpGDTZpl0Pb1XCO6JeDCBdp126Cgs9sMxqSjgYyRg==}
