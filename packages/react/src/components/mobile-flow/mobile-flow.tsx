@@ -6,7 +6,7 @@ import { assignInlineVars } from "@vanilla-extract/dynamic";
 import { mobileFlow } from "./mobile-flow.css";
 import { useEffect, useState } from "react";
 import { isUploadSupported } from "../utils";
-import { DocumentSide, KYC, DocumentType, KYCStatus } from "@slashid/kyc";
+import { DocumentSide, KYC, DocumentType, KYCStatus } from "@slashid/slashid";
 import { MobileLivePhoto } from "../mobile-live-photo";
 import { Banner } from "../banner";
 import { Logo } from "../icon/logo";

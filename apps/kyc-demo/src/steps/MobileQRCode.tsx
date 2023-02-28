@@ -9,8 +9,7 @@ import {
 } from "design-system";
 import { useEffect, useRef, useState } from "react";
 
-import type { KYC } from "@slashid/kyc";
-import { KYCStatus } from "@slashid/kyc/dist/client";
+import type { KYC, KYCStatus } from "@slashid/slashid";
 
 export function MobileQRCode(props: {
   kyc: KYC;

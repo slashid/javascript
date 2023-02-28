@@ -12,7 +12,9 @@
     "prettier-write": "prettier --parser=typescript \"src/**/*.{ts,tsx}\" --write"
   },
   "dependencies": {
+    "@buildo/bento-design-system": "^0.15.5",
     "@buildo/formo": "^2.0.1",
+    "@fontsource/inter": "^4.5.14",
     "@slashid/react": "workspace:*",
     "@slashid/slashid": "^3.3.0",
     "@tanstack/react-location": "^3.7.4",
@@ -24,6 +26,7 @@
   "devDependencies": {
     "@types/react": "^18.0.24",
     "@types/react-dom": "^18.0.8",
+    "@vanilla-extract/css": "^1.9.2",
     "@vanilla-extract/vite-plugin": "^3.7.0",
     "@vitejs/plugin-react": "^2.2.0",
     "prettier": "^2.7.1",

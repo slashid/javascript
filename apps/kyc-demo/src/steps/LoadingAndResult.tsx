@@ -6,8 +6,8 @@ import {
   Inline,
   Stack,
 } from "design-system";
-import type { KYC } from "@slashid/kyc";
-import { KYCStatus } from "@slashid/kyc/dist/client";
+import type { KYC } from "@slashid/slashid";
+import { KYCStatus } from "@slashid/slashid";
 import { useEffect, useRef, useState } from "react";
 
 type Result = "loading" | "takingLonger" | "ok" | "nok";

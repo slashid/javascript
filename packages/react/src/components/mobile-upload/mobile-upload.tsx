@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { DocumentSide, DocumentType } from "@slashid/kyc";
+import { DocumentSide, DocumentType } from "@slashid/slashid";
 import {
   blobResize,
   blobToBase64,

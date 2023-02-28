@@ -5,7 +5,7 @@ import {
   FormSection,
   SelectField,
 } from "design-system";
-import { KYC, DocumentType as DocType, DocumentSide } from "@slashid/kyc";
+import { KYC, DocumentType as DocType, DocumentSide } from "@slashid/slashid";
 import { useEffect, useState } from "react";
 import { useFormo, validators } from "@buildo/formo";
 import { failure, success } from "@buildo/formo/lib/Result";

@@ -5,7 +5,7 @@ import {
   FormRow,
   FormSection,
 } from "design-system";
-import type { KYC } from "@slashid/kyc";
+import type { KYC } from "@slashid/slashid";
 import { useState } from "react";
 import { useFormo, validators } from "@buildo/formo";
 import { failure, success } from "@buildo/formo/lib/Result";

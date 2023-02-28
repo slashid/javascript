@@ -1,3 +1,5 @@
 packages:
   - "apps/*"
   - "packages/*"
+  # TODO include kyc-demo once KYC SDK is released
+  - "!apps/kyc-demo/*"

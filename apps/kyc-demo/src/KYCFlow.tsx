@@ -1,4 +1,4 @@
-import { DocumentSide, KYC, KYCStatus } from "@slashid/kyc";
+import { KYC, KYCFlowId, DocumentSide, KYCStatus } from "@slashid/slashid";
 import { useMemo, useState } from "react";
 
 import { ConsentAndVerify } from "./steps/ConsentAndVerify";
@@ -14,7 +14,6 @@ import { config } from "./config";
 import { sid } from "./sid";
 import { useSlashID } from "@slashid/react";
 import { MobileCompletedFeedback } from "./steps/MobileCompletedFeedback";
-import { KYCFlowId } from "@slashid/kyc/dist/client";
 import { LivePhotoUpload } from "./steps/LivePhotoUpload";
 
 type State =

@@ -1,5 +1,5 @@
 import { Banner, Bleed, Button, IconChevronLeft, Inline } from "design-system";
-import type { KYC } from "@slashid/kyc";
+import type { KYC } from "@slashid/slashid";
 import { useEffect, useState } from "react";
 
 export function DeleteFlow(props: {

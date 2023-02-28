@@ -6,7 +6,7 @@ import {
   FormSection,
   Inline,
 } from "design-system";
-import { DocumentSide, KYC } from "@slashid/kyc";
+import { KYC, DocumentSide } from "@slashid/slashid";
 import { failure, success } from "@buildo/formo/lib/Result";
 import { useFormo, validators } from "@buildo/formo";
 

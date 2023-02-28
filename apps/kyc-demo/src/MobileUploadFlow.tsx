@@ -1,16 +1,9 @@
-import { KYC } from "@slashid/kyc";
-import { MobileFlow } from "@slashid/kyc-react";
-import "@slashid/kyc-react/dist/index.css";
+import { KYC } from "@slashid/slashid";
+import { MobileFlow } from "@slashid/react";
 import { useMemo } from "react";
 import { config } from "./config";
 import { sid } from "./sid";
-import {
-  DesignSystemProvider,
-  ContentBlock,
-  Inset,
-  Banner,
-  AreaLoader,
-} from "design-system";
+import { DesignSystemProvider, ContentBlock, Inset } from "design-system";
 import { SlashIDProvider } from "@slashid/react";
 import { defaultMessages } from "./defaultMessages";
 

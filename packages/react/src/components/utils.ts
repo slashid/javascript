@@ -1,4 +1,4 @@
-import { KYC } from "@slashid/kyc";
+import { KYC } from "@slashid/slashid";
 import Compress from "compress.js";
 
 export const isUploadSupported = () => {

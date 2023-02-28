@@ -1,7 +1,7 @@
 import { useFormo, validators } from "@buildo/formo";
 import { failure, success } from "@buildo/formo/lib/Result";
-import type { DocumentSide, KYC, KYCStatus } from "@slashid/kyc";
-import { Country } from "@slashid/kyc";
+import type { KYC } from "@slashid/slashid";
+import { DocumentSide, KYCStatus, Country } from "@slashid/slashid";
 import {
   AreaLoader,
   Form,
