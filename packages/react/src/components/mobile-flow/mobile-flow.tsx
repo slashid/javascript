@@ -6,6 +6,7 @@ import { assignInlineVars } from "@vanilla-extract/dynamic";
 import { mobileFlow } from "./mobile-flow.css";
 import { useEffect, useState } from "react";
 import { isUploadSupported } from "../utils";
+// @ts-expect-error TODO fix enums in KYC SDK
 import { DocumentSide, KYC, DocumentType, KYCStatus } from "@slashid/slashid";
 import { MobileLivePhoto } from "../mobile-live-photo";
 import { Banner } from "../banner";

@@ -32,7 +32,7 @@ importers:
       '@buildo/formo': ^2.0.1
       '@fontsource/inter': ^4.5.14
       '@slashid/react': workspace:*
-      '@slashid/slashid': file:../../../ng-evangelion/web/sdk
+      '@slashid/slashid': ^3.3.0
       '@tanstack/react-location': ^3.7.4
       '@types/react': ^18.0.24
       '@types/react-dom': ^18.0.8
@@ -51,7 +51,7 @@ importers:
       '@buildo/formo': 2.0.2_react@18.2.0
       '@fontsource/inter': 4.5.14
       '@slashid/react': link:../../packages/react
-      '@slashid/slashid': file:../ng-evangelion/web/sdk
+      '@slashid/slashid': 3.3.0
       '@tanstack/react-location': 3.7.4_biqbaboplfbrettd7655fr4n2y
       design-system: 2.5.0
       react: 18.2.0
@@ -4837,6 +4837,21 @@ packages:
       url: 0.11.0
       uuid: 8.3.2
 
+  /@slashid/slashid/3.3.0:
+    resolution: {integrity: sha512-8Nt8kqOLp4/S7LWYwzlemgZA4x1HTM6oebhHZKtmzW1DzgpGvw/hr4qOgd57wNBnbyEyVB6mQM80MAomAqNZnw==}
+    dependencies:
+      '@changesets/cli': 2.26.0
+      '@types/uuid': 8.3.4
+      changeset: 0.2.6
+      docdash: 1.2.0
+      jwt-decode: 3.1.2
+      mitt: 3.0.0
+      querystring-es3: 0.2.1
+      regenerator-runtime: 0.13.11
+      url: 0.11.0
+      uuid: 8.3.2
+    dev: false
+
   /@swc/helpers/0.4.11:
     resolution: {integrity: sha512-rEUrBSGIoSFuYxwBYtlUFMlE2CwGhmW+w9355/5oduSw8e5h2+Tj4UrAGNNgP9915++wj5vkQo0UuOBqOAq4nw==}
     dependencies:
@@ -6905,10 +6920,6 @@ packages:
     engines: {node: '>=0.3.1'}
     dev: true
 
-  /dijkstrajs/1.0.2:
-    resolution: {integrity: sha512-QV6PMaHTCNmKSeP6QoXhVTw9snc9VD8MulTT0Bd99Pacp4SS1cjcrYPgBPmibqKVtMJJfqC6XvOXgPMEEPH/fg==}
-    dev: false
-
   /dir-glob/3.0.1:
     resolution: {integrity: sha512-WkrWp9GR4KXfKGYzOLmTuGVi1UWFfws377n9cc55/tb6DuqyF6pcQ5AbiHEshaDpY9v6oaSr2XCDidGmMwdzIA==}
     engines: {node: '>=8'}
@@ -6985,10 +6996,6 @@ packages:
     resolution: {integrity: sha512-/kyM18EfinwXZbno9FyUGeFh87KC8HRQBQGildHZbEuRyWFOmv1U10o9BBp8XVZDVNNuQKyIGIu5ZYAAXJ0V2Q==}
     engines: {node: '>= 4'}
     dev: true
-
-  /encode-utf8/1.0.3:
-    resolution: {integrity: sha512-ucAnuBEhUK4boH2HjVYG5Q2mQyPorvv0u/ocS+zhdw0S8AlHYY+GOFhP1Gio5z4icpP2ivFSvhtFjQi8+T9ppw==}
-    dev: false
 
   /encodeurl/1.0.2:
     resolution: {integrity: sha512-TPJXq8JqFaVYm2CWmPvnP2Iyo4ZSM7/QKcSmuMLDObfpH5fi7RUGmd/rTDf+rut/saiDiQEeVTNgAmJEdAOx0w==}
@@ -10644,11 +10651,6 @@ packages:
       pathe: 1.1.0
     dev: true
 
-  /pngjs/5.0.0:
-    resolution: {integrity: sha512-40QW5YalBNfQo5yRYmiw7Yz6TKKVr3h6970B2YE+3fQpsWcrbj1PzJgxeJ19DRQjhMbKPIuMY8rFaXc8moolVw==}
-    engines: {node: '>=10.13.0'}
-    dev: false
-
   /postcss-discard-duplicates/5.1.0_postcss@8.4.21:
     resolution: {integrity: sha512-zmX3IoSI2aoenxHV6C7plngHWWhUOV3sP1T8y2ifzxzbtnuhk1EdPwm0S1bIUNaJ2eNbWeGLEwzw8huPD67aQw==}
     engines: {node: ^10 || ^12 || >=14.0}
@@ -10930,17 +10932,6 @@ packages:
   /punycode/2.1.1:
     resolution: {integrity: sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==}
     engines: {node: '>=6'}
-
-  /qrcode/1.5.1:
-    resolution: {integrity: sha512-nS8NJ1Z3md8uTjKtP+SGGhfqmTCs5flU/xR623oI0JX+Wepz9R8UrRVCTBTJm3qGw3rH6jJ6MUHjkDx15cxSSg==}
-    engines: {node: '>=10.13.0'}
-    hasBin: true
-    dependencies:
-      dijkstrajs: 1.0.2
-      encode-utf8: 1.0.3
-      pngjs: 5.0.0
-      yargs: 15.4.1
-    dev: false
 
   /qs/6.11.0:
     resolution: {integrity: sha512-MvjoMCJwEarSbUYk5O+nmoSzSutSsTwF85zcHPQ9OrlFoZOYIjaqBAJIqIXjptyD5vThxGq52Xu/MaJzRkIk4Q==}
@@ -13344,21 +13335,3 @@ packages:
   /zwitch/2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
     dev: true
-
-  file:../ng-evangelion/web/sdk:
-    resolution: {directory: ../ng-evangelion/web/sdk, type: directory}
-    name: '@slashid/slashid'
-    version: 3.3.0
-    dependencies:
-      '@changesets/cli': 2.26.0
-      '@types/uuid': 8.3.4
-      changeset: 0.2.6
-      docdash: 1.2.0
-      jwt-decode: 3.1.2
-      mitt: 3.0.0
-      qrcode: 1.5.1
-      querystring-es3: 0.2.1
-      regenerator-runtime: 0.13.11
-      url: 0.11.0
-      uuid: 8.3.2
-    dev: false

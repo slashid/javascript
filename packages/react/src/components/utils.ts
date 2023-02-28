@@ -1,3 +1,4 @@
+// @ts-expect-error TODO fix enums in KYC SDK
 import { KYC } from "@slashid/slashid";
 import Compress from "compress.js";
 
