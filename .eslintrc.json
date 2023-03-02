@@ -23,11 +23,13 @@
     // Add your own rules here to override ones from the extended configs.
     "@typescript-eslint/ban-ts-comment": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/no-namespace": "off",
     "react/react-in-jsx-scope": "off",
     "react/prop-types": "off",
     "@typescript-eslint/no-unused-vars": "error",
     "prefer-const": "off",
-    "no-control-regex": "off"
+    "no-control-regex": "off",
+    "no-case-declarations": "off"
   },
   "root": true
 }

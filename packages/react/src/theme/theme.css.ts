@@ -41,12 +41,22 @@ export const publicVariables = createGlobalThemeContract(
       primaryHover: "color-primary-hover",
       transparent: "color-transparent",
       error: "color-error",
+      // KYC
+      success: "color-success",
+      foregroundSuccess: "color-foreground-success",
+      backgroundSuccess: "color-background-success",
+      failure: "color-failure",
+      foregroundFailure: "color-foreground-failure",
+      backgroundFailure: "color-background-failure",
     },
     font: {
       fontFamily: "font-family",
     },
     border: {
       radius: "button-border-radius",
+      width: {
+        panel: "border-width-panel",
+      },
     },
   },
   // TODO consider using the second argument to generate the names based on the object path
@@ -71,9 +81,16 @@ const lightThemeColors = {
   primaryHover: colors.blue600,
   transparent: "transparent",
   error: colors.red500,
+  // KYC
+  success: "#059E56",
+  foregroundSuccess: "#016A1C",
+  backgroundSuccess: "#E6F3ED",
+  failure: "#F40B49",
+  foregroundFailure: "#B1000F",
+  backgroundFailure: "#FFF0F4",
 };
 
-const darkThemeColors = {
+export const darkThemeColors = {
   background: colors.grey900,
   mute: colors.grey800,
   panel: colors.grey700,
@@ -90,18 +107,30 @@ const darkThemeColors = {
   primaryHover: colors.blue600,
   transparent: "transparent",
   error: colors.red500,
+  // KYC
+  success: "#059E56",
+  foregroundSuccess: "#016A1C",
+  backgroundSuccess: "#E6F3ED",
+  failure: "#F40B49",
+  foregroundFailure: "#B1000F",
+  backgroundFailure: "#FFF0F4",
 };
 
-// default: light theme
-createGlobalTheme(".sid-theme-root", publicVariables, {
+export const lightTheme = {
   color: lightThemeColors,
   font: {
     fontFamily: "Inter",
   },
   border: {
     radius: "16px",
+    width: {
+      panel: "2px",
+    },
   },
-});
+};
+
+// default: light theme
+createGlobalTheme(".sid-theme-root", publicVariables, lightTheme);
 
 export const darkTheme = style({
   vars: assignVars(publicVariables.color, darkThemeColors),
