@@ -1,5 +1,12 @@
 # @slashid/react
 
+## 1.3.1
+
+### Patch Changes
+
+- 38c54bf: Fix issue with last handle on SSR, bump Core SDK
+- d8bd533: Fix styles for input autofill on WebKit browsers
+
 ## 1.3.0
 
 ### Minor Changes
