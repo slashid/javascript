@@ -51,7 +51,7 @@
     "country-list-with-dial-code-and-flag": "^3.0.2"
   },
   "devDependencies": {
-    "@slashid/slashid": "^3.2.0",
+    "@slashid/slashid": "^3.3.2",
     "@testing-library/dom": "^8.19.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
