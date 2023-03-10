@@ -23,9 +23,7 @@ const factors = [
   { method: "oidc", options: { provider: "github" } },
 ];
 
-const mfaFactors: Factor[] = [
-  {method: "sms_link"}
-]
+const mfaFactors: Factor[] = [{ method: "sms_link" }];
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
@@ -38,14 +36,14 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
       >
         <div className="formWrapper">
           <LoggedOut>
-          <Form />
+            <Form />
           </LoggedOut>
           <LoggedIn>
-            <MFAProvider 
-            text={{
-              "initial.title": "MFA"
-            }}
-            factors={mfaFactors}
+            <MFAProvider
+              text={{
+                "initial.title": "Multi-Factor Authentication",
+              }}
+              factors={mfaFactors}
             >
               <Form />
             </MFAProvider>
