@@ -1,5 +1,5 @@
 import { User } from "@slashid/slashid";
-import { Cancel, LogIn, LoginOptions, Retry } from "../../domain/types";
+import { Cancel, LogIn, LoginOptions, Retry, MFA } from "../../domain/types";
 
 export interface InitialState {
   status: "initial";
@@ -102,7 +102,7 @@ export function createFlow(opts: CreateFlowOptions = {}) {
     processEvent(event);
   };
   let state: FlowState = createInitialState(send);
-  let logInFn: undefined | LogIn = undefined;
+  let logInFn: undefined | LogIn | MFA = undefined;
   const { onSuccess } = opts;
 
   function setState(s: FlowState) {
@@ -119,8 +119,9 @@ export function createFlow(opts: CreateFlowOptions = {}) {
               setState(createAuthenticatingState(send, { options: e.options }));
               try {
                 const user = await logInFn(e.options);
-                if (onSuccess && user) {
-                  onSuccess(user);
+                if (onSuccess) {
+                  // user will be `undefined` for mfa()
+                  onSuccess(user!);
                 }
 
                 setState(createSuccessState());
@@ -187,7 +188,7 @@ export function createFlow(opts: CreateFlowOptions = {}) {
     subscribe: (observer: Observer) => {
       observers.push(observer);
     },
-    setLogIn: (fn: LogIn) => {
+    setLogIn: (fn: LogIn|MFA) => {
       logInFn = fn;
     },
     state,
