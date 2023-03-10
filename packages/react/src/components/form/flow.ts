@@ -189,7 +189,7 @@ export function createFlow(opts: CreateFlowOptions = {}) {
     subscribe: (observer: Observer) => {
       observers.push(observer);
     },
-    setLogIn: (fn: LogIn|MFA) => {
+    setLogIn: (fn: LogIn | MFA) => {
       logInFn = fn;
     },
     state,
