@@ -191,6 +191,7 @@ export function createFlow(opts: CreateFlowOptions = {}) {
     },
     setLogIn: (fn: LogIn | MFA) => {
       logInFn = fn;
+      console.log(logInFn)
     },
     state,
   };
