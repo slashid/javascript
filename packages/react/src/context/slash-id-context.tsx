@@ -9,7 +9,7 @@ import React, {
 
 import { PersonHandleType, SlashID, User } from "@slashid/slashid";
 import { MemoryStorage } from "../browser/memory-storage";
-import { LogIn, LoginOptions } from "../domain/types";
+import { LogIn, LoginOptions, MFA } from "../domain/types";
 
 export type StorageOption = "memory" | "localStorage";
 
@@ -33,6 +33,7 @@ export interface ISlashIDContext {
   sdkState: SDKState;
   logOut: () => undefined;
   logIn: LogIn;
+  mfa: MFA;
   validateToken: (token: string) => Promise<boolean>;
 }
 
@@ -42,6 +43,7 @@ export const initialContextValue = {
   sdkState: "initial" as const,
   logOut: () => undefined,
   logIn: () => Promise.reject("NYI"),
+  mfa: () => undefined,
   validateToken: () => Promise.resolve(false),
 };
 
@@ -135,6 +137,22 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
     },
     [oid, state, storeUser, logOut]
   );
+
+  const mfa = useCallback<MFA>(async ({ handle, factor }) => {
+    if (state === "initial" || !user) {
+      return;
+    }
+
+    setState('authenticating');
+
+    try {
+      await user.mfa(handle, factor)
+      setState("ready")
+    } catch (e) {
+      setState("ready")
+      throw e;
+    }
+  }, [user, state])
 
   const validateToken = useCallback(async (token: string): Promise<boolean> => {
     const tokenUser = new User(token);
@@ -240,6 +258,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
         sdkState: state,
         logOut,
         logIn,
+        mfa,
         validateToken,
       };
     }
@@ -250,9 +269,10 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
       sdkState: state,
       logOut,
       logIn,
+      mfa,
       validateToken,
     };
-  }, [logIn, logOut, user, validateToken, state]);
+  }, [logIn, logOut, user, validateToken, state, mfa]);
 
   return (
     <SlashIDContext.Provider value={contextValue}>

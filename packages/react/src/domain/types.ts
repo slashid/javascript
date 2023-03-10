@@ -15,6 +15,7 @@ export interface LoginOptions {
 export type FactorOIDC = Extract<Factor, { method: "oidc" }>;
 
 export type LogIn = (options: LoginOptions) => Promise<User | undefined>;
+export type MFA = (options: LoginOptions) => void;
 export type Retry = () => void;
 export type Cancel = () => void;
 
