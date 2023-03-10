@@ -93,7 +93,7 @@ const createErrorState = (send: Send): ErrorState => {
 };
 
 export type CreateFlowOptions = {
-  onSuccess?: (user: User) => void;
+  onSuccess?: (user: User | undefined | void) => void;
 };
 
 export function createFlow(opts: CreateFlowOptions = {}) {
@@ -121,7 +121,7 @@ export function createFlow(opts: CreateFlowOptions = {}) {
                 const user = await logInFn(e.options);
                 if (onSuccess) {
                   // user will be `undefined` for mfa()
-                  onSuccess(user!);
+                  onSuccess(user);
                 }
 
                 setState(createSuccessState());
@@ -148,7 +148,8 @@ export function createFlow(opts: CreateFlowOptions = {}) {
                   });
 
                   const user = await logInFn(state.context.options);
-                  if (onSuccess && user) {
+                  if (onSuccess) {
+                    // user will be `undefined` for mfa()
                     onSuccess(user);
                   }
 
