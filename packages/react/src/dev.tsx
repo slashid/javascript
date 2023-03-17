@@ -1,10 +1,9 @@
+import type { Factor } from "@slashid/slashid";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { Form } from "./components/form";
-import { SlashIDProvider, LoggedIn, LoggedOut } from "./main";
-import { ConfigurationProvider, MFAProvider } from "./context/config-context";
-
-import type { Factor } from "@slashid/slashid";
+import { MFA } from "./components/mfa";
+import { SlashIDProvider } from "./context/slash-id-context";
+import { ConfigurationProvider } from "./context/config-context";
 
 import "./dev.css";
 
@@ -23,7 +22,7 @@ const factors = [
   { method: "oidc", options: { provider: "github" } },
 ];
 
-const mfaFactors: Factor[] = [{ method: "sms_link" }];
+const mfaFactors: Factor[] = [{ method: "otp_via_sms" }];
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
@@ -35,19 +34,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         storeLastHandle={true}
       >
         <div className="formWrapper">
-          <LoggedOut>
-            <Form />
-          </LoggedOut>
-          <LoggedIn>
-            <MFAProvider
-              text={{
-                "initial.title": "Multi-Factor Authentication",
-              }}
-              factors={mfaFactors}
-            >
-              <Form />
-            </MFAProvider>
-          </LoggedIn>
+          <MFA factors={mfaFactors} />
         </div>
       </ConfigurationProvider>
     </SlashIDProvider>
