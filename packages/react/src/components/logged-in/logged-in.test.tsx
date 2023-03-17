@@ -30,4 +30,52 @@ describe("LoggedIn", () => {
     );
     expect(screen.queryByText("Test")).not.toBeInTheDocument();
   });
+
+  test("should render children when user is authenticated with correct method", () => {
+    render(
+      <TestSlashIDProvider user={TEST_USER}>
+        <LoggedIn withFactorMethods={["email_link"]}>
+          <TestComponent />
+        </LoggedIn>
+      </TestSlashIDProvider>
+    );
+
+    expect(screen.getByText("Test")).toBeInTheDocument();
+  });
+
+  test("should not render children when user is not authenticated with correct method", () => {
+    render(
+      <TestSlashIDProvider user={TEST_USER}>
+        <LoggedIn withFactorMethods={["sms_link"]}>
+          <TestComponent />
+        </LoggedIn>
+      </TestSlashIDProvider>
+    );
+
+    expect(screen.queryByText("Test")).not.toBeInTheDocument();
+  });
+
+  test("should render children when callback function returns `true`", () => {
+    render(
+      <TestSlashIDProvider user={TEST_USER}>
+        <LoggedIn withFactorMethods={(factors) => factors.includes('email_link')}>
+          <TestComponent />
+        </LoggedIn>
+      </TestSlashIDProvider>
+    );
+
+    expect(screen.getByText("Test")).toBeInTheDocument();
+  });
+
+  test("should not render children when callback function returns `false`", () => {
+    render(
+      <TestSlashIDProvider user={TEST_USER}>
+        <LoggedIn withFactorMethods={(factors) => factors.includes('sms_link')}>
+          <TestComponent />
+        </LoggedIn>
+      </TestSlashIDProvider>
+    );
+
+    expect(screen.queryByText("Test")).not.toBeInTheDocument();
+  });
 });
