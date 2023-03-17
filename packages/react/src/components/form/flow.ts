@@ -119,7 +119,7 @@ export function createFlow(opts: CreateFlowOptions = {}) {
               setState(createAuthenticatingState(send, { options: e.options }));
               try {
                 const user = await logInFn(e.options);
-                if (user && onSuccess) {
+                if (onSuccess && user) {
                   onSuccess(user);
                 }
 
@@ -147,7 +147,7 @@ export function createFlow(opts: CreateFlowOptions = {}) {
                   });
 
                   const user = await logInFn(state.context.options);
-                  if (user && onSuccess) {
+                  if (onSuccess && user) {
                     onSuccess(user);
                   }
 
@@ -189,7 +189,6 @@ export function createFlow(opts: CreateFlowOptions = {}) {
     },
     setLogIn: (fn: LogIn | MFA) => {
       logInFn = fn;
-      console.log(logInFn);
     },
     state,
   };

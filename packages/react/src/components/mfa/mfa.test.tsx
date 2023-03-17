@@ -23,10 +23,10 @@ describe("#MFA", () => {
   test("MFA flow", async () => {
     const logInMock = vi.fn(() => Promise.resolve(TEST_USER));
     const mfaMock = vi.fn(() => Promise.resolve(TEST_USER));
-
     const user = userEvent.setup();
     const mfaText = "TEST TITLE MFA";
 
+    // initial form state
     const { rerender } = render(
       <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
         <MFA
@@ -38,8 +38,10 @@ describe("#MFA", () => {
       </TestSlashIDProvider>
     );
 
+    // first factor authentication - email
     inputEmail("valid@email.com");
     user.click(screen.getByTestId("sid-form-initial-submit-button"));
+
     await waitFor(() => expect(logInMock).toHaveBeenCalledTimes(1));
 
     // update user instance for correct <LoggedIn /> <LoggedOut /> behaviour
@@ -58,13 +60,13 @@ describe("#MFA", () => {
         />
       </TestSlashIDProvider>
     );
-
     await expect(screen.findByText(mfaText)).resolves.toBeInTheDocument();
 
+    // second factor authentication - phone number
     inputPhone("7975777666");
-
     user.click(screen.getByTestId("sid-form-initial-submit-button"));
 
+    await waitFor(() => expect(mfaMock).toHaveBeenCalledTimes(1));
     await expect(
       screen.findByTestId("sid-form-success-state")
     ).resolves.toBeInTheDocument();
