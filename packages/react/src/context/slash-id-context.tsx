@@ -43,7 +43,7 @@ export const initialContextValue = {
   sdkState: "initial" as const,
   logOut: () => undefined,
   logIn: () => Promise.reject("NYI"),
-  mfa: () => undefined,
+  mfa: () => Promise.reject("NYI"),
   validateToken: () => Promise.resolve(false),
 };
 
@@ -138,21 +138,25 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
     [oid, state, storeUser, logOut]
   );
 
-  const mfa = useCallback<MFA>(async ({ handle, factor }) => {
-    if (state === "initial" || !user) {
-      return;
-    }
+  const mfa = useCallback<MFA>(
+    async ({ handle, factor }) => {
+      if (state === "initial" || !user) {
+        return;
+      }
 
-    setState('authenticating');
+      setState("authenticating");
 
-    try {
-      await user.mfa(handle, factor)
-      setState("ready")
-    } catch (e) {
-      setState("ready")
-      throw e;
-    }
-  }, [user, state])
+      try {
+        await user.mfa(handle, factor);
+        setState("ready");
+        return user;
+      } catch (e) {
+        setState("ready");
+        throw e;
+      }
+    },
+    [user, state]
+  );
 
   const validateToken = useCallback(async (token: string): Promise<boolean> => {
     const tokenUser = new User(token);
