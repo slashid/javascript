@@ -2025,7 +2025,7 @@ packages:
   /@changesets/parse/0.3.15:
     resolution: {integrity: sha512-3eDVqVuBtp63i+BxEWHPFj2P1s3syk0PTrk2d94W9JD30iG+OER0Y6n65TeLlY8T2yB9Fvj6Ev5Gg0+cKe/ZUA==}
     dependencies:
-      '@changesets/types': 5.2.0
+      '@changesets/types': 5.2.1
       js-yaml: 3.14.1
     dev: true
 
