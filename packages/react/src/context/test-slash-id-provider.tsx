@@ -21,6 +21,7 @@ export const TestSlashIDProvider: React.FC<TestProviderProps> = ({
   user,
   children,
   logIn,
+  mfa,
 }) => {
   const value = useMemo(
     () => ({
@@ -29,8 +30,9 @@ export const TestSlashIDProvider: React.FC<TestProviderProps> = ({
       sdkState: sdkState || "initial",
       user,
       ...(logIn ? { logIn } : {}),
+      ...(mfa ? { mfa } : {}),
     }),
-    [logIn, sdkState, sid, user]
+    [logIn, mfa, sdkState, sid, user]
   );
 
   return (
