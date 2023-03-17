@@ -10,9 +10,6 @@ body {
   margin: 0 auto;
   padding: 0;
   background-color: darkgray;
-  max-width: 1280px;
-  display: flex;
-  justify-content: center;
 }
 
 .formWrapper {
