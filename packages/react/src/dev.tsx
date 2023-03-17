@@ -1,7 +1,8 @@
+import type { Factor } from "@slashid/slashid";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { Form } from "./components/form";
-import { SlashIDProvider } from "./main";
+import { MFA } from "./components/mfa";
+import { SlashIDProvider } from "./context/slash-id-context";
 import { ConfigurationProvider } from "./context/config-context";
 
 import "./dev.css";
@@ -21,6 +22,8 @@ const factors = [
   { method: "oidc", options: { provider: "github" } },
 ];
 
+const mfaFactors: Factor[] = [{ method: "otp_via_sms" }];
+
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <SlashIDProvider oid={import.meta.env.VITE_ORG_ID}>
@@ -31,7 +34,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         storeLastHandle={true}
       >
         <div className="formWrapper">
-          <Form />
+          <MFA factors={mfaFactors} />
         </div>
       </ConfigurationProvider>
     </SlashIDProvider>
