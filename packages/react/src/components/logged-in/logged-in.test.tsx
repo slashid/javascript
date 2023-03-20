@@ -1,9 +1,11 @@
+import { FactorMethod } from "@slashid/slashid";
 import { render, screen } from "@testing-library/react";
 
 import { LoggedIn } from ".";
 import {
   TestSlashIDProvider,
   TEST_USER,
+  NewTestUserWithAuthMethods,
 } from "../../context/test-slash-id-provider";
 
 const TestComponent = () => <h1>Test</h1>;
@@ -32,9 +34,12 @@ describe("LoggedIn", () => {
   });
 
   test("should render children when user is authenticated with correct method", () => {
+    const methods: FactorMethod[] = ["email_link", "otp_via_sms"];
+    const user = NewTestUserWithAuthMethods(methods);
+
     render(
-      <TestSlashIDProvider user={TEST_USER}>
-        <LoggedIn withFactorMethods={["email_link"]}>
+      <TestSlashIDProvider user={user}>
+        <LoggedIn withFactorMethods={methods}>
           <TestComponent />
         </LoggedIn>
       </TestSlashIDProvider>
@@ -44,9 +49,12 @@ describe("LoggedIn", () => {
   });
 
   test("should not render children when user is not authenticated with correct method", () => {
+    const methods: FactorMethod[] = ["email_link", "otp_via_sms"];
+    const user = NewTestUserWithAuthMethods(methods);
+
     render(
-      <TestSlashIDProvider user={TEST_USER}>
-        <LoggedIn withFactorMethods={["sms_link"]}>
+      <TestSlashIDProvider user={user}>
+        <LoggedIn withFactorMethods={["webauthn"]}>
           <TestComponent />
         </LoggedIn>
       </TestSlashIDProvider>
@@ -56,9 +64,14 @@ describe("LoggedIn", () => {
   });
 
   test("should render children when callback function returns `true`", () => {
+    const methods: FactorMethod[] = ["email_link", "otp_via_sms"];
+    const user = NewTestUserWithAuthMethods(methods);
+
     render(
-      <TestSlashIDProvider user={TEST_USER}>
-        <LoggedIn withFactorMethods={(factors) => factors.includes('email_link')}>
+      <TestSlashIDProvider user={user}>
+        <LoggedIn
+          withFactorMethods={(factors) => factors.includes("email_link")}
+        >
           <TestComponent />
         </LoggedIn>
       </TestSlashIDProvider>
@@ -68,9 +81,12 @@ describe("LoggedIn", () => {
   });
 
   test("should not render children when callback function returns `false`", () => {
+    const methods: FactorMethod[] = ["email_link", "otp_via_sms"];
+    const user = NewTestUserWithAuthMethods(methods);
+
     render(
-      <TestSlashIDProvider user={TEST_USER}>
-        <LoggedIn withFactorMethods={(factors) => factors.includes('sms_link')}>
+      <TestSlashIDProvider user={user}>
+        <LoggedIn withFactorMethods={(factors) => factors.includes("webauthn")}>
           <TestComponent />
         </LoggedIn>
       </TestSlashIDProvider>
