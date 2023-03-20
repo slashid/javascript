@@ -5,7 +5,7 @@ import { LoggedIn } from ".";
 import {
   TestSlashIDProvider,
   TEST_USER,
-  NewTestUserWithAuthMethods,
+  createTestUser,
 } from "../../context/test-slash-id-provider";
 
 const TestComponent = () => <h1>Test</h1>;
@@ -34,12 +34,12 @@ describe("LoggedIn", () => {
   });
 
   test("should render children when user is authenticated with correct method", () => {
-    const methods: FactorMethod[] = ["email_link", "otp_via_sms"];
-    const user = NewTestUserWithAuthMethods(methods);
+    const authMethods: FactorMethod[] = ["email_link", "otp_via_sms"];
+    const user = createTestUser({ authMethods });
 
     render(
       <TestSlashIDProvider user={user}>
-        <LoggedIn withFactorMethods={methods}>
+        <LoggedIn withFactorMethods={authMethods}>
           <TestComponent />
         </LoggedIn>
       </TestSlashIDProvider>
@@ -49,8 +49,8 @@ describe("LoggedIn", () => {
   });
 
   test("should not render children when user is not authenticated with correct method", () => {
-    const methods: FactorMethod[] = ["email_link", "otp_via_sms"];
-    const user = NewTestUserWithAuthMethods(methods);
+    const authMethods: FactorMethod[] = ["email_link", "otp_via_sms"];
+    const user = createTestUser({ authMethods });
 
     render(
       <TestSlashIDProvider user={user}>
@@ -64,8 +64,8 @@ describe("LoggedIn", () => {
   });
 
   test("should render children when callback function returns `true`", () => {
-    const methods: FactorMethod[] = ["email_link", "otp_via_sms"];
-    const user = NewTestUserWithAuthMethods(methods);
+    const authMethods: FactorMethod[] = ["email_link", "otp_via_sms"];
+    const user = createTestUser({ authMethods });
 
     render(
       <TestSlashIDProvider user={user}>
@@ -81,8 +81,8 @@ describe("LoggedIn", () => {
   });
 
   test("should not render children when callback function returns `false`", () => {
-    const methods: FactorMethod[] = ["email_link", "otp_via_sms"];
-    const user = NewTestUserWithAuthMethods(methods);
+    const authMethods: FactorMethod[] = ["email_link", "otp_via_sms"];
+    const user = createTestUser({ authMethods });
 
     render(
       <TestSlashIDProvider user={user}>

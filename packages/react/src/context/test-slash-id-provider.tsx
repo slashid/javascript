@@ -35,7 +35,11 @@ export const TEST_TOKEN = [
 
 export const TEST_USER = new User(TEST_TOKEN);
 
-export function NewTestUserWithAuthMethods(authMethods: FactorMethod[]): User {
+type CreateTestUserOptions = {
+  authMethods: FactorMethod[];
+};
+
+export function createTestUser({ authMethods }: CreateTestUserOptions): User {
   const token = [
     TEST_TOKEN_HEADER,
     btoa(
