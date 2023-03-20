@@ -1,17 +1,16 @@
-import type { Factor, User } from "@slashid/slashid";
+import type { User, FactorMethod } from "@slashid/slashid";
 import { useMemo } from "react";
 import { useSlashID } from "../../hooks/use-slash-id";
 
-type FactorMethods = Factor["method"][];
 
 type Props = {
   children: React.ReactNode;
   withFactorMethods?:
-    | FactorMethods
-    | ((userAuthenticationMethods: FactorMethods) => boolean);
+    | FactorMethod[]
+    | ((userAuthenticationMethods: FactorMethod[]) => boolean);
 };
 
-const hasUserAuthenticationMethods = (user: User, methods: FactorMethods) => {
+const hasUserAuthenticationMethods = (user: User, methods: FactorMethod[]) => {
   for (const factorMethod of methods) {
     if (!user.authentication.includes(factorMethod)) {
       return false;
