@@ -38,7 +38,14 @@ export const TEST_USER = new User(TEST_TOKEN);
 type CreateTestUserOptions = {
   authMethods: FactorMethod[];
 };
-
+/**
+ * Creates new User instance.
+ * NOTE: This function DOES NOT use or generate a valid token, only one that is easily decoded
+ * for the purpose of testing the SDK. To be used in the tests ONLY.
+ *
+ * @param options CreateTestUserOptions
+ * @returns User
+ */
 export function createTestUser({ authMethods }: CreateTestUserOptions): User {
   const token = [
     TEST_TOKEN_HEADER,
