@@ -1,5 +1,12 @@
 # @slashid/react
 
+## 1.4.0
+
+### Minor Changes
+
+- 4cf8882: Create <MFA /> component for immediate Multi-Factor Authentication
+- 83f4d83: Extend <LoggedIn> API - add `withFactorMethods` prop to specify required authentication factor methods.
+
 ## 1.3.1
 
 ### Patch Changes
