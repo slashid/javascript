@@ -2,6 +2,7 @@ import { SlashIDContext, SlashIDProvider } from "./context/slash-id-context";
 import {
   ConfigurationContext,
   ConfigurationProvider,
+  MFAProvider,
 } from "./context/config-context";
 import { LoggedIn } from "./components/logged-in";
 import { LoggedOut } from "./components/logged-out";
@@ -18,6 +19,7 @@ export {
   SlashIDProvider,
   ConfigurationContext,
   ConfigurationProvider,
+  MFAProvider,
   LoggedIn,
   LoggedOut,
   Groups,
