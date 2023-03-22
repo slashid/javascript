@@ -1,4 +1,4 @@
-import { MFA } from "./mfa";
+import { MultiFactorAuth } from "./multi-factor-auth";
 import userEvent from "@testing-library/user-event";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import {
@@ -29,7 +29,7 @@ describe("#MFA", () => {
     // initial form state
     const { rerender } = render(
       <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
-        <MFA
+        <MultiFactorAuth
           factors={[{ method: "otp_via_sms" }]}
           text={{
             "initial.title": mfaText,
@@ -52,7 +52,7 @@ describe("#MFA", () => {
         user={TEST_USER}
         mfa={mfaMock}
       >
-        <MFA
+        <MultiFactorAuth
           factors={[{ method: "otp_via_sms" }]}
           text={{
             "initial.title": mfaText,

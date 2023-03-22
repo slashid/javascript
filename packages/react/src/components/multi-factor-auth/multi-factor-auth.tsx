@@ -5,12 +5,12 @@ import { LoggedOut } from "../logged-out";
 import { MFAProvider } from "../../context/config-context";
 import { TextConfig } from "../text/constants";
 
-type MFAProps = {
+type MultiFactorAuthProps = {
   factors: Factor[];
   text?: Partial<TextConfig>;
 };
 
-export function MFA({ factors, text }: MFAProps) {
+export function MultiFactorAuth({ factors, text }: MultiFactorAuthProps) {
   return (
     <>
       <LoggedOut>
