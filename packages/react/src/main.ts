@@ -8,6 +8,7 @@ import { LoggedOut } from "./components/logged-out";
 import { Groups } from "./components/groups";
 import { Form } from "./components/form";
 import { MultiFactorAuth } from "./components/multi-factor-auth";
+import { StepUpAuth } from "./components/step-up-auth";
 import { useSlashID } from "./hooks/use-slash-id";
 
 /**
@@ -23,5 +24,6 @@ export {
   Groups,
   Form,
   MultiFactorAuth,
+  StepUpAuth,
   useSlashID,
 };
