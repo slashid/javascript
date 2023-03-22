@@ -1,11 +1,8 @@
-import { useSlashID } from "@slashid/react";
 import Head from "next/head";
-import { Profile, SlashIDForm } from "demo-form";
+import Link from "next/link";
 import styles from "./index.module.css";
 
 function Home() {
-  const { user } = useSlashID();
-
   return (
     <div className={styles.container}>
       <Head>
@@ -19,13 +16,15 @@ function Home() {
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
 
-        {user ? (
-          <Profile />
-        ) : (
-          <div className={styles.form}>
-            <SlashIDForm />
-          </div>
-        )}
+        <h2>Explore the components:</h2>
+
+        <p className={styles.docs}>
+          <Link href="/form">{`<Form />`}</Link>
+          <br />
+          <Link href="/mfa">{`<MultiFactorAuth />`}</Link>
+          <br />
+          <Link href="/step-up-auth">{`<StepUpAuth />`}</Link>
+        </p>
 
         <p className={styles.docs}>
           <a href="https://developer.slashid.dev/">Read the docs</a>
