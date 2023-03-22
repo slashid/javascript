@@ -19,7 +19,7 @@ const inputPhone = (value: string) => {
   fireEvent.change(input, { target: { value } });
 };
 
-describe("#MFA", () => {
+describe("#MultiFactorAuth", () => {
   test("MFA flow", async () => {
     const logInMock = vi.fn(() => Promise.resolve(TEST_USER));
     const mfaMock = vi.fn(() => Promise.resolve(TEST_USER));
