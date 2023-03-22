@@ -1,23 +1,11 @@
 import { MultiFactorAuth } from "./multi-factor-auth";
 import userEvent from "@testing-library/user-event";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import {
   TestSlashIDProvider,
   TEST_USER,
 } from "../../context/test-slash-id-provider";
-import { TEXT } from "../text/constants";
-
-const inputEmail = (value: string) => {
-  const input = screen.getByPlaceholderText(TEXT["initial.handle.phone.email"]);
-  fireEvent.change(input, { target: { value } });
-};
-
-const inputPhone = (value: string) => {
-  const input = screen.getByPlaceholderText(
-    TEXT["initial.handle.phone.placeholder"]
-  );
-  fireEvent.change(input, { target: { value } });
-};
+import { inputEmail, inputPhone } from "../test-utils";
 
 describe("#MultiFactorAuth", () => {
   test("MFA flow", async () => {
