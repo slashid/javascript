@@ -1,0 +1,13 @@
+.page {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-height: 100vh;
+  width: 100%;
+  background-color: darkgray;
+}
+
+.section {
+  margin: 0 auto;
+  padding: 0;
+}
