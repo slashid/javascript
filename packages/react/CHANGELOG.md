@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 1.5.0
+
+### Minor Changes
+
+- ca4fc56: Create <MultiFactorAuth> and <StepUpAuth> components
+
 ## 1.4.0
 
 ### Minor Changes
