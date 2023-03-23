@@ -1,4 +1,3 @@
-import { Factor } from "@slashid/slashid";
 import { clsx } from "clsx";
 import { useFlowState } from "./useFlowState";
 import { CreateFlowOptions } from "./flow";
@@ -12,15 +11,12 @@ import { Footer } from "./footer";
 import { useConfiguration } from "../../hooks/use-configuration";
 import { FormProvider } from "../../context/form-context";
 import { useLastHandle } from "../../hooks/use-last-handle";
-import { TextConfig } from "../text/constants";
 import {
   ConfigurationOverrides,
   ConfigurationOverridesProps,
 } from "../configuration-overrides";
 
 export type Props = ConfigurationOverridesProps & {
-  factors?: Factor[];
-  text?: Partial<TextConfig>;
   className?: string;
   onSuccess?: CreateFlowOptions["onSuccess"];
 };
