@@ -1,3 +1,4 @@
+import { Factor } from "@slashid/slashid";
 import { clsx } from "clsx";
 import { useFlowState } from "./useFlowState";
 import { CreateFlowOptions } from "./flow";
@@ -11,15 +12,23 @@ import { Footer } from "./footer";
 import { useConfiguration } from "../../hooks/use-configuration";
 import { FormProvider } from "../../context/form-context";
 import { useLastHandle } from "../../hooks/use-last-handle";
+import { TextConfig } from "../text/constants";
 
 export type Props = {
+  factors?: Factor[];
+  text?: Partial<TextConfig>;
   className?: string;
   onSuccess?: CreateFlowOptions["onSuccess"];
 };
 
-export const Form: React.FC<Props> = ({ className, onSuccess }) => {
+export const Form: React.FC<Props> = ({
+  factors,
+  text,
+  className,
+  onSuccess,
+}) => {
   const flowState = useFlowState({ onSuccess });
-  const { theme } = useConfiguration();
+  const { theme } = useConfiguration({ factors, text });
   const { lastHandle } = useLastHandle();
 
   return (
