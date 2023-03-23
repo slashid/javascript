@@ -1,21 +1,17 @@
 import { User } from "@slashid/slashid";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { vi, describe, afterEach } from "vitest";
 import { Form } from ".";
 import { TEXT } from "../text/constants";
 import { STORAGE_LAST_HANDLE_KEY } from "../../hooks/use-last-handle";
+import { inputEmail } from "../test-utils";
 
 import {
   TestSlashIDProvider,
   TEST_USER,
 } from "../../context/test-slash-id-provider";
 import { ConfigurationProvider } from "../../context/config-context";
-
-const inputEmail = (value: string) => {
-  const input = screen.getByPlaceholderText(TEXT["initial.handle.phone.email"]);
-  fireEvent.change(input, { target: { value } });
-};
 
 describe("#Form", () => {
   test("should render in the initial state", () => {

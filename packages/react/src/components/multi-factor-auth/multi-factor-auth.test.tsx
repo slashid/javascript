@@ -1,40 +1,34 @@
-import { MFA } from "./mfa";
+import type { StepConfig } from "./multi-factor-auth";
+import { MultiFactorAuth } from "./multi-factor-auth";
 import userEvent from "@testing-library/user-event";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import {
   TestSlashIDProvider,
   TEST_USER,
 } from "../../context/test-slash-id-provider";
-import { TEXT } from "../text/constants";
+import { inputEmail, inputPhone } from "../test-utils";
 
-const inputEmail = (value: string) => {
-  const input = screen.getByPlaceholderText(TEXT["initial.handle.phone.email"]);
-  fireEvent.change(input, { target: { value } });
-};
-
-const inputPhone = (value: string) => {
-  const input = screen.getByPlaceholderText(
-    TEXT["initial.handle.phone.placeholder"]
-  );
-  fireEvent.change(input, { target: { value } });
-};
-
-describe("#MFA", () => {
+describe("#MultiFactorAuth", () => {
   test("MFA flow", async () => {
     const logInMock = vi.fn(() => Promise.resolve(TEST_USER));
     const mfaMock = vi.fn(() => Promise.resolve(TEST_USER));
     const user = userEvent.setup();
     const mfaText = "TEST TITLE MFA";
 
+    const steps: StepConfig[] = [
+      { factors: [{ method: "email_link" }] },
+      {
+        factors: [{ method: "otp_via_sms" }],
+        text: {
+          "initial.title": mfaText,
+        },
+      },
+    ];
+
     // initial form state
     const { rerender } = render(
       <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
-        <MFA
-          factors={[{ method: "otp_via_sms" }]}
-          text={{
-            "initial.title": mfaText,
-          }}
-        />
+        <MultiFactorAuth steps={steps} />
       </TestSlashIDProvider>
     );
 
@@ -52,12 +46,7 @@ describe("#MFA", () => {
         user={TEST_USER}
         mfa={mfaMock}
       >
-        <MFA
-          factors={[{ method: "otp_via_sms" }]}
-          text={{
-            "initial.title": mfaText,
-          }}
-        />
+        <MultiFactorAuth steps={steps} />
       </TestSlashIDProvider>
     );
     await expect(screen.findByText(mfaText)).resolves.toBeInTheDocument();

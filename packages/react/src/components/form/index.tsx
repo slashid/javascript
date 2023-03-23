@@ -3,3 +3,4 @@ import "@fontsource/inter/500.css";
 import "@fontsource/inter/600.css";
 
 export { Form } from "./form";
+export type { Props as FormProps  } from "./form";

@@ -1,0 +1,19 @@
+.page {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  place-items: center;
+  min-height: 100vh;
+  width: 100%;
+  background-color: darkgray;
+}
+
+.section {
+  margin: 1rem auto;
+  padding: 0;
+}
+
+.link {
+  color: #0070f3;
+  font-weight: 500;
+}

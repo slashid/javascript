@@ -11,13 +11,22 @@ import { Footer } from "./footer";
 import { useConfiguration } from "../../hooks/use-configuration";
 import { FormProvider } from "../../context/form-context";
 import { useLastHandle } from "../../hooks/use-last-handle";
+import {
+  ConfigurationOverrides,
+  ConfigurationOverridesProps,
+} from "../configuration-overrides";
 
-export type Props = {
+export type Props = ConfigurationOverridesProps & {
   className?: string;
   onSuccess?: CreateFlowOptions["onSuccess"];
 };
 
-export const Form: React.FC<Props> = ({ className, onSuccess }) => {
+export const Form: React.FC<Props> = ({
+  className,
+  onSuccess,
+  factors,
+  text,
+}) => {
   const flowState = useFlowState({ onSuccess });
   const { theme } = useConfiguration();
   const { lastHandle } = useLastHandle();
@@ -33,19 +42,21 @@ export const Form: React.FC<Props> = ({ className, onSuccess }) => {
         className
       )}
     >
-      {flowState.status === "initial" && (
-        <FormProvider>
-          <Initial flowState={flowState} lastHandle={lastHandle} />
-        </FormProvider>
-      )}
-      {flowState.status === "authenticating" && (
-        <FormProvider>
-          <Authenticating flowState={flowState} />
-        </FormProvider>
-      )}
-      {flowState.status === "error" && <Error flowState={flowState} />}
-      {flowState.status === "success" && <Success flowState={flowState} />}
-      <Footer />
+      <ConfigurationOverrides text={text} factors={factors}>
+        {flowState.status === "initial" && (
+          <FormProvider>
+            <Initial flowState={flowState} lastHandle={lastHandle} />
+          </FormProvider>
+        )}
+        {flowState.status === "authenticating" && (
+          <FormProvider>
+            <Authenticating flowState={flowState} />
+          </FormProvider>
+        )}
+        {flowState.status === "error" && <Error flowState={flowState} />}
+        {flowState.status === "success" && <Success flowState={flowState} />}
+        <Footer />
+      </ConfigurationOverrides>
     </div>
   );
 };

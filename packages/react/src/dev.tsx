@@ -1,7 +1,7 @@
 import type { Factor } from "@slashid/slashid";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { MFA } from "./components/mfa";
+import { MultiFactorAuth } from "./components/multi-factor-auth";
 import { SlashIDProvider } from "./context/slash-id-context";
 import { ConfigurationProvider } from "./context/config-context";
 
@@ -34,7 +34,13 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         storeLastHandle={true}
       >
         <div className="formWrapper">
-          <MFA factors={mfaFactors} />
+          <MultiFactorAuth
+            steps={[
+              // @ts-expect-error TODO fix the enum related problems
+              { factors: factors },
+              { factors: mfaFactors },
+            ]}
+          />
         </div>
       </ConfigurationProvider>
     </SlashIDProvider>
