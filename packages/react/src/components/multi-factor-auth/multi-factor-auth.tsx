@@ -5,7 +5,7 @@ import { LoggedIn } from "../logged-in";
 import { LoggedOut } from "../logged-out";
 import { TextConfig } from "../text/constants";
 
-type StepConfig = {
+export type StepConfig = {
   factors: Factor[];
   text?: Partial<TextConfig>;
 };

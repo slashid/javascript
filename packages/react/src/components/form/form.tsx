@@ -29,7 +29,8 @@ export const Form: React.FC<Props> = ({
   text,
 }) => {
   const flowState = useFlowState({ onSuccess });
-  const { theme } = useConfiguration();
+  const config = useConfiguration();
+  const { theme } = config;
   const { lastHandle } = useLastHandle();
 
   return (
@@ -43,7 +44,14 @@ export const Form: React.FC<Props> = ({
         className
       )}
     >
-      <ConfigurationProvider text={text} factors={factors}>
+      <ConfigurationProvider
+        {...config}
+        text={{
+          ...config.text,
+          ...text,
+        }}
+        factors={factors ? factors : config.factors}
+      >
         {flowState.status === "initial" && (
           <FormProvider>
             <Initial flowState={flowState} lastHandle={lastHandle} />

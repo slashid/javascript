@@ -1,3 +1,4 @@
+import type { StepConfig } from "./multi-factor-auth";
 import { MultiFactorAuth } from "./multi-factor-auth";
 import userEvent from "@testing-library/user-event";
 import { render, screen, waitFor } from "@testing-library/react";
@@ -14,15 +15,20 @@ describe("#MultiFactorAuth", () => {
     const user = userEvent.setup();
     const mfaText = "TEST TITLE MFA";
 
+    const steps: StepConfig[] = [
+      { factors: [{ method: "email_link" }] },
+      {
+        factors: [{ method: "otp_via_sms" }],
+        text: {
+          "initial.title": mfaText,
+        },
+      },
+    ];
+
     // initial form state
     const { rerender } = render(
       <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
-        <MultiFactorAuth
-          factors={[{ method: "otp_via_sms" }]}
-          text={{
-            "initial.title": mfaText,
-          }}
-        />
+        <MultiFactorAuth steps={steps} />
       </TestSlashIDProvider>
     );
 
@@ -40,12 +46,7 @@ describe("#MultiFactorAuth", () => {
         user={TEST_USER}
         mfa={mfaMock}
       >
-        <MultiFactorAuth
-          factors={[{ method: "otp_via_sms" }]}
-          text={{
-            "initial.title": mfaText,
-          }}
-        />
+        <MultiFactorAuth steps={steps} />
       </TestSlashIDProvider>
     );
     await expect(screen.findByText(mfaText)).resolves.toBeInTheDocument();
