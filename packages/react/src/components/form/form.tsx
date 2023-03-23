@@ -13,9 +13,12 @@ import { useConfiguration } from "../../hooks/use-configuration";
 import { FormProvider } from "../../context/form-context";
 import { useLastHandle } from "../../hooks/use-last-handle";
 import { TextConfig } from "../text/constants";
-import { ConfigurationProvider } from "../../main";
+import {
+  ConfigurationOverrides,
+  ConfigurationOverridesProps,
+} from "../configuration-overrides";
 
-export type Props = {
+export type Props = ConfigurationOverridesProps & {
   factors?: Factor[];
   text?: Partial<TextConfig>;
   className?: string;
@@ -29,8 +32,7 @@ export const Form: React.FC<Props> = ({
   text,
 }) => {
   const flowState = useFlowState({ onSuccess });
-  const config = useConfiguration();
-  const { theme } = config;
+  const { theme } = useConfiguration();
   const { lastHandle } = useLastHandle();
 
   return (
@@ -44,14 +46,7 @@ export const Form: React.FC<Props> = ({
         className
       )}
     >
-      <ConfigurationProvider
-        {...config}
-        text={{
-          ...config.text,
-          ...text,
-        }}
-        factors={factors ? factors : config.factors}
-      >
+      <ConfigurationOverrides text={text} factors={factors}>
         {flowState.status === "initial" && (
           <FormProvider>
             <Initial flowState={flowState} lastHandle={lastHandle} />
@@ -65,7 +60,7 @@ export const Form: React.FC<Props> = ({
         {flowState.status === "error" && <Error flowState={flowState} />}
         {flowState.status === "success" && <Success flowState={flowState} />}
         <Footer />
-      </ConfigurationProvider>
+      </ConfigurationOverrides>
     </div>
   );
 };
