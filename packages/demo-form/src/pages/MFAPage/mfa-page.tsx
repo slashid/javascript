@@ -1,5 +1,5 @@
 import type { Factor } from "@slashid/slashid";
-import { MultiFactorAuth, ConfigurationProvider } from "@slashid/react";
+import { MultiFactorAuth } from "@slashid/react";
 import { PageLayout } from "../../components/PageLayout";
 
 import "@slashid/react/style.css";
@@ -14,9 +14,12 @@ export function MFAPage() {
       text="Component used for Multi-Factor Authentication - you can configure the number sequence of authentication steps."
     >
       <div style={{ width: 390 }}>
-        <ConfigurationProvider factors={firstStepFactors}>
-          <MultiFactorAuth factors={secondStepFactors} />
-        </ConfigurationProvider>
+        <MultiFactorAuth
+          steps={[
+            { factors: firstStepFactors },
+            { factors: secondStepFactors },
+          ]}
+        />
       </div>
     </PageLayout>
   );
