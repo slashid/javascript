@@ -3,12 +3,17 @@ import type { FormProps } from "../form";
 import { Form } from "../form";
 import { LoggedIn } from "../logged-in";
 import { LoggedOut } from "../logged-out";
-import { MFAProvider } from "../../context/config-context";
 import { TextConfig } from "../text/constants";
 
-type MultiFactorAuthProps = FormProps & {
+type StepConfig = {
   factors: Factor[];
   text?: Partial<TextConfig>;
+};
+
+type MultiFactorAuthProps = {
+  steps: StepConfig[];
+  className?: string;
+  onSuccess?: FormProps["onSuccess"];
 };
 
 /**
@@ -18,27 +23,42 @@ type MultiFactorAuthProps = FormProps & {
  * the user will _immediately_ be prompted with second step - one of the `factors`.
  */
 export function MultiFactorAuth({
-  factors,
-  text,
+  steps,
   className,
   onSuccess,
 }: MultiFactorAuthProps) {
+  if (!steps.length) {
+    return null;
+  }
+
+  const firstStep = steps[0];
+  const nextSteps = steps.slice(1);
+
   return (
     <>
       <LoggedOut>
-        <Form className={className} />
+        <Form
+          className={className}
+          factors={firstStep.factors}
+          text={firstStep.text}
+        />
       </LoggedOut>
-      <LoggedIn>
-        <MFAProvider
-          factors={factors}
-          text={{
-            "initial.title": "Multi-Factor Authentication",
-            ...(text ? text : {}),
-          }}
+      {nextSteps.map(({ factors, text }, index) => (
+        <LoggedIn
+          key={index}
+          withFactorMethods={(methods) => methods.length === index + 1}
         >
-          <Form className={className} onSuccess={onSuccess} />
-        </MFAProvider>
-      </LoggedIn>
+          <Form
+            className={className}
+            factors={factors}
+            text={{
+              "initial.title": "Multi-Factor Authentication",
+              ...(text ? text : {}),
+            }}
+            onSuccess={index === nextSteps.length + 1 ? onSuccess : undefined}
+          />
+        </LoggedIn>
+      ))}
     </>
   );
 }

@@ -34,7 +34,13 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         storeLastHandle={true}
       >
         <div className="formWrapper">
-          <MultiFactorAuth factors={mfaFactors} />
+          <MultiFactorAuth
+            steps={[
+              // @ts-expect-error TODO fix the enum related problems
+              { factors: factors },
+              { factors: mfaFactors },
+            ]}
+          />
         </div>
       </ConfigurationProvider>
     </SlashIDProvider>

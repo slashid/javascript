@@ -1,1 +1,1 @@
-export * from "./multi-factor-auth";
+export { MultiFactorAuth } from "./multi-factor-auth";

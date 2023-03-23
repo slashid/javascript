@@ -1,5 +1,5 @@
 import { Factor } from "@slashid/slashid";
-import { createContext, ReactNode, useMemo, useContext } from "react";
+import { createContext, ReactNode, useMemo } from "react";
 import { TEXT, TextConfig } from "../components/text/constants";
 import { SlashID } from "../components/icon/slashid";
 
@@ -52,33 +52,6 @@ export const ConfigurationProvider: React.FC<Props> = ({
       storeLastHandle: storeLastHandle || initialContextValue.storeLastHandle,
     };
   }, [text, factors, logo, theme, storeLastHandle]);
-
-  return (
-    <ConfigurationContext.Provider value={contextValue}>
-      {children}
-    </ConfigurationContext.Provider>
-  );
-};
-
-export const MFAProvider: React.FC<Props> = ({
-  text,
-  factors,
-  logo,
-  theme,
-  children,
-  storeLastHandle,
-}) => {
-  const ctx = useContext(ConfigurationContext);
-
-  const contextValue = useMemo(() => {
-    return {
-      text: text ? { ...TEXT, ...text } : ctx.text,
-      factors: factors || ctx.factors,
-      logo: logo || ctx.logo,
-      theme: theme || ctx.theme,
-      storeLastHandle: storeLastHandle || ctx.storeLastHandle,
-    };
-  }, [text, factors, logo, theme, storeLastHandle, ctx]);
 
   return (
     <ConfigurationContext.Provider value={contextValue}>

@@ -13,6 +13,7 @@ import { useConfiguration } from "../../hooks/use-configuration";
 import { FormProvider } from "../../context/form-context";
 import { useLastHandle } from "../../hooks/use-last-handle";
 import { TextConfig } from "../text/constants";
+import { ConfigurationProvider } from "../../main";
 
 export type Props = {
   factors?: Factor[];
@@ -22,13 +23,13 @@ export type Props = {
 };
 
 export const Form: React.FC<Props> = ({
-  factors,
-  text,
   className,
   onSuccess,
+  factors,
+  text,
 }) => {
   const flowState = useFlowState({ onSuccess });
-  const { theme } = useConfiguration({ factors, text });
+  const { theme } = useConfiguration();
   const { lastHandle } = useLastHandle();
 
   return (
@@ -42,19 +43,21 @@ export const Form: React.FC<Props> = ({
         className
       )}
     >
-      {flowState.status === "initial" && (
-        <FormProvider>
-          <Initial flowState={flowState} lastHandle={lastHandle} />
-        </FormProvider>
-      )}
-      {flowState.status === "authenticating" && (
-        <FormProvider>
-          <Authenticating flowState={flowState} />
-        </FormProvider>
-      )}
-      {flowState.status === "error" && <Error flowState={flowState} />}
-      {flowState.status === "success" && <Success flowState={flowState} />}
-      <Footer />
+      <ConfigurationProvider text={text} factors={factors}>
+        {flowState.status === "initial" && (
+          <FormProvider>
+            <Initial flowState={flowState} lastHandle={lastHandle} />
+          </FormProvider>
+        )}
+        {flowState.status === "authenticating" && (
+          <FormProvider>
+            <Authenticating flowState={flowState} />
+          </FormProvider>
+        )}
+        {flowState.status === "error" && <Error flowState={flowState} />}
+        {flowState.status === "success" && <Success flowState={flowState} />}
+        <Footer />
+      </ConfigurationProvider>
     </div>
   );
 };

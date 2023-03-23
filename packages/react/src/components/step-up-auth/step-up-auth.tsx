@@ -1,14 +1,9 @@
-import type { Factor } from "@slashid/slashid";
 import type { FormProps } from "../form";
 import { Form } from "../form";
-import { TextConfig } from "../text/constants";
 import { LoggedIn } from "../logged-in";
-import { MFAProvider } from "../../context/config-context";
 
-type StepUpAuthProps = FormProps & {
-  factors: Factor[];
-  text?: Partial<TextConfig>;
-};
+type StepUpAuthProps = FormProps;
+
 /**
  * Step-Up Authentication challenge for already logged in users to reauthenticate.
  * It can be used to grant access to high-risk resources or interaction with sensitive data.
@@ -21,16 +16,16 @@ export function StepUpAuth({
 }: StepUpAuthProps) {
   return (
     <LoggedIn>
-      <MFAProvider
+      <Form
+        className={className}
         factors={factors}
         text={{
           "initial.title": "Confirm it's you",
           "initial.subtitle": "Reauthenticate to proceed",
           ...(text ? text : {}),
         }}
-      >
-        <Form className={className} onSuccess={onSuccess} />
-      </MFAProvider>
+        onSuccess={onSuccess}
+      />
     </LoggedIn>
   );
 }
