@@ -5,7 +5,7 @@ import {
   Form,
   LoggedOut,
 } from "@slashid/react";
-import styles from "../../styles/Page.module.css";
+import { PageLayout } from "../../components/PageLayout";
 
 import "@slashid/react/style.css";
 
@@ -14,17 +14,18 @@ const secondStepFactors: Factor[] = [{ method: "sms_link" }];
 
 export function StepUpAuthPage() {
   return (
-    <main className={styles.page}>
-      <section className={styles.section}>
-        <div style={{ width: 390 }}>
-          <ConfigurationProvider factors={firstStepFactors}>
-            <LoggedOut>
-              <Form />
-            </LoggedOut>
-            <StepUpAuth factors={secondStepFactors} />
-          </ConfigurationProvider>
-        </div>
-      </section>
-    </main>
+    <PageLayout
+      title="<StepUpAuth>"
+      text="This component implements Step-Up Authentication flow - you can request already authenticated users to reauthenticate before proceeding."
+    >
+      <div style={{ width: 390 }}>
+        <ConfigurationProvider factors={firstStepFactors}>
+          <LoggedOut>
+            <Form />
+          </LoggedOut>
+          <StepUpAuth factors={secondStepFactors} />
+        </ConfigurationProvider>
+      </div>
+    </PageLayout>
   );
 }

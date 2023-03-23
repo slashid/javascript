@@ -1,6 +1,6 @@
 import type { Factor } from "@slashid/slashid";
 import { MultiFactorAuth, ConfigurationProvider } from "@slashid/react";
-import styles from "../../styles/Page.module.css";
+import { PageLayout } from "../../components/PageLayout";
 
 import "@slashid/react/style.css";
 
@@ -9,14 +9,15 @@ const secondStepFactors: Factor[] = [{ method: "sms_link" }];
 
 export function MFAPage() {
   return (
-    <main className={styles.page}>
-      <section className={styles.section}>
-        <div style={{ width: 390 }}>
-          <ConfigurationProvider factors={firstStepFactors}>
-            <MultiFactorAuth factors={secondStepFactors} />
-          </ConfigurationProvider>
-        </div>
-      </section>
-    </main>
+    <PageLayout
+      title="<MultiFactorAuth>"
+      text="Component used for Multi-Factor Authentication - you can configure the number sequence of authentication steps."
+    >
+      <div style={{ width: 390 }}>
+        <ConfigurationProvider factors={firstStepFactors}>
+          <MultiFactorAuth factors={secondStepFactors} />
+        </ConfigurationProvider>
+      </div>
+    </PageLayout>
   );
 }
