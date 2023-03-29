@@ -108,8 +108,8 @@ importers:
       '@remix-run/node': ^1.13.0
       '@remix-run/react': ^1.13.0
       '@remix-run/serve': ^1.13.0
-      '@slashid/react': workspace:*
-      '@slashid/slashid': ^3.3.2
+      '@slashid/react': workspace:1.5.0
+      '@slashid/slashid': link:/Users/kobeljic/projects/slashid/ng-evangelion/web/sdk
       '@types/react': ^18.0.25
       '@types/react-dom': ^18.0.8
       demo-form: workspace:*
@@ -123,7 +123,7 @@ importers:
       '@remix-run/react': 1.13.0_biqbaboplfbrettd7655fr4n2y
       '@remix-run/serve': 1.13.0
       '@slashid/react': link:../../packages/react
-      '@slashid/slashid': 3.3.2
+      '@slashid/slashid': link:../../../ng-evangelion/web/sdk
       demo-form: link:../../packages/demo-form
       isbot: 3.6.6
       react: 18.2.0

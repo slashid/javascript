@@ -12,7 +12,7 @@ export const SlashID = ({ children }: Props) => {
   return (
     <SlashIDProvider
       baseApiUrl="https://api.sandbox.slashid.com"
-      oid={process.env.SLASHID_ORGANIZATION_ID ?? ""}
+      oid="817b1d29-3800-bc0c-36eb-83ab632f66a5"
       tokenStorage="localStorage"
     >
       <ConfigurationProvider factors={factors}>

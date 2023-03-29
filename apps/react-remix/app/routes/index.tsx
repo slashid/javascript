@@ -1,9 +1,10 @@
 import type { LinksFunction } from "@remix-run/node";
-import { LoggedOut, LoggedIn, Form } from "@slashid/react";
-import { Profile } from "demo-form";
+import { LoggedOut, LoggedIn, Form, useSlashID } from "@slashid/react";
 
 import slashIDstyles from "@slashid/react/style.css";
 import profileStyles from "demo-form/style.css";
+import { useNavigate } from "@remix-run/react";
+import { useEffect } from "react";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: slashIDstyles },
@@ -11,6 +12,15 @@ export const links: LinksFunction = () => [
 ];
 
 export default function Index() {
+  const navigate = useNavigate();
+  const { user } = useSlashID();
+
+  useEffect(() => {
+    if (user) {
+      navigate("./profile");
+    }
+  }, [user]);
+
   return (
     <div className="index">
       <LoggedOut>
@@ -18,9 +28,6 @@ export default function Index() {
           <Form />
         </div>
       </LoggedOut>
-      <LoggedIn>
-        <Profile />
-      </LoggedIn>
     </div>
   );
 }
