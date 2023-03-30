@@ -47,15 +47,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: pnpm/action-setup@v2.2.4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: ${{ matrix.node-version }}
+          cache: "pnpm"
+          node-version-file: ".nvmrc"
+          registry-url: "https://registry.npmjs.org/"
+
       - name: Install dependencies
         run: pnpm install
+
       - name: Install Playwright Browsers
         run: pnpm exec playwright install --with-deps
+
       - name: Run Playwright tests
-        run: pnpm exec playwright test
+        run: pnpm test:e2e
       - uses: actions/upload-artifact@v3
         if: always()
         with:
