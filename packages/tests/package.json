@@ -1,0 +1,17 @@
+{
+  "name": "@slashid/tests",
+  "version": "0.0.1",
+  "description": "Tests setup for /id projects",
+  "main": "index.js",
+  "scripts": {},
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.32.1",
+    "@types/node": "18.11.9",
+    "tsconfig": "workspace:*"
+  },
+  "files": [
+    "playwright.config.ts"
+  ]
+}
