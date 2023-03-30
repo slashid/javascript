@@ -71,8 +71,10 @@ importers:
 
   apps/react-nextjs:
     specifiers:
+      '@playwright/test': ^1.32.1
       '@slashid/react': workspace:*
       '@slashid/slashid': ^3.3.2
+      '@slashid/tests': workspace:*
       '@types/node': 18.11.9
       '@types/react': 18.0.25
       '@types/react-dom': 18.0.7
@@ -88,6 +90,7 @@ importers:
     dependencies:
       '@slashid/react': link:../../packages/react
       '@slashid/slashid': 3.3.2
+      '@slashid/tests': link:../../packages/tests
       '@types/node': 18.11.9
       '@types/react': 18.0.25
       '@types/react-dom': 18.0.7
@@ -100,6 +103,8 @@ importers:
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       typescript: 4.8.4
+    devDependencies:
+      '@playwright/test': 1.32.1
 
   apps/react-remix:
     specifiers:
@@ -248,6 +253,16 @@ importers:
       tsconfig: link:../tsconfig
       vite: 3.1.8
       vitest: 0.25.2_jsdom@20.0.2
+
+  packages/tests:
+    specifiers:
+      '@playwright/test': ^1.32.1
+      '@types/node': 18.11.9
+      tsconfig: workspace:*
+    devDependencies:
+      '@playwright/test': 1.32.1
+      '@types/node': 18.11.9
+      tsconfig: link:../tsconfig
 
   packages/tsconfig:
     specifiers: {}
@@ -3100,6 +3115,17 @@ packages:
       picocolors: 1.0.0
       tiny-glob: 0.2.9
       tslib: 2.5.0
+    dev: true
+
+  /@playwright/test/1.32.1:
+    resolution: {integrity: sha512-FTwjCuhlm1qHUGf4hWjfr64UMJD/z0hXYbk+O387Ioe6WdyZQ+0TBDAc6P+pHjx2xCv1VYNgrKbYrNixFWy4Dg==}
+    engines: {node: '>=14'}
+    hasBin: true
+    dependencies:
+      '@types/node': 18.11.9
+      playwright-core: 1.32.1
+    optionalDependencies:
+      fsevents: 2.3.2
     dev: true
 
   /@radix-ui/number/1.0.0:
@@ -10628,6 +10654,12 @@ packages:
       jsonc-parser: 3.2.0
       mlly: 1.1.1
       pathe: 1.1.0
+    dev: true
+
+  /playwright-core/1.32.1:
+    resolution: {integrity: sha512-KZYUQC10mXD2Am1rGlidaalNGYk3LU1vZqqNk0gT4XPty1jOqgup8KDP8l2CUlqoNKhXM5IfGjWgW37xvGllBA==}
+    engines: {node: '>=14'}
+    hasBin: true
     dev: true
 
   /pngjs/5.0.0:
