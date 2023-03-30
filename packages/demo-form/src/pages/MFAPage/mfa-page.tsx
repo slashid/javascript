@@ -1,8 +1,9 @@
 import type { Factor } from "@slashid/slashid";
-import { MultiFactorAuth } from "@slashid/react";
+import { MultiFactorAuth, LoggedIn } from "@slashid/react";
 import { PageLayout } from "../../components/PageLayout";
 
 import "@slashid/react/style.css";
+import { User } from "../../components/User";
 
 const firstStepFactors: Factor[] = [{ method: "email_link" }];
 const secondStepFactors: Factor[] = [{ method: "sms_link" }];
@@ -21,6 +22,14 @@ export function MFAPage() {
           ]}
         />
       </div>
+      <LoggedIn
+        withFactorMethods={(factors) => {
+          console.log(factors);
+          return factors.length === 2;
+        }}
+      >
+        <User />
+      </LoggedIn>
     </PageLayout>
   );
 }

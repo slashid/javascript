@@ -73,7 +73,7 @@ importers:
     specifiers:
       '@playwright/test': ^1.32.1
       '@slashid/react': workspace:*
-      '@slashid/slashid': ^3.3.2
+      '@slashid/slashid': ^3.4.0
       '@slashid/tests': workspace:*
       '@types/node': 18.11.9
       '@types/react': 18.0.25
@@ -89,7 +89,7 @@ importers:
       typescript: ^4.6.4
     dependencies:
       '@slashid/react': link:../../packages/react
-      '@slashid/slashid': 3.3.2
+      '@slashid/slashid': 3.4.0
       '@slashid/tests': link:../../packages/tests
       '@types/node': 18.11.9
       '@types/react': 18.0.25
@@ -4850,6 +4850,22 @@ packages:
       regenerator-runtime: 0.13.11
       url: 0.11.0
       uuid: 8.3.2
+
+  /@slashid/slashid/3.4.0:
+    resolution: {integrity: sha512-/RaJM4vgIajvYj6urfmjTc5PksN0wQQNxpRGNc7Q71faMYSJpdhkpNTN+/OihF/cOeQS2qRm16SUFnWDUB3YVw==}
+    dependencies:
+      '@changesets/cli': 2.26.0
+      '@types/uuid': 8.3.4
+      changeset: 0.2.6
+      docdash: 1.2.0
+      jwt-decode: 3.1.2
+      mitt: 3.0.0
+      qrcode: 1.5.1
+      querystring-es3: 0.2.1
+      regenerator-runtime: 0.13.11
+      url: 0.11.0
+      uuid: 8.3.2
+    dev: false
 
   /@swc/helpers/0.4.11:
     resolution: {integrity: sha512-rEUrBSGIoSFuYxwBYtlUFMlE2CwGhmW+w9355/5oduSw8e5h2+Tj4UrAGNNgP9915++wj5vkQo0UuOBqOAq4nw==}

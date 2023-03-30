@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@slashid/react": "workspace:*",
-    "@slashid/slashid": "^3.3.2",
+    "@slashid/slashid": "^3.4.0",
     "@slashid/tests": "workspace:*",
     "@types/node": "18.11.9",
     "@types/react": "18.0.25",

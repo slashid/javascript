@@ -125,6 +125,7 @@ export function createFlow(opts: CreateFlowOptions = {}) {
 
                 setState(createSuccessState());
               } catch (e) {
+                console.error(e);
                 setState(createErrorState(send));
               }
             }
@@ -153,6 +154,7 @@ export function createFlow(opts: CreateFlowOptions = {}) {
 
                   setState(createSuccessState());
                 } catch (e) {
+                  console.error(e);
                   setState(createErrorState(send));
                 }
               }
