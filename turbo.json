@@ -12,7 +12,8 @@
       "outputs": []
     },
     "test:e2e": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["build"],
+      "outputs": []
     },
     "build": {
       "dependsOn": ["^build", "test:types", "lint"],
