@@ -42,32 +42,14 @@ jobs:
       - name: Unit tests
         run: pnpm test:unit
 
-  test-e2e:
-    timeout-minutes: 60
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: pnpm/action-setup@v2.2.4
-
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: "pnpm"
-          node-version-file: ".nvmrc"
-          registry-url: "https://registry.npmjs.org/"
-
-      - name: Install dependencies
-        run: pnpm install
-
       - name: Install Playwright Browsers
         run: pnpx playwright install --with-deps
 
-      - name: Run Playwright tests
+      - name: E2E tests
         run: pnpm test:e2e
       - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: playwright-report
           path: playwright-report/
-          retention-days: 30
+          retention-days: 5
