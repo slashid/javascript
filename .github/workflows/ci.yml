@@ -54,11 +54,6 @@ jobs:
 
       - name: Install Playwright Browsers
         run: pnpx playwright install --with-deps
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
-
-      - name: Install Playwright deps
-        run: pnpx playwright install-deps
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
 
       - name: E2E tests
         run: pnpm test:e2e
