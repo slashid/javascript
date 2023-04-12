@@ -192,7 +192,6 @@ importers:
 
   packages/react:
     specifiers:
-      '@fontsource/inter': ^4.5.14
       '@radix-ui/react-select': ^1.1.2
       '@radix-ui/react-tabs': ^1.0.1
       '@slashid/slashid': ^3.3.2
@@ -220,7 +219,6 @@ importers:
       vite: ^3.1.0
       vitest: ^0.25.2
     dependencies:
-      '@fontsource/inter': 4.5.14
       '@radix-ui/react-select': 1.1.2_sd644w7yfdyrvmykkrrqd5kd4a
       '@radix-ui/react-tabs': 1.0.1_biqbaboplfbrettd7655fr4n2y
       '@vanilla-extract/css': 1.9.2
