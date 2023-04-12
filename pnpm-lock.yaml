@@ -73,7 +73,7 @@ importers:
     specifiers:
       '@playwright/test': ^1.32.1
       '@slashid/react': workspace:*
-      '@slashid/slashid': ^3.4.0
+      '@slashid/slashid': ^3.6.0
       '@slashid/tests': workspace:*
       '@types/node': 18.11.9
       '@types/react': 18.0.25
@@ -89,7 +89,7 @@ importers:
       typescript: ^4.6.4
     dependencies:
       '@slashid/react': link:../../packages/react
-      '@slashid/slashid': 3.4.0
+      '@slashid/slashid': 3.6.0
       '@slashid/tests': link:../../packages/tests
       '@types/node': 18.11.9
       '@types/react': 18.0.25
@@ -4851,8 +4851,8 @@ packages:
       url: 0.11.0
       uuid: 8.3.2
 
-  /@slashid/slashid/3.4.0:
-    resolution: {integrity: sha512-/RaJM4vgIajvYj6urfmjTc5PksN0wQQNxpRGNc7Q71faMYSJpdhkpNTN+/OihF/cOeQS2qRm16SUFnWDUB3YVw==}
+  /@slashid/slashid/3.6.0:
+    resolution: {integrity: sha512-KC0Esi8rfsF7b+dCIqgDZD+KV8HDCGcJcX4rAas84/5kVh4RbXg53alnq7LbtmrLzB1w4wchAGlodzUFZvpffQ==}
     dependencies:
       '@changesets/cli': 2.26.0
       '@types/uuid': 8.3.4
