@@ -14,7 +14,7 @@ export function MFAPage() {
       title="<MultiFactorAuth>"
       text="Component used for Multi-Factor Authentication - you can configure the number sequence of authentication steps."
     >
-      <div style={{ width: 390 }}>
+      <div style={{ width: 390, margin: "0 auto" }}>
         <MultiFactorAuth
           steps={[
             { factors: firstStepFactors },
@@ -22,12 +22,7 @@ export function MFAPage() {
           ]}
         />
       </div>
-      <LoggedIn
-        withFactorMethods={(factors) => {
-          console.log(factors);
-          return factors.length === 2;
-        }}
-      >
+      <LoggedIn>
         <User />
       </LoggedIn>
     </PageLayout>

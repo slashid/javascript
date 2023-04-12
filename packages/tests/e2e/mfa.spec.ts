@@ -103,10 +103,8 @@ test("MFA user flow", async ({ page }) => {
     page.getByTestId("sid-form-initial-submit-button").click(),
   ]);
 
-  await page.screenshot({ path: "screenshot.png" });
-
   // TODO show user attributes
-  await expect(page.getByTestId("sid-user-object")).toContainText(
+  await expect(page.getByTestId("sid-user-token")).toContainText(
     USER_TOKEN_TWO_FACTORS
   );
 });
