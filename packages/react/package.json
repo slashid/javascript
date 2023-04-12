@@ -40,7 +40,6 @@
     "test:unit:watch": "vitest"
   },
   "dependencies": {
-    "@fontsource/inter": "^4.5.14",
     "@radix-ui/react-select": "^1.1.2",
     "@radix-ui/react-tabs": "^1.0.1",
     "@vanilla-extract/css": "^1.9.2",
