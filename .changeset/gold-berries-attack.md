@@ -2,4 +2,4 @@
 "@slashid/react": patch
 ---
 
-Add sans-serif font as a fallback
+Use sans-serif as a default font

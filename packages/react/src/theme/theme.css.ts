@@ -119,7 +119,7 @@ export const darkThemeColors = {
 export const lightTheme = {
   color: lightThemeColors,
   font: {
-    fontFamily: "Inter, sans-serif",
+    fontFamily: "sans-serif",
   },
   border: {
     radius: "16px",
