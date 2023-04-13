@@ -1,5 +1,12 @@
 # @slashid/react
 
+## 1.5.1
+
+### Patch Changes
+
+- 6142540: Use sans-serif as a default font
+- ae032a7: Reduce CSS bundle size - exclude Inter font
+
 ## 1.5.0
 
 ### Minor Changes
