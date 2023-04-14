@@ -1,5 +1,9 @@
 /** @type {import('@remix-run/dev').AppConfig} */
 module.exports = {
   ignoredRouteFiles: ["**/.*"],
-  serverDependenciesToBundle: [/^@slashid\/react/, /^demo-form/],
+  serverDependenciesToBundle: [
+    "@slashid/slashid",
+    "@slashid/react",
+    "demo-form",
+  ],
 };
