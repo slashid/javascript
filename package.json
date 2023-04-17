@@ -16,6 +16,7 @@
     "lint": "turbo run lint",
     "test:types": "turbo run test:types",
     "test:unit": "turbo run test:unit",
+    "test:e2e": "turbo run test:e2e",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "changeset": "changeset",
     "ci:publish": "pnpm build && changeset publish"

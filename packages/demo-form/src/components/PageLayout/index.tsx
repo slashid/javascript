@@ -16,17 +16,19 @@ export function PageLayout({ title, text, children, docsUrl }: Props) {
         <h1>{title}</h1>
         <p>{text}</p>
       </section>
-      <footer className={styles.section}>{children}</footer>
-      {docsUrl ? (
-        <a
-          href={docsUrl}
-          target="_blank"
-          rel="noreferrer"
-          className={styles.link}
-        >
-          Read the docs
-        </a>
-      ) : null}
+      <section className={styles.section}>{children}</section>
+      <footer className={styles.section}>
+        {docsUrl ? (
+          <a
+            href={docsUrl}
+            target="_blank"
+            rel="noreferrer"
+            className={styles.link}
+          >
+            Read the docs
+          </a>
+        ) : null}
+      </footer>
     </main>
   );
 }
