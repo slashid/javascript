@@ -1,5 +1,12 @@
 # react-nextjs
 
+## 0.1.18
+
+### Patch Changes
+
+- Updated dependencies [49cf222]
+  - @slashid/tests@0.0.2
+
 ## 0.1.17
 
 ### Patch Changes
