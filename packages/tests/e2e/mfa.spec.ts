@@ -1,5 +1,4 @@
 import { test, expect } from "@playwright/test";
-import { request } from "http";
 
 test("load <MultiFactorAuth> demo page", async ({ page }) => {
   await page.goto("http://localhost:3000/mfa");
