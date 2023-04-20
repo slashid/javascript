@@ -63,3 +63,8 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 5
+
+      - name: Bundle size check
+        run: pnpm danger ci
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
