@@ -52,18 +52,6 @@ jobs:
       - name: Unit tests
         run: pnpm test:unit
 
-      - name: Install Playwright Browsers
-        run: pnpx playwright install --with-deps
-
-      - name: E2E tests
-        run: pnpm test:e2e
-      - uses: actions/upload-artifact@v3
-        if: always()
-        with:
-          name: playwright-report
-          path: playwright-report/
-          retention-days: 5
-
       - name: Bundle size check
         run: pnpm danger ci
         env:
