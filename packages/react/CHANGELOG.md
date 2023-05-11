@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 1.5.3
+
+### Patch Changes
+
+- d496aa1: Add config to hide branding banner
+
 ## 1.5.2
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # react-nextjs
 
+## 0.1.20
+
+### Patch Changes
+
+- Updated dependencies [d496aa1]
+  - @slashid/react@1.5.3
+  - demo-form@0.0.19
+
 ## 0.1.19
 
 ### Patch Changes
