@@ -28,7 +28,7 @@ export const Form: React.FC<Props> = ({
   text,
 }) => {
   const flowState = useFlowState({ onSuccess });
-  const { theme } = useConfiguration();
+  const { theme, showBanner } = useConfiguration();
   const { lastHandle } = useLastHandle();
 
   return (
@@ -55,7 +55,7 @@ export const Form: React.FC<Props> = ({
         )}
         {flowState.status === "error" && <Error flowState={flowState} />}
         {flowState.status === "success" && <Success flowState={flowState} />}
-        <Footer />
+        {showBanner ? <Footer /> : null}
       </ConfigurationOverrides>
     </div>
   );

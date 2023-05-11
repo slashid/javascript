@@ -12,6 +12,7 @@ export interface IConfigurationContext {
   logo: Logo;
   theme: Theme;
   storeLastHandle: boolean;
+  showBanner: boolean;
 }
 
 export const initialContextValue: IConfigurationContext = {
@@ -20,6 +21,7 @@ export const initialContextValue: IConfigurationContext = {
   logo: <SlashID />,
   theme: "auto",
   storeLastHandle: false,
+  showBanner: true,
 };
 
 export const ConfigurationContext =
@@ -32,6 +34,7 @@ type Props = {
   logo?: Logo;
   theme?: Theme;
   storeLastHandle?: boolean;
+  showBanner?: boolean;
   children: ReactNode;
 };
 
@@ -42,6 +45,7 @@ export const ConfigurationProvider: React.FC<Props> = ({
   theme,
   children,
   storeLastHandle,
+  showBanner = true,
 }) => {
   const contextValue = useMemo(() => {
     return {
@@ -50,8 +54,9 @@ export const ConfigurationProvider: React.FC<Props> = ({
       logo: logo || initialContextValue.logo,
       theme: theme || initialContextValue.theme,
       storeLastHandle: storeLastHandle || initialContextValue.storeLastHandle,
+      showBanner: showBanner,
     };
-  }, [text, factors, logo, theme, storeLastHandle]);
+  }, [text, factors, logo, theme, storeLastHandle, showBanner]);
 
   return (
     <ConfigurationContext.Provider value={contextValue}>

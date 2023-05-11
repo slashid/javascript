@@ -361,4 +361,35 @@ describe("<Form /> configuration", () => {
       screen.getByPlaceholderText(TEXT["initial.handle.phone.placeholder"])
     ).toHaveValue(phoneNumber);
   });
+
+  test("show banner - default", () => {
+    render(
+      <TestSlashIDProvider sdkState="ready">
+        <ConfigurationProvider
+          storeLastHandle={true}
+          factors={[{ method: "email_link" }, { method: "otp_via_sms" }]}
+        >
+          <Form />
+        </ConfigurationProvider>
+      </TestSlashIDProvider>
+    );
+
+    expect(screen.getByText(TEXT["footer.branding"])).toBeInTheDocument();
+  });
+
+  test("hide banner", () => {
+    render(
+      <TestSlashIDProvider sdkState="ready">
+        <ConfigurationProvider
+          storeLastHandle={true}
+          factors={[{ method: "email_link" }, { method: "otp_via_sms" }]}
+          showBanner={false}
+        >
+          <Form />
+        </ConfigurationProvider>
+      </TestSlashIDProvider>
+    );
+
+    expect(screen.queryByText(TEXT["footer.branding"])).not.toBeInTheDocument();
+  });
 });
