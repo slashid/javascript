@@ -40,7 +40,7 @@ export const TEXT = {
   "error.title": "Something went wrong...",
   "error.subtitle":
     "There has been an error while submitting your form. Please try again.",
-  "factor.webauthn": "Webauthn",
+  "factor.webauthn": "Passkeys",
   "factor.otpViaSms": "OTP via SMS",
   "factor.emailLink": "Email link",
   "factor.smsLink": "SMS link",
