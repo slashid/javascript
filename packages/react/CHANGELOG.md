@@ -1,5 +1,12 @@
 # @slashid/react
 
+## 1.5.4
+
+### Patch Changes
+
+- 092f021: Adjust wording to more user-friendly (WebAuthn -> Passkeys)
+- 6e8e9cc: Added a configuration option for enabling the Analytics API
+
 ## 1.5.3
 
 ### Patch Changes
