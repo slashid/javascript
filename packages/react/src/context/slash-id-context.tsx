@@ -216,7 +216,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
       try {
         const tempUser = await sid.getUserFromURL();
         if (tempUser) {
-          storeUser(tempUser);
+          storeUser(new User(tempUser.token));
           return true;
         } else {
           return false;
