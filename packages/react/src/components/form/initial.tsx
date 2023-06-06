@@ -93,14 +93,15 @@ const Oidc: React.FC<OidcProps> = ({ providers, handleClick }) => {
   );
 };
 
-const FACTOR_LABEL_MAP: Record<Factor["method"], TextConfigKey> = {
+const FACTOR_LABEL_MAP: Record<
+  Exclude<Factor["method"], "webauthn_via_email" | "webauthn_via_sms">,
+  TextConfigKey
+> = {
   email_link: "factor.emailLink",
   otp_via_sms: "factor.otpViaSms",
   sms_link: "factor.smsLink",
   webauthn: "factor.webauthn",
   oidc: "",
-  webauthn_via_email: "",
-  webauthn_via_sms: "",
 };
 
 type HandleFormProps = {

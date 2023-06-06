@@ -18,6 +18,7 @@ export interface SlashIDProviderProps {
   tokenStorage?: StorageOption;
   baseApiUrl?: string;
   sdkUrl?: string;
+  analyticsEnabled?: boolean;
   children: React.ReactNode;
 }
 
@@ -69,6 +70,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
   tokenStorage = "memory",
   baseApiUrl,
   sdkUrl,
+  analyticsEnabled = false,
   children,
 }) => {
   const [state, setState] = useState<SDKState>(initialContextValue.sdkState);
@@ -175,6 +177,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
         oid,
         ...(baseApiUrl && { baseURL: baseApiUrl }),
         ...(sdkUrl && { sdkURL: sdkUrl }),
+        ...(analyticsEnabled && { analyticsEnabled }),
       });
       const storage = createStorage(tokenStorage);
 
@@ -183,7 +186,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
 
       setState("loaded");
     }
-  }, [oid, baseApiUrl, sdkUrl, state, tokenStorage]);
+  }, [oid, baseApiUrl, sdkUrl, state, tokenStorage, analyticsEnabled]);
 
   useEffect(() => {
     if (state !== "initial") {
@@ -213,7 +216,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
       try {
         const tempUser = await sid.getUserFromURL();
         if (tempUser) {
-          storeUser(tempUser);
+          storeUser(new User(tempUser.token));
           return true;
         } else {
           return false;
