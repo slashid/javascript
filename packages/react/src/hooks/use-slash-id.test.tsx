@@ -18,14 +18,14 @@ const TestComponent = () => {
 };
 
 describe("useSlashID", () => {
-  test("should return a user instance when a valid token is passed to the SlashIDProvider", async () => {
+  test("should return a user instance when a valid initial token is passed to the SlashIDProvider", async () => {
     render(
-      <SlashIDProvider token={TEST_TOKEN} oid={TEST_ORG_ID}>
+      <SlashIDProvider initialToken={TEST_TOKEN} oid={TEST_ORG_ID}>
         <TestComponent />
       </SlashIDProvider>
     );
 
-    // expect.assertions(1);
+    expect.assertions(1);
     await expect(
       screen.findByText(TEST_PERSON_ID)
     ).resolves.toBeInTheDocument();

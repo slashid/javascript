@@ -2,4 +2,4 @@
 "@slashid/react": minor
 ---
 
-Add the "token" prop to the SlashIDProvider
+Add the "initialToken" prop to the SlashIDProvider
