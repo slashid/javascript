@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 1.6.0
+
+### Minor Changes
+
+- 8f13b41: Add the "initialToken" prop to the SlashIDProvider
+
 ## 1.5.4
 
 ### Patch Changes
