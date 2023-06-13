@@ -15,6 +15,7 @@ export type StorageOption = "memory" | "localStorage";
 
 export interface SlashIDProviderProps {
   oid: string;
+  token?: string;
   tokenStorage?: StorageOption;
   baseApiUrl?: string;
   sdkUrl?: string;
@@ -67,6 +68,7 @@ const createStorage = (storageType: StorageOption) => {
 
 export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
   oid,
+  token,
   tokenStorage = "memory",
   baseApiUrl,
   sdkUrl,
@@ -244,10 +246,14 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
     };
 
     const tryImmediateLogin = async () => {
-      const isDone = await loginDirectIdIfPresent();
+      if (token) {
+        storeUser(new User(token));
+      } else {
+        const isDone = await loginDirectIdIfPresent();
 
-      if (!isDone) {
-        await loginStoredToken();
+        if (!isDone) {
+          await loginStoredToken();
+        }
       }
 
       setState("ready");
@@ -255,7 +261,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
 
     setState("retrievingToken");
     tryImmediateLogin();
-  }, [state, storeUser, validateToken]);
+  }, [state, token, storeUser, validateToken]);
 
   const contextValue = useMemo(() => {
     if (state === "initial") {
