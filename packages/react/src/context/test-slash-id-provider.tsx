@@ -10,6 +10,10 @@ type TestProviderProps = Partial<ISlashIDContext> & {
   children: React.ReactNode;
 };
 
+export const TEST_ORG_ID = "ad5399ea-4e88-b04a-16ca-82958c955740";
+export const TEST_PERSON_ID =
+  "pid:01e43f2419fe994879a64564cd76ab30a8d2ea95e89987c8185cef5ab8f8adf8de643a289c:2";
+
 const TEST_TOKEN_HEADER = "eyJhbGciOiJSUzI1NiIsICJraWQiOiJ2RXBzRmcifQ";
 const TEST_TOKEN_PAYLOAD_DECODED = {
   authenticated_methods: ["email_link"],
@@ -19,9 +23,8 @@ const TEST_TOKEN_PAYLOAD_DECODED = {
   iat: 1668767017,
   iss: "https://sandbox.slashid.dev",
   jti: "039bbb27c07b69b21762ec0a1a9c2dc5",
-  oid: "ad5399ea-4e88-b04a-16ca-82958c955740",
-  user_id:
-    "pid:01e43f2419fe994879a64564cd76ab30a8d2ea95e89987c8185cef5ab8f8adf8de643a289c:2",
+  oid: TEST_ORG_ID,
+  person_id: TEST_PERSON_ID,
 };
 
 const TEST_TOKEN_SIGNATURE =
