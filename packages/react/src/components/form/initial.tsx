@@ -128,7 +128,7 @@ const HandleForm: React.FC<HandleFormProps> = ({
   const [flag, setFlag] = useState<Flag>(
     findFlag(parsedPhoneNumber?.countryCode ?? "") ?? GB_FLAG
   );
-  const [factor, setFactor] = useState<Factor>(filteredFactors[0]);
+  const [factor, setFactor] = useState<Factor>(() => filteredFactors[0]);
   const { text } = useConfiguration();
 
   useEffect(() => {
