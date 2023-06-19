@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 1.6.2
+
+### Patch Changes
+
+- 8af4be9: Make sure the form stays in sync with the dynamic config
+
 ## 1.6.1
 
 ### Patch Changes
