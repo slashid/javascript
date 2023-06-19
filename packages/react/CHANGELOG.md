@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 1.6.1
+
+### Patch Changes
+
+- a08bd1c: Make sure the form reacts properly to dynamic configuration
+
 ## 1.6.0
 
 ### Minor Changes
