@@ -163,7 +163,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
   );
 
   const validateToken = useCallback(async (token: string): Promise<boolean> => {
-    const tokenUser = new User(token);
+    const tokenUser = new User(token, sidRef.current!);
     try {
       const ret = await tokenUser.validateToken();
       return ret.valid;
@@ -195,7 +195,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
       const slashId = sidRef.current!;
       // @ts-expect-error TODO expose the type
       const getUserFromEvent = ({ token }) => {
-        const userFromToken = new User(token);
+        const userFromToken = new User(token, sidRef.current!);
         if (!user || userFromToken.token !== user.token) {
           setUser(userFromToken);
         }
@@ -218,7 +218,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
       try {
         const tempUser = await sid.getUserFromURL();
         if (tempUser) {
-          storeUser(new User(tempUser.token));
+          storeUser(new User(tempUser.token, sidRef.current!));
           return true;
         } else {
           return false;
@@ -238,7 +238,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
           return false;
         }
 
-        storeUser(new User(storedToken));
+        storeUser(new User(storedToken, sidRef.current!));
         return true;
       } else {
         return false;
@@ -247,7 +247,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
 
     const tryImmediateLogin = async () => {
       if (initialToken) {
-        storeUser(new User(initialToken));
+        storeUser(new User(initialToken, sidRef.current!));
       } else {
         const isDone = await loginDirectIdIfPresent();
 
