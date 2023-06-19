@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 1.6.3
+
+### Patch Changes
+
+- c386900: Make sure the User options are inherited from the SDK
+
 ## 1.6.2
 
 ### Patch Changes
