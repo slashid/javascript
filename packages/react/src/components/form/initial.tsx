@@ -118,8 +118,9 @@ const HandleForm: React.FC<HandleFormProps> = ({
   handleSubmit,
   defaultValue,
 }) => {
-  const filteredFactors = filterFactors(factors, handleType).filter(
-    (f) => !isFactorOidc(f)
+  const filteredFactors = useMemo(
+    () => filterFactors(factors, handleType).filter((f) => !isFactorOidc(f)),
+    [factors, handleType]
   );
   const shouldRenderFactorDropdown = filteredFactors.length > 1;
   const { registerField, registerSubmit, values, status, resetForm } =
@@ -128,8 +129,12 @@ const HandleForm: React.FC<HandleFormProps> = ({
   const [flag, setFlag] = useState<Flag>(
     findFlag(parsedPhoneNumber?.countryCode ?? "") ?? GB_FLAG
   );
-  const [factor, setFactor] = useState<Factor>(() => filteredFactors[0]);
+  const [factor, setFactor] = useState<Factor>(filteredFactors[0]);
   const { text } = useConfiguration();
+
+  useEffect(() => {
+    setFactor(filteredFactors[0]);
+  }, [filteredFactors]);
 
   useEffect(() => {
     return resetForm;
