@@ -33,7 +33,7 @@ export interface ISlashIDContext {
   sid: SlashID | undefined;
   user: User | undefined;
   sdkState: SDKState;
-  logOut: () => undefined;
+  logOut: () => Promise<void>;
   logIn: LogIn;
   mfa: MFA;
   validateToken: (token: string) => Promise<boolean>;
@@ -43,7 +43,7 @@ export const initialContextValue = {
   sid: undefined,
   user: undefined,
   sdkState: "initial" as const,
-  logOut: () => undefined,
+  logOut: () => Promise.reject("NYI"),
   logIn: () => Promise.reject("NYI"),
   mfa: () => Promise.reject("NYI"),
   validateToken: () => Promise.resolve(false),
@@ -77,8 +77,18 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
 }) => {
   const [state, setState] = useState<SDKState>(initialContextValue.sdkState);
   const [user, setUser] = useState<User | undefined>(undefined);
+  const [resolveLogout, setResolveLogout] = useState<
+    ((val: unknown) => void) | null
+  >(null);
   const storageRef = useRef<Storage | undefined>(undefined);
   const sidRef = useRef<SlashID | undefined>(undefined);
+
+  useEffect(() => {
+    if (state === "ready" && resolveLogout && user === undefined) {
+      resolveLogout(null);
+      setResolveLogout(null);
+    }
+  }, [resolveLogout, state, user]);
 
   const storeUser = useCallback(
     (newUser: User) => {
@@ -92,7 +102,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
     [state]
   );
 
-  const logOut = useCallback((): undefined => {
+  const logOut = useCallback(async (): Promise<void> => {
     if (state === "initial") {
       return;
     }
@@ -102,8 +112,13 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
       return;
     }
 
-    user.logout();
-    setUser(undefined);
+    await Promise.all([
+      user.logout(),
+      new Promise((resolve) => {
+        setUser(undefined);
+        setResolveLogout(resolve);
+      }),
+    ]);
   }, [user, state]);
 
   const logIn = useCallback(
@@ -135,7 +150,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
         return user;
       } catch (e) {
         setState("ready");
-        logOut();
+        await logOut();
         throw e;
       }
     },
