@@ -69,7 +69,6 @@ function Config() {
 
 const getFactor = (email: string) => {
   const domain = email.split("@")[1];
-  console.log({ email, domain });
 
   if (domain === "slashid.dev") {
     return {
