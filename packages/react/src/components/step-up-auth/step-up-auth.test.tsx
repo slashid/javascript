@@ -6,6 +6,7 @@ import {
 } from "../../context/test-slash-id-provider";
 import userEvent from "@testing-library/user-event";
 import { inputPhone } from "../test-utils";
+import { SDKState } from "../../context/slash-id-context";
 
 describe("#StepUpAuth", () => {
   test("Step-Up Authentication flow", async () => {
@@ -15,7 +16,7 @@ describe("#StepUpAuth", () => {
 
     // already authenticated user is presented with Step-Up Auth challenge
     render(
-      <TestSlashIDProvider sdkState="ready" user={TEST_USER} mfa={mfaMock}>
+      <TestSlashIDProvider sdkState={SDKState.Ready} user={TEST_USER} mfa={mfaMock}>
         <StepUpAuth
           factors={[{ method: "otp_via_sms" }]}
           text={{

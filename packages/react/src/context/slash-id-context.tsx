@@ -23,12 +23,13 @@ export interface SlashIDProviderProps {
   children: React.ReactNode;
 }
 
-type SDKState =
-  | "initial"
-  | "loaded"
-  | "retrievingToken"
-  | "authenticating"
-  | "ready";
+export enum SDKState {
+  Initial = "initial",
+  Loaded = "loaded",
+  RetrievingToken = "retrievingToken",
+  Authenticating = "authenticating",
+  Ready = "ready"
+}
 export interface ISlashIDContext {
   sid: SlashID | undefined;
   user: User | undefined;
@@ -42,7 +43,7 @@ export interface ISlashIDContext {
 export const initialContextValue = {
   sid: undefined,
   user: undefined,
-  sdkState: "initial" as const,
+  sdkState: SDKState.Initial,
   logOut: () => undefined,
   logIn: () => Promise.reject("NYI"),
   mfa: () => Promise.reject("NYI"),
@@ -82,7 +83,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
 
   const storeUser = useCallback(
     (newUser: User) => {
-      if (state === "initial") {
+      if (state === SDKState.Initial) {
         return;
       }
 
@@ -93,7 +94,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
   );
 
   const logOut = useCallback((): undefined => {
-    if (state === "initial") {
+    if (state === SDKState.Initial) {
       return;
     }
 
@@ -108,7 +109,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
 
   const logIn = useCallback(
     async ({ factor, handle }: LoginOptions): Promise<User | undefined> => {
-      if (state === "initial") {
+      if (state === SDKState.Initial) {
         return;
       }
 
@@ -117,7 +118,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
         return;
       }
 
-      setState("authenticating");
+      setState(SDKState.Authenticating);
 
       try {
         const identifier =
@@ -131,10 +132,10 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
         // @ts-expect-error TODO make the identifier optional
         const user = await sid.id(oid, identifier, factor);
         storeUser(user);
-        setState("ready");
+        setState(SDKState.Ready);
         return user;
       } catch (e) {
-        setState("ready");
+        setState(SDKState.Ready);
         logOut();
         throw e;
       }
@@ -144,18 +145,18 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
 
   const mfa = useCallback<MFA>(
     async ({ handle, factor }) => {
-      if (state === "initial" || !user) {
+      if (state === SDKState.Initial || !user) {
         return;
       }
 
-      setState("authenticating");
+      setState(SDKState.Authenticating);
 
       try {
         await user.mfa(handle, factor);
-        setState("ready");
+        setState(SDKState.Ready);
         return user;
       } catch (e) {
-        setState("ready");
+        setState(SDKState.Ready);
         throw e;
       }
     },
@@ -174,7 +175,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
   }, []);
 
   useEffect(() => {
-    if (state === "initial") {
+    if (state === SDKState.Initial) {
       const slashId = new SlashID({
         oid,
         ...(baseApiUrl && { baseURL: baseApiUrl }),
@@ -186,12 +187,12 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
       storageRef.current = storage;
       sidRef.current = slashId;
 
-      setState("loaded");
+      setState(SDKState.Loaded);
     }
   }, [oid, baseApiUrl, sdkUrl, state, tokenStorage, analyticsEnabled]);
 
   useEffect(() => {
-    if (state !== "initial") {
+    if (state !== SDKState.Initial) {
       const slashId = sidRef.current!;
       // @ts-expect-error TODO expose the type
       const getUserFromEvent = ({ token }) => {
@@ -207,7 +208,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
   }, [state, user]);
 
   useEffect(() => {
-    if (state !== "loaded") {
+    if (state !== SDKState.Loaded) {
       return;
     }
 
@@ -256,15 +257,15 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
         }
       }
 
-      setState("ready");
+      setState(SDKState.Ready);
     };
 
-    setState("retrievingToken");
+    setState(SDKState.RetrievingToken);
     tryImmediateLogin();
   }, [state, initialToken, storeUser, validateToken]);
 
   const contextValue = useMemo(() => {
-    if (state === "initial") {
+    if (state === SDKState.Initial) {
       return {
         sid: undefined,
         user,

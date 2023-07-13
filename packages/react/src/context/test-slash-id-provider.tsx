@@ -4,6 +4,7 @@ import {
   SlashIDContext,
   ISlashIDContext,
   initialContextValue,
+  SDKState,
 } from "../context/slash-id-context";
 
 type TestProviderProps = Partial<ISlashIDContext> & {
@@ -77,7 +78,7 @@ export const TestSlashIDProvider: React.FC<TestProviderProps> = ({
     () => ({
       ...initialContextValue,
       sid,
-      sdkState: sdkState || "initial",
+      sdkState: sdkState || SDKState.Initial,
       user,
       ...(logIn ? { logIn } : {}),
       ...(mfa ? { mfa } : {}),

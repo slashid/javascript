@@ -12,13 +12,14 @@ import {
   TEST_USER,
 } from "../../context/test-slash-id-provider";
 import { ConfigurationProvider } from "../../context/config-context";
+import { SDKState } from "../../context/slash-id-context";
 
 describe("#Form", () => {
   test("should render in the initial state", () => {
     const logInMock = vi.fn(() => Promise.resolve(TEST_USER));
 
     render(
-      <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+      <TestSlashIDProvider sdkState={SDKState.Ready} logIn={logInMock}>
         <Form />
       </TestSlashIDProvider>
     );
@@ -30,7 +31,7 @@ describe("#Form", () => {
     const logInMock = vi.fn(() => Promise.resolve(TEST_USER));
     const factors = [{ method: "email_link" }, { method: "webauthn" }];
     render(
-      <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+      <TestSlashIDProvider sdkState={SDKState.Ready} logIn={logInMock}>
         <ConfigurationProvider
           // @ts-expect-error
           factors={factors}
@@ -52,7 +53,7 @@ describe("#Form", () => {
       { method: "oidc", options: { provider: "github" } },
     ];
     render(
-      <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+      <TestSlashIDProvider sdkState={SDKState.Ready} logIn={logInMock}>
         <ConfigurationProvider
           // @ts-expect-error
           factors={factors}
@@ -76,7 +77,7 @@ describe("#Form", () => {
       { method: "oidc", options: { provider: "github" } },
     ];
     render(
-      <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+      <TestSlashIDProvider sdkState={SDKState.Ready} logIn={logInMock}>
         <ConfigurationProvider
           // @ts-expect-error
           factors={factors}
@@ -96,7 +97,7 @@ describe("#Form", () => {
     const user = userEvent.setup();
 
     render(
-      <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+      <TestSlashIDProvider sdkState={SDKState.Ready} logIn={logInMock}>
         <Form />
       </TestSlashIDProvider>
     );
@@ -113,7 +114,7 @@ describe("#Form", () => {
     const user = userEvent.setup();
 
     render(
-      <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+      <TestSlashIDProvider sdkState={SDKState.Ready} logIn={logInMock}>
         <Form />
       </TestSlashIDProvider>
     );
@@ -132,7 +133,7 @@ describe("#Form", () => {
     const user = userEvent.setup();
 
     render(
-      <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+      <TestSlashIDProvider sdkState={SDKState.Ready} logIn={logInMock}>
         <Form />
       </TestSlashIDProvider>
     );
@@ -155,7 +156,7 @@ describe("#Form", () => {
     const user = userEvent.setup();
 
     render(
-      <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+      <TestSlashIDProvider sdkState={SDKState.Ready} logIn={logInMock}>
         <Form />
       </TestSlashIDProvider>
     );
@@ -182,7 +183,7 @@ describe("#Form", () => {
     const user = userEvent.setup();
 
     render(
-      <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+      <TestSlashIDProvider sdkState={SDKState.Ready} logIn={logInMock}>
         <Form />
       </TestSlashIDProvider>
     );
@@ -210,7 +211,7 @@ describe("#Form", () => {
     const user = userEvent.setup();
 
     render(
-      <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+      <TestSlashIDProvider sdkState={SDKState.Ready} logIn={logInMock}>
         <Form />
       </TestSlashIDProvider>
     );
@@ -230,7 +231,7 @@ describe("#Form", () => {
     const onSuccess = vi.fn();
 
     render(
-      <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+      <TestSlashIDProvider sdkState={SDKState.Ready} logIn={logInMock}>
         <Form onSuccess={onSuccess} />
       </TestSlashIDProvider>
     );
@@ -252,7 +253,7 @@ describe("#Form", () => {
     const user = userEvent.setup();
 
     render(
-      <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+      <TestSlashIDProvider sdkState={SDKState.Ready} logIn={logInMock}>
         <Form />
       </TestSlashIDProvider>
     );
@@ -272,7 +273,7 @@ describe("#Form", () => {
     const user = userEvent.setup();
 
     render(
-      <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+      <TestSlashIDProvider sdkState={SDKState.Ready} logIn={logInMock}>
         <Form />
       </TestSlashIDProvider>
     );
@@ -316,7 +317,7 @@ describe("<Form /> configuration", () => {
     );
 
     render(
-      <TestSlashIDProvider sdkState="ready">
+      <TestSlashIDProvider sdkState={SDKState.Ready}>
         <ConfigurationProvider storeLastHandle={true}>
           <Form />
         </ConfigurationProvider>
@@ -344,7 +345,7 @@ describe("<Form /> configuration", () => {
     );
 
     render(
-      <TestSlashIDProvider sdkState="ready">
+      <TestSlashIDProvider sdkState={SDKState.Ready}>
         <ConfigurationProvider
           storeLastHandle={true}
           factors={[{ method: "email_link" }, { method: "otp_via_sms" }]}
@@ -364,7 +365,7 @@ describe("<Form /> configuration", () => {
 
   test("show banner - default", () => {
     render(
-      <TestSlashIDProvider sdkState="ready">
+      <TestSlashIDProvider sdkState={SDKState.Ready}>
         <ConfigurationProvider
           storeLastHandle={true}
           factors={[{ method: "email_link" }, { method: "otp_via_sms" }]}
@@ -379,7 +380,7 @@ describe("<Form /> configuration", () => {
 
   test("hide banner", () => {
     render(
-      <TestSlashIDProvider sdkState="ready">
+      <TestSlashIDProvider sdkState={SDKState.Ready}>
         <ConfigurationProvider
           storeLastHandle={true}
           factors={[{ method: "email_link" }, { method: "otp_via_sms" }]}
