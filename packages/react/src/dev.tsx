@@ -67,27 +67,25 @@ function Config() {
   );
 } */
 
-const getFactors = (email: string) => {
+const getFactor = (email: string) => {
   const domain = email.split("@")[1];
   console.log({ email, domain });
 
   if (domain === "slashid.dev") {
-    return [
-      {
-        method: "oidc",
-        options: {
-          provider: "google",
-          client_id: import.meta.env.VITE_GOOGLE_SSO_CLIENT_ID,
-        },
+    return {
+      method: "oidc",
+      options: {
+        provider: "google",
+        client_id: import.meta.env.VITE_GOOGLE_SSO_CLIENT_ID,
       },
-    ] as Factor[];
+    } as Factor;
   } else {
-    return [{ method: "email_link" }] as Factor[];
+    return { method: "email_link" } as Factor;
   }
 };
 
 const DynamicConfig = () => {
-  return <DynamicFlow getFactors={getFactors} />;
+  return <DynamicFlow className="formWrapper" getFactor={getFactor} />;
 };
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
