@@ -1,13 +1,12 @@
 import type { Factor } from "@slashid/slashid";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import ReactDOM from "react-dom/client";
-import { MultiFactorAuth } from "./components/multi-factor-auth";
 import { SlashIDProvider } from "./context/slash-id-context";
-import { ConfigurationProvider } from "./context/config-context";
 
 import "./dev.css";
+import { DynamicFlow } from "./main";
 
-const initialFactors: Factor[] = [
+/* const initialFactors: Factor[] = [
   { method: "email_link" },
   { method: "otp_via_sms" },
   {
@@ -66,12 +65,25 @@ function Config() {
       </div>
     </ConfigurationProvider>
   );
-}
+} */
+
+const getFactors = (email: string) => {
+  console.log(email);
+  if (email === "test@mail.com") {
+    return [{ method: "email_link" }] as Factor[];
+  } else {
+    return [{ method: "otp_via_sms" }] as Factor[];
+  }
+};
+
+const DynamicConfig = () => {
+  return <DynamicFlow getFactors={getFactors} />;
+};
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <SlashIDProvider oid={import.meta.env.VITE_ORG_ID}>
-      <Config />
+      <DynamicConfig />
     </SlashIDProvider>
   </React.StrictMode>
 );

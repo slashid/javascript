@@ -2,7 +2,6 @@ import type { User, FactorMethod } from "@slashid/slashid";
 import { useMemo } from "react";
 import { useSlashID } from "../../hooks/use-slash-id";
 
-
 type Props = {
   children: React.ReactNode;
   withFactorMethods?:
