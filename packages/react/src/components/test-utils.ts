@@ -20,4 +20,4 @@ export const inputPhone = (
 
 export const sdkNotReadyStates = Object
   .values(SDKState)
-  .filter(state => state != SDKState.Ready)
+  .filter((state): state is Exclude<SDKState, SDKState.Ready> => state != SDKState.Ready)
