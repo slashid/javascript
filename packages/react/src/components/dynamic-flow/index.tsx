@@ -6,6 +6,8 @@ import * as styles from "../form/form.css";
 import { HandleForm, Logo } from "../form/initial";
 import { Text } from "../text";
 import { FormProvider } from "../../context/form-context";
+import { useCallback, useState } from "react";
+import { Handle } from "../../domain/types";
 
 type Props = {
   className?: string;
@@ -38,7 +40,18 @@ const FormWrapper = ({ children, className }: FormProps) => {
 
 export const DynamicFlow = ({ getFactors, className }: Props) => {
   const { logo } = useConfiguration();
-  console.log({ getFactors });
+  const [handle, setHandle] = useState<string>("");
+  const [factors, setFactors] = useState<Factor[]>([]);
+
+  const setHandleAndFactors = useCallback(
+    (factor: Factor, handle: Handle) => {
+      setHandle(handle.value);
+      setFactors(getFactors(handle.value));
+    },
+    [getFactors]
+  );
+
+  console.log({ handle, factors });
 
   return (
     <div>
@@ -55,7 +68,7 @@ export const DynamicFlow = ({ getFactors, className }: Props) => {
             <HandleForm
               handleType="email_address"
               factors={[]}
-              handleSubmit={(factor, handle) => getFactors(handle.value)}
+              handleSubmit={setHandleAndFactors}
             />
           </FormProvider>
         </article>

@@ -68,11 +68,21 @@ function Config() {
 } */
 
 const getFactors = (email: string) => {
-  console.log(email);
-  if (email === "test@mail.com") {
-    return [{ method: "email_link" }] as Factor[];
+  const domain = email.split("@")[1];
+  console.log({ email, domain });
+
+  if (domain === "slashid.dev") {
+    return [
+      {
+        method: "oidc",
+        options: {
+          provider: "google",
+          client_id: import.meta.env.VITE_GOOGLE_SSO_CLIENT_ID,
+        },
+      },
+    ] as Factor[];
   } else {
-    return [{ method: "otp_via_sms" }] as Factor[];
+    return [{ method: "email_link" }] as Factor[];
   }
 };
 
