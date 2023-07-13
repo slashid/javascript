@@ -7,6 +7,7 @@ import { LoggedIn } from "./components/logged-in";
 import { LoggedOut } from "./components/logged-out";
 import { Groups } from "./components/groups";
 import { Form } from "./components/form";
+import { DynamicFlow } from "./components/dynamic-flow";
 import { MultiFactorAuth } from "./components/multi-factor-auth";
 import { StepUpAuth } from "./components/step-up-auth";
 import { SlashIDLoaded } from "./components/loaded";
@@ -25,6 +26,7 @@ export {
   LoggedOut,
   Groups,
   Form,
+  DynamicFlow,
   MultiFactorAuth,
   StepUpAuth,
   useSlashID,

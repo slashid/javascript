@@ -40,7 +40,7 @@ type LogoProps = {
   logo?: TLogo;
 };
 
-const Logo: React.FC<LogoProps> = ({ logo }) => {
+export const Logo: React.FC<LogoProps> = ({ logo }) => {
   if (typeof logo === "string") {
     return (
       <img className="sid-logo sid-logo--image" src={logo} alt="Company logo" />
@@ -114,7 +114,7 @@ type HandleFormProps = {
   defaultValue?: string;
 };
 
-const HandleForm: React.FC<HandleFormProps> = ({
+export const HandleForm: React.FC<HandleFormProps> = ({
   handleType,
   factors,
   handleSubmit,
