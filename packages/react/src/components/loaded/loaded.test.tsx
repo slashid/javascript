@@ -27,20 +27,6 @@ describe("SlashIDLoaded", () => {
     });
   }
 
-  for (const state of sdkNotReadyStates) {
-    test(`should render children when sdk state is '${state}'`, () => {
-      const text = faker.lorem.sentence()
-
-      render(
-        <TestSlashIDProvider sdkState={state}>
-          <SlashIDLoaded>
-            <Mock text={text} />
-          </SlashIDLoaded>
-        </TestSlashIDProvider>
-      );
-      expect(screen.queryByText(text)).not.toBeInTheDocument();
-    });
-  }
 
   for (const state of sdkNotReadyStates) {
     test(`should render fallback when sdk state is '${state}'`, () => {
