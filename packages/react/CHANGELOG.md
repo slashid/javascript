@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 1.7.0
+
+### Minor Changes
+
+- 0e02668: Increase the required @slashid/slashid peer dependency version to 3.9.0. and add the AzureAD OIDC provider
+
 ## 1.6.3
 
 ### Patch Changes
