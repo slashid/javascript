@@ -27,7 +27,6 @@ describe("SlashIDLoaded", () => {
     });
   }
 
-
   for (const state of sdkNotReadyStates) {
     test(`should render fallback when sdk state is '${state}'`, () => {
       const text = faker.lorem.sentence()

@@ -7,26 +7,31 @@ import {
 } from "../../context/test-slash-id-provider";
 import { SDKState } from "../../context/slash-id-context";
 import { sdkNotReadyStates } from "../test-utils";
+import { faker } from "@faker-js/faker";
 
-const TestComponent = () => <h1>Test</h1>;
+const TestComponent = ({ text }: { text: string }) => <h1>{text}</h1>;
 
 describe("LoggedOut", () => {
   test("should render children when a user is not logged in", () => {
+    const text = faker.lorem.sentence()
+
     render(
       <TestSlashIDProvider user={undefined} sdkState={SDKState.Ready}>
         <LoggedOut>
-          <TestComponent />
+          <TestComponent text={text} />
         </LoggedOut>
       </TestSlashIDProvider>
     );
-    expect(screen.getByText("Test")).toBeInTheDocument();
+    expect(screen.getByText(text)).toBeInTheDocument();
   });
 
   test("should not render children when a user is logged in", () => {
+    const text = faker.lorem.sentence()
+
     render(
       <TestSlashIDProvider user={TEST_USER} sdkState={SDKState.Ready}>
         <LoggedOut>
-          <TestComponent />
+          <TestComponent text={text} />
         </LoggedOut>
       </TestSlashIDProvider>
     );
@@ -35,10 +40,12 @@ describe("LoggedOut", () => {
 
   for (const state of sdkNotReadyStates) {
     test(`should not render children when sdk state is ${state}`, () => {
+      const text = faker.lorem.sentence()
+
       render(
         <TestSlashIDProvider user={TEST_USER} sdkState={SDKState.Ready}>
           <LoggedOut>
-            <TestComponent />
+            <TestComponent text={text} />
           </LoggedOut>
         </TestSlashIDProvider>
       );
