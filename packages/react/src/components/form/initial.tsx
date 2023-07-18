@@ -58,7 +58,7 @@ const PROVIDER_TO_ICON: Record<string, React.ReactNode> = {
   gitlab: <Gitlab />,
   line: <Line />,
   bitbucket: <Bitbucket />,
-  azuread: <AzureAD />
+  azuread: <AzureAD />,
 };
 
 type OidcProps = {
@@ -66,7 +66,7 @@ type OidcProps = {
   handleClick: (factor: Factor) => void;
 };
 
-const Oidc: React.FC<OidcProps> = ({ providers, handleClick }) => {
+export const Oidc: React.FC<OidcProps> = ({ providers, handleClick }) => {
   const { text } = useConfiguration();
   if (!providers.length) {
     return null;
@@ -87,7 +87,11 @@ const Oidc: React.FC<OidcProps> = ({ providers, handleClick }) => {
             icon={PROVIDER_TO_ICON[p.options?.provider]}
           >
             {text["initial.oidc"]}
-            <span className={styles.oidcProvider}>{p.options?.provider}</span>
+            <span className={styles.oidcProvider}>
+              {p.options?.provider === "azuread"
+                ? "Microsoft Account"
+                : p.options?.provider}
+            </span>
           </Button>
         );
       })}

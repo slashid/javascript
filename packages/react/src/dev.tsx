@@ -4,7 +4,8 @@ import ReactDOM from "react-dom/client";
 import { SlashIDProvider } from "./context/slash-id-context";
 
 import "./dev.css";
-import { DynamicFlow } from "./main";
+import { ConfigurationProvider, DynamicFlow } from "./main";
+import { FactorOIDC } from "./domain/types";
 
 /* const initialFactors: Factor[] = [
   { method: "email_link" },
@@ -83,8 +84,33 @@ const getFactor = (email: string) => {
   }
 };
 
+const oidcFactors: FactorOIDC[] = [
+  {
+    method: "oidc",
+    options: {
+      provider: "google",
+      client_id: import.meta.env.VITE_GOOGLE_SSO_CLIENT_ID,
+    },
+  },
+  {
+    method: "oidc",
+    options: {
+      provider: "azuread",
+      client_id: import.meta.env.VITE_GOOGLE_SSO_CLIENT_ID,
+    },
+  },
+];
+
 const DynamicConfig = () => {
-  return <DynamicFlow className="formWrapper" getFactor={getFactor} />;
+  return (
+    <ConfigurationProvider text={{ "initial.oidc": "Continue with" }}>
+      <DynamicFlow
+        className="formWrapper"
+        getFactor={getFactor}
+        oidcFactors={oidcFactors}
+      />
+    </ConfigurationProvider>
+  );
 };
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
