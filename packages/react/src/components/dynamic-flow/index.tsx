@@ -3,21 +3,23 @@ import { clsx } from "clsx";
 import { themeClass, darkTheme, autoTheme } from "../../theme/theme.css";
 import { useConfiguration } from "../../hooks/use-configuration";
 import * as styles from "../form/form.css";
-import { HandleForm, Logo } from "../form/initial";
+import { HandleForm, Logo, Oidc } from "../form/initial";
 import { Text } from "../text";
 import { FormProvider } from "../../context/form-context";
 import { useCallback } from "react";
-import { Handle } from "../../domain/types";
+import { FactorOIDC, Handle } from "../../domain/types";
 import { CreateFlowOptions } from "../form/flow";
 import { useFlowState } from "../form/useFlowState";
 import { Authenticating } from "../form/authenticating";
 import { Success } from "../form/success";
 import { Error } from "../form/error";
+import { Divider } from "../divider";
 
 type Props = {
   className?: string;
   onSuccess?: CreateFlowOptions["onSuccess"];
   getFactor: (email: string) => Factor;
+  oidcFactors?: FactorOIDC[];
 };
 
 type FormProps = {
@@ -44,15 +46,20 @@ const FormWrapper = ({ children, className }: FormProps) => {
   );
 };
 
-export const DynamicFlow = ({ getFactor, className, onSuccess }: Props) => {
-  const { logo } = useConfiguration();
+export const DynamicFlow = ({
+  getFactor,
+  className,
+  onSuccess,
+  oidcFactors = [],
+}: Props) => {
+  const { logo, text } = useConfiguration();
   const flowState = useFlowState({ onSuccess });
+  const shouldRenderDivider = oidcFactors.length > 0;
 
   const setHandleAndFactors = useCallback(
     (factor: Factor, handle: Handle) => {
       if (flowState.status === "initial") {
         const factor = getFactor(handle.value);
-        console.log({ factor, handle });
         flowState.logIn({
           factor,
           handle,
@@ -86,6 +93,18 @@ export const DynamicFlow = ({ getFactor, className, onSuccess }: Props) => {
                   handleSubmit={setHandleAndFactors}
                 />
               </FormProvider>
+              {shouldRenderDivider && (
+                <Divider>{text["initial.divider"]}</Divider>
+              )}
+              <Oidc
+                providers={oidcFactors}
+                handleClick={(factor) =>
+                  flowState.logIn({
+                    factor,
+                    handle: undefined,
+                  })
+                }
+              />
             </>
           )}
           {flowState.status === "authenticating" && (
