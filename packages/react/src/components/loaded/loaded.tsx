@@ -9,7 +9,7 @@ interface Props {
 /**
  * Conditional rendering helper
  * 
- * Acts as a guard for SlashID core SDK dependent operations
+ * Acts as a guard for SlashID core SDK dependent operations. Can optionally render a fallback component while the SDK is loading.
  */
 export const SlashIDLoaded: React.FC<Props>  = ({ fallback, children }) => {
     const { sdkState } = useSlashID()
