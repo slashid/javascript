@@ -1,5 +1,7 @@
 import React, { useCallback, useMemo, useState, useEffect } from "react";
 import { Factor } from "@slashid/slashid";
+import { clsx } from "clsx";
+import { findFlag } from "country-list-with-dial-code-and-flag";
 
 import { Dropdown } from "../dropdown";
 import { Text } from "../text";
@@ -29,11 +31,10 @@ import { Gitlab } from "../icon/gitlab";
 import { Line } from "../icon/line";
 import { Bitbucket } from "../icon/bitbucket";
 import { Divider } from "../divider";
-import { clsx } from "clsx";
+import { AzureAD } from "../icon/azuread";
 import { isValidEmail, isValidPhoneNumber } from "./validation";
 import { ErrorMessage } from "./error-message";
 import { useForm } from "../../hooks/use-form";
-import { findFlag } from "country-list-with-dial-code-and-flag";
 
 type LogoProps = {
   logo?: TLogo;
@@ -57,6 +58,7 @@ const PROVIDER_TO_ICON: Record<string, React.ReactNode> = {
   gitlab: <Gitlab />,
   line: <Line />,
   bitbucket: <Bitbucket />,
+  azuread: <AzureAD />
 };
 
 type OidcProps = {
