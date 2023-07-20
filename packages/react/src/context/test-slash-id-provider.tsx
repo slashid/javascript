@@ -3,8 +3,7 @@ import React, { useMemo } from "react";
 import {
   SlashIDContext,
   ISlashIDContext,
-  initialContextValue,
-  SDKState,
+  initialContextValue
 } from "../context/slash-id-context";
 
 type TestProviderProps = Partial<ISlashIDContext> & {
@@ -78,7 +77,7 @@ export const TestSlashIDProvider: React.FC<TestProviderProps> = ({
     () => ({
       ...initialContextValue,
       sid,
-      sdkState: sdkState || SDKState.Initial,
+      sdkState: sdkState || "initial",
       user,
       ...(logIn ? { logIn } : {}),
       ...(mfa ? { mfa } : {}),

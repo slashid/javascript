@@ -1,9 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import { SlashIDLoaded } from ".";
 import { TestSlashIDProvider } from "../../context/test-slash-id-provider";
-import { SDKState } from "../../context/slash-id-context";
 import { faker } from '@faker-js/faker'
-import { sdkNotReadyStates } from "../test-utils";
+import { sdkNotReadyStates } from "../../domain/sdk-state";
 
 const Mock = ({ text }: { text: string }) => (
   <h1>
@@ -50,7 +49,7 @@ describe("SlashIDLoaded", () => {
     const text = faker.lorem.sentence()
 
     render(
-      <TestSlashIDProvider sdkState={SDKState.Ready}>
+      <TestSlashIDProvider sdkState={"ready"}>
         <SlashIDLoaded>
           <Mock text={text} />
         </SlashIDLoaded>
@@ -64,7 +63,7 @@ describe("SlashIDLoaded", () => {
     const fallback = faker.lorem.sentence()
 
     render(
-      <TestSlashIDProvider sdkState={SDKState.Ready}>
+      <TestSlashIDProvider sdkState={"ready"}>
         <SlashIDLoaded
           fallback={<Mock text={fallback} />}
         >

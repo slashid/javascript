@@ -5,9 +5,8 @@ import {
   TestSlashIDProvider,
   TEST_USER,
 } from "../../context/test-slash-id-provider";
-import { SDKState } from "../../context/slash-id-context";
-import { sdkNotReadyStates } from "../test-utils";
 import { faker } from "@faker-js/faker";
+import { sdkNotReadyStates } from "../../domain/sdk-state";
 
 const TestComponent = ({ text }: { text: string }) => <h1>{text}</h1>;
 
@@ -16,7 +15,7 @@ describe("LoggedOut", () => {
     const text = faker.lorem.sentence()
 
     render(
-      <TestSlashIDProvider user={undefined} sdkState={SDKState.Ready}>
+      <TestSlashIDProvider user={undefined} sdkState={"ready"}>
         <LoggedOut>
           <TestComponent text={text} />
         </LoggedOut>
@@ -29,7 +28,7 @@ describe("LoggedOut", () => {
     const text = faker.lorem.sentence()
 
     render(
-      <TestSlashIDProvider user={TEST_USER} sdkState={SDKState.Ready}>
+      <TestSlashIDProvider user={TEST_USER} sdkState={"ready"}>
         <LoggedOut>
           <TestComponent text={text} />
         </LoggedOut>
@@ -43,7 +42,7 @@ describe("LoggedOut", () => {
       const text = faker.lorem.sentence()
 
       render(
-        <TestSlashIDProvider user={TEST_USER} sdkState={SDKState.Ready}>
+        <TestSlashIDProvider user={TEST_USER} sdkState={"ready"}>
           <LoggedOut>
             <TestComponent text={text} />
           </LoggedOut>

@@ -7,7 +7,6 @@ import {
   TEST_USER,
 } from "../../context/test-slash-id-provider";
 import { inputEmail, inputPhone } from "../test-utils";
-import { SDKState } from "../../context/slash-id-context";
 
 describe("#MultiFactorAuth", () => {
   test("MFA flow", async () => {
@@ -28,7 +27,7 @@ describe("#MultiFactorAuth", () => {
 
     // initial form state
     const { rerender } = render(
-      <TestSlashIDProvider sdkState={SDKState.Ready} logIn={logInMock}>
+      <TestSlashIDProvider sdkState={"ready"} logIn={logInMock}>
         <MultiFactorAuth steps={steps} />
       </TestSlashIDProvider>
     );
@@ -42,7 +41,7 @@ describe("#MultiFactorAuth", () => {
     // update user instance for correct <LoggedIn /> <LoggedOut /> behaviour
     rerender(
       <TestSlashIDProvider
-        sdkState={SDKState.Ready}
+        sdkState={"ready"}
         logIn={logInMock}
         user={TEST_USER}
         mfa={mfaMock}

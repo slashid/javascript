@@ -1,9 +1,8 @@
-import { SDKState } from "../../context/slash-id-context";
 import { useSlashID } from "../../main";
 
 interface Props {
-    fallback?: React.ReactNode
-    children: React.ReactNode
+    fallback?: JSX.Element
+    children: JSX.Element
 }
 
 /**
@@ -11,17 +10,13 @@ interface Props {
  * 
  * Acts as a guard for SlashID core SDK dependent operations. Can optionally render a fallback component while the SDK is loading.
  */
-export const SlashIDLoaded: React.FC<Props>  = ({ fallback, children }) => {
+export const SlashIDLoaded  = ({ fallback, children }: Props): JSX.Element => {
     const { sdkState } = useSlashID()
 
-    if (sdkState !== SDKState.Ready) {
-        if (!fallback) return null
+    if (sdkState !== "ready") {
+        if (!fallback) return <></>
 
-        return (
-            <>
-                {fallback}
-            </>
-        )
+        return fallback
     }
 
     return (

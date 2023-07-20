@@ -6,7 +6,6 @@ import {
   TestSlashIDProvider,
   TEST_TOKEN,
 } from "../../context/test-slash-id-provider";
-import { SDKState } from "../../context/slash-id-context";
 
 const TestComponent = () => <h1>Test</h1>;
 
@@ -17,7 +16,7 @@ describe("Groups", () => {
     const belongsTo = vi.fn((groups: string[]) => groups.includes("groupa"));
 
     render(
-      <TestSlashIDProvider sdkState={SDKState.Ready} user={userWithGroups}>
+      <TestSlashIDProvider sdkState={"ready"} user={userWithGroups}>
         <Groups belongsTo={belongsTo}>
           <TestComponent />
         </Groups>
@@ -34,7 +33,7 @@ describe("Groups", () => {
     const belongsTo = vi.fn((groups: string[]) => groups.includes("groupa"));
 
     render(
-      <TestSlashIDProvider sdkState={SDKState.Ready} user={userWithGroups}>
+      <TestSlashIDProvider sdkState={"ready"} user={userWithGroups}>
         <Groups belongsTo={belongsTo}>
           <TestComponent />
         </Groups>
@@ -49,7 +48,7 @@ describe("Groups", () => {
     const belongsTo = vi.fn();
 
     render(
-      <TestSlashIDProvider sdkState={SDKState.Initial}>
+      <TestSlashIDProvider sdkState={"initial"}>
         <Groups belongsTo={belongsTo}>
           <TestComponent />
         </Groups>
@@ -64,7 +63,7 @@ describe("Groups", () => {
     const belongsTo = vi.fn();
 
     render(
-      <TestSlashIDProvider sdkState={SDKState.Ready} user={undefined}>
+      <TestSlashIDProvider sdkState={"ready"} user={undefined}>
         <Groups belongsTo={belongsTo}>
           <TestComponent />
         </Groups>
