@@ -2,7 +2,6 @@ export const sdkStates = [
     "initial",
     "loaded",
     "retrievingToken",
-    "authenticating",
     "ready"
   ] as const
   

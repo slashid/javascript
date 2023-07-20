@@ -112,8 +112,6 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
         return;
       }
 
-      setState("authenticating");
-
       try {
         const identifier =
           factor.method === "oidc" || handle === undefined
@@ -126,10 +124,8 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
         // @ts-expect-error TODO make the identifier optional
         const user = await sid.id(oid, identifier, factor);
         storeUser(user);
-        setState("ready");
         return user;
       } catch (e) {
-        setState("ready");
         logOut();
         throw e;
       }
@@ -143,14 +139,10 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
         return;
       }
 
-      setState("authenticating");
-
       try {
         await user.mfa(handle, factor);
-        setState("ready");
         return user;
       } catch (e) {
-        setState("ready");
         throw e;
       }
     },
