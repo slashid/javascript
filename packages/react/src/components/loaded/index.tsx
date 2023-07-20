@@ -19,9 +19,5 @@ export const SlashIDLoaded  = ({ fallback, children }: Props): JSX.Element => {
         return fallback
     }
 
-    return (
-        <>
-            {children}
-        </>
-    )
+    return children
 }
