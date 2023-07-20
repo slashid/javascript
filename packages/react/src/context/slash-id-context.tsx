@@ -139,12 +139,8 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
         return;
       }
 
-      try {
-        await user.mfa(handle, factor);
-        return user;
-      } catch (e) {
-        throw e;
-      }
+      await user.mfa(handle, factor);
+      return user;
     },
     [user, state]
   );
