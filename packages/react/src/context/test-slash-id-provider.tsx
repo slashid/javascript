@@ -3,7 +3,7 @@ import React, { useMemo } from "react";
 import {
   SlashIDContext,
   ISlashIDContext,
-  initialContextValue
+  initialContextValue,
 } from "../context/slash-id-context";
 
 type TestProviderProps = Partial<ISlashIDContext> & {
