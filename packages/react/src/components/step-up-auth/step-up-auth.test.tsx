@@ -15,7 +15,7 @@ describe("#StepUpAuth", () => {
 
     // already authenticated user is presented with Step-Up Auth challenge
     render(
-      <TestSlashIDProvider sdkState={"ready"} user={TEST_USER} mfa={mfaMock}>
+      <TestSlashIDProvider sdkState="ready" user={TEST_USER} mfa={mfaMock}>
         <StepUpAuth
           factors={[{ method: "otp_via_sms" }]}
           text={{

@@ -16,7 +16,7 @@ describe("Groups", () => {
     const belongsTo = vi.fn((groups: string[]) => groups.includes("groupa"));
 
     render(
-      <TestSlashIDProvider sdkState={"ready"} user={userWithGroups}>
+      <TestSlashIDProvider sdkState="ready" user={userWithGroups}>
         <Groups belongsTo={belongsTo}>
           <TestComponent />
         </Groups>
@@ -33,7 +33,7 @@ describe("Groups", () => {
     const belongsTo = vi.fn((groups: string[]) => groups.includes("groupa"));
 
     render(
-      <TestSlashIDProvider sdkState={"ready"} user={userWithGroups}>
+      <TestSlashIDProvider sdkState="ready" user={userWithGroups}>
         <Groups belongsTo={belongsTo}>
           <TestComponent />
         </Groups>
@@ -48,7 +48,7 @@ describe("Groups", () => {
     const belongsTo = vi.fn();
 
     render(
-      <TestSlashIDProvider sdkState={"initial"}>
+      <TestSlashIDProvider sdkState="initial">
         <Groups belongsTo={belongsTo}>
           <TestComponent />
         </Groups>
@@ -63,7 +63,7 @@ describe("Groups", () => {
     const belongsTo = vi.fn();
 
     render(
-      <TestSlashIDProvider sdkState={"ready"} user={undefined}>
+      <TestSlashIDProvider sdkState="ready" user={undefined}>
         <Groups belongsTo={belongsTo}>
           <TestComponent />
         </Groups>

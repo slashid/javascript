@@ -27,7 +27,7 @@ describe("#MultiFactorAuth", () => {
 
     // initial form state
     const { rerender } = render(
-      <TestSlashIDProvider sdkState={"ready"} logIn={logInMock}>
+      <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
         <MultiFactorAuth steps={steps} />
       </TestSlashIDProvider>
     );
@@ -41,7 +41,7 @@ describe("#MultiFactorAuth", () => {
     // update user instance for correct <LoggedIn /> <LoggedOut /> behaviour
     rerender(
       <TestSlashIDProvider
-        sdkState={"ready"}
+        sdkState="ready"
         logIn={logInMock}
         user={TEST_USER}
         mfa={mfaMock}

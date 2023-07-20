@@ -49,7 +49,7 @@ describe("SlashIDLoaded", () => {
     const text = faker.lorem.sentence()
 
     render(
-      <TestSlashIDProvider sdkState={"ready"}>
+      <TestSlashIDProvider sdkState="ready">
         <SlashIDLoaded>
           <Mock text={text} />
         </SlashIDLoaded>
@@ -63,7 +63,7 @@ describe("SlashIDLoaded", () => {
     const fallback = faker.lorem.sentence()
 
     render(
-      <TestSlashIDProvider sdkState={"ready"}>
+      <TestSlashIDProvider sdkState="ready">
         <SlashIDLoaded
           fallback={<Mock text={fallback} />}
         >

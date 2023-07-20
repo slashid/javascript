@@ -15,7 +15,7 @@ describe("LoggedOut", () => {
     const text = faker.lorem.sentence()
 
     render(
-      <TestSlashIDProvider user={undefined} sdkState={"ready"}>
+      <TestSlashIDProvider user={undefined} sdkState="ready">
         <LoggedOut>
           <TestComponent text={text} />
         </LoggedOut>
@@ -28,7 +28,7 @@ describe("LoggedOut", () => {
     const text = faker.lorem.sentence()
 
     render(
-      <TestSlashIDProvider user={TEST_USER} sdkState={"ready"}>
+      <TestSlashIDProvider user={TEST_USER} sdkState="ready">
         <LoggedOut>
           <TestComponent text={text} />
         </LoggedOut>
@@ -42,7 +42,7 @@ describe("LoggedOut", () => {
       const text = faker.lorem.sentence()
 
       render(
-        <TestSlashIDProvider user={TEST_USER} sdkState={"ready"}>
+        <TestSlashIDProvider user={TEST_USER} sdkState="ready">
           <LoggedOut>
             <TestComponent text={text} />
           </LoggedOut>
