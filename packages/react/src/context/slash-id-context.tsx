@@ -32,6 +32,7 @@ type SDKState =
 export interface ISlashIDContext {
   sid: SlashID | undefined;
   user: User | undefined;
+  isLoading: boolean;
   sdkState: SDKState;
   logOut: () => undefined;
   logIn: LogIn;
@@ -42,6 +43,7 @@ export interface ISlashIDContext {
 export const initialContextValue = {
   sid: undefined,
   user: undefined,
+  isLoading: true,
   sdkState: "initial" as const,
   logOut: () => undefined,
   logIn: () => Promise.reject("NYI"),
@@ -77,6 +79,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
 }) => {
   const [state, setState] = useState<SDKState>(initialContextValue.sdkState);
   const [user, setUser] = useState<User | undefined>(undefined);
+  const isLoading = useMemo(() => state !== 'ready', [state]);
   const storageRef = useRef<Storage | undefined>(undefined);
   const sidRef = useRef<SlashID | undefined>(undefined);
 
@@ -268,6 +271,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
       return {
         sid: undefined,
         user,
+        isLoading,
         sdkState: state,
         logOut,
         logIn,
@@ -279,6 +283,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
     return {
       sid: sidRef.current!,
       user,
+      isLoading,
       sdkState: state,
       logOut,
       logIn,
