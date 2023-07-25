@@ -14,5 +14,5 @@ export const LoggedOut = ({ children }: Props) => {
     return null;
   }
 
-  return children
+  return (<>{children}</>)
 }
