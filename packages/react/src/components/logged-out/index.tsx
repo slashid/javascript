@@ -1,5 +1,4 @@
 import { useSlashID } from "../../main";
-import { SlashIDLoaded } from "../loaded";
 
 type Props = {
   children: React.ReactNode;
