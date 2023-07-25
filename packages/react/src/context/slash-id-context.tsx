@@ -32,6 +32,7 @@ type SDKState =
 export interface ISlashIDContext {
   sid: SlashID | undefined;
   user: User | undefined;
+  isAuthenticated: boolean;
   sdkState: SDKState;
   logOut: () => undefined;
   logIn: LogIn;
@@ -39,9 +40,10 @@ export interface ISlashIDContext {
   validateToken: (token: string) => Promise<boolean>;
 }
 
-export const initialContextValue = {
+export const initialContextValue: ISlashIDContext = {
   sid: undefined,
   user: undefined,
+  isAuthenticated: false,
   sdkState: "initial" as const,
   logOut: () => undefined,
   logIn: () => Promise.reject("NYI"),
@@ -77,6 +79,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
 }) => {
   const [state, setState] = useState<SDKState>(initialContextValue.sdkState);
   const [user, setUser] = useState<User | undefined>(undefined);
+  const isAuthenticated = useMemo(() => user !== undefined, [user])
   const storageRef = useRef<Storage | undefined>(undefined);
   const sidRef = useRef<SlashID | undefined>(undefined);
 
@@ -268,6 +271,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
       return {
         sid: undefined,
         user,
+        isAuthenticated,
         sdkState: state,
         logOut,
         logIn,
@@ -279,13 +283,14 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
     return {
       sid: sidRef.current!,
       user,
+      isAuthenticated,
       sdkState: state,
       logOut,
       logIn,
       mfa,
       validateToken,
     };
-  }, [logIn, logOut, user, validateToken, state, mfa]);
+  }, [logIn, logOut, user, isAuthenticated, validateToken, state, mfa]);
 
   return (
     <SlashIDContext.Provider value={contextValue}>
