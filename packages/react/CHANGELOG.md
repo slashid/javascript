@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 1.8.2
+
+### Patch Changes
+
+- fff6df8: Remove JSX.Element type from
+
 ## 1.8.1
 
 ### Patch Changes
