@@ -10,6 +10,7 @@ import { Form } from "./components/form";
 import { DynamicFlow } from "./components/dynamic-flow";
 import { MultiFactorAuth } from "./components/multi-factor-auth";
 import { StepUpAuth } from "./components/step-up-auth";
+import { SlashIDLoaded } from "./components/loaded";
 import { useSlashID } from "./hooks/use-slash-id";
 
 /**
@@ -18,6 +19,7 @@ import { useSlashID } from "./hooks/use-slash-id";
 export {
   SlashIDContext,
   SlashIDProvider,
+  SlashIDLoaded,
   ConfigurationContext,
   ConfigurationProvider,
   LoggedIn,

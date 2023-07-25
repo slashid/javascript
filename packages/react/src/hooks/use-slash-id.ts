@@ -1,8 +1,19 @@
-import React from "react";
-import { SlashIDContext } from "../context/slash-id-context";
+import React, { useMemo } from "react";
+import { ISlashIDContext, SlashIDContext } from "../context/slash-id-context";
 
-export function useSlashID() {
+interface UseSlashID extends ISlashIDContext {
+  isLoading: boolean
+  isAuthenticated: boolean
+}
+
+export function useSlashID(): UseSlashID {
   const contextValue = React.useContext(SlashIDContext);
+  const isLoading = useMemo(() => contextValue.sdkState !== 'ready', [contextValue.sdkState]);
+  const isAuthenticated = useMemo(() => contextValue.user !== undefined, [contextValue.user]);
 
-  return contextValue;
+  return {
+    ...contextValue,
+    isLoading,
+    isAuthenticated
+  };
 }

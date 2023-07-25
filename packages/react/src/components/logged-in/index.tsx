@@ -23,11 +23,11 @@ const hasUserAuthenticationMethods = (user: User, methods: FactorMethod[]) => {
  * Renders the children only when the SDK is ready and the user is authenticated.
  */
 export const LoggedIn: React.FC<Props> = ({ children, withFactorMethods }) => {
-  const { user } = useSlashID();
+  const { user, isAuthenticated } = useSlashID();
 
   const shouldRender = useMemo(() => {
     // user must be logged in
-    if (!user) {
+    if (!isAuthenticated || !user) {
       return false;
     }
 
