@@ -54,6 +54,7 @@
     "country-list-with-dial-code-and-flag": "^3.0.2"
   },
   "devDependencies": {
+    "@faker-js/faker": "^8.0.2",
     "@slashid/slashid": "^3.9.0",
     "@testing-library/dom": "^8.19.0",
     "@testing-library/jest-dom": "^5.16.5",

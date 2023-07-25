@@ -10,6 +10,7 @@ import React, {
 import { PersonHandleType, SlashID, User } from "@slashid/slashid";
 import { MemoryStorage } from "../browser/memory-storage";
 import { LogIn, LoginOptions, MFA } from "../domain/types";
+import { SDKState } from "../domain/sdk-state";
 
 export type StorageOption = "memory" | "localStorage";
 
@@ -23,12 +24,6 @@ export interface SlashIDProviderProps {
   children: React.ReactNode;
 }
 
-type SDKState =
-  | "initial"
-  | "loaded"
-  | "retrievingToken"
-  | "authenticating"
-  | "ready";
 export interface ISlashIDContext {
   sid: SlashID | undefined;
   user: User | undefined;
@@ -117,8 +112,6 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
         return;
       }
 
-      setState("authenticating");
-
       try {
         const identifier =
           factor.method === "oidc" || handle === undefined
@@ -131,10 +124,8 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
         // @ts-expect-error TODO make the identifier optional
         const user = await sid.id(oid, identifier, factor);
         storeUser(user);
-        setState("ready");
         return user;
       } catch (e) {
-        setState("ready");
         logOut();
         throw e;
       }
@@ -148,16 +139,8 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
         return;
       }
 
-      setState("authenticating");
-
-      try {
-        await user.mfa(handle, factor);
-        setState("ready");
-        return user;
-      } catch (e) {
-        setState("ready");
-        throw e;
-      }
+      await user.mfa(handle, factor);
+      return user;
     },
     [user, state]
   );
