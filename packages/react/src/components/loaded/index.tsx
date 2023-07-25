@@ -11,9 +11,9 @@ interface Props {
  * Acts as a guard for SlashID core SDK dependent operations. Can optionally render a fallback component while the SDK is loading.
  */
 export const SlashIDLoaded  = ({ fallback, children }: Props): JSX.Element => {
-    const { sdkState } = useSlashID()
+    const { isLoading } = useSlashID()
 
-    if (sdkState !== "ready") {
+    if (isLoading) {
         if (!fallback) return <></>
 
         return fallback

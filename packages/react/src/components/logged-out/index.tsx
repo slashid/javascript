@@ -8,22 +8,12 @@ type Props = {
 /**
  * Renders the children only when the SDK is ready and the user is not authenticated.
  */
-export const LoggedOut: React.FC<Props> = (props) => {
-  return (
-    <SlashIDLoaded>
-      <LoggedOutGuard
-        {...props}
-      />
-    </SlashIDLoaded>
-  )
-}
+export const LoggedOut = ({ children }: Props) => {
+  const { isAuthenticated, isLoading } = useSlashID();
 
-const LoggedOutGuard: React.FC<Props> = ({ children }) => {
-  const { user } = useSlashID();
-
-  if (user) {
+  if (isAuthenticated || isLoading) {
     return null;
   }
 
-  return <>{children}</>;
-};
+  return children
+}
