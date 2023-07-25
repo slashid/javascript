@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 1.8.0
+
+### Minor Changes
+
+- 02ea6e5: Add <SlashIDLoaded>, isLoading and isAuthenticated
+
 ## 1.7.0
 
 ### Minor Changes
