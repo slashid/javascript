@@ -1,52 +1,78 @@
-import { useCallback } from "react";
+import { GDPRConsent, GDPRConsentLevel } from "@slashid/slashid";
+import { useCallback, useEffect, useState } from "react";
 import { isBrowser } from "../browser/is-browser";
-import { useSlashID } from './use-slash-id';
+import { useSlashID } from "./use-slash-id";
 
 export const STORAGE_GDPR_CONSENT_KEY = "@slashid/GDPR_CONSENT";
 
 type UseGdprConsent = () => {
-  fetchGdprConsent: () => Promise<boolean>;
-  updateGdprConsent: (consent: boolean) => Promise<void>;
+  consents: GDPRConsent[];
+  updateGdprConsent: (consent: GDPRConsentLevel[]) => Promise<void>;
+};
+
+const getStoredConsents = (): GDPRConsent[] => {
+  if (!isBrowser()) {
+    return [];
+  }
+
+  const storedConsents = window.localStorage.getItem(STORAGE_GDPR_CONSENT_KEY);
+
+  if (storedConsents === null) {
+    return [];
+  }
+
+  return JSON.parse(storedConsents);
 };
 
 export const useGdprConsent: UseGdprConsent = () => {
-  const { user } = useSlashID();
+  const { user, sid } = useSlashID();
+  const [consents, setConsents] = useState<GDPRConsent[]>([]);
 
-  const fetchGdprConsent = useCallback(async () => {
-    if (user) {
-      // TODO: When authenticated using SlashID, fetch the consent using the User instance
-      return false;
-    }
-
-    if (!isBrowser()) {
-      return false;
-    }
-
-    const storedGdprConsent = window.localStorage.getItem(
-      STORAGE_GDPR_CONSENT_KEY
-    );
-    if (storedGdprConsent === null) {
-      return false;
-    }
-
-    return !!JSON.parse(storedGdprConsent);
-  }, [user]);
-
-  const updateGdprConsent = useCallback(async (consent: boolean) => {
-    if (user) {
-      // TODO: When authenticated using SlashID, update the consent using the User instance
+  useEffect(() => {
+    if (!sid || !user) {
+      setConsents(getStoredConsents());
       return;
     }
 
-    if (!isBrowser()) {
-      return;
-    }
+    const fetchGDPRConsent = async () => {
+      const { consents } = await user.getGDPRConsent();
 
-    window.localStorage.setItem(
-      STORAGE_GDPR_CONSENT_KEY,
-      JSON.stringify(consent)
-    );
-  }, [user]);
+      // TODO: compare the timestamps of consent levels and store the latest one using the API
+      setConsents(consents);
+      window.localStorage.removeItem(STORAGE_GDPR_CONSENT_KEY);
+    };
 
-  return { fetchGdprConsent, updateGdprConsent };
+    sid.subscribe("idFlowSucceeded", fetchGDPRConsent);
+    return () => sid.unsubscribe("idFlowSucceeded", fetchGDPRConsent);
+  }, [sid, user]);
+
+  const updateGdprConsent = useCallback(
+    async (consentLevels: GDPRConsentLevel[]) => {
+      if (user) {
+        const { consents } = await user.setGDPRConsent({
+          consentLevels,
+        });
+        setConsents(consents);
+        return;
+      }
+
+      if (!isBrowser()) {
+        return;
+      }
+
+      const consentsToStore = consentLevels.map((consentLevel) => ({
+        consent_level: consentLevel,
+        created_at: new Date(),
+      })) as GDPRConsent[];
+
+      window.localStorage.setItem(
+        STORAGE_GDPR_CONSENT_KEY,
+        JSON.stringify(consentsToStore)
+      );
+      setConsents(consentsToStore);
+    },
+    [user]
+  );
+
+  return { consents, updateGdprConsent };
 };
