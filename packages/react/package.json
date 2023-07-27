@@ -1,6 +1,6 @@
 {
   "name": "@slashid/react",
-  "version": "1.7.0",
+  "version": "1.8.3",
   "private": false,
   "publishConfig": {
     "access": "public"
@@ -55,6 +55,7 @@
   },
   "devDependencies": {
     "@slashid/slashid": "^3.10.0",
+    "@faker-js/faker": "^8.0.2",
     "@testing-library/dom": "^8.19.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",

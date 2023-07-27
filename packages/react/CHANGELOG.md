@@ -1,5 +1,23 @@
 # @slashid/react
 
+## 1.8.3
+
+### Patch Changes
+
+- fff6df8: Remove JSX.Element type from
+
+## 1.8.1
+
+### Patch Changes
+
+- c70fa86: Remove JSX.Element type from <SlashIDLoaded/>
+
+## 1.8.0
+
+### Minor Changes
+
+- 02ea6e5: Add <SlashIDLoaded>, isLoading and isAuthenticated
+
 ## 1.7.0
 
 ### Minor Changes
