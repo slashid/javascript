@@ -55,7 +55,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^8.0.2",
-    "@slashid/slashid": "^3.9.0",
+    "@slashid/slashid": "link:/Users/jake/dev/ng-evangelion/web/sdk",
     "@testing-library/dom": "^8.19.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",

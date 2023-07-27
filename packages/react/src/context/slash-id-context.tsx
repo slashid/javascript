@@ -16,6 +16,7 @@ export type StorageOption = "memory" | "localStorage";
 
 export interface SlashIDProviderProps {
   oid: string;
+  onOidChange?: (oid: string) => void | Promise<void>
   initialToken?: string;
   tokenStorage?: StorageOption;
   baseApiUrl?: string;
@@ -32,6 +33,7 @@ export interface ISlashIDContext {
   logIn: LogIn;
   mfa: MFA;
   validateToken: (token: string) => Promise<boolean>;
+  _switchOrganizationInContext: ({ oid }: { oid: string }) => void;
 }
 
 export const initialContextValue = {
@@ -42,6 +44,7 @@ export const initialContextValue = {
   logIn: () => Promise.reject("NYI"),
   mfa: () => Promise.reject("NYI"),
   validateToken: () => Promise.resolve(false),
+  _switchOrganizationInContext: () => {}
 };
 
 export const SlashIDContext =
@@ -62,7 +65,8 @@ const createStorage = (storageType: StorageOption) => {
 };
 
 export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
-  oid,
+  oid: initialOid,
+  onOidChange,
   initialToken,
   tokenStorage = "memory",
   baseApiUrl,
@@ -70,10 +74,49 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
   analyticsEnabled = false,
   children,
 }) => {
+  const [oid, setOid] = useState(initialOid)
+  const [token, setToken] = useState(initialToken)
   const [state, setState] = useState<SDKState>(initialContextValue.sdkState);
   const [user, setUser] = useState<User | undefined>(undefined);
   const storageRef = useRef<Storage | undefined>(undefined);
   const sidRef = useRef<SlashID | undefined>(undefined);
+
+  /**
+   * Sets the current [oid] and restarts
+   * the SDK lifecycle
+   * @param oid 
+   */
+  const updateOid = (oid: string) => {
+    setOid(oid)
+    if (onOidChange) onOidChange(oid)
+  }
+
+  /**
+   * Watch the eternal [oid] prop and react
+   * to changes.
+   * 
+   * Changing the `oid` prop at runtime
+   * causes the SDK lifecycle to start again.
+   */
+  useEffect(() => {
+    if (initialOid === oid) return
+    updateOid(initialOid)
+    setState("initial")
+  }, [initialOid])
+
+  /**
+   * Restarts the React SDK lifecycle with a new
+   * organizational context
+   */
+  const _switchOrganizationInContext = async ({ oid: newOid }: { oid: string }) => {
+    if (newOid === oid || !user) return
+
+    const newToken = await user.getTokenForOrganization(newOid)
+
+    setToken(newToken)
+    updateOid(newOid)
+    setState("initial")
+  }
 
   const storeUser = useCallback(
     (newUser: User) => {
@@ -83,6 +126,10 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
 
       setUser(newUser);
       storageRef.current?.setItem(STORAGE_TOKEN_KEY, newUser.token);
+
+      if (newUser.oid !== oid) {
+        _switchOrganizationInContext({ oid: newUser.oid })
+      }
     },
     [state]
   );
@@ -229,8 +276,8 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
     };
 
     const tryImmediateLogin = async () => {
-      if (initialToken) {
-        storeUser(new User(initialToken, sidRef.current!));
+      if (token) {
+        storeUser(new User(token, sidRef.current!));
       } else {
         const isDone = await loginDirectIdIfPresent();
 
@@ -244,7 +291,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
 
     setState("retrievingToken");
     tryImmediateLogin();
-  }, [state, initialToken, storeUser, validateToken]);
+  }, [state, token, storeUser, validateToken]);
 
   const contextValue = useMemo(() => {
     if (state === "initial") {
@@ -256,6 +303,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
         logIn,
         mfa,
         validateToken,
+        _switchOrganizationInContext
       };
     }
 
@@ -267,6 +315,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
       logIn,
       mfa,
       validateToken,
+      _switchOrganizationInContext
     };
   }, [logIn, logOut, user, validateToken, state, mfa]);
 
