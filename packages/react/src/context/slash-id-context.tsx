@@ -82,8 +82,8 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
   const sidRef = useRef<SlashID | undefined>(undefined);
 
   /**
-   * Sets the current [oid] and restarts
-   * the SDK lifecycle
+   * Sets the current [oid] emits change
+   * event
    * @param oid 
    */
   const setOid = (oid: string) => {
