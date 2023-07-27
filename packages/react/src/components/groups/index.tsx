@@ -1,11 +1,11 @@
-import { useMemo } from "react";
+import { ReactNode, useMemo } from "react";
 import { useSlashID } from "../../main";
 
 type Groups = string[];
 
 type Props = {
   belongsTo: (groups: Groups) => boolean;
-  children: React.ReactNode;
+  children: ReactNode;
 };
 
 /**

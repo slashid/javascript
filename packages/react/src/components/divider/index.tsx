@@ -1,9 +1,9 @@
 import { clsx } from "clsx";
-import React from "react";
+import React, { ReactNode } from "react";
 import * as styles from "./divider.css";
 
 type Props = {
-  children: React.ReactNode;
+  children: ReactNode;
 };
 
 export const Divider: React.FC<Props> = ({ children }) => {

@@ -1,4 +1,5 @@
 import React, {
+  ReactNode,
   createContext,
   useCallback,
   useEffect,
@@ -22,7 +23,7 @@ export interface SlashIDProviderProps {
   sdkUrl?: string;
   analyticsEnabled?: boolean;
   themeProps?: ThemeProps;
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 export interface ISlashIDContext {

@@ -1,7 +1,8 @@
+import { ReactNode } from "react";
 import { useSlashID } from "../../main";
 
 type Props = {
-  children: React.ReactNode;
+  children: ReactNode;
 };
 
 /**
