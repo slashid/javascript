@@ -75,7 +75,7 @@
     "vitest": "^0.25.2"
   },
   "peerDependencies": {
-    "@slashid/slashid": ">= 3.9.0",
+    "@slashid/slashid": ">= 3.10.0",
     "react": ">=16"
   }
 }
