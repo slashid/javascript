@@ -9,7 +9,7 @@ export const useOrganizations = () => {
 
   const { user, _switchOrganizationInContext } = useSlashID()
 
-  const switchOrganization = useCallback<ISlashIDContext['_switchOrganizationInContext']>(({ oid, token }) => {
+  const switchOrganization = useCallback<ISlashIDContext['_switchOrganizationInContext']>(({ oid }) => {
     _switchOrganizationInContext({ oid })
   }, [])
 
