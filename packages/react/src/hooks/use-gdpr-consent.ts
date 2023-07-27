@@ -7,7 +7,7 @@ export const STORAGE_GDPR_CONSENT_KEY = "@slashid/GDPR_CONSENT";
 
 type UseGdprConsent = () => {
   consents: GDPRConsent[];
-  updateGdprConsent: (consent: GDPRConsentLevel[]) => Promise<void>;
+  updateGdprConsent: (consentLevels: GDPRConsentLevel[]) => Promise<void>;
 };
 
 const getStoredConsents = (): GDPRConsent[] => {
@@ -16,7 +16,6 @@ const getStoredConsents = (): GDPRConsent[] => {
   }
 
   const storedConsents = window.localStorage.getItem(STORAGE_GDPR_CONSENT_KEY);
-
   if (storedConsents === null) {
     return [];
   }
@@ -41,7 +40,6 @@ export const useGdprConsent: UseGdprConsent = () => {
 
       setConsents(hasStoredConsents ? storedConsents : consents);
       window.localStorage.removeItem(STORAGE_GDPR_CONSENT_KEY);
-
       if (hasStoredConsents) {
         user.setGDPRConsent({
           consentLevels: storedConsents.map((consent) => consent.consent_level),
