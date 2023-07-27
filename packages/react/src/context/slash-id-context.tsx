@@ -17,7 +17,6 @@ export type StorageOption = "memory" | "localStorage";
 
 export interface SlashIDProviderProps {
   oid: string;
-  onOidChange?: (oid: string) => void | Promise<void>
   initialToken?: string;
   tokenStorage?: StorageOption;
   baseApiUrl?: string;
@@ -35,7 +34,7 @@ export interface ISlashIDContext {
   logIn: LogIn;
   mfa: MFA;
   validateToken: (token: string) => Promise<boolean>;
-  _switchOrganizationInContext: ({ oid }: { oid: string }) => void;
+  __switchOrganizationInContext: ({ oid }: { oid: string }) => void;
 }
 
 export const initialContextValue = {
@@ -46,7 +45,7 @@ export const initialContextValue = {
   logIn: () => Promise.reject("NYI"),
   mfa: () => Promise.reject("NYI"),
   validateToken: () => Promise.resolve(false),
-  _switchOrganizationInContext: () => {}
+  __switchOrganizationInContext: () => {}
 };
 
 export const SlashIDContext =
@@ -68,7 +67,6 @@ const createStorage = (storageType: StorageOption) => {
 
 export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
   oid: initialOid,
-  onOidChange,
   initialToken,
   tokenStorage = "memory",
   baseApiUrl,
@@ -77,7 +75,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
   themeProps,
   children,
 }) => {
-  const [oid, _setOid] = useState(initialOid)
+  const [oid, setOid] = useState(initialOid)
   const [token, setToken] = useState(initialToken)
   const [state, setState] = useState<SDKState>(initialContextValue.sdkState);
   const [user, setUser] = useState<User | undefined>(undefined);
@@ -85,33 +83,10 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
   const sidRef = useRef<SlashID | undefined>(undefined);
 
   /**
-   * Sets the current [oid] emits change
-   * event
-   * @param oid 
-   */
-  const setOid = (oid: string) => {
-    _setOid(oid)
-    if (onOidChange) onOidChange(oid)
-  }
-
-  /**
-   * Watch the eternal [oid] prop and react
-   * to changes.
-   * 
-   * Changing the `oid` prop at runtime
-   * causes the SDK lifecycle to start again.
-   */
-  useEffect(() => {
-    if (initialOid === oid) return
-    setOid(initialOid)
-    setState("initial")
-  }, [initialOid])
-
-  /**
    * Restarts the React SDK lifecycle with a new
    * organizational context
    */
-  const _switchOrganizationInContext = async ({ oid: newOid }: { oid: string }) => {
+  const __switchOrganizationInContext = async ({ oid: newOid }: { oid: string }) => {
     if (newOid === oid || !user) return
 
     const newToken = await user.getTokenForOrganization(newOid)
@@ -131,7 +106,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
       storageRef.current?.setItem(STORAGE_TOKEN_KEY, newUser.token);
 
       if (newUser.oid !== oid) {
-        _switchOrganizationInContext({ oid: newUser.oid })
+        __switchOrganizationInContext({ oid: newUser.oid })
       }
     },
     [state]
@@ -306,7 +281,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
         logIn,
         mfa,
         validateToken,
-        _switchOrganizationInContext
+        __switchOrganizationInContext
       };
     }
 
@@ -318,7 +293,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
       logIn,
       mfa,
       validateToken,
-      _switchOrganizationInContext
+      __switchOrganizationInContext
     };
   }, [logIn, logOut, user, validateToken, state, mfa]);
 
