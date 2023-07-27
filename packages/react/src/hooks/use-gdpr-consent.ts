@@ -84,6 +84,7 @@ export const createApiGDPRConsentStorage = (
 type UseGdprConsent = () => {
   consents: GDPRConsent[];
   updateGdprConsent: (consentLevels: GDPRConsentLevel[]) => Promise<void>;
+  deleteGdprConsent: () => Promise<void>;
 };
 
 export const useGdprConsent: UseGdprConsent = () => {
@@ -118,5 +119,10 @@ export const useGdprConsent: UseGdprConsent = () => {
     [storage]
   );
 
-  return { consents, updateGdprConsent };
+  const deleteGdprConsent = useCallback(async () => {
+    await storage.deleteConsentLevels();
+    setConsents([]);
+  }, [storage]);
+
+  return { consents, updateGdprConsent, deleteGdprConsent };
 };
