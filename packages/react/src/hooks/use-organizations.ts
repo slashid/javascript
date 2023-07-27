@@ -20,8 +20,7 @@ export const useOrganizations = () => {
   }, [organizations, user, user?.oid])
 
   useEffect(() => {
-    if (!user) return
-    if (organizations.length) return
+    if (!user || organizations.length) return
 
     user.getOrganizations()
       .then(({ organizations }) => {
