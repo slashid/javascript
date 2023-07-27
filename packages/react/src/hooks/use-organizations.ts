@@ -7,10 +7,10 @@ export const useOrganizations = () => {
   const [isLoading, setLoading] = useState<boolean>(true)
   const [organizations, setOrganizations] = useState<OrganizationDetails[]>([])
 
-  const { user, _switchOrganizationInContext } = useSlashID()
+  const { user, __switchOrganizationInContext } = useSlashID()
 
-  const switchOrganization = useCallback<ISlashIDContext['_switchOrganizationInContext']>(({ oid }) => {
-    _switchOrganizationInContext({ oid })
+  const switchOrganization = useCallback<ISlashIDContext['__switchOrganizationInContext']>(({ oid }) => {
+    __switchOrganizationInContext({ oid })
   }, [])
 
   const currentOrganization = useMemo(() => {

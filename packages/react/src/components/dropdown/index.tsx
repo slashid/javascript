@@ -17,6 +17,7 @@ type Props = {
   items: Item[];
   defaultValue?: string;
   onChange: (value: string) => void;
+  disabled?: boolean;
 };
 
 export const Dropdown: React.FC<Props> = ({
@@ -26,10 +27,11 @@ export const Dropdown: React.FC<Props> = ({
   defaultValue,
   onChange,
   className,
+  disabled = false
 }) => {
   return (
     <div className="sid-dropdown">
-      <Select.Root onValueChange={onChange} defaultValue={defaultValue}>
+      <Select.Root disabled={disabled} onValueChange={onChange} defaultValue={defaultValue}>
         <Select.Trigger className={clsx(styles.trigger, className)}>
           <label className={styles.label}>{label}</label>
           <div className={styles.input} placeholder={placeholder}>
