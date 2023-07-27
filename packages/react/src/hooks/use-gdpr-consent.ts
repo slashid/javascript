@@ -34,16 +34,25 @@ export const useGdprConsent: UseGdprConsent = () => {
       return;
     }
 
-    const fetchGDPRConsent = async () => {
+    const fetchAndSyncGDPRConsent = async () => {
       const { consents } = await user.getGDPRConsent();
+      const storedConsents = getStoredConsents();
+      const hasStoredConsents = storedConsents.length > 0;
 
-      // TODO: compare the timestamps of consent levels and store the latest one using the API
-      setConsents(consents);
+      setConsents(hasStoredConsents ? storedConsents : consents);
       window.localStorage.removeItem(STORAGE_GDPR_CONSENT_KEY);
+
+      if (hasStoredConsents) {
+        user.setGDPRConsent({
+          consentLevels: storedConsents.map((consent) => consent.consent_level),
+        });
+      }
     };
 
-    sid.subscribe("idFlowSucceeded", fetchGDPRConsent);
-    return () => sid.unsubscribe("idFlowSucceeded", fetchGDPRConsent);
+    fetchAndSyncGDPRConsent();
+    sid.subscribe("idFlowSucceeded", fetchAndSyncGDPRConsent);
+
+    return () => sid.unsubscribe("idFlowSucceeded", fetchAndSyncGDPRConsent);
   }, [sid, user]);
 
   const updateGdprConsent = useCallback(
