@@ -74,7 +74,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
   analyticsEnabled = false,
   children,
 }) => {
-  const [oid, setOid] = useState(initialOid)
+  const [oid, _setOid] = useState(initialOid)
   const [token, setToken] = useState(initialToken)
   const [state, setState] = useState<SDKState>(initialContextValue.sdkState);
   const [user, setUser] = useState<User | undefined>(undefined);
@@ -86,8 +86,8 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
    * the SDK lifecycle
    * @param oid 
    */
-  const updateOid = (oid: string) => {
-    setOid(oid)
+  const setOid = (oid: string) => {
+    _setOid(oid)
     if (onOidChange) onOidChange(oid)
   }
 
@@ -100,7 +100,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
    */
   useEffect(() => {
     if (initialOid === oid) return
-    updateOid(initialOid)
+    setOid(initialOid)
     setState("initial")
   }, [initialOid])
 
@@ -114,7 +114,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
     const newToken = await user.getTokenForOrganization(newOid)
 
     setToken(newToken)
-    updateOid(newOid)
+    setOid(newOid)
     setState("initial")
   }
 
