@@ -4,7 +4,7 @@ import { useSlashID } from "./use-slash-id"
 import { ISlashIDContext } from "../context/slash-id-context"
 
 export const useOrganizations = () => {
-  const [isLoading, setLoading] = useState<boolean>(false)
+  const [isLoading, setLoading] = useState<boolean>(true)
   const [organizations, setOrganizations] = useState<OrganizationDetails[]>([])
 
   const { user, _switchOrganizationInContext } = useSlashID()
