@@ -114,4 +114,5 @@ export const TEXT = {
   "kyc.livephoto.mobile.title": "Selfie Check",
   "kyc.livephoto.mobile.subtitle":
     "Upload a selfie picture to confirm your identity.",
+  "org.switcher.label": "Organization"
 };

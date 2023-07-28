@@ -7,10 +7,11 @@ import React, {
   useState,
 } from "react";
 
-import { PersonHandleType, SlashID, User } from "@slashid/slashid";
+import { OrganizationDetails, PersonHandleType, SlashID, User } from "@slashid/slashid";
 import { MemoryStorage } from "../browser/memory-storage";
 import { LogIn, LoginOptions, MFA } from "../domain/types";
 import { SDKState } from "../domain/sdk-state";
+import { OrganizationProvider } from "./organization-context";
 
 export type StorageOption = "memory" | "localStorage";
 
@@ -22,6 +23,7 @@ export interface SlashIDProviderProps {
   sdkUrl?: string;
   analyticsEnabled?: boolean;
   children: React.ReactNode;
+  defaultOrganization?: string | ((organizations: OrganizationDetails[]) => string)
 }
 
 export interface ISlashIDContext {
@@ -32,6 +34,8 @@ export interface ISlashIDContext {
   logIn: LogIn;
   mfa: MFA;
   validateToken: (token: string) => Promise<boolean>;
+  __defaultOrgCheckComplete: boolean;
+  __switchOrganizationInContext: ({ oid }: { oid: string }) => void;
 }
 
 export const initialContextValue = {
@@ -42,6 +46,8 @@ export const initialContextValue = {
   logIn: () => Promise.reject("NYI"),
   mfa: () => Promise.reject("NYI"),
   validateToken: () => Promise.resolve(false),
+  __defaultOrgCheckComplete: false,
+  __switchOrganizationInContext: () => {}
 };
 
 export const SlashIDContext =
@@ -62,18 +68,66 @@ const createStorage = (storageType: StorageOption) => {
 };
 
 export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
-  oid,
+  oid: initialOid,
   initialToken,
   tokenStorage = "memory",
   baseApiUrl,
   sdkUrl,
   analyticsEnabled = false,
   children,
+  defaultOrganization
 }) => {
+  const [oid, setOid] = useState(initialOid)
+  const [token, setToken] = useState(initialToken)
   const [state, setState] = useState<SDKState>(initialContextValue.sdkState);
   const [user, setUser] = useState<User | undefined>(undefined);
   const storageRef = useRef<Storage | undefined>(undefined);
   const sidRef = useRef<SlashID | undefined>(undefined);
+  
+  const [orgs, setOrgs] = useState<null | any[]>(null)
+  const [defaultOrgCheckComplete, setDefaultOrgCheckComplete] = useState<boolean>(!defaultOrganization)
+
+  useEffect(() => {
+    if (!defaultOrganization || !user || orgs !== null) return
+
+    user.getOrganizations()
+      .then(organizations => {
+        setOrgs(organizations)
+      })
+  }, [user, orgs?.length])
+
+  const getDefaultOrganizationOid = (orgs: any[]) => {
+    if (!defaultOrganization) throw new Error("Expected defaultOrganizations to be defined")
+    if (typeof defaultOrganization === "string") {
+      return defaultOrganization
+    }
+
+    return defaultOrganization(orgs)
+  }
+
+  /**
+   * Restarts the React SDK lifecycle with a new
+   * organizational context
+   */
+  const __switchOrganizationInContext = async ({ oid: newOid }: { oid: string }) => {
+    if (!user) return
+
+    const newToken = await user.getTokenForOrganization(newOid)
+
+    setToken(newToken)
+    setOid(newOid)
+    setState("initial")
+  }
+
+  useEffect(() => {
+    const noOrgs = !orgs?.length
+
+    if (defaultOrgCheckComplete || noOrgs || !user || !defaultOrganization) return
+
+    const oid = getDefaultOrganizationOid(orgs)
+    __switchOrganizationInContext({ oid })
+    setDefaultOrgCheckComplete(true)
+  }, [orgs, user])
 
   const storeUser = useCallback(
     (newUser: User) => {
@@ -83,6 +137,10 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
 
       setUser(newUser);
       storageRef.current?.setItem(STORAGE_TOKEN_KEY, newUser.token);
+
+      if (newUser.oid !== oid) {
+        __switchOrganizationInContext({ oid: newUser.oid })
+      }
     },
     [state]
   );
@@ -99,6 +157,8 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
 
     user.logout();
     setUser(undefined);
+    setOrgs(null);
+    setDefaultOrgCheckComplete(false);
   }, [user, state]);
 
   const logIn = useCallback(
@@ -229,8 +289,8 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
     };
 
     const tryImmediateLogin = async () => {
-      if (initialToken) {
-        storeUser(new User(initialToken, sidRef.current!));
+      if (token) {
+        storeUser(new User(token, sidRef.current!));
       } else {
         const isDone = await loginDirectIdIfPresent();
 
@@ -243,8 +303,9 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
     };
 
     setState("retrievingToken");
+
     tryImmediateLogin();
-  }, [state, initialToken, storeUser, validateToken]);
+  }, [state, token, storeUser, validateToken]);
 
   const contextValue = useMemo(() => {
     if (state === "initial") {
@@ -256,6 +317,8 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
         logIn,
         mfa,
         validateToken,
+        __defaultOrgCheckComplete: defaultOrgCheckComplete,
+        __switchOrganizationInContext
       };
     }
 
@@ -267,12 +330,16 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
       logIn,
       mfa,
       validateToken,
+      __defaultOrgCheckComplete: defaultOrgCheckComplete,
+      __switchOrganizationInContext
     };
-  }, [logIn, logOut, user, validateToken, state, mfa]);
+  }, [logIn, logOut, user, validateToken, state, mfa, defaultOrgCheckComplete]);
 
   return (
     <SlashIDContext.Provider value={contextValue}>
-      {children}
+      <OrganizationProvider>
+        {children}
+      </OrganizationProvider>
     </SlashIDContext.Provider>
   );
 };
