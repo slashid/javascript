@@ -50,7 +50,7 @@ const ThemeRoot = ({ children }: { children: ReactNode }) => {
 }
 
 export const OrganizationSwitcher = ({ filter, fallback = <DefaultFallback /> }: Props) => {
-  const { text, theme } = useConfiguration();
+  const { text } = useConfiguration();
   const { __defaultOrgCheckComplete } = useSlashID()
   const { organizations: allOrganizations, currentOrganization, switchOrganization, isLoading } = useOrganizations()
 

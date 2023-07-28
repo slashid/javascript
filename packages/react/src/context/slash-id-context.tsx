@@ -91,7 +91,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
     if (!defaultOrganization || !user || orgs !== null) return
 
     user.getOrganizations()
-      .then(({ organizations }) => {
+      .then(organizations => {
         setOrgs(organizations)
       })
   }, [user, orgs?.length])
