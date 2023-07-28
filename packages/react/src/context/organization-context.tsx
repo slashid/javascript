@@ -38,7 +38,7 @@ export const OrganizationProvider: React.FC<Props> = ({ children }) => {
     if (!user || !isLoading) return
     
     user.getOrganizations()
-      .then(({ organizations }) => {
+      .then(organizations => {
         setOrganizations(organizations)
       })
   }, [user])
