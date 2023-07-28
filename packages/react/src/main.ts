@@ -12,6 +12,8 @@ import { MultiFactorAuth } from "./components/multi-factor-auth";
 import { StepUpAuth } from "./components/step-up-auth";
 import { SlashIDLoaded } from "./components/loaded";
 import { useSlashID } from "./hooks/use-slash-id";
+import { useOrganizations } from "./hooks/use-organizations";
+import { OrganizationSwitcher } from './components/organization-switcher'
 
 /**
  * TODO: think about code splitting
@@ -30,4 +32,6 @@ export {
   MultiFactorAuth,
   StepUpAuth,
   useSlashID,
+  useOrganizations,
+  OrganizationSwitcher
 };
