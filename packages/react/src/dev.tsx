@@ -38,8 +38,6 @@ const withWan: Factor[] = [
   },
 ];
 
-const mfaFactors: Factor[] = [{ method: "otp_via_sms" }];
-
 function Config() {
   const { currentOrganization } = useOrganizations();
   const [factors, setFactors] = useState<Factor[]>(initialFactors);
