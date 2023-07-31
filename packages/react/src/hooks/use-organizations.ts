@@ -8,7 +8,6 @@ import {
 } from "../context/organization-context";
 
 interface UseOrganizations extends IOrganizationContext {
-  // currentOrganization: OrganizationDetails | null
   switchOrganization: ({ oid }: { oid: string }) => void;
 }
 
