@@ -1,14 +1,17 @@
 import type { Factor } from "@slashid/slashid";
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
-import { MultiFactorAuth } from "./components/multi-factor-auth";
-import { SlashIDProvider } from "./context/slash-id-context";
-import { ConfigurationProvider } from "./context/config-context";
 
 import "./dev.css";
-import { Form, LoggedIn, LoggedOut, useSlashID } from "./main";
-import { OrganizationSwitcher } from "./components/organization-switcher";
-import { useOrganizations } from "./hooks/use-organizations";
+import {
+  Form,
+  LoggedIn,
+  LoggedOut,
+  ConfigurationProvider,
+  OrganizationSwitcher,
+  useOrganizations,
+  SlashIDProvider,
+} from "./main";
 
 const initialFactors: Factor[] = [
   { method: "email_link" },
@@ -38,7 +41,7 @@ const withWan: Factor[] = [
 const mfaFactors: Factor[] = [{ method: "otp_via_sms" }];
 
 function Config() {
-  const { currentOrganization } = useOrganizations()
+  const { currentOrganization } = useOrganizations();
   const [factors, setFactors] = useState<Factor[]>(initialFactors);
 
   useEffect(() => {
@@ -74,7 +77,9 @@ function Config() {
         <>
           Current org: {currentOrganization?.org_name}
           <OrganizationSwitcher
-            filter={(org) => org.org_name.includes("abc") || org.org_name === "MyOrg"}
+            filter={(org) =>
+              org.org_name.includes("abc") || org.org_name === "MyOrg"
+            }
           />
         </>
       </LoggedIn>
@@ -90,10 +95,10 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
       tokenStorage="localStorage"
       baseApiUrl="https://api.slashid.com"
       defaultOrganization={(orgs) => {
-        const preferred = orgs.find(org => org.org_name === 'MyOrg/abc2')
-        if (preferred) return preferred.id
-        
-        return "b6f94b67-d20f-7fc3-51df-bf6e3b82683e" // orgs[0].id
+        const preferred = orgs.find((org) => org.org_name === "MyOrg/abc2");
+        if (preferred) return preferred.id;
+
+        return "b6f94b67-d20f-7fc3-51df-bf6e3b82683e"; // orgs[0].id
       }}
     >
       <Config />

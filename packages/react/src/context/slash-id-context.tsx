@@ -49,7 +49,7 @@ export const initialContextValue = {
   mfa: () => Promise.reject("NYI"),
   validateToken: () => Promise.resolve(false),
   __defaultOrgCheckComplete: false,
-  __switchOrganizationInContext: () => {}
+  __switchOrganizationInContext: () => undefined
 };
 
 export const SlashIDContext =
