@@ -1,8 +1,8 @@
 import { ReactNode, useMemo } from "react";
 import { useConfiguration } from "../../hooks/use-configuration";
-import { useOrganizations } from "../../hooks/use-organizations"
+import { useOrganizations } from "../../hooks/use-organizations";
 import { sprinkles } from "../../theme/sprinkles.css";
-import { Dropdown } from "../dropdown"
+import { Dropdown } from "../dropdown";
 import { clsx } from "clsx";
 import { themeClass, darkTheme, autoTheme } from "../../theme/theme.css";
 import * as styles from "./index.css";
@@ -10,26 +10,27 @@ import { OrganizationDetails } from "@slashid/slashid";
 import { useSlashID } from "../../main";
 
 interface Props {
-  fallback?: ReactNode
-  filter?: (organization: OrganizationDetails) => boolean
+  fallback?: ReactNode;
+  filter?: (organization: OrganizationDetails) => boolean;
 }
 
-const className = sprinkles({ marginBottom: "3", marginTop: "5" })
+const className = sprinkles({ marginBottom: "3", marginTop: "5" });
+const noop = () => undefined;
 
 const DefaultFallback = () => {
   const { text } = useConfiguration();
 
   return (
     <Dropdown
-      defaultValue={''}
+      defaultValue={""}
       disabled={true}
       className={className}
-      items={[{ label: '-', value: '' }]}
-      onChange={() => {}}
+      items={[{ label: "-", value: "" }]}
+      onChange={noop}
       label={text["org.switcher.label"]}
     />
-  )
-}
+  );
+};
 
 const ThemeRoot = ({ children }: { children: ReactNode }) => {
   const { theme } = useConfiguration();
@@ -46,25 +47,29 @@ const ThemeRoot = ({ children }: { children: ReactNode }) => {
     >
       {children}
     </div>
-  )
-}
+  );
+};
 
-export const OrganizationSwitcher = ({ filter, fallback = <DefaultFallback /> }: Props) => {
+export const OrganizationSwitcher = ({
+  filter,
+  fallback = <DefaultFallback />,
+}: Props) => {
   const { text } = useConfiguration();
-  const { __defaultOrgCheckComplete } = useSlashID()
-  const { organizations: allOrganizations, currentOrganization, switchOrganization, isLoading } = useOrganizations()
+  const { __defaultOrgCheckComplete } = useSlashID();
+  const {
+    organizations: allOrganizations,
+    currentOrganization,
+    switchOrganization,
+    isLoading,
+  } = useOrganizations();
 
   const organizations = useMemo(() => {
-    if (!filter) return allOrganizations
-    return allOrganizations.filter(filter)
-  }, [filter, allOrganizations])
+    if (!filter) return allOrganizations;
+    return allOrganizations.filter(filter);
+  }, [filter, allOrganizations]);
 
   if (isLoading || !currentOrganization || !__defaultOrgCheckComplete) {
-    return (
-      <ThemeRoot>
-        {fallback}
-      </ThemeRoot>  
-    )
+    return <ThemeRoot>{fallback}</ThemeRoot>;
   }
 
   return (
@@ -78,10 +83,8 @@ export const OrganizationSwitcher = ({ filter, fallback = <DefaultFallback /> }:
           label: org.org_name,
           value: org.id,
         }))}
-        onChange={(oid) =>
-          switchOrganization({ oid })
-        }
+        onChange={(oid) => switchOrganization({ oid })}
       />
     </ThemeRoot>
   );
-}
+};

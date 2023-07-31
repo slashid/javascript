@@ -4,9 +4,8 @@ import ReactDOM from "react-dom/client";
 import { SlashIDProvider } from "./context/slash-id-context";
 
 import "./dev.css";
-import { ConfigurationProvider, DynamicFlow } from "./main";
-import { FactorOIDC } from "./domain/types";
-import { Form, LoggedIn, LoggedOut, useSlashID } from "./main";
+import { ConfigurationProvider } from "./main";
+import { Form, LoggedIn, LoggedOut } from "./main";
 import { OrganizationSwitcher } from "./components/organization-switcher";
 import { useOrganizations } from "./hooks/use-organizations";
 
