@@ -4,6 +4,7 @@ import {
   TEST_PERSON_ID,
   TEST_TOKEN,
 } from "../context/test-slash-id-provider";
+import { TestOrganizationProvider } from '../context/test-organization-context'
 import { SlashIDProvider } from "../main";
 import { useSlashID } from "./use-slash-id";
 
@@ -20,7 +21,11 @@ const TestComponent = () => {
 describe("useSlashID", () => {
   test("should return a user instance when a valid initial token is passed to the SlashIDProvider", async () => {
     render(
-      <SlashIDProvider initialToken={TEST_TOKEN} oid={TEST_ORG_ID}>
+      <SlashIDProvider initialToken={TEST_TOKEN} oid={TEST_ORG_ID} providers={({ children }) => (
+        <TestOrganizationProvider>
+          {children}
+        </TestOrganizationProvider>
+      )}>
         <TestComponent />
       </SlashIDProvider>
     );

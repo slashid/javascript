@@ -24,6 +24,7 @@ export interface SlashIDProviderProps {
   analyticsEnabled?: boolean;
   children: React.ReactNode;
   defaultOrganization?: string | ((organizations: OrganizationDetails[]) => string)
+  providers?: ({ children }: { children: React.ReactNode }) => React.ReactNode
 }
 
 export interface ISlashIDContext {
@@ -75,7 +76,12 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
   sdkUrl,
   analyticsEnabled = false,
   children,
-  defaultOrganization
+  defaultOrganization,
+  providers = ({ children }) => (
+    <OrganizationProvider>
+      {children}
+    </OrganizationProvider>
+  )
 }) => {
   const [oid, setOid] = useState(initialOid)
   const [token, setToken] = useState(initialToken)
@@ -337,9 +343,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
 
   return (
     <SlashIDContext.Provider value={contextValue}>
-      <OrganizationProvider>
-        {children}
-      </OrganizationProvider>
+      {providers({ children })}
     </SlashIDContext.Provider>
   );
 };

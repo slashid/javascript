@@ -39,7 +39,6 @@ export const OrganizationProvider: React.FC<Props> = ({ children }) => {
     
     user.getOrganizations()
       .then(organizations => {
-        console.log({ organizations })
         setOrganizations(organizations)
       })
   }, [user])
