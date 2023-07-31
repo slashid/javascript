@@ -15,10 +15,6 @@ interface GDPRConsentStorage {
 
 export const createLocalGDPRConsentStorage = (): GDPRConsentStorage => ({
   getConsentLevels: async () => {
-    if (!isBrowser()) {
-      return [];
-    }
-
     const storedConsents = window.localStorage.getItem(
       STORAGE_GDPR_CONSENT_KEY
     );
@@ -29,10 +25,6 @@ export const createLocalGDPRConsentStorage = (): GDPRConsentStorage => ({
     return JSON.parse(storedConsents);
   },
   setConsentLevels: async (consentLevels) => {
-    if (!isBrowser()) {
-      return [];
-    }
-
     const consentsToStore = consentLevels.map((consentLevel) => ({
       consent_level: consentLevel,
       created_at: new Date(),
@@ -45,10 +37,6 @@ export const createLocalGDPRConsentStorage = (): GDPRConsentStorage => ({
     return consentsToStore;
   },
   deleteConsentLevels: async () => {
-    if (!isBrowser()) {
-      return;
-    }
-
     window.localStorage.removeItem(STORAGE_GDPR_CONSENT_KEY);
   },
 });
@@ -92,13 +80,20 @@ export const useGdprConsent: UseGdprConsent = () => {
   const [consents, setConsents] = useState<GDPRConsent[]>([]);
 
   const storage = useMemo(() => {
-    return user
-      ? createApiGDPRConsentStorage(user)
-      : createLocalGDPRConsentStorage();
+    if (user) {
+      return createApiGDPRConsentStorage(user);
+    }
+    if (!isBrowser()) {
+      return;
+    }
+    return createLocalGDPRConsentStorage();
   }, [user]);
 
   useEffect(() => {
     const fetchAndSyncGDPRConsent = async () => {
+      if (!storage) {
+        return;
+      }
       const consents = await storage.getConsentLevels();
       setConsents(consents);
     };
@@ -113,6 +108,9 @@ export const useGdprConsent: UseGdprConsent = () => {
 
   const updateGdprConsent = useCallback(
     async (consentLevels: GDPRConsentLevel[]) => {
+      if (!storage) {
+        return;
+      }
       const consents = await storage.setConsentLevels(consentLevels);
       setConsents(consents);
     },
@@ -120,6 +118,9 @@ export const useGdprConsent: UseGdprConsent = () => {
   );
 
   const deleteGdprConsent = useCallback(async () => {
+    if (!storage) {
+      return;
+    }
     await storage.deleteConsentLevels();
     setConsents([]);
   }, [storage]);
