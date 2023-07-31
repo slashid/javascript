@@ -4,10 +4,13 @@ import {
   SlashIDContext,
   ISlashIDContext,
   initialContextValue,
+  SlashIDProviderProps,
 } from "../context/slash-id-context";
+import { TestOrganizationProvider } from "./test-organization-context";
 
 type TestProviderProps = Partial<ISlashIDContext> & {
   children: React.ReactNode;
+  providers?: SlashIDProviderProps['providers']
 };
 
 export const TEST_ORG_ID = "ad5399ea-4e88-b04a-16ca-82958c955740";
@@ -72,7 +75,12 @@ export const TestSlashIDProvider: React.FC<TestProviderProps> = ({
   children,
   logIn,
   mfa,
-  __defaultOrgCheckComplete = true
+  __defaultOrgCheckComplete = true,
+  providers = ({ children }) => (
+    <TestOrganizationProvider>
+      {children}
+    </TestOrganizationProvider>
+  )
 }) => {
   const value = useMemo(
     () => ({
@@ -88,6 +96,8 @@ export const TestSlashIDProvider: React.FC<TestProviderProps> = ({
   );
 
   return (
-    <SlashIDContext.Provider value={value}>{children}</SlashIDContext.Provider>
+    <SlashIDContext.Provider value={value}>
+      {providers({ children })}
+    </SlashIDContext.Provider>
   );
 };
