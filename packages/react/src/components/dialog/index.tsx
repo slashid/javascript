@@ -11,6 +11,7 @@ type Props = {
   trigger: ReactNode;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  icon?: ReactNode;
   className?: string;
   theme?: Theme;
   modal?: boolean;
@@ -21,6 +22,7 @@ export const Dialog = ({
   trigger,
   open,
   onOpenChange,
+  icon,
   className,
   theme = "light",
   modal = true,
@@ -39,11 +41,14 @@ export const Dialog = ({
             <RadixDialog.Content
               className={clsx("sid-dialog", styles.wrapper, className)}
             >
-              <RadixDialog.Close asChild>
-                <button className={styles.closeButton} aria-label="Close">
-                  <Close />
-                </button>
-              </RadixDialog.Close>
+              <div className={styles.header}>
+                <div>{icon}</div>
+                <RadixDialog.Close asChild>
+                  <button className={styles.closeButton} aria-label="Close">
+                    <Close />
+                  </button>
+                </RadixDialog.Close>
+              </div>
               {children}
             </RadixDialog.Content>
           </RadixDialog.Portal>

@@ -1,5 +1,5 @@
 import { keyframes, style } from "@vanilla-extract/css";
-import { publicVariables } from "../../theme/theme.css";
+import { publicVariables, theme } from "../../theme/theme.css";
 
 const show = keyframes({
   "0%": { opacity: "0" },
@@ -16,22 +16,24 @@ export const overlay = style({
 });
 
 export const wrapper = style({
-  backgroundColor: publicVariables.color.background,
   position: "fixed",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: "90vw",
-  maxWidth: "450px",
-  maxHeight: "85vh",
-  padding: "25px",
-  animation,
-  border: `1px solid ${publicVariables.color.secondary}`,
+  maxWidth: "398px",
+  maxHeight: "80vh",
+  padding: "16px",
   boxSizing: "border-box",
+  borderRadius: "20px",
+  animation,
+  backgroundColor: publicVariables.color.panel,
+  boxShadow: theme.color.md,
+});
 
-  ":focus": {
-    outline: "none",
-  },
+export const header = style({
+  display: "flex",
+  justifyContent: "space-between",
 });
 
 export const closeButton = style({

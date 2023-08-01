@@ -209,6 +209,7 @@ export const [themeClass, theme] = createTheme({
   },
   color: {
     md: "4px 0px 24px rgba(29, 25, 77, 0.03), 0px 12px 32px rgba(29, 25, 77, 0.04)",
+    lg: "32px 80px 116px 0px rgba(15, 14, 27, 0.10), 120px 0px 184px 0px rgba(15, 14, 27, 0.10)",
   },
 });
 
