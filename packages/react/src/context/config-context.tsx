@@ -1,11 +1,11 @@
 import { Factor } from "@slashid/slashid";
 import { createContext, ReactNode, useMemo } from "react";
-import { TEXT, TextConfig } from "../components/text/constants";
 import { SlashID } from "../components/icon/slashid";
+import { TEXT, TextConfig } from "../components/text/constants";
+import { Theme } from "../theme/theme.css";
 
 export type Logo = string | React.ReactNode;
 
-export type Theme = "light" | "dark" | "auto";
 export interface IConfigurationContext {
   text: TextConfig;
   factors: Factor[];

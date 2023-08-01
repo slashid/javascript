@@ -211,3 +211,5 @@ export const [themeClass, theme] = createTheme({
     md: "4px 0px 24px rgba(29, 25, 77, 0.03), 0px 12px 32px rgba(29, 25, 77, 0.04)",
   },
 });
+
+export type Theme = "light" | "dark" | "auto";
