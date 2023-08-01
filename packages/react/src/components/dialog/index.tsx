@@ -1,7 +1,8 @@
 import * as RadixDialog from "@radix-ui/react-dialog";
 import { clsx } from "clsx";
 import { ReactNode, useState } from "react";
-import { Theme, autoTheme, darkTheme, themeClass } from "../../theme/theme.css";
+import { ThemeRoot } from "../../theme/theme-root";
+import { Theme } from "../../theme/theme.css";
 import { Close } from "../icon/close";
 import * as styles from "./style.css";
 
@@ -21,7 +22,7 @@ export const Dialog = ({
   open,
   onOpenChange,
   className,
-  theme = "auto",
+  theme = "light",
   modal = true,
 }: Props) => {
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
@@ -29,31 +30,25 @@ export const Dialog = ({
   if (!trigger) return null;
 
   return (
-    <div
-      ref={setContainer}
-      className={clsx(
-        "sid-theme-root",
-        `sid-theme-root__${theme}`,
-        themeClass,
-        { [darkTheme]: theme === "dark", [autoTheme]: theme === "auto" }
-      )}
-    >
-      <RadixDialog.Root modal={modal} open={open} onOpenChange={onOpenChange}>
-        <RadixDialog.Trigger asChild>{trigger}</RadixDialog.Trigger>
-        <RadixDialog.Portal container={container}>
-          <RadixDialog.Overlay className={styles.overlay} />
-          <RadixDialog.Content
-            className={clsx("sid-dialog", styles.wrapper, className)}
-          >
-            <RadixDialog.Close asChild>
-              <button className={styles.closeButton} aria-label="Close">
-                <Close />
-              </button>
-            </RadixDialog.Close>
-            {children}
-          </RadixDialog.Content>
-        </RadixDialog.Portal>
-      </RadixDialog.Root>
-    </div>
+    <ThemeRoot theme={theme}>
+      <div ref={setContainer}>
+        <RadixDialog.Root modal={modal} open={open} onOpenChange={onOpenChange}>
+          <RadixDialog.Trigger asChild>{trigger}</RadixDialog.Trigger>
+          <RadixDialog.Portal container={container}>
+            <RadixDialog.Overlay className={styles.overlay} />
+            <RadixDialog.Content
+              className={clsx("sid-dialog", styles.wrapper, className)}
+            >
+              <RadixDialog.Close asChild>
+                <button className={styles.closeButton} aria-label="Close">
+                  <Close />
+                </button>
+              </RadixDialog.Close>
+              {children}
+            </RadixDialog.Content>
+          </RadixDialog.Portal>
+        </RadixDialog.Root>
+      </div>
+    </ThemeRoot>
   );
 };

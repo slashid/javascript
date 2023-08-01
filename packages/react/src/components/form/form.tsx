@@ -1,20 +1,20 @@
 import { clsx } from "clsx";
-import { useFlowState } from "./useFlowState";
-import { CreateFlowOptions } from "./flow";
-import { Initial } from "./initial";
-import { Authenticating } from "./authenticating";
-import { Error } from "./error";
-import { Success } from "./success";
-import { themeClass, darkTheme, autoTheme } from "../../theme/theme.css";
-import * as styles from "./form.css";
-import { Footer } from "./footer";
-import { useConfiguration } from "../../hooks/use-configuration";
 import { FormProvider } from "../../context/form-context";
+import { useConfiguration } from "../../hooks/use-configuration";
 import { useLastHandle } from "../../hooks/use-last-handle";
+import { ThemeRoot } from "../../theme/theme-root";
 import {
   ConfigurationOverrides,
   ConfigurationOverridesProps,
 } from "../configuration-overrides";
+import { Authenticating } from "./authenticating";
+import { Error } from "./error";
+import { CreateFlowOptions } from "./flow";
+import { Footer } from "./footer";
+import * as styles from "./form.css";
+import { Initial } from "./initial";
+import { Success } from "./success";
+import { useFlowState } from "./useFlowState";
 
 export type Props = ConfigurationOverridesProps & {
   className?: string;
@@ -32,16 +32,7 @@ export const Form: React.FC<Props> = ({
   const { lastHandle } = useLastHandle();
 
   return (
-    <div
-      className={clsx(
-        "sid-theme-root",
-        `sid-theme-root__${theme}`,
-        themeClass,
-        { [darkTheme]: theme === "dark", [autoTheme]: theme === "auto" },
-        styles.form,
-        className
-      )}
-    >
+    <ThemeRoot theme={theme} className={clsx(styles.form, className)}>
       <ConfigurationOverrides text={text} factors={factors}>
         {flowState.status === "initial" && (
           <FormProvider>
@@ -57,6 +48,6 @@ export const Form: React.FC<Props> = ({
         {flowState.status === "success" && <Success flowState={flowState} />}
         {showBanner ? <Footer /> : null}
       </ConfigurationOverrides>
-    </div>
+    </ThemeRoot>
   );
 };

@@ -35,13 +35,11 @@ export const wrapper = style({
 });
 
 export const closeButton = style({
+  all: "unset",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  padding: "0",
-  border: `1px solid ${publicVariables.color.smooth}`,
-  userSelect: "none",
-  lineHeight: "118%",
+  borderRadius: "50%",
 
   ":hover": {
     cursor: "pointer",
