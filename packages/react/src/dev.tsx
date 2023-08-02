@@ -1,5 +1,5 @@
 import type { Factor } from "@slashid/slashid";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 
 import "./dev.css";
@@ -11,7 +11,34 @@ import {
   OrganizationSwitcher,
   useOrganizations,
   SlashIDProvider,
+  SlashIDLoaded,
+  useSlashID,
 } from "./main";
+
+import { useAtom } from 'jotai'
+import { user as userAtom } from './stores/user'
+import { useOrganizationsA, useOrganizationsB } from "./hooks/poc";
+
+const OrgsWithLoadable = () => {
+  const { currentOrganization, isLoading } = useOrganizationsA();
+
+  if (isLoading) return <div>Loading...</div>
+
+  return (
+    <div>
+      A: {currentOrganization?.org_name}
+    </div>
+  )
+};
+const OrgsWithSuspense = () => {
+  const { currentOrganization } = useOrganizationsB();
+
+  return (
+    <div>
+      B: {currentOrganization?.org_name}
+    </div>
+  )
+};
 
 const initialFactors: Factor[] = [
   { method: "email_link" },
@@ -86,6 +113,18 @@ function Config() {
   );
 }
 
+const SetUser = () => {
+  const { user } = useSlashID()
+  const [, set] = useAtom(userAtom)
+
+  useEffect(() => {
+    if (!user) return
+    set(user)
+  }, [user])
+
+  return <></>
+}
+
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <SlashIDProvider
@@ -99,7 +138,16 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         return "b6f94b67-d20f-7fc3-51df-bf6e3b82683e"; // orgs[0].id
       }}
     >
-      <Config />
+      {/* <Config /> */}
+      <SetUser />
+      <SlashIDLoaded>
+        <>
+          <OrgsWithLoadable />
+          <Suspense fallback={<div>Loading...</div>}>
+            <OrgsWithSuspense />
+          </Suspense>
+        </>
+      </SlashIDLoaded>
     </SlashIDProvider>
   </React.StrictMode>
 );

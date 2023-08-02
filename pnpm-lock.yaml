@@ -220,6 +220,7 @@ importers:
       clsx: ^1.2.1
       compress.js: ^1.2.2
       country-list-with-dial-code-and-flag: ^3.0.2
+      jotai: ^2.2.3
       jsdom: ^20.0.2
       react: ^18.2.0
       react-dom: ^18.2.0
@@ -235,6 +236,7 @@ importers:
       '@vanilla-extract/sprinkles': 1.5.1_@vanilla-extract+css@1.9.2
       compress.js: 1.2.2
       country-list-with-dial-code-and-flag: 3.0.2
+      jotai: 2.2.3_gvifxuufrqkj4gcqfnnwrb44ya
     devDependencies:
       '@faker-js/faker': 8.0.2
       '@slashid/slashid': 3.12.0
@@ -9669,6 +9671,22 @@ packages:
   /jju/1.4.0:
     resolution: {integrity: sha512-8wb9Yw966OSxApiCt0K3yNJL8pnNeIv+OEq2YMidz4FKP6nonSRoOXc80iXY4JaN2FC11B9qsNmDsm+ZOfMROA==}
     dev: true
+
+  /jotai/2.2.3_gvifxuufrqkj4gcqfnnwrb44ya:
+    resolution: {integrity: sha512-E3tTBb2CKwjAJKUJYVV6rKM8zxmpsPMedRclRnI2RgLzkvgDEH6mhtZPVesxIoixJ8p7949RWd8eo/8TqDDFDA==}
+    engines: {node: '>=12.20.0'}
+    peerDependencies:
+      '@types/react': '>=17.0.0'
+      react: '>=17.0.0'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      react:
+        optional: true
+    dependencies:
+      '@types/react': 18.0.8
+      react: 18.2.0
+    dev: false
 
   /js-cookie/2.2.1:
     resolution: {integrity: sha512-HvdH2LzI/EAZcUwA8+0nKNtWHqS+ZmijLA30RwZA0bo7ToCckjK5MkGhjED9KoRcXO6BaGI3I9UIzSA1FKFPOQ==}
