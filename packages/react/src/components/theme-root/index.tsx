@@ -1,5 +1,5 @@
 import { clsx } from "clsx";
-import { Theme, autoTheme, darkTheme, themeClass } from "./theme.css";
+import { Theme, autoTheme, darkTheme, themeClass } from "../../theme/theme.css";
 
 export type ThemeProps = {
   theme?: Theme;

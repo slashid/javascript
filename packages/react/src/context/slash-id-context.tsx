@@ -11,7 +11,7 @@ import { PersonHandleType, SlashID, User } from "@slashid/slashid";
 import { MemoryStorage } from "../browser/memory-storage";
 import { LogIn, LoginOptions, MFA } from "../domain/types";
 import { SDKState } from "../domain/sdk-state";
-import { ThemeProps, ThemeRoot } from "../theme/theme-root";
+import { ThemeProps, ThemeRoot } from "../components/theme-root";
 
 export type StorageOption = "memory" | "localStorage";
 
