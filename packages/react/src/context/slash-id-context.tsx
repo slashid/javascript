@@ -36,7 +36,7 @@ export interface ISlashIDContext {
   mfa: MFA;
   validateToken: (token: string) => Promise<boolean>;
   __defaultOrgCheckComplete: boolean;
-  __switchOrganizationInContext: ({ oid }: { oid: string }) => void;
+  __switchOrganizationInContext: ({ oid }: { oid: string }) => Promise<void>;
 }
 
 export const initialContextValue = {
@@ -48,7 +48,7 @@ export const initialContextValue = {
   mfa: () => Promise.reject("NYI"),
   validateToken: () => Promise.resolve(false),
   __defaultOrgCheckComplete: false,
-  __switchOrganizationInContext: () => undefined
+  __switchOrganizationInContext: () => Promise.resolve()
 };
 
 export const SlashIDContext =
