@@ -43,6 +43,7 @@ export const TEST_USER = new User(TEST_TOKEN);
 
 type CreateTestUserOptions = {
   authMethods: FactorMethod[];
+  oid?: string;
 };
 
 /**
@@ -53,13 +54,14 @@ type CreateTestUserOptions = {
  * @param options CreateTestUserOptions
  * @returns User
  */
-export function createTestUser({ authMethods }: CreateTestUserOptions): User {
+export function createTestUser({ authMethods, oid }: CreateTestUserOptions): User {
   const token = [
     TEST_TOKEN_HEADER,
     btoa(
       JSON.stringify({
         ...TEST_TOKEN_PAYLOAD_DECODED,
         authenticated_methods: authMethods,
+        oid: oid ?? TEST_TOKEN_PAYLOAD_DECODED.oid
       })
     ),
     TEST_TOKEN_SIGNATURE,
@@ -76,6 +78,7 @@ export const TestSlashIDProvider: React.FC<TestProviderProps> = ({
   logIn,
   mfa,
   __defaultOrgCheckComplete = true,
+  __switchOrganizationInContext = () => Promise.resolve(),
   providers = ({ children }) => (
     <TestOrganizationProvider>
       {children}
@@ -88,9 +91,10 @@ export const TestSlashIDProvider: React.FC<TestProviderProps> = ({
       sid,
       sdkState: sdkState || "initial",
       user,
-      __defaultOrgCheckComplete,
       ...(logIn ? { logIn } : {}),
       ...(mfa ? { mfa } : {}),
+      __defaultOrgCheckComplete,
+      __switchOrganizationInContext
     }),
     [logIn, mfa, sdkState, sid, user]
   );

@@ -7,7 +7,7 @@ import {
   OrganizationContext,
 } from "../context/organization-context";
 
-interface UseOrganizations extends IOrganizationContext {
+export interface UseOrganizations extends IOrganizationContext {
   switchOrganization: ({ oid }: { oid: string }) => void;
 }
 
@@ -18,9 +18,7 @@ export const useOrganizations = (): UseOrganizations => {
   const switchOrganization = useCallback<
     ISlashIDContext["__switchOrganizationInContext"]
   >(
-    ({ oid }) => {
-      __switchOrganizationInContext({ oid });
-    },
+    ({ oid }) => __switchOrganizationInContext({ oid }),
     [__switchOrganizationInContext]
   );
 
