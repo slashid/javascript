@@ -2,14 +2,17 @@ import { Factor } from "@slashid/slashid";
 import { createContext, ReactNode, useMemo } from "react";
 import { TEXT, TextConfig } from "../components/text/constants";
 import { SlashID } from "../components/icon/slashid";
+import { Theme } from "../theme/theme.css";
 
 export type Logo = string | React.ReactNode;
 
-export type Theme = "light" | "dark" | "auto";
 export interface IConfigurationContext {
   text: TextConfig;
   factors: Factor[];
   logo: Logo;
+  /**
+   * @deprecated Set this on the SlashIDProvider instead using the themeProps prop.
+   */
   theme: Theme;
   storeLastHandle: boolean;
   showBanner: boolean;
