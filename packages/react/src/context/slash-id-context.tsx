@@ -6,8 +6,9 @@ import React, {
   useRef,
   useState,
 } from "react";
-
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { PersonHandleType, SlashID, User } from "@slashid/slashid";
+
 import { MemoryStorage } from "../browser/memory-storage";
 import { LogIn, LoginOptions, MFA } from "../domain/types";
 import { SDKState } from "../domain/sdk-state";
@@ -60,6 +61,8 @@ const createStorage = (storageType: StorageOption) => {
       return new MemoryStorage();
   }
 };
+
+export const queryClient = new QueryClient();
 
 export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
   oid,
@@ -271,8 +274,10 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
   }, [logIn, logOut, user, validateToken, state, mfa]);
 
   return (
-    <SlashIDContext.Provider value={contextValue}>
-      {children}
-    </SlashIDContext.Provider>
+    <QueryClientProvider client={queryClient}>
+      <SlashIDContext.Provider value={contextValue}>
+        {children}
+      </SlashIDContext.Provider>
+    </QueryClientProvider>
   );
 };

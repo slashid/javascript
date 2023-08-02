@@ -6,6 +6,19 @@ import { SlashIDProvider } from "./context/slash-id-context";
 import { ConfigurationProvider } from "./context/config-context";
 
 import "./dev.css";
+import { useOrganizations } from "./hooks/use-organizations";
+import { SlashIDLoaded } from "./main";
+
+const Orgs = () => {
+  const { status, data } = useOrganizations();
+
+  // this will display the loading indicator even before the data fetches, can be fixed easily with a more accurate rendering condition
+  if (status !== "success") {
+    return <div>Loading...</div>;
+  }
+
+  return <pre>{JSON.stringify(data, null, 2)}</pre>;
+};
 
 const initialFactors: Factor[] = [
   { method: "email_link" },
@@ -72,6 +85,9 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <SlashIDProvider oid={import.meta.env.VITE_ORG_ID}>
       <Config />
+      <SlashIDLoaded>
+        <Orgs />
+      </SlashIDLoaded>
     </SlashIDProvider>
   </React.StrictMode>
 );

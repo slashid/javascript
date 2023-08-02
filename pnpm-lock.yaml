@@ -202,7 +202,8 @@ importers:
       '@faker-js/faker': ^8.0.2
       '@radix-ui/react-select': ^1.1.2
       '@radix-ui/react-tabs': ^1.0.1
-      '@slashid/slashid': ^3.9.0
+      '@slashid/slashid': ^3.12.0
+      '@tanstack/react-query': ^4.32.1
       '@testing-library/dom': ^8.19.0
       '@testing-library/jest-dom': ^5.16.5
       '@testing-library/react': ^13.4.0
@@ -229,6 +230,7 @@ importers:
     dependencies:
       '@radix-ui/react-select': 1.1.2_sd644w7yfdyrvmykkrrqd5kd4a
       '@radix-ui/react-tabs': 1.0.1_biqbaboplfbrettd7655fr4n2y
+      '@tanstack/react-query': 4.32.1_biqbaboplfbrettd7655fr4n2y
       '@vanilla-extract/css': 1.9.2
       '@vanilla-extract/dynamic': 2.0.3
       '@vanilla-extract/recipes': 0.3.0_@vanilla-extract+css@1.9.2
@@ -237,7 +239,7 @@ importers:
       country-list-with-dial-code-and-flag: 3.0.2
     devDependencies:
       '@faker-js/faker': 8.0.2
-      '@slashid/slashid': 3.9.0
+      '@slashid/slashid': 3.12.0
       '@testing-library/dom': 8.19.0
       '@testing-library/jest-dom': 5.16.5
       '@testing-library/react': 13.4.0_biqbaboplfbrettd7655fr4n2y
@@ -5088,6 +5090,22 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
+  /@slashid/slashid/3.12.0:
+    resolution: {integrity: sha512-v5WfPZs7VXum142e4iM1lpD1L8HEb1E9XWXF/XRKy5t1PSKchiikKg8XvXddM/TDxYhK92pbEnhR0eFMwWN6tQ==}
+    dependencies:
+      '@changesets/cli': 2.26.2
+      '@types/uuid': 8.3.4
+      changeset: 0.2.6
+      docdash: 1.2.0
+      jwt-decode: 3.1.2
+      mitt: 3.0.0
+      qrcode: 1.5.1
+      querystring-es3: 0.2.1
+      regenerator-runtime: 0.13.11
+      url: 0.11.0
+      uuid: 8.3.2
+    dev: true
+
   /@slashid/slashid/3.3.2:
     resolution: {integrity: sha512-GWK5OSts1XOoMlVlf5z1Z0ED15nyeS/T1LxRc5YMqB8xPo61glTbACj6tWs87J2BhVON1nwJjUnWItXlvSk+xQ==}
     dependencies:
@@ -5120,22 +5138,6 @@ packages:
       uuid: 8.3.2
     dev: false
 
-  /@slashid/slashid/3.9.0:
-    resolution: {integrity: sha512-ih/QG7tiVJC8y7gdAh7o5orLLIjOmAN+yf8Yr7vuhflbrxZvZlNGzGQnWoOrVlxVNG7r2I+p4pVcTD54KVdFdQ==}
-    dependencies:
-      '@changesets/cli': 2.26.2
-      '@types/uuid': 8.3.4
-      changeset: 0.2.6
-      docdash: 1.2.0
-      jwt-decode: 3.1.2
-      mitt: 3.0.0
-      qrcode: 1.5.1
-      querystring-es3: 0.2.1
-      regenerator-runtime: 0.13.11
-      url: 0.11.0
-      uuid: 8.3.2
-    dev: true
-
   /@swc/helpers/0.4.11:
     resolution: {integrity: sha512-rEUrBSGIoSFuYxwBYtlUFMlE2CwGhmW+w9355/5oduSw8e5h2+Tj4UrAGNNgP9915++wj5vkQo0UuOBqOAq4nw==}
     dependencies:
@@ -5155,6 +5157,10 @@ packages:
       defer-to-connect: 2.0.1
     dev: true
 
+  /@tanstack/query-core/4.32.1:
+    resolution: {integrity: sha512-VEAGHboOFWN/bvf/7cCoeLQfld0AA8n0V/kfc77W+FvxnnSwJufEh6gfjqpX5bRE/DEYfYDYdNtuL3KM+lIs8Q==}
+    dev: false
+
   /@tanstack/react-location/3.7.4_biqbaboplfbrettd7655fr4n2y:
     resolution: {integrity: sha512-6rH2vNHGr0uyeUz5ZHvWMYjeYKGgIKFzvs5749QtnS9f+FU7t7fQE0hKZAzltBZk82LT7iYbcHBRyUg2lW13VA==}
     engines: {node: '>=12'}
@@ -5166,6 +5172,24 @@ packages:
       history: 5.3.0
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
+    dev: false
+
+  /@tanstack/react-query/4.32.1_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-lPTfOq6bR6DorPaS018gTMd3zs8r06tlERiVY6BRP9SnDkkl4ckqeANava/jPLWrSZP+EA15loQUTmvZs6k2GA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-native: '*'
+    peerDependenciesMeta:
+      react-dom:
+        optional: true
+      react-native:
+        optional: true
+    dependencies:
+      '@tanstack/query-core': 4.32.1
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      use-sync-external-store: 1.2.0_react@18.2.0
     dev: false
 
   /@testing-library/dom/8.19.0:
