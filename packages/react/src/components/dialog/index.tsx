@@ -37,9 +37,15 @@ export const Dialog = ({
         <RadixDialog.Root modal={modal} open={open} onOpenChange={onOpenChange}>
           <RadixDialog.Trigger asChild>{trigger}</RadixDialog.Trigger>
           <RadixDialog.Portal container={container}>
-            <RadixDialog.Overlay className={styles.overlay} />
+            {modal && <RadixDialog.Overlay className={styles.overlay} />}
             <RadixDialog.Content
               className={clsx("sid-dialog", styles.wrapper, className)}
+              onInteractOutside={(e) => {
+                if (modal) {
+                  return;
+                }
+                e.preventDefault();
+              }}
             >
               <div className={styles.header}>
                 <div>{icon}</div>
