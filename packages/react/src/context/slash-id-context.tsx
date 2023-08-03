@@ -146,7 +146,6 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
         // @ts-expect-error TODO make the identifier optional
         const user = await sid.id(oid, identifier, factor)
             .then(async user => {
-              console.log('middleware check')
               if (middleware === undefined) return user
 
               const middlewares = Array.isArray(middleware)
