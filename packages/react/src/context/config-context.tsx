@@ -1,8 +1,7 @@
 import { Factor } from "@slashid/slashid";
 import { createContext, ReactNode, useMemo } from "react";
-import { SlashID } from "../components/icon/slashid";
 import { TEXT, TextConfig } from "../components/text/constants";
-import { Theme } from "../theme/theme.css";
+import { SlashID } from "../components/icon/slashid";
 
 export type Logo = string | React.ReactNode;
 
