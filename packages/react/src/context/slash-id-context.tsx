@@ -11,6 +11,7 @@ import { PersonHandleType, SlashID, User } from "@slashid/slashid";
 import { MemoryStorage } from "../browser/memory-storage";
 import { LogIn, LoginOptions, MFA } from "../domain/types";
 import { SDKState } from "../domain/sdk-state";
+import { ThemeProps, ThemeRoot } from "../components/theme-root";
 
 export type StorageOption = "memory" | "localStorage";
 
@@ -21,6 +22,7 @@ export interface SlashIDProviderProps {
   baseApiUrl?: string;
   sdkUrl?: string;
   analyticsEnabled?: boolean;
+  themeProps?: ThemeProps;
   children: React.ReactNode;
 }
 
@@ -68,6 +70,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
   baseApiUrl,
   sdkUrl,
   analyticsEnabled = false,
+  themeProps,
   children,
 }) => {
   const [state, setState] = useState<SDKState>(initialContextValue.sdkState);
@@ -272,7 +275,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
 
   return (
     <SlashIDContext.Provider value={contextValue}>
-      {children}
+      <ThemeRoot {...themeProps}>{children}</ThemeRoot>
     </SlashIDContext.Provider>
   );
 };
