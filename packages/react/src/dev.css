@@ -16,3 +16,7 @@ body {
   width: 390px;
   margin: 32px;
 }
+
+.testClass {
+  --sid-color-primary: yellow;
+}

@@ -1,20 +1,19 @@
 import { clsx } from "clsx";
-import { FormProvider } from "../../context/form-context";
+import { useFlowState } from "./useFlowState";
+import { CreateFlowOptions } from "./flow";
+import { Initial } from "./initial";
+import { Authenticating } from "./authenticating";
+import { Error } from "./error";
+import { Success } from "./success";
+import * as styles from "./form.css";
+import { Footer } from "./footer";
 import { useConfiguration } from "../../hooks/use-configuration";
+import { FormProvider } from "../../context/form-context";
 import { useLastHandle } from "../../hooks/use-last-handle";
-import { ThemeRoot } from "../../theme/theme-root";
 import {
   ConfigurationOverrides,
   ConfigurationOverridesProps,
 } from "../configuration-overrides";
-import { Authenticating } from "./authenticating";
-import { Error } from "./error";
-import { CreateFlowOptions } from "./flow";
-import { Footer } from "./footer";
-import * as styles from "./form.css";
-import { Initial } from "./initial";
-import { Success } from "./success";
-import { useFlowState } from "./useFlowState";
 
 export type Props = ConfigurationOverridesProps & {
   className?: string;
@@ -28,11 +27,11 @@ export const Form: React.FC<Props> = ({
   text,
 }) => {
   const flowState = useFlowState({ onSuccess });
-  const { theme, showBanner } = useConfiguration();
+  const { showBanner } = useConfiguration();
   const { lastHandle } = useLastHandle();
 
   return (
-    <ThemeRoot theme={theme} className={clsx(styles.form, className)}>
+    <div className={clsx("sid-form", styles.form, className)}>
       <ConfigurationOverrides text={text} factors={factors}>
         {flowState.status === "initial" && (
           <FormProvider>
@@ -48,6 +47,6 @@ export const Form: React.FC<Props> = ({
         {flowState.status === "success" && <Success flowState={flowState} />}
         {showBanner ? <Footer /> : null}
       </ConfigurationOverrides>
-    </ThemeRoot>
+    </div>
   );
 };

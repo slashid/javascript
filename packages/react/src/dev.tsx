@@ -55,7 +55,6 @@ function Config() {
 
   return (
     <ConfigurationProvider
-      theme="dark"
       factors={factors}
       storeLastHandle={true}
     >
@@ -70,7 +69,10 @@ function Config() {
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <SlashIDProvider oid={import.meta.env.VITE_ORG_ID}>
+    <SlashIDProvider
+      oid={import.meta.env.VITE_ORG_ID}
+      themeProps={{ theme: "dark", className: "testClass" }}
+    >
       <Config />
     </SlashIDProvider>
   </React.StrictMode>
