@@ -136,6 +136,10 @@ export const darkTheme = style({
   vars: assignVars(publicVariables.color, darkThemeColors),
 });
 
+export const lightThemeVars = style({
+  vars: assignVars(publicVariables.color, lightThemeColors),
+});
+
 // overrides the color theme based on system settings
 export const autoTheme = style({
   "@media": {

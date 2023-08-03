@@ -14,6 +14,7 @@ import {
   ConfigurationOverrides,
   ConfigurationOverridesProps,
 } from "../configuration-overrides";
+import { darkTheme, autoTheme, lightThemeVars } from "../../theme/theme.css";
 
 export type Props = ConfigurationOverridesProps & {
   className?: string;
@@ -27,11 +28,22 @@ export const Form: React.FC<Props> = ({
   text,
 }) => {
   const flowState = useFlowState({ onSuccess });
-  const { showBanner } = useConfiguration();
+  // TODO remove after deprecating the theme prop
+  const { showBanner, theme } = useConfiguration();
   const { lastHandle } = useLastHandle();
 
   return (
-    <div className={clsx(styles.form, className)}>
+    <div
+      className={clsx(
+        styles.form,
+        {
+          [darkTheme]: theme === "dark",
+          [autoTheme]: theme === "auto",
+          [lightThemeVars]: theme === "light",
+        },
+        className
+      )}
+    >
       <ConfigurationOverrides text={text} factors={factors}>
         {flowState.status === "initial" && (
           <FormProvider>
