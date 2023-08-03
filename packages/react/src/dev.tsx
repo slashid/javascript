@@ -6,6 +6,8 @@ import { SlashIDProvider } from "./context/slash-id-context";
 import { ConfigurationProvider } from "./context/config-context";
 
 import "./dev.css";
+import { DynamicFlow } from "./components/dynamic-flow";
+import { FactorOIDC, Handle } from "./domain/types";
 
 const initialFactors: Factor[] = [
   { method: "email_link" },
@@ -54,10 +56,7 @@ function Config() {
   }, []);
 
   return (
-    <ConfigurationProvider
-      factors={factors}
-      storeLastHandle={true}
-    >
+    <ConfigurationProvider factors={factors} storeLastHandle={true}>
       <div className="formWrapper">
         <MultiFactorAuth
           steps={[{ factors: factors }, { factors: mfaFactors }]}
@@ -67,13 +66,72 @@ function Config() {
   );
 }
 
+const getFactor = (handle?: Handle) => {
+  if (!handle || handle.type !== "email_address") {
+    throw new Error("Only use email for demo!");
+  }
+
+  const email = handle?.value;
+  const domain = email.split("@")[1];
+
+  if (domain === "slashid.dev") {
+    const oidcFactor: Factor = {
+      method: "oidc",
+      options: {
+        provider: "google",
+        client_id: import.meta.env.VITE_GOOGLE_SSO_CLIENT_ID,
+      },
+    };
+    return oidcFactor;
+  } else {
+    const emailLinkFactor: Factor = { method: "email_link" };
+    return emailLinkFactor;
+  }
+};
+
+const oidcFactors: FactorOIDC[] = [
+  {
+    method: "oidc",
+    options: {
+      provider: "google",
+      client_id: import.meta.env.VITE_GOOGLE_SSO_CLIENT_ID,
+    },
+  },
+  {
+    method: "oidc",
+    options: {
+      provider: "azuread",
+      client_id: import.meta.env.VITE_GOOGLE_SSO_CLIENT_ID,
+    },
+  },
+];
+
+const ConfiguredDynamicFlow = () => {
+  return (
+    <ConfigurationProvider text={{ "initial.oidc": "Continue with" }}>
+      <DynamicFlow
+        className="formWrapper"
+        getFactor={getFactor}
+        oidcFactors={oidcFactors}
+      />
+    </ConfigurationProvider>
+  );
+};
+
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <SlashIDProvider
       oid={import.meta.env.VITE_ORG_ID}
       themeProps={{ theme: "dark", className: "testClass" }}
     >
-      <Config />
+      <div>
+        <h2>MFA with dynamic config</h2>
+        <Config />
+      </div>
+      <div>
+        <h2>Dynamic flow - factor based on handle</h2>
+        <ConfiguredDynamicFlow />
+      </div>
     </SlashIDProvider>
   </React.StrictMode>
 );

@@ -13,10 +13,10 @@ import { isFactorOidc } from "../../domain/handles";
 
 type Props = {
   flowState: InitialState;
-  setHandleAndFactors: (factor: Factor, handle?: Handle) => void;
+  handleSubmit: (factor: Factor, handle?: Handle) => void;
 };
 
-export const Initial = ({ flowState, setHandleAndFactors }: Props) => {
+export const Initial = ({ flowState, handleSubmit }: Props) => {
   const { logo, text, factors } = useConfiguration();
   const oidcFactors: FactorOIDC[] = useMemo(
     () => factors.filter(isFactorOidc),
@@ -34,7 +34,7 @@ export const Initial = ({ flowState, setHandleAndFactors }: Props) => {
       />
       <Text variant={{ color: "tertiary" }} as="h2" t="initial.subtitle" />
       <FormProvider>
-        <ConfiguredHandleForm handleSubmit={setHandleAndFactors} />
+        <ConfiguredHandleForm handleSubmit={handleSubmit} />
       </FormProvider>
       {shouldRenderDivider && <Divider>{text["initial.divider"]}</Divider>}
       <Oidc

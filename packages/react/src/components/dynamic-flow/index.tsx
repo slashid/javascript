@@ -19,21 +19,11 @@ type Props = {
   oidcFactors?: FactorOIDC[];
 };
 
-/* 
-
--- have a handle input in the initial state
----- have a better way of reusing the base form building blocks
--- in the next state initialize the factors
--- perform login as designed after that
-
-
-*/
-
 export const DynamicFlow = ({ getFactor, className, onSuccess }: Props) => {
   const flowState = useFlowState({ onSuccess });
 
-  const setHandleAndFactors = useCallback(
-    (factor: Factor, handle?: Handle) => {
+  const handleSubmit = useCallback(
+    (_: Factor, handle?: Handle) => {
       if (flowState.status === "initial") {
         const factor = getFactor(handle);
         flowState.logIn({
@@ -56,10 +46,7 @@ export const DynamicFlow = ({ getFactor, className, onSuccess }: Props) => {
     >
       <article data-testid="sid-dynamic-flow--initial-state">
         {flowState.status === "initial" && (
-          <Initial
-            setHandleAndFactors={setHandleAndFactors}
-            flowState={flowState}
-          />
+          <Initial handleSubmit={handleSubmit} flowState={flowState} />
         )}
         {flowState.status === "authenticating" && (
           <FormProvider>

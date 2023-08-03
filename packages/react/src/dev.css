@@ -13,7 +13,7 @@ body {
 }
 
 .formWrapper {
-  width: 390px;
+  width: 420px !important;
   margin: 32px;
 }
 
