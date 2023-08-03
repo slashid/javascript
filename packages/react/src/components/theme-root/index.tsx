@@ -1,5 +1,11 @@
 import { clsx } from "clsx";
-import { Theme, autoTheme, darkTheme, themeClass } from "../../theme/theme.css";
+import {
+  Theme,
+  autoTheme,
+  darkTheme,
+  lightThemeVars,
+  themeClass,
+} from "../../theme/theme.css";
 
 export type ThemeProps = {
   theme?: Theme;
@@ -23,7 +29,11 @@ export function ThemeRoot({ children, theme = "light", className }: Props) {
         "sid-theme-root",
         `sid-theme-root__${theme}`,
         themeClass,
-        { [darkTheme]: theme === "dark", [autoTheme]: theme === "auto" },
+        {
+          [darkTheme]: theme === "dark",
+          [autoTheme]: theme === "auto",
+          [lightThemeVars]: theme === "light",
+        },
         className
       )}
     >

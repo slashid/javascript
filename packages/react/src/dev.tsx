@@ -55,7 +55,6 @@ function Config() {
 
   return (
     <ConfigurationProvider
-      theme="light"
       factors={factors}
       storeLastHandle={true}
     >
