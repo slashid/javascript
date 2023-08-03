@@ -55,7 +55,6 @@ export const OrganizationSwitcher = ({
   fallback = <DefaultFallback />,
 }: Props) => {
   const { text } = useConfiguration();
-  const { __defaultOrgCheckComplete } = useSlashID();
   const {
     organizations: allOrganizations,
     currentOrganization,
@@ -68,7 +67,7 @@ export const OrganizationSwitcher = ({
     return allOrganizations.filter(filter);
   }, [filter, allOrganizations]);
 
-  if (isLoading || !currentOrganization || !__defaultOrgCheckComplete) {
+  if (isLoading || !currentOrganization) {
     return <ThemeRoot>{fallback}</ThemeRoot>;
   }
 

@@ -15,7 +15,7 @@ import {
 } from "../../domain/handles";
 import { useConfiguration } from "../../hooks/use-configuration";
 import { Button } from "../button";
-import { FactorOIDC, Handle, HandleType, Validator } from "../../domain/types";
+import { FactorOIDC, Handle, HandleType, LoginOptions, Validator } from "../../domain/types";
 import { isFactorOidc, hasOidcAndNonOidcFactors } from "../../domain/handles";
 import { Logo as TLogo } from "../../context/config-context";
 import { Flag, GB_FLAG, Input, PhoneInput } from "../input";
@@ -245,9 +245,10 @@ const TAB_NAME = {
 type Props = {
   flowState: InitialState;
   lastHandle?: Handle;
+  middleware?: LoginOptions['middleware']
 };
 
-export const Initial: React.FC<Props> = ({ flowState, lastHandle }) => {
+export const Initial: React.FC<Props> = ({ flowState, lastHandle, middleware }) => {
   const { factors, logo, text } = useConfiguration();
 
   const oidcFactors: FactorOIDC[] = useMemo(
@@ -271,10 +272,7 @@ export const Initial: React.FC<Props> = ({ flowState, lastHandle }) => {
 
   const handleSubmit = useCallback(
     (factor: Factor, handle?: Handle) => {
-      flowState.logIn({
-        factor,
-        handle,
-      });
+      flowState.logIn({ factor, handle}, { middleware });
     },
     [flowState]
   );

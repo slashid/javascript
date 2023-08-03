@@ -15,10 +15,12 @@ import {
   ConfigurationOverrides,
   ConfigurationOverridesProps,
 } from "../configuration-overrides";
+import { LoginOptions } from "../../domain/types";
 
 export type Props = ConfigurationOverridesProps & {
   className?: string;
   onSuccess?: CreateFlowOptions["onSuccess"];
+  middleware?: LoginOptions["middleware"];
 };
 
 export const Form: React.FC<Props> = ({
@@ -26,6 +28,7 @@ export const Form: React.FC<Props> = ({
   onSuccess,
   factors,
   text,
+  middleware
 }) => {
   const flowState = useFlowState({ onSuccess });
   const { theme, showBanner } = useConfiguration();
@@ -45,7 +48,7 @@ export const Form: React.FC<Props> = ({
       <ConfigurationOverrides text={text} factors={factors}>
         {flowState.status === "initial" && (
           <FormProvider>
-            <Initial flowState={flowState} lastHandle={lastHandle} />
+            <Initial flowState={flowState} lastHandle={lastHandle} middleware={middleware} />
           </FormProvider>
         )}
         {flowState.status === "authenticating" && (

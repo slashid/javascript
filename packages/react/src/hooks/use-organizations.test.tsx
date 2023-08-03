@@ -1,5 +1,4 @@
 import { render, screen } from "@testing-library/react";
-import { TestOrganizationProvider } from '../context/test-organization-context'
 import { useOrganizations } from "../main";
 import { faker } from "@faker-js/faker";
 import { OrganizationDetails } from "@slashid/slashid";
