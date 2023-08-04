@@ -2,11 +2,11 @@ import { render, screen } from "@testing-library/react";
 
 import { LoggedOut } from ".";
 import {
-  TestSlashIDProvider,
-  TEST_USER,
+  TestSlashIDProvider
 } from "../../context/test-slash-id-provider";
 import { faker } from "@faker-js/faker";
 import { sdkNotReadyStates } from "../../domain/sdk-state";
+import { createTestUser } from "../test-utils";
 
 const TestComponent = ({ text }: { text: string }) => <h1>{text}</h1>;
 
@@ -28,7 +28,7 @@ describe("LoggedOut", () => {
     const text = faker.lorem.sentence()
 
     render(
-      <TestSlashIDProvider user={TEST_USER} sdkState="ready">
+      <TestSlashIDProvider user={createTestUser()} sdkState="ready">
         <LoggedOut>
           <TestComponent text={text} />
         </LoggedOut>
@@ -42,7 +42,7 @@ describe("LoggedOut", () => {
       const text = faker.lorem.sentence()
 
       render(
-        <TestSlashIDProvider user={TEST_USER} sdkState="ready">
+        <TestSlashIDProvider user={createTestUser()} sdkState="ready">
           <LoggedOut>
             <TestComponent text={text} />
           </LoggedOut>

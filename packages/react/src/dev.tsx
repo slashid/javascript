@@ -1,13 +1,22 @@
 import type { Factor } from "@slashid/slashid";
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
-import { MultiFactorAuth } from "./components/multi-factor-auth";
-import { SlashIDProvider } from "./context/slash-id-context";
-import { ConfigurationProvider } from "./context/config-context";
 
 import "./dev.css";
-import { DynamicFlow } from "./components/dynamic-flow";
-import { FactorOIDC, Handle } from "./domain/types";
+import {
+  Form,
+  LoggedIn,
+  LoggedOut,
+  ConfigurationProvider,
+  OrganizationSwitcher,
+  useOrganizations,
+  SlashIDProvider,
+  DynamicFlow,
+} from "./main";
+import { defaultOrganization } from "./middleware/default-organization";
+import { Handle, FactorOIDC } from "./domain/types";
+
+const rootOid = "b6f94b67-d20f-7fc3-51df-bf6e3b82683e"
 
 const initialFactors: Factor[] = [
   { method: "email_link" },
@@ -34,9 +43,8 @@ const withWan: Factor[] = [
   },
 ];
 
-const mfaFactors: Factor[] = [{ method: "otp_via_sms" }];
-
 function Config() {
+  const { currentOrganization } = useOrganizations();
   const [factors, setFactors] = useState<Factor[]>(initialFactors);
 
   useEffect(() => {
@@ -56,12 +64,37 @@ function Config() {
   }, []);
 
   return (
-    <ConfigurationProvider factors={factors} storeLastHandle={true}>
-      <div className="formWrapper">
-        <MultiFactorAuth
-          steps={[{ factors: factors }, { factors: mfaFactors }]}
-        />
-      </div>
+    <ConfigurationProvider
+      factors={factors}
+      storeLastHandle={true}
+    >
+      <LoggedOut>
+        <div className="formWrapper">
+          {/* <MultiFactorAuth
+            steps={[{ factors: factors }, { factors: mfaFactors }]}
+          /> */}
+          <Form
+            middleware={[
+              defaultOrganization(({ organizations }) => {
+                const preferred = organizations.find((org) => org.org_name === "MyOrg/abc2");
+                if (preferred) return preferred.id;
+        
+                return rootOid;
+              })
+            ]}
+          />
+        </div>
+      </LoggedOut>
+      <LoggedIn>
+        <>
+          Current org: {currentOrganization?.org_name}
+          <OrganizationSwitcher
+            filter={(org) =>
+              org.org_name.includes("abc") || org.org_name === "MyOrg"
+            }
+          />
+        </>
+      </LoggedIn>
     </ConfigurationProvider>
   );
 }
@@ -123,6 +156,8 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <SlashIDProvider
       oid={import.meta.env.VITE_ORG_ID}
       themeProps={{ theme: "dark", className: "testClass" }}
+      tokenStorage="localStorage"
+      baseApiUrl="https://api.slashid.com"
     >
       <div>
         <h2>MFA with dynamic config</h2>

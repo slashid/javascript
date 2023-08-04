@@ -12,6 +12,8 @@ import { StepUpAuth } from "./components/step-up-auth";
 import { SlashIDLoaded } from "./components/loaded";
 import { useSlashID } from "./hooks/use-slash-id";
 import { DynamicFlow } from "./components/dynamic-flow";
+import { useOrganizations } from "./hooks/use-organizations";
+import { OrganizationSwitcher } from './components/organization-switcher'
 
 /**
  * TODO: think about code splitting
@@ -30,4 +32,6 @@ export {
   StepUpAuth,
   DynamicFlow,
   useSlashID,
+  useOrganizations,
+  OrganizationSwitcher
 };

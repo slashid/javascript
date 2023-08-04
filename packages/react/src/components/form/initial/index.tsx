@@ -4,7 +4,7 @@ import { Factor } from "@slashid/slashid";
 import { Text } from "../../text";
 import { InitialState } from "../flow";
 import { useConfiguration } from "../../../hooks/use-configuration";
-import { FactorOIDC, Handle } from "../../../domain/types";
+import { FactorOIDC, Handle, LoginOptions } from "../../../domain/types";
 import { isFactorOidc } from "../../../domain/handles";
 
 import { Logo } from "./logo";
@@ -14,9 +14,14 @@ import { ConfiguredHandleForm } from "./configured-handle-form";
 type Props = {
   flowState: InitialState;
   lastHandle?: Handle;
+  middleware?: LoginOptions["middleware"];
 };
 
-export const Initial: React.FC<Props> = ({ flowState, lastHandle }) => {
+export const Initial: React.FC<Props> = ({
+  flowState,
+  lastHandle,
+  middleware,
+}) => {
   const { factors, logo } = useConfiguration();
 
   const oidcFactors: FactorOIDC[] = useMemo(
@@ -26,12 +31,15 @@ export const Initial: React.FC<Props> = ({ flowState, lastHandle }) => {
 
   const handleSubmit = useCallback(
     (factor: Factor, handle?: Handle) => {
-      flowState.logIn({
-        factor,
-        handle,
-      });
+      flowState.logIn(
+        {
+          factor,
+          handle,
+        },
+        { middleware }
+      );
     },
-    [flowState]
+    [flowState, middleware]
   );
 
   return (

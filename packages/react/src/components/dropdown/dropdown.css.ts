@@ -54,6 +54,7 @@ export const content = style({
   boxShadow: theme.color.md,
   borderRadius: "20px",
   overflow: "hidden",
+  zIndex: 1
 });
 
 export const viewport = style({
@@ -81,4 +82,5 @@ export const item = style({
 export const icon = style({
   position: "relative",
   top: "-8px",
+  zIndex: 0
 });

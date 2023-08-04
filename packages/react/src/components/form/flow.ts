@@ -1,15 +1,16 @@
 import { User } from "@slashid/slashid";
-import { Cancel, LogIn, LoginOptions, Retry, MFA } from "../../domain/types";
+import { Cancel, LogIn, LoginConfiguration, Retry, MFA, LoginOptions } from "../../domain/types";
 
 export interface InitialState {
   status: "initial";
-  logIn: (options: LoginOptions) => void;
+  logIn: (config: LoginConfiguration, options?: LoginOptions) => void;
 }
 
 export interface AuthenticatingState {
   status: "authenticating";
   context: {
-    options: LoginOptions;
+    config: LoginConfiguration;
+    options?: LoginOptions;
     attempt: number;
   };
   retry: Retry;
@@ -27,7 +28,8 @@ export interface ErrorState {
 
 interface LoginEvent {
   type: "sid_login";
-  options: LoginOptions;
+  config: LoginConfiguration;
+  options?: LoginOptions;
 }
 
 interface CancelEvent {
@@ -52,21 +54,22 @@ type Send = (e: Event) => void;
 const createInitialState = (send: Send): InitialState => {
   return {
     status: "initial",
-    logIn: (options: LoginOptions) => {
-      send({ type: "sid_login", options });
+    logIn: (config, options) => {
+      send({ type: "sid_login", config, options });
     },
   };
 };
 
 const createAuthenticatingState = (
   send: Send,
-  context: { options: LoginOptions }
+  context: { config: LoginConfiguration, options?: LoginOptions }
 ): AuthenticatingState => {
   return {
     status: "authenticating",
     context: {
       attempt: 0,
-      options: context.options,
+      config: context.config,
+      options: context.options
     },
     retry: () => {
       send({ type: "sid_retry" });
@@ -116,9 +119,9 @@ export function createFlow(opts: CreateFlowOptions = {}) {
         switch (e.type) {
           case "sid_login":
             if (logInFn) {
-              setState(createAuthenticatingState(send, { options: e.options }));
+              setState(createAuthenticatingState(send, { config: e.config, options: e.options }));
               try {
-                const user = await logInFn(e.options);
+                const user = await logInFn(e.config, e.options);
                 if (onSuccess && user) {
                   onSuccess(user);
                 }
@@ -147,7 +150,7 @@ export function createFlow(opts: CreateFlowOptions = {}) {
                     },
                   });
 
-                  const user = await logInFn(state.context.options);
+                  const user = await logInFn(state.context.config, state.context.options);
                   if (onSuccess && user) {
                     onSuccess(user);
                   }

@@ -1,21 +1,20 @@
 import { StepUpAuth } from "./step-up-auth";
 import { render, screen, waitFor } from "@testing-library/react";
 import {
-  TestSlashIDProvider,
-  TEST_USER,
+  TestSlashIDProvider
 } from "../../context/test-slash-id-provider";
 import userEvent from "@testing-library/user-event";
-import { inputPhone } from "../test-utils";
+import { createTestUser, inputPhone } from "../test-utils";
 
 describe("#StepUpAuth", () => {
   test("Step-Up Authentication flow", async () => {
-    const mfaMock = vi.fn(() => Promise.resolve(TEST_USER));
+    const mfaMock = vi.fn(() => Promise.resolve(createTestUser()));
     const user = userEvent.setup();
     const stepUpText = "TEST TITLE STEP-UP AUTH";
 
     // already authenticated user is presented with Step-Up Auth challenge
     render(
-      <TestSlashIDProvider sdkState="ready" user={TEST_USER} mfa={mfaMock}>
+      <TestSlashIDProvider sdkState="ready" user={createTestUser()} mfa={mfaMock}>
         <StepUpAuth
           factors={[{ method: "otp_via_sms" }]}
           text={{
