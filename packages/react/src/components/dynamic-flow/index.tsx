@@ -19,6 +19,11 @@ type Props = {
   middleware?: LoginOptions["middleware"];
 };
 
+/**
+ * This is a variant of the <Form> component that allows you to dynamically change the factor based on the handle that was used.
+ * The initial form will ask for a handle, and then the factor will be determined based on the handle that was entered.
+ * This behaviour is controlled by the `getFactor` prop - it receives the handle that was entered and should return the factor that should be used.
+ */
 export const DynamicFlow = ({
   getFactor,
   className,
