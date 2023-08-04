@@ -7,16 +7,17 @@ import { Text } from "../text";
 import { useConfiguration } from "../../hooks/use-configuration";
 import { ConfiguredHandleForm } from "../form/initial/configured-handle-form";
 import { Factor } from "@slashid/slashid";
-import { FactorOIDC, Handle } from "../../domain/types";
+import { FactorOIDC, Handle, LoginOptions } from "../../domain/types";
 import { useMemo } from "react";
 import { isFactorOidc } from "../../domain/handles";
 
 type Props = {
   flowState: InitialState;
   handleSubmit: (factor: Factor, handle?: Handle) => void;
+  middleware?: LoginOptions["middleware"];
 };
 
-export const Initial = ({ flowState, handleSubmit }: Props) => {
+export const Initial = ({ flowState, handleSubmit, middleware }: Props) => {
   const { logo, text, factors } = useConfiguration();
   const oidcFactors: FactorOIDC[] = useMemo(
     () => factors.filter(isFactorOidc),
@@ -25,7 +26,10 @@ export const Initial = ({ flowState, handleSubmit }: Props) => {
   const shouldRenderDivider = oidcFactors.length > 0;
 
   return (
-    <>
+    <div
+      data-testid="sid-dynamic-flow--initial-state"
+      className="sid-dynamic-flow--initial-state"
+    >
       <Logo logo={logo} />
       <Text
         as="h1"
@@ -40,12 +44,15 @@ export const Initial = ({ flowState, handleSubmit }: Props) => {
       <Oidc
         providers={oidcFactors}
         handleClick={(factor) =>
-          flowState.logIn({
-            factor,
-            handle: undefined,
-          })
+          flowState.logIn(
+            {
+              factor,
+              handle: undefined,
+            },
+            { middleware }
+          )
         }
       />
-    </>
+    </div>
   );
 };
