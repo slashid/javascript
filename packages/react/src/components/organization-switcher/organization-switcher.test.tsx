@@ -137,8 +137,8 @@ describe("OrganizationSwitcher", () => {
     
     await waitFor(() => expect(screen.queryByText("-")).not.toBeInTheDocument())
     await waitFor(() => expect(container.querySelector(".sid-organization-switcher > .sid-dropdown .sid-dropdown__trigger")).toBeTruthy())
-
-    const trigger = container.querySelector(".sid-organization-switcher > .sid-dropdown .sid-dropdown__trigger")!!
+    
+    const trigger = container.querySelector(".sid-organization-switcher > .sid-dropdown .sid-dropdown__trigger")!
     
     ;(window as any).PointerEvent = class PointerEvent extends Event {};
     window.HTMLElement.prototype.scrollIntoView = vi.fn();
@@ -149,7 +149,7 @@ describe("OrganizationSwitcher", () => {
 
     await waitFor(() => expect(container.querySelector(".sid-organization-switcher > .sid-dropdown .sid-dropdown__popover")).toBeTruthy())
 
-    const popover = container.querySelector<HTMLDivElement>(".sid-organization-switcher > .sid-dropdown .sid-dropdown__popover")!!
+    const popover = container.querySelector<HTMLDivElement>(".sid-organization-switcher > .sid-dropdown .sid-dropdown__popover")!
     const { findByText } = within(popover)
 
     await expect(findByText(anotherOrg.org_name)).resolves.toBeInTheDocument()
@@ -177,7 +177,7 @@ describe("OrganizationSwitcher", () => {
     await waitFor(() => expect(screen.queryByText("-")).not.toBeInTheDocument())
     await waitFor(() => expect(container.querySelector(".sid-organization-switcher > .sid-dropdown .sid-dropdown__trigger")).toBeTruthy())
 
-    const trigger = container.querySelector(".sid-organization-switcher > .sid-dropdown .sid-dropdown__trigger")!!
+    const trigger = container.querySelector(".sid-organization-switcher > .sid-dropdown .sid-dropdown__trigger")!
     
     ;(window as any).PointerEvent = class PointerEvent extends Event {};
     window.HTMLElement.prototype.scrollIntoView = vi.fn();
@@ -188,7 +188,7 @@ describe("OrganizationSwitcher", () => {
 
     await waitFor(() => expect(container.querySelector(".sid-organization-switcher > .sid-dropdown .sid-dropdown__popover")).toBeTruthy())
 
-    const popover = container.querySelector<HTMLDivElement>(".sid-organization-switcher > .sid-dropdown .sid-dropdown__popover")!!
+    const popover = container.querySelector<HTMLDivElement>(".sid-organization-switcher > .sid-dropdown .sid-dropdown__popover")!
     const { findByText } = within(popover)
 
     for (const org of shuffledOrgs) {
@@ -224,7 +224,7 @@ describe("OrganizationSwitcher", () => {
     await waitFor(() => expect(screen.queryByText("-")).not.toBeInTheDocument())
     await waitFor(() => expect(container.querySelector(".sid-organization-switcher > .sid-dropdown .sid-dropdown__trigger")).toBeTruthy())
 
-    const trigger = container.querySelector(".sid-organization-switcher > .sid-dropdown .sid-dropdown__trigger")!!
+    const trigger = container.querySelector(".sid-organization-switcher > .sid-dropdown .sid-dropdown__trigger")!
     
     ;(window as any).PointerEvent = class PointerEvent extends Event {};
     window.HTMLElement.prototype.scrollIntoView = vi.fn();
@@ -235,10 +235,10 @@ describe("OrganizationSwitcher", () => {
 
     await waitFor(() => expect(container.querySelector(".sid-organization-switcher > .sid-dropdown .sid-dropdown__popover")).toBeTruthy())
 
-    const popover = container.querySelector<HTMLDivElement>(".sid-organization-switcher > .sid-dropdown .sid-dropdown__popover")!!
+    const popover = container.querySelector<HTMLDivElement>(".sid-organization-switcher > .sid-dropdown .sid-dropdown__popover")!
     const { findByText, queryByText } = within(popover)
 
-    const items = popover.querySelectorAll(".sid-dropdown__item")!!
+    const items = popover.querySelectorAll(".sid-dropdown__item")!
 
     expect(items.length).toBe(validOrgs.length)
 
