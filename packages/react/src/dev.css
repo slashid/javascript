@@ -17,6 +17,11 @@ body {
   margin: 32px;
 }
 
-.testClass {
+.sid-theme-root.testClass {
   --sid-color-primary: yellow;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }

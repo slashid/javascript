@@ -14,9 +14,9 @@ import {
   DynamicFlow,
 } from "./main";
 import { defaultOrganization } from "./middleware/default-organization";
-import { Handle, FactorOIDC } from "./domain/types";
+import { Handle } from "./domain/types";
 
-const rootOid = "b6f94b67-d20f-7fc3-51df-bf6e3b82683e"
+const rootOid = "b6f94b67-d20f-7fc3-51df-bf6e3b82683e";
 
 const initialFactors: Factor[] = [
   { method: "email_link" },
@@ -64,10 +64,7 @@ function Config() {
   }, []);
 
   return (
-    <ConfigurationProvider
-      factors={factors}
-      storeLastHandle={true}
-    >
+    <ConfigurationProvider factors={factors} storeLastHandle={true}>
       <LoggedOut>
         <div className="formWrapper">
           {/* <MultiFactorAuth
@@ -76,11 +73,13 @@ function Config() {
           <Form
             middleware={[
               defaultOrganization(({ organizations }) => {
-                const preferred = organizations.find((org) => org.org_name === "MyOrg/abc2");
+                const preferred = organizations.find(
+                  (org) => org.org_name === "MyOrg/abc2"
+                );
                 if (preferred) return preferred.id;
-        
+
                 return rootOid;
-              })
+              }),
             ]}
           />
         </div>
@@ -122,31 +121,10 @@ const getFactor = (handle?: Handle) => {
   }
 };
 
-const oidcFactors: FactorOIDC[] = [
-  {
-    method: "oidc",
-    options: {
-      provider: "google",
-      client_id: import.meta.env.VITE_GOOGLE_SSO_CLIENT_ID,
-    },
-  },
-  {
-    method: "oidc",
-    options: {
-      provider: "azuread",
-      client_id: import.meta.env.VITE_GOOGLE_SSO_CLIENT_ID,
-    },
-  },
-];
-
 const ConfiguredDynamicFlow = () => {
   return (
     <ConfigurationProvider text={{ "initial.oidc": "Continue with" }}>
-      <DynamicFlow
-        className="formWrapper"
-        getFactor={getFactor}
-        oidcFactors={oidcFactors}
-      />
+      <DynamicFlow className="formWrapper" getFactor={getFactor} />
     </ConfigurationProvider>
   );
 };
@@ -159,13 +137,15 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
       tokenStorage="localStorage"
       baseApiUrl="https://api.slashid.com"
     >
-      <div>
-        <h2>MFA with dynamic config</h2>
-        <Config />
-      </div>
-      <div>
-        <h2>Dynamic flow - factor based on handle</h2>
-        <ConfiguredDynamicFlow />
+      <div className="layout">
+        <div>
+          <h2>Switch to default org</h2>
+          <Config />
+        </div>
+        <div>
+          <h2>Dynamic flow - factor based on handle</h2>
+          <ConfiguredDynamicFlow />
+        </div>
       </div>
     </SlashIDProvider>
   </React.StrictMode>

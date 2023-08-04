@@ -2,7 +2,7 @@ import { Factor } from "@slashid/slashid";
 import { clsx } from "clsx";
 import { FormProvider } from "../../context/form-context";
 import { useCallback } from "react";
-import { FactorOIDC, Handle } from "../../domain/types";
+import { Handle, LoginOptions } from "../../domain/types";
 import { CreateFlowOptions } from "../form/flow";
 import { useFlowState } from "../form/useFlowState";
 import { Authenticating } from "../form/authenticating";
@@ -16,23 +16,31 @@ type Props = {
   className?: string;
   onSuccess?: CreateFlowOptions["onSuccess"];
   getFactor: (handle?: Handle) => Factor;
-  oidcFactors?: FactorOIDC[];
+  middleware?: LoginOptions["middleware"];
 };
 
-export const DynamicFlow = ({ getFactor, className, onSuccess }: Props) => {
+export const DynamicFlow = ({
+  getFactor,
+  className,
+  onSuccess,
+  middleware,
+}: Props) => {
   const flowState = useFlowState({ onSuccess });
 
   const handleSubmit = useCallback(
     (_: Factor, handle?: Handle) => {
       if (flowState.status === "initial") {
         const factor = getFactor(handle);
-        flowState.logIn({
-          factor,
-          handle,
-        });
+        flowState.logIn(
+          {
+            factor,
+            handle,
+          },
+          { middleware }
+        );
       }
     },
-    [getFactor, flowState]
+    [getFactor, flowState, middleware]
   );
 
   return (
