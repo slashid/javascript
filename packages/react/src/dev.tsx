@@ -74,8 +74,8 @@ function Config() {
           /> */}
           <Form
             middleware={[
-              defaultOrganization((orgs) => {
-                const preferred = orgs.find((org) => org.org_name === "MyOrg/abc2");
+              defaultOrganization(({ organizations }) => {
+                const preferred = organizations.find((org) => org.org_name === "MyOrg/abc2");
                 if (preferred) return preferred.id;
         
                 return rootOid;
