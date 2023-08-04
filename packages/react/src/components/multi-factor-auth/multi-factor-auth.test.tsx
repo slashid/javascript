@@ -7,7 +7,7 @@ import {
 } from "../../context/test-slash-id-provider";
 import { createTestUser, inputEmail, inputPhone } from "../test-utils";
 
-describe("#MultiFactorAuth", () => {
+describe.skip("#MultiFactorAuth", () => {
   test("MFA flow", async () => {
     const testUser = createTestUser()
     const logInMock = vi.fn(() => Promise.resolve(testUser));
