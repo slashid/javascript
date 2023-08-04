@@ -24,7 +24,6 @@ export const useOrganizations = (): {
     if (!user) return;
 
     setOrganizations([]);
-
     user.getOrganizations().then((organizations) => {
       setOrganizations(organizations);
     });

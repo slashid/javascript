@@ -14,7 +14,7 @@ import { ConfigurationProvider } from "../../context/config-context";
 
 describe("#Form", () => {
   test("should render in the initial state", () => {
-    const logInMock = vi.fn(() => Promise.resolve(createTestUser()));
+    const logInMock = vi.fn(async () => createTestUser());
 
     render(
       <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
@@ -26,7 +26,7 @@ describe("#Form", () => {
   });
 
   test("should not render divider when only non-OIDC factors are present", () => {
-    const logInMock = vi.fn(() => Promise.resolve(createTestUser()));
+    const logInMock = vi.fn(async () => createTestUser());
     const factors = [{ method: "email_link" }, { method: "webauthn" }];
     render(
       <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
@@ -45,7 +45,7 @@ describe("#Form", () => {
   });
 
   test("should not render divider when only OIDC factors are present", () => {
-    const logInMock = vi.fn(() => Promise.resolve(createTestUser()));
+    const logInMock = vi.fn(async () => createTestUser());
     const factors = [
       { method: "oidc", options: { provider: "facebook" } },
       { method: "oidc", options: { provider: "github" } },
@@ -67,7 +67,7 @@ describe("#Form", () => {
   });
 
   test("should render divider when both OIDC and non OIDC factors are present", () => {
-    const logInMock = vi.fn(() => Promise.resolve(createTestUser()));
+    const logInMock = vi.fn(async () => createTestUser());
     const factors = [
       { method: "email_link" },
       { method: "webauthn" },
@@ -91,7 +91,7 @@ describe("#Form", () => {
   });
 
   test("should render error message - empty email input", async () => {
-    const logInMock = vi.fn(() => Promise.resolve(createTestUser()));
+    const logInMock = vi.fn(async () => createTestUser());
     const user = userEvent.setup();
 
     render(
@@ -108,7 +108,7 @@ describe("#Form", () => {
   });
 
   test("should render error message - invalid email input", async () => {
-    const logInMock = vi.fn(() => Promise.resolve(createTestUser()));
+    const logInMock = vi.fn(async () => createTestUser());
     const user = userEvent.setup();
 
     render(
@@ -127,7 +127,7 @@ describe("#Form", () => {
   });
 
   test("should clear error message after changing input value", async () => {
-    const logInMock = vi.fn(() => Promise.resolve(createTestUser()));
+    const logInMock = vi.fn(async () => createTestUser());
     const user = userEvent.setup();
 
     render(
@@ -150,7 +150,7 @@ describe("#Form", () => {
   });
 
   test("should transition from initial to authenticating state", async () => {
-    const logInMock = vi.fn(() => Promise.resolve(createTestUser()));
+    const logInMock = vi.fn(async () => createTestUser());
     const user = userEvent.setup();
 
     render(
@@ -205,7 +205,7 @@ describe("#Form", () => {
   });
 
   test("should show the success state on successful login", async () => {
-    const logInMock = vi.fn(() => Promise.resolve(createTestUser()));
+    const logInMock = vi.fn(async () => createTestUser());
     const user = userEvent.setup();
 
     render(
@@ -225,7 +225,7 @@ describe("#Form", () => {
 
   test("should call the onSuccess callback if provided on a successful login", async () => {
     const testUser = createTestUser()
-    const logInMock = vi.fn(() => Promise.resolve(testUser));
+    const logInMock = vi.fn(async () => testUser);
     const user = userEvent.setup();
     const onSuccess = vi.fn();
 

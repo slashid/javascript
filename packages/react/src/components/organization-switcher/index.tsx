@@ -60,6 +60,7 @@ export const OrganizationSwitcher = ({
   fallback = <DefaultFallback />,
 }: Props) => {
   const { text } = useConfiguration();
+
   const {
     organizations: allOrganizations,
     currentOrganization,

@@ -16,7 +16,7 @@ export const TestSlashIDProvider: React.FC<TestProviderProps> = ({
   children,
   logIn,
   mfa,
-  __switchOrganizationInContext = () => Promise.resolve()
+  __switchOrganizationInContext = async () => undefined
 }) => {
   const value = useMemo(
     () => ({

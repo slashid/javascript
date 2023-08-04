@@ -60,9 +60,7 @@ describe("useOrganizations", () => {
 
     const user = createTestUser({ oid: org.id })
 
-    user.getOrganizations = vi.fn(() => {
-      return Promise.resolve([org])
-    })
+    user.getOrganizations = vi.fn(async () => [org])
 
     render(
       <TestSlashIDProvider
@@ -85,9 +83,7 @@ describe("useOrganizations", () => {
     // the users oid does not match an org in [orgs]
     const user = createTestUser({ oid: faker.string.uuid() })
 
-    user.getOrganizations = vi.fn(() => {
-      return Promise.resolve(orgs)
-    })
+    user.getOrganizations = vi.fn(async () => orgs)
 
     let _isLoading: boolean
     let _organizations = []
@@ -124,9 +120,7 @@ describe("useOrganizations", () => {
     const shuffledOrgs = faker.helpers.shuffle([currentOrganization, ...otherOrgs])
 
     const user = createTestUser({ oid: currentOrganization.id })
-    user.getOrganizations = vi.fn(() => {
-      return Promise.resolve(shuffledOrgs)
-    })
+    user.getOrganizations = vi.fn(async () => shuffledOrgs)
 
     render(
       <TestSlashIDProvider
@@ -216,7 +210,7 @@ describe("useOrganizations", () => {
     const shuffledOrgs = faker.helpers.shuffle([currentOrg, ...otherOrgs])
 
     const user = createTestUser({ oid: currentOrg.id })
-    user.getOrganizations = vi.fn(() => Promise.resolve(shuffledOrgs))
+    user.getOrganizations = vi.fn(async () => shuffledOrgs)
 
     const expected = (orgs: OrganizationDetails[]) => `orgs:${orgs.length}`
 
@@ -238,7 +232,7 @@ describe("useOrganizations", () => {
     const org = createTestOrganization()
 
     const user = createTestUser({ oid: org.id })
-    user.getOrganizations = vi.fn(() => Promise.resolve([org]))
+    user.getOrganizations = vi.fn(async () => [org])
     
     const oid = faker.string.uuid()
     const spy = vi.fn()

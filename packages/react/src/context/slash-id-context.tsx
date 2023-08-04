@@ -43,8 +43,8 @@ export const initialContextValue = {
   logOut: () => undefined,
   logIn: () => Promise.reject("NYI"),
   mfa: () => Promise.reject("NYI"),
-  validateToken: () => Promise.resolve(false),
-  __switchOrganizationInContext: () => Promise.resolve()
+  validateToken: async () => false,
+  __switchOrganizationInContext: async () => undefined
 };
 
 export const SlashIDContext =
