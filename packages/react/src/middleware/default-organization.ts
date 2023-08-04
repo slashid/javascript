@@ -11,6 +11,7 @@ import { LoginMiddleware } from "../domain/types";
  * @param oid the organization id of the users default organization - this can be a string or a function which resolves to a string. When a function is provided it's called with a list of all available organizations for that user, and the user object itself.
  *
  * @example
+ * Using a static default organization
  * ```tsx
  * <Form
  *  middleware={[
@@ -20,6 +21,7 @@ import { LoginMiddleware } from "../domain/types";
  * ```
  * 
  * @example
+ * Searching for the organization from the users available organizations
  * ```tsx
  * <Form
  *  middleware={[
@@ -31,16 +33,19 @@ import { LoginMiddleware } from "../domain/types";
  * ```
  * 
  * @example
+ * Getting the default org from a user attribute you've set
+ * ```tsx
  * <Form
  *  middleware={[
  *    defaultOrganization(async ({ user }) => {
  *      const bucket = await user.getBucket()
- *      const home = await bucket.get<{ oid }>("default_org")
+ *      const home = await bucket.get<{ oid }>("preferred_org")
  * 
  *      return home.oid
  *    })
  *  ]}
  * />
+ * ```
  */
 export const defaultOrganization = (oid: string | ((context: { organizations: OrganizationDetails[], user: User }) => string | Promise<string>)): LoginMiddleware => async ({ user }) => {
   const organizations = await user.getOrganizations()
