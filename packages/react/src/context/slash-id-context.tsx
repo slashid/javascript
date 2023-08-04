@@ -7,13 +7,11 @@ import React, {
   useState,
 } from "react";
 
-import { OrganizationDetails, PersonHandleType, SlashID, User } from "@slashid/slashid";
+import { PersonHandleType, SlashID, User } from "@slashid/slashid";
 import { MemoryStorage } from "../browser/memory-storage";
-import { LogIn, LoginOptions, MFA } from "../domain/types";
+import { LogIn, LoginConfiguration, LoginOptions, MFA } from "../domain/types";
 import { SDKState } from "../domain/sdk-state";
 import { ThemeProps, ThemeRoot } from "../components/theme-root";
-import { OrganizationProvider } from "./organization-context";
-
 export type StorageOption = "memory" | "localStorage";
 
 export interface SlashIDProviderProps {
@@ -25,8 +23,6 @@ export interface SlashIDProviderProps {
   analyticsEnabled?: boolean;
   themeProps?: ThemeProps;
   children: React.ReactNode;
-  defaultOrganization?: string | ((organizations: OrganizationDetails[]) => string)
-  providers?: ({ children }: { children: React.ReactNode }) => React.ReactNode
 }
 
 export interface ISlashIDContext {
@@ -37,7 +33,6 @@ export interface ISlashIDContext {
   logIn: LogIn;
   mfa: MFA;
   validateToken: (token: string) => Promise<boolean>;
-  __defaultOrgCheckComplete: boolean;
   __switchOrganizationInContext: ({ oid }: { oid: string }) => Promise<void>;
 }
 
@@ -49,7 +44,6 @@ export const initialContextValue = {
   logIn: () => Promise.reject("NYI"),
   mfa: () => Promise.reject("NYI"),
   validateToken: () => Promise.resolve(false),
-  __defaultOrgCheckComplete: false,
   __switchOrganizationInContext: () => Promise.resolve()
 };
 
@@ -78,13 +72,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
   sdkUrl,
   analyticsEnabled = false,
   themeProps,
-  children,
-  defaultOrganization,
-  providers = ({ children }) => (
-    <OrganizationProvider>
-      {children}
-    </OrganizationProvider>
-  )
+  children
 }) => {
   const [oid, setOid] = useState(initialOid)
   const [token, setToken] = useState(initialToken)
@@ -92,27 +80,6 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
   const [user, setUser] = useState<User | undefined>(undefined);
   const storageRef = useRef<Storage | undefined>(undefined);
   const sidRef = useRef<SlashID | undefined>(undefined);
-  
-  const [orgs, setOrgs] = useState<null | any[]>(null)
-  const [defaultOrgCheckComplete, setDefaultOrgCheckComplete] = useState<boolean>(!defaultOrganization)
-
-  useEffect(() => {
-    if (!defaultOrganization || !user || orgs !== null) return
-
-    user.getOrganizations()
-      .then(organizations => {
-        setOrgs(organizations)
-      })
-  }, [user, orgs?.length])
-
-  const getDefaultOrganizationOid = (orgs: any[]) => {
-    if (!defaultOrganization) throw new Error("Expected defaultOrganizations to be defined")
-    if (typeof defaultOrganization === "string") {
-      return defaultOrganization
-    }
-
-    return defaultOrganization(orgs)
-  }
 
   /**
    * Restarts the React SDK lifecycle with a new
@@ -127,16 +94,6 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
     setOid(newOid)
     setState("initial")
   }
-
-  useEffect(() => {
-    const noOrgs = !orgs?.length
-
-    if (defaultOrgCheckComplete || noOrgs || !user || !defaultOrganization) return
-
-    const oid = getDefaultOrganizationOid(orgs)
-    __switchOrganizationInContext({ oid })
-    setDefaultOrgCheckComplete(true)
-  }, [orgs, user])
 
   const storeUser = useCallback(
     (newUser: User) => {
@@ -166,12 +123,10 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
 
     user.logout();
     setUser(undefined);
-    setOrgs(null);
-    setDefaultOrgCheckComplete(false);
   }, [user, state]);
 
-  const logIn = useCallback(
-    async ({ factor, handle }: LoginOptions): Promise<User | undefined> => {
+  const logIn = useCallback<LogIn>(
+    async ({ factor, handle }, { middleware } = {}): Promise<User | undefined> => {
       if (state === "initial") {
         return;
       }
@@ -191,7 +146,20 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
               };
 
         // @ts-expect-error TODO make the identifier optional
-        const user = await sid.id(oid, identifier, factor);
+        const user = await sid.id(oid, identifier, factor)
+            .then(async user => {
+              if (middleware === undefined) return user
+
+              const middlewares = Array.isArray(middleware)
+                ? middleware
+                : [middleware]
+
+              return middlewares
+                .reduce((previous, next) => {
+                  return previous.then(user => next({ user, sid }))
+                }, Promise.resolve(user))
+            })
+
         storeUser(user);
         return user;
       } catch (e) {
@@ -241,22 +209,6 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
       setState("loaded");
     }
   }, [oid, baseApiUrl, sdkUrl, state, tokenStorage, analyticsEnabled]);
-
-  useEffect(() => {
-    if (state !== "initial") {
-      const slashId = sidRef.current!;
-      // @ts-expect-error TODO expose the type
-      const getUserFromEvent = ({ token }) => {
-        const userFromToken = new User(token, sidRef.current!);
-        if (!user || userFromToken.token !== user.token) {
-          setUser(userFromToken);
-        }
-      };
-      slashId.subscribe("idFlowSucceeded", getUserFromEvent);
-
-      return () => slashId.unsubscribe("idFlowSucceeded", getUserFromEvent);
-    }
-  }, [state, user]);
 
   useEffect(() => {
     if (state !== "loaded") {
@@ -326,7 +278,6 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
         logIn,
         mfa,
         validateToken,
-        __defaultOrgCheckComplete: defaultOrgCheckComplete,
         __switchOrganizationInContext
       };
     }
@@ -339,16 +290,15 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
       logIn,
       mfa,
       validateToken,
-      __defaultOrgCheckComplete: defaultOrgCheckComplete,
       __switchOrganizationInContext
     };
-  }, [logIn, logOut, user, validateToken, state, mfa, defaultOrgCheckComplete]);
+  }, [logIn, logOut, user, validateToken, state, mfa]);
 
   return (
     <SlashIDContext.Provider value={contextValue}>
-        <ThemeRoot {...themeProps}>
-          {providers({ children })}
-        </ThemeRoot>
+      <ThemeRoot {...themeProps}>
+        {children}
+      </ThemeRoot>
     </SlashIDContext.Provider>
   );
 };

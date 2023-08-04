@@ -12,6 +12,9 @@ import {
   useOrganizations,
   SlashIDProvider,
 } from "./main";
+import { defaultOrganization } from "./middleware/default-organization";
+
+const rootOid = "b6f94b67-d20f-7fc3-51df-bf6e3b82683e"
 
 const initialFactors: Factor[] = [
   { method: "email_link" },
@@ -68,7 +71,16 @@ function Config() {
           {/* <MultiFactorAuth
             steps={[{ factors: factors }, { factors: mfaFactors }]}
           /> */}
-          <Form />
+          <Form
+            middleware={[
+              defaultOrganization(({ organizations }) => {
+                const preferred = organizations.find((org) => org.org_name === "MyOrg/abc2");
+                if (preferred) return preferred.id;
+        
+                return rootOid;
+              })
+            ]}
+          />
         </div>
       </LoggedOut>
       <LoggedIn>
@@ -92,12 +104,6 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
       themeProps={{ theme: "dark", className: "testClass" }}
       tokenStorage="localStorage"
       baseApiUrl="https://api.slashid.com"
-      defaultOrganization={(orgs) => {
-        const preferred = orgs.find((org) => org.org_name === "MyOrg/abc2");
-        if (preferred) return preferred.id;
-
-        return "b6f94b67-d20f-7fc3-51df-bf6e3b82683e"; // orgs[0].id
-      }}
     >
       <Config />
     </SlashIDProvider>

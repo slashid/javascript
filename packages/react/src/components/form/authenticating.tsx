@@ -86,9 +86,9 @@ const OtpForm = () => {
 export const Authenticating: React.FC<Props> = ({ flowState }) => {
   const { text } = useConfiguration();
   const { title, message } = getAuthenticatingMessage(
-    flowState.context.options.factor
+    flowState.context.config.factor
   );
-  const factor = flowState.context.options.factor;
+  const factor = flowState.context.config.factor;
 
   return (
     <article data-testid="sid-form-authenticating-state">
