@@ -39,9 +39,9 @@ import { LoginMiddleware } from "../domain/types";
  *  middleware={[
  *    defaultOrganization(async ({ user }) => {
  *      const bucket = user.getBucket()
- *      const home = await bucket.get<{ oid }>("preferred_org")
+ *      const { preferred_org_id } = await bucket.get<{ preferred_org_id }>("preferred_org_id")
  * 
- *      return home.oid
+ *      return preferred_org_id
  *    })
  *  ]}
  * />
