@@ -50,6 +50,18 @@ const ThemeRoot = ({ children }: { children: ReactNode }) => {
   );
 };
 
+/**
+ * First class client-side organization switcher.
+ * 
+ * Renders a list of the users available organizations, upon selection
+ * the SDK will switch organizational context to the selected organization
+ * and trigger re-render for all code which implements the user object.
+ * 
+ * See also: useOrganizations()
+ * 
+ * @param filter A predicate function to filter the available organizations shown
+ * @param fallback The content shown while organizations are being fetched
+ */
 export const OrganizationSwitcher = ({
   filter,
   fallback = <DefaultFallback />,
