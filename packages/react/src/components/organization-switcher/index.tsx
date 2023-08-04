@@ -4,10 +4,8 @@ import { useOrganizations } from "../../hooks/use-organizations";
 import { sprinkles } from "../../theme/sprinkles.css";
 import { Dropdown } from "../dropdown";
 import { clsx } from "clsx";
-import { themeClass, darkTheme, autoTheme } from "../../theme/theme.css";
 import * as styles from "./index.css";
 import { OrganizationDetails } from "@slashid/slashid";
-import { useSlashID } from "../../main";
 
 interface Props {
   fallback?: ReactNode;

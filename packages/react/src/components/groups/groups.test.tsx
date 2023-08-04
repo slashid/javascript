@@ -1,4 +1,3 @@
-import { User } from "@slashid/slashid";
 import { render, screen } from "@testing-library/react";
 
 import { Groups } from ".";

@@ -1,4 +1,3 @@
-import { FactorMethod, User } from "@slashid/slashid";
 import React, { useMemo } from "react";
 import {
   SlashIDContext,

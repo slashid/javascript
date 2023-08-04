@@ -79,7 +79,6 @@ describe("useOrganizations", () => {
   });
 
   test("does not resolve if currentOrganization not found", async () => {
-    const content = faker.animal.cat()
     const org = createTestOrganization()
     const orgs = [org]
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useCallback } from "react";
 import { useSlashID } from "./use-slash-id";
 import { ISlashIDContext } from "../context/slash-id-context";
