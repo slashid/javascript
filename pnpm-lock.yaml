@@ -202,7 +202,7 @@ importers:
       '@faker-js/faker': ^8.0.2
       '@radix-ui/react-select': ^1.1.2
       '@radix-ui/react-tabs': ^1.0.1
-      '@slashid/slashid': ^3.9.0
+      '@slashid/slashid': ^3.12.0
       '@testing-library/dom': ^8.19.0
       '@testing-library/jest-dom': ^5.16.5
       '@testing-library/react': ^13.4.0
@@ -237,7 +237,7 @@ importers:
       country-list-with-dial-code-and-flag: 3.0.2
     devDependencies:
       '@faker-js/faker': 8.0.2
-      '@slashid/slashid': 3.9.0
+      '@slashid/slashid': 3.12.0
       '@testing-library/dom': 8.19.0
       '@testing-library/jest-dom': 5.16.5
       '@testing-library/react': 13.4.0_biqbaboplfbrettd7655fr4n2y
@@ -5088,6 +5088,22 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
+  /@slashid/slashid/3.12.0:
+    resolution: {integrity: sha512-v5WfPZs7VXum142e4iM1lpD1L8HEb1E9XWXF/XRKy5t1PSKchiikKg8XvXddM/TDxYhK92pbEnhR0eFMwWN6tQ==}
+    dependencies:
+      '@changesets/cli': 2.26.2
+      '@types/uuid': 8.3.4
+      changeset: 0.2.6
+      docdash: 1.2.0
+      jwt-decode: 3.1.2
+      mitt: 3.0.0
+      qrcode: 1.5.1
+      querystring-es3: 0.2.1
+      regenerator-runtime: 0.13.11
+      url: 0.11.0
+      uuid: 8.3.2
+    dev: true
+
   /@slashid/slashid/3.3.2:
     resolution: {integrity: sha512-GWK5OSts1XOoMlVlf5z1Z0ED15nyeS/T1LxRc5YMqB8xPo61glTbACj6tWs87J2BhVON1nwJjUnWItXlvSk+xQ==}
     dependencies:
@@ -5119,22 +5135,6 @@ packages:
       url: 0.11.0
       uuid: 8.3.2
     dev: false
-
-  /@slashid/slashid/3.9.0:
-    resolution: {integrity: sha512-ih/QG7tiVJC8y7gdAh7o5orLLIjOmAN+yf8Yr7vuhflbrxZvZlNGzGQnWoOrVlxVNG7r2I+p4pVcTD54KVdFdQ==}
-    dependencies:
-      '@changesets/cli': 2.26.2
-      '@types/uuid': 8.3.4
-      changeset: 0.2.6
-      docdash: 1.2.0
-      jwt-decode: 3.1.2
-      mitt: 3.0.0
-      qrcode: 1.5.1
-      querystring-es3: 0.2.1
-      regenerator-runtime: 0.13.11
-      url: 0.11.0
-      uuid: 8.3.2
-    dev: true
 
   /@swc/helpers/0.4.11:
     resolution: {integrity: sha512-rEUrBSGIoSFuYxwBYtlUFMlE2CwGhmW+w9355/5oduSw8e5h2+Tj4UrAGNNgP9915++wj5vkQo0UuOBqOAq4nw==}

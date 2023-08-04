@@ -1,17 +1,16 @@
-import { User } from "@slashid/slashid";
 import { render, screen } from "@testing-library/react";
 
 import { Groups } from ".";
 import {
-  TestSlashIDProvider,
-  TEST_TOKEN,
+  TestSlashIDProvider
 } from "../../context/test-slash-id-provider";
+import { createTestUser } from "../test-utils";
 
 const TestComponent = () => <h1>Test</h1>;
 
 describe("Groups", () => {
   test("should render children when the SDK is ready and the user belongs to the specified groups", () => {
-    const userWithGroups = new User(TEST_TOKEN);
+    const userWithGroups = createTestUser()
     userWithGroups.getGroups = vi.fn(() => ["groupa"]);
     const belongsTo = vi.fn((groups: string[]) => groups.includes("groupa"));
 
@@ -28,7 +27,7 @@ describe("Groups", () => {
   });
 
   test("should not render children when the SDK is ready and the user does not belong to the specified groups", () => {
-    const userWithGroups = new User(TEST_TOKEN);
+    const userWithGroups = createTestUser()
     userWithGroups.getGroups = vi.fn(() => ["groupb"]);
     const belongsTo = vi.fn((groups: string[]) => groups.includes("groupa"));
 
