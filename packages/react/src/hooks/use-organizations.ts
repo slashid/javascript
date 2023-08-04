@@ -32,7 +32,7 @@ export const useOrganizations = (): UseOrganizations => {
     return organizations.find(org => org.id === user.oid) ?? null
   }, [organizations, user])
 
-  const isLoading = useMemo(() => Boolean(!organizations.length) || !currentOrganization, [organizations, currentOrganization])
+  const isLoading = useMemo(() => !organizations.length || !currentOrganization, [organizations, currentOrganization])
 
   const switchOrganization = useCallback<
     ISlashIDContext["__switchOrganizationInContext"]

@@ -208,22 +208,6 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
     }
   }, [oid, baseApiUrl, sdkUrl, state, tokenStorage, analyticsEnabled]);
 
-  // useEffect(() => {
-  //   if (state !== "initial") {
-  //     const slashId = sidRef.current!;
-  //     // @ts-expect-error TODO expose the type
-  //     const getUserFromEvent = ({ token }) => {
-  //       const userFromToken = new User(token, sidRef.current!);
-  //       if (!user || userFromToken.token !== user.token) {
-  //         setUser(userFromToken);
-  //       }
-  //     };
-  //     slashId.subscribe("idFlowSucceeded", getUserFromEvent);
-
-  //     return () => slashId.unsubscribe("idFlowSucceeded", getUserFromEvent);
-  //   }
-  // }, [state, user]);
-
   useEffect(() => {
     if (state !== "loaded") {
       return;
