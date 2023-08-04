@@ -59,9 +59,7 @@ export const ConfiguredHandleForm = ({ handleSubmit, lastHandle }: Props) => {
           handleType={handleTypes[0]}
           defaultValue={resolveLastHandleValue(lastHandle, handleTypes[0])}
         />
-        {shouldRenderDivider ? (
-          <Divider>{text["initial.divider"]}</Divider>
-        ) : null}
+        {shouldRenderDivider && <Divider>{text["initial.divider"]}</Divider>}
       </>
     );
   }
