@@ -114,4 +114,17 @@ export const TEXT = {
   "kyc.livephoto.mobile.title": "Selfie Check",
   "kyc.livephoto.mobile.subtitle":
     "Upload a selfie picture to confirm your identity.",
+  // gdpr
+  "gdpr.dialog.title": "We value your privacy",
+  "gdpr.dialog.subtitle":
+    "We use cookies to improve your experience. Learn more in our Cookie policy.",
+  "gdpr.consent.necessary.title": "Necessary cookies",
+  "gdpr.consent.necessary.description":
+    "This is a detailed description of necessary cookies. Lorem ipsum dolor sit amet consectetur. Praesent malesuas massa praesent at placerat leo orci amet. Commodo eget eget montes amet viverra faucibus vel. Sitiori vestibulum ullamcorper.",
+  "gdpr.consent.analytics.title": "Analytics",
+  "gdpr.consent.analytics.description":
+    "This is a detailed description of analytics cookies. Lorem ipsum dolor sit amet consectetur. Praesent malesuas massa praesent at placerat leo orci amet. Commodo eget eget montes amet viverra faucibus vel. Sitiori vestibulum ullamcorper.",
+  "gdpr.consent.marketing.title": "Marketing",
+  "gdpr.consent.marketing.description":
+    "This is a detailed description of marketing cookies. Lorem ipsum dolor sit amet consectetur. Praesent malesuas massa praesent at placerat leo orci amet. Commodo eget eget montes amet viverra faucibus vel. Sitiori vestibulum ullamcorper.",
 };
