@@ -38,7 +38,7 @@ import { LoginMiddleware } from "../domain/types";
  * <Form
  *  middleware={[
  *    defaultOrganization(async ({ user }) => {
- *      const bucket = await user.getBucket()
+ *      const bucket = user.getBucket()
  *      const home = await bucket.get<{ oid }>("preferred_org")
  * 
  *      return home.oid
