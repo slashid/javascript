@@ -32,15 +32,10 @@ const DefaultFallback = () => {
   );
 };
 
-const ThemeRoot = ({ children }: { children: ReactNode }) => {
-  const { theme } = useConfiguration();
+const Root = ({ children }: { children: ReactNode }) => {
   return (
     <div
       className={clsx(
-        "sid-theme-root",
-        `sid-theme-root__${theme}`,
-        themeClass,
-        { [darkTheme]: theme === "dark", [autoTheme]: theme === "auto" },
         styles.organizationSwitcher,
         "sid-organization-switcher"
       )}
@@ -80,11 +75,11 @@ export const OrganizationSwitcher = ({
   }, [filter, allOrganizations]);
 
   if (isLoading || !currentOrganization) {
-    return <ThemeRoot>{fallback}</ThemeRoot>;
+    return <Root>{fallback}</Root>;
   }
 
   return (
-    <ThemeRoot>
+    <Root>
       <Dropdown
         key={currentOrganization.id}
         defaultValue={currentOrganization.id}
@@ -96,6 +91,6 @@ export const OrganizationSwitcher = ({
         }))}
         onChange={(oid) => switchOrganization({ oid })}
       />
-    </ThemeRoot>
+    </Root>
   );
 };
