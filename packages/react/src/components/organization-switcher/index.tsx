@@ -79,7 +79,6 @@ export const OrganizationSwitcher = ({
   return (
     <Root>
       <Dropdown
-        key={currentOrganization.id}
         defaultValue={currentOrganization.id}
         className={className}
         label={text["org.switcher.label"]}

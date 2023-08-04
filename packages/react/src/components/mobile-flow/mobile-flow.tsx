@@ -243,7 +243,13 @@ export const MobileFlow = (props: Props) => {
         ? action.error("invalid_state", e.message)
         : action.error("generic", e.message)
     );
-  }, []);
+  /**
+   * TODO:
+   * The useEffect dependencies below were added to satisfy the linter,
+   * we need to test this component in depth before we decide to expose
+   * the KYC feature.
+   */
+  }, [action, makeResume]);
 
   // On state change
   useEffect(() => {

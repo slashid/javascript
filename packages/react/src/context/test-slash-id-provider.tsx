@@ -28,7 +28,7 @@ export const TestSlashIDProvider: React.FC<TestProviderProps> = ({
       ...(mfa ? { mfa } : {}),
       __switchOrganizationInContext
     }),
-    [logIn, mfa, sdkState, sid, user]
+    [logIn, mfa, sdkState, sid, user, __switchOrganizationInContext]
   );
 
   return (
