@@ -1,5 +1,5 @@
-import { colors, publicVariables, theme } from "../../theme/theme.css";
 import { style, styleVariants } from "@vanilla-extract/css";
+import { colors, publicVariables, theme } from "../../theme/theme.css";
 
 const base = style({
   fontFamily: publicVariables.font.fontFamily,
@@ -29,6 +29,13 @@ const base = style({
   },
 });
 
+const md = style({
+  width: "auto",
+  height: "auto",
+  padding: "14px 16px",
+  borderRadius: "16px",
+});
+
 export const button = styleVariants({
   primary: [
     base,
@@ -36,6 +43,7 @@ export const button = styleVariants({
       backgroundColor: publicVariables.color.primary,
       color: colors.white,
       border: "none",
+
       ":hover": {
         backgroundColor: publicVariables.color.primaryHover,
       },
@@ -47,6 +55,57 @@ export const button = styleVariants({
       backgroundColor: publicVariables.color.panel,
       color: publicVariables.color.foreground,
       border: `1px solid ${publicVariables.color.smooth}`,
+
+      ":hover": {
+        backgroundColor: publicVariables.color.soft,
+      },
+    },
+  ],
+  secondaryMd: [
+    base,
+    md,
+    {
+      backgroundColor: publicVariables.color.panel,
+      color: publicVariables.color.foreground,
+      border: `1px solid ${publicVariables.color.smooth}`,
+
+      ":hover": {
+        backgroundColor: publicVariables.color.soft,
+      },
+    },
+  ],
+  neutral: [
+    base,
+    {
+      border: "none",
+      backgroundColor: publicVariables.color.foreground,
+      color: publicVariables.color.background,
+
+      ":hover": {
+        backgroundColor: publicVariables.color.contrast,
+      },
+    },
+  ],
+  neutralMd: [
+    base,
+    md,
+    {
+      border: "none",
+      backgroundColor: publicVariables.color.foreground,
+      color: publicVariables.color.background,
+
+      ":hover": {
+        backgroundColor: publicVariables.color.contrast,
+      },
+    },
+  ],
+  ghostMd: [
+    base,
+    md,
+    {
+      border: "none",
+      backgroundColor: publicVariables.color.panel,
+      color: publicVariables.color.foreground,
 
       ":hover": {
         backgroundColor: publicVariables.color.soft,

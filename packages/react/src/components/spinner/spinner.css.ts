@@ -1,4 +1,4 @@
-import { keyframes, style } from "@vanilla-extract/css";
+import { keyframes, style, styleVariants } from "@vanilla-extract/css";
 
 const rotation = keyframes({
   "0%": {
@@ -10,14 +10,29 @@ const rotation = keyframes({
 });
 
 export const spinner = style({
-  width: "24px",
-  height: "24px",
   borderRadius: "50%",
   border: "3px solid white",
   borderBottomColor: "transparent",
   boxSizing: "border-box",
   display: "inline-block",
   animation: `${rotation} 1s linear infinite`,
+});
+
+export const spinnerVariants = styleVariants({
+  default: [
+    spinner,
+    {
+      width: "24px",
+      height: "24px",
+    },
+  ],
+  short: [
+    spinner,
+    {
+      width: "16px",
+      height: "16px",
+    },
+  ],
 });
 
 export const background = style({
