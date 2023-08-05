@@ -37,13 +37,8 @@ export const dialogTrigger = style({
   right: margin,
   display: "grid",
   placeItems: "center",
-  width: "46px",
-  height: "38px",
   padding: "12px 16px",
-  border: "none",
   borderRadius: "14px",
-  boxSizing: "border-box",
-  backgroundColor: publicVariables.color.foreground,
 
   "@media": {
     "screen and (max-width: 480px)": {
@@ -51,19 +46,6 @@ export const dialogTrigger = style({
         [margin]: "20px",
       },
     },
-  },
-
-  ":hover": {
-    cursor: "pointer",
-    backgroundColor: publicVariables.color.primaryHover,
-  },
-
-  ":active": {
-    transform: "scale(.98)",
-  },
-
-  ":focus-visible": {
-    outline: `4px solid ${publicVariables.color.smooth}`,
   },
 });
 
@@ -73,12 +55,21 @@ export const title = style({
 });
 
 export const content = style({
-  borderTop: `1px solid ${publicVariables.color.subtle}`,
-  borderBottom: `1px solid ${publicVariables.color.subtle}`,
-  background: publicVariables.color.panel,
+  display: "grid",
   maxHeight: "30vh",
+  minHeight: "304px",
   overflowY: "auto",
   padding: "0 16px",
+  borderTop: `1px solid ${publicVariables.color.subtle}`,
+  borderBottom: `1px solid ${publicVariables.color.subtle}`,
+  background: publicVariables.color.auxiliary,
+});
+
+export const error = style({
+  display: "grid",
+  placeContent: "center",
+  gap: "6px",
+  textAlign: "center",
 });
 
 export const trigger = style({
@@ -97,4 +88,8 @@ export const footer = style({
       flexDirection: "column",
     },
   },
+});
+
+export const saveButton = style({
+  minWidth: "130px",
 });

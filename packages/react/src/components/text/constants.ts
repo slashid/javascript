@@ -127,4 +127,6 @@ export const TEXT = {
   "gdpr.consent.marketing.title": "Marketing",
   "gdpr.consent.marketing.description":
     "This is a detailed description of marketing cookies. Lorem ipsum dolor sit amet consectetur. Praesent malesuas massa praesent at placerat leo orci amet. Commodo eget eget montes amet viverra faucibus vel. Sitiori vestibulum ullamcorper.",
+  "gdpr.dialog.error.title": "Oops!",
+  "gdpr.dialog.error.subtitle": "Looks like something went wrong...",
 };

@@ -38,15 +38,41 @@ export const GDPRConsentDialog = ({
   modal = true,
 }: Props) => {
   const [open, setOpen] = useState(defaultOpen);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasError, setHasError] = useState(false);
+  const [isCustomizing, setIsCustomizing] = useState(false);
+
+  const close = () => setOpen(false);
+
+  const handleSave = async () => {
+    try {
+      setHasError(false);
+      setIsLoading(true);
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      handleAccept();
+    } catch (error) {
+      console.error(error);
+      setHasError(true);
+      onError?.();
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleAccept = () => {
-    setOpen(false);
+    close();
     onSuccess?.();
+    // TODO: add accept logic
   };
 
   const handleReject = () => {
-    setOpen(false);
+    close();
     onError?.();
+    // TODO: add reject logic
+  };
+
+  const handleCustomize = () => {
+    setIsCustomizing(true);
   };
 
   return (
@@ -56,9 +82,9 @@ export const GDPRConsentDialog = ({
       open={open}
       onOpenChange={setOpen}
       trigger={
-        <button className={styles.dialogTrigger}>
+        <Button variant="neutralMd" className={styles.dialogTrigger}>
           <Cookie />
-        </button>
+        </Button>
       }
       icon={<Cookie />}
     >
@@ -69,70 +95,111 @@ export const GDPRConsentDialog = ({
           variant={{ weight: "semibold", color: "contrast" }}
         />
       </div>
-      <div className={styles.content}>
-        <Accordion
-          items={[
-            {
-              value: "1",
-              icon: <Switch blocked />,
-              trigger: (
-                <Text
-                  className={styles.trigger}
-                  t="gdpr.consent.necessary.title"
-                  variant={{ weight: "semibold" }}
-                />
-              ),
-              content: (
-                <Text
-                  t="gdpr.consent.necessary.description"
-                  variant={{ size: "sm", color: "contrast" }}
-                />
-              ),
-            },
-            {
-              value: "2",
-              icon: <Switch />,
-              trigger: (
-                <Text
-                  className={styles.trigger}
-                  t="gdpr.consent.analytics.title"
-                  variant={{ weight: "semibold" }}
-                />
-              ),
-              content: (
-                <Text
-                  t="gdpr.consent.analytics.description"
-                  variant={{ size: "sm", color: "contrast" }}
-                />
-              ),
-            },
-            {
-              value: "3",
-              icon: <Switch />,
-              trigger: (
-                <Text
-                  className={styles.trigger}
-                  t="gdpr.consent.marketing.title"
-                  variant={{ weight: "semibold" }}
-                />
-              ),
-              content: (
-                <Text
-                  t="gdpr.consent.marketing.description"
-                  variant={{ size: "sm", color: "contrast" }}
-                />
-              ),
-            },
-          ]}
-        />
-      </div>
+      {isCustomizing && (
+        <div className={styles.content}>
+          {hasError ? (
+            <div className={styles.error}>
+              <Text
+                t="gdpr.dialog.error.title"
+                variant={{
+                  weight: "semibold",
+                  color: "contrast",
+                }}
+              />
+              <Text
+                t="gdpr.dialog.error.subtitle"
+                variant={{ weight: "semibold", color: "tertiary" }}
+              />
+            </div>
+          ) : (
+            <>
+              <Accordion
+                items={[
+                  {
+                    value: "1",
+                    icon: <Switch blocked />,
+                    trigger: (
+                      <Text
+                        className={styles.trigger}
+                        t="gdpr.consent.necessary.title"
+                        variant={{ weight: "semibold" }}
+                      />
+                    ),
+                    content: (
+                      <Text
+                        t="gdpr.consent.necessary.description"
+                        variant={{ size: "sm", color: "contrast" }}
+                      />
+                    ),
+                  },
+                  {
+                    value: "2",
+                    icon: <Switch />,
+                    trigger: (
+                      <Text
+                        className={styles.trigger}
+                        t="gdpr.consent.analytics.title"
+                        variant={{ weight: "semibold" }}
+                      />
+                    ),
+                    content: (
+                      <Text
+                        t="gdpr.consent.analytics.description"
+                        variant={{ size: "sm", color: "contrast" }}
+                      />
+                    ),
+                  },
+                  {
+                    value: "3",
+                    icon: <Switch />,
+                    trigger: (
+                      <Text
+                        className={styles.trigger}
+                        t="gdpr.consent.marketing.title"
+                        variant={{ weight: "semibold" }}
+                      />
+                    ),
+                    content: (
+                      <Text
+                        t="gdpr.consent.marketing.description"
+                        variant={{ size: "sm", color: "contrast" }}
+                      />
+                    ),
+                  },
+                ]}
+              />
+            </>
+          )}
+        </div>
+      )}
       <div className={styles.footer}>
-        <Button variant="primary" onClick={handleAccept}>
-          Accept
+        {isCustomizing && (
+          <Button
+            variant="neutralMd"
+            loading={isLoading}
+            onClick={handleSave}
+            className={styles.saveButton}
+          >
+            {hasError ? "Try again" : "Save settings"}
+          </Button>
+        )}
+        <Button
+          variant="secondaryMd"
+          onClick={handleAccept}
+          disabled={isLoading}
+        >
+          Accept all
         </Button>
-        <Button variant="secondary" onClick={handleReject}>
-          Reject
-        </Button>
+        {!isCustomizing && (
+          <>
+            <Button variant="secondaryMd" onClick={handleReject}>
+              Reject all
+            </Button>
+            <Button variant="ghostMd" onClick={handleCustomize}>
+              Customize
+            </Button>
+          </>
+        )}
       </div>
     </Dialog>
   );

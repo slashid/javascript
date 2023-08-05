@@ -41,6 +41,7 @@ export const publicVariables = createGlobalThemeContract(
       primaryHover: "color-primary-hover",
       transparent: "color-transparent",
       error: "color-error",
+      auxiliary: "color-auxiliary",
       // KYC
       success: "color-success",
       foregroundSuccess: "color-foreground-success",
@@ -81,6 +82,7 @@ const lightThemeColors = {
   primaryHover: colors.blue600,
   transparent: "transparent",
   error: colors.red500,
+  auxiliary: "#FAFAFA",
   // KYC
   success: "#059E56",
   foregroundSuccess: "#016A1C",
@@ -107,6 +109,7 @@ export const darkThemeColors = {
   primaryHover: colors.blue600,
   transparent: "transparent",
   error: colors.red500,
+  auxiliary: colors.grey800,
   // KYC
   success: "#059E56",
   foregroundSuccess: "#016A1C",
