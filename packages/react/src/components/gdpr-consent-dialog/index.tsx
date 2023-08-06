@@ -1,5 +1,5 @@
 import { clsx } from "clsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Accordion } from "../accordion";
 import { Button } from "../button";
 import { Dialog } from "../dialog";
@@ -7,6 +7,7 @@ import { Cookie } from "../icon/cookie";
 import { Switch } from "../switch";
 import { Text } from "../text";
 import * as styles from "./style.css";
+import { publicVariables } from "../../theme/theme.css";
 
 type Props = {
   /** Custom class name */
@@ -44,6 +45,11 @@ export const GDPRConsentDialog = ({
 
   const close = () => setOpen(false);
 
+  const reset = () => {
+    setHasError(false);
+    setIsCustomizing(false);
+  };
+
   const handleSave = async () => {
     try {
       setHasError(false);
@@ -75,6 +81,13 @@ export const GDPRConsentDialog = ({
     setIsCustomizing(true);
   };
 
+  useEffect(() => {
+    if (!open) {
+      // Reset state when dialog is closed
+      reset();
+    }
+  }, [open]);
+
   return (
     <Dialog
       className={clsx(styles.dialog, className)}
@@ -86,7 +99,7 @@ export const GDPRConsentDialog = ({
           <Cookie />
         </Button>
       }
-      icon={<Cookie />}
+      icon={<Cookie fill={publicVariables.color.primary} />}
     >
       <div className={styles.title}>
         <Text t="gdpr.dialog.title" variant={{ weight: "bold" }} />
@@ -97,79 +110,82 @@ export const GDPRConsentDialog = ({
       </div>
       {isCustomizing && (
         <div className={styles.content}>
-          {hasError ? (
-            <div className={styles.error}>
-              <Text
-                t="gdpr.dialog.error.title"
-                variant={{
-                  weight: "semibold",
-                  color: "contrast",
-                }}
-              />
-              <Text
-                t="gdpr.dialog.error.subtitle"
-                variant={{ weight: "semibold", color: "tertiary" }}
-              />
-            </div>
-          ) : (
-            <>
-              <Accordion
-                items={[
-                  {
-                    value: "1",
-                    icon: <Switch blocked />,
-                    trigger: (
-                      <Text
-                        className={styles.trigger}
-                        t="gdpr.consent.necessary.title"
-                        variant={{ weight: "semibold" }}
-                      />
-                    ),
-                    content: (
-                      <Text
-                        t="gdpr.consent.necessary.description"
-                        variant={{ size: "sm", color: "contrast" }}
-                      />
-                    ),
-                  },
-                  {
-                    value: "2",
-                    icon: <Switch />,
-                    trigger: (
-                      <Text
-                        className={styles.trigger}
-                        t="gdpr.consent.analytics.title"
-                        variant={{ weight: "semibold" }}
-                      />
-                    ),
-                    content: (
-                      <Text
-                        t="gdpr.consent.analytics.description"
-                        variant={{ size: "sm", color: "contrast" }}
-                      />
-                    ),
-                  },
-                  {
-                    value: "3",
-                    icon: <Switch />,
-                    trigger: (
-                      <Text
-                        className={styles.trigger}
-                        t="gdpr.consent.marketing.title"
-                        variant={{ weight: "semibold" }}
-                      />
-                    ),
-                    content: (
-                      <Text
-                        t="gdpr.consent.marketing.description"
-                        variant={{ size: "sm", color: "contrast" }}
-                      />
-                    ),
-                  },
-                ]}
-              />
-            </>
-          )}
+          <div className={styles.contentWrapper}>
+            <Accordion
+              itemClassName={styles.accordionItem}
+              items={[
+                {
+                  value: "1",
+                  icon: <Switch blocked />,
+                  trigger: (
+                    <Text
+                      className={styles.accordionTrigger}
+                      t="gdpr.consent.necessary.title"
+                      variant={{ weight: "semibold" }}
+                    />
+                  ),
+                  content: (
+                    <Text
+                      className={styles.accordionContent}
+                      t="gdpr.consent.necessary.description"
+                      variant={{ size: "sm", color: "contrast" }}
+                    />
+                  ),
+                },
+                {
+                  value: "2",
+                  icon: <Switch disabled={isLoading} />,
+                  trigger: (
+                    <Text
+                      className={styles.accordionTrigger}
+                      t="gdpr.consent.analytics.title"
+                      variant={{ weight: "semibold" }}
+                    />
+                  ),
+                  content: (
+                    <Text
+                      className={styles.accordionContent}
+                      t="gdpr.consent.analytics.description"
+                      variant={{ size: "sm", color: "contrast" }}
+                    />
+                  ),
+                },
+                {
+                  value: "3",
+                  icon: <Switch disabled={isLoading} />,
+                  trigger: (
+                    <Text
+                      className={styles.accordionTrigger}
+                      t="gdpr.consent.marketing.title"
+                      variant={{ weight: "semibold" }}
+                    />
+                  ),
+                  content: (
+                    <Text
+                      className={styles.accordionContent}
+                      t="gdpr.consent.marketing.description"
+                      variant={{ size: "sm", color: "contrast" }}
+                    />
+                  ),
+                },
+              ]}
+            />
+            {hasError && (
+              <div className={styles.errorWrapper}>
+                <Text
+                  t="gdpr.dialog.error.title"
+                  variant={{
+                    weight: "semibold",
+                    color: "contrast",
+                  }}
+                />
+                <Text
+                  t="gdpr.dialog.error.subtitle"
+                  variant={{ weight: "semibold", color: "tertiary" }}
+                />
+              </div>
+            )}
+          </div>
         </div>
       )}
       <div className={styles.footer}>

@@ -7,16 +7,16 @@ export const dialog = style({
   vars: {
     [margin]: "12px",
   },
-  backgroundColor: publicVariables.color.panel,
-  position: "fixed",
-  bottom: margin,
-  right: margin,
+  transform: "unset",
   top: "unset",
   left: "unset",
-  transform: "unset",
-  maxWidth: "unset",
-  maxHeight: "90vh",
-  width: "398px",
+  bottom: margin,
+  right: margin,
+  maxHeight: "542px",
+  maxWidth: "384px",
+  display: "grid",
+  gridTemplateRows: "auto auto 1fr auto",
+  backgroundColor: publicVariables.color.panel,
 
   "@media": {
     "screen and (max-width: 480px)": {
@@ -55,9 +55,6 @@ export const title = style({
 });
 
 export const content = style({
-  display: "grid",
-  maxHeight: "30vh",
-  minHeight: "304px",
   overflowY: "auto",
   padding: "0 16px",
   borderTop: `1px solid ${publicVariables.color.subtle}`,
@@ -65,16 +62,33 @@ export const content = style({
   background: publicVariables.color.auxiliary,
 });
 
-export const error = style({
+export const contentWrapper = style({
+  position: "relative",
+});
+
+export const errorWrapper = style({
+  position: "absolute",
+  left: "0",
+  top: "0",
+  width: "100%",
+  height: "100%",
   display: "grid",
   placeContent: "center",
   gap: "6px",
   textAlign: "center",
+  background: publicVariables.color.auxiliary,
 });
 
-export const trigger = style({
-  flex: "1",
-  padding: "15px 0",
+export const accordionItem = style({
+  borderBottom: `1px solid ${publicVariables.color.subtle}`,
+});
+
+export const accordionTrigger = style({
+  padding: "24px 0",
+});
+
+export const accordionContent = style({
+  paddingBottom: "24px",
 });
 
 export const footer = style({

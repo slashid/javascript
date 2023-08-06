@@ -14,15 +14,16 @@ type Item = {
 type Props = {
   items: Item[];
   className?: string;
+  itemClassName?: string;
 };
 
-export const Accordion = ({ items, className }: Props) => (
+export const Accordion = ({ items, className, itemClassName }: Props) => (
   <RadixAccordion.Root
-    className={clsx("sid-accordion", styles.accordion, className)}
+    className={clsx("sid-accordion", className)}
     type="multiple"
   >
     {items.map(({ value, trigger, icon, content }) => (
-      <RadixAccordion.Item key={value} value={value}>
+      <RadixAccordion.Item key={value} value={value} className={itemClassName}>
         <RadixAccordion.Header className={styles.header}>
           <RadixAccordion.Trigger className={styles.trigger}>
             <ChevronLeft className={styles.chevron} />

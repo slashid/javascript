@@ -10,6 +10,10 @@ export const radixSwitch = style({
   borderRadius: "100px",
 
   selectors: {
+    '&[disabled]:not([data-blocked="true"])': {
+      opacity: 0.4,
+      cursor: "not-allowed",
+    },
     '&[data-state="unchecked"]': {
       backgroundColor: publicVariables.color.placeholder,
     },
