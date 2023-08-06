@@ -44,8 +44,10 @@ export const button = styleVariants({
       color: colors.white,
       border: "none",
 
-      ":hover:not([disabled])": {
-        backgroundColor: publicVariables.color.primaryHover,
+      selectors: {
+        "&:hover:not([disabled])": {
+          backgroundColor: publicVariables.color.primaryHover,
+        },
       },
     },
   ],
@@ -56,8 +58,10 @@ export const button = styleVariants({
       color: publicVariables.color.foreground,
       border: `1px solid ${publicVariables.color.smooth}`,
 
-      ":hover:not([disabled])": {
-        backgroundColor: publicVariables.color.soft,
+      selectors: {
+        "&:hover:not([disabled])": {
+          backgroundColor: publicVariables.color.soft,
+        },
       },
     },
   ],
@@ -69,8 +73,10 @@ export const button = styleVariants({
       color: publicVariables.color.foreground,
       border: `1px solid ${publicVariables.color.smooth}`,
 
-      ":hover:not([disabled])": {
-        backgroundColor: publicVariables.color.soft,
+      selectors: {
+        "&:hover:not([disabled])": {
+          backgroundColor: publicVariables.color.soft,
+        },
       },
     },
   ],
@@ -81,8 +87,10 @@ export const button = styleVariants({
       backgroundColor: publicVariables.color.foreground,
       color: publicVariables.color.background,
 
-      ":hover:not([disabled])": {
-        backgroundColor: publicVariables.color.contrast,
+      selectors: {
+        "&:hover:not([disabled])": {
+          backgroundColor: publicVariables.color.contrast,
+        },
       },
     },
   ],
@@ -94,8 +102,10 @@ export const button = styleVariants({
       backgroundColor: publicVariables.color.foreground,
       color: publicVariables.color.background,
 
-      ":hover:not([disabled])": {
-        backgroundColor: publicVariables.color.contrast,
+      selectors: {
+        "&:hover:not([disabled])": {
+          backgroundColor: publicVariables.color.contrast,
+        },
       },
     },
   ],
@@ -107,8 +117,10 @@ export const button = styleVariants({
       backgroundColor: publicVariables.color.panel,
       color: publicVariables.color.foreground,
 
-      ":hover:not([disabled])": {
-        backgroundColor: publicVariables.color.soft,
+      selectors: {
+        "&:hover:not([disabled])": {
+          backgroundColor: publicVariables.color.soft,
+        },
       },
     },
   ],
