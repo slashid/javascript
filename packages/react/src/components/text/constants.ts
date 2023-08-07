@@ -113,7 +113,8 @@ export const TEXT = {
   "kyc.livephoto.mobile.success.title": "Image looks good",
   "kyc.livephoto.mobile.title": "Selfie Check",
   "kyc.livephoto.mobile.subtitle":
-    "Upload a selfie picture to confirm your identity.",
+  "Upload a selfie picture to confirm your identity.",
+  "org.switcher.label": "Organization",
   // gdpr
   "gdpr.dialog.title": "We value your privacy",
   "gdpr.dialog.subtitle":

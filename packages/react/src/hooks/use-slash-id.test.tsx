@@ -1,11 +1,7 @@
 import { render, screen } from "@testing-library/react";
-import {
-  TEST_ORG_ID,
-  TEST_PERSON_ID,
-  TEST_TOKEN,
-} from "../context/test-slash-id-provider";
 import { SlashIDProvider } from "../main";
 import { useSlashID } from "./use-slash-id";
+import { TEST_ORG_ID, TEST_PERSON_ID, createTestUser } from "../components/test-utils";
 
 const TestComponent = () => {
   const { user } = useSlashID();
@@ -19,8 +15,10 @@ const TestComponent = () => {
 
 describe("useSlashID", () => {
   test("should return a user instance when a valid initial token is passed to the SlashIDProvider", async () => {
+
+
     render(
-      <SlashIDProvider initialToken={TEST_TOKEN} oid={TEST_ORG_ID}>
+      <SlashIDProvider initialToken={createTestUser().token} oid={TEST_ORG_ID}>
         <TestComponent />
       </SlashIDProvider>
     );
