@@ -1,10 +1,11 @@
 import { GDPRConsent, GDPRConsentLevel, User } from "@slashid/slashid";
 import { render, screen } from "@testing-library/react";
-import { TEST_ORG_ID, TEST_TOKEN } from "../context/test-slash-id-provider";
+import { TEST_ORG_ID, createTestUser } from "../components/test-utils";
 import { SlashIDProvider } from "../main";
 import { STORAGE_GDPR_CONSENT_KEY, useGdprConsent } from "./use-gdpr-consent";
 
 const NO_CONSENTS_TEXT = "No consents";
+const TEST_TOKEN = createTestUser().token;
 
 const TestComponent = () => {
   const { consents } = useGdprConsent();
