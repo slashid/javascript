@@ -5,15 +5,29 @@ import { Close } from "../icon/close";
 import * as styles from "./style.css";
 
 type Props = {
+  /** Dialog content */
   children: ReactNode;
+  /** Dialog trigger */
   trigger: ReactNode;
+  /** Dialog open state */
   open: boolean;
+  /** Dialog open state change handler */
   onOpenChange: (open: boolean) => void;
+  /** Dialog icon */
   icon?: ReactNode;
+  /** Dialog content container class name */
   className?: string;
+  /**
+   * The modality of the dialog.
+   * When set to `true`, interaction with outside elements will be disabled and only dialog content will be visible to screen readers.
+   * When set to `false`, interaction with outside elements will be enabled and all content will be visible to screen readers.
+   */
   modal?: boolean;
 };
 
+/**
+ * Dialog component built on top of Radix Dialog primitives.
+ */
 export const Dialog = ({
   children,
   trigger,
