@@ -2,18 +2,15 @@ import { FactorMethod } from "@slashid/slashid";
 import { render, screen } from "@testing-library/react";
 
 import { LoggedIn } from ".";
-import {
-  TestSlashIDProvider,
-  TEST_USER,
-  createTestUser,
-} from "../../context/test-slash-id-provider";
+import { TestSlashIDProvider } from "../../context/test-slash-id-provider";
+import { createTestUser } from "../test-utils";
 
 const TestComponent = () => <h1>Test</h1>;
 
 describe("LoggedIn", () => {
   test("should render children when a user is logged in", () => {
     render(
-      <TestSlashIDProvider user={TEST_USER}>
+      <TestSlashIDProvider user={createTestUser()}>
         <LoggedIn>
           <TestComponent />
         </LoggedIn>

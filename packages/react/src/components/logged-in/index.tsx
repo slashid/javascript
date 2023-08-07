@@ -43,7 +43,7 @@ export const LoggedIn: React.FC<Props> = ({ children, withFactorMethods }) => {
     }
 
     return true;
-  }, [user, withFactorMethods]);
+  }, [user, withFactorMethods, isAuthenticated]);
 
   if (!shouldRender) {
     return null;

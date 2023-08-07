@@ -5,7 +5,6 @@ import { Initial } from "./initial";
 import { Authenticating } from "./authenticating";
 import { Error } from "./error";
 import { Success } from "./success";
-import { themeClass, darkTheme, autoTheme } from "../../theme/theme.css";
 import * as styles from "./form.css";
 import { Footer } from "./footer";
 import { useConfiguration } from "../../hooks/use-configuration";
@@ -15,10 +14,12 @@ import {
   ConfigurationOverrides,
   ConfigurationOverridesProps,
 } from "../configuration-overrides";
+import { LoginOptions } from "../../domain/types";
 
 export type Props = ConfigurationOverridesProps & {
   className?: string;
   onSuccess?: CreateFlowOptions["onSuccess"];
+  middleware?: LoginOptions["middleware"];
 };
 
 export const Form: React.FC<Props> = ({
@@ -26,26 +27,18 @@ export const Form: React.FC<Props> = ({
   onSuccess,
   factors,
   text,
+  middleware
 }) => {
   const flowState = useFlowState({ onSuccess });
-  const { theme, showBanner } = useConfiguration();
+  const { showBanner } = useConfiguration();
   const { lastHandle } = useLastHandle();
 
   return (
-    <div
-      className={clsx(
-        "sid-theme-root",
-        `sid-theme-root__${theme}`,
-        themeClass,
-        { [darkTheme]: theme === "dark", [autoTheme]: theme === "auto" },
-        styles.form,
-        className
-      )}
-    >
+    <div className={clsx("sid-form", styles.form, className)}>
       <ConfigurationOverrides text={text} factors={factors}>
         {flowState.status === "initial" && (
           <FormProvider>
-            <Initial flowState={flowState} lastHandle={lastHandle} />
+            <Initial flowState={flowState} lastHandle={lastHandle} middleware={middleware} />
           </FormProvider>
         )}
         {flowState.status === "authenticating" && (
