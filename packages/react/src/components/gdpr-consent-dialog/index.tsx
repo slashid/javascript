@@ -69,11 +69,6 @@ export const GDPRConsentDialog = ({
 
   const close = () => setOpen(false);
 
-  const reset = () => {
-    setHasError(false);
-    setIsCustomizing(false);
-  };
-
   const handleSave = async () => {
     try {
       const consentLevels = Object.entries({ ...consentState, necessary: true })
@@ -109,25 +104,23 @@ export const GDPRConsentDialog = ({
       // TODO: do we need to await here?
       updateGdprConsent(["none"]);
       close();
+      // TODO: onSuccess or onError?
       onSuccess?.(["none"]);
     } catch (error) {
       onError?.(error);
     }
   };
 
-  const handleCustomize = () => {
-    setIsCustomizing(true);
-  };
-
   useEffect(() => {
     if (!open) {
-      // Reset state when dialog is closed
-      reset();
+      setHasError(false);
+      setIsCustomizing(false);
     }
   }, [open]);
 
   useEffect(() => {
     setConsentState(getConsentState(consents));
+    // TODO: fix defaultOpen while consents are loading
     setOpen(defaultOpen || !consents.length);
   }, [consents, defaultOpen]);
 
@@ -228,7 +221,7 @@ export const GDPRConsentDialog = ({
             <Button variant="secondaryMd" onClick={handleReject}>
               Reject all
             </Button>
-            <Button variant="ghostMd" onClick={handleCustomize}>
+            <Button variant="ghostMd" onClick={() => setIsCustomizing(true)}>
               Customize
             </Button>
           </>
