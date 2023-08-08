@@ -128,6 +128,12 @@ export const TEXT = {
   "gdpr.consent.marketing.title": "Marketing",
   "gdpr.consent.marketing.description":
     "This is a detailed description of marketing cookies. Lorem ipsum dolor sit amet consectetur. Praesent malesuas massa praesent at placerat leo orci amet. Commodo eget eget montes amet viverra faucibus vel. Sitiori vestibulum ullamcorper.",
+  "gdpr.consent.retargeting.title": "Retargeting",
+  "gdpr.consent.retargeting.description":
+    "This is a detailed description of retargeting cookies. Lorem ipsum dolor sit amet consectetur. Praesent malesuas massa praesent at placerat leo orci amet. Commodo eget eget montes amet viverra faucibus vel. Sitiori vestibulum ullamcorper.",
+  "gdpr.consent.tracking.title": "Tracking",
+  "gdpr.consent.tracking.description":
+    "This is a detailed description of tracking cookies. Lorem ipsum dolor sit amet consectetur. Praesent malesuas massa praesent at placerat leo orci amet. Commodo eget eget montes amet viverra faucibus vel. Sitiori vestibulum ullamcorper.",
   "gdpr.dialog.error.title": "Oops!",
   "gdpr.dialog.error.subtitle": "Looks like something went wrong...",
 };

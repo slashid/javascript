@@ -1,23 +1,26 @@
+import { GDPRConsent, GDPRConsentLevel } from "@slashid/slashid";
 import { clsx } from "clsx";
 import { useEffect, useState } from "react";
+import { useGdprConsent } from "../../hooks/use-gdpr-consent";
+import { publicVariables } from "../../theme/theme.css";
 import { Accordion } from "../accordion";
 import { Button } from "../button";
 import { Dialog } from "../dialog";
 import { Cookie } from "../icon/cookie";
 import { Switch } from "../switch";
 import { Text } from "../text";
+import { TextConfigKey } from "../text/constants";
 import * as styles from "./style.css";
-import { publicVariables } from "../../theme/theme.css";
 
 type Props = {
   /** Custom class name */
   className?: string;
   /** Default open state */
   defaultOpen?: boolean;
-  /** Callback when user accepts */
-  onSuccess?: () => void;
-  /** Callback when user rejects */
-  onError?: () => void;
+  /** Callback when user actions are successful */
+  onSuccess?: (consentLevels: GDPRConsentLevel[]) => void;
+  /** Callback when user actions fail */
+  onError?: (error: unknown) => void;
   /**
    * The modality of the dialog.
    * When set to `true`, interaction with outside elements will be disabled and only dialog content will be visible to screen readers.
@@ -27,9 +30,28 @@ type Props = {
   // TODO: customised text
 };
 
+const GDPR_CONSENT_LEVELS: GDPRConsentLevel[] = [
+  "necessary",
+  "analytics",
+  "marketing",
+  "retargeting",
+  "tracking",
+];
+
+type ConsentState = Record<GDPRConsentLevel, boolean>;
+
+const getConsentState = (consents: GDPRConsent[]) => {
+  const consentLevels = Object.fromEntries(
+    GDPR_CONSENT_LEVELS.map((level) => [
+      level,
+      consents.map((c) => c.consent_level).includes(level),
+    ])
+  );
+  return consentLevels as ConsentState;
+};
+
 /**
- * GDPR Dialog component to handle user consent for cookies
- * TODO: add more detailed description
+ * GDPR Consent Dialog component to manage the GDPR consent levels for the current user.
  */
 export const GDPRConsentDialog = ({
   className,
@@ -38,7 +60,9 @@ export const GDPRConsentDialog = ({
   defaultOpen = false,
   modal = true,
 }: Props) => {
-  const [open, setOpen] = useState(defaultOpen);
+  const { consents, updateGdprConsent } = useGdprConsent();
+  const [consentState, setConsentState] = useState(getConsentState(consents));
+  const [open, setOpen] = useState(defaultOpen || !consents.length);
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [isCustomizing, setIsCustomizing] = useState(false);
@@ -52,29 +76,43 @@ export const GDPRConsentDialog = ({
 
   const handleSave = async () => {
     try {
+      const consentLevels = Object.entries({ ...consentState, necessary: true })
+        .filter(([, value]) => value)
+        .map(([key]) => key as GDPRConsentLevel);
+
       setHasError(false);
       setIsLoading(true);
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      handleAccept();
+      await updateGdprConsent(consentLevels);
+      close();
+      onSuccess?.(consentLevels);
     } catch (error) {
-      console.error(error);
       setHasError(true);
-      onError?.();
+      onError?.(error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleAccept = () => {
-    close();
-    onSuccess?.();
-    // TODO: add accept logic
+  const handleAcceptAll = () => {
+    try {
+      // TODO: do we need to await here?
+      updateGdprConsent(GDPR_CONSENT_LEVELS);
+      close();
+      onSuccess?.(GDPR_CONSENT_LEVELS);
+    } catch (error) {
+      onError?.(error);
+    }
   };
 
   const handleReject = () => {
-    close();
-    onError?.();
-    // TODO: add reject logic
+    try {
+      // TODO: do we need to await here?
+      updateGdprConsent(["none"]);
+      close();
+      onSuccess?.(["none"]);
+    } catch (error) {
+      onError?.(error);
+    }
   };
 
   const handleCustomize = () => {
@@ -87,6 +125,11 @@ export const GDPRConsentDialog = ({
       reset();
     }
   }, [open]);
+
+  useEffect(() => {
+    setConsentState(getConsentState(consents));
+    setOpen(defaultOpen || !consents.length);
+  }, [consents, defaultOpen]);
 
   return (
     <Dialog
@@ -113,62 +156,36 @@ export const GDPRConsentDialog = ({
           <div className={styles.contentWrapper}>
             <Accordion
               itemClassName={styles.accordionItem}
-              items={[
-                {
-                  value: "1",
-                  icon: <Switch blocked />,
-                  trigger: (
-                    <Text
-                      className={styles.accordionTrigger}
-                      t="gdpr.consent.necessary.title"
-                      variant={{ weight: "semibold" }}
-                    />
-                  ),
-                  content: (
-                    <Text
-                      className={styles.accordionContent}
-                      t="gdpr.consent.necessary.description"
-                      variant={{ size: "sm", color: "contrast" }}
-                    />
-                  ),
-                },
-                {
-                  value: "2",
-                  icon: <Switch disabled={isLoading} />,
-                  trigger: (
-                    <Text
-                      className={styles.accordionTrigger}
-                      t="gdpr.consent.analytics.title"
-                      variant={{ weight: "semibold" }}
-                    />
-                  ),
-                  content: (
-                    <Text
-                      className={styles.accordionContent}
-                      t="gdpr.consent.analytics.description"
-                      variant={{ size: "sm", color: "contrast" }}
-                    />
-                  ),
-                },
-                {
-                  value: "3",
-                  icon: <Switch disabled={isLoading} />,
-                  trigger: (
-                    <Text
-                      className={styles.accordionTrigger}
-                      t="gdpr.consent.marketing.title"
-                      variant={{ weight: "semibold" }}
-                    />
-                  ),
-                  content: (
-                    <Text
-                      className={styles.accordionContent}
-                      t="gdpr.consent.marketing.description"
-                      variant={{ size: "sm", color: "contrast" }}
-                    />
-                  ),
-                },
-              ]}
+              items={Object.keys(consentState).map((level) => ({
+                value: level,
+                icon: (
+                  <Switch
+                    blocked={level === "necessary"}
+                    disabled={isLoading}
+                    checked={consentState[level as GDPRConsentLevel]}
+                    onCheckedChange={(checked) =>
+                      setConsentState((prev) => ({
+                        ...prev,
+                        [level]: checked,
+                      }))
+                    }
+                  />
+                ),
+                trigger: (
+                  <Text
+                    className={styles.accordionTrigger}
+                    t={`gdpr.consent.${level}.title` as TextConfigKey}
+                    variant={{ weight: "semibold" }}
+                  />
+                ),
+                content: (
+                  <Text
+                    className={styles.accordionContent}
+                    t={`gdpr.consent.${level}.description` as TextConfigKey}
+                    variant={{ size: "sm", color: "contrast" }}
+                  />
+                ),
+              }))}
             />
             {hasError && (
               <div className={styles.errorWrapper}>
@@ -201,7 +218,7 @@ export const GDPRConsentDialog = ({
         )}
         <Button
           variant="secondaryMd"
-          onClick={handleAccept}
+          onClick={handleAcceptAll}
           disabled={isLoading}
         >
           Accept all
