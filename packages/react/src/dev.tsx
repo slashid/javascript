@@ -11,10 +11,12 @@ import {
   OrganizationSwitcher,
   useOrganizations,
   SlashIDProvider,
+  DynamicFlow,
 } from "./main";
 import { defaultOrganization } from "./middleware/default-organization";
+import { Handle } from "./domain/types";
 
-const rootOid = "b6f94b67-d20f-7fc3-51df-bf6e3b82683e"
+const rootOid = "b6f94b67-d20f-7fc3-51df-bf6e3b82683e";
 
 const initialFactors: Factor[] = [
   { method: "email_link" },
@@ -62,10 +64,7 @@ function Config() {
   }, []);
 
   return (
-    <ConfigurationProvider
-      factors={factors}
-      storeLastHandle={true}
-    >
+    <ConfigurationProvider factors={factors} storeLastHandle={true}>
       <LoggedOut>
         <div className="formWrapper">
           {/* <MultiFactorAuth
@@ -74,11 +73,13 @@ function Config() {
           <Form
             middleware={[
               defaultOrganization(({ organizations }) => {
-                const preferred = organizations.find((org) => org.org_name === "MyOrg/abc2");
+                const preferred = organizations.find(
+                  (org) => org.org_name === "MyOrg/abc2"
+                );
                 if (preferred) return preferred.id;
-        
+
                 return rootOid;
-              })
+              }),
             ]}
           />
         </div>
@@ -97,6 +98,37 @@ function Config() {
   );
 }
 
+const getFactor = (handle?: Handle) => {
+  if (!handle || handle.type !== "email_address") {
+    throw new Error("Only use email for demo!");
+  }
+
+  const email = handle?.value;
+  const domain = email.split("@")[1];
+
+  if (domain === "slashid.dev") {
+    const oidcFactor: Factor = {
+      method: "oidc",
+      options: {
+        provider: "google",
+        client_id: import.meta.env.VITE_GOOGLE_SSO_CLIENT_ID,
+      },
+    };
+    return oidcFactor;
+  } else {
+    const emailLinkFactor: Factor = { method: "email_link" };
+    return emailLinkFactor;
+  }
+};
+
+const ConfiguredDynamicFlow = () => {
+  return (
+    <ConfigurationProvider text={{ "initial.oidc": "Continue with" }}>
+      <DynamicFlow className="formWrapper" getFactor={getFactor} />
+    </ConfigurationProvider>
+  );
+};
+
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <SlashIDProvider
@@ -105,7 +137,16 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
       tokenStorage="localStorage"
       baseApiUrl="https://api.slashid.com"
     >
-      <Config />
+      <div className="layout">
+        <div>
+          <h2>Switch to default org</h2>
+          <Config />
+        </div>
+        <div>
+          <h2>Dynamic flow - factor based on handle</h2>
+          <ConfiguredDynamicFlow />
+        </div>
+      </div>
     </SlashIDProvider>
   </React.StrictMode>
 );
