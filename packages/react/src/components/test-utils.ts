@@ -52,14 +52,17 @@ type CreateTestUserOptions = {
  * @param options CreateTestUserOptions
  * @returns User
  */
-export function createTestUser({ authMethods = [], oid }: CreateTestUserOptions = {}): User {
+export function createTestUser({
+  authMethods = [],
+  oid,
+}: CreateTestUserOptions = {}): User {
   const token = [
     TEST_TOKEN_HEADER,
     btoa(
       JSON.stringify({
         ...TEST_TOKEN_PAYLOAD_DECODED,
         authenticated_methods: authMethods,
-        oid: oid ?? TEST_TOKEN_PAYLOAD_DECODED.oid
+        oid: oid ?? TEST_TOKEN_PAYLOAD_DECODED.oid,
       })
     ),
     TEST_TOKEN_SIGNATURE,
@@ -72,15 +75,31 @@ const createBaseOrg = () => ({
   id: faker.string.uuid(),
   org_name: faker.company.buzzPhrase(),
   tenant_name: faker.company.buzzPhrase(),
-})
+});
 
 export const createTestOrganization = (): OrganizationDetails => ({
   ...createBaseOrg(),
-  managed_organizations: Array.from(Array(faker.number.int({ min: 1, max: 3 }))).map(() => createBaseOrg())
-})
+  managed_organizations: Array.from(
+    Array(faker.number.int({ min: 1, max: 3 }))
+  ).map(() => createBaseOrg()),
+});
 
 export const createTestPerson = () => ({
   active: true,
   person_id: faker.string.uuid(),
-  region: faker.location.countryCode()
-})
+  region: faker.location.countryCode(),
+});
+
+/**
+ * Radix UI depends Element.onhasPointerCapture, the DOM implementation
+ * in our testing setup has not implemented this.
+ *
+ * https://github.com/testing-library/user-event/discussions/1087
+ */
+export const polyfillPointerEvent = () => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (window as any).PointerEvent = class PointerEvent extends Event {};
+  window.HTMLElement.prototype.scrollIntoView = vi.fn();
+  window.HTMLElement.prototype.hasPointerCapture = vi.fn();
+  window.HTMLElement.prototype.releasePointerCapture = vi.fn();
+};

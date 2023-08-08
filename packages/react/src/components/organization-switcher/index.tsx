@@ -60,6 +60,7 @@ export const OrganizationSwitcher = ({
   fallback = <DefaultFallback />,
 }: Props) => {
   const { text } = useConfiguration();
+
   const {
     organizations: allOrganizations,
     currentOrganization,
@@ -79,7 +80,6 @@ export const OrganizationSwitcher = ({
   return (
     <Root>
       <Dropdown
-        key={currentOrganization.id}
         defaultValue={currentOrganization.id}
         className={className}
         label={text["org.switcher.label"]}

@@ -1,4 +1,4 @@
-import type { Factor } from "@slashid/slashid";
+import { type Factor } from "@slashid/slashid";
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 
@@ -64,12 +64,25 @@ function Config() {
   }, []);
 
   return (
-    <ConfigurationProvider factors={factors} storeLastHandle={true}>
+    <ConfigurationProvider
+      factors={factors}
+      storeLastHandle={true}
+    >
+      {/* <div className="formWrapper">
+        <MultiFactorAuth
+          steps={[
+            { factors: [{ method: "email_link" }] },
+            {
+              factors: [{ method: "otp_via_sms" }],
+              text: {
+                "initial.title": "TEST TITLE MFA",
+              },
+            },
+          ]}
+        />
+      </div> */}
       <LoggedOut>
         <div className="formWrapper">
-          {/* <MultiFactorAuth
-            steps={[{ factors: factors }, { factors: mfaFactors }]}
-          /> */}
           <Form
             middleware={[
               defaultOrganization(({ organizations }) => {
