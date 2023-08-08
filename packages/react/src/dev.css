@@ -13,10 +13,15 @@ body {
 }
 
 .formWrapper {
-  width: 390px;
+  width: 420px !important;
   margin: 32px;
 }
 
-.testClass {
+.sid-theme-root.testClass {
   --sid-color-primary: yellow;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
