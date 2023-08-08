@@ -24,6 +24,7 @@ export const dialog = style({
         [margin]: "20px",
       },
       width: `calc(100% - (${margin} * 2))`,
+      maxWidth: "unset",
     },
   },
 });
@@ -33,8 +34,8 @@ export const dialogTrigger = style({
     [margin]: "12px",
   },
   position: "fixed",
-  bottom: margin,
-  right: margin,
+  bottom: `calc(${margin} + 2px)`,
+  right: `calc(${margin} + 2px)`,
   display: "grid",
   placeItems: "center",
   padding: "12px 16px",
