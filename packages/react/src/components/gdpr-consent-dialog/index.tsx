@@ -1,15 +1,15 @@
-import { GDPRConsent, GDPRConsentLevel } from "@slashid/slashid";
+import { GDPRConsentLevel } from "@slashid/slashid";
 import { clsx } from "clsx";
-import { useEffect, useState } from "react";
+import { useEffect, useReducer } from "react";
 import { useGdprConsent } from "../../hooks/use-gdpr-consent";
 import { publicVariables } from "../../theme/theme.css";
-import { Accordion } from "../accordion";
 import { Button } from "../button";
 import { Dialog } from "../dialog";
 import { Cookie } from "../icon/cookie";
-import { Switch } from "../switch";
 import { Text } from "../text";
-import { TextConfigKey } from "../text/constants";
+import { Actions } from "./actions";
+import { Settings } from "./settings";
+import { createInitialState, reducer } from "./state";
 import * as styles from "./style.css";
 
 type Props = {
@@ -30,28 +30,6 @@ type Props = {
   // TODO: customised text
 };
 
-const GDPR_CONSENT_LEVELS: GDPRConsentLevel[] = [
-  "necessary",
-  "analytics",
-  "marketing",
-  "retargeting",
-  "tracking",
-];
-
-type ConsentState = Record<GDPRConsentLevel, boolean>;
-
-type ActionType = "save" | "acceptAll" | "rejectAll" | undefined;
-
-const getConsentState = (consents: GDPRConsent[]) => {
-  const consentLevels = Object.fromEntries(
-    GDPR_CONSENT_LEVELS.map((level) => [
-      level,
-      consents.map((c) => c.consent_level).includes(level),
-    ])
-  );
-  return consentLevels as ConsentState;
-};
-
 /**
  * GDPR Consent Dialog component to manage the GDPR consent levels for the current user.
  */
@@ -62,61 +40,26 @@ export const GDPRConsentDialog = ({
   defaultOpen = false,
   modal = true,
 }: Props) => {
-  const { consents, updateGdprConsent } = useGdprConsent();
-  const [consentState, setConsentState] = useState(getConsentState(consents));
-  const [open, setOpen] = useState(defaultOpen || !consents.length);
-  const [isLoading, setIsLoading] = useState(false);
-  const [hasError, setHasError] = useState(false);
-  const [isCustomizing, setIsCustomizing] = useState(false);
-  const [currentAction, setCurrentAction] = useState<ActionType>();
+  const { consents } = useGdprConsent();
+  const [state, dispatch] = useReducer(
+    reducer,
+    createInitialState(consents, defaultOpen)
+  );
 
-  const handleUpdate = async (
-    consentLevels: GDPRConsentLevel[],
-    action: ActionType
-  ) => {
-    setCurrentAction(action);
-    setHasError(false);
-    setIsLoading(true);
-    try {
-      await updateGdprConsent(consentLevels);
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      if (consentLevels) throw new Error("Error");
-      onSuccess?.(consentLevels);
-      setOpen(false);
-    } catch (error) {
-      setHasError(true);
-      onError?.(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleSave = async () => {
-    const consentLevels = Object.entries({ ...consentState, necessary: true })
-      .filter(([, value]) => value)
-      .map(([key]) => key as GDPRConsentLevel);
-
-    return handleUpdate(consentLevels, "save");
-  };
-
-  const handleAcceptAll = () => handleUpdate(GDPR_CONSENT_LEVELS, "acceptAll");
-
-  const handleRejectAll = () => handleUpdate(["none"], "rejectAll");
-
-  const handleCustomize = () => {
-    setHasError(false);
-    setIsCustomizing(true);
-  };
+  const { consentSettings, open, isLoading, hasError, isCustomizing } = state;
 
   useEffect(() => {
     if (!open) {
-      setHasError(false);
-      setIsCustomizing(false);
+      dispatch({ type: "SET_HAS_ERROR", payload: false });
+      dispatch({ type: "SET_IS_CUSTOMIZING", payload: false });
     }
   }, [open]);
 
   useEffect(() => {
-    setConsentState(getConsentState(consents));
+    dispatch({
+      type: "SET_CONSENT_SETTINGS",
+      payload: consents,
+    });
     // TODO: fix defaultOpen while consents are loading
     // setOpen(defaultOpen || !consents.length);
   }, [consents]);
@@ -126,7 +69,10 @@ export const GDPRConsentDialog = ({
       className={clsx(styles.dialog, className)}
       modal={modal}
       open={open}
-      onOpenChange={setOpen}
+      onOpenChange={(open: boolean) =>
+        dispatch({ type: "SET_OPEN", payload: open })
+      }
+      // TODO: should trigger be passed as a prop? if yes then dialog CSS needs to be updated
       trigger={
         <Button variant="neutralMd" className={styles.dialogTrigger}>
           <Cookie />
@@ -145,45 +91,14 @@ export const GDPRConsentDialog = ({
         <div
           className={clsx(styles.content, { [styles.errorContent]: hasError })}
         >
-          {/* <div className={styles.contentWrapper}> */}
           {isCustomizing && (
-            // TODO: pull out accordion to a separate component
-            <Accordion
-              itemClassName={styles.accordionItem}
-              items={Object.keys(consentState).map((level) => ({
-                value: level,
-                icon: (
-                  <Switch
-                    blocked={level === "necessary"}
-                    disabled={isLoading}
-                    checked={consentState[level as GDPRConsentLevel]}
-                    onCheckedChange={(checked) =>
-                      setConsentState((prev) => ({
-                        ...prev,
-                        [level]: checked,
-                      }))
-                    }
-                  />
-                ),
-                trigger: (
-                  <Text
-                    className={styles.accordionTrigger}
-                    t={`gdpr.consent.${level}.title` as TextConfigKey}
-                    variant={{ weight: "semibold" }}
-                  />
-                ),
-                content: (
-                  <Text
-                    className={styles.accordionContent}
-                    t={`gdpr.consent.${level}.description` as TextConfigKey}
-                    variant={{ size: "sm", color: "contrast" }}
-                  />
-                ),
-              }))}
+            <Settings
+              consentSettings={consentSettings}
+              dispatch={dispatch}
+              disabled={isLoading}
             />
           )}
           {hasError && (
-            // TODO: fix error message layout to show up on any action
             <div className={styles.errorWrapper}>
               <Text
                 t="gdpr.dialog.error.title"
@@ -198,56 +113,15 @@ export const GDPRConsentDialog = ({
               />
             </div>
           )}
-          {/* </div> */}
         </div>
       )}
       <div className={styles.footer}>
-        {isCustomizing && (
-          <Button
-            variant="neutralMd"
-            loading={isLoading && currentAction === "save"}
-            disabled={isLoading && currentAction !== "save"}
-            onClick={handleSave}
-            className={styles.saveButton}
-          >
-            {hasError && currentAction === "save"
-              ? "Try again"
-              : "Save settings"}
-          </Button>
-        )}
-        <Button
-          variant="secondaryMd"
-          loading={isLoading && currentAction === "acceptAll"}
-          disabled={isLoading && currentAction !== "acceptAll"}
-          onClick={handleAcceptAll}
-          className={styles.acceptButton}
-        >
-          {hasError && currentAction === "acceptAll"
-            ? "Try again"
-            : "Accept all"}
-        </Button>
-        {!isCustomizing && (
-          <>
-            <Button
-              variant="secondaryMd"
-              loading={isLoading && currentAction === "rejectAll"}
-              disabled={isLoading && currentAction !== "rejectAll"}
-              onClick={handleRejectAll}
-              className={styles.rejectButton}
-            >
-              {hasError && currentAction === "rejectAll"
-                ? "Try again"
-                : "Reject all"}
-            </Button>
-            <Button
-              variant="ghostMd"
-              onClick={handleCustomize}
-              disabled={isLoading}
-            >
-              Customize
-            </Button>
-          </>
-        )}
+        <Actions
+          state={state}
+          dispatch={dispatch}
+          onSuccess={onSuccess}
+          onError={onError}
+        />
       </div>
     </Dialog>
   );
