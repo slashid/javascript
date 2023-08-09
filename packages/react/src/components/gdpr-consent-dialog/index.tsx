@@ -40,6 +40,8 @@ const GDPR_CONSENT_LEVELS: GDPRConsentLevel[] = [
 
 type ConsentState = Record<GDPRConsentLevel, boolean>;
 
+type ActionType = "save" | "acceptAll" | "rejectAll" | undefined;
+
 const getConsentState = (consents: GDPRConsent[]) => {
   const consentLevels = Object.fromEntries(
     GDPR_CONSENT_LEVELS.map((level) => [
@@ -66,20 +68,21 @@ export const GDPRConsentDialog = ({
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [isCustomizing, setIsCustomizing] = useState(false);
+  const [currentAction, setCurrentAction] = useState<ActionType>();
 
-  const close = () => setOpen(false);
-
-  const handleSave = async () => {
+  const handleUpdate = async (
+    consentLevels: GDPRConsentLevel[],
+    action: ActionType
+  ) => {
+    setCurrentAction(action);
+    setHasError(false);
+    setIsLoading(true);
     try {
-      const consentLevels = Object.entries({ ...consentState, necessary: true })
-        .filter(([, value]) => value)
-        .map(([key]) => key as GDPRConsentLevel);
-
-      setHasError(false);
-      setIsLoading(true);
       await updateGdprConsent(consentLevels);
-      close();
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      if (consentLevels) throw new Error("Error");
       onSuccess?.(consentLevels);
+      setOpen(false);
     } catch (error) {
       setHasError(true);
       onError?.(error);
@@ -88,27 +91,21 @@ export const GDPRConsentDialog = ({
     }
   };
 
-  const handleAcceptAll = () => {
-    try {
-      // TODO: do we need to await here?
-      updateGdprConsent(GDPR_CONSENT_LEVELS);
-      close();
-      onSuccess?.(GDPR_CONSENT_LEVELS);
-    } catch (error) {
-      onError?.(error);
-    }
+  const handleSave = async () => {
+    const consentLevels = Object.entries({ ...consentState, necessary: true })
+      .filter(([, value]) => value)
+      .map(([key]) => key as GDPRConsentLevel);
+
+    return handleUpdate(consentLevels, "save");
   };
 
-  const handleReject = () => {
-    try {
-      // TODO: do we need to await here?
-      updateGdprConsent(["none"]);
-      close();
-      // TODO: onSuccess or onError?
-      onSuccess?.(["none"]);
-    } catch (error) {
-      onError?.(error);
-    }
+  const handleAcceptAll = () => handleUpdate(GDPR_CONSENT_LEVELS, "acceptAll");
+
+  const handleRejectAll = () => handleUpdate(["none"], "rejectAll");
+
+  const handleCustomize = () => {
+    setHasError(false);
+    setIsCustomizing(true);
   };
 
   useEffect(() => {
@@ -121,8 +118,8 @@ export const GDPRConsentDialog = ({
   useEffect(() => {
     setConsentState(getConsentState(consents));
     // TODO: fix defaultOpen while consents are loading
-    setOpen(defaultOpen || !consents.length);
-  }, [consents, defaultOpen]);
+    // setOpen(defaultOpen || !consents.length);
+  }, [consents]);
 
   return (
     <Dialog
@@ -144,9 +141,13 @@ export const GDPRConsentDialog = ({
           variant={{ weight: "semibold", color: "contrast" }}
         />
       </div>
-      {isCustomizing && (
-        <div className={styles.content}>
-          <div className={styles.contentWrapper}>
+      {(isCustomizing || hasError) && (
+        <div
+          className={clsx(styles.content, { [styles.errorContent]: hasError })}
+        >
+          {/* <div className={styles.contentWrapper}> */}
+          {isCustomizing && (
+            // TODO: pull out accordion to a separate component
             <Accordion
               itemClassName={styles.accordionItem}
               items={Object.keys(consentState).map((level) => ({
@@ -180,48 +181,69 @@ export const GDPRConsentDialog = ({
                 ),
               }))}
             />
-            {hasError && (
-              <div className={styles.errorWrapper}>
-                <Text
-                  t="gdpr.dialog.error.title"
-                  variant={{
-                    weight: "semibold",
-                    color: "contrast",
-                  }}
-                />
-                <Text
-                  t="gdpr.dialog.error.subtitle"
-                  variant={{ weight: "semibold", color: "tertiary" }}
-                />
-              </div>
-            )}
-          </div>
+          )}
+          {hasError && (
+            // TODO: fix error message layout to show up on any action
+            <div className={styles.errorWrapper}>
+              <Text
+                t="gdpr.dialog.error.title"
+                variant={{
+                  weight: "semibold",
+                  color: "contrast",
+                }}
+              />
+              <Text
+                t="gdpr.dialog.error.subtitle"
+                variant={{ weight: "semibold", color: "tertiary" }}
+              />
+            </div>
+          )}
+          {/* </div> */}
         </div>
       )}
       <div className={styles.footer}>
         {isCustomizing && (
           <Button
             variant="neutralMd"
-            loading={isLoading}
+            loading={isLoading && currentAction === "save"}
+            disabled={isLoading && currentAction !== "save"}
             onClick={handleSave}
             className={styles.saveButton}
           >
-            {hasError ? "Try again" : "Save settings"}
+            {hasError && currentAction === "save"
+              ? "Try again"
+              : "Save settings"}
           </Button>
         )}
         <Button
           variant="secondaryMd"
+          loading={isLoading && currentAction === "acceptAll"}
+          disabled={isLoading && currentAction !== "acceptAll"}
           onClick={handleAcceptAll}
-          disabled={isLoading}
+          className={styles.acceptButton}
         >
-          Accept all
+          {hasError && currentAction === "acceptAll"
+            ? "Try again"
+            : "Accept all"}
         </Button>
         {!isCustomizing && (
           <>
-            <Button variant="secondaryMd" onClick={handleReject}>
-              Reject all
+            <Button
+              variant="secondaryMd"
+              loading={isLoading && currentAction === "rejectAll"}
+              disabled={isLoading && currentAction !== "rejectAll"}
+              onClick={handleRejectAll}
+              className={styles.rejectButton}
+            >
+              {hasError && currentAction === "rejectAll"
+                ? "Try again"
+                : "Reject all"}
             </Button>
-            <Button variant="ghostMd" onClick={() => setIsCustomizing(true)}>
+            <Button
+              variant="ghostMd"
+              onClick={handleCustomize}
+              disabled={isLoading}
+            >
               Customize
             </Button>
           </>

@@ -15,6 +15,7 @@ import {
 } from "./main";
 import { defaultOrganization } from "./middleware/default-organization";
 import { Handle } from "./domain/types";
+import { GDPRConsentDialog } from "./components/gdpr-consent-dialog";
 
 const rootOid = "b6f94b67-d20f-7fc3-51df-bf6e3b82683e";
 
@@ -64,7 +65,14 @@ function Config() {
   }, []);
 
   return (
-    <ConfigurationProvider factors={factors} storeLastHandle={true}>
+    <ConfigurationProvider
+      factors={factors}
+      storeLastHandle={true}
+      text={{
+        "gdpr.consent.necessary.description":
+          "These cookies are essential for the proper functioning of the website. Without these cookies, the website would not work properly.",
+      }}
+    >
       <LoggedOut>
         <div className="formWrapper">
           {/* <MultiFactorAuth
@@ -94,6 +102,12 @@ function Config() {
           />
         </>
       </LoggedIn>
+      <GDPRConsentDialog
+        onSuccess={(consentLevels) =>
+          console.log("onSuccess - consentLevels:", consentLevels)
+        }
+        onError={(error) => console.error(error)}
+      />
     </ConfigurationProvider>
   );
 }

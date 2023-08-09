@@ -17,6 +17,7 @@ export const dialog = style({
   display: "grid",
   gridTemplateRows: "auto auto 1fr auto",
   backgroundColor: publicVariables.color.panel,
+  zIndex: 1,
 
   "@media": {
     "screen and (max-width: 480px)": {
@@ -56,11 +57,17 @@ export const title = style({
 });
 
 export const content = style({
+  position: "relative",
   overflowY: "auto",
   padding: "0 16px",
   borderTop: `1px solid ${publicVariables.color.subtle}`,
   borderBottom: `1px solid ${publicVariables.color.subtle}`,
   background: publicVariables.color.auxiliary,
+});
+
+export const errorContent = style({
+  overflowY: "hidden",
+  minHeight: "200px",
 });
 
 export const contentWrapper = style({
@@ -78,6 +85,7 @@ export const errorWrapper = style({
   gap: "6px",
   textAlign: "center",
   background: publicVariables.color.auxiliary,
+  zIndex: 1,
 });
 
 export const accordionItem = style({
@@ -107,4 +115,12 @@ export const footer = style({
 
 export const saveButton = style({
   minWidth: "130px",
+});
+
+export const acceptButton = style({
+  minWidth: "105px",
+});
+
+export const rejectButton = style({
+  minWidth: "100px",
 });
