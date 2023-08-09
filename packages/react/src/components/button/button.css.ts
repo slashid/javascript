@@ -109,6 +109,20 @@ export const button = styleVariants({
       },
     },
   ],
+  ghost: [
+    base,
+    {
+      border: "none",
+      backgroundColor: publicVariables.color.panel,
+      color: publicVariables.color.foreground,
+
+      selectors: {
+        "&:hover:not([disabled])": {
+          backgroundColor: publicVariables.color.soft,
+        },
+      },
+    },
+  ],
   ghostMd: [
     base,
     md,
@@ -138,4 +152,49 @@ export const icon = style({
   marginRight: "22px",
   display: "flex",
   alignItems: "center",
+});
+
+export const spinner = styleVariants({
+  primary: [
+    {
+      borderColor: colors.white,
+      borderBottomColor: "transparent",
+    },
+  ],
+  secondary: [
+    {
+      borderColor: publicVariables.color.foreground,
+      borderBottomColor: "transparent",
+    },
+  ],
+  secondaryMd: [
+    {
+      borderColor: publicVariables.color.foreground,
+      borderBottomColor: "transparent",
+    },
+  ],
+  neutral: [
+    {
+      borderColor: publicVariables.color.background,
+      borderBottomColor: "transparent",
+    },
+  ],
+  neutralMd: [
+    {
+      borderColor: publicVariables.color.background,
+      borderBottomColor: "transparent",
+    },
+  ],
+  ghost: [
+    {
+      borderColor: publicVariables.color.foreground,
+      borderBottomColor: "transparent",
+    },
+  ],
+  ghostMd: [
+    {
+      borderColor: publicVariables.color.foreground,
+      borderBottomColor: "transparent",
+    },
+  ],
 });

@@ -46,7 +46,7 @@ export const Button = forwardRef<HTMLButtonElement, Props>(
         onClick={onClick}
       >
         {loading ? (
-          <Spinner variant="short" />
+          <Spinner variant="short" className={styles.spinner[variant]} />
         ) : (
           <>
             {icon ? <i className={styles.icon}>{icon}</i> : null}
