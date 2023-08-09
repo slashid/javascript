@@ -29,11 +29,10 @@ export const Actions = ({ state, dispatch, onSuccess, onError }: Props) => {
     action: ActionType
   ) => {
     setActiveAction(action);
-    dispatch({ type: "SET_HAS_ERROR", payload: false });
-    dispatch({ type: "SET_IS_LOADING", payload: true });
+    dispatch({ type: "START_LOADING" });
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      if (consentLevels) throw new Error("Error");
+      // await new Promise((resolve) => setTimeout(resolve, 2000));
+      // if (consentLevels) throw new Error("Error");
       await updateGdprConsent(consentLevels);
       onSuccess?.(consentLevels);
       dispatch({ type: "SET_OPEN", payload: false });
@@ -41,7 +40,7 @@ export const Actions = ({ state, dispatch, onSuccess, onError }: Props) => {
       dispatch({ type: "SET_HAS_ERROR", payload: true });
       onError?.(error);
     } finally {
-      dispatch({ type: "SET_IS_LOADING", payload: false });
+      dispatch({ type: "STOP_LOADING" });
     }
   };
 

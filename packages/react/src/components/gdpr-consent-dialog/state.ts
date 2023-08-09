@@ -22,14 +22,15 @@ export type State = {
 type Action =
   | { type: "SET_OPEN"; payload: boolean }
   | { type: "SET_CONSENT_SETTINGS"; payload: GDPRConsent[] }
-  | { type: "SET_IS_LOADING"; payload: boolean }
+  | { type: "START_LOADING" }
+  | { type: "STOP_LOADING" }
   | { type: "SET_HAS_ERROR"; payload: boolean }
   | { type: "SET_IS_CUSTOMIZING"; payload: boolean }
   | { type: "TOGGLE_CONSENT"; payload: ConsentLevel };
 
 export type Dispatch = React.Dispatch<Action>;
 
-export const getConsentSettings = (consents: GDPRConsent[]) => {
+const getConsentSettings = (consents: GDPRConsent[]) => {
   const consentSettings = Object.fromEntries(
     GDPR_CONSENT_LEVELS.map((level) => [
       level,
@@ -67,10 +68,16 @@ export const reducer = (state: State, action: Action): State => {
         consentSettings: getConsentSettings(action.payload),
         // open: !action.payload.length,
       };
-    case "SET_IS_LOADING":
+    case "START_LOADING":
       return {
         ...state,
-        isLoading: action.payload,
+        hasError: false,
+        isLoading: true,
+      };
+    case "STOP_LOADING":
+      return {
+        ...state,
+        isLoading: false,
       };
     case "SET_HAS_ERROR":
       return {
@@ -90,6 +97,7 @@ export const reducer = (state: State, action: Action): State => {
           [action.payload]: !state.consentSettings[action.payload],
         },
       };
+
     default:
       return state;
   }
