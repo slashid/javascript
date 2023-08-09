@@ -1,9 +1,9 @@
-import { defaultOrganization } from "./default-organization";
+import { defaultOrganization } from ".";
 import { faker } from "@faker-js/faker";
 import {
   createTestOrganization,
   createTestUser,
-} from "../components/test-utils";
+} from "../../components/test-utils";
 import { SlashID, User } from "@slashid/slashid";
 
 describe("middleware: defaultOrganization", () => {

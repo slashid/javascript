@@ -1,5 +1,5 @@
 import { OrganizationDetails, User } from "@slashid/slashid";
-import { LoginMiddleware } from "../domain/types";
+import { LoginMiddleware } from "../../domain/types";
 
 /**
  * Middleware: post-login switch the users organization context to another suborganization.
