@@ -15,11 +15,11 @@ export const User = () => {
     <>
       <h3>User token</h3>
       <pre className={styles.userToken} data-testid="sid-user-token">
-        {user.token}
+        {user?.token}
       </pre>
       <h3>Decoded token payload</h3>
       <pre className={styles.userToken} data-testid="sid-user-object">
-        {decodeToken(user.token)}
+        {user?.token ? decodeToken(user.token) : ""}
       </pre>
     </>
   );

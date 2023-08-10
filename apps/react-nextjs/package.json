@@ -10,7 +10,7 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
-    "@slashid/react": "workspace:*",
+    "@slashid/react": "../../packages/react/dist",
     "@slashid/slashid": "^3.6.0",
     "@slashid/tests": "workspace:*",
     "@types/node": "18.11.9",

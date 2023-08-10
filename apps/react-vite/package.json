@@ -11,8 +11,8 @@
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "@slashid/slashid": "^3.3.2",
-    "@slashid/react": "workspace:*",
+    "@slashid/slashid": "^3.12.0",
+    "@slashid/react": "../../packages/react/dist",
     "demo-form": "workspace:*"
   },
   "devDependencies": {
