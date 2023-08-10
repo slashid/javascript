@@ -2,12 +2,13 @@ import { Factor } from "@slashid/slashid";
 import { createContext, ReactNode, useMemo } from "react";
 import { TEXT, TextConfig } from "../components/text/constants";
 import { SlashID } from "../components/icon/slashid";
+import { FactorConfiguration } from "../domain/types";
 
 export type Logo = string | React.ReactNode;
 
 export interface IConfigurationContext {
   text: TextConfig;
-  factors: Factor[];
+  factors: FactorConfiguration[];
   logo: Logo;
   storeLastHandle: boolean;
   showBanner: boolean;

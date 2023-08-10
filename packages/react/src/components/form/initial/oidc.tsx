@@ -1,6 +1,6 @@
 import { Factor } from "@slashid/slashid";
 import clsx from "clsx";
-import { FactorOIDC } from "../../../domain/types";
+import { FactorLabeledOIDC } from "../../../domain/types";
 import { useConfiguration } from "../../../hooks/use-configuration";
 import { sprinkles } from "../../../theme/sprinkles.css";
 import { Button } from "../../button";
@@ -12,7 +12,6 @@ import { Github } from "../../icon/github";
 import { Gitlab } from "../../icon/gitlab";
 import { Google } from "../../icon/google";
 import { Line } from "../../icon/line";
-import { stack } from "../../stack/stack.css";
 
 import * as styles from "./initial.css";
 
@@ -28,7 +27,7 @@ const PROVIDER_TO_ICON: Record<string, React.ReactNode> = {
 };
 
 type Props = {
-  providers: FactorOIDC[];
+  providers: FactorLabeledOIDC[];
   handleClick: (factor: Factor) => void;
 };
 
@@ -39,7 +38,7 @@ export const Oidc: React.FC<Props> = ({ providers, handleClick }) => {
   }
 
   return (
-    <div className={clsx(stack, sprinkles({ marginTop: "4" }))}>
+    <div className={clsx(sprinkles({ marginTop: "4" }), styles.oidcList)}>
       {providers.map((p) => {
         if (!p.options?.provider) {
           return null;
@@ -47,13 +46,16 @@ export const Oidc: React.FC<Props> = ({ providers, handleClick }) => {
 
         return (
           <Button
-            key={p.options?.provider}
+            key={p.options?.client_id}
             onClick={() => handleClick({ method: "oidc", options: p.options })}
             variant="secondary"
             icon={PROVIDER_TO_ICON[p.options?.provider]}
+            className={clsx("sid-oidc--button")}
           >
             {text["initial.oidc"]}
-            <span className={styles.oidcProvider}>{p.options?.provider}</span>
+            <span className={styles.oidcProvider}>
+              {p.label || p.options?.provider}
+            </span>
           </Button>
         );
       })}
