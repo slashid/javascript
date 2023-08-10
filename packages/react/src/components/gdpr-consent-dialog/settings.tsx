@@ -1,7 +1,6 @@
 import { Accordion } from "../accordion";
 import { Switch } from "../switch";
 import { Text } from "../text";
-import { TextConfigKey } from "../text/constants";
 import { ConsentSettings, Dispatch, GDPR_CONSENT_LEVELS } from "./state";
 import * as styles from "./style.css";
 
@@ -34,14 +33,14 @@ export const Settings = ({
         trigger: (
           <Text
             className={styles.accordionTrigger}
-            t={`gdpr.consent.${level}.title` as TextConfigKey}
+            t={`gdpr.consent.${level}.title`}
             variant={{ weight: "semibold" }}
           />
         ),
         content: (
           <Text
             className={styles.accordionContent}
-            t={`gdpr.consent.${level}.description` as TextConfigKey}
+            t={`gdpr.consent.${level}.description`}
             variant={{ size: "sm", color: "contrast" }}
           />
         ),

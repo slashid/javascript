@@ -2,10 +2,11 @@ import { GDPRConsentLevel } from "@slashid/slashid";
 import { useState } from "react";
 import { useGdprConsent } from "../../hooks/use-gdpr-consent";
 import { Button } from "../button";
+import { ActionButton } from "./action-button";
 import { Dispatch, GDPR_CONSENT_LEVELS, State } from "./state";
 import * as styles from "./style.css";
 
-type ActionType = "save" | "accept" | "reject" | undefined;
+type ActionType = "save" | "accept" | "reject" | null;
 
 type Props = {
   state: State;
@@ -16,13 +17,9 @@ type Props = {
 
 export const Actions = ({ state, dispatch, onSuccess, onError }: Props) => {
   const { updateGdprConsent } = useGdprConsent();
-  const [activeAction, setActiveAction] = useState<ActionType>();
+  const [activeAction, setActiveAction] = useState<ActionType>(null);
 
   const { consentSettings, isLoading, hasError, isCustomizing } = state;
-
-  const isSaveActionActive = activeAction === "save";
-  const isAcceptActionActive = activeAction === "accept";
-  const isRejectActionActive = activeAction === "reject";
 
   const handleUpdate = async (
     consentLevels: GDPRConsentLevel[],
@@ -31,7 +28,7 @@ export const Actions = ({ state, dispatch, onSuccess, onError }: Props) => {
     setActiveAction(action);
     dispatch({ type: "START_LOADING" });
     try {
-      // await new Promise((resolve) => setTimeout(resolve, 2000));
+      await new Promise((resolve) => setTimeout(resolve, 2000));
       // if (consentLevels) throw new Error("Error");
       await updateGdprConsent(consentLevels);
       onSuccess?.(consentLevels);
@@ -45,22 +42,16 @@ export const Actions = ({ state, dispatch, onSuccess, onError }: Props) => {
   };
 
   const handleSave = async () => {
-    const consentLevels = Object.entries({
-      ...consentSettings,
-      necessary: true,
-    })
+    const consentLevels = Object.entries(consentSettings)
       .filter(([, value]) => value)
       .map(([key]) => key as GDPRConsentLevel);
 
     return handleUpdate(consentLevels, "save");
   };
 
-  const handleAccept = () =>
-    handleUpdate(
-      GDPR_CONSENT_LEVELS as unknown as GDPRConsentLevel[],
-      "accept"
-    );
+  const handleAccept = () => handleUpdate([...GDPR_CONSENT_LEVELS], "accept");
 
+  // TODO: include necessary here?
   const handleReject = () => handleUpdate(["none"], "reject");
 
   const handleCustomize = () => {
@@ -71,36 +62,36 @@ export const Actions = ({ state, dispatch, onSuccess, onError }: Props) => {
   return (
     <>
       {isCustomizing && (
-        <Button
+        <ActionButton
           variant="neutralMd"
-          loading={isLoading && isSaveActionActive}
-          disabled={isLoading && !isSaveActionActive}
+          label="Save settings"
+          hasError={hasError}
+          isActive={activeAction === "save"}
+          loading={isLoading}
           onClick={handleSave}
           className={styles.saveButton}
-        >
-          {hasError && isSaveActionActive ? "Try again" : "Save settings"}
-        </Button>
+        />
       )}
-      <Button
+      <ActionButton
         variant="secondaryMd"
-        loading={isLoading && isAcceptActionActive}
-        disabled={isLoading && !isAcceptActionActive}
+        label="Accept all"
+        hasError={hasError}
+        isActive={activeAction === "accept"}
+        loading={isLoading}
         onClick={handleAccept}
         className={styles.acceptButton}
-      >
-        {hasError && isAcceptActionActive ? "Try again" : "Accept "}
-      </Button>
+      />
       {!isCustomizing && (
         <>
-          <Button
+          <ActionButton
             variant="secondaryMd"
-            loading={isLoading && isRejectActionActive}
-            disabled={isLoading && !isRejectActionActive}
+            label="Reject all"
+            hasError={hasError}
+            isActive={activeAction === "reject"}
+            loading={isLoading}
             onClick={handleReject}
             className={styles.rejectButton}
-          >
-            {hasError && isRejectActionActive ? "Try again" : "Reject "}
-          </Button>
+          />
           <Button
             variant="ghostMd"
             onClick={handleCustomize}

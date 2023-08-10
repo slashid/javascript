@@ -37,23 +37,19 @@ const getConsentSettings = (consents: GDPRConsent[]) => {
       consents.map((c) => c.consent_level).includes(level),
     ])
   );
-  return consentSettings as ConsentSettings;
+  return { ...consentSettings, necessary: true } as ConsentSettings;
 };
 
 export const createInitialState = (
   consents: GDPRConsent[],
   defaultOpen: boolean
-): State => {
-  const consentSettings = getConsentSettings(consents);
-
-  return {
-    consentSettings,
-    open: defaultOpen,
-    isLoading: false,
-    hasError: false,
-    isCustomizing: false,
-  };
-};
+): State => ({
+  consentSettings: getConsentSettings(consents),
+  open: defaultOpen,
+  isLoading: false,
+  hasError: false,
+  isCustomizing: false,
+});
 
 export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
