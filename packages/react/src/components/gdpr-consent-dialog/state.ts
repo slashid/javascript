@@ -37,6 +37,7 @@ const getConsentSettings = (consents: GDPRConsent[]) => {
       consents.map((c) => c.consent_level).includes(level),
     ])
   );
+  // TODO: revisit this
   return { ...consentSettings, necessary: true } as ConsentSettings;
 };
 
@@ -62,8 +63,7 @@ export const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         consentSettings: getConsentSettings(action.payload),
-        // TODO: fix defaultOpen while consents are loading
-        // open: !action.payload.length,
+        open: !action.payload.length,
       };
     case "START_LOADING":
       return {

@@ -39,7 +39,7 @@ export const GDPRConsentDialog = ({
   defaultOpen = false,
   modal = true,
 }: Props) => {
-  const { consents, updateGdprConsent } = useGdprConsent();
+  const { consents, consentState, updateGdprConsent } = useGdprConsent();
   const [state, dispatch] = useReducer(
     reducer,
     createInitialState(consents, defaultOpen)
@@ -60,6 +60,10 @@ export const GDPRConsentDialog = ({
       payload: consents,
     });
   }, [consents]);
+
+  if (consentState === "initial") {
+    return null;
+  }
 
   return (
     <Dialog

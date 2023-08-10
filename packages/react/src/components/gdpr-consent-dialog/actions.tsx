@@ -38,6 +38,7 @@ export const Actions = ({
       // if (consentLevels) throw new Error("Error");
 
       await updateGdprConsent(consentLevels);
+      // TODO: return GDPRConsent[] instead
       onSuccess?.(consentLevels);
       dispatch({ type: "SET_OPEN", payload: false });
     } catch (error) {

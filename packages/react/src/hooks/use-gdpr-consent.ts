@@ -69,8 +69,11 @@ export const createApiGDPRConsentStorage = (
   },
 });
 
+type ConsentState = "initial" | "ready";
+
 type UseGdprConsent = () => {
   consents: GDPRConsent[];
+  consentState: ConsentState;
   updateGdprConsent: (consentLevels: GDPRConsentLevel[]) => Promise<void>;
   deleteGdprConsent: () => Promise<void>;
 };
@@ -78,6 +81,7 @@ type UseGdprConsent = () => {
 export const useGdprConsent: UseGdprConsent = () => {
   const { user, sid } = useSlashID();
   const [consents, setConsents] = useState<GDPRConsent[]>([]);
+  const [consentState, setConsentState] = useState<ConsentState>("initial");
 
   const storage = useMemo(() => {
     if (user) {
@@ -96,6 +100,7 @@ export const useGdprConsent: UseGdprConsent = () => {
       }
       const consents = await storage.getConsentLevels();
       setConsents(consents);
+      setConsentState("ready");
     };
 
     fetchAndSyncGDPRConsent();
@@ -125,5 +130,5 @@ export const useGdprConsent: UseGdprConsent = () => {
     setConsents([]);
   }, [storage]);
 
-  return { consents, updateGdprConsent, deleteGdprConsent };
+  return { consents, consentState, updateGdprConsent, deleteGdprConsent };
 };
