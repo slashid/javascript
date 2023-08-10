@@ -6,9 +6,11 @@ const { execSync } = require("child_process");
 const zlib = require("zlib");
 
 const filesToCheck = [
-  "packages/react/dist/main.js",
   "packages/react/dist/style.css",
-  "packages/react/dist/main.d.ts",
+  "packages/react/dist/index.js",
+  "packages/react/dist/index.d.ts",
+  "packages/react/dist/middleware/index.js",
+  "packages/react/dist/middleware/index.d.ts",
 ];
 
 function getFileSize(filePath) {
