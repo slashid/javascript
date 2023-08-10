@@ -12,7 +12,7 @@ export interface LoginConfiguration {
   factor: Factor;
 }
 
-interface LoginMiddlewareContext {
+export interface LoginMiddlewareContext {
   user: User
   sid: SlashID
 }
