@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useSlashID } from "../../main";
+import { useSlashID } from "../..";
 
 type Groups = string[];
 

@@ -226,6 +226,7 @@ importers:
       react-dom: ^18.2.0
       tsconfig: workspace:*
       vite: ^3.1.0
+      vite-plugin-static-copy: ^0.17.0
       vitest: ^0.25.2
     dependencies:
       '@radix-ui/react-dialog': 1.0.4_gnxa6l6dsd7ztow6xrc7kuwsy4
@@ -256,6 +257,7 @@ importers:
       react-dom: 18.2.0_react@18.2.0
       tsconfig: link:../tsconfig
       vite: 3.1.8
+      vite-plugin-static-copy: 0.17.0_vite@3.1.8
       vitest: 0.25.2_jsdom@20.0.2
 
   packages/tests:
@@ -9020,6 +9022,15 @@ packages:
       universalify: 2.0.0
     dev: true
 
+  /fs-extra/11.1.1:
+    resolution: {integrity: sha512-MGIE4HOvQCeUCzmlHs0vXpih4ysz4wg9qiSAu6cd42lVwPbTM1TjV7RusoyQqMmk/95gdQZX72u+YW+c3eEpFQ==}
+    engines: {node: '>=14.14'}
+    dependencies:
+      graceful-fs: 4.2.10
+      jsonfile: 6.1.0
+      universalify: 2.0.0
+    dev: true
+
   /fs-extra/7.0.1:
     resolution: {integrity: sha512-YJDaCJZEnBmcbw13fvdAM9AwNOJwOzrE4pqMqBq5nFiEqXUqHwlK4B+3pUw6JNvfSPtX05xFHtYy/1ni01eGCw==}
     engines: {node: '>=6 <7 || >=8'}
@@ -13755,6 +13766,19 @@ packages:
       - '@types/node'
       - rollup
       - supports-color
+    dev: true
+
+  /vite-plugin-static-copy/0.17.0_vite@3.1.8:
+    resolution: {integrity: sha512-2HpNbHfDt8SDy393AGXh9llHkc8FJMQkI8s3T5WsH3SWLMO+f5cFIyPErl4yGKU9Uh3Vaqsd4lHZYTf042fQ2A==}
+    engines: {node: ^14.18.0 || >=16.0.0}
+    peerDependencies:
+      vite: ^3.0.0 || ^4.0.0
+    dependencies:
+      chokidar: 3.5.3
+      fast-glob: 3.2.12
+      fs-extra: 11.1.1
+      picocolors: 1.0.0
+      vite: 3.1.8
     dev: true
 
   /vite/3.1.8:

@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { SlashIDProvider } from "../main";
+import { SlashIDProvider } from "..";
 import { useSlashID } from "./use-slash-id";
 import { TEST_ORG_ID, TEST_PERSON_ID, createTestUser } from "../components/test-utils";
 

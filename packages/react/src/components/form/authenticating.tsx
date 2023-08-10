@@ -12,7 +12,7 @@ import { FormEventHandler, useCallback, useEffect, useState } from "react";
 import { Input } from "../input";
 import { Button } from "../button";
 import { ErrorMessage } from "./error-message";
-import { useSlashID } from "../../main";
+import { useSlashID } from "../..";
 import { isValidOTPCode } from "./validation";
 import { useForm } from "../../hooks/use-form";
 

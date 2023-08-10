@@ -12,7 +12,7 @@ import {
   useOrganizations,
   SlashIDProvider,
   DynamicFlow,
-} from "./main";
+} from ".";
 import { defaultOrganization } from "./middleware";
 import { Handle } from "./domain/types";
 

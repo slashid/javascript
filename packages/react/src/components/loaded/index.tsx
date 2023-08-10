@@ -1,4 +1,4 @@
-import { useSlashID } from "../../main";
+import { useSlashID } from "../..";
 
 interface Props {
     fallback?: React.ReactElement

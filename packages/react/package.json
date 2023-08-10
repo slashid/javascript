@@ -3,7 +3,8 @@
   "version": "1.9.0",
   "private": false,
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "directory": "./dist"
   },
   "repository": {
     "type": "git",
@@ -22,19 +23,20 @@
     "jwt"
   ],
   "type": "module",
-  "types": "dist/main.d.ts",
-  "main": "dist/main.js",
-  "module": "dist/main.js",
+  "main": "index.js",
+  "module": "index.js",
   "sideEffects": false,
   "exports": {
     ".": {
-      "import": "./dist/main.js"
+      "import": "./index.js",
+      "types": "./index.d.ts"
     },
-    "./style.css": "./dist/style.css"
+    "./middleware": {
+      "import": "./middleware/index.js",
+      "types": "./middleware/index.d.ts"
+    },
+    "./style.css": "./style.css"
   },
-  "files": [
-    "dist/*"
-  ],
   "scripts": {
     "dev": "vite",
     "build": "vite build && tsc",
@@ -73,6 +75,7 @@
     "react-dom": "^18.2.0",
     "tsconfig": "workspace:*",
     "vite": "^3.1.0",
+    "vite-plugin-static-copy": "^0.17.0",
     "vitest": "^0.25.2"
   },
   "peerDependencies": {

@@ -6,7 +6,7 @@ import { createTestUser, inputEmail } from "../test-utils";
 
 import { TestSlashIDProvider } from "../../context/test-slash-id-provider";
 import { DynamicFlow } from ".";
-import { ConfigurationProvider } from "../../main";
+import { ConfigurationProvider } from "../..";
 
 describe("#DynamicFlow", () => {
   test("should render in the initial state", () => {
