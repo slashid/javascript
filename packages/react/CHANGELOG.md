@@ -1,5 +1,14 @@
 # @slashid/react
 
+## 1.9.0
+
+### Minor Changes
+
+- 9e4ae09: Move the theme props to the SlashIDProvider
+- 433a8e4: Add the DynamicFlow component
+- 1d0d64c: Add <OrganizationSwitcher>, useOrganizations()
+- 1d0d64c: Add middleware concept, defaultOrganization middleware
+
 ## 1.8.3
 
 ### Patch Changes
