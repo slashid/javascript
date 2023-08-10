@@ -45,7 +45,6 @@ export const GDPRConsentDialog = ({
     createInitialState(consents, defaultOpen)
   );
 
-  const isConsentNotReady = consentState !== "ready";
   const { consentSettings, open, isLoading, hasError, isCustomizing } = state;
 
   useEffect(() => {
@@ -56,16 +55,15 @@ export const GDPRConsentDialog = ({
   }, [open]);
 
   useEffect(() => {
-    if (isConsentNotReady) {
-      return;
+    if (consentState === "ready") {
+      dispatch({
+        type: "SET_CONSENT_SETTINGS",
+        payload: consents,
+      });
     }
-    dispatch({
-      type: "SET_CONSENT_SETTINGS",
-      payload: consents,
-    });
-  }, [isConsentNotReady, consents]);
+  }, [consentState, consents]);
 
-  if (isConsentNotReady) {
+  if (consentState === "initial") {
     return null;
   }
 
