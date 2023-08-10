@@ -74,7 +74,9 @@ type ConsentState = "initial" | "ready";
 type UseGdprConsent = () => {
   consents: GDPRConsent[];
   consentState: ConsentState;
-  updateGdprConsent: (consentLevels: GDPRConsentLevel[]) => Promise<void>;
+  updateGdprConsent: (
+    consentLevels: GDPRConsentLevel[]
+  ) => Promise<GDPRConsent[]>;
   deleteGdprConsent: () => Promise<void>;
 };
 
@@ -114,10 +116,11 @@ export const useGdprConsent: UseGdprConsent = () => {
   const updateGdprConsent = useCallback(
     async (consentLevels: GDPRConsentLevel[]) => {
       if (!storage) {
-        return;
+        return [];
       }
       const consents = await storage.setConsentLevels(consentLevels);
       setConsents(consents);
+      return consents;
     },
     [storage]
   );

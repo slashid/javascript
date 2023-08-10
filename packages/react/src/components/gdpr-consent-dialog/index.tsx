@@ -1,4 +1,4 @@
-import { GDPRConsentLevel } from "@slashid/slashid";
+import { GDPRConsent } from "@slashid/slashid";
 import { clsx } from "clsx";
 import { useEffect, useReducer } from "react";
 import { useGdprConsent } from "../../hooks/use-gdpr-consent";
@@ -18,7 +18,7 @@ type Props = {
   /** Default open state */
   defaultOpen?: boolean;
   /** Callback when user actions are successful */
-  onSuccess?: (consentLevels: GDPRConsentLevel[]) => void;
+  onSuccess?: (consentLevels: GDPRConsent[]) => void;
   /** Callback when user actions fail */
   onError?: (error: unknown) => void;
   /**

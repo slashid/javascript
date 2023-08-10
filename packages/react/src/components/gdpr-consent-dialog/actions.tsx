@@ -1,4 +1,4 @@
-import { GDPRConsentLevel } from "@slashid/slashid";
+import { GDPRConsent, GDPRConsentLevel } from "@slashid/slashid";
 import { useState } from "react";
 import { Button } from "../button";
 import { ActionButton } from "./action-button";
@@ -10,8 +10,10 @@ type ActionType = "save" | "accept" | "reject" | null;
 type Props = {
   state: State;
   dispatch: Dispatch;
-  updateGdprConsent: (consentLevels: GDPRConsentLevel[]) => Promise<void>;
-  onSuccess?: (consentLevels: GDPRConsentLevel[]) => void;
+  updateGdprConsent: (
+    consentLevels: GDPRConsentLevel[]
+  ) => Promise<GDPRConsent[]>;
+  onSuccess?: (consentLevels: GDPRConsent[]) => void;
   onError?: (error: unknown) => void;
 };
 
@@ -37,9 +39,8 @@ export const Actions = ({
       // await new Promise((resolve) => setTimeout(resolve, 2000));
       // if (consentLevels) throw new Error("Error");
 
-      await updateGdprConsent(consentLevels);
-      // TODO: return GDPRConsent[] instead
-      onSuccess?.(consentLevels);
+      const consents = await updateGdprConsent(consentLevels);
+      onSuccess?.(consents);
       dispatch({ type: "SET_OPEN", payload: false });
     } catch (error) {
       dispatch({ type: "SET_HAS_ERROR", payload: true });
