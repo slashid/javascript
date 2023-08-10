@@ -35,8 +35,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-playwright-browsers-
 
+      - name: Prune pnpm store
+        run: pnpm store prune
+
       - name: Install dependencies
-        run: pnpm install --force
+        run: pnpm install
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
