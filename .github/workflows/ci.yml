@@ -36,7 +36,7 @@ jobs:
             ${{ runner.os }}-playwright-browsers-
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --force
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
