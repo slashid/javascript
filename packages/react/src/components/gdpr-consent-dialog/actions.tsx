@@ -1,6 +1,5 @@
 import { GDPRConsentLevel } from "@slashid/slashid";
 import { useState } from "react";
-import { useGdprConsent } from "../../hooks/use-gdpr-consent";
 import { Button } from "../button";
 import { ActionButton } from "./action-button";
 import { Dispatch, GDPR_CONSENT_LEVELS, State } from "./state";
@@ -11,12 +10,18 @@ type ActionType = "save" | "accept" | "reject" | null;
 type Props = {
   state: State;
   dispatch: Dispatch;
+  updateGdprConsent: (consentLevels: GDPRConsentLevel[]) => Promise<void>;
   onSuccess?: (consentLevels: GDPRConsentLevel[]) => void;
   onError?: (error: unknown) => void;
 };
 
-export const Actions = ({ state, dispatch, onSuccess, onError }: Props) => {
-  const { updateGdprConsent } = useGdprConsent();
+export const Actions = ({
+  state,
+  dispatch,
+  updateGdprConsent,
+  onSuccess,
+  onError,
+}: Props) => {
   const [activeAction, setActiveAction] = useState<ActionType>(null);
 
   const { consentSettings, isLoading, hasError, isCustomizing } = state;
@@ -28,8 +33,10 @@ export const Actions = ({ state, dispatch, onSuccess, onError }: Props) => {
     setActiveAction(action);
     dispatch({ type: "START_LOADING" });
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      // TODO: remove this after finishing testing loading and error states
+      // await new Promise((resolve) => setTimeout(resolve, 2000));
       // if (consentLevels) throw new Error("Error");
+
       await updateGdprConsent(consentLevels);
       onSuccess?.(consentLevels);
       dispatch({ type: "SET_OPEN", payload: false });

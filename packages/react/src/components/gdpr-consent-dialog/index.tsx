@@ -27,7 +27,6 @@ type Props = {
    * When set to `false`, interaction with outside elements will be enabled and all content will be visible to screen readers.
    */
   modal?: boolean;
-  // TODO: customised text
 };
 
 /**
@@ -40,7 +39,7 @@ export const GDPRConsentDialog = ({
   defaultOpen = false,
   modal = true,
 }: Props) => {
-  const { consents } = useGdprConsent();
+  const { consents, updateGdprConsent } = useGdprConsent();
   const [state, dispatch] = useReducer(
     reducer,
     createInitialState(consents, defaultOpen)
@@ -60,8 +59,6 @@ export const GDPRConsentDialog = ({
       type: "SET_CONSENT_SETTINGS",
       payload: consents,
     });
-    // TODO: fix defaultOpen while consents are loading
-    // setOpen(defaultOpen || !consents.length);
   }, [consents]);
 
   return (
@@ -119,6 +116,7 @@ export const GDPRConsentDialog = ({
         <Actions
           state={state}
           dispatch={dispatch}
+          updateGdprConsent={updateGdprConsent}
           onSuccess={onSuccess}
           onError={onError}
         />

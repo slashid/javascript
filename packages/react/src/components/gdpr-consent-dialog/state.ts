@@ -62,6 +62,7 @@ export const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         consentSettings: getConsentSettings(action.payload),
+        // TODO: fix defaultOpen while consents are loading
         // open: !action.payload.length,
       };
     case "START_LOADING":
