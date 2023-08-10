@@ -14,7 +14,7 @@ import {
   DynamicFlow,
 } from "./main";
 import { defaultOrganization } from "./middleware";
-import { Handle } from "./domain/types";
+import { FactorConfiguration, Handle } from "./domain/types";
 
 const rootOid = "b6f94b67-d20f-7fc3-51df-bf6e3b82683e";
 
@@ -30,7 +30,7 @@ const initialFactors: Factor[] = [
   },
 ];
 
-const withWan: Factor[] = [
+const withWan: FactorConfiguration[] = [
   { method: "webauthn", options: { attachment: "platform" } },
   { method: "email_link" },
   { method: "otp_via_sms" },
@@ -39,6 +39,14 @@ const withWan: Factor[] = [
     options: {
       provider: "google",
       client_id: import.meta.env.VITE_GOOGLE_SSO_CLIENT_ID,
+    },
+  },
+  {
+    method: "oidc",
+    label: "Google SSO - label test",
+    options: {
+      provider: "google",
+      client_id: "TEST",
     },
   },
 ];
@@ -64,10 +72,7 @@ function Config() {
   }, []);
 
   return (
-    <ConfigurationProvider
-      factors={factors}
-      storeLastHandle={true}
-    >
+    <ConfigurationProvider factors={factors} storeLastHandle={true}>
       {/* <div className="formWrapper">
         <MultiFactorAuth
           steps={[

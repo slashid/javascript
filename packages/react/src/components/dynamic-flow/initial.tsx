@@ -7,7 +7,7 @@ import { Text } from "../text";
 import { useConfiguration } from "../../hooks/use-configuration";
 import { ConfiguredHandleForm } from "../form/initial/configured-handle-form";
 import { Factor } from "@slashid/slashid";
-import { FactorOIDC, Handle, LoginOptions } from "../../domain/types";
+import { FactorLabeledOIDC, Handle, LoginOptions } from "../../domain/types";
 import { useMemo } from "react";
 import { isFactorOidc } from "../../domain/handles";
 
@@ -19,7 +19,7 @@ type Props = {
 
 export const Initial = ({ flowState, handleSubmit, middleware }: Props) => {
   const { logo, text, factors } = useConfiguration();
-  const oidcFactors: FactorOIDC[] = useMemo(
+  const oidcFactors: FactorLabeledOIDC[] = useMemo(
     () => factors.filter(isFactorOidc),
     [factors]
   );
