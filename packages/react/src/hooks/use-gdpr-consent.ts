@@ -81,7 +81,7 @@ type UseGdprConsent = () => {
 };
 
 export const useGdprConsent: UseGdprConsent = () => {
-  const { user, sid } = useSlashID();
+  const { user, sdkState, sid } = useSlashID();
   const [consents, setConsents] = useState<GDPRConsent[]>([]);
   const [consentState, setConsentState] = useState<ConsentState>("initial");
 
@@ -97,7 +97,7 @@ export const useGdprConsent: UseGdprConsent = () => {
 
   useEffect(() => {
     const fetchAndSyncGDPRConsent = async () => {
-      if (!storage) {
+      if (!storage || sdkState !== "ready") {
         return;
       }
       const consents = await storage.getConsentLevels();
@@ -106,12 +106,7 @@ export const useGdprConsent: UseGdprConsent = () => {
     };
 
     fetchAndSyncGDPRConsent();
-
-    if (sid) {
-      sid.subscribe("idFlowSucceeded", fetchAndSyncGDPRConsent);
-      return () => sid.unsubscribe("idFlowSucceeded", fetchAndSyncGDPRConsent);
-    }
-  }, [sid, storage]);
+  }, [sdkState, sid, storage]);
 
   const updateGdprConsent = useCallback(
     async (consentLevels: GDPRConsentLevel[]) => {

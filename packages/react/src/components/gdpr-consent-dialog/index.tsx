@@ -55,11 +55,14 @@ export const GDPRConsentDialog = ({
   }, [open]);
 
   useEffect(() => {
+    if (consentState === "initial") {
+      return;
+    }
     dispatch({
       type: "SET_CONSENT_SETTINGS",
       payload: consents,
     });
-  }, [consents]);
+  }, [consentState, consents]);
 
   if (consentState === "initial") {
     return null;
