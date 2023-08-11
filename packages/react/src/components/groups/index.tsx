@@ -13,7 +13,7 @@ type Props = {
  * 
  * Use this component where some content should be shown only to users belonging to one or more specific groups.
  * 
- * @param belongsTo string or predicate function - the predicate function is called with a list of group names that the user belongs to.
+ * @param belongsTo group name or predicate function - the predicate function is called with a list of group names that the user belongs to.
  * 
  * @example
  * User belongs to group "admin"
