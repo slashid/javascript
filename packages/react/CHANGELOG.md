@@ -1,5 +1,12 @@
 # @slashid/react
 
+## 1.10.0
+
+### Minor Changes
+
+- 5e8d505: Move middleware exports to root
+- 4629fa8: Added the "label" option to OIDC factor config to enable overriding the UI label
+
 ## 1.9.0
 
 ### Minor Changes
