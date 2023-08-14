@@ -1,10 +1,11 @@
-import { StoryObj } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react";
 import { Button } from ".";
 
-export default {
+const meta: Meta<typeof Button> = {
   component: Button,
 };
-// } satisfies Meta<typeof Button>;
+
+export default meta;
 
 type Story = StoryObj<typeof Button>;
 
@@ -15,4 +16,3 @@ export const Primary: Story = {
 export const Secondary: Story = {
   render: () => <Button variant="secondary">Button</Button>,
 };
-export { Button };
