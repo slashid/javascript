@@ -1,5 +1,5 @@
 import React from "react";
-import { ThemeRoot } from "../src/components/theme-root";
+import { SlashIDProvider } from "../src/main";
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
@@ -13,8 +13,14 @@ export const parameters = {
 
 export const decorators = [
   (Story) => (
-    <ThemeRoot theme="light">
+    <SlashIDProvider
+      // @ts-ignore
+      oid={import.meta.env.VITE_ORG_ID}
+      themeProps={{ theme: "dark" }}
+      tokenStorage="localStorage"
+      baseApiUrl="https://api.slashid.com"
+    >
       <Story />
-    </ThemeRoot>
+    </SlashIDProvider>
   ),
 ];

@@ -10,5 +10,5 @@ export default meta;
 type Story = StoryObj<typeof LoggedOut>;
 
 export const Primary: Story = {
-  render: () => <LoggedOut>LoggedOut</LoggedOut>,
+  render: () => <LoggedOut>Only visible for un-authenticated users.</LoggedOut>,
 };

@@ -11,8 +11,8 @@ type Story = StoryObj<typeof SlashIDLoaded>;
 
 export const Primary: Story = {
   render: () => (
-    <SlashIDLoaded>
-      <h1>SlashIDLoaded</h1>
+    <SlashIDLoaded fallback={<div>Please wait...</div>}>
+      <div>SlashID is ready!</div>
     </SlashIDLoaded>
   ),
 };
