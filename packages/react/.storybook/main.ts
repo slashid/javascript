@@ -13,7 +13,7 @@ const config: import('@storybook/react-vite').StorybookConfig = {
     options: {},
   },
   docs: {
-    autodocs: "tag",
+    autodocs: true,
   },
 }; 
 export default config;
