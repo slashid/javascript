@@ -42,7 +42,7 @@
     "test:types": "tsc --noEmit --emitDeclarationOnly false",
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
-    "storybook": "storybook dev -p 6006 --no-open",
+    "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
   "dependencies": {
