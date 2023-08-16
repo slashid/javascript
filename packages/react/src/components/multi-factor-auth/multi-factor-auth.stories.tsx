@@ -11,7 +11,14 @@ type Story = StoryObj<typeof MultiFactorAuth>;
 
 export const Default: Story = {
   render: () => (
-    <MultiFactorAuth steps={[{ factors: [{ method: "email_link" }] }]} />
+    <MultiFactorAuth
+      steps={[
+        { factors: [{ method: "email_link" }] },
+        {
+          factors: [{ method: "otp_via_sms" }],
+        },
+      ]}
+    />
   ),
 };
 
@@ -20,8 +27,9 @@ export const WithTextOverride: Story = {
   render: () => (
     <MultiFactorAuth
       steps={[
+        { factors: [{ method: "email_link" }] },
         {
-          factors: [{ method: "email_link" }],
+          factors: [{ method: "otp_via_sms" }],
           text: {
             "initial.title": "MFA",
           },
