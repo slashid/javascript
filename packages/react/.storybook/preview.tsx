@@ -16,7 +16,7 @@ export const decorators = [
     <SlashIDProvider
       // @ts-ignore
       oid={import.meta.env.VITE_ORG_ID}
-      themeProps={{ theme: "dark" }}
+      themeProps={{ theme: "auto" }}
       tokenStorage="localStorage"
       baseApiUrl="https://api.slashid.com"
     >

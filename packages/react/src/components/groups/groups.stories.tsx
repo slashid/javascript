@@ -9,7 +9,7 @@ export default meta;
 
 type Story = StoryObj<typeof Groups>;
 
-export const Primary: Story = {
+export const Default: Story = {
   render: () => (
     <Groups belongsTo={(groups) => groups.includes("admin")}>
       Only visible for admins.

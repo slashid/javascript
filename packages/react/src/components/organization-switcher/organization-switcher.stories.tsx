@@ -9,14 +9,20 @@ export default meta;
 
 type Story = StoryObj<typeof OrganizationSwitcher>;
 
-export const Primary: Story = {
+export const Default: Story = {
   render: () => <OrganizationSwitcher />,
 };
 
-export const Secondary: Story = {
+export const WithFiltering: Story = {
+  name: "With filtering",
   render: () => (
     <OrganizationSwitcher
       filter={(org) => !org.org_name.startsWith("private_")}
     />
   ),
+};
+
+export const WithFallback: Story = {
+  name: "With fallback",
+  render: () => <OrganizationSwitcher fallback={<div>Please wait...</div>} />,
 };

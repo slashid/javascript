@@ -9,6 +9,10 @@ export default meta;
 
 type Story = StoryObj<typeof Button>;
 
+export const Default: Story = {
+  render: () => <Button>Button</Button>,
+};
+
 export const Primary: Story = {
   render: () => <Button variant="primary">Button</Button>,
 };
