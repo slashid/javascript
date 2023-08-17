@@ -20,6 +20,8 @@ import * as styles from "./style.css";
 type Props = {
   /** Custom class name */
   className?: string;
+  /** Custom class name for the trigger button */
+  triggerClassName?: string;
   /** Default open state */
   defaultOpen?: boolean;
   /** Value of the lock on the necessary cookies category */
@@ -45,6 +47,7 @@ type Props = {
  */
 export const GDPRConsentDialog = ({
   className,
+  triggerClassName,
   onSuccess,
   onError,
   defaultOpen = false,
@@ -83,15 +86,21 @@ export const GDPRConsentDialog = ({
 
   return (
     <Dialog
-      className={clsx(styles.dialog, className)}
+      className={clsx("sid-gdpr-consent-dialog", styles.dialog, className)}
       modal={modal}
       open={open}
       onOpenChange={(open: boolean) =>
         dispatch({ type: "SET_OPEN", payload: open })
       }
-      // TODO: should trigger be passed as a prop? if yes then dialog CSS needs to be updated
       trigger={
-        <Button variant="neutralMd" className={styles.dialogTrigger}>
+        <Button
+          variant="neutralMd"
+          className={clsx(
+            "sid-gdpr-consent-dialog-trigger",
+            styles.dialogTrigger,
+            triggerClassName
+          )}
+        >
           <Cookie />
         </Button>
       }
