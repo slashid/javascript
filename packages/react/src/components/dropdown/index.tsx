@@ -56,7 +56,9 @@ export const Dropdown: React.FC<Props> = ({
                   key={item.label}
                   value={item.value}
                 >
-                  <Select.ItemText>{item.label}</Select.ItemText>
+                  <Select.ItemText>
+                    {item.label}
+                  </Select.ItemText>
                   <Select.ItemIndicator>
                     <Check className="sid-dropdown__item--selected__icon" />
                   </Select.ItemIndicator>

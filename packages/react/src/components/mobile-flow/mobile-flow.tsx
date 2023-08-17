@@ -4,7 +4,7 @@ import { DarkThemeColors, MobileUpload, Theme } from "../mobile-upload";
 import { Stack } from "../stack";
 import { assignInlineVars } from "@vanilla-extract/dynamic";
 import { mobileFlow } from "./mobile-flow.css";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { isUploadSupported } from "../utils";
 // @ts-expect-error TODO fix enums in KYC SDK
 import { DocumentSide, KYC, DocumentType, KYCStatus } from "@slashid/slashid";
@@ -122,7 +122,7 @@ export const MobileFlow = (props: Props) => {
     {}
   );
 
-  const action = {
+  const action = useMemo(() => ({
     loading: () => setState({ status: "loading" }),
     error: (reason: ErrorReason, msg: string) => {
       console.error(msg);
@@ -143,7 +143,7 @@ export const MobileFlow = (props: Props) => {
       }),
     livephoto: (flowId: string) => setState({ status: "livephoto", flowId }),
     completed: () => setState({ status: "completed" }),
-  };
+  }), []);
 
   const content: JSX.Element = (() => {
     switch (state.status) {
@@ -220,14 +220,15 @@ export const MobileFlow = (props: Props) => {
   };
 
   // Resume API varies based on mobile flow mode
-  const makeResume = () => {
+  const makeResume = useCallback(() => {
     switch (props.mode) {
       case "full":
         return props.kyc.flow(props.flowId).then(onFlowFetched);
       case "hybrid":
         return props.kyc.resumeFromMobile().then(onFlowFetched);
     }
-  };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [onFlowFetched, (props as FullModeProps).flowId, props.kyc, props.mode]);
 
   // On mount
   useEffect(() => {
@@ -243,12 +244,19 @@ export const MobileFlow = (props: Props) => {
         ? action.error("invalid_state", e.message)
         : action.error("generic", e.message)
     );
-  }, []);
+  /**
+   * TODO:
+   * The useEffect dependencies below were added to satisfy the linter,
+   * we need to test this component in depth before we decide to expose
+   * the KYC feature.
+   */
+  }, [action, makeResume]);
 
   // On state change
+  const { onComplete } = props
   useEffect(() => {
-    state.status === "completed" && props.onComplete && props.onComplete();
-  }, [state]);
+    state.status === "completed" && onComplete?.();
+  }, [state, onComplete]);
 
   const logo = props.logo ? props.logo() : <Logo />;
 

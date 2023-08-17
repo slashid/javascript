@@ -4,7 +4,7 @@ import { Factor } from "@slashid/slashid";
 import { Text } from "../../text";
 import { InitialState } from "../flow";
 import { useConfiguration } from "../../../hooks/use-configuration";
-import { FactorOIDC, Handle, LoginOptions } from "../../../domain/types";
+import { FactorLabeledOIDC, Handle, LoginOptions } from "../../../domain/types";
 import { isFactorOidc } from "../../../domain/handles";
 
 import { Logo } from "./logo";
@@ -24,7 +24,7 @@ export const Initial: React.FC<Props> = ({
 }) => {
   const { factors, logo } = useConfiguration();
 
-  const oidcFactors: FactorOIDC[] = useMemo(
+  const oidcFactors: FactorLabeledOIDC[] = useMemo(
     () => factors.filter(isFactorOidc),
     [factors]
   );

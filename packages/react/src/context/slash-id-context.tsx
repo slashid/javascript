@@ -43,8 +43,8 @@ export const initialContextValue = {
   logOut: () => undefined,
   logIn: () => Promise.reject("NYI"),
   mfa: () => Promise.reject("NYI"),
-  validateToken: () => Promise.resolve(false),
-  __switchOrganizationInContext: () => Promise.resolve()
+  validateToken: async () => false,
+  __switchOrganizationInContext: async () => undefined
 };
 
 export const SlashIDContext =
@@ -85,7 +85,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
    * Restarts the React SDK lifecycle with a new
    * organizational context
    */
-  const __switchOrganizationInContext = async ({ oid: newOid }: { oid: string }) => {
+  const __switchOrganizationInContext = useCallback(async ({ oid: newOid }: { oid: string }) => {
     if (!user) return
 
     const newToken = await user.getTokenForOrganization(newOid)
@@ -93,7 +93,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
     setToken(newToken)
     setOid(newOid)
     setState("initial")
-  }
+  }, [user])
 
   const storeUser = useCallback(
     (newUser: User) => {
@@ -108,7 +108,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
         __switchOrganizationInContext({ oid: newUser.oid })
       }
     },
-    [state]
+    [state, __switchOrganizationInContext, oid]
   );
 
   const logOut = useCallback((): undefined => {
@@ -292,7 +292,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
       validateToken,
       __switchOrganizationInContext
     };
-  }, [logIn, logOut, user, validateToken, state, mfa]);
+  }, [logIn, logOut, user, validateToken, state, mfa, __switchOrganizationInContext]);
 
   return (
     <SlashIDContext.Provider value={contextValue}>

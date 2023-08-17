@@ -1,21 +1,21 @@
-import type { Factor } from "@slashid/slashid";
+import { type Factor } from "@slashid/slashid";
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 
+import { GDPRConsentDialog } from "./components/gdpr-consent-dialog";
 import "./dev.css";
+import { FactorConfiguration, Handle } from "./domain/types";
 import {
+  ConfigurationProvider,
+  DynamicFlow,
   Form,
   LoggedIn,
   LoggedOut,
-  ConfigurationProvider,
   OrganizationSwitcher,
-  useOrganizations,
   SlashIDProvider,
-  DynamicFlow,
+  useOrganizations,
 } from "./main";
 import { defaultOrganization } from "./middleware/default-organization";
-import { Handle } from "./domain/types";
-import { GDPRConsentDialog } from "./components/gdpr-consent-dialog";
 
 const rootOid = "b6f94b67-d20f-7fc3-51df-bf6e3b82683e";
 
@@ -31,7 +31,7 @@ const initialFactors: Factor[] = [
   },
 ];
 
-const withWan: Factor[] = [
+const withWan: FactorConfiguration[] = [
   { method: "webauthn", options: { attachment: "platform" } },
   { method: "email_link" },
   { method: "otp_via_sms" },
@@ -40,6 +40,14 @@ const withWan: Factor[] = [
     options: {
       provider: "google",
       client_id: import.meta.env.VITE_GOOGLE_SSO_CLIENT_ID,
+    },
+  },
+  {
+    method: "oidc",
+    label: "Google SSO - label test",
+    options: {
+      provider: "google",
+      client_id: "TEST",
     },
   },
 ];
@@ -73,11 +81,21 @@ function Config() {
           "These cookies are essential for the proper functioning of the website. Without these cookies, the website would not work properly.",
       }}
     >
+      {/* <div className="formWrapper">
+        <MultiFactorAuth
+          steps={[
+            { factors: [{ method: "email_link" }] },
+            {
+              factors: [{ method: "otp_via_sms" }],
+              text: {
+                "initial.title": "TEST TITLE MFA",
+              },
+            },
+          ]}
+        />
+      </div> */}
       <LoggedOut>
         <div className="formWrapper">
-          {/* <MultiFactorAuth
-            steps={[{ factors: factors }, { factors: mfaFactors }]}
-          /> */}
           <Form
             middleware={[
               defaultOrganization(({ organizations }) => {

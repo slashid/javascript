@@ -14,6 +14,7 @@ import { useSlashID } from "./hooks/use-slash-id";
 import { DynamicFlow } from "./components/dynamic-flow";
 import { useOrganizations } from "./hooks/use-organizations";
 import { OrganizationSwitcher } from './components/organization-switcher'
+import { type LoginMiddleware, type LoginMiddlewareContext, defaultOrganization } from "./middleware";
 
 /**
  * TODO: think about code splitting
@@ -33,5 +34,10 @@ export {
   DynamicFlow,
   useSlashID,
   useOrganizations,
-  OrganizationSwitcher
+  OrganizationSwitcher,
+  
+  // middleware
+  defaultOrganization,
+  type LoginMiddleware,
+  type LoginMiddlewareContext
 };

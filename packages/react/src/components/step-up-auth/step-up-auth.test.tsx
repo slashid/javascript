@@ -8,7 +8,7 @@ import { createTestUser, inputPhone } from "../test-utils";
 
 describe("#StepUpAuth", () => {
   test("Step-Up Authentication flow", async () => {
-    const mfaMock = vi.fn(() => Promise.resolve(createTestUser()));
+    const mfaMock = vi.fn(async () => createTestUser());
     const user = userEvent.setup();
     const stepUpText = "TEST TITLE STEP-UP AUTH";
 
