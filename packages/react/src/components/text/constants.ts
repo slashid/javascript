@@ -121,19 +121,19 @@ export const TEXT = {
     "We use cookies to improve your experience. Learn more in our Cookie policy.",
   "gdpr.consent.necessary.title": "Necessary cookies",
   "gdpr.consent.necessary.description":
-    "This is a detailed description of necessary cookies. Lorem ipsum dolor sit amet consectetur. Praesent malesuas massa praesent at placerat leo orci amet. Commodo eget eget montes amet viverra faucibus vel. Sitiori vestibulum ullamcorper.",
+    "Cookies that are essential to provide the service you have requested or which are required to comply with legal requirements, like data protection laws.",
   "gdpr.consent.analytics.title": "Analytics",
   "gdpr.consent.analytics.description":
-    "This is a detailed description of analytics cookies. Lorem ipsum dolor sit amet consectetur. Praesent malesuas massa praesent at placerat leo orci amet. Commodo eget eget montes amet viverra faucibus vel. Sitiori vestibulum ullamcorper.",
+    "Cookies that are used for analytics or performance measurement purposes, like counting the number of unique visitors to our site, how long you stay on the site, and what parts of our site you visit.",
   "gdpr.consent.marketing.title": "Marketing",
   "gdpr.consent.marketing.description":
-    "This is a detailed description of marketing cookies. Lorem ipsum dolor sit amet consectetur. Praesent malesuas massa praesent at placerat leo orci amet. Commodo eget eget montes amet viverra faucibus vel. Sitiori vestibulum ullamcorper.",
+    "Cookies that are used to display advertising personalised to you (whether on or off our site) based on your browsing and profile.",
   "gdpr.consent.retargeting.title": "Retargeting",
   "gdpr.consent.retargeting.description":
-    "This is a detailed description of retargeting cookies. Lorem ipsum dolor sit amet consectetur. Praesent malesuas massa praesent at placerat leo orci amet. Commodo eget eget montes amet viverra faucibus vel. Sitiori vestibulum ullamcorper.",
+    "Cookies that are used to display advertising personalised to you (whether on or off our site) based on your browsing and profile.",
   "gdpr.consent.tracking.title": "Tracking",
   "gdpr.consent.tracking.description":
-    "This is a detailed description of tracking cookies. Lorem ipsum dolor sit amet consectetur. Praesent malesuas massa praesent at placerat leo orci amet. Commodo eget eget montes amet viverra faucibus vel. Sitiori vestibulum ullamcorper.",
+    "Cookies that track your online behaviour, such as clicks, preferences, device specifications, location, and search history. This data helps in targeted advertising and gathering website analytics.",
   "gdpr.dialog.error.title": "Oops!",
   "gdpr.dialog.error.subtitle": "Looks like something went wrong...",
 };
