@@ -73,14 +73,7 @@ function Config() {
   }, []);
 
   return (
-    <ConfigurationProvider
-      factors={factors}
-      storeLastHandle={true}
-      text={{
-        "gdpr.consent.necessary.description":
-          "These cookies are essential for the proper functioning of the website. Without these cookies, the website would not work properly.",
-      }}
-    >
+    <ConfigurationProvider factors={factors} storeLastHandle={true}>
       {/* <div className="formWrapper">
         <MultiFactorAuth
           steps={[
@@ -121,6 +114,8 @@ function Config() {
         </>
       </LoggedIn>
       <GDPRConsentDialog
+        necessaryCookiesRequired
+        defaultRejectAllLevels={["none", "necessary"]}
         onSuccess={(consentLevels) =>
           console.log("onSuccess - consentLevels:", consentLevels)
         }
