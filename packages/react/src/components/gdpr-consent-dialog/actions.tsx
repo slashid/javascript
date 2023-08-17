@@ -2,13 +2,16 @@ import { GDPRConsent, GDPRConsentLevel } from "@slashid/slashid";
 import { useState } from "react";
 import { Button } from "../button";
 import { ActionButton } from "./action-button";
-import { Dispatch, GDPR_CONSENT_LEVELS, State } from "./state";
+import { ConsentLevel, Dispatch, State } from "./state";
 import * as styles from "./style.css";
 
 type ActionType = "save" | "accept" | "reject" | null;
 
 type Props = {
   state: State;
+  necessaryCookiesRequired: boolean;
+  defaultAcceptAllLevels: ConsentLevel[];
+  defaultRejectAllLevels: GDPRConsentLevel[];
   dispatch: Dispatch;
   updateGdprConsent: (
     consentLevels: GDPRConsentLevel[]
@@ -19,6 +22,9 @@ type Props = {
 
 export const Actions = ({
   state,
+  necessaryCookiesRequired,
+  defaultAcceptAllLevels,
+  defaultRejectAllLevels,
   dispatch,
   updateGdprConsent,
   onSuccess,
@@ -35,10 +41,6 @@ export const Actions = ({
     setActiveAction(action);
     dispatch({ type: "START_LOADING" });
     try {
-      // TODO: remove this after finishing testing loading and error states
-      // await new Promise((resolve) => setTimeout(resolve, 2000));
-      // if (consentLevels) throw new Error("Error");
-
       const consents = await updateGdprConsent(consentLevels);
       onSuccess?.(consents);
       dispatch({ type: "SET_OPEN", payload: false });
@@ -51,17 +53,19 @@ export const Actions = ({
   };
 
   const handleSave = async () => {
-    const consentLevels = Object.entries(consentSettings)
+    const consentLevels = Object.entries({
+      ...consentSettings,
+      necessary: necessaryCookiesRequired,
+    })
       .filter(([, value]) => value)
       .map(([key]) => key as GDPRConsentLevel);
 
     return handleUpdate(consentLevels, "save");
   };
 
-  const handleAccept = () => handleUpdate([...GDPR_CONSENT_LEVELS], "accept");
+  const handleAccept = () => handleUpdate(defaultAcceptAllLevels, "accept");
 
-  // TODO: include necessary here?
-  const handleReject = () => handleUpdate(["none"], "reject");
+  const handleReject = () => handleUpdate(defaultRejectAllLevels, "reject");
 
   const handleCustomize = () => {
     dispatch({ type: "SET_HAS_ERROR", payload: false });

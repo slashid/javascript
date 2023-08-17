@@ -1,4 +1,4 @@
-import { GDPRConsent } from "@slashid/slashid";
+import { GDPRConsent, GDPRConsentLevel } from "@slashid/slashid";
 import { clsx } from "clsx";
 import { useEffect, useReducer } from "react";
 import { useGdprConsent } from "../../hooks/use-gdpr-consent";
@@ -9,7 +9,12 @@ import { Cookie } from "../icon/cookie";
 import { Text } from "../text";
 import { Actions } from "./actions";
 import { Settings } from "./settings";
-import { createInitialState, reducer } from "./state";
+import {
+  ConsentLevel,
+  GDPR_CONSENT_LEVELS,
+  createInitialState,
+  reducer,
+} from "./state";
 import * as styles from "./style.css";
 
 type Props = {
@@ -17,6 +22,12 @@ type Props = {
   className?: string;
   /** Default open state */
   defaultOpen?: boolean;
+  /** Value of the lock on the necessary cookies category */
+  necessaryCookiesRequired?: boolean;
+  /** Default consent levels to store when clicking on accept all */
+  defaultAcceptAllLevels?: ConsentLevel[];
+  /** Default consent levels to store when clicking on reject all */
+  defaultRejectAllLevels?: GDPRConsentLevel[];
   /** Callback when user actions are successful */
   onSuccess?: (consentLevels: GDPRConsent[]) => void;
   /** Callback when user actions fail */
@@ -37,6 +48,9 @@ export const GDPRConsentDialog = ({
   onSuccess,
   onError,
   defaultOpen = false,
+  necessaryCookiesRequired = false,
+  defaultAcceptAllLevels = [...GDPR_CONSENT_LEVELS],
+  defaultRejectAllLevels = ["none"],
   modal = true,
 }: Props) => {
   const { consents, consentState, updateGdprConsent } = useGdprConsent();
@@ -121,6 +135,9 @@ export const GDPRConsentDialog = ({
       <div className={styles.footer}>
         <Actions
           state={state}
+          necessaryCookiesRequired={necessaryCookiesRequired}
+          defaultAcceptAllLevels={defaultAcceptAllLevels}
+          defaultRejectAllLevels={defaultRejectAllLevels}
           dispatch={dispatch}
           updateGdprConsent={updateGdprConsent}
           onSuccess={onSuccess}

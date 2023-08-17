@@ -37,8 +37,7 @@ const getConsentSettings = (consents: GDPRConsent[]) => {
       consents.map((c) => c.consent_level).includes(level),
     ])
   );
-  // TODO: revisit this
-  return { ...consentSettings, necessary: true } as ConsentSettings;
+  return consentSettings as ConsentSettings;
 };
 
 export const createInitialState = (
