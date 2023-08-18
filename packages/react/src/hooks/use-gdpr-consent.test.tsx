@@ -1,11 +1,10 @@
 import { GDPRConsent, GDPRConsentLevel, User } from "@slashid/slashid";
 import { render, screen } from "@testing-library/react";
-import { TEST_ORG_ID, createTestUser } from "../components/test-utils";
-import { SlashIDProvider } from "../main";
+import { createTestUser } from "../components/test-utils";
+import { TestSlashIDProvider } from "../context/test-slash-id-provider";
 import { STORAGE_GDPR_CONSENT_KEY, useGdprConsent } from "./use-gdpr-consent";
 
 const NO_CONSENTS_TEXT = "No consents";
-const TEST_TOKEN = createTestUser().token;
 
 const TestComponent = () => {
   const { consents } = useGdprConsent();
@@ -38,7 +37,11 @@ describe("useGdprConsent", () => {
   });
 
   test("should return no consents for anonymous user on first visit", async () => {
-    render(<TestComponent />);
+    render(
+      <TestSlashIDProvider sdkState="ready">
+        <TestComponent />
+      </TestSlashIDProvider>
+    );
 
     expect(getGDPRConsentSpy).not.toHaveBeenCalled();
     expect(getItemSpy).toHaveBeenCalledWith(STORAGE_GDPR_CONSENT_KEY);
@@ -57,7 +60,11 @@ describe("useGdprConsent", () => {
 
     getItemSpy.mockReturnValue(JSON.stringify(testConsents));
 
-    render(<TestComponent />);
+    render(
+      <TestSlashIDProvider sdkState="ready">
+        <TestComponent />
+      </TestSlashIDProvider>
+    );
 
     expect(getGDPRConsentSpy).not.toHaveBeenCalled();
     expect(getItemSpy).toHaveBeenCalledWith(STORAGE_GDPR_CONSENT_KEY);
@@ -75,12 +82,12 @@ describe("useGdprConsent", () => {
       },
     ];
 
-    getItemSpy.mockReturnValue(JSON.stringify(testConsents));
     getGDPRConsentSpy.mockReturnValue(
       Promise.resolve({
         consents: [],
       })
     );
+    getItemSpy.mockReturnValue(JSON.stringify(testConsents));
     setGDPRConsentSpy.mockReturnValue(
       Promise.resolve({
         consents: testConsents,
@@ -88,17 +95,16 @@ describe("useGdprConsent", () => {
     );
 
     render(
-      <SlashIDProvider initialToken={TEST_TOKEN} oid={TEST_ORG_ID}>
+      <TestSlashIDProvider sdkState="ready" user={createTestUser()}>
         <TestComponent />
-      </SlashIDProvider>
+      </TestSlashIDProvider>
     );
-
-    expect(getGDPRConsentSpy).toHaveBeenCalled();
-    expect(getItemSpy).toHaveBeenCalledWith(STORAGE_GDPR_CONSENT_KEY);
 
     expect(await screen.findByText(testConsentLevel)).toBeInTheDocument();
     expect(screen.queryByText(NO_CONSENTS_TEXT)).not.toBeInTheDocument();
 
+    expect(getGDPRConsentSpy).toHaveBeenCalled();
+    expect(getItemSpy).toHaveBeenCalledWith(STORAGE_GDPR_CONSENT_KEY);
     expect(setGDPRConsentSpy).toHaveBeenCalledWith({
       consentLevels: [testConsentLevel],
     });
@@ -114,25 +120,24 @@ describe("useGdprConsent", () => {
       },
     ];
 
-    getItemSpy.mockReturnValue(null);
     getGDPRConsentSpy.mockReturnValue(
       Promise.resolve({
         consents: testConsents,
       })
     );
+    getItemSpy.mockReturnValue(null);
 
     render(
-      <SlashIDProvider initialToken={TEST_TOKEN} oid={TEST_ORG_ID}>
+      <TestSlashIDProvider sdkState="ready" user={createTestUser()}>
         <TestComponent />
-      </SlashIDProvider>
+      </TestSlashIDProvider>
     );
-
-    expect(getGDPRConsentSpy).toHaveBeenCalled();
-    expect(getItemSpy).toHaveBeenCalledWith(STORAGE_GDPR_CONSENT_KEY);
 
     expect(await screen.findByText(testConsentLevel)).toBeInTheDocument();
     expect(screen.queryByText(NO_CONSENTS_TEXT)).not.toBeInTheDocument();
 
+    expect(getGDPRConsentSpy).toHaveBeenCalled();
+    expect(getItemSpy).toHaveBeenCalledWith(STORAGE_GDPR_CONSENT_KEY);
     expect(setGDPRConsentSpy).not.toHaveBeenCalled();
     expect(removeItemSpy).not.toHaveBeenCalled();
   });
