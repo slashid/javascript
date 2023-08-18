@@ -120,7 +120,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
     if (!user) {
       return;
     }
-    
+
     user.logout();
     setUser(undefined);
     // we need to set the oid back to the root on log out
@@ -154,8 +154,6 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
                 type: handle.type as unknown as PersonHandleType,
                 value: handle.value,
               };
-
-              console.log(sid.oid)
 
         // @ts-expect-error TODO make the identifier optional
         const user = await sid.id(oid, identifier, factor)
