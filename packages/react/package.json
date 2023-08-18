@@ -37,13 +37,13 @@
   ],
   "scripts": {
     "dev": "vite",
+    "dev:storybook": "storybook dev -p 6006",
     "build": "vite build && tsc",
+    "build:storybook": "storybook build",
     "lint": "eslint ./src",
     "test:types": "tsc --noEmit --emitDeclarationOnly false",
     "test:unit": "vitest run",
-    "test:unit:watch": "vitest",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "test:unit:watch": "vitest"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.0.4",

@@ -12,6 +12,7 @@
   ],
   "scripts": {
     "build": "turbo run build",
+    "build:storybook": "turbo run build:storybook",
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
     "test:types": "turbo run test:types",
