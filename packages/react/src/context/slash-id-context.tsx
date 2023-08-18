@@ -10,7 +10,7 @@ import React, {
 import { PersonHandleType, SlashID, User } from "@slashid/slashid";
 import { MemoryStorage } from "../browser/memory-storage";
 import { LogIn, MFA } from "../domain/types";
-import { SDKState } from "../domain/sdk-state";
+import { SDKState, sdkStates } from "../domain/sdk-state";
 import { ThemeProps, ThemeRoot } from "../components/theme-root";
 export type StorageOption = "memory" | "localStorage";
 
@@ -120,10 +120,20 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
     if (!user) {
       return;
     }
-
+    
     user.logout();
     setUser(undefined);
-  }, [user, state]);
+    // we need to set the oid back to the root on log out
+    setOid(initialOid);
+    // we can't reinitialize the SDK here, as it picks up the old token and creates a new user immediately
+    sidRef.current = new SlashID({
+      oid: initialOid,
+      ...(baseApiUrl && { baseURL: baseApiUrl }),
+      ...(sdkUrl && { sdkURL: sdkUrl }),
+      ...(analyticsEnabled && { analyticsEnabled }),
+    });
+  }, [state, user, initialOid, baseApiUrl, sdkUrl, analyticsEnabled]);
+
 
   const logIn = useCallback<LogIn>(
     async ({ factor, handle }, { middleware } = {}): Promise<User | undefined> => {
@@ -144,6 +154,8 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
                 type: handle.type as unknown as PersonHandleType,
                 value: handle.value,
               };
+
+              console.log(sid.oid)
 
         // @ts-expect-error TODO make the identifier optional
         const user = await sid.id(oid, identifier, factor)
