@@ -1,7 +1,11 @@
 import { Accordion } from "../accordion";
 import { Switch } from "../switch";
 import { Text } from "../text";
-import { ConsentSettings, Dispatch, GDPR_CONSENT_LEVELS } from "./state";
+import {
+  ConsentSettings,
+  Dispatch,
+  CONSENT_LEVELS_WITHOUT_NONE,
+} from "./state";
 import * as styles from "./style.css";
 
 type Props = {
@@ -18,7 +22,7 @@ export const Settings = ({
   return (
     <Accordion
       itemClassName={styles.accordionItem}
-      items={GDPR_CONSENT_LEVELS.map((level) => ({
+      items={CONSENT_LEVELS_WITHOUT_NONE.map((level) => ({
         value: level,
         icon: (
           <Switch

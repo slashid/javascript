@@ -1,6 +1,6 @@
 import { GDPRConsent } from "@slashid/slashid";
 
-export const GDPR_CONSENT_LEVELS = [
+export const CONSENT_LEVELS_WITHOUT_NONE = [
   "necessary",
   "analytics",
   "marketing",
@@ -8,8 +8,8 @@ export const GDPR_CONSENT_LEVELS = [
   "tracking",
 ] as const;
 
-export type ConsentLevel = (typeof GDPR_CONSENT_LEVELS)[number];
-export type ConsentSettings = Record<ConsentLevel, boolean>;
+export type ConsentSettingsLevel = (typeof CONSENT_LEVELS_WITHOUT_NONE)[number];
+export type ConsentSettings = Record<ConsentSettingsLevel, boolean>;
 
 export type State = {
   consentSettings: ConsentSettings;
@@ -26,13 +26,13 @@ type Action =
   | { type: "STOP_LOADING" }
   | { type: "SET_HAS_ERROR"; payload: boolean }
   | { type: "SET_IS_CUSTOMIZING"; payload: boolean }
-  | { type: "TOGGLE_CONSENT"; payload: ConsentLevel };
+  | { type: "TOGGLE_CONSENT"; payload: ConsentSettingsLevel };
 
 export type Dispatch = React.Dispatch<Action>;
 
 const getConsentSettings = (consents: GDPRConsent[]) => {
   const consentSettings = Object.fromEntries(
-    GDPR_CONSENT_LEVELS.map((level) => [
+    CONSENT_LEVELS_WITHOUT_NONE.map((level) => [
       level,
       consents.map((c) => c.consent_level).includes(level),
     ])

@@ -2,7 +2,7 @@ import { GDPRConsent, GDPRConsentLevel } from "@slashid/slashid";
 import { useState } from "react";
 import { Button } from "../button";
 import { ActionButton } from "./action-button";
-import { ConsentLevel, Dispatch, State } from "./state";
+import { ConsentSettingsLevel, Dispatch, State } from "./state";
 import * as styles from "./style.css";
 
 type ActionType = "save" | "accept" | "reject" | null;
@@ -10,7 +10,7 @@ type ActionType = "save" | "accept" | "reject" | null;
 type Props = {
   state: State;
   necessaryCookiesRequired: boolean;
-  defaultAcceptAllLevels: ConsentLevel[];
+  defaultAcceptAllLevels: ConsentSettingsLevel[];
   defaultRejectAllLevels: GDPRConsentLevel[];
   dispatch: Dispatch;
   updateGdprConsent: (

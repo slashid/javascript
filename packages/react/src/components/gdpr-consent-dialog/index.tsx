@@ -10,8 +10,8 @@ import { Text } from "../text";
 import { Actions } from "./actions";
 import { Settings } from "./settings";
 import {
-  ConsentLevel,
-  GDPR_CONSENT_LEVELS,
+  CONSENT_LEVELS_WITHOUT_NONE,
+  ConsentSettingsLevel,
   createInitialState,
   reducer,
 } from "./state";
@@ -27,7 +27,7 @@ type Props = {
   /** Value of the lock on the necessary cookies category */
   necessaryCookiesRequired?: boolean;
   /** Default consent levels to store when clicking on accept all */
-  defaultAcceptAllLevels?: ConsentLevel[];
+  defaultAcceptAllLevels?: ConsentSettingsLevel[];
   /** Default consent levels to store when clicking on reject all */
   defaultRejectAllLevels?: GDPRConsentLevel[];
   /** Callback when user actions are successful */
@@ -52,7 +52,7 @@ export const GDPRConsentDialog = ({
   onError,
   defaultOpen = false,
   necessaryCookiesRequired = false,
-  defaultAcceptAllLevels = [...GDPR_CONSENT_LEVELS],
+  defaultAcceptAllLevels = [...CONSENT_LEVELS_WITHOUT_NONE],
   defaultRejectAllLevels = ["none"],
   modal = true,
 }: Props) => {
