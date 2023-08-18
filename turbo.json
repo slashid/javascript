@@ -19,6 +19,9 @@
       "dependsOn": ["^build", "test:types", "lint"],
       "outputs": ["dist/**", ".next/**"]
     },
+    "build:storybook": {
+      "outputs": ["storybook-static/**"]
+    },
     "dev": {
       "cache": false
     }
