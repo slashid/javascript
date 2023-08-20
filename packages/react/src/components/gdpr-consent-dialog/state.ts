@@ -1,15 +1,4 @@
-import { GDPRConsent } from "@slashid/slashid";
-
-export const CONSENT_LEVELS_WITHOUT_NONE = [
-  "necessary",
-  "analytics",
-  "marketing",
-  "retargeting",
-  "tracking",
-] as const;
-
-export type ConsentSettingsLevel = (typeof CONSENT_LEVELS_WITHOUT_NONE)[number];
-export type ConsentSettings = Record<ConsentSettingsLevel, boolean>;
+import { ConsentSettings, ConsentSettingsLevel } from "./types";
 
 export type State = {
   consentSettings: ConsentSettings;
@@ -21,7 +10,6 @@ export type State = {
 
 type Action =
   | { type: "SET_OPEN"; payload: boolean }
-  | { type: "SET_CONSENT_SETTINGS"; payload: GDPRConsent[] }
   | { type: "START_LOADING" }
   | { type: "STOP_LOADING" }
   | { type: "SET_HAS_ERROR"; payload: boolean }
@@ -30,22 +18,12 @@ type Action =
 
 export type Dispatch = React.Dispatch<Action>;
 
-const getConsentSettings = (consents: GDPRConsent[]) => {
-  const consentSettings = Object.fromEntries(
-    CONSENT_LEVELS_WITHOUT_NONE.map((level) => [
-      level,
-      consents.map((c) => c.consent_level).includes(level),
-    ])
-  );
-  return consentSettings as ConsentSettings;
-};
-
 export const createInitialState = (
-  consents: GDPRConsent[],
-  defaultOpen: boolean
+  initialConsentSettings: ConsentSettings,
+  initialOpen: boolean
 ): State => ({
-  consentSettings: getConsentSettings(consents),
-  open: defaultOpen,
+  consentSettings: initialConsentSettings,
+  open: initialOpen,
   isLoading: false,
   hasError: false,
   isCustomizing: false,
@@ -57,12 +35,6 @@ export const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         open: action.payload,
-      };
-    case "SET_CONSENT_SETTINGS":
-      return {
-        ...state,
-        consentSettings: getConsentSettings(action.payload),
-        open: !action.payload.length,
       };
     case "START_LOADING":
       return {
@@ -93,7 +65,6 @@ export const reducer = (state: State, action: Action): State => {
           [action.payload]: !state.consentSettings[action.payload],
         },
       };
-
     default:
       return state;
   }

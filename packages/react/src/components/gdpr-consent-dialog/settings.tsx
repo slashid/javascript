@@ -1,12 +1,10 @@
 import { Accordion } from "../accordion";
 import { Switch } from "../switch";
 import { Text } from "../text";
-import {
-  ConsentSettings,
-  Dispatch,
-  CONSENT_LEVELS_WITHOUT_NONE,
-} from "./state";
+import { CONSENT_LEVELS_WITHOUT_NONE } from "./constants";
+import { Dispatch } from "./state";
 import * as styles from "./style.css";
+import { ConsentSettings } from "./types";
 
 type Props = {
   consentSettings: ConsentSettings;

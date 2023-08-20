@@ -1,9 +1,15 @@
-import { GDPRConsent, GDPRConsentLevel } from "@slashid/slashid";
+import { GDPRConsentLevel } from "@slashid/slashid";
 import { useState } from "react";
 import { Button } from "../button";
 import { ActionButton } from "./action-button";
-import { ConsentSettingsLevel, Dispatch, State } from "./state";
+import { Dispatch, State } from "./state";
 import * as styles from "./style.css";
+import {
+  ConsentSettingsLevel,
+  OnError,
+  OnSuccess,
+  UpdateGdprConsent,
+} from "./types";
 
 type ActionType = "save" | "accept" | "reject" | null;
 
@@ -13,11 +19,9 @@ type Props = {
   defaultAcceptAllLevels: ConsentSettingsLevel[];
   defaultRejectAllLevels: GDPRConsentLevel[];
   dispatch: Dispatch;
-  updateGdprConsent: (
-    consentLevels: GDPRConsentLevel[]
-  ) => Promise<GDPRConsent[]>;
-  onSuccess?: (consentLevels: GDPRConsent[]) => void;
-  onError?: (error: unknown) => void;
+  updateGdprConsent: UpdateGdprConsent;
+  onSuccess?: OnSuccess;
+  onError?: OnError;
 };
 
 export const Actions = ({

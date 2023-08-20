@@ -95,18 +95,25 @@ export const useGdprConsent: UseGdprConsent = () => {
     return createLocalGDPRConsentStorage();
   }, [user]);
 
-  useEffect(() => {
-    const fetchAndSyncGDPRConsent = async () => {
-      if (!storage || sdkState !== "ready") {
-        return;
-      }
-      const consents = await storage.getConsentLevels();
-      setConsents(consents);
-      setConsentState("ready");
-    };
+  const fetchAndSyncGDPRConsent = useCallback(async () => {
+    if (!storage || sdkState !== "ready") {
+      return;
+    }
+    const consents = await storage.getConsentLevels();
+    setConsents(consents);
+    setConsentState("ready");
+  }, [storage, sdkState]);
 
+  useEffect(() => {
     fetchAndSyncGDPRConsent();
-  }, [sdkState, sid, storage]);
+  }, [fetchAndSyncGDPRConsent]);
+
+  useEffect(() => {
+    if (sid) {
+      sid.subscribe("idFlowSucceeded", fetchAndSyncGDPRConsent);
+      return () => sid.unsubscribe("idFlowSucceeded", fetchAndSyncGDPRConsent);
+    }
+  }, [sid, fetchAndSyncGDPRConsent]);
 
   const updateGdprConsent = useCallback(
     async (consentLevels: GDPRConsentLevel[]) => {
