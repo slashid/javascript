@@ -55,7 +55,6 @@ export const ConsentDialog = ({
 
   useEffect(() => {
     if (!open) {
-      dispatch({ type: "SET_HAS_ERROR", payload: false });
       dispatch({ type: "SET_IS_CUSTOMIZING", payload: false });
     }
   }, [open]);

@@ -72,7 +72,6 @@ export const Actions = ({
   const handleReject = () => handleUpdate(defaultRejectAllLevels, "reject");
 
   const handleCustomize = () => {
-    dispatch({ type: "SET_HAS_ERROR", payload: false });
     dispatch({ type: "SET_IS_CUSTOMIZING", payload: true });
   };
 

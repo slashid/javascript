@@ -55,6 +55,7 @@ export const reducer = (state: State, action: Action): State => {
     case "SET_IS_CUSTOMIZING":
       return {
         ...state,
+        hasError: false,
         isCustomizing: action.payload,
       };
     case "TOGGLE_CONSENT":
