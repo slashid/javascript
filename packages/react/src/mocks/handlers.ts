@@ -22,6 +22,7 @@ type PostIdBody = {
 export const handlers = [
   rest.post<PostIdBody>(route("/id"), (req, res, ctx) => {
     challenges[req.id] = createTestUser({
+      oid: req.headers.get("Slashid-Orgid") as string,
       authMethods: [req.body?.factor.method],
       authentications: [
         {
