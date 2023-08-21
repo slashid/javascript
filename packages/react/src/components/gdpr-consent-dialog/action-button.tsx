@@ -8,10 +8,12 @@ type Props = {
   isActive: boolean;
   loading: boolean;
   onClick: () => void;
+  testId?: ComponentProps<typeof Button>["testId"];
   className?: string;
 };
 
 export const ActionButton = ({
+  testId,
   variant,
   label,
   hasError,
@@ -21,6 +23,7 @@ export const ActionButton = ({
   className,
 }: Props) => (
   <Button
+    testId={testId}
     className={className}
     variant={variant}
     loading={loading && isActive}

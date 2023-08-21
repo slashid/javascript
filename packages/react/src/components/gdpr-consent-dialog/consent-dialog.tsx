@@ -69,6 +69,7 @@ export const ConsentDialog = ({
       }
       trigger={
         <Button
+          testId="sid-gdpr-consent-dialog-trigger"
           variant="neutralMd"
           className={clsx(
             "sid-gdpr-consent-dialog-trigger",

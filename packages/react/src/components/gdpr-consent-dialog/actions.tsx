@@ -79,6 +79,7 @@ export const Actions = ({
     <>
       {isCustomizing && (
         <ActionButton
+          testId="sid-gdpr-consent-dialog-save"
           variant="neutralMd"
           label="Save settings"
           hasError={hasError}
@@ -89,6 +90,7 @@ export const Actions = ({
         />
       )}
       <ActionButton
+        testId="sid-gdpr-consent-dialog-accept"
         variant="secondaryMd"
         label="Accept all"
         hasError={hasError}
@@ -100,6 +102,7 @@ export const Actions = ({
       {!isCustomizing && (
         <>
           <ActionButton
+            testId="sid-gdpr-consent-dialog-reject"
             variant="secondaryMd"
             label="Reject all"
             hasError={hasError}
@@ -109,6 +112,7 @@ export const Actions = ({
             className={styles.rejectButton}
           />
           <Button
+            testId="sid-gdpr-consent-dialog-customize"
             variant="ghostMd"
             onClick={handleCustomize}
             disabled={isLoading}
