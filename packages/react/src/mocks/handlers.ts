@@ -1,21 +1,45 @@
 import { rest } from "msw";
 import { createTestUser } from "../components/test-utils";
+import { FactorMethod, User } from "@slashid/slashid";
+import { HandleType } from "../domain/types";
 
 const BASE_API_URL = "https://api.sandbox.slashid.com";
 
 const route = (path: string) => `${BASE_API_URL}${path}`;
 
+const challenges: Record<string, User> = {};
+
+type PostIdBody = {
+  factor: {
+    method: FactorMethod;
+  };
+  handle: {
+    type: HandleType;
+    value: string;
+  };
+};
+
 export const handlers = [
-  rest.post(route("/id"), (_req, res, ctx) => {
-    console.log("/id");
+  rest.post<PostIdBody>(route("/id"), (req, res, ctx) => {
+    challenges[req.id] = createTestUser({
+      authMethods: [req.body?.factor.method],
+      authentications: [
+        {
+          handle: req.body?.handle,
+          factor: req.body?.factor.method,
+          timestamp: new Date().toISOString(),
+        },
+      ],
+    });
+
     return res(
       ctx.status(200),
       ctx.json({
         result: [
           {
-            id: "test_id",
+            id: req.id,
             options: {
-              challenge_id: "test_challenge_id",
+              challenge_id: req.id,
             },
             type: "proxy",
           },
@@ -23,22 +47,15 @@ export const handlers = [
       })
     );
   }),
-  rest.get(route("/challenge/:challenge_id/v2"), (_req, res, ctx) => {
-    console.log("/v2");
+  rest.get(route("/challenge/:challenge_id/v2"), (req, res, ctx) => {
+    const { challenge_id } = req.params;
+    const user = challenges[challenge_id as string];
+    delete challenges[challenge_id as string];
 
     return res(
       ctx.status(200),
       ctx.json({
-        result: createTestUser({ authMethods: ["email_link"] }).token,
-      })
-    );
-  }),
-  rest.get(route("/token"), (_req, res, ctx) => {
-    console.log("/token");
-    return res(
-      ctx.status(200),
-      ctx.json({
-        result: createTestUser({ authMethods: ["email_link"] }).token,
+        result: user,
       })
     );
   }),
