@@ -50,6 +50,7 @@ type CreateTestUserOptions = {
   authMethods?: FactorMethod[];
   oid?: string;
   authentications?: Authentication[];
+  token?: string;
 };
 
 /**
@@ -61,24 +62,29 @@ type CreateTestUserOptions = {
  * @returns User
  */
 export function createTestUser({
-  authMethods = [],
+  authMethods,
   oid,
-  authentications = [],
+  authentications,
+  token,
 }: CreateTestUserOptions = {}): User {
-  const token = [
+  const payload = token
+    ? JSON.parse(atob(token.split(".")[1]))
+    : TEST_TOKEN_PAYLOAD_DECODED;
+
+  const newToken = [
     TEST_TOKEN_HEADER,
     btoa(
       JSON.stringify({
-        ...TEST_TOKEN_PAYLOAD_DECODED,
-        authenticated_methods: authMethods,
-        oid: oid ?? TEST_TOKEN_PAYLOAD_DECODED.oid,
-        authentications,
+        ...payload,
+        ...(authMethods ? { authenticated_methods: authMethods } : {}),
+        ...(oid ? { oid } : {}),
+        ...(authentications ? { authentications } : {})
       })
     ),
     TEST_TOKEN_SIGNATURE,
   ].join(".");
 
-  return new User(token);
+  return new User(newToken);
 }
 
 const createBaseOrg = () => ({

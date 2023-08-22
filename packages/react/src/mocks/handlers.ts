@@ -21,6 +21,11 @@ type PostIdBody = {
 
 export const handlers = [
   rest.post<PostIdBody>(route("/id"), (req, res, ctx) => {
+    if (req.headers.get("Authorization")) {
+      // throw error if there is already a token
+      throw new Error("override this handler for MFA calls");
+    }
+
     challenges[req.id] = createTestUser({
       oid: req.headers.get("Slashid-Orgid") as string,
       authMethods: [req.body?.factor.method],
@@ -57,6 +62,21 @@ export const handlers = [
       ctx.status(200),
       ctx.json({
         result: user,
+      })
+    );
+  }),
+  rest.get(route("/token"), (req, res, ctx) => {
+    const token = req.headers.get("Authorization")?.split(" ")[1];
+    const oid = req.headers.get("Slashid-Orgid");
+
+    if (!token || !oid) {
+      return res(ctx.status(403));
+    }
+
+    return res(
+      ctx.status(200),
+      ctx.json({
+        result: createTestUser({ token, oid }).token,
       })
     );
   }),
