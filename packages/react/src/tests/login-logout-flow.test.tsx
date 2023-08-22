@@ -9,10 +9,11 @@ describe("Log in / Log out flow", () => {
     const wrapper = ({ children }: PropsWithChildren<any>) => (
       <SlashIDProvider oid={TEST_ROOT_OID}>{children}</SlashIDProvider>
     );
-
     const { result, unmount } = renderHook(() => useSlashID(), {
       wrapper,
     });
+
+    // login with one email
     await act(
       () =>
         async function () {
@@ -30,9 +31,11 @@ describe("Log in / Log out flow", () => {
         }
     );
 
+    // log out
     result.current.logOut();
     await waitFor(() => expect(result.current.user).toBeUndefined());
 
+    // login again with another email
     await act(
       () =>
         async function () {
@@ -50,6 +53,7 @@ describe("Log in / Log out flow", () => {
           await waitFor(() => expect(result.current.user).toEqual(newUser));
         }
     );
+
     unmount();
   });
 
@@ -58,9 +62,9 @@ describe("Log in / Log out flow", () => {
     const wrapper = ({ children }: PropsWithChildren<any>) => (
       <SlashIDProvider oid={TEST_ROOT_OID}>{children}</SlashIDProvider>
     );
-
     const { result, unmount } = renderHook(() => useSlashID(), { wrapper });
 
+    // login with one email
     await act(
       () =>
         async function () {
@@ -78,6 +82,7 @@ describe("Log in / Log out flow", () => {
         }
     );
 
+    // switch organization
     await act(
       () =>
         async function () {
@@ -91,9 +96,11 @@ describe("Log in / Log out flow", () => {
         }
     );
 
+    // log out
     result.current.logOut();
     await waitFor(() => expect(result.current.user).toBeUndefined());
 
+    // log in with another email - user should have root oid
     await act(
       () =>
         async function () {
@@ -111,6 +118,7 @@ describe("Log in / Log out flow", () => {
           await waitFor(() => expect(newUser?.oid).toEqual(TEST_ROOT_OID));
         }
     );
+
     unmount();
   });
 });
