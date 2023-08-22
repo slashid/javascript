@@ -74,15 +74,16 @@ const mapLevelsToConsents = (
 ): GDPRConsent[] =>
   levels.map((consentLevel) => ({
     consent_level: consentLevel,
-    // we have to skip the date comparison here because it's not easy to mock the date accurately, testing for consent_level should be enough
+    // we have to skip the date comparison here because it's not easy to mock the date accurately testing for consent_level should be enough
     created_at: expect.any(createdAtType),
   }));
 
-// pointerEventsCheck: 0 is needed to avoid an error with the dialog component complaining about pointer events set to none in the body
-const event = userEvent.setup({ pointerEventsCheck: 0 });
-const testUser = createTestUser();
-
 describe("#GDPRConsentDialog", () => {
+  const event = userEvent.setup({
+    // pointerEventsCheck: 0 is needed to avoid an error with the dialog component complaining about pointer events set to none in the body
+    pointerEventsCheck: 0,
+  });
+  const testUser = createTestUser();
   const onSuccessMock = vi.fn();
   const getItemSpy = vi.spyOn(Storage.prototype, "getItem");
   const setItemSpy = vi.spyOn(Storage.prototype, "setItem");
@@ -123,21 +124,13 @@ describe("#GDPRConsentDialog", () => {
     });
 
     test("should save the consents and close the dialog when user clicks on Accept all", async () => {
-      const acceptAllLevels: ConsentSettingsLevel[] = [
-        "necessary",
-        "analytics",
-        "marketing",
-        "tracking",
-      ];
+      const acceptAllLevels = [...CONSENT_LEVELS_WITHOUT_NONE];
 
       getItemSpy.mockReturnValue(null);
 
       render(
         <TestSlashIDProvider sdkState="ready">
-          <GDPRConsentDialog
-            defaultAcceptAllLevels={acceptAllLevels}
-            onSuccess={onSuccessMock}
-          />
+          <GDPRConsentDialog onSuccess={onSuccessMock} />
         </TestSlashIDProvider>
       );
 
@@ -158,16 +151,13 @@ describe("#GDPRConsentDialog", () => {
     });
 
     test("should save the consents and close the dialog when user clicks on Reject all", async () => {
-      const rejectAllLevels: GDPRConsentLevel[] = ["none", "necessary"];
+      const rejectAllLevels: GDPRConsentLevel[] = ["none"];
 
       getItemSpy.mockReturnValue(null);
 
       render(
         <TestSlashIDProvider sdkState="ready">
-          <GDPRConsentDialog
-            defaultRejectAllLevels={rejectAllLevels}
-            onSuccess={onSuccessMock}
-          />
+          <GDPRConsentDialog onSuccess={onSuccessMock} />
         </TestSlashIDProvider>
       );
 
