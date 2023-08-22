@@ -24,6 +24,7 @@ export const Settings = ({
         value: level,
         icon: (
           <Switch
+            data-testid={`sid-gdpr-consent-switch-${level}`}
             blocked={level === "necessary"}
             disabled={disabled}
             checked={consentSettings[level]}

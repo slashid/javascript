@@ -15,7 +15,6 @@ type ActionType = "save" | "accept" | "reject" | null;
 
 type Props = {
   state: State;
-  necessaryCookiesRequired: boolean;
   defaultAcceptAllLevels: ConsentSettingsLevel[];
   defaultRejectAllLevels: GDPRConsentLevel[];
   dispatch: Dispatch;
@@ -26,7 +25,6 @@ type Props = {
 
 export const Actions = ({
   state,
-  necessaryCookiesRequired,
   defaultAcceptAllLevels,
   defaultRejectAllLevels,
   dispatch,
@@ -57,10 +55,7 @@ export const Actions = ({
   };
 
   const handleSave = async () => {
-    const consentLevels = Object.entries({
-      ...consentSettings,
-      necessary: necessaryCookiesRequired,
-    })
+    const consentLevels = Object.entries(consentSettings)
       .filter(([, value]) => value)
       .map(([key]) => key as GDPRConsentLevel);
 

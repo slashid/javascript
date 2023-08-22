@@ -35,20 +35,27 @@ export const ConsentDialog = ({
   defaultRejectAllLevels = ["none"],
   modal = true,
 }: Props) => {
-  const initialConsentSettings: ConsentSettings = useMemo(
-    () =>
-      Object.fromEntries(
-        CONSENT_LEVELS_WITHOUT_NONE.map((level) => [
-          level,
-          consents.map((c) => c.consent_level).includes(level),
-        ])
-      ) as ConsentSettings,
-    [consents]
-  );
+  const { initialConsentSettings, initialOpen } = useMemo(() => {
+    const initialOpen = defaultOpen || !consents.length;
+    const settings = Object.fromEntries(
+      CONSENT_LEVELS_WITHOUT_NONE.map((level) => [
+        level,
+        consents.map(({ consent_level }) => consent_level).includes(level),
+      ])
+    );
+
+    return {
+      initialConsentSettings: {
+        ...settings,
+        necessary: necessaryCookiesRequired,
+      } as ConsentSettings,
+      initialOpen,
+    };
+  }, [defaultOpen, consents, necessaryCookiesRequired]);
 
   const [state, dispatch] = useReducer(
     reducer,
-    createInitialState(initialConsentSettings, defaultOpen || !consents.length)
+    createInitialState(initialConsentSettings, initialOpen)
   );
 
   const { consentSettings, open, isLoading, hasError, isCustomizing } = state;
@@ -120,7 +127,6 @@ export const ConsentDialog = ({
       <div className={styles.footer}>
         <Actions
           state={state}
-          necessaryCookiesRequired={necessaryCookiesRequired}
           defaultAcceptAllLevels={defaultAcceptAllLevels}
           defaultRejectAllLevels={defaultRejectAllLevels}
           dispatch={dispatch}
