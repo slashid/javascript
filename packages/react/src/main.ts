@@ -1,43 +1,49 @@
-import { SlashIDContext, SlashIDProvider } from "./context/slash-id-context";
+import { DynamicFlow } from "./components/dynamic-flow";
+import { Form } from "./components/form";
+import { GDPRConsentDialog } from "./components/gdpr-consent-dialog";
+import { Groups } from "./components/groups";
+import { SlashIDLoaded } from "./components/loaded";
+import { LoggedIn } from "./components/logged-in";
+import { LoggedOut } from "./components/logged-out";
+import { MultiFactorAuth } from "./components/multi-factor-auth";
+import { OrganizationSwitcher } from "./components/organization-switcher";
+import { StepUpAuth } from "./components/step-up-auth";
 import {
   ConfigurationContext,
   ConfigurationProvider,
 } from "./context/config-context";
-import { LoggedIn } from "./components/logged-in";
-import { LoggedOut } from "./components/logged-out";
-import { Groups } from "./components/groups";
-import { Form } from "./components/form";
-import { MultiFactorAuth } from "./components/multi-factor-auth";
-import { StepUpAuth } from "./components/step-up-auth";
-import { SlashIDLoaded } from "./components/loaded";
-import { useSlashID } from "./hooks/use-slash-id";
-import { DynamicFlow } from "./components/dynamic-flow";
+import { SlashIDContext, SlashIDProvider } from "./context/slash-id-context";
 import { useOrganizations } from "./hooks/use-organizations";
-import { OrganizationSwitcher } from './components/organization-switcher'
-import { type LoginMiddleware, type LoginMiddlewareContext, defaultOrganization } from "./middleware";
+import { useSlashID } from "./hooks/use-slash-id";
+import {
+  defaultOrganization,
+  type LoginMiddleware,
+  type LoginMiddlewareContext,
+} from "./middleware";
 
 /**
  * TODO: think about code splitting
  */
 export {
-  SlashIDContext,
-  SlashIDProvider,
-  SlashIDLoaded,
   ConfigurationContext,
   ConfigurationProvider,
+  DynamicFlow,
+  Form,
+  GDPRConsentDialog,
+  Groups,
   LoggedIn,
   LoggedOut,
-  Groups,
-  Form,
   MultiFactorAuth,
-  StepUpAuth,
-  DynamicFlow,
-  useSlashID,
-  useOrganizations,
   OrganizationSwitcher,
-  
+  SlashIDContext,
+  SlashIDLoaded,
+  SlashIDProvider,
+  StepUpAuth,
+  useOrganizations,
+  useSlashID,
+
   // middleware
   defaultOrganization,
   type LoginMiddleware,
-  type LoginMiddlewareContext
+  type LoginMiddlewareContext,
 };
