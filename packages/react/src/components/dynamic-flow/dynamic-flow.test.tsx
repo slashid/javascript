@@ -1,5 +1,5 @@
 import { Factor } from "@slashid/slashid";
-import { render, screen } from "@testing-library/react";
+import { render, screen, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { vi, describe } from "vitest";
 import { createTestUser, inputEmail } from "../test-utils";
@@ -88,7 +88,9 @@ describe("#DynamicFlow", () => {
 
     inputEmail("valid@email.com");
 
-    user.click(screen.getByTestId("sid-form-initial-submit-button"));
+    await act(() =>
+      user.click(screen.getByTestId("sid-form-initial-submit-button"))
+    );
 
     await expect(
       screen.findByTestId("sid-form-success-state")
