@@ -1,14 +1,31 @@
 import { GDPRConsent, GDPRConsentLevel, User } from "@slashid/slashid";
 import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import userEvent, {
+  PointerEventsCheckLevel,
+} from "@testing-library/user-event";
 import { describe } from "vitest";
 import { GDPRConsentDialog } from ".";
 import { TestSlashIDProvider } from "../../context/test-slash-id-provider";
 import { STORAGE_GDPR_CONSENT_KEY } from "../../hooks/use-gdpr-consent";
 import { createTestUser } from "../test-utils";
 import { TEXT } from "../text/constants";
-import { ConsentSettingsLevel } from "./types";
 import { CONSENT_LEVELS_WITHOUT_NONE } from "./constants";
+import { ConsentSettingsLevel } from "./types";
+
+const mapLevelsToConsents = (
+  levels: (ConsentSettingsLevel | GDPRConsentLevel)[],
+  createdAtType: unknown = Date
+): GDPRConsent[] =>
+  levels.map((consentLevel) => ({
+    consent_level: consentLevel,
+    // we have to skip the date comparison here because it's not easy to mock the date accurately, testing for consent_level should be enough
+    created_at: expect.any(createdAtType),
+  }));
+
+const event = userEvent.setup({
+  // this is needed to avoid an error with the dialog component complaining about pointer events set to none in the body
+  pointerEventsCheck: PointerEventsCheckLevel.Never,
+});
 
 const expectDialogToBeOpenWithInitialState = async () => {
   expect(
@@ -68,21 +85,32 @@ const expectDialogToBeOpenWithCustomizingState = async (
   ).not.toBeInTheDocument();
 };
 
-const mapLevelsToConsents = (
-  levels: (ConsentSettingsLevel | GDPRConsentLevel)[],
-  createdAtType: unknown = Date
-): GDPRConsent[] =>
-  levels.map((consentLevel) => ({
-    consent_level: consentLevel,
-    // we have to skip the date comparison here because it's not easy to mock the date accurately testing for consent_level should be enough
-    created_at: expect.any(createdAtType),
-  }));
+const toggleConsentSettings = async (
+  consentSettingsLevels: ConsentSettingsLevel[]
+) => {
+  CONSENT_LEVELS_WITHOUT_NONE.filter((level) => level !== "necessary").forEach(
+    async (level) => {
+      const switchButton = screen.getByTestId(
+        `sid-gdpr-consent-switch-${level}`
+      );
+      const isAlreadyChecked =
+        switchButton.getAttribute("data-state") === "checked";
+      const shouldToggleOn = consentSettingsLevels.includes(level);
+
+      if (isAlreadyChecked !== shouldToggleOn) {
+        // we only need to toggle the settings that have a different state
+        await event.click(switchButton);
+      }
+
+      expect(switchButton).toHaveAttribute(
+        "data-state",
+        shouldToggleOn ? "checked" : "unchecked"
+      );
+    }
+  );
+};
 
 describe("#GDPRConsentDialog", () => {
-  const event = userEvent.setup({
-    // pointerEventsCheck: 0 is needed to avoid an error with the dialog component complaining about pointer events set to none in the body
-    pointerEventsCheck: 0,
-  });
   const testUser = createTestUser();
   const onSuccessMock = vi.fn();
   const getItemSpy = vi.spyOn(Storage.prototype, "getItem");
@@ -178,10 +206,16 @@ describe("#GDPRConsentDialog", () => {
     });
 
     test("should save the consents and close the dialog when user clicks on Save settings", async () => {
-      const LevelsToSave: ConsentSettingsLevel[] = ["necessary", "marketing"];
-      const consentsToSave = mapLevelsToConsents(LevelsToSave);
+      const loadedLevels: ConsentSettingsLevel[] = ["necessary", "analytics"];
+      const LevelsToSave: ConsentSettingsLevel[] = [
+        "necessary",
+        "marketing",
+        "tracking",
+      ];
 
-      getItemSpy.mockReturnValue(JSON.stringify(consentsToSave));
+      getItemSpy.mockReturnValue(
+        JSON.stringify(mapLevelsToConsents(loadedLevels))
+      );
 
       render(
         <TestSlashIDProvider sdkState="ready">
@@ -200,7 +234,10 @@ describe("#GDPRConsentDialog", () => {
         screen.getByTestId("sid-gdpr-consent-dialog-customize")
       );
 
-      await expectDialogToBeOpenWithCustomizingState(LevelsToSave);
+      await expectDialogToBeOpenWithCustomizingState(loadedLevels);
+
+      // toggle the switches to the desired states to save
+      await toggleConsentSettings(LevelsToSave);
 
       await event.click(screen.getByTestId("sid-gdpr-consent-dialog-save"));
 
@@ -211,7 +248,9 @@ describe("#GDPRConsentDialog", () => {
       expect(JSON.parse(setItemSpy.mock.calls[0][1])).toEqual(
         mapLevelsToConsents(LevelsToSave, String)
       );
-      expect(onSuccessMock).toHaveBeenCalledWith(consentsToSave);
+      expect(onSuccessMock).toHaveBeenCalledWith(
+        mapLevelsToConsents(LevelsToSave)
+      );
       await expectDialogToBeClosed();
     });
   });
@@ -308,11 +347,16 @@ describe("#GDPRConsentDialog", () => {
     });
 
     test("should save the consents and close the dialog when user clicks on Save settings", async () => {
-      const LevelsToSave: ConsentSettingsLevel[] = ["necessary", "marketing"];
+      const loadedLevels: ConsentSettingsLevel[] = ["necessary", "retargeting"];
+      const LevelsToSave: ConsentSettingsLevel[] = [
+        "necessary",
+        "analytics",
+        "marketing",
+      ];
       const consentsToSave = mapLevelsToConsents(LevelsToSave);
 
       getGDPRConsentSpy.mockReturnValue(
-        Promise.resolve({ consents: consentsToSave })
+        Promise.resolve({ consents: mapLevelsToConsents(loadedLevels) })
       );
       getItemSpy.mockReturnValue(null);
       setGDPRConsentSpy.mockReturnValue(
@@ -336,7 +380,10 @@ describe("#GDPRConsentDialog", () => {
         screen.getByTestId("sid-gdpr-consent-dialog-customize")
       );
 
-      await expectDialogToBeOpenWithCustomizingState(LevelsToSave);
+      await expectDialogToBeOpenWithCustomizingState(loadedLevels);
+
+      // toggle the switches to the desired states to save
+      await toggleConsentSettings(LevelsToSave);
 
       await event.click(screen.getByTestId("sid-gdpr-consent-dialog-save"));
 
