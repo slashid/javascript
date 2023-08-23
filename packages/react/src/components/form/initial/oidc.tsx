@@ -4,7 +4,7 @@ import { FactorLabeledOIDC } from "../../../domain/types";
 import { useConfiguration } from "../../../hooks/use-configuration";
 import { sprinkles } from "../../../theme/sprinkles.css";
 import { Button } from "../../button";
-import { Apple } from "../../icon/apple";
+// import { Apple } from "../../icon/apple";
 import { AzureAD } from "../../icon/azuread";
 import { Bitbucket } from "../../icon/bitbucket";
 import { Facebook } from "../../icon/facebook";

@@ -6,6 +6,7 @@ import { useSlashID, SlashIDProvider } from "../main";
 describe("Log in / Log out flow", () => {
   it("should log in correctly after logging out", async () => {
     const TEST_ROOT_OID = "oid_1";
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const wrapper = ({ children }: PropsWithChildren<any>) => (
       <SlashIDProvider oid={TEST_ROOT_OID}>{children}</SlashIDProvider>
     );
@@ -59,6 +60,7 @@ describe("Log in / Log out flow", () => {
 
   it("should have root oid after org switching and logOut", async () => {
     const TEST_ROOT_OID = "oid_1";
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const wrapper = ({ children }: PropsWithChildren<any>) => (
       <SlashIDProvider oid={TEST_ROOT_OID}>{children}</SlashIDProvider>
     );
