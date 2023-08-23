@@ -58,7 +58,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^8.0.2",
-    "@slashid/slashid": "^3.13.0",
+    "@slashid/slashid": "^3.13.1",
     "@storybook/addon-essentials": "7.0.0-rc.2",
     "@storybook/addon-interactions": "7.0.0-rc.2",
     "@storybook/addon-links": "7.0.0-rc.2",
@@ -89,7 +89,7 @@
     "vitest": "^0.25.2"
   },
   "peerDependencies": {
-    "@slashid/slashid": ">= 3.13.0",
+    "@slashid/slashid": ">= 3.13.1",
     "react": ">=16",
     "react-dom": ">=16"
   }
