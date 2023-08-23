@@ -1,4 +1,4 @@
-import { Factor } from "@slashid/slashid";
+import { Factor, OAuthProvider } from "@slashid/slashid";
 import clsx from "clsx";
 import { FactorLabeledOIDC } from "../../../domain/types";
 import { useConfiguration } from "../../../hooks/use-configuration";
@@ -15,9 +15,9 @@ import { Line } from "../../icon/line";
 
 import * as styles from "./initial.css";
 
-const PROVIDER_TO_ICON: Record<string, React.ReactNode> = {
+const PROVIDER_TO_ICON: Record<OAuthProvider, React.ReactNode> = {
   google: <Google />,
-  apple: <Apple />,
+  // apple: <Apple />,
   facebook: <Facebook />,
   github: <Github />,
   gitlab: <Gitlab />,
@@ -25,6 +25,17 @@ const PROVIDER_TO_ICON: Record<string, React.ReactNode> = {
   bitbucket: <Bitbucket />,
   azuread: <AzureAD />,
 };
+
+const PROVIDER_TO_PRETTY_NAME: Record<OAuthProvider, string> = {
+  google: "Google",
+  // apple: "Apple",
+  facebook: "Facebook",
+  github: "GitHub",
+  gitlab: "GitLab",
+  line: "LINE",
+  bitbucket: "Bitbucket",
+  azuread: "Azure AD"
+}
 
 type Props = {
   providers: FactorLabeledOIDC[];
@@ -54,7 +65,7 @@ export const Oidc: React.FC<Props> = ({ providers, handleClick }) => {
           >
             {text["initial.oidc"]}
             <span className={styles.oidcProvider}>
-              {p.label || p.options?.provider}
+              {p.label || PROVIDER_TO_PRETTY_NAME[p.options?.provider]}
             </span>
           </Button>
         );
