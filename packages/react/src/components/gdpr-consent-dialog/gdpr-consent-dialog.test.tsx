@@ -76,10 +76,10 @@ const expectDialogToBeOpenWithCustomizingState = async (
   expect(
     screen.getByTestId("sid-gdpr-consent-dialog-accept")
   ).toBeInTheDocument();
-
   expect(
-    screen.queryByTestId("sid-gdpr-consent-dialog-reject")
-  ).not.toBeInTheDocument();
+    screen.getByTestId("sid-gdpr-consent-dialog-reject")
+  ).toBeInTheDocument();
+
   expect(
     screen.queryByTestId("sid-gdpr-consent-dialog-customize")
   ).not.toBeInTheDocument();

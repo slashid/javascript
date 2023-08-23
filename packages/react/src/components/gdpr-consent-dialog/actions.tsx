@@ -36,6 +36,9 @@ export const Actions = ({
 
   const { consentSettings, isLoading, hasError, isCustomizing } = state;
 
+  const showSaveButton = isCustomizing;
+  const showCustomize = !isCustomizing;
+
   const handleUpdate = async (
     consentLevels: GDPRConsentLevel[],
     action: ActionType
@@ -72,7 +75,7 @@ export const Actions = ({
 
   return (
     <>
-      {isCustomizing && (
+      {showSaveButton && (
         <ActionButton
           testId="sid-gdpr-consent-dialog-save"
           variant="neutralMd"
@@ -94,27 +97,25 @@ export const Actions = ({
         onClick={handleAccept}
         className={styles.acceptButton}
       />
-      {!isCustomizing && (
-        <>
-          <ActionButton
-            testId="sid-gdpr-consent-dialog-reject"
-            variant="secondaryMd"
-            label="Reject all"
-            hasError={hasError}
-            isActive={activeAction === "reject"}
-            loading={isLoading}
-            onClick={handleReject}
-            className={styles.rejectButton}
-          />
-          <Button
-            testId="sid-gdpr-consent-dialog-customize"
-            variant="ghostMd"
-            onClick={handleCustomize}
-            disabled={isLoading}
-          >
-            Customize
-          </Button>
-        </>
+      <ActionButton
+        testId="sid-gdpr-consent-dialog-reject"
+        variant={showSaveButton ? "neutralMd" : "secondaryMd"}
+        label="Reject all"
+        hasError={hasError}
+        isActive={activeAction === "reject"}
+        loading={isLoading}
+        onClick={handleReject}
+        className={styles.rejectButton}
+      />
+      {showCustomize && (
+        <Button
+          testId="sid-gdpr-consent-dialog-customize"
+          variant="ghostMd"
+          onClick={handleCustomize}
+          disabled={isLoading}
+        >
+          Customize
+        </Button>
       )}
     </>
   );
