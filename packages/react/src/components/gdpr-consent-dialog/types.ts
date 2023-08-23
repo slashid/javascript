@@ -14,22 +14,20 @@ export type GDPRConsentDialogProps = {
   className?: string;
   /** Custom class name for the trigger button */
   triggerClassName?: string;
-  /** Default open state */
-  defaultOpen?: boolean;
   /** Value of the lock on the necessary cookies category */
   necessaryCookiesRequired?: boolean;
   /** Default consent levels to store when clicking on accept all */
   defaultAcceptAllLevels?: ConsentSettingsLevel[];
   /** Default consent levels to store when clicking on reject all */
   defaultRejectAllLevels?: GDPRConsentLevel[];
+  /** When this boolean is set to `true`, it disables interactions outside the dialog and prevents the user from closing it until they choose an option */
+  forceConsent?: boolean;
+  /** When this boolean is set to `true`, it forces the dialog to be open on page load */
+  forceOpen?: boolean;
+  /** Custom portal container element that the dialog portals into */
+  container?: HTMLElement;
   /** Callback when user actions are successful */
   onSuccess?: OnSuccess;
   /** Callback when user actions fail */
   onError?: OnError;
-  /**
-   * The modality of the dialog.
-   * When set to `true`, interaction with outside elements will be disabled and only dialog content will be visible to screen readers.
-   * When set to `false`, interaction with outside elements will be enabled and all content will be visible to screen readers.
-   */
-  modal?: boolean;
 };

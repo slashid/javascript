@@ -29,14 +29,14 @@ export const ConsentDialog = ({
   triggerClassName,
   onSuccess,
   onError,
-  defaultOpen = false,
+  container,
   necessaryCookiesRequired = false,
   defaultAcceptAllLevels = [...CONSENT_LEVELS_WITHOUT_NONE],
   defaultRejectAllLevels = ["none"],
-  modal = true,
+  forceConsent = false,
+  forceOpen = false,
 }: Props) => {
-  const { initialConsentSettings, initialOpen } = useMemo(() => {
-    const initialOpen = defaultOpen || !consents.length;
+  const initialConsentSettings = useMemo(() => {
     const settings = Object.fromEntries(
       CONSENT_LEVELS_WITHOUT_NONE.map((level) => [
         level,
@@ -45,13 +45,15 @@ export const ConsentDialog = ({
     );
 
     return {
-      initialConsentSettings: {
-        ...settings,
-        necessary: necessaryCookiesRequired,
-      } as ConsentSettings,
-      initialOpen,
-    };
-  }, [defaultOpen, consents, necessaryCookiesRequired]);
+      ...settings,
+      necessary: necessaryCookiesRequired,
+    } as ConsentSettings;
+  }, [consents, necessaryCookiesRequired]);
+
+  const initialOpen = useMemo(
+    () => (forceOpen ? true : !consents.length),
+    [consents.length, forceOpen]
+  );
 
   const [state, dispatch] = useReducer(
     reducer,
@@ -69,8 +71,10 @@ export const ConsentDialog = ({
   return (
     <Dialog
       className={clsx("sid-gdpr-consent-dialog", styles.dialog, className)}
-      modal={modal}
+      modal={forceConsent}
+      dismissable={!forceConsent}
       open={open}
+      container={container}
       onOpenChange={(open: boolean) =>
         dispatch({ type: "SET_OPEN", payload: open })
       }

@@ -114,8 +114,12 @@ function Config() {
         </>
       </LoggedIn>
       <GDPRConsentDialog
+        forceConsent
+        forceOpen
         necessaryCookiesRequired
         defaultRejectAllLevels={["none", "necessary"]}
+        className="gdprConsentDialogClass"
+        triggerClassName="gdprConsentDialogTriggerClass"
         onSuccess={(consentLevels) =>
           console.log("onSuccess - consentLevels:", consentLevels)
         }
