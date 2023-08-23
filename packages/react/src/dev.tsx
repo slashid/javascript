@@ -154,10 +154,12 @@ const BasicForm = () => {
       factors={[{ method: "email_link" }, { method: "otp_via_email" }]}
     >
       <SlashIDLoaded>
-        <LoggedIn>Logged in!</LoggedIn>
-        <LoggedOut>
-          <Form />
-        </LoggedOut>
+        <>
+          <LoggedIn>Logged in!</LoggedIn>
+          <LoggedOut>
+            <Form />
+          </LoggedOut>
+        </>
       </SlashIDLoaded>
     </ConfigurationProvider>
   );

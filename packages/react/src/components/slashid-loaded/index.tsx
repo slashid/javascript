@@ -2,7 +2,7 @@ import { useSlashID } from "../../main";
 
 interface Props {
   fallback?: React.ReactElement;
-  children: React.ReactNode;
+  children: React.ReactElement;
 }
 
 /**
