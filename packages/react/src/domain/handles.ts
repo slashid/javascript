@@ -1,4 +1,4 @@
-import { HandleType, FactorOIDC, Handle } from "./types";
+import { HandleType, FactorOIDC, Handle, FactorOTP } from "./types";
 import { Factor } from "@slashid/slashid";
 import {
   getList,
@@ -6,7 +6,7 @@ import {
 } from "country-list-with-dial-code-and-flag";
 import { TextConfigKey } from "../components/text/constants";
 
-const FACTORS_WITH_EMAIL = ["webauthn", "email_link"];
+const FACTORS_WITH_EMAIL = ["webauthn", "otp_via_email", "email_link"];
 const FACTORS_WITH_PHONE = ["otp_via_sms", "sms_link"];
 
 function getHandleType(factor: Factor): HandleType | null {
@@ -42,6 +42,10 @@ export function getHandleTypes(factors: Factor[]): HandleType[] {
  */
 export function filterFactors(factors: Factor[], handleType: HandleType) {
   return factors.filter((f) => getHandleType(f) === handleType);
+}
+
+export function isFactorOTP(factor: Factor): factor is FactorOTP {
+  return factor.method === "otp_via_email" || factor.method === "otp_via_sms";
 }
 
 export function isFactorOidc(factor: Factor): factor is FactorOIDC {

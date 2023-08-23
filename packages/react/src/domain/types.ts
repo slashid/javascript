@@ -27,6 +27,11 @@ export interface LoginOptions {
 
 export type FactorOIDC = Extract<Factor, { method: "oidc" }>;
 
+export type FactorOTP = Extract<
+  Factor,
+  { method: "otp_via_email" } | { method: "otp_via_sms" }
+>;
+
 /**
  * This makes it possible to add a label to the configured OIDC factors.
  * This is useful when you want to change the default display (capitalized provider name).
