@@ -9,7 +9,7 @@ import { Groups } from "./components/groups";
 import { Form } from "./components/form";
 import { MultiFactorAuth } from "./components/multi-factor-auth";
 import { StepUpAuth } from "./components/step-up-auth";
-import { SlashIDLoaded } from "./components/loaded";
+import { SlashIDLoaded } from "./components/slashid-loaded";
 import { useSlashID } from "./hooks/use-slash-id";
 import { DynamicFlow } from "./components/dynamic-flow";
 import { useOrganizations } from "./hooks/use-organizations";

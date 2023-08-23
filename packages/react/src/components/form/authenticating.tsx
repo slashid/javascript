@@ -4,7 +4,7 @@ import { Text } from "../text";
 import { LinkButton } from "../button/link-button";
 import * as styles from "./authenticating.css";
 import { useConfiguration } from "../../hooks/use-configuration";
-import { getAuthenticatingMessage } from "../../domain/handles";
+import { getAuthenticatingMessage, isFactorOTP } from "../../domain/handles";
 import { Circle } from "../spinner/circle";
 import { Spinner } from "../spinner/spinner";
 import { clsx } from "clsx";
@@ -47,9 +47,9 @@ const OtpForm = () => {
   );
 
   useEffect(() => {
-    const onOtpSmsSent = () => setFormState("input");
+    const onOtpCodeSent = () => setFormState("input");
     if (formState === "initial") {
-      sid?.subscribe("otpSmsSent", onOtpSmsSent);
+      sid?.subscribe("otpCodeSent", onOtpCodeSent);
     }
   }, [formState, sid]);
 
@@ -108,7 +108,7 @@ export const Authenticating: React.FC<Props> = ({ flowState }) => {
         ) : undefined}
       </Text>
       <Text t={message} variant={{ color: "contrast" }} />
-      {factor.method === "otp_via_sms" ? <OtpForm /> : <Loader />}
+      {isFactorOTP(factor) ? <OtpForm /> : <Loader />}
       <div className={styles.retryPrompt}>
         <Text
           variant={{ size: "sm", color: "tertiary", weight: "semibold" }}
