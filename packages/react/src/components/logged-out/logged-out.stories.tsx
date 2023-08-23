@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from "@storybook/react";
 import { LoggedOut } from ".";
-import { SlashIDLoaded } from "../loaded";
+import { SlashIDLoaded } from "../slashid-loaded";
 
 const meta: Meta<typeof LoggedOut> = {
   component: LoggedOut,

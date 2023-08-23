@@ -2,11 +2,11 @@ import { DynamicFlow } from "./components/dynamic-flow";
 import { Form } from "./components/form";
 import { GDPRConsentDialog } from "./components/gdpr-consent-dialog";
 import { Groups } from "./components/groups";
-import { SlashIDLoaded } from "./components/loaded";
 import { LoggedIn } from "./components/logged-in";
 import { LoggedOut } from "./components/logged-out";
 import { MultiFactorAuth } from "./components/multi-factor-auth";
 import { OrganizationSwitcher } from "./components/organization-switcher";
+import { SlashIDLoaded } from "./components/slashid-loaded";
 import { StepUpAuth } from "./components/step-up-auth";
 import {
   ConfigurationContext,

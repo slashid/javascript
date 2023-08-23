@@ -2,6 +2,7 @@ import { screen, fireEvent } from "@testing-library/react";
 import { TEXT } from "./text/constants";
 import { FactorMethod, OrganizationDetails, User } from "@slashid/slashid";
 import { faker } from "@faker-js/faker";
+import { Handle } from "../domain/types";
 
 export const inputEmail = (
   value: string,
@@ -39,9 +40,17 @@ const TEST_TOKEN_PAYLOAD_DECODED = {
 const TEST_TOKEN_SIGNATURE =
   "tsyUk3guY29r-jb-Xw2htT0egEO3KUErDSlJu9F9Y_QQAf6Te_DmdPgnCKjR7pTGO1uKvYT6JKit7opyntOA4y_wIhymUOkW5mtX-fgyIF0Fkxx1JjGm4BcTE9rI1tH7DWG177yTzwJ2kv5OYvTknpn_QK8s6JzD1N5Yq11_VNf2dRN_NXb-0feqDGhXU7lR-oO7wqFlt37pzENQ7-tG3JDt9uCKqSbrtXqxTHGtg80ZY3FxXYYiHNC3v0nXV5aFRhxGvIIm9LgNkZwXkEtSecIqFHWJn2-ILuOFpvcmtmlZr8AxQyNMAKMt1fARf2LJy45qITI2IyVTndtDekT6HQ";
 
+type Authentication = {
+  factor: FactorMethod;
+  handle: Handle;
+  timestamp: string;
+};
+
 type CreateTestUserOptions = {
   authMethods?: FactorMethod[];
   oid?: string;
+  authentications?: Authentication[];
+  token?: string;
 };
 
 /**
@@ -53,22 +62,29 @@ type CreateTestUserOptions = {
  * @returns User
  */
 export function createTestUser({
-  authMethods = [],
+  authMethods,
   oid,
+  authentications,
+  token,
 }: CreateTestUserOptions = {}): User {
-  const token = [
+  const payload = token
+    ? JSON.parse(atob(token.split(".")[1]))
+    : TEST_TOKEN_PAYLOAD_DECODED;
+
+  const newToken = [
     TEST_TOKEN_HEADER,
     btoa(
       JSON.stringify({
-        ...TEST_TOKEN_PAYLOAD_DECODED,
-        authenticated_methods: authMethods,
-        oid: oid ?? TEST_TOKEN_PAYLOAD_DECODED.oid,
+        ...payload,
+        ...(authMethods ? { authenticated_methods: authMethods } : {}),
+        ...(oid ? { oid } : {}),
+        ...(authentications ? { authentications } : {})
       })
     ),
     TEST_TOKEN_SIGNATURE,
   ].join(".");
 
-  return new User(token);
+  return new User(newToken);
 }
 
 const createBaseOrg = () => ({

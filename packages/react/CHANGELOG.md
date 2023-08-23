@@ -1,5 +1,12 @@
 # @slashid/react
 
+## 1.10.1
+
+### Patch Changes
+
+- a3b7564: Added the otp_via_email method
+- 4d47e4b: Update the core SDK dependency
+
 ## 1.10.0
 
 ### Minor Changes

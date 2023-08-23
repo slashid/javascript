@@ -24,6 +24,7 @@ export const FACTOR_LABEL_MAP: Record<
 > = {
   email_link: "factor.emailLink",
   otp_via_sms: "factor.otpViaSms",
+  otp_via_email: "factor.otpViaEmail",
   sms_link: "factor.smsLink",
   webauthn: "factor.webauthn",
   oidc: "",

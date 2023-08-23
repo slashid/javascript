@@ -12,6 +12,7 @@ import {
   LoggedIn,
   LoggedOut,
   OrganizationSwitcher,
+  SlashIDLoaded,
   SlashIDProvider,
   useOrganizations,
 } from "./main";
@@ -160,6 +161,23 @@ const ConfiguredDynamicFlow = () => {
   );
 };
 
+const BasicForm = () => {
+  return (
+    <ConfigurationProvider
+      factors={[{ method: "email_link" }, { method: "otp_via_email" }]}
+    >
+      <SlashIDLoaded>
+        <>
+          <LoggedIn>Logged in!</LoggedIn>
+          <LoggedOut>
+            <Form />
+          </LoggedOut>
+        </>
+      </SlashIDLoaded>
+    </ConfigurationProvider>
+  );
+};
+
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <SlashIDProvider
@@ -170,8 +188,14 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     >
       <div className="layout">
         <div>
-          <h2>Switch to default org</h2>
-          <Config />
+          <div>
+            <h2>Basic form</h2>
+            <BasicForm />
+          </div>
+          <div>
+            <h2>Switch to default org</h2>
+            <Config />
+          </div>
         </div>
         <div>
           <h2>Dynamic flow - factor based on handle</h2>

@@ -42,6 +42,7 @@ export const TEXT = {
     "There has been an error while submitting your form. Please try again.",
   "factor.webauthn": "Passkeys",
   "factor.otpViaSms": "OTP via SMS",
+  "factor.otpViaEmail": "OTP via email",
   "factor.emailLink": "Email link",
   "factor.smsLink": "SMS link",
   "validationError.otp": "Please enter the OTP code.",
