@@ -9,7 +9,7 @@ type Item = {
   value: string;
   /** Icon to display next to the trigger */
   icon?: ReactNode;
-  /** Trigger TO Toggle the collapsed state of its associated item */
+  /** Trigger to toggle the collapsed state of its associated item */
   trigger: ReactNode;
   /** Content to display when the item is expanded */
   content: ReactNode;

@@ -1,5 +1,5 @@
 import { useGdprConsent } from "../../hooks/use-gdpr-consent";
-import { SlashIDLoaded } from "../loaded";
+import { SlashIDLoaded } from "../slashid-loaded";
 import { ConsentDialog } from "./consent-dialog";
 import { GDPRConsentDialogProps } from "./types";
 
