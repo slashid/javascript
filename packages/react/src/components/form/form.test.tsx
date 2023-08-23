@@ -7,9 +7,7 @@ import { TEXT } from "../text/constants";
 import { STORAGE_LAST_HANDLE_KEY } from "../../hooks/use-last-handle";
 import { createTestUser, inputEmail } from "../test-utils";
 
-import {
-  TestSlashIDProvider
-} from "../../context/test-slash-id-provider";
+import { TestSlashIDProvider } from "../../context/test-slash-id-provider";
 import { ConfigurationProvider } from "../../context/config-context";
 
 describe("#Form", () => {
@@ -47,8 +45,11 @@ describe("#Form", () => {
   test("should not render divider when only OIDC factors are present", () => {
     const logInMock = vi.fn(async () => createTestUser());
     const factors = [
-      { method: "oidc", options: { provider: "facebook" } },
-      { method: "oidc", options: { provider: "github" } },
+      {
+        method: "oidc",
+        options: { provider: "facebook", client_id: "facebook" },
+      },
+      { method: "oidc", options: { provider: "github", client_id: "github" } },
     ];
     render(
       <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
@@ -71,8 +72,11 @@ describe("#Form", () => {
     const factors = [
       { method: "email_link" },
       { method: "webauthn" },
-      { method: "oidc", options: { provider: "facebook" } },
-      { method: "oidc", options: { provider: "github" } },
+      {
+        method: "oidc",
+        options: { provider: "facebook", client_id: "facebook" },
+      },
+      { method: "oidc", options: { provider: "github", client_id: "github" } },
     ];
     render(
       <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
@@ -224,7 +228,7 @@ describe("#Form", () => {
   });
 
   test("should call the onSuccess callback if provided on a successful login", async () => {
-    const testUser = createTestUser()
+    const testUser = createTestUser();
     const logInMock = vi.fn(async () => testUser);
     const user = userEvent.setup();
     const onSuccess = vi.fn();
