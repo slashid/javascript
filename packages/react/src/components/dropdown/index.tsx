@@ -53,7 +53,7 @@ export const Dropdown: React.FC<Props> = ({
               {items.map((item) => (
                 <Select.Item
                   className={clsx("sid-dropdown__item", item.value === selected && "sid-dropdown__item--selected", styles.item)}
-                  key={JSON.stringify(item.label)}
+                  key={item.value}
                   value={item.value}
                 >
                   <Select.ItemText>
