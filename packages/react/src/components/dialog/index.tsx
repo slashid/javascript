@@ -1,6 +1,6 @@
 import * as RadixDialog from "@radix-ui/react-dialog";
 import { clsx } from "clsx";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { Close } from "../icon/close";
 import * as styles from "./style.css";
 
@@ -39,12 +39,17 @@ export const Dialog = ({
   onOpenChange,
   icon,
   className,
-  // TODO: change default container to document.body once it has theme CSS variables
-  container = document.querySelector<HTMLElement>(".sid-theme-root") ||
-    document.body,
+  container,
   dismissable = true,
   modal = true,
 }: Props) => {
+  // TODO: remove this effect once we have theme CSS variables in the body
+  useEffect(() => {
+    const themeClassList =
+      document.querySelector(".sid-theme-root")?.classList ?? [];
+    document.body.classList.add(...themeClassList);
+  }, []);
+
   if (!trigger) return null;
 
   return (

@@ -121,9 +121,7 @@ function Config() {
         defaultRejectAllLevels={["none", "necessary"]}
         className="gdprConsentDialogClass"
         triggerClassName="gdprConsentDialogTriggerClass"
-        onSuccess={(consentLevels) =>
-          console.log("onSuccess - consentLevels:", consentLevels)
-        }
+        onSuccess={(consents) => console.log("onSuccess - consents:", consents)}
         onError={(error) => console.error(error)}
       />
     </ConfigurationProvider>
