@@ -44,7 +44,7 @@
     "test:types": "tsc --noEmit --emitDeclarationOnly false",
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
-    "next": "node ./yalc.next.js && pnpm build && yalc publish"
+    "publish:yalc": "node ./yalc.next.js && pnpm build && yalc publish"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.0.4",

@@ -1,4 +1,4 @@
-import { findByTestId, render, screen, waitFor, within } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import { OrganizationSwitcher } from ".";
 import { TestSlashIDProvider } from "../../context/test-slash-id-provider";
 import { TEXT } from "../text/constants";
