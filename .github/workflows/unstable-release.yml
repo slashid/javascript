@@ -11,9 +11,25 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: pnpm/action-setup@v2.2.4
+
+      - name: Use Node.js 16.14.0
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.14.0
+          cache: "pnpm"
+          node-version-file: ".nvmrc"
+          registry-url: "https://registry.npmjs.org/"
+
+      - name: Install dependencies
+        run: pnpm install
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       - name: Generate unstable changeset
         run: pnpm changeset version --snapshot next
+        
       - name: Build packages
         run: pnpm build
+        
       - name: Publish unstable packages
         run: pnpm changeset publish --tag next
