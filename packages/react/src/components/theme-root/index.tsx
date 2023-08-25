@@ -20,8 +20,9 @@ type Props = {
 };
 
 /**
- * This component is to be rendered as close as the app root.
- * It sets the proper class names so that child components on all levels can use the theming properties.
+ * This component will apply the necessary class names to the <body> element.
+ * That way the child components on all levels can use the theming properties.
+ * This also helps with any components portaling out of the SlashIDProvider hierarchy.
  */
 export function ThemeRoot({ children, theme = "light", className }: Props) {
   useLayoutEffect(() => {
