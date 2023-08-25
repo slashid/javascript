@@ -115,5 +115,26 @@ export const TEXT = {
   "kyc.livephoto.mobile.title": "Selfie Check",
   "kyc.livephoto.mobile.subtitle":
     "Upload a selfie picture to confirm your identity.",
-  "org.switcher.label": "Organization"
+  "org.switcher.label": "Organization",
+  // gdpr
+  "gdpr.dialog.title": "We value your privacy",
+  "gdpr.dialog.subtitle":
+    "We use cookies to improve your experience. Learn more in our Cookie policy.",
+  "gdpr.consent.necessary.title": "Necessary cookies",
+  "gdpr.consent.necessary.description":
+    "Cookies that are essential to provide the service you have requested or which are required to comply with legal requirements, like data protection laws.",
+  "gdpr.consent.analytics.title": "Analytics",
+  "gdpr.consent.analytics.description":
+    "Cookies that are used for analytics or performance measurement purposes, like counting the number of unique visitors to our site, how long you stay on the site, and what parts of our site you visit.",
+  "gdpr.consent.marketing.title": "Marketing",
+  "gdpr.consent.marketing.description":
+    "Cookies that are used to display advertising personalised to you (whether on or off our site) based on your browsing and profile.",
+  "gdpr.consent.retargeting.title": "Retargeting",
+  "gdpr.consent.retargeting.description":
+    "Cookies that are used to display advertising personalised to you (whether on or off our site) based on your browsing and profile.",
+  "gdpr.consent.tracking.title": "Tracking",
+  "gdpr.consent.tracking.description":
+    "Cookies that track your online behaviour, such as clicks, preferences, device specifications, location, and search history. This data helps in targeted advertising and gathering website analytics.",
+  "gdpr.dialog.error.title": "Oops!",
+  "gdpr.dialog.error.subtitle": "Looks like something went wrong...",
 };

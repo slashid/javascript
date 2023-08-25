@@ -41,6 +41,7 @@ export const publicVariables = createGlobalThemeContract(
       primaryHover: "color-primary-hover",
       transparent: "color-transparent",
       error: "color-error",
+      auxiliary: "color-auxiliary",
       // KYC
       success: "color-success",
       foregroundSuccess: "color-foreground-success",
@@ -81,6 +82,7 @@ const lightThemeColors = {
   primaryHover: colors.blue600,
   transparent: "transparent",
   error: colors.red500,
+  auxiliary: "#FAFAFA",
   // KYC
   success: "#059E56",
   foregroundSuccess: "#016A1C",
@@ -107,6 +109,7 @@ export const darkThemeColors = {
   primaryHover: colors.blue600,
   transparent: "transparent",
   error: colors.red500,
+  auxiliary: colors.grey800,
   // KYC
   success: "#059E56",
   foregroundSuccess: "#016A1C",
@@ -213,6 +216,10 @@ export const [themeClass, theme] = createTheme({
   },
   color: {
     md: "4px 0px 24px rgba(29, 25, 77, 0.03), 0px 12px 32px rgba(29, 25, 77, 0.04)",
+  },
+  boxShadow: {
+    lg: "32px 80px 116px 0px rgba(15, 14, 27, 0.10), 120px 0px 184px 0px rgba(15, 14, 27, 0.10)",
+    dim: "0px 0px 4px 0px rgba(33, 36, 51, 0.02), 0px 6px 12px 0px rgba(33, 36, 51, 0.03)",
   },
 });
 

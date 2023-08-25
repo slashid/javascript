@@ -1,5 +1,5 @@
-import { colors, publicVariables, theme } from "../../theme/theme.css";
 import { style, styleVariants } from "@vanilla-extract/css";
+import { colors, publicVariables, theme } from "../../theme/theme.css";
 
 const base = style({
   fontFamily: publicVariables.font.fontFamily,
@@ -29,6 +29,13 @@ const base = style({
   },
 });
 
+const md = style({
+  width: "auto",
+  height: "auto",
+  padding: "14px 16px",
+  borderRadius: "16px",
+});
+
 export const button = styleVariants({
   primary: [
     base,
@@ -36,8 +43,11 @@ export const button = styleVariants({
       backgroundColor: publicVariables.color.primary,
       color: colors.white,
       border: "none",
-      ":hover": {
-        backgroundColor: publicVariables.color.primaryHover,
+
+      selectors: {
+        "&:hover:not([disabled])": {
+          backgroundColor: publicVariables.color.primaryHover,
+        },
       },
     },
   ],
@@ -48,8 +58,83 @@ export const button = styleVariants({
       color: publicVariables.color.foreground,
       border: `1px solid ${publicVariables.color.smooth}`,
 
-      ":hover": {
-        backgroundColor: publicVariables.color.soft,
+      selectors: {
+        "&:hover:not([disabled])": {
+          backgroundColor: publicVariables.color.soft,
+        },
+      },
+    },
+  ],
+  secondaryMd: [
+    base,
+    md,
+    {
+      backgroundColor: publicVariables.color.panel,
+      color: publicVariables.color.foreground,
+      border: `1px solid ${publicVariables.color.smooth}`,
+
+      selectors: {
+        "&:hover:not([disabled])": {
+          backgroundColor: publicVariables.color.soft,
+        },
+      },
+    },
+  ],
+  neutral: [
+    base,
+    {
+      border: "none",
+      backgroundColor: publicVariables.color.foreground,
+      color: publicVariables.color.background,
+
+      selectors: {
+        "&:hover:not([disabled])": {
+          backgroundColor: publicVariables.color.contrast,
+        },
+      },
+    },
+  ],
+  neutralMd: [
+    base,
+    md,
+    {
+      border: "none",
+      backgroundColor: publicVariables.color.foreground,
+      color: publicVariables.color.background,
+
+      selectors: {
+        "&:hover:not([disabled])": {
+          backgroundColor: publicVariables.color.contrast,
+        },
+      },
+    },
+  ],
+  ghost: [
+    base,
+    {
+      border: "none",
+      backgroundColor: publicVariables.color.panel,
+      color: publicVariables.color.foreground,
+
+      selectors: {
+        "&:hover:not([disabled])": {
+          backgroundColor: publicVariables.color.soft,
+        },
+      },
+    },
+  ],
+  ghostMd: [
+    base,
+    md,
+    {
+      border: "none",
+      backgroundColor: publicVariables.color.panel,
+      color: publicVariables.color.foreground,
+
+      selectors: {
+        "&:hover:not([disabled])": {
+          backgroundColor: publicVariables.color.soft,
+        },
       },
     },
   ],
@@ -57,8 +142,8 @@ export const button = styleVariants({
 
 export const buttonDisabled = style({
   opacity: "0.6",
+
   ":hover": {
-    backgroundColor: publicVariables.color.primary,
     cursor: "not-allowed",
   },
 });
@@ -67,4 +152,49 @@ export const icon = style({
   marginRight: "22px",
   display: "flex",
   alignItems: "center",
+});
+
+export const spinner = styleVariants({
+  primary: [
+    {
+      borderColor: colors.white,
+      borderBottomColor: "transparent",
+    },
+  ],
+  secondary: [
+    {
+      borderColor: publicVariables.color.foreground,
+      borderBottomColor: "transparent",
+    },
+  ],
+  secondaryMd: [
+    {
+      borderColor: publicVariables.color.foreground,
+      borderBottomColor: "transparent",
+    },
+  ],
+  neutral: [
+    {
+      borderColor: publicVariables.color.background,
+      borderBottomColor: "transparent",
+    },
+  ],
+  neutralMd: [
+    {
+      borderColor: publicVariables.color.background,
+      borderBottomColor: "transparent",
+    },
+  ],
+  ghost: [
+    {
+      borderColor: publicVariables.color.foreground,
+      borderBottomColor: "transparent",
+    },
+  ],
+  ghostMd: [
+    {
+      borderColor: publicVariables.color.foreground,
+      borderBottomColor: "transparent",
+    },
+  ],
 });

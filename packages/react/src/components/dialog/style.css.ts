@@ -20,10 +20,8 @@ export const wrapper = style({
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: "90vw",
-  maxWidth: "398px",
+  maxWidth: "50vw",
   maxHeight: "80vh",
-  padding: "16px",
   boxSizing: "border-box",
   borderRadius: "20px",
   animation,
@@ -34,6 +32,7 @@ export const wrapper = style({
 export const header = style({
   display: "flex",
   justifyContent: "space-between",
+  padding: "16px 16px 0 16px",
 });
 
 export const closeButton = style({

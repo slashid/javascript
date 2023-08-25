@@ -2,20 +2,21 @@ import { type Factor } from "@slashid/slashid";
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 
+import { GDPRConsentDialog } from "./components/gdpr-consent-dialog";
 import "./dev.css";
+import { FactorConfiguration, Handle } from "./domain/types";
 import {
+  ConfigurationProvider,
+  DynamicFlow,
   Form,
   LoggedIn,
   LoggedOut,
-  ConfigurationProvider,
   OrganizationSwitcher,
-  useOrganizations,
-  SlashIDProvider,
-  DynamicFlow,
   SlashIDLoaded,
+  SlashIDProvider,
+  useOrganizations,
 } from "./main";
-import { defaultOrganization } from "./middleware";
-import { FactorConfiguration, Handle } from "./domain/types";
+import { defaultOrganization } from "./middleware/default-organization";
 
 const rootOid = "b6f94b67-d20f-7fc3-51df-bf6e3b82683e";
 
@@ -113,6 +114,16 @@ function Config() {
           />
         </>
       </LoggedIn>
+      <GDPRConsentDialog
+        forceConsent
+        forceOpen
+        necessaryCookiesRequired
+        defaultRejectAllLevels={["none", "necessary"]}
+        className="gdprConsentDialogClass"
+        triggerClassName="gdprConsentDialogTriggerClass"
+        onSuccess={(consents) => console.log("onSuccess - consents:", consents)}
+        onError={(error) => console.error(error)}
+      />
     </ConfigurationProvider>
   );
 }

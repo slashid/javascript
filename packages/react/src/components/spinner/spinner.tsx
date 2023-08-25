@@ -1,3 +1,11 @@
+import clsx from "clsx";
 import * as styles from "./spinner.css";
 
-export const Spinner = () => <div className={styles.spinner} />;
+type Props = {
+  className?: string;
+  variant?: keyof typeof styles.spinnerVariants;
+};
+
+export const Spinner = ({ className, variant = "default" }: Props) => (
+  <div className={clsx(styles.spinnerVariants[variant], className)} />
+);

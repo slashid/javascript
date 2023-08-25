@@ -21,6 +21,14 @@ body {
   --sid-color-primary: yellow;
 }
 
+.gdprConsentDialogClass {
+  max-height: 600px;
+}
+
+.gdprConsentDialogTriggerClass {
+  border-radius: 15px;
+}
+
 .layout {
   display: grid;
   grid-template-columns: 1fr 1fr;

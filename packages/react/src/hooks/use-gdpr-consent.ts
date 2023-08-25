@@ -69,15 +69,21 @@ export const createApiGDPRConsentStorage = (
   },
 });
 
+type ConsentState = "initial" | "ready";
+
 type UseGdprConsent = () => {
   consents: GDPRConsent[];
-  updateGdprConsent: (consentLevels: GDPRConsentLevel[]) => Promise<void>;
+  consentState: ConsentState;
+  updateGdprConsent: (
+    consentLevels: GDPRConsentLevel[]
+  ) => Promise<GDPRConsent[]>;
   deleteGdprConsent: () => Promise<void>;
 };
 
 export const useGdprConsent: UseGdprConsent = () => {
-  const { user, sid } = useSlashID();
+  const { user, sdkState, sid } = useSlashID();
   const [consents, setConsents] = useState<GDPRConsent[]>([]);
+  const [consentState, setConsentState] = useState<ConsentState>("initial");
 
   const storage = useMemo(() => {
     if (user) {
@@ -89,30 +95,34 @@ export const useGdprConsent: UseGdprConsent = () => {
     return createLocalGDPRConsentStorage();
   }, [user]);
 
+  const fetchAndSyncGDPRConsent = useCallback(async () => {
+    if (!storage || sdkState !== "ready") {
+      return;
+    }
+    const consents = await storage.getConsentLevels();
+    setConsents(consents);
+    setConsentState("ready");
+  }, [storage, sdkState]);
+
   useEffect(() => {
-    const fetchAndSyncGDPRConsent = async () => {
-      if (!storage) {
-        return;
-      }
-      const consents = await storage.getConsentLevels();
-      setConsents(consents);
-    };
-
     fetchAndSyncGDPRConsent();
+  }, [fetchAndSyncGDPRConsent]);
 
+  useEffect(() => {
     if (sid) {
       sid.subscribe("idFlowSucceeded", fetchAndSyncGDPRConsent);
       return () => sid.unsubscribe("idFlowSucceeded", fetchAndSyncGDPRConsent);
     }
-  }, [sid, storage]);
+  }, [sid, fetchAndSyncGDPRConsent]);
 
   const updateGdprConsent = useCallback(
     async (consentLevels: GDPRConsentLevel[]) => {
       if (!storage) {
-        return;
+        return [];
       }
       const consents = await storage.setConsentLevels(consentLevels);
       setConsents(consents);
+      return consents;
     },
     [storage]
   );
@@ -125,5 +135,5 @@ export const useGdprConsent: UseGdprConsent = () => {
     setConsents([]);
   }, [storage]);
 
-  return { consents, updateGdprConsent, deleteGdprConsent };
+  return { consents, consentState, updateGdprConsent, deleteGdprConsent };
 };
