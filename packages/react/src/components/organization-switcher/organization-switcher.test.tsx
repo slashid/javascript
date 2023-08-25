@@ -79,6 +79,7 @@ describe("OrganizationSwitcher", () => {
     const user = createTestUser({ oid: org.id });
     const spy = vi.fn(async () => [org]);
     const expectedLabel = faker.company.buzzPhrase();
+    const currentOrgName = org.org_name
 
     user.getOrganizations = spy;
 
@@ -95,7 +96,7 @@ describe("OrganizationSwitcher", () => {
     );
 
     await waitFor(() =>
-      expect(screen.queryByText("-")).not.toBeInTheDocument()
+      expect(screen.queryByText(currentOrgName)).toBeInTheDocument()
     );
 
     const root = container.querySelector(".sid-organization-switcher");
@@ -119,6 +120,7 @@ describe("OrganizationSwitcher", () => {
     const org = createTestOrganization();
     const user = createTestUser({ oid: org.id });
     const spy = vi.fn(async () => [org]);
+    const currentOrgName = org.org_name
 
     user.getOrganizations = spy;
 
@@ -129,7 +131,7 @@ describe("OrganizationSwitcher", () => {
     );
 
     await waitFor(() =>
-      expect(screen.queryByText("-")).not.toBeInTheDocument()
+      expect(screen.queryByText(currentOrgName)).toBeInTheDocument()
     );
 
     const currentValue = container.querySelector(
@@ -139,12 +141,45 @@ describe("OrganizationSwitcher", () => {
     expect(currentValue).toBe(org.org_name);
   });
 
+  test("should display the current organizations label override as the selected value", async () => {
+    const currentOrg = createTestOrganization();
+    const user = createTestUser({ oid: currentOrg.id });
+    const anotherOrg = createTestOrganization();
+    const spy = vi.fn(async () => [anotherOrg, currentOrg]);
+
+    const expected = faker.commerce.product();
+
+    user.getOrganizations = spy;
+
+    const { container } = render(
+      <TestSlashIDProvider user={user}>
+        <OrganizationSwitcher
+          renderLabel={(org) => {
+            if (org.id === currentOrg.id) return expected;
+            return org.org_name;
+          }}
+        />
+      </TestSlashIDProvider>
+    );
+
+    await waitFor(() =>
+      expect(screen.queryByText(expected)).toBeInTheDocument()
+    );
+
+    const currentValue = container.querySelector(
+      ".sid-organization-switcher > .sid-dropdown .sid-dropdown__trigger__input span"
+    )?.innerHTML;
+
+    expect(currentValue).toBe(expected);
+  });
+
   test("should display a menu on click", async () => {
     const org = createTestOrganization();
     const user = createTestUser({ oid: org.id });
     const anotherOrg = createTestOrganization();
     const spy = vi.fn(async () => [org, anotherOrg]);
     const event = userEvent.setup();
+    const currentOrgName = org.org_name
 
     user.getOrganizations = spy;
 
@@ -155,7 +190,7 @@ describe("OrganizationSwitcher", () => {
     );
 
     await waitFor(() =>
-      expect(screen.queryByText("-")).not.toBeInTheDocument()
+      expect(screen.queryByText(currentOrgName)).toBeInTheDocument()
     );
 
     const trigger = container.querySelector(
@@ -180,6 +215,7 @@ describe("OrganizationSwitcher", () => {
       () => createTestOrganization()
     );
     const shuffledOrgs = faker.helpers.shuffle([org, ...others]);
+    const currentOrgName = org.org_name
 
     const spy = vi.fn(async () => shuffledOrgs);
     const event = userEvent.setup();
@@ -193,7 +229,7 @@ describe("OrganizationSwitcher", () => {
     );
 
     await waitFor(() =>
-      expect(screen.queryByText("-")).not.toBeInTheDocument()
+      expect(screen.queryByText(currentOrgName)).toBeInTheDocument()
     );
 
     const trigger = container.querySelector(
@@ -221,9 +257,10 @@ describe("OrganizationSwitcher", () => {
     );
     const shuffledOrgs = faker.helpers.shuffle([org, ...others]);
     const [a, b, c, ...invalidOrgs] = others;
-    const validOrgs = [a, b, c];
+    const validOrgs = [a, b, c, org];
     const ids = validOrgs.map((org) => org.id);
     const predicate = (org: OrganizationDetails) => ids.includes(org.id);
+    const currentOrgName = org.org_name
 
     const spy = vi.fn(async () => shuffledOrgs);
     const event = userEvent.setup();
@@ -237,7 +274,7 @@ describe("OrganizationSwitcher", () => {
     );
 
     await waitFor(() =>
-      expect(screen.queryByText("-")).not.toBeInTheDocument()
+      expect(screen.queryByText(currentOrgName)).toBeInTheDocument()
     );
     await waitFor(() =>
       expect(
@@ -272,11 +309,141 @@ describe("OrganizationSwitcher", () => {
     }
   });
 
+  test("should render organization label overrides for items which satisfy the predicate in menu", async () => {
+    const currentOrg = createTestOrganization();
+    const user = createTestUser({ oid: currentOrg.id });
+    const others = Array.from(Array(faker.number.int({ min: 3, max: 10 }))).map(
+      () => createTestOrganization()
+    );
+
+    const shuffledOrgs = faker.helpers.shuffle([currentOrg, ...others]);
+    const overridenOrgs = faker.helpers
+      .shuffle(shuffledOrgs)
+      // select a random number of shuffledORgs to override
+      .slice(0, faker.number.int({ min: 2, max: shuffledOrgs.length - 1 }))
+      // create label overrides, append index for uniqueness
+      .map((org, i) => ({ id: org.id, org_name: faker.commerce.product() + i }));
+    
+    const notOverridenOrgs = shuffledOrgs.filter(
+      (org) => !overridenOrgs.find(({ id }) => id === org.id)
+    );
+
+    const currentOrgName = [...overridenOrgs, ...notOverridenOrgs]
+      .find(org => org.id === currentOrg.id)?.org_name 
+
+    if (!currentOrgName) throw new Error("currentOrgName did not resolve correctly")
+
+    const spy = vi.fn(async () => shuffledOrgs);
+    const event = userEvent.setup();
+
+    user.getOrganizations = spy;
+
+    const { container } = render(
+      <TestSlashIDProvider user={user}>
+        <OrganizationSwitcher
+          renderLabel={(org) => {
+            const override = overridenOrgs.find(({ id }) => id === org.id);
+
+            if (override) return override.org_name;
+
+            return org.org_name;
+          }}
+        />
+      </TestSlashIDProvider>
+    );
+
+    await waitFor(() =>
+      expect(screen.queryByText(currentOrgName)).toBeInTheDocument()
+    );
+
+    const trigger = container.querySelector(
+      ".sid-organization-switcher > .sid-dropdown .sid-dropdown__trigger"
+    )!;
+
+    polyfillPointerEvent();
+    await event.click(trigger);
+
+    const popover = container.querySelector<HTMLDivElement>(
+      ".sid-organization-switcher > .sid-dropdown .sid-dropdown__popover"
+    )!;
+    const { findByText } = within(popover);
+
+    // assert overriden labels are rendered correctly
+    for (const org of overridenOrgs) {
+      await expect(findByText(org.org_name)).resolves.toBeInTheDocument();
+    }
+
+    // assert un-overriden labels are still present
+    for (const org of notOverridenOrgs) {
+      await expect(findByText(org.org_name)).resolves.toBeInTheDocument();
+    }
+  });
+
+  test("should render organization label override components in menu", async () => {
+    const currentOrg = createTestOrganization();
+    const user = createTestUser({ oid: currentOrg.id });
+    const others = Array.from(Array(faker.number.int({ min: 3, max: 10 }))).map(
+      () => createTestOrganization()
+    );
+    const overrideOrgName = `${faker.commerce.productMaterial()}__default`
+
+    const shuffledOrgs = faker.helpers.shuffle([currentOrg, ...others]);
+    const testId = `test-${faker.string.uuid()}`;
+    const OverrideComponent = () => {
+      return <div data-testid={testId}>{overrideOrgName}</div>;
+    };
+    const notOverridenOrgs = shuffledOrgs.filter(
+      (org) => org.id !== currentOrg.id
+    );
+
+    const spy = vi.fn(async () => shuffledOrgs);
+    const event = userEvent.setup();
+
+    user.getOrganizations = spy;
+
+    const { container } = render(
+      <TestSlashIDProvider user={user}>
+        <OrganizationSwitcher
+          renderLabel={(org) => {
+            if (org.id === currentOrg.id) return <OverrideComponent />;
+
+            return org.org_name;
+          }}
+        />
+      </TestSlashIDProvider>
+    );
+
+    await waitFor(() =>
+      expect(screen.queryByText(overrideOrgName)).toBeInTheDocument()
+    );
+
+    const trigger = container.querySelector(
+      ".sid-organization-switcher > .sid-dropdown .sid-dropdown__trigger"
+    )!;
+
+    polyfillPointerEvent();
+    await event.click(trigger);
+
+    const popover = container.querySelector<HTMLDivElement>(
+      ".sid-organization-switcher > .sid-dropdown .sid-dropdown__popover"
+    )!;
+    const { findByText, findByTestId } = within(popover);
+
+    // assert OverrideComponent rendered correctly
+    await expect(findByTestId(testId)).resolves.toBeInTheDocument();
+
+    // assert un-overriden labels are still present
+    for (const org of notOverridenOrgs) {
+      await expect(findByText(org.org_name)).resolves.toBeInTheDocument();
+    }
+  });
+
   test("should render org.switcher.label in loaded dropdown input", async () => {
     const org = createTestOrganization();
     const user = createTestUser({ oid: org.id });
     const spy = vi.fn(async () => [org]);
     const expected = faker.commerce.productDescription();
+    const currentOrgName = org.org_name
 
     user.getOrganizations = spy;
 
@@ -293,7 +460,7 @@ describe("OrganizationSwitcher", () => {
     );
 
     await waitFor(() =>
-      expect(screen.queryByText("-")).not.toBeInTheDocument()
+      expect(screen.queryByText(currentOrgName)).toBeInTheDocument()
     );
     const actual = container.querySelector<HTMLLabelElement>(
       ".sid-organization-switcher > .sid-dropdown .sid-dropdown__trigger__label"
@@ -309,6 +476,7 @@ describe("OrganizationSwitcher", () => {
       () => createTestOrganization()
     );
     const shuffledOrgs = faker.helpers.shuffle([org, ...others]);
+    const currentOrgName = org.org_name
 
     const getOrganizations = vi.fn(async () => shuffledOrgs);
     const event = userEvent.setup();
@@ -324,7 +492,7 @@ describe("OrganizationSwitcher", () => {
     );
 
     await waitFor(() =>
-      expect(screen.queryByText("-")).not.toBeInTheDocument()
+      expect(screen.queryByText(currentOrgName)).toBeInTheDocument()
     );
 
     const trigger = container.querySelector(
@@ -363,6 +531,7 @@ describe("OrganizationSwitcher", () => {
       () => createTestOrganization()
     );
     const shuffledOrgs = faker.helpers.shuffle([org, ...others]);
+    const currentOrgName = org.org_name
 
     const getOrganizations = vi.fn(async () => shuffledOrgs);
     const event = userEvent.setup();
@@ -378,7 +547,7 @@ describe("OrganizationSwitcher", () => {
     );
 
     await waitFor(() =>
-      expect(screen.queryByText("-")).not.toBeInTheDocument()
+      expect(screen.queryByText(currentOrgName)).toBeInTheDocument()
     );
 
     const trigger = container.querySelector(

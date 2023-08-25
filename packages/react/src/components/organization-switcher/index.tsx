@@ -10,6 +10,7 @@ import { OrganizationDetails } from "@slashid/slashid";
 interface Props {
   fallback?: ReactNode;
   filter?: (organization: OrganizationDetails) => boolean;
+  renderLabel?: (organization: OrganizationDetails) => ReactNode;
 }
 
 const className = sprinkles({ marginBottom: "3", marginTop: "5" });
@@ -54,10 +55,12 @@ const Root = ({ children }: { children: ReactNode }) => {
  * 
  * @param filter A predicate function to filter the available organizations shown
  * @param fallback The content shown while organizations are being fetched
+ * @param renderLabel A render function called for each item in the menu
  */
 export const OrganizationSwitcher = ({
   filter,
   fallback = <DefaultFallback />,
+  renderLabel,
 }: Props) => {
   const { text } = useConfiguration();
 
@@ -84,7 +87,9 @@ export const OrganizationSwitcher = ({
         className={className}
         label={text["org.switcher.label"]}
         items={organizations.map((org) => ({
-          label: org.org_name,
+          label: renderLabel
+            ? renderLabel(org)
+            : org.org_name,
           value: org.id,
         }))}
         onChange={(oid) => switchOrganization({ oid })}

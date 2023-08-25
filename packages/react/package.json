@@ -43,7 +43,8 @@
     "lint": "eslint ./src",
     "test:types": "tsc --noEmit --emitDeclarationOnly false",
     "test:unit": "vitest run",
-    "test:unit:watch": "vitest"
+    "test:unit:watch": "vitest",
+    "publish:yalc": "node ./yalc.next.js && pnpm build && yalc publish"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.1.2",
@@ -60,7 +61,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^8.0.2",
-    "@slashid/slashid": "^3.13.0",
+    "@slashid/slashid": "^3.13.2",
     "@storybook/addon-essentials": "7.0.0-rc.2",
     "@storybook/addon-interactions": "7.0.0-rc.2",
     "@storybook/addon-links": "7.0.0-rc.2",
@@ -86,13 +87,15 @@
     "msw": "^1.2.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "semver": "^7.5.4",
     "storybook": "7.0.0-rc.2",
     "tsconfig": "workspace:*",
     "vite": "^3.1.0",
-    "vitest": "^0.25.2"
+    "vitest": "^0.25.2",
+    "yalc": "1.0.0-pre.53"
   },
   "peerDependencies": {
-    "@slashid/slashid": ">= 3.13.0",
+    "@slashid/slashid": ">= 3.13.2",
     "react": ">=16",
     "react-dom": ">=16"
   }

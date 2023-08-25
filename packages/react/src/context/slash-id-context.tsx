@@ -125,14 +125,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
     setUser(undefined);
     // we need to set the oid back to the root on log out
     setOid(initialOid);
-    // we can't reinitialize the SDK here, as it picks up the old token and creates a new user immediately
-    sidRef.current = new SlashID({
-      oid: initialOid,
-      ...(baseApiUrl && { baseURL: baseApiUrl }),
-      ...(sdkUrl && { sdkURL: sdkUrl }),
-      ...(analyticsEnabled && { analyticsEnabled }),
-    });
-  }, [state, user, initialOid, baseApiUrl, sdkUrl, analyticsEnabled]);
+  }, [state, user, initialOid]);
 
 
   const logIn = useCallback<LogIn>(

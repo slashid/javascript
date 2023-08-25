@@ -26,3 +26,12 @@ export const WithFallback: Story = {
   name: "With fallback",
   render: () => <OrganizationSwitcher fallback={<div>Please wait...</div>} />,
 };
+
+export const WithLabelOverride: Story = {
+  name: "With rendered organization name override",
+  render: () => (
+    <OrganizationSwitcher
+      renderLabel={org => `${org.org_name} (${org.tenant_name})`}
+    />
+  )
+};

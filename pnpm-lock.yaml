@@ -205,7 +205,7 @@ importers:
       '@radix-ui/react-select': ^1.1.2
       '@radix-ui/react-switch': ^1.0.3
       '@radix-ui/react-tabs': ^1.0.1
-      '@slashid/slashid': ^3.13.0
+      '@slashid/slashid': ^3.13.2
       '@storybook/addon-essentials': 7.0.0-rc.2
       '@storybook/addon-interactions': 7.0.0-rc.2
       '@storybook/addon-links': 7.0.0-rc.2
@@ -237,10 +237,12 @@ importers:
       msw: ^1.2.3
       react: ^18.2.0
       react-dom: ^18.2.0
+      semver: ^7.5.4
       storybook: 7.0.0-rc.2
       tsconfig: workspace:*
       vite: ^3.1.0
       vitest: ^0.25.2
+      yalc: 1.0.0-pre.53
     dependencies:
       '@radix-ui/react-accordion': 1.1.2_klv45jcyfekupagrljqabdim74
       '@radix-ui/react-dialog': 1.0.4_klv45jcyfekupagrljqabdim74
@@ -255,7 +257,7 @@ importers:
       country-list-with-dial-code-and-flag: 3.0.3
     devDependencies:
       '@faker-js/faker': 8.0.2
-      '@slashid/slashid': 3.13.1
+      '@slashid/slashid': 3.13.2
       '@storybook/addon-essentials': 7.0.0-rc.2_biqbaboplfbrettd7655fr4n2y
       '@storybook/addon-interactions': 7.0.0-rc.2_biqbaboplfbrettd7655fr4n2y
       '@storybook/addon-links': 7.0.0-rc.2_biqbaboplfbrettd7655fr4n2y
@@ -281,10 +283,12 @@ importers:
       msw: 1.2.3
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
+      semver: 7.5.4
       storybook: 7.0.0-rc.2
       tsconfig: link:../tsconfig
       vite: 3.2.7
       vitest: 0.25.8_jsdom@20.0.3
+      yalc: 1.0.0-pre.53
 
   packages/tests:
     specifiers:
@@ -6575,8 +6579,8 @@ packages:
       uuid: 8.3.2
     dev: false
 
-  /@slashid/slashid/3.13.1:
-    resolution: {integrity: sha512-WM5JQWj1WZuRdX7jw/LjkDwTYOl6Ph5aFb1LVVGojVp4uHJsUL48r8AuoEqtR/rbXDHNyjrTwxtFFFy3Ue82GQ==}
+  /@slashid/slashid/3.13.2:
+    resolution: {integrity: sha512-/qIuZMRXZ70MI8lmCRYt1CQxpagGrzDSKX/soDTCCC5/r0O2boEnX6YCoMrmv9gxV4a68P7BAfH4gr9VncL1kg==}
     dependencies:
       '@changesets/cli': 2.26.2
       '@types/uuid': 8.3.4
@@ -12796,6 +12800,12 @@ packages:
     resolution: {integrity: sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==}
     dev: true
 
+  /ignore-walk/3.0.4:
+    resolution: {integrity: sha512-PY6Ii8o1jMRA1z4F2hRkH/xN59ox43DavKvD3oDpfurRlOJyAHpifIwpbdv1n4jt4ov0jSpw3kQ4GhJnpBL6WQ==}
+    dependencies:
+      minimatch: 3.1.2
+    dev: true
+
   /ignore/4.0.6:
     resolution: {integrity: sha512-cyFDKrqc/YdcWFniJhzI42+AzS+gNwmUzOSFcRCQYwySuBBBy/KjuxWLZ/FHEH6Moq1NizMOBWyTcv8O4OZIMg==}
     engines: {node: '>= 4'}
@@ -12839,6 +12849,11 @@ packages:
 
   /ini/1.3.8:
     resolution: {integrity: sha512-JV/yugV2uzW5iMRSiZAyDtQd+nxtUnjeLt0acNdw98kKLrvuRVyB80tsREOE7yvGVgalhZ6RNXCmEHkUKBKxew==}
+    dev: true
+
+  /ini/2.0.0:
+    resolution: {integrity: sha512-7PnF4oN3CvZF23ADhA5wRaYEQpJ8qygSkbtTXWBeXWXmEVRXK+1ITciHWwHhsjv1TmW0MgacIv6hEi5pX5NQdA==}
+    engines: {node: '>=10'}
     dev: true
 
   /inline-style-parser/0.1.1:
@@ -14808,6 +14823,27 @@ packages:
   /normalize-url/6.1.0:
     resolution: {integrity: sha512-DlL+XwOy3NxAQ8xuC0okPgK46iuVNAK01YN7RueYBqqFeGsBjV9XmCAzAdgt+667bCl5kPh9EqKKDwnaPG1I7A==}
     engines: {node: '>=10'}
+    dev: true
+
+  /npm-bundled/1.1.2:
+    resolution: {integrity: sha512-x5DHup0SuyQcmL3s7Rx/YQ8sbw/Hzg0rj48eN0dV7hf5cmQq5PXIeioroH3raV1QC1yh3uTYuMThvEQF3iKgGQ==}
+    dependencies:
+      npm-normalize-package-bin: 1.0.1
+    dev: true
+
+  /npm-normalize-package-bin/1.0.1:
+    resolution: {integrity: sha512-EPfafl6JL5/rU+ot6P3gRSCpPDW5VmIzX959Ob1+ySFUuuYHWHekXpwdUZcKP5C+DS4GEtdJluwBjnsNDl+fSA==}
+    dev: true
+
+  /npm-packlist/2.2.2:
+    resolution: {integrity: sha512-Jt01acDvJRhJGthnUJVF/w6gumWOZxO7IkpY/lsX9//zqQgnF7OJaxgQXcerd4uQOLu7W5bkb4mChL9mdfm+Zg==}
+    engines: {node: '>=10'}
+    hasBin: true
+    dependencies:
+      glob: 7.2.3
+      ignore-walk: 3.0.4
+      npm-bundled: 1.1.2
+      npm-normalize-package-bin: 1.0.1
     dev: true
 
   /npm-run-path/4.0.1:
@@ -18479,6 +18515,20 @@ packages:
   /y18n/5.0.8:
     resolution: {integrity: sha512-0pfFzegeDWJHJIAmTLRP2DwHjdF5s7jo9tuztdQxAhINCdvS+3nGINqPd00AphqJR/0LhANUS6/+7SCb98YOfA==}
     engines: {node: '>=10'}
+
+  /yalc/1.0.0-pre.53:
+    resolution: {integrity: sha512-tpNqBCpTXplnduzw5XC+FF8zNJ9L/UXmvQyyQj7NKrDNavbJtHvzmZplL5ES/RCnjX7JR7W9wz5GVDXVP3dHUQ==}
+    hasBin: true
+    dependencies:
+      chalk: 4.1.2
+      detect-indent: 6.1.0
+      fs-extra: 8.1.0
+      glob: 7.2.3
+      ignore: 5.2.4
+      ini: 2.0.0
+      npm-packlist: 2.2.2
+      yargs: 16.2.0
+    dev: true
 
   /yallist/2.1.2:
     resolution: {integrity: sha512-ncTzHV7NvsQZkYe1DW7cbDLm0YpzHmZF5r/iyP3ZnQtMiJ+pjzisCiMNI+Sj+xQF5pXhSHxSB3uDbsBTzY/c2A==}
