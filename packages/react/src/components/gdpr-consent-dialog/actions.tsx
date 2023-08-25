@@ -99,7 +99,7 @@ export const Actions = ({
       />
       <ActionButton
         testId="sid-gdpr-consent-dialog-reject"
-        variant={showSaveButton ? "neutralMd" : "secondaryMd"}
+        variant="secondaryMd"
         label="Reject all"
         hasError={hasError}
         isActive={activeAction === "reject"}

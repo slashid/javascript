@@ -22,7 +22,7 @@ export type GDPRConsentDialogProps = {
   defaultRejectAllLevels?: GDPRConsentLevel[];
   /** When this boolean is set to `true`, it disables interactions outside the dialog and prevents the user from closing it until they choose an option */
   forceConsent?: boolean;
-  /** When this boolean is set to `true`, it forces the dialog to be open on page load */
+  /** When this boolean is set to `true`, it forces the dialog to be open on page load regardless of if consent was given previously */
   forceOpen?: boolean;
   /** Custom portal container element that the dialog portals into */
   container?: HTMLElement;
