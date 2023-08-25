@@ -1,0 +1,19 @@
+name: Unstable/nightly release
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  unstable-release:
+    name: Unstable/nightly release
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2.2.4
+      - name: Generate unstable changeset
+        run: pnpm changeset version --snapshot next
+      - name: Build packages
+        run: pnpm build
+      - name: Publish unstable packages
+        run: pnpm changeset publish --tag next
