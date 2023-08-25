@@ -3,10 +3,10 @@ import { clsx } from "clsx";
 import { Check } from "../icon/check";
 import { ChevronDown } from "../icon/chevron-down";
 import * as styles from "./dropdown.css";
-import { useCallback, useState } from "react";
+import { ReactNode, useCallback, useState } from "react";
 
 type Item = {
-  label: string;
+  label: ReactNode;
   value: string;
 };
 
@@ -53,7 +53,7 @@ export const Dropdown: React.FC<Props> = ({
               {items.map((item) => (
                 <Select.Item
                   className={clsx("sid-dropdown__item", item.value === selected && "sid-dropdown__item--selected", styles.item)}
-                  key={item.label}
+                  key={item.value}
                   value={item.value}
                 >
                   <Select.ItemText>
