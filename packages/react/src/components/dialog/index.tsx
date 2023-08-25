@@ -1,6 +1,6 @@
 import * as RadixDialog from "@radix-ui/react-dialog";
 import { clsx } from "clsx";
-import { ReactNode, useEffect } from "react";
+import { ReactNode } from "react";
 import { Close } from "../icon/close";
 import * as styles from "./style.css";
 
@@ -43,13 +43,6 @@ export const Dialog = ({
   dismissable = true,
   modal = true,
 }: Props) => {
-  // TODO: remove this effect once we have theme CSS variables in the body
-  useEffect(() => {
-    const themeClassList =
-      document.querySelector(".sid-theme-root")?.classList ?? [];
-    document.body.classList.add(...themeClassList);
-  }, []);
-
   if (!trigger) return null;
 
   return (
