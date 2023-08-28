@@ -1,6 +1,6 @@
 import { GDPRConsent } from "@slashid/slashid";
 import { clsx } from "clsx";
-import { useEffect, useMemo, useReducer } from "react";
+import { forwardRef, useEffect, useMemo, useReducer } from "react";
 import { publicVariables } from "../../theme/theme.css";
 import { Button } from "../button";
 import { Dialog } from "../dialog";
@@ -16,6 +16,7 @@ import {
   GDPRConsentDialogProps,
   UpdateGdprConsent,
 } from "./types";
+import { Teleport } from "../teleport";
 
 type Props = GDPRConsentDialogProps & {
   consents: GDPRConsent[];
@@ -68,6 +69,25 @@ export const ConsentDialog = ({
     }
   }, [open]);
 
+  const TriggerButton = forwardRef<HTMLButtonElement>((props, ref) => (
+    <Teleport to="sid-cookie-button">
+      <Button
+        {...props}
+        ref={ref}
+        testId="sid-gdpr-consent-dialog-trigger"
+        variant="neutralMd"
+        className={clsx(
+          "sid-gdpr-consent-dialog-trigger",
+          styles.dialogTrigger,
+          triggerClassName
+        )}
+      >
+        <Cookie />
+      </Button>
+    </Teleport>
+  ))
+  TriggerButton.displayName = "TriggerButton"
+
   return (
     <Dialog
       className={clsx("sid-gdpr-consent-dialog", styles.dialog, className)}
@@ -79,17 +99,7 @@ export const ConsentDialog = ({
         dispatch({ type: "SET_OPEN", payload: open })
       }
       trigger={
-        <Button
-          testId="sid-gdpr-consent-dialog-trigger"
-          variant="neutralMd"
-          className={clsx(
-            "sid-gdpr-consent-dialog-trigger",
-            styles.dialogTrigger,
-            triggerClassName
-          )}
-        >
-          <Cookie />
-        </Button>
+        <TriggerButton />
       }
       icon={<Cookie fill={publicVariables.color.primary} />}
     >
