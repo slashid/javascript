@@ -10,6 +10,7 @@ import { Factor } from "@slashid/slashid";
 import { FactorLabeledOIDC, Handle, LoginOptions } from "../../domain/types";
 import { useMemo } from "react";
 import { isFactorOidc } from "../../domain/handles";
+import * as styles from "./dynamic-flow.css";
 
 type Props = {
   flowState: InitialState;
@@ -31,12 +32,14 @@ export const Initial = ({ flowState, handleSubmit, middleware }: Props) => {
       className="sid-dynamic-flow--initial-state"
     >
       <Logo logo={logo} />
-      <Text
-        as="h1"
-        variant={{ size: "2xl-title", weight: "bold" }}
-        t="initial.title"
-      />
-      <Text variant={{ color: "tertiary" }} as="h2" t="initial.subtitle" />
+      <div className={styles.header}>
+        <Text
+          as="h1"
+          variant={{ size: "2xl-title", weight: "bold" }}
+          t="initial.title"
+        />
+        <Text variant={{ color: "tertiary" }} as="h2" t="initial.subtitle" />
+      </div>
       <FormProvider>
         <ConfiguredHandleForm handleSubmit={handleSubmit} />
       </FormProvider>

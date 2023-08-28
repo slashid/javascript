@@ -93,7 +93,7 @@ export const Authenticating: React.FC<Props> = ({ flowState }) => {
   return (
     <article data-testid="sid-form-authenticating-state">
       <LinkButton
-        className={sprinkles({ marginBottom: "6" })}
+        className={sprinkles({ marginBottom: "4" })}
         testId="sid-form-authenticating-cancel-button"
         variant="back"
         onClick={() => flowState.cancel()}

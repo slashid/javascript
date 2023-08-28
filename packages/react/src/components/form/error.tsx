@@ -30,7 +30,7 @@ export const Error: React.FC<Props> = ({ flowState }) => {
   return (
     <article data-testid="sid-form-error-state">
       <LinkButton
-        className={sprinkles({ marginBottom: "6" })}
+        className={sprinkles({ marginBottom: "4" })}
         testId="sid-form-authenticating-cancel-button"
         variant="back"
         onClick={() => flowState.cancel()}

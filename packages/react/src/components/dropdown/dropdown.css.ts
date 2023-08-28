@@ -9,13 +9,13 @@ export const trigger = style({
   width: "100%",
   minWidth: theme.input.minWidth,
   height: theme.input.height,
-  padding: `0 ${theme.input.paddingHorizontal}`,
+  gap: theme.space["0.5"],
+  padding: `${theme.input.paddingVertical} ${theme.input.paddingHorizontal}`,
   boxSizing: "border-box",
   backgroundColor: publicVariables.color.offset,
   border: `1px solid ${publicVariables.color.subtle}`,
   borderRadius: publicVariables.border.radius,
   fontFamily: publicVariables.font.fontFamily,
-  
 
   ":active": {
     border: `1px solid ${publicVariables.color.tertiary}`,
@@ -54,7 +54,7 @@ export const content = style({
   boxShadow: theme.color.md,
   borderRadius: "20px",
   overflow: "hidden",
-  zIndex: 1
+  zIndex: 1,
 });
 
 export const viewport = style({
@@ -82,5 +82,5 @@ export const item = style({
 export const icon = style({
   position: "relative",
   top: "-8px",
-  zIndex: 0
+  zIndex: 0,
 });
