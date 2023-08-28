@@ -1,5 +1,14 @@
 # @slashid/react
 
+## 1.11.0
+
+### Minor Changes
+
+- 76e8f3f: Add renderLabel prop to \<OrganizationSwitcher />
+- 214df7e: Add <GDPRConsentDialog>, useGdprConsent()
+- 460cf89: fix: clear stale state before performing login
+- 302157e: Use correct OIDC provider branding
+
 ## 1.10.1
 
 ### Patch Changes
