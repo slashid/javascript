@@ -1,4 +1,6 @@
+import clsx from "clsx";
 import { Logo as TLogo } from "../../../context/config-context";
+import * as styles from "./logo.css";
 
 type Props = {
   logo?: TLogo;
@@ -7,9 +9,17 @@ type Props = {
 export const Logo: React.FC<Props> = ({ logo }) => {
   if (typeof logo === "string") {
     return (
-      <img className="sid-logo sid-logo--image" src={logo} alt="Company logo" />
+      <img
+        className={clsx("sid-logo", "sid-logo--image", styles.logo)}
+        src={logo}
+        alt="Company logo"
+      />
     );
   }
 
-  return <div className="sid-logo sid-logo--component">{logo}</div>;
+  return (
+    <div className={clsx("sid-logo", "sid-logo--component", styles.logo)}>
+      {logo}
+    </div>
+  );
 };
