@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { Logo as TLogo } from "../../../context/config-context";
-import * as styles from "./logo.css";
+import * as styles from "./initial.css";
 
 type Props = {
   logo?: TLogo;

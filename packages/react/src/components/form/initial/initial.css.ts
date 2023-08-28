@@ -9,3 +9,14 @@ export const oidcList = style({
   flexDirection: "column",
   gap: "0.5rem",
 });
+
+export const logo = style({
+  display: "flex",
+  marginBottom: "1rem",
+});
+
+export const header = style({
+  display: "flex",
+  flexDirection: "column",
+  gap: "0.25rem",
+});

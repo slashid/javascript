@@ -1,15 +1,16 @@
-import React, { useCallback, useMemo } from "react";
 import { Factor } from "@slashid/slashid";
+import React, { useCallback, useMemo } from "react";
 
+import { isFactorOidc } from "../../../domain/handles";
+import { FactorLabeledOIDC, Handle, LoginOptions } from "../../../domain/types";
+import { useConfiguration } from "../../../hooks/use-configuration";
 import { Text } from "../../text";
 import { InitialState } from "../flow";
-import { useConfiguration } from "../../../hooks/use-configuration";
-import { FactorLabeledOIDC, Handle, LoginOptions } from "../../../domain/types";
-import { isFactorOidc } from "../../../domain/handles";
 
+import { ConfiguredHandleForm } from "./configured-handle-form";
+import * as styles from "./initial.css";
 import { Logo } from "./logo";
 import { Oidc } from "./oidc";
-import { ConfiguredHandleForm } from "./configured-handle-form";
 
 type Props = {
   flowState: InitialState;
@@ -45,12 +46,14 @@ export const Initial: React.FC<Props> = ({
   return (
     <article data-testid="sid-form-initial-state">
       <Logo logo={logo} />
-      <Text
-        as="h1"
-        variant={{ size: "2xl-title", weight: "bold" }}
-        t="initial.title"
-      />
-      <Text variant={{ color: "tertiary" }} as="h2" t="initial.subtitle" />
+      <div className={styles.header}>
+        <Text
+          as="h1"
+          variant={{ size: "2xl-title", weight: "bold" }}
+          t="initial.title"
+        />
+        <Text variant={{ color: "tertiary" }} as="h2" t="initial.subtitle" />
+      </div>
       <ConfiguredHandleForm
         lastHandle={lastHandle}
         handleSubmit={handleSubmit}
