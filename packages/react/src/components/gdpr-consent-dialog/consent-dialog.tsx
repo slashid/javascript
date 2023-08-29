@@ -9,13 +9,9 @@ import { Text } from "../text";
 import { Actions } from "./actions";
 import { CONSENT_LEVELS_WITHOUT_NONE } from "./constants";
 import { Settings } from "./settings";
-import { createInitialState, reducer } from "./state";
+import { createInitialState, mapConsentsToSettings, reducer } from "./state";
 import * as styles from "./style.css";
-import {
-  ConsentSettings,
-  GDPRConsentDialogProps,
-  UpdateGdprConsent,
-} from "./types";
+import { GDPRConsentDialogProps, UpdateGdprConsent } from "./types";
 
 type Props = GDPRConsentDialogProps & {
   consents: GDPRConsent[];
@@ -36,19 +32,13 @@ export const ConsentDialog = ({
   forceConsent = false,
   forceOpen = false,
 }: Props) => {
-  const initialConsentSettings = useMemo(() => {
-    const settings = Object.fromEntries(
-      CONSENT_LEVELS_WITHOUT_NONE.map((level) => [
-        level,
-        consents.map(({ consent_level }) => consent_level).includes(level),
-      ])
-    );
-
-    return {
-      ...settings,
+  const initialConsentSettings = useMemo(
+    () => ({
+      ...mapConsentsToSettings(consents),
       necessary: necessaryCookiesRequired,
-    } as ConsentSettings;
-  }, [consents, necessaryCookiesRequired]);
+    }),
+    [consents, necessaryCookiesRequired]
+  );
 
   const initialOpen = useMemo(
     () => (forceOpen ? true : !consents.length),

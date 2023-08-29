@@ -48,6 +48,7 @@ export const Actions = ({
     try {
       const consents = await updateGdprConsent(consentLevels);
       onSuccess?.(consents);
+      dispatch({ type: "SET_CONSENT_SETTINGS", payload: consents });
       dispatch({ type: "SET_OPEN", payload: false });
     } catch (error) {
       dispatch({ type: "SET_HAS_ERROR", payload: true });
