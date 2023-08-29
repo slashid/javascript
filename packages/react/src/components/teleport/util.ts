@@ -7,7 +7,7 @@
  * 
  * @param teleportKey the key of teleport target
  * 
- * @returns DOM selector for teleport target i.e. #foo
+ * @returns the portal element
  */
 export const findOrCreateTeleportTarget = (teleportKey: string): HTMLElement => {
   const element = globalThis.document.getElementById(teleportKey)
