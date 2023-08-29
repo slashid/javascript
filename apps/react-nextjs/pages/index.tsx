@@ -24,6 +24,8 @@ function Home() {
           <Link href="/mfa">{`<MultiFactorAuth />`}</Link>
           <br />
           <Link href="/step-up-auth">{`<StepUpAuth />`}</Link>
+          <br />
+          <Link href="/gdpr-consent-dialog">{`<GDPRConsentDialog />`}</Link>
         </p>
 
         <p className={styles.docs}>
