@@ -9,7 +9,11 @@ export interface TeleportProps {
 }
 
 /**
- * Renders child content in a portal element at the DOM root
+ * A managed React portal. Creates and manages resolution of portal
+ * destination elements for you, just provide a name.
+ * 
+ * The portal destination elements are created at the DOM root and
+ * [children] are rendered here.
  * 
  * @param to The destination portal name
  * @param children The content to be teleported
