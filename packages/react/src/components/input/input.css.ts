@@ -8,6 +8,7 @@ export const input = style({
   fontWeight: theme.font.weight.semibold,
   color: publicVariables.color.foreground,
   backgroundColor: publicVariables.color.panel,
+  lineHeight: "122%",
 
   "::placeholder": {
     color: publicVariables.color.placeholder,
@@ -93,8 +94,10 @@ const inputHostBase = style({
   flexDirection: "column",
   height: "100%",
   width: "100%",
-  padding: `0 ${theme.input.paddingHorizontal}`,
+  gap: theme.space["0.5"],
+  padding: `${theme.input.paddingVertical} ${theme.input.paddingHorizontal}`,
   borderLeft: "1px solid transparent",
+  boxSizing: "border-box",
 });
 
 export const inputHost = styleVariants({
@@ -122,7 +125,7 @@ export const label = style({
   fontSize: theme.font.size.xs,
   fontWeight: theme.font.weight.semibold,
   color: publicVariables.color.contrast,
-  lineHeight: "100%",
+  lineHeight: "118%",
 });
 
 export const countryCode = style({

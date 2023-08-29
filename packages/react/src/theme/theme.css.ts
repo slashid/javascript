@@ -210,8 +210,9 @@ export const [themeClass, theme] = createTheme({
     "96": "24rem",
   },
   input: {
-    height: "58px",
+    height: "60px",
     paddingHorizontal: "16px",
+    paddingVertical: "12px",
     minWidth: "240px",
   },
   color: {

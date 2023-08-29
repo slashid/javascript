@@ -70,7 +70,7 @@ export const HandleForm: React.FC<Props> = ({
     if (handleType === "phone_number") {
       return (
         <PhoneInput
-          className={sprinkles({ marginTop: "3" })}
+          className={sprinkles({ marginTop: "4" })}
           id={`sid-input-${handleType}`}
           name={handleType}
           label={text["initial.handle.phone"]}
@@ -92,7 +92,7 @@ export const HandleForm: React.FC<Props> = ({
 
     return (
       <Input
-        className={sprinkles({ marginTop: "3" })}
+        className={sprinkles({ marginTop: "4" })}
         id={`sid-input-${handleType}`}
         name={handleType}
         label={text["initial.handle.email"]}
@@ -135,7 +135,7 @@ export const HandleForm: React.FC<Props> = ({
       {shouldRenderFactorDropdown && (
         <Dropdown
           defaultValue={filteredFactors[0].method}
-          className={sprinkles({ marginBottom: "3", marginTop: "5" })}
+          className={sprinkles({ marginBottom: "3", marginTop: "6" })}
           label={text["initial.authenticationMethod"]}
           items={filteredFactors.map((f) => ({
             label: text[FACTOR_LABEL_MAP[f.method]],
@@ -149,7 +149,7 @@ export const HandleForm: React.FC<Props> = ({
       {input}
       <ErrorMessage name={handleType} />
       <Button
-        className={sprinkles({ marginTop: "4" })}
+        className={sprinkles({ marginTop: "6" })}
         type="submit"
         variant="primary"
         testId="sid-form-initial-submit-button"

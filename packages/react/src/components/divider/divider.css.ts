@@ -4,7 +4,7 @@ import { publicVariables, theme } from "../../theme/theme.css";
 export const divider = style({
   display: "flex",
   alignItems: "center",
-  margin: `${theme.space[5]} 0`,
+  margin: `${theme.space[6]} 0`,
   gap: theme.space[2],
 });
 

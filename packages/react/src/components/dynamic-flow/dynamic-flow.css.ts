@@ -1,12 +1,12 @@
 import { style } from "@vanilla-extract/css";
-import { publicVariables } from "../../theme/theme.css";
+import { publicVariables, theme } from "../../theme/theme.css";
 
 export const form = style({
   fontFamily: publicVariables.font.fontFamily,
   color: publicVariables.color.foreground,
   backgroundColor: publicVariables.color.panel,
   width: "100%",
-  padding: "20px",
+  padding: "32px",
   boxSizing: "border-box",
 
   "@media": {
@@ -14,4 +14,10 @@ export const form = style({
       borderRadius: `calc(2 * ${publicVariables.border.radius})`,
     },
   },
+});
+
+export const header = style({
+  display: "flex",
+  flexDirection: "column",
+  gap: theme.space[1],
 });

@@ -1,11 +1,23 @@
 import { style } from "@vanilla-extract/css";
+import { theme } from "../../../theme/theme.css";
 
 export const oidcProvider = style({
-  marginLeft: "0.25rem",
+  marginLeft: theme.space[1],
 });
 
 export const oidcList = style({
   display: "flex",
   flexDirection: "column",
-  gap: "0.5rem",
+  gap: theme.space[2],
+});
+
+export const logo = style({
+  display: "flex",
+  marginBottom: theme.space[4],
+});
+
+export const header = style({
+  display: "flex",
+  flexDirection: "column",
+  gap: theme.space[1],
 });

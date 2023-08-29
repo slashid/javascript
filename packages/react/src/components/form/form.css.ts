@@ -6,7 +6,7 @@ export const form = style({
   color: publicVariables.color.foreground,
   backgroundColor: publicVariables.color.panel,
   width: "100%",
-  padding: "20px",
+  padding: "32px 32px 16px 32px",
   boxSizing: "border-box",
 
   "@media": {
