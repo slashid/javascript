@@ -13,7 +13,7 @@ export const dialog = style({
   bottom: margin,
   right: margin,
   maxHeight: "542px",
-  maxWidth: "384px",
+  maxWidth: "400px",
   display: "grid",
   gridTemplateRows: "auto auto 1fr auto",
   backgroundColor: publicVariables.color.panel,

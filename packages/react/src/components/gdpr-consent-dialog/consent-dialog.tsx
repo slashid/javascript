@@ -2,9 +2,9 @@ import { GDPRConsent } from "@slashid/slashid";
 import { clsx } from "clsx";
 import { useEffect, useMemo, useReducer } from "react";
 import { publicVariables } from "../../theme/theme.css";
-import { Button } from "../button";
 import { Dialog } from "../dialog";
 import { Cookie } from "../icon/cookie";
+import { TriggerButton } from './trigger-button'
 import { Text } from "../text";
 import { Actions } from "./actions";
 import { CONSENT_LEVELS_WITHOUT_NONE } from "./constants";
@@ -79,17 +79,9 @@ export const ConsentDialog = ({
         dispatch({ type: "SET_OPEN", payload: open })
       }
       trigger={
-        <Button
-          testId="sid-gdpr-consent-dialog-trigger"
-          variant="neutralMd"
-          className={clsx(
-            "sid-gdpr-consent-dialog-trigger",
-            styles.dialogTrigger,
-            triggerClassName
-          )}
-        >
-          <Cookie />
-        </Button>
+        <TriggerButton
+          buttonClassName={triggerClassName}
+        />
       }
       icon={<Cookie fill={publicVariables.color.primary} />}
     >

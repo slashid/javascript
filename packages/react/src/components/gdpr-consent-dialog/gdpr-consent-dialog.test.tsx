@@ -1,5 +1,5 @@
 import { GDPRConsent, GDPRConsentLevel, User } from "@slashid/slashid";
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import userEvent, {
   PointerEventsCheckLevel,
 } from "@testing-library/user-event";
@@ -227,7 +227,12 @@ describe("#GDPRConsentDialog", () => {
       );
 
       await expectDialogToBeClosed();
-      await event.click(screen.getByTestId("sid-gdpr-consent-dialog-trigger"));
+
+      fireEvent(
+        screen.getByTestId("sid-gdpr-consent-dialog-trigger"),
+        new MouseEvent('click', { bubbles: true })
+      )
+      
       await expectDialogToBeOpenWithInitialState();
 
       await event.click(
@@ -373,7 +378,12 @@ describe("#GDPRConsentDialog", () => {
       );
 
       await expectDialogToBeClosed();
-      await event.click(screen.getByTestId("sid-gdpr-consent-dialog-trigger"));
+
+      fireEvent(
+        screen.getByTestId("sid-gdpr-consent-dialog-trigger"),
+        new MouseEvent('click', { bubbles: true })
+      )
+
       await expectDialogToBeOpenWithInitialState();
 
       await event.click(

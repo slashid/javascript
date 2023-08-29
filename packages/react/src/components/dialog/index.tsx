@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 import { Close } from "../icon/close";
 import * as styles from "./style.css";
 
-type Props = {
+export type DialogProps = {
   /** Dialog content */
   children: ReactNode;
   /** Dialog trigger */
@@ -16,7 +16,7 @@ type Props = {
   /** Dialog icon */
   icon?: ReactNode;
   /** Dialog custom portal container */
-  container?: HTMLElement;
+  container?: HTMLElement | (() => HTMLElement | null) | null;
   /** Dialog content container class name */
   className?: string;
   /** When this boolean is set to `false`, the close button is hidden and dialog cannot be closed by clicking on the overlay */
@@ -42,18 +42,18 @@ export const Dialog = ({
   container,
   dismissable = true,
   modal = true,
-}: Props) => {
+}: DialogProps) => {
   if (!trigger) return null;
 
   return (
     <RadixDialog.Root modal={modal} open={open} onOpenChange={onOpenChange}>
       <RadixDialog.Trigger asChild>{trigger}</RadixDialog.Trigger>
-      <RadixDialog.Portal container={container}>
+      <RadixDialog.Portal container={typeof container === "function" ? container() : container}>
         {modal && <RadixDialog.Overlay className={styles.overlay} />}
         <RadixDialog.Content
           className={clsx("sid-dialog", styles.wrapper, className)}
           onInteractOutside={(e) => {
-            if (!dismissable) {
+            if (!modal || !dismissable) {
               e.preventDefault();
             }
           }}
