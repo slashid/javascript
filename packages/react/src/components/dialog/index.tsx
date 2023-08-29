@@ -1,6 +1,6 @@
 import * as RadixDialog from "@radix-ui/react-dialog";
 import { clsx } from "clsx";
-import { ReactNode, useMemo } from "react";
+import { ReactNode } from "react";
 import { Close } from "../icon/close";
 import * as styles from "./style.css";
 
@@ -43,27 +43,12 @@ export const Dialog = ({
   dismissable = true,
   modal = true,
 }: DialogProps) => {
-  /**
-   * Check if the container function return value changed every cycle but only
-   * trigger another render when it actually changes.
-   */
-  const containerFuncReturn = (() => {
-    if (typeof container !== "function") return null
-
-    return container()
-  })()
-
-  const __container = useMemo(() => {
-    if (typeof container === "function") return containerFuncReturn
-    return container
-  }, [container, containerFuncReturn])
-
   if (!trigger) return null;
 
   return (
     <RadixDialog.Root modal={modal} open={open} onOpenChange={onOpenChange}>
       <RadixDialog.Trigger asChild>{trigger}</RadixDialog.Trigger>
-      <RadixDialog.Portal container={__container}>
+      <RadixDialog.Portal container={typeof container === "function" ? container() : container}>
         {modal && <RadixDialog.Overlay className={styles.overlay} />}
         <RadixDialog.Content
           className={clsx("sid-dialog", styles.wrapper, className)}
