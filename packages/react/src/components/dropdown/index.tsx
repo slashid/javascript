@@ -57,10 +57,10 @@ export const Dropdown: React.FC<Props> = ({
             placeholder={placeholder}
           >
             <Select.Value />
-            <ChevronDown
-              className={clsx("sid-dropdown__trigger__icon", styles.icon)}
-            />
           </div>
+          <ChevronDown
+            className={clsx("sid-dropdown__trigger__icon", styles.icon)}
+          />
         </Select.Trigger>
 
         <Select.Content
@@ -81,7 +81,7 @@ export const Dropdown: React.FC<Props> = ({
                   value={item.value}
                 >
                   <Select.ItemText>{item.label}</Select.ItemText>
-                  <Select.ItemIndicator>
+                  <Select.ItemIndicator className={styles.selectedIcon}>
                     <Check className="sid-dropdown__item--selected__icon" />
                   </Select.ItemIndicator>
                 </Select.Item>
