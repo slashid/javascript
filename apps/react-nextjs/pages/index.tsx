@@ -1,3 +1,9 @@
+import {
+  FormPageRoute,
+  GDPRConsentDialogPageRoute,
+  MFAPageRoute,
+  StepUpAuthPageRoute
+} from "demo-form";
 import Head from "next/head";
 import Link from "next/link";
 import styles from "./index.module.css";
@@ -19,13 +25,13 @@ function Home() {
         <h2>Explore the components:</h2>
 
         <p className={styles.docs}>
-          <Link href="/form">{`<Form />`}</Link>
+          <Link href={FormPageRoute}>{`<Form />`}</Link>
           <br />
-          <Link href="/mfa">{`<MultiFactorAuth />`}</Link>
+          <Link href={MFAPageRoute}>{`<MultiFactorAuth />`}</Link>
           <br />
-          <Link href="/step-up-auth">{`<StepUpAuth />`}</Link>
+          <Link href={StepUpAuthPageRoute}>{`<StepUpAuth />`}</Link>
           <br />
-          <Link href="/gdpr-consent-dialog">{`<GDPRConsentDialog />`}</Link>
+          <Link href={GDPRConsentDialogPageRoute}>{`<GDPRConsentDialog />`}</Link>
         </p>
 
         <p className={styles.docs}>

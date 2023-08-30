@@ -1,3 +1,3 @@
 export { GDPRConsentDialogPage } from "./gdpr-consent-dialog-page";
 
-export const GDPRConsentDialogPageRoute = "gdpr-consent-dialog";
+export const GDPRConsentDialogPageRoute = "/gdpr-consent-dialog";
