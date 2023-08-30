@@ -1,8 +1,9 @@
+import { ReactNode } from "react";
 import { useSlashID } from "../../main";
 
 interface Props {
-  fallback?: React.ReactElement;
-  children: React.ReactElement;
+  fallback?: ReactNode;
+  children: ReactNode;
 }
 
 /**
@@ -16,8 +17,12 @@ export const SlashIDLoaded = ({ fallback, children }: Props) => {
   if (isLoading) {
     if (!fallback) return null;
 
-    return fallback;
+    return <>
+      {fallback};
+    </>
   }
 
-  return children;
+  return <>
+    {children}
+  </>
 };
