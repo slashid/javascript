@@ -1,21 +1,18 @@
-import { GDPRConsent } from "@slashid/slashid";
+import { GDPRConsent, GDPRConsentLevel } from "@slashid/slashid";
 import { clsx } from "clsx";
 import { useEffect, useMemo, useReducer } from "react";
 import { publicVariables } from "../../theme/theme.css";
+import { Button } from "../button";
 import { Dialog } from "../dialog";
 import { Cookie } from "../icon/cookie";
-import { TriggerButton } from './trigger-button'
 import { Text } from "../text";
-import { Actions } from "./actions";
+import { ActionButton } from "./action-button";
 import { CONSENT_LEVELS_WITHOUT_NONE } from "./constants";
 import { Settings } from "./settings";
-import { createInitialState, reducer } from "./state";
+import { createInitialState, mapConsentsToSettings, reducer } from "./state";
 import * as styles from "./style.css";
-import {
-  ConsentSettings,
-  GDPRConsentDialogProps,
-  UpdateGdprConsent,
-} from "./types";
+import { TriggerButton } from "./trigger-button";
+import { ActionType, GDPRConsentDialogProps, UpdateGdprConsent } from "./types";
 
 type Props = GDPRConsentDialogProps & {
   consents: GDPRConsent[];
@@ -36,19 +33,13 @@ export const ConsentDialog = ({
   forceConsent = false,
   forceOpen = false,
 }: Props) => {
-  const initialConsentSettings = useMemo(() => {
-    const settings = Object.fromEntries(
-      CONSENT_LEVELS_WITHOUT_NONE.map((level) => [
-        level,
-        consents.map(({ consent_level }) => consent_level).includes(level),
-      ])
-    );
-
-    return {
-      ...settings,
+  const initialConsentSettings = useMemo(
+    () => ({
+      ...mapConsentsToSettings(consents),
       necessary: necessaryCookiesRequired,
-    } as ConsentSettings;
-  }, [consents, necessaryCookiesRequired]);
+    }),
+    [consents, necessaryCookiesRequired]
+  );
 
   const initialOpen = useMemo(
     () => (forceOpen ? true : !consents.length),
@@ -60,7 +51,47 @@ export const ConsentDialog = ({
     createInitialState(initialConsentSettings, initialOpen)
   );
 
-  const { consentSettings, open, isLoading, hasError, isCustomizing } = state;
+  const {
+    consentSettings,
+    activeAction,
+    open,
+    isLoading,
+    hasError,
+    isCustomizing,
+  } = state;
+
+  const handleUpdate = async (
+    consentLevels: GDPRConsentLevel[],
+    activeAction: ActionType
+  ) => {
+    dispatch({ type: "START_ACTION", payload: activeAction });
+    try {
+      const consents = await updateGdprConsent(consentLevels);
+      onSuccess?.(consents);
+      dispatch({ type: "SYNC_CONSENT_SETTINGS", payload: consents });
+    } catch (error) {
+      dispatch({ type: "SET_HAS_ERROR", payload: true });
+      onError?.(error);
+    } finally {
+      dispatch({ type: "COMPLETE_ACTION" });
+    }
+  };
+
+  const handleSave = async () => {
+    const consentLevels = Object.entries(consentSettings)
+      .filter(([, value]) => value)
+      .map(([key]) => key as GDPRConsentLevel);
+
+    return handleUpdate(consentLevels, "save");
+  };
+
+  const handleAccept = () => handleUpdate(defaultAcceptAllLevels, "accept");
+
+  const handleReject = () => handleUpdate(defaultRejectAllLevels, "reject");
+
+  const handleCustomize = () => {
+    dispatch({ type: "SET_IS_CUSTOMIZING", payload: true });
+  };
 
   useEffect(() => {
     if (!open) {
@@ -78,11 +109,7 @@ export const ConsentDialog = ({
       onOpenChange={(open: boolean) =>
         dispatch({ type: "SET_OPEN", payload: open })
       }
-      trigger={
-        <TriggerButton
-          buttonClassName={triggerClassName}
-        />
-      }
+      trigger={<TriggerButton buttonClassName={triggerClassName} />}
       icon={<Cookie fill={publicVariables.color.primary} />}
     >
       <div className={styles.title}>
@@ -99,7 +126,9 @@ export const ConsentDialog = ({
           {isCustomizing && (
             <Settings
               consentSettings={consentSettings}
-              dispatch={dispatch}
+              toggleConsent={(level) =>
+                dispatch({ type: "TOGGLE_CONSENT", payload: level })
+              }
               disabled={isLoading}
             />
           )}
@@ -121,15 +150,48 @@ export const ConsentDialog = ({
         </div>
       )}
       <div className={styles.footer}>
-        <Actions
-          state={state}
-          defaultAcceptAllLevels={defaultAcceptAllLevels}
-          defaultRejectAllLevels={defaultRejectAllLevels}
-          dispatch={dispatch}
-          updateGdprConsent={updateGdprConsent}
-          onSuccess={onSuccess}
-          onError={onError}
+        {isCustomizing && (
+          <ActionButton
+            testId="sid-gdpr-consent-dialog-save"
+            variant="neutralMd"
+            label="Save settings"
+            hasError={hasError}
+            isActive={activeAction === "save"}
+            loading={isLoading}
+            onClick={handleSave}
+            className={styles.saveButton}
+          />
+        )}
+        <ActionButton
+          testId="sid-gdpr-consent-dialog-accept"
+          variant="secondaryMd"
+          label="Accept all"
+          hasError={hasError}
+          isActive={activeAction === "accept"}
+          loading={isLoading}
+          onClick={handleAccept}
+          className={styles.acceptButton}
         />
+        <ActionButton
+          testId="sid-gdpr-consent-dialog-reject"
+          variant="secondaryMd"
+          label="Reject all"
+          hasError={hasError}
+          isActive={activeAction === "reject"}
+          loading={isLoading}
+          onClick={handleReject}
+          className={styles.rejectButton}
+        />
+        {!isCustomizing && (
+          <Button
+            testId="sid-gdpr-consent-dialog-customize"
+            variant="ghostMd"
+            onClick={handleCustomize}
+            disabled={isLoading}
+          >
+            Customize
+          </Button>
+        )}
       </div>
     </Dialog>
   );
