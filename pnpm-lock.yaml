@@ -229,7 +229,6 @@ importers:
       '@vanilla-extract/sprinkles': ^1.5.1
       '@vanilla-extract/vite-plugin': ^3.7.0
       '@vitejs/plugin-react': ^2.1.0
-      addon-essentials@latest: link:storybook/addon-essentials@latest
       clsx: ^1.2.1
       compress.js: ^1.2.2
       country-list-with-dial-code-and-flag: ^3.0.2
@@ -278,7 +277,6 @@ importers:
       '@types/testing-library__jest-dom': 5.14.9
       '@vanilla-extract/vite-plugin': 3.8.2_vite@3.2.7
       '@vitejs/plugin-react': 2.2.0_vite@3.2.7
-      addon-essentials@latest: link:storybook/addon-essentials@latest
       clsx: 1.2.1
       cross-fetch: 4.0.0
       jsdom: 20.0.3
