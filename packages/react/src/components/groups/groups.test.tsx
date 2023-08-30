@@ -44,19 +44,15 @@ describe("Groups", () => {
     expect(screen.queryByText("Test")).not.toBeInTheDocument();
   });
 
-  test("should render children when the SDK is ready and the user belongs to the specified groups, as string", () => {
+  test("should render children when the SDK is ready and the user belongs to the specified groups, provided as string", () => {
     const userWithGroups = createTestUser()
-    const groups = Array
-      .from(Array(faker.number.int({ min: 3, max: 10 })))
-      .map(() => faker.company.buzzNoun())
+    const group = "groupa"
 
-    userWithGroups.getGroups = vi.fn(() => groups);
-
-    const [belongsTo] = faker.helpers.shuffle(groups)
+    userWithGroups.getGroups = vi.fn(() => [group]);
 
     render(
       <TestSlashIDProvider sdkState="ready" user={userWithGroups}>
-        <Groups belongsTo={belongsTo}>
+        <Groups belongsTo={group}>
           <TestComponent />
         </Groups>
       </TestSlashIDProvider>
@@ -65,19 +61,14 @@ describe("Groups", () => {
     expect(screen.getByText("Test")).toBeInTheDocument();
   });
 
-  test("should not render children when the SDK is ready and the user does not belong to the specified groups, as string", () => {
+  test("should not render children when the SDK is ready and the user does not belongs to the specified groups, provided as string", () => {
     const userWithGroups = createTestUser()
-    const groups = Array
-      .from(Array(faker.number.int({ min: 3, max: 10 })))
-      .map(() => faker.company.buzzNoun())
 
-    userWithGroups.getGroups = vi.fn(() => groups);
-
-    const belongsTo = faker.company.buzzAdjective()
+    userWithGroups.getGroups = vi.fn(() => ["groupb"]);
 
     render(
       <TestSlashIDProvider sdkState="ready" user={userWithGroups}>
-        <Groups belongsTo={belongsTo}>
+        <Groups belongsTo={"groupa"}>
           <TestComponent />
         </Groups>
       </TestSlashIDProvider>
@@ -113,6 +104,54 @@ describe("Groups", () => {
     );
 
     expect(belongsTo).not.toHaveBeenCalled();
+    expect(screen.queryByText("Test")).not.toBeInTheDocument();
+  });
+
+  /**
+   * Random variants of tests
+   * 
+   * These tests reduce the likelihood of false positives
+   * but with the trade-off of readability.
+   */
+  test("should render children when the SDK is ready and the user belongs to the specified groups, provided as string (random)", () => {
+    const userWithGroups = createTestUser()
+    const groups = Array
+      .from(Array(faker.number.int({ min: 3, max: 10 })))
+      .map((_,i) => faker.company.buzzNoun() + i)
+
+    userWithGroups.getGroups = vi.fn(() => groups);
+
+    const [belongsTo] = faker.helpers.shuffle(groups)
+
+    render(
+      <TestSlashIDProvider sdkState="ready" user={userWithGroups}>
+        <Groups belongsTo={belongsTo}>
+          <TestComponent />
+        </Groups>
+      </TestSlashIDProvider>
+    );
+
+    expect(screen.getByText("Test")).toBeInTheDocument();
+  });
+
+  test("should not render children when the SDK is ready and the user does not belongs to the specified groups, provided as string (random)", () => {
+    const userWithGroups = createTestUser()
+    const groups = Array
+      .from(Array(faker.number.int({ min: 3, max: 10 })))
+      .map((_,i) => faker.company.buzzNoun() + i)
+
+    userWithGroups.getGroups = vi.fn(() => groups);
+
+    const expected = `${faker.company.buzzNoun()}_expected`
+
+    render(
+      <TestSlashIDProvider sdkState="ready" user={userWithGroups}>
+        <Groups belongsTo={expected}>
+          <TestComponent />
+        </Groups>
+      </TestSlashIDProvider>
+    );
+
     expect(screen.queryByText("Test")).not.toBeInTheDocument();
   });
 });
