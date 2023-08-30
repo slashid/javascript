@@ -1,5 +1,5 @@
 import type { LinksFunction } from "@remix-run/node";
-import { LoggedOut, LoggedIn, Form } from "@slashid/react";
+import { Form, GDPRConsentDialog, LoggedIn, LoggedOut } from "@slashid/react";
 import { Profile } from "demo-form";
 
 import slashIDstyles from "@slashid/react/style.css";
@@ -21,6 +21,7 @@ export default function Index() {
       <LoggedIn>
         <Profile />
       </LoggedIn>
+      <GDPRConsentDialog />
     </div>
   );
 }

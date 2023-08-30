@@ -1,7 +1,22 @@
 import { Profile } from "./components/Profile";
 import { SlashIDForm } from "./components/SlashIDForm";
-import { FormPage } from "./pages/FormPage";
-import { MFAPage } from "./pages/MFAPage";
-import { StepUpAuthPage } from "./pages/StepUpAuthPage";
+import { FormPage, FormPageRoute } from "./pages/FormPage";
+import {
+  GDPRConsentDialogPage,
+  GDPRConsentDialogPageRoute,
+} from "./pages/GDPRConsentDialogPage";
+import { MFAPage, MFAPageRoute } from "./pages/MFAPage";
+import { StepUpAuthPage, StepUpAuthPageRoute } from "./pages/StepUpAuthPage";
 
-export { Profile, SlashIDForm, FormPage, MFAPage, StepUpAuthPage };
+export {
+  FormPage,
+  FormPageRoute,
+  GDPRConsentDialogPage,
+  GDPRConsentDialogPageRoute,
+  MFAPage,
+  MFAPageRoute,
+  Profile,
+  SlashIDForm,
+  StepUpAuthPage,
+  StepUpAuthPageRoute,
+};

@@ -71,16 +71,25 @@ export const createApiGDPRConsentStorage = (
 
 type ConsentState = "initial" | "ready";
 
-type UseGdprConsent = () => {
+type UseGDPRConsent = () => {
   consents: GDPRConsent[];
-  consentState: ConsentState;
+  state: ConsentState;
   updateGdprConsent: (
     consentLevels: GDPRConsentLevel[]
   ) => Promise<GDPRConsent[]>;
   deleteGdprConsent: () => Promise<void>;
 };
 
-export const useGdprConsent: UseGdprConsent = () => {
+/**
+ * A stateful hook providing access to the current user's GDPR consent levels.
+ * Use this hook to list the accepted levels and accept and reject additional levels.
+ *
+ * If there is no authenticated user, the consent levels will be stored in local storage.
+ * Otherwise, the consent levels will be stored using the SlashID API.
+ *
+ * @returns {UseGDPRConsent} an object with the current consent levels and methods to update it
+ */
+export const useGDPRConsent: UseGDPRConsent = () => {
   const { user, sdkState, sid } = useSlashID();
   const [consents, setConsents] = useState<GDPRConsent[]>([]);
   const [consentState, setConsentState] = useState<ConsentState>("initial");
@@ -135,5 +144,5 @@ export const useGdprConsent: UseGdprConsent = () => {
     setConsents([]);
   }, [storage]);
 
-  return { consents, consentState, updateGdprConsent, deleteGdprConsent };
+  return { consents, state: consentState, updateGdprConsent, deleteGdprConsent };
 };

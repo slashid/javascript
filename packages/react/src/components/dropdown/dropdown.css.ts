@@ -17,6 +17,8 @@ export const trigger = style({
   border: `1px solid ${publicVariables.color.subtle}`,
   borderRadius: publicVariables.border.radius,
   fontFamily: publicVariables.font.fontFamily,
+  position: "relative",
+  textAlign: "left",
 
   ":active": {
     border: `1px solid ${publicVariables.color.tertiary}`,
@@ -44,8 +46,8 @@ export const input = style({
   fontSize: theme.font.size.base,
   fontWeight: theme.font.weight.semibold,
   color: publicVariables.color.foreground,
-  display: "flex",
-  justifyContent: "space-between",
+  display: "grid",
+  gridTemplateColumns: "auto 24px"
 });
 
 export const content = style({
@@ -70,7 +72,8 @@ export const item = style({
   borderRadius: "12px",
   padding: "16px 12px",
   display: "flex",
-  justifyContent: "space-between",
+  columnGap: "8px",
+  alignItems: "center",
 
   ":hover": {
     backgroundColor: publicVariables.color.soft,
@@ -81,7 +84,13 @@ export const item = style({
 });
 
 export const icon = style({
-  position: "relative",
-  top: "-8px",
-  zIndex: 0,
+  position: "absolute",
+  right: "16px",
+  zIndex: 0
 });
+
+export const selectedIcon = style({
+  height: "16px",
+  marginLeft: "auto",
+  justifySelf: "flex-end"
+})

@@ -2,6 +2,7 @@ import { GDPRConsent, GDPRConsentLevel } from "@slashid/slashid";
 import { CONSENT_LEVELS_WITHOUT_NONE } from "./constants";
 import { type DialogProps } from "../dialog";
 
+export type ActionType = "save" | "accept" | "reject" | null;
 export type ConsentSettingsLevel = (typeof CONSENT_LEVELS_WITHOUT_NONE)[number];
 export type ConsentSettings = Record<ConsentSettingsLevel, boolean>;
 export type OnSuccess = (consentLevels: GDPRConsent[]) => void;
