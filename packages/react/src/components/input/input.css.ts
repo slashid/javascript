@@ -25,10 +25,19 @@ globalStyle(`${input}:-webkit-autofill`, {
   WebkitTextFillColor: publicVariables.color.foreground,
 });
 
+export const dropdownWrapper = style({
+  position: "absolute",
+  width: "100%",
+});
+
+export const dropdownContent = style({
+  width: "var(--radix-select-trigger-width)",
+  // maxHeight: "var(--radix-popper-available-height)",
+  maxHeight: "260px",
+});
+
 export const dropdown = style({
   opacity: 0,
-  width: "100%",
-  height: "100%",
 
   ":hover": {
     cursor: "pointer",
@@ -36,7 +45,6 @@ export const dropdown = style({
 });
 
 export const countryHost = style({
-  position: "relative",
   height: "100%",
   width: "122px",
   borderRight: `1px solid ${publicVariables.color.subtle}`,
@@ -55,6 +63,7 @@ export const countryHost = style({
 });
 
 export const host = style({
+  position: "relative",
   display: "flex",
   alignItems: "flex-start",
   border: `1px solid ${publicVariables.color.subtle}`,
@@ -92,6 +101,7 @@ const inputHostBase = style({
   alignItems: "flex-start",
   justifyContent: "center",
   flexDirection: "column",
+  flex: 1,
   height: "100%",
   width: "100%",
   gap: theme.space["0.5"],

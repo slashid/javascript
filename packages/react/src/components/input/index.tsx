@@ -128,16 +128,26 @@ export const PhoneInput: React.FC<PhoneProps> = ({
             </div>
             <ChevronDown />
           </div>
-          <Dropdown
-            defaultValue={flag.code}
-            className={styles.dropdown}
-            label=""
-            onChange={handleChangeCountryCode}
-            items={countries.map((country) => ({
-              label: `${country.name} ${country.dial_code}`,
-              value: country.code,
-            }))}
-          />
+          <div className={styles.dropdownWrapper}>
+            <Dropdown
+              defaultValue={flag.code}
+              className={styles.dropdown}
+              label=""
+              onChange={handleChangeCountryCode}
+              items={countries.map((country) => ({
+                label: `${country.name} ${country.dial_code}`,
+                value: country.code,
+              }))}
+              contentProps={{
+                className: styles.dropdownContent,
+                position: "popper",
+                align: "start",
+                // alignOffset: -1,
+                side: "bottom",
+                sideOffset: 4,
+              }}
+            />
+          </div>
         </div>
       ) : null}
       <BaseInput

@@ -47,7 +47,7 @@ export const input = style({
   fontWeight: theme.font.weight.semibold,
   color: publicVariables.color.foreground,
   display: "grid",
-  gridTemplateColumns: "auto 24px"
+  gridTemplateColumns: "auto 24px",
 });
 
 export const content = style({
@@ -57,6 +57,9 @@ export const content = style({
   boxShadow: theme.color.md,
   borderRadius: "20px",
   overflow: "hidden",
+  // width: "var(--radix-select-trigger-width)",
+  // maxHeight: "var(--radix-popper-available-height)",
+  // maxHeight: "260px",
   zIndex: 1,
 });
 
@@ -86,11 +89,11 @@ export const item = style({
 export const icon = style({
   position: "absolute",
   right: "16px",
-  zIndex: 0
+  zIndex: 0,
 });
 
 export const selectedIcon = style({
   height: "16px",
   marginLeft: "auto",
-  justifySelf: "flex-end"
-})
+  justifySelf: "flex-end",
+});
