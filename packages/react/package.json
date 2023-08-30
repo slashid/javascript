@@ -81,7 +81,6 @@
     "@types/testing-library__jest-dom": "^5.14.5",
     "@vanilla-extract/vite-plugin": "^3.7.0",
     "@vitejs/plugin-react": "^2.1.0",
-    "addon-essentials@latest": "link:storybook/addon-essentials@latest",
     "clsx": "^1.2.1",
     "cross-fetch": "^4.0.0",
     "jsdom": "^20.0.2",
