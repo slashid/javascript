@@ -1,12 +1,10 @@
 import { ReactNode, useMemo } from "react";
 import { useSlashID } from "../../main";
 
-type Groups = string[];
-
 type Props = {
-  belongsTo: string | ((groups: Groups) => boolean);
-  children: ReactNode;
-};
+  belongsTo: string | ((groups: string[]) => boolean);
+  children: ReactNode
+}
 
 /**
  * Conditional rendering helper.
@@ -29,9 +27,7 @@ type Props = {
  * User belongs to either "admin" or "user"
  * ```tsx
  * <Groups
- *  belongsTo={groups => 
- *    ["admin", "user"].some(group => groups.includes(group))
- *  }
+ *  belongsTo={Groups.some(["admin", "user"])}
  * >
  *  ...
  * </Groups>
@@ -41,15 +37,13 @@ type Props = {
  * User belongs to both "admin" and "user"
  * ```tsx
  * <Groups
- *  belongsTo={groups =>
- *    ["admin", "user"].every(group => groups.includes(group))
- *  }
+ *  belongsTo={Groups.all(["admin", "user"])}
  * >
  *  ...
  * </Groups>
  * ```
  */
-export const Groups: React.FC<Props> = ({ belongsTo, children }) => {
+export const Groups = ({ belongsTo, children }: Props) => {
   const { user } = useSlashID();
 
   const shouldRender = useMemo(() => {
@@ -69,3 +63,6 @@ export const Groups: React.FC<Props> = ({ belongsTo, children }) => {
 
   return <>{children}</>;
 };
+
+Groups.some = (groups: string[]) => (userGroups: string[]) => groups.some(group => userGroups.includes(group))
+Groups.all = (groups: string[]) => (userGroups: string[]) => groups.every(group => userGroups.includes(group))
