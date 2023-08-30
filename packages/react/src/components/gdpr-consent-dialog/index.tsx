@@ -7,9 +7,9 @@ import { GDPRConsentDialogProps } from "./types";
  * GDPR Consent Dialog component to manage the GDPR consent levels for the current user.
  */
 export const GDPRConsentDialog = (props: GDPRConsentDialogProps) => {
-  const { consents, state, updateGdprConsent } = useGDPRConsent();
+  const { consents, isLoading, updateGdprConsent } = useGDPRConsent();
 
-  if (state === "initial") {
+  if (isLoading) {
     return null;
   }
 
