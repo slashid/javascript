@@ -1,4 +1,4 @@
-import { useGdprConsent } from "../../hooks/use-gdpr-consent";
+import { useGDPRConsent } from "../../hooks/use-gdpr-consent";
 import { SlashIDLoaded } from "../slashid-loaded";
 import { ConsentDialog } from "./consent-dialog";
 import { GDPRConsentDialogProps } from "./types";
@@ -7,7 +7,7 @@ import { GDPRConsentDialogProps } from "./types";
  * GDPR Consent Dialog component to manage the GDPR consent levels for the current user.
  */
 export const GDPRConsentDialog = (props: GDPRConsentDialogProps) => {
-  const { consents, consentState, updateGdprConsent } = useGdprConsent();
+  const { consents, consentState, updateGdprConsent } = useGDPRConsent();
 
   if (consentState === "initial") {
     return null;
