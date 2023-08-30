@@ -13,7 +13,7 @@ import {
   ConfigurationProvider,
 } from "./context/config-context";
 import { SlashIDContext, SlashIDProvider } from "./context/slash-id-context";
-import { useGdprConsent } from "./hooks/use-gdpr-consent";
+import { useGDPRConsent } from "./hooks/use-gdpr-consent";
 import { useOrganizations } from "./hooks/use-organizations";
 import { useSlashID } from "./hooks/use-slash-id";
 import {
@@ -40,7 +40,7 @@ export {
   SlashIDLoaded,
   SlashIDProvider,
   StepUpAuth,
-  useGdprConsent,
+  useGDPRConsent,
   useOrganizations,
   useSlashID,
 
