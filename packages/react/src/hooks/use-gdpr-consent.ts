@@ -80,6 +80,16 @@ type UseGdprConsent = () => {
   deleteGdprConsent: () => Promise<void>;
 };
 
+/**
+ * A stateful hook providing access to the current user's GDPR consent levels.
+ * Use this hook to list the accepted levels and accept and reject additional levels.
+ *
+ * If there is no authenticated user, the consent levels will be stored in local storage.
+ * Otherwise, the consent levels will be stored using the SlashID API.
+ *
+ *
+ * @returns {UseGdprConsent} an object with the current consent levels and methods to update it
+ */
 export const useGdprConsent: UseGdprConsent = () => {
   const { user, sdkState, sid } = useSlashID();
   const [consents, setConsents] = useState<GDPRConsent[]>([]);
