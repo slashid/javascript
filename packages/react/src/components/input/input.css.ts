@@ -38,8 +38,7 @@ export const dropdown = style({
 export const countryHost = style({
   position: "relative",
   height: "100%",
-  width: "94px",
-  padding: "0 12px 0 16px",
+  width: "122px",
   borderRight: `1px solid ${publicVariables.color.subtle}`,
 
   selectors: {
