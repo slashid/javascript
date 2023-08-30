@@ -73,7 +73,7 @@ type ConsentState = "initial" | "ready";
 
 type UseGDPRConsent = () => {
   consents: GDPRConsent[];
-  consentState: ConsentState;
+  state: ConsentState;
   updateGdprConsent: (
     consentLevels: GDPRConsentLevel[]
   ) => Promise<GDPRConsent[]>;
@@ -144,5 +144,5 @@ export const useGDPRConsent: UseGDPRConsent = () => {
     setConsents([]);
   }, [storage]);
 
-  return { consents, consentState, updateGdprConsent, deleteGdprConsent };
+  return { consents, state: consentState, updateGdprConsent, deleteGdprConsent };
 };
