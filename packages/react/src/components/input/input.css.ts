@@ -25,7 +25,7 @@ globalStyle(`${input}:-webkit-autofill`, {
   WebkitTextFillColor: publicVariables.color.foreground,
 });
 
-export const select = style({
+export const dropdown = style({
   opacity: 0,
   width: "100%",
   height: "100%",
@@ -38,17 +38,18 @@ export const select = style({
 export const countryHost = style({
   position: "relative",
   height: "100%",
-  width: "212px",
+  width: "94px",
+  padding: "0 12px 0 16px",
   borderRight: `1px solid ${publicVariables.color.subtle}`,
 
   selectors: {
-    [`&:has(${select}:active)`]: {
+    [`&:has(${dropdown}:active)`]: {
       borderRight: `1px solid ${publicVariables.color.tertiary}`,
     },
-    [`&:has(${select}:focus)`]: {
+    [`&:has(${dropdown}:focus)`]: {
       borderRight: `1px solid ${publicVariables.color.tertiary}`,
     },
-    [`&:has(${select}:hover)`]: {
+    [`&:has(${dropdown}:hover)`]: {
       borderRight: `1px solid ${publicVariables.color.placeholder}`,
     },
   },
@@ -75,13 +76,13 @@ export const host = style({
     [`&:has(${input}:hover)`]: {
       border: `1px solid ${publicVariables.color.placeholder}`,
     },
-    [`&:has(${select}:active)`]: {
+    [`&:has(${dropdown}:active)`]: {
       border: `1px solid ${publicVariables.color.tertiary}`,
     },
-    [`&:has(${select}:focus)`]: {
+    [`&:has(${dropdown}:focus)`]: {
       border: `1px solid ${publicVariables.color.tertiary}`,
     },
-    [`&:has(${select}:hover)`]: {
+    [`&:has(${dropdown}:hover)`]: {
       border: `1px solid ${publicVariables.color.placeholder}`,
     },
   },

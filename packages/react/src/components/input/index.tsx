@@ -1,8 +1,9 @@
 import { clsx } from "clsx";
-import { ChangeEvent, useCallback, ChangeEventHandler } from "react";
-import { getList, findFlag } from "country-list-with-dial-code-and-flag";
-import * as styles from "./input.css";
+import { findFlag, getList } from "country-list-with-dial-code-and-flag";
+import { ChangeEventHandler, useCallback } from "react";
+import { Dropdown } from "../dropdown";
 import { ChevronDown } from "../icon/chevron-down";
+import * as styles from "./input.css";
 
 type BaseProps = {
   id: string;
@@ -109,9 +110,8 @@ export const PhoneInput: React.FC<PhoneProps> = ({
   const countries = getList();
 
   const handleChangeCountryCode = useCallback(
-    (e: ChangeEvent<HTMLSelectElement>) => {
-      const newCountryCode = e.target.value;
-      onFlagChange(findFlag(newCountryCode)!);
+    (value: string) => {
+      onFlagChange(findFlag(value)!);
     },
     [onFlagChange]
   );
@@ -128,17 +128,16 @@ export const PhoneInput: React.FC<PhoneProps> = ({
             </div>
             <ChevronDown />
           </div>
-          <select
-            className={styles.select}
-            value={flag.code}
+          <Dropdown
+            defaultValue={flag.code}
+            className={styles.dropdown}
+            label=""
             onChange={handleChangeCountryCode}
-          >
-            {countries.map((country) => (
-              <option key={country.code} value={country.code}>
-                {country.name} {country.dial_code}
-              </option>
-            ))}
-          </select>
+            items={countries.map((country) => ({
+              label: `${country.name} ${country.dial_code}`,
+              value: country.code,
+            }))}
+          />
         </div>
       ) : null}
       <BaseInput

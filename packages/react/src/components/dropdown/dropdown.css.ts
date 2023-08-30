@@ -7,7 +7,8 @@ export const trigger = style({
   justifyContent: "center",
   flexDirection: "column",
   width: "100%",
-  minWidth: theme.input.minWidth,
+  // TODO: revisit this
+  // minWidth: theme.input.minWidth,
   height: theme.input.height,
   gap: theme.space["0.5"],
   padding: `${theme.input.paddingVertical} ${theme.input.paddingHorizontal}`,
