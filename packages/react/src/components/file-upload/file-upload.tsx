@@ -4,6 +4,7 @@ import { Stack } from "../stack";
 import { Text } from "../text";
 import { TextConfigKey } from "../text/constants";
 import * as styles from "./file-upload.css";
+import { ReactNode } from "react";
 
 type Props =
   | {
@@ -62,7 +63,7 @@ export const FileUpload: (props: Props) => JSX.Element = (props) => {
 
 const InputContainer = (props: {
   variant: styles.DSUVariants;
-  children: JSX.Element;
+  children: ReactNode;
 }) => (
   <div className={clsx("sid-dsu-container", styles.dsu[props.variant])}>
     {props.children}
