@@ -27,7 +27,7 @@ type Props = {
  * User belongs to either "admin" or "user"
  * ```tsx
  * <Groups
- *  belongsTo={Groups.some(["admin", "user"])}
+ *  belongsTo={Groups.some("admin", "user")}
  * >
  *  ...
  * </Groups>
@@ -37,7 +37,7 @@ type Props = {
  * User belongs to both "admin" and "user"
  * ```tsx
  * <Groups
- *  belongsTo={Groups.all(["admin", "user"])}
+ *  belongsTo={Groups.all("admin", "user")}
  * >
  *  ...
  * </Groups>
@@ -64,5 +64,5 @@ export const Groups = ({ belongsTo, children }: Props) => {
   return <>{children}</>;
 };
 
-Groups.some = (groups: string[]) => (userGroups: string[]) => groups.some(group => userGroups.includes(group))
-Groups.all = (groups: string[]) => (userGroups: string[]) => groups.every(group => userGroups.includes(group))
+Groups.some = (...groups: string[]) => (userGroups: string[]) => groups.some(group => userGroups.includes(group))
+Groups.all = (...groups: string[]) => (userGroups: string[]) => groups.every(group => userGroups.includes(group))

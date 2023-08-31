@@ -155,3 +155,40 @@ describe("Groups", () => {
     expect(screen.queryByText("Test")).not.toBeInTheDocument();
   });
 });
+
+describe("Groups.*", () => {
+  test("Groups.some should return true when one or more of users groups match required groups", () => {
+    const required = ["alpha", "beta", "delta"]
+    const groups = ["charlie", "delta"]
+
+    const actual = Groups.some(...required)(groups)
+
+    expect(actual).toBe(true)
+  })
+  test("Groups.some should return false when none of users groups match required groups", () => {
+    const required = ["alpha", "beta"]
+    const groups = ["charlie", "delta", "echo"]
+
+    const actual = Groups.some(...required)(groups)
+
+    expect(actual).toBe(false)
+  })
+  test("Groups.all should return true when users groups match all required groups", () => {
+    const required = ["charlie", "echo"]
+    const groups = ["alpha", "beta", "charlie", "delta", "echo"]
+
+    const actual = Groups.all(...required)(groups)
+
+    expect(actual).toBe(true)
+
+  })
+  test("Groups.all should return false when users groups do not match all required groups", () => {
+    const required = ["alpha", "beta", "charlie", "delta", "echo", "foxtrot"]
+    const groups = ["alpha", "delta", "echo"]
+
+    const actual = Groups.all(...required)(groups)
+
+    expect(actual).toBe(false)
+
+  })
+})
