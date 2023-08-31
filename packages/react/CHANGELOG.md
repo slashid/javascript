@@ -1,5 +1,19 @@
 # @slashid/react
 
+## 1.12.0
+
+### Minor Changes
+
+- fde4fa1: Fix form spacing issues
+- e567a8e: Improve GDPRConsentDialog usability
+
+### Patch Changes
+
+- 8727f5d: Adjust requireNecessaryCookies prop to behave as in the docs
+- 9cd82ce: Fix out of sync consent settings
+- cb23df7: Use a consistent naming strategy with uppercase acronyms
+- 43012df: Refactored the hook to expose isLoading instead of the state variable
+
 ## 1.11.0
 
 ### Minor Changes
