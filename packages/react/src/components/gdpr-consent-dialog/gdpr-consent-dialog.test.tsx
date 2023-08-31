@@ -63,9 +63,6 @@ const expectDialogToBeOpenWithCustomizingState = async (
     ).toBeInTheDocument();
 
     expect(
-      screen.getByTestId("sid-gdpr-consent-switch-necessary")
-    ).toHaveAttribute("data-blocked", "true");
-    expect(
       screen.getByTestId(`sid-gdpr-consent-switch-${level}`)
     ).toHaveAttribute("data-state", isChecked ? "checked" : "unchecked");
   });
@@ -124,6 +121,60 @@ describe("#GDPRConsentDialog", () => {
     setItemSpy.mockClear();
     getGDPRConsentSpy.mockClear();
     setGDPRConsentSpy.mockClear();
+  });
+
+  describe("general features", () => {
+    test("should allow toggling the necessary consent in the customize state when necessaryCookiesRequired is false", async () => {
+      render(
+        <TestSlashIDProvider sdkState="ready">
+          <GDPRConsentDialog necessaryCookiesRequired={false} />
+        </TestSlashIDProvider>
+      );
+
+      await expectDialogToBeOpenWithInitialState();
+
+      await event.click(
+        screen.getByTestId("sid-gdpr-consent-dialog-customize")
+      );
+
+      expect(
+        screen.getByTestId("sid-gdpr-consent-switch-necessary")
+      ).toHaveAttribute("data-blocked", "false");
+
+      expect(
+        screen.getByTestId("sid-gdpr-consent-switch-necessary")
+      ).toHaveAttribute("data-state", "unchecked");
+
+      await event.click(
+        screen.getByTestId("sid-gdpr-consent-switch-necessary")
+      );
+
+      expect(
+        screen.getByTestId("sid-gdpr-consent-switch-necessary")
+      ).toHaveAttribute("data-state", "checked");
+    });
+
+    test("should block toggling the necessary consent in the customize state when necessaryCookiesRequired is true", async () => {
+      render(
+        <TestSlashIDProvider sdkState="ready">
+          <GDPRConsentDialog necessaryCookiesRequired />
+        </TestSlashIDProvider>
+      );
+
+      await expectDialogToBeOpenWithInitialState();
+
+      await event.click(
+        screen.getByTestId("sid-gdpr-consent-dialog-customize")
+      );
+
+      expect(
+        screen.getByTestId("sid-gdpr-consent-switch-necessary")
+      ).toHaveAttribute("data-blocked", "true");
+
+      expect(
+        screen.getByTestId("sid-gdpr-consent-switch-necessary")
+      ).toHaveAttribute("data-state", "checked");
+    });
   });
 
   describe("anonymous user", () => {
@@ -230,9 +281,9 @@ describe("#GDPRConsentDialog", () => {
 
       fireEvent(
         screen.getByTestId("sid-gdpr-consent-dialog-trigger"),
-        new MouseEvent('click', { bubbles: true })
-      )
-      
+        new MouseEvent("click", { bubbles: true })
+      );
+
       await expectDialogToBeOpenWithInitialState();
 
       await event.click(
@@ -381,8 +432,8 @@ describe("#GDPRConsentDialog", () => {
 
       fireEvent(
         screen.getByTestId("sid-gdpr-consent-dialog-trigger"),
-        new MouseEvent('click', { bubbles: true })
-      )
+        new MouseEvent("click", { bubbles: true })
+      );
 
       await expectDialogToBeOpenWithInitialState();
 
