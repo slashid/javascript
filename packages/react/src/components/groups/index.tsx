@@ -1,26 +1,60 @@
 import { ReactNode, useMemo } from "react";
 import { useSlashID } from "../../main";
 
-type Groups = string[];
-
 type Props = {
-  belongsTo: (groups: Groups) => boolean;
-  children: ReactNode;
-};
+  belongsTo: string | ((groups: string[]) => boolean);
+  children: ReactNode
+}
 
 /**
- * Requires a callback function to be passed in. This callback will be called with an array of names of groups the user belongs to.
- * Renders children only if the callback returns true.
+ * Conditional rendering helper.
+ * 
+ * Use this component where some content should be shown only to users belonging to one or more specific groups.
+ * 
+ * @param belongsTo group name or predicate function - the predicate function is called with a list of group names that the user belongs to.
+ * 
+ * @example
+ * User belongs to group "admin"
+ * ```tsx
+ * <Groups
+ *  belongsTo="admin"
+ * >
+ *  ...
+ * </Groups>
+ * ```
+ * 
+ * @example
+ * User belongs to either "admin" or "user"
+ * ```tsx
+ * <Groups
+ *  belongsTo={Groups.some("admin", "user")}
+ * >
+ *  ...
+ * </Groups>
+ * ```
+ * 
+ * @example
+ * User belongs to both "admin" and "user"
+ * ```tsx
+ * <Groups
+ *  belongsTo={Groups.all("admin", "user")}
+ * >
+ *  ...
+ * </Groups>
+ * ```
  */
-export const Groups: React.FC<Props> = ({ belongsTo, children }) => {
+export const Groups = ({ belongsTo, children }: Props) => {
   const { user } = useSlashID();
 
   const shouldRender = useMemo(() => {
     if (!user) {
       return false;
     }
+    const groups = user.getGroups()
 
-    return belongsTo(user.getGroups());
+    return typeof belongsTo === "string"
+      ? groups.includes(belongsTo)
+      : belongsTo(groups)
   }, [user, belongsTo]);
 
   if (!shouldRender) {
@@ -29,3 +63,6 @@ export const Groups: React.FC<Props> = ({ belongsTo, children }) => {
 
   return <>{children}</>;
 };
+
+Groups.some = (...groups: string[]) => (userGroups: string[]) => groups.some(group => userGroups.includes(group))
+Groups.all = (...groups: string[]) => (userGroups: string[]) => groups.every(group => userGroups.includes(group))
