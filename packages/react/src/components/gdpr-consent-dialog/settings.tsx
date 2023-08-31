@@ -3,16 +3,22 @@ import { Switch } from "../switch";
 import { Text } from "../text";
 import { CONSENT_LEVELS_WITHOUT_NONE } from "./constants";
 import * as styles from "./style.css";
-import { ConsentSettings, ConsentSettingsLevel } from "./types";
+import {
+  ConsentSettings,
+  ConsentSettingsLevel,
+  GDPRConsentDialogProps,
+} from "./types";
 
 type Props = {
   consentSettings: ConsentSettings;
+  necessaryCookiesRequired?: GDPRConsentDialogProps["necessaryCookiesRequired"];
   toggleConsent: (level: ConsentSettingsLevel) => void;
   disabled?: boolean;
 };
 
 export const Settings = ({
   consentSettings,
+  necessaryCookiesRequired = false,
   toggleConsent,
   disabled = false,
 }: Props) => {
@@ -24,7 +30,7 @@ export const Settings = ({
         icon: (
           <Switch
             data-testid={`sid-gdpr-consent-switch-${level}`}
-            blocked={level === "necessary"}
+            blocked={level === "necessary" && necessaryCookiesRequired}
             disabled={disabled}
             checked={consentSettings[level]}
             onCheckedChange={() => toggleConsent(level)}

@@ -16,7 +16,7 @@ export type GDPRConsentDialogProps = {
   className?: string;
   /** Custom class name for the trigger button */
   triggerClassName?: string;
-  /** Value of the lock on the necessary cookies category */
+  /** Prevent rejecting the necessary consent level when customizing consent levels */
   necessaryCookiesRequired?: boolean;
   /** Default consent levels to store when clicking on accept all */
   defaultAcceptAllLevels?: ConsentSettingsLevel[];
