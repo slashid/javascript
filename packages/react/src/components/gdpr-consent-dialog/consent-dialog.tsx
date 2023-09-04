@@ -126,6 +126,7 @@ export const ConsentDialog = ({
           {isCustomizing && (
             <Settings
               consentSettings={consentSettings}
+              necessaryCookiesRequired={necessaryCookiesRequired}
               toggleConsent={(level) =>
                 dispatch({ type: "TOGGLE_CONSENT", payload: level })
               }
