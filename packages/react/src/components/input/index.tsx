@@ -142,7 +142,7 @@ export const PhoneInput: React.FC<PhoneProps> = ({
                 className: styles.dropdownContent,
                 position: "popper",
                 align: "start",
-                // alignOffset: -1,
+                alignOffset: -1,
                 side: "bottom",
                 sideOffset: 4,
               }}

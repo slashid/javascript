@@ -7,8 +7,7 @@ export const trigger = style({
   justifyContent: "center",
   flexDirection: "column",
   width: "100%",
-  // TODO: revisit this
-  // minWidth: theme.input.minWidth,
+  minWidth: theme.input.minWidth,
   height: theme.input.height,
   gap: theme.space["0.5"],
   padding: `${theme.input.paddingVertical} ${theme.input.paddingHorizontal}`,
@@ -57,20 +56,18 @@ export const content = style({
   boxShadow: theme.color.md,
   borderRadius: "20px",
   overflow: "hidden",
-  // width: "var(--radix-select-trigger-width)",
-  // maxHeight: "var(--radix-popper-available-height)",
-  // maxHeight: "260px",
   zIndex: 1,
 });
 
 export const viewport = style({
-  padding: "12px 24px",
+  padding: "12px",
 });
 
 export const item = style({
   fontFamily: publicVariables.font.fontFamily,
   fontWeight: theme.font.weight.bold,
   fontSize: theme.font.size.base,
+  lineHeight: "100%",
   color: publicVariables.color.foreground,
   borderRadius: "12px",
   padding: "16px 12px",

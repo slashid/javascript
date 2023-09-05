@@ -31,9 +31,8 @@ export const dropdownWrapper = style({
 });
 
 export const dropdownContent = style({
-  width: "var(--radix-select-trigger-width)",
-  // maxHeight: "var(--radix-popper-available-height)",
-  maxHeight: "260px",
+  width: "calc(var(--radix-select-trigger-width) + 2px)",
+  maxHeight: "264px",
 });
 
 export const dropdown = style({
@@ -101,7 +100,6 @@ const inputHostBase = style({
   alignItems: "flex-start",
   justifyContent: "center",
   flexDirection: "column",
-  flex: 1,
   height: "100%",
   width: "100%",
   gap: theme.space["0.5"],
@@ -116,6 +114,9 @@ export const inputHost = styleVariants({
   tel: [
     inputHostBase,
     {
+      flex: 1,
+      zIndex: 1,
+
       selectors: {
         [`&:has(${input}:active)`]: {
           borderLeft: `1px solid ${publicVariables.color.tertiary}`,
