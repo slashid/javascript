@@ -25,6 +25,17 @@ globalStyle(`${input}:-webkit-autofill`, {
   WebkitTextFillColor: publicVariables.color.foreground,
 });
 
+export const dropdownLabel = style({
+  display: "flex",
+  columnGap: "12px",
+});
+
+export const countryFlagSvg = style({
+  width: "16px",
+  height: "12px",
+  borderRadius: "2px",
+});
+
 export const dropdownWrapper = style({
   position: "absolute",
   width: "100%",
