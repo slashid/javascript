@@ -1,10 +1,9 @@
 import { clsx } from "clsx";
-import CountryFlagSvg from "country-list-with-dial-code-and-flag/dist/flag-svg";
+import { findFlag, getList } from "country-list-with-dial-code-and-flag";
 import { ChangeEventHandler, useCallback } from "react";
 import { Dropdown } from "../dropdown";
 import { ChevronDown } from "../icon/chevron-down";
 import * as styles from "./input.css";
-import CountryList from "country-list-with-dial-code-and-flag";
 
 type BaseProps = {
   id: string;
@@ -88,8 +87,8 @@ export const Input: React.FC<InputProps> = ({
   );
 };
 
-export type Flag = ReturnType<typeof CountryList.getAll>[0];
-export const GB_FLAG: Flag = CountryList.findOneByCountryCode("GB")!;
+export type Flag = ReturnType<typeof getList>[0];
+export const GB_FLAG: Flag = findFlag("GB")!;
 
 type PhoneProps = BaseProps & {
   type?: "tel";
@@ -108,11 +107,11 @@ export const PhoneInput: React.FC<PhoneProps> = ({
   onChange,
   onFlagChange,
 }) => {
-  const countries = CountryList.getAll();
+  const countries = getList();
 
   const handleChangeCountryCode = useCallback(
     (value: string) => {
-      onFlagChange(CountryList.findOneByCountryCode(value)!);
+      onFlagChange(findFlag(value)!);
     },
     [onFlagChange]
   );
@@ -124,15 +123,8 @@ export const PhoneInput: React.FC<PhoneProps> = ({
       {flag ? (
         <div className={styles.countryHost}>
           <div className={styles.countryCode}>
-            <div className={styles.dropdownLabel}>
-              <div
-                className={styles.countryFlagSvg}
-                // TODO: use HTML to React parser https://github.com/remarkablemark/html-react-parser
-                dangerouslySetInnerHTML={{
-                  __html: CountryFlagSvg[flag.code],
-                }}
-              />
-              {flag.dial_code}
+            <div>
+              {flag.flag} {flag.dial_code}
             </div>
             <ChevronDown />
           </div>
@@ -143,18 +135,7 @@ export const PhoneInput: React.FC<PhoneProps> = ({
               label=""
               onChange={handleChangeCountryCode}
               items={countries.map((country) => ({
-                label: (
-                  <div className={styles.dropdownLabel}>
-                    <div
-                      className={styles.countryFlagSvg}
-                      // TODO: use HTML to React parser https://github.com/remarkablemark/html-react-parser
-                      dangerouslySetInnerHTML={{
-                        __html: CountryFlagSvg[country.code],
-                      }}
-                    />
-                    {country.name} {country.dial_code}
-                  </div>
-                ),
+                label: `${country.name} ${country.dial_code}`,
                 value: country.code,
               }))}
               contentProps={{

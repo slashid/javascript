@@ -231,7 +231,7 @@ importers:
       '@vitejs/plugin-react': ^2.1.0
       clsx: ^1.2.1
       compress.js: ^1.2.2
-      country-list-with-dial-code-and-flag: ^5.0.3
+      country-list-with-dial-code-and-flag: ^3.0.2
       cross-fetch: ^4.0.0
       jsdom: ^20.0.2
       msw: ^1.2.5
@@ -254,7 +254,7 @@ importers:
       '@vanilla-extract/recipes': 0.3.0_zd2pmj2rl4fq6dchynq6tm4lty
       '@vanilla-extract/sprinkles': 1.6.1_zd2pmj2rl4fq6dchynq6tm4lty
       compress.js: 1.2.2
-      country-list-with-dial-code-and-flag: 5.0.3
+      country-list-with-dial-code-and-flag: 3.0.3
     devDependencies:
       '@faker-js/faker': 8.0.2
       '@slashid/slashid': 3.13.2
@@ -9132,8 +9132,8 @@ packages:
       yaml: 1.10.2
     dev: false
 
-  /country-list-with-dial-code-and-flag/5.0.3:
-    resolution: {integrity: sha512-lz/jjHO351Nigjgc2B7WQSH7kycU/pCKBFh0fyN92efZGCbm9b4H9N83MABzqXFl2fMa9bmvPwBykbGZUrhLKw==}
+  /country-list-with-dial-code-and-flag/3.0.3:
+    resolution: {integrity: sha512-s7e62HFHQhF4agdFoFzGJQYnx3qspBMyeUKJy9bOD0GsK6MRLdduTzXs1asiV5FcXlGYXmdhkSmNbSY28SKtPA==}
     dev: false
 
   /cross-fetch/4.0.0:

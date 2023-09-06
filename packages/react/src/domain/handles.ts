@@ -1,7 +1,10 @@
 import { HandleType, FactorOIDC, Handle, FactorOTP } from "./types";
 import { Factor } from "@slashid/slashid";
+import {
+  getList,
+  findFlagByDialCode,
+} from "country-list-with-dial-code-and-flag";
 import { TextConfigKey } from "../components/text/constants";
-import CountryList from "country-list-with-dial-code-and-flag";
 
 const FACTORS_WITH_EMAIL = ["webauthn", "otp_via_email", "email_link"];
 const FACTORS_WITH_PHONE = ["otp_via_sms", "sms_link"];
@@ -73,18 +76,12 @@ export type ParsedPhoneNumber = {
 export function parsePhoneNumber(
   number: string
 ): ParsedPhoneNumber | undefined {
-  for (const flag of CountryList.getAll()) {
+  for (const flag of getList()) {
     if (number.startsWith(flag.dial_code)) {
-      const countryCode = CountryList.findOneByDialCode(flag.dial_code)?.code;
-
-      if (!countryCode) {
-        return;
-      }
-
       return {
         dialCode: flag.dial_code,
         number: number.substring(flag.dial_code.length).trim(),
-        countryCode,
+        countryCode: findFlagByDialCode(flag.dial_code).code,
       };
     }
   }

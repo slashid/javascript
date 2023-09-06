@@ -57,7 +57,7 @@
     "@vanilla-extract/recipes": "^0.3.0",
     "@vanilla-extract/sprinkles": "^1.5.1",
     "compress.js": "^1.2.2",
-    "country-list-with-dial-code-and-flag": "^5.0.3"
+    "country-list-with-dial-code-and-flag": "^3.0.2"
   },
   "devDependencies": {
     "@faker-js/faker": "^8.0.2",
