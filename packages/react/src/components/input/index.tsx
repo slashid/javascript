@@ -1,6 +1,7 @@
 import { clsx } from "clsx";
+import { polyfillCountryFlagEmojis } from "country-flag-emoji-polyfill";
 import { findFlag, getList } from "country-list-with-dial-code-and-flag";
-import { ChangeEventHandler, useCallback } from "react";
+import { ChangeEventHandler, useCallback, useLayoutEffect } from "react";
 import { Dropdown } from "../dropdown";
 import { ChevronDown } from "../icon/chevron-down";
 import * as styles from "./input.css";
@@ -109,6 +110,10 @@ export const PhoneInput: React.FC<PhoneProps> = ({
 }) => {
   const countries = getList();
 
+  useLayoutEffect(() => {
+    polyfillCountryFlagEmojis();
+  }, []);
+
   const handleChangeCountryCode = useCallback(
     (value: string) => {
       onFlagChange(findFlag(value)!);
@@ -135,7 +140,7 @@ export const PhoneInput: React.FC<PhoneProps> = ({
               label=""
               onChange={handleChangeCountryCode}
               items={countries.map((country) => ({
-                label: `${country.name} ${country.dial_code}`,
+                label: `${country.flag} ${country.name} ${country.dial_code}`,
                 value: country.code,
               }))}
               contentProps={{
