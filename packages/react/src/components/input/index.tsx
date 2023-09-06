@@ -2,6 +2,7 @@ import { clsx } from "clsx";
 import { polyfillCountryFlagEmojis } from "country-flag-emoji-polyfill";
 import { findFlag, getList } from "country-list-with-dial-code-and-flag";
 import { ChangeEventHandler, useCallback, useLayoutEffect } from "react";
+import { sprinkles } from "../../theme/sprinkles.css";
 import { Dropdown } from "../dropdown";
 import { ChevronDown } from "../icon/chevron-down";
 import * as styles from "./input.css";
@@ -140,7 +141,20 @@ export const PhoneInput: React.FC<PhoneProps> = ({
               label=""
               onChange={handleChangeCountryCode}
               items={countries.map((country) => ({
-                label: `${country.flag} ${country.name} ${country.dial_code}`,
+                label: (
+                  <>
+                    <span>{country.flag}</span>
+                    <span
+                      className={sprinkles({
+                        marginLeft: "3",
+                        marginRight: "1",
+                      })}
+                    >
+                      {country.name}
+                    </span>
+                    <span>{country.dial_code}</span>
+                  </>
+                ),
                 value: country.code,
               }))}
               contentProps={{
