@@ -112,11 +112,7 @@ export const PhoneInput: React.FC<PhoneProps> = ({
 
   const handleChangeCountryCode = useCallback(
     (value: string) => {
-      const [dial_code, code] = value.split("_");
-      const countries = CountryList.findByCountryCode(code);
-      const country = countries.find((c) => c.dial_code === dial_code);
-
-      onFlagChange(country!);
+      onFlagChange(CountryList.findOneByCountryCode(value)!);
     },
     [onFlagChange]
   );
@@ -159,8 +155,7 @@ export const PhoneInput: React.FC<PhoneProps> = ({
                     {country.name} {country.dial_code}
                   </div>
                 ),
-                // TODO: revisit this
-                value: `${country.dial_code}_${country.code}`,
+                value: country.code,
               }))}
               contentProps={{
                 className: styles.dropdownContent,
