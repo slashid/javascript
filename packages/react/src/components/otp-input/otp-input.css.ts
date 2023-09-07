@@ -4,14 +4,15 @@ import { publicVariables, theme } from "../../theme/theme.css";
 export const container = style({
   display: "flex",
   gap: "4px",
-  justifyContent: "space-around",
+  justifyContent: "center",
 });
 
 export const otpInput = style({
   all: "unset",
-  width: "64px",
-  height: "64px",
-  padding: "20px 16px",
+  maxWidth: "64px",
+  width: "100%",
+  height: "auto",
+  aspectRatio: "1/1",
   borderRadius: "16px",
   boxSizing: "border-box",
   border: `1px solid ${publicVariables.color.subtle}`,
