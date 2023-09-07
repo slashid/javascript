@@ -66,28 +66,6 @@ export const OtpInput = ({
     }
   };
 
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { nativeEvent } = event;
-    if (!isInputValueValid(event.target.value)) {
-      // TODO: revisit this logic
-      // This was added previosly to handle an edge case for dealing with
-      // keyCode "229 Unidentified" on Android. Check if this is still needed.
-      if (
-        // @ts-ignore
-        nativeEvent.data === null &&
-        // @ts-ignore
-        nativeEvent.inputType === "deleteContentBackward"
-      ) {
-        event.preventDefault();
-        changeCodeAtFocus("");
-        focusInput(activeInput - 1);
-      }
-      // Clear the input if it's not valid value because firefox allows
-      // pasting non-numeric characters in a number type input
-      event.target.value = "";
-    }
-  };
-
   const handleFocus =
     (event: FocusEvent<HTMLInputElement, Element>) => (index: number) => {
       setActiveInput(index);
@@ -198,7 +176,6 @@ export const OtpInput = ({
           }`}
           type={inputType}
           inputMode={isInputNum ? "numeric" : "text"}
-          onInput={handleInputChange}
         />
       ))}
     </div>
