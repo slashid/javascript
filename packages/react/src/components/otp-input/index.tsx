@@ -66,6 +66,16 @@ export const OtpInput = ({
     }
   };
 
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (isInputValueValid(event.target.value)) {
+      return;
+    }
+
+    // Clear the input if it's not valid value because firefox allows
+    // pasting non-numeric characters in a number type input
+    event.target.value = "";
+  };
+
   const handleFocus =
     (event: FocusEvent<HTMLInputElement, Element>) => (index: number) => {
       setActiveInput(index);
@@ -176,6 +186,7 @@ export const OtpInput = ({
           }`}
           type={inputType}
           inputMode={isInputNum ? "numeric" : "text"}
+          onInput={handleInputChange}
         />
       ))}
     </div>
