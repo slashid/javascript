@@ -15,64 +15,74 @@ type Story = StoryObj<typeof DynamicFlow>;
 
 export const Default: Story = {
   render: () => (
-    <ConfigurationProvider>
-      <DynamicFlow getFactor={() => ({ method: "email_link" })} />
-    </ConfigurationProvider>
+    <div style={{ maxWidth: 450, margin: "auto" }}>
+      <ConfigurationProvider>
+        <DynamicFlow getFactor={() => ({ method: "email_link" })} />
+      </ConfigurationProvider>
+    </div>
   ),
 };
 
 export const WithClassName: Story = {
   name: "With className",
   render: () => (
-    <ConfigurationProvider>
-      <DynamicFlow
-        getFactor={() => ({ method: "email_link" })}
-        className="my-class"
-      />
-    </ConfigurationProvider>
+    <div style={{ maxWidth: 450, margin: "auto" }}>
+      <ConfigurationProvider>
+        <DynamicFlow
+          getFactor={() => ({ method: "email_link" })}
+          className="my-class"
+        />
+      </ConfigurationProvider>
+    </div>
   ),
 };
 
 export const WithSuccessCallback: Story = {
   name: "With success callback",
   render: () => (
-    <ConfigurationProvider>
-      <DynamicFlow
-        getFactor={() => ({ method: "email_link" })}
-        onSuccess={(user) => {
-          console.log("onSuccess - user: ", user);
-        }}
-      />
-    </ConfigurationProvider>
+    <div style={{ maxWidth: 450, margin: "auto" }}>
+      <ConfigurationProvider>
+        <DynamicFlow
+          getFactor={() => ({ method: "email_link" })}
+          onSuccess={(user) => {
+            console.log("onSuccess - user: ", user);
+          }}
+        />
+      </ConfigurationProvider>
+    </div>
   ),
 };
 
 export const WithTextOverride: Story = {
   name: "With text override",
   render: () => (
-    <ConfigurationProvider text={{ "initial.oidc": "Continue with" }}>
-      <DynamicFlow getFactor={() => ({ method: "email_link" })} />
-    </ConfigurationProvider>
+    <div style={{ maxWidth: 450, margin: "auto" }}>
+      <ConfigurationProvider text={{ "initial.oidc": "Continue with" }}>
+        <DynamicFlow getFactor={() => ({ method: "email_link" })} />
+      </ConfigurationProvider>
+    </div>
   ),
 };
 
 export const WithMiddleware: Story = {
   name: "With middleware",
   render: () => (
-    <ConfigurationProvider>
-      <DynamicFlow
-        getFactor={() => ({ method: "email_link" })}
-        middleware={[
-          defaultOrganization(({ organizations }) => {
-            const preferred = organizations.find(
-              (org) => org.org_name === "MyOrg/abc2"
-            );
-            if (preferred) return preferred.id;
+    <div style={{ maxWidth: 450, margin: "auto" }}>
+      <ConfigurationProvider>
+        <DynamicFlow
+          getFactor={() => ({ method: "email_link" })}
+          middleware={[
+            defaultOrganization(({ organizations }) => {
+              const preferred = organizations.find(
+                (org) => org.org_name === "MyOrg/abc2"
+              );
+              if (preferred) return preferred.id;
 
-            return rootOid;
-          }),
-        ]}
-      />
-    </ConfigurationProvider>
+              return rootOid;
+            }),
+          ]}
+        />
+      </ConfigurationProvider>
+    </div>
   ),
 };
