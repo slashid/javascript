@@ -13,10 +13,3 @@ export const oidcTitle = style({
 export const otpForm = style({
   margin: "28px 0",
 });
-
-export const otpFormSection = style({
-  display: "flex",
-  flexDirection: "row",
-  justifyContent: "space-between",
-  gap: "8px",
-});

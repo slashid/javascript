@@ -1,20 +1,19 @@
-import { centered, sprinkles } from "../../theme/sprinkles.css";
-import { AuthenticatingState } from "./flow";
-import { Text } from "../text";
-import { LinkButton } from "../button/link-button";
-import * as styles from "./authenticating.css";
-import { useConfiguration } from "../../hooks/use-configuration";
-import { getAuthenticatingMessage, isFactorOTP } from "../../domain/handles";
-import { Circle } from "../spinner/circle";
-import { Spinner } from "../spinner/spinner";
 import { clsx } from "clsx";
 import { FormEventHandler, useCallback, useEffect, useState } from "react";
-import { Input } from "../input";
-import { Button } from "../button";
-import { ErrorMessage } from "./error-message";
-import { useSlashID } from "../../main";
-import { isValidOTPCode } from "./validation";
+import { getAuthenticatingMessage, isFactorOTP } from "../../domain/handles";
+import { useConfiguration } from "../../hooks/use-configuration";
 import { useForm } from "../../hooks/use-form";
+import { useSlashID } from "../../main";
+import { centered, sprinkles } from "../../theme/sprinkles.css";
+import { LinkButton } from "../button/link-button";
+import { OtpInput } from "../otp-input";
+import { Circle } from "../spinner/circle";
+import { Spinner } from "../spinner/spinner";
+import { Text } from "../text";
+import * as styles from "./authenticating.css";
+import { ErrorMessage } from "./error-message";
+import { AuthenticatingState } from "./flow";
+import { OTP_CODE_LENGTH, isValidOTPCode } from "./validation";
 
 const Loader = () => (
   <div className={clsx(sprinkles({ marginY: "12" }), centered)}>
@@ -31,7 +30,7 @@ type Props = {
 const OtpForm = () => {
   const { text } = useConfiguration();
   const { sid } = useSlashID();
-  const { values, registerField, registerSubmit, status } = useForm();
+  const { values, registerField, registerSubmit } = useForm();
   const [formState, setFormState] = useState<
     "initial" | "input" | "submitting"
   >("initial");
@@ -42,6 +41,7 @@ const OtpForm = () => {
 
       setFormState("submitting");
       sid?.publish("otpCodeSubmitted", values["otp"]);
+      console.log("OTP submitted: ", values["otp"]);
     },
     [sid, values]
   );
@@ -53,31 +53,38 @@ const OtpForm = () => {
     }
   }, [formState, sid]);
 
-  if (formState !== "input") {
-    return <Loader />;
-  }
+  // TODO: only for testing, revert when done testing
+  // if (formState !== "input") {
+  //   return <Loader />;
+  // }
 
   return (
     <form onSubmit={registerSubmit(handleSubmit)} className={styles.otpForm}>
-      <section className={styles.otpFormSection}>
-        <Input
-          id="sid-otp-input"
-          name="otp"
-          label={text["authenticating.otpInput"]}
-          type="text"
-          value={values["otp"] ?? ""}
-          onChange={registerField("otp", {
+      {/* TODO: test in mobile and SSR */}
+      <OtpInput
+        shouldAutoFocus
+        inputType="number"
+        value={values["otp"] ?? ""}
+        onChange={(otp) => {
+          const onChangeHandler = registerField("otp", {
             validator: (value) => {
               if (!isValidOTPCode(value)) {
                 return { message: text["validationError.otp"] };
               }
             },
-          })}
-        />
-        <Button type="submit" variant="primary" disabled={status === "invalid"}>
-          {text["authenticating.otpInput.submit"]}
-        </Button>
-      </section>
+          });
+          const event = {
+            target: {
+              value: otp,
+            },
+          };
+
+          // TODO: revisit this logic
+          onChangeHandler(event as never);
+        }}
+        numInputs={OTP_CODE_LENGTH}
+      />
+      <input type="submit" hidden />
       <ErrorMessage name="otp" />
     </form>
   );

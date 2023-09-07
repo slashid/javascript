@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { clsx } from "clsx";
 import { useFlowState } from "./useFlowState";
-import { CreateFlowOptions } from "./flow";
+import { AuthenticatingState, CreateFlowOptions } from "./flow";
 import { Initial } from "./initial";
 import { Authenticating } from "./authenticating";
 import { Error } from "./error";
@@ -27,28 +28,47 @@ export const Form: React.FC<Props> = ({
   onSuccess,
   factors,
   text,
-  middleware
+  middleware,
 }) => {
-  const flowState = useFlowState({ onSuccess });
+  // TODO: only for testing, revert when done testing
+  // const flowState = useFlowState({ onSuccess });
   const { showBanner } = useConfiguration();
   const { lastHandle } = useLastHandle();
+
+  const flowState: AuthenticatingState = {
+    status: "authenticating",
+    context: {
+      config: {
+        handle: { type: "phone_number", value: "00000" },
+        factor: { method: "otp_via_sms" },
+      },
+      options: { middleware },
+      attempt: 0,
+    },
+    retry: () => {},
+    cancel: () => {},
+  };
 
   return (
     <div className={clsx("sid-form", styles.form, className)}>
       <ConfigurationOverrides text={text} factors={factors}>
-        {flowState.status === "initial" && (
+        {/* {flowState.status === "initial" && (
           <FormProvider>
-            <Initial flowState={flowState} lastHandle={lastHandle} middleware={middleware} />
+            <Initial
+              flowState={flowState}
+              lastHandle={lastHandle}
+              middleware={middleware}
+            />
           </FormProvider>
         )}
-        {flowState.status === "authenticating" && (
-          <FormProvider>
-            <Authenticating flowState={flowState} />
-          </FormProvider>
-        )}
-        {flowState.status === "error" && <Error flowState={flowState} />}
+        {flowState.status === "authenticating" && ( */}
+        <FormProvider>
+          <Authenticating flowState={flowState} />
+        </FormProvider>
+        {/* // )} */}
+        {/* {flowState.status === "error" && <Error flowState={flowState} />}
         {flowState.status === "success" && <Success flowState={flowState} />}
-        {showBanner ? <Footer /> : null}
+        {showBanner ? <Footer /> : null} */}
       </ConfigurationOverrides>
     </div>
   );
