@@ -116,7 +116,7 @@ function Config() {
       </LoggedIn>
       <GDPRConsentDialog
         forceConsent
-        forceOpen
+        // forceOpen
         necessaryCookiesRequired
         defaultRejectAllLevels={["none", "necessary"]}
         className="gdprConsentDialogClass"
