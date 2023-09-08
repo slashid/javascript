@@ -50,11 +50,12 @@ export const OtpInput = ({
     }
   }, [shouldAutoFocus]);
 
+  const isInputTypeValid = (value: string) => {
+    return isInputNum ? !isNaN(Number(value)) : typeof value === "string";
+  };
+
   const isInputValueValid = (value: string) => {
-    const isTypeValid = isInputNum
-      ? !isNaN(Number(value))
-      : typeof value === "string";
-    return isTypeValid && value.trim().length === 1;
+    return isInputTypeValid(value) && value.trim().length === 1;
   };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -66,14 +67,48 @@ export const OtpInput = ({
     }
   };
 
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    if (isInputValueValid(event.target.value)) {
+  /**
+   * Spreads the OTP value across the inputs.
+   */
+  const spreadOTPInputValue = (value: string) => {
+    const otp = getOTPValue();
+    let nextActiveInput = activeInput;
+
+    // Get value in an array of max size (num of inputs - current position)
+    const valueArray = value.slice(0, numInputs - activeInput).split("");
+
+    // Skip operation if the values contain non-numeric values for number inputs
+    if (isInputNum && valueArray.some((value) => isNaN(Number(value)))) {
       return;
     }
 
-    // Clear the input if it's not valid value because firefox allows
-    // pasting non-numeric characters in a number type input
-    event.target.value = "";
+    // Insert data from focused input onwards
+    for (let pos = 0; pos < numInputs; ++pos) {
+      if (pos >= activeInput && valueArray.length > 0) {
+        otp[pos] = valueArray.shift() ?? "";
+        nextActiveInput++;
+      }
+    }
+
+    focusInput(nextActiveInput);
+    handleOTPChange(otp);
+  };
+
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    const isTypeValid = isInputTypeValid(value);
+
+    if (!isTypeValid) {
+      // Clear the input if it's not valid type because firefox allows
+      // pasting non-numeric characters in a number type input
+      event.target.value = "";
+      return;
+    }
+
+    // Spread the input across the inputs only for autofill
+    if (value.length === numInputs) {
+      spreadOTPInputValue(value);
+    }
   };
 
   const handleFocus =
@@ -140,30 +175,8 @@ export const OtpInput = ({
   const handlePaste: ClipboardEventHandler<HTMLInputElement> = (event) => {
     event.preventDefault();
 
-    const otp = getOTPValue();
-    let nextActiveInput = activeInput;
-
-    // Get pastedData in an array of max size (num of inputs - current position)
-    const pastedData = event.clipboardData
-      ?.getData("text/plain")
-      .slice(0, numInputs - activeInput)
-      .split("");
-
-    // Prevent pasting if the clipboard data contains non-numeric values for number inputs
-    if (isInputNum && pastedData.some((value) => isNaN(Number(value)))) {
-      return;
-    }
-
-    // Paste data from focused input onwards
-    for (let pos = 0; pos < numInputs; ++pos) {
-      if (pos >= activeInput && pastedData.length > 0) {
-        otp[pos] = pastedData.shift() ?? "";
-        nextActiveInput++;
-      }
-    }
-
-    focusInput(nextActiveInput);
-    handleOTPChange(otp);
+    const value = event.clipboardData?.getData("text/plain");
+    spreadOTPInputValue(value);
   };
 
   return (
@@ -172,8 +185,9 @@ export const OtpInput = ({
         <input
           key={index}
           className={styles.otpInput}
-          autoComplete="one-time-code"
-          maxLength={1}
+          // enable autofill only on the first input
+          autoComplete={index === 0 ? "one-time-code" : "off"}
+          maxLength={index === 0 ? numInputs : 1}
           type="text"
           inputMode={isInputNum ? "numeric" : "text"}
           aria-label={`Please enter OTP ${isInputNum ? "digit" : "character"} ${

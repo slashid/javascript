@@ -41,7 +41,7 @@ const OtpForm = () => {
 
       setFormState("submitting");
       sid?.publish("otpCodeSubmitted", values["otp"]);
-      console.log("OTP submitted: ", values["otp"]);
+      alert(`OTP submitted: ${values["otp"]}`);
     },
     [sid, values]
   );
@@ -60,7 +60,6 @@ const OtpForm = () => {
 
   return (
     <form onSubmit={registerSubmit(handleSubmit)} className={styles.otpForm}>
-      {/* TODO: test in mobile and SSR */}
       <OtpInput
         shouldAutoFocus
         inputType="number"
