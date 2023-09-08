@@ -36,17 +36,4 @@ export const otpInput = style({
   ":hover": {
     border: `1px solid ${publicVariables.color.placeholder}`,
   },
-
-  selectors: {
-    /* Hide Arrows From Input Number for Chrome, Safari, Edge, Opera */
-    "&::-webkit-outer-spin-button, &::-webkit-inner-spin-button": {
-      WebkitAppearance: "none",
-      margin: 0,
-    },
-
-    /* Hide Arrows From Input Number for Firefox */
-    "&[type=number]": {
-      MozAppearance: "textfield",
-    },
-  },
 });

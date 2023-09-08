@@ -172,6 +172,13 @@ export const OtpInput = ({
         <input
           key={index}
           className={styles.otpInput}
+          autoComplete="one-time-code"
+          maxLength={1}
+          type="text"
+          inputMode={isInputNum ? "numeric" : "text"}
+          aria-label={`Please enter OTP ${isInputNum ? "digit" : "character"} ${
+            index + 1
+          }`}
           value={getOTPValue()[index] ?? ""}
           ref={(element) => (inputRefs.current[index] = element)}
           onChange={handleChange}
@@ -179,13 +186,6 @@ export const OtpInput = ({
           onBlur={handleBlur}
           onKeyDown={handleKeyDown}
           onPaste={handlePaste}
-          autoComplete="off"
-          maxLength={1}
-          aria-label={`Please enter OTP ${isInputNum ? "digit" : "character"} ${
-            index + 1
-          }`}
-          type={inputType}
-          inputMode={isInputNum ? "numeric" : "text"}
           onInput={handleInputChange}
         />
       ))}
