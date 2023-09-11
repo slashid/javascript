@@ -1,5 +1,11 @@
 import { clsx } from "clsx";
-import { FormEventHandler, useCallback, useEffect, useState } from "react";
+import {
+  FormEventHandler,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { getAuthenticatingMessage, isFactorOTP } from "../../domain/handles";
 import { useConfiguration } from "../../hooks/use-configuration";
 import { useForm } from "../../hooks/use-form";
@@ -34,6 +40,7 @@ const OtpForm = () => {
   const [formState, setFormState] = useState<
     "initial" | "input" | "submitting"
   >("initial");
+  const submitInputRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = useCallback(
     (e) => {
@@ -44,6 +51,34 @@ const OtpForm = () => {
     },
     [sid, values]
   );
+
+  const handleChange = useCallback(
+    (otp: string) => {
+      const onChange = registerField("otp", {
+        validator: (value) => {
+          if (!isValidOTPCode(value)) {
+            return { message: text["validationError.otp"] };
+          }
+        },
+      });
+      const event = {
+        target: {
+          value: otp,
+        },
+      };
+
+      // TODO: revisit this logic
+      onChange(event as never);
+    },
+    [registerField, text]
+  );
+
+  useEffect(() => {
+    if (isValidOTPCode(values["otp"])) {
+      // Automatically submit the form when the OTP code is valid
+      submitInputRef.current?.click();
+    }
+  }, [values]);
 
   useEffect(() => {
     const onOtpCodeSent = () => setFormState("input");
@@ -62,26 +97,10 @@ const OtpForm = () => {
         shouldAutoFocus
         inputType="number"
         value={values["otp"] ?? ""}
-        onChange={(otp) => {
-          const onChangeHandler = registerField("otp", {
-            validator: (value) => {
-              if (!isValidOTPCode(value)) {
-                return { message: text["validationError.otp"] };
-              }
-            },
-          });
-          const event = {
-            target: {
-              value: otp,
-            },
-          };
-
-          // TODO: revisit this logic
-          onChangeHandler(event as never);
-        }}
+        onChange={handleChange}
         numInputs={OTP_CODE_LENGTH}
       />
-      <input type="submit" hidden />
+      <input hidden type="submit" ref={submitInputRef} />
       <ErrorMessage name="otp" />
     </form>
   );
