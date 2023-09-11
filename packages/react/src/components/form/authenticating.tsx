@@ -67,7 +67,6 @@ const OtpForm = () => {
         },
       };
 
-      // TODO: revisit this logic
       onChange(event as never);
     },
     [registerField, text]
