@@ -41,7 +41,6 @@ const OtpForm = () => {
 
       setFormState("submitting");
       sid?.publish("otpCodeSubmitted", values["otp"]);
-      alert(`OTP submitted: ${values["otp"]}`);
     },
     [sid, values]
   );
@@ -52,11 +51,10 @@ const OtpForm = () => {
       sid?.subscribe("otpCodeSent", onOtpCodeSent);
     }
   }, [formState, sid]);
-
-  // TODO: only for testing, revert when done testing
-  // if (formState !== "input") {
-  //   return <Loader />;
-  // }
+ 
+  if (formState !== "input") {
+    return <Loader />;
+  }
 
   return (
     <form onSubmit={registerSubmit(handleSubmit)} className={styles.otpForm}>

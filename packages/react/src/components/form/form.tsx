@@ -29,30 +29,17 @@ export const Form: React.FC<Props> = ({
   factors,
   text,
   middleware,
-}) => {
-  // TODO: only for testing, revert when done testing
-  // const flowState = useFlowState({ onSuccess });
+}) => { 
+  const flowState = useFlowState({ onSuccess });
   const { showBanner } = useConfiguration();
   const { lastHandle } = useLastHandle();
 
-  const flowState: AuthenticatingState = {
-    status: "authenticating",
-    context: {
-      config: {
-        handle: { type: "phone_number", value: "00000" },
-        factor: { method: "otp_via_sms" },
-      },
-      options: { middleware },
-      attempt: 0,
-    },
-    retry: () => {},
-    cancel: () => {},
-  };
+
 
   return (
     <div className={clsx("sid-form", styles.form, className)}>
       <ConfigurationOverrides text={text} factors={factors}>
-        {/* {flowState.status === "initial" && (
+        {flowState.status === "initial" && (
           <FormProvider>
             <Initial
               flowState={flowState}
@@ -61,14 +48,14 @@ export const Form: React.FC<Props> = ({
             />
           </FormProvider>
         )}
-        {flowState.status === "authenticating" && ( */}
+        {flowState.status === "authenticating" && (
         <FormProvider>
           <Authenticating flowState={flowState} />
         </FormProvider>
-        {/* // )} */}
-        {/* {flowState.status === "error" && <Error flowState={flowState} />}
+        )}
+        {flowState.status === "error" && <Error flowState={flowState} />}
         {flowState.status === "success" && <Success flowState={flowState} />}
-        {showBanner ? <Footer /> : null} */}
+        {showBanner ? <Footer /> : null}
       </ConfigurationOverrides>
     </div>
   );
