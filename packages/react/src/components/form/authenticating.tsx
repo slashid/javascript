@@ -123,14 +123,14 @@ export const Authenticating: React.FC<Props> = ({ flowState }) => {
       >
         {text["authenticating.back"]}
       </LinkButton>
-      <Text as="h1" t={title} variant={{ size: "2xl-title" }}>
+      <Text as="h1" t={title} variant={{ size: "2xl-title", weight: "bold" }}>
         {factor.method === "oidc" ? (
           <span className={styles.oidcTitle}>
             {factor.options?.provider as unknown as string}
           </span>
         ) : undefined}
       </Text>
-      <Text t={message} variant={{ color: "contrast" }} />
+      <Text t={message} variant={{ color: "contrast", weight: "semibold" }} />
       {isFactorOTP(factor) ? <OtpForm /> : <Loader />}
       <div className={styles.retryPrompt}>
         <Text

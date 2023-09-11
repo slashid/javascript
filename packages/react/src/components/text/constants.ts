@@ -4,7 +4,7 @@ export type TextConfigKey = keyof TextConfig;
 export const TEXT = {
   "": "NYI",
   "footer.branding": "Top-tier security by SlashID",
-  "initial.title": "Welcome",
+  "initial.title": "Welcome to SlashID",
   "initial.subtitle": "Sign in to your account",
   "initial.oidc": "Sign in with",
   "initial.authenticationMethod": "Authentication method",
@@ -14,8 +14,8 @@ export const TEXT = {
   "initial.handle.phone.placeholder": "Type your phone number",
   "initial.submit": "Continue",
   "initial.divider": "or",
-  "authenticating.retryPrompt": "Did not work?",
-  "authenticating.retry": "Retry",
+  "authenticating.retryPrompt": "Didn’t receive the code?",
+  "authenticating.retry": "Resend",
   "authenticating.back": "Back",
   "authenticating.message.webauthn":
     "If you are registering for the first time, you will receive an email to verify your email address.",

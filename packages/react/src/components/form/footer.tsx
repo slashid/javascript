@@ -6,7 +6,7 @@ export const Footer = () => {
     <Text
       className={styles.footer}
       t="footer.branding"
-      variant={{ size: "xs" }}
+      variant={{ size: "xs", weight: "semibold" }}
     />
   );
 };

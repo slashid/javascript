@@ -11,5 +11,5 @@ export const oidcTitle = style({
 });
 
 export const otpForm = style({
-  margin: "28px 0",
+  margin: "16px 0",
 });
