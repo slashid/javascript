@@ -17,6 +17,7 @@ import {
 } from "../configuration-overrides";
 import { LoginOptions } from "../../domain/types";
 import React from "react";
+import { useSlots } from "../slot";
 
 export type Props = ConfigurationOverridesProps & {
   className?: string;
@@ -37,8 +38,8 @@ export const Form = ({
   const { showBanner } = useConfiguration();
   const { lastHandle } = useLastHandle();
 
-  const slots = React.useMemo(() => {
-    const renderedSlots: Record<string, React.ReactNode | null> = {
+  const defaultSlots = React.useMemo(() => {
+    const slots = {
       footer: showBanner ? <Footer /> : null,
       initial: flowState.status === "initial" && (
         <Initial
@@ -49,30 +50,16 @@ export const Form = ({
       ),
     };
 
-    React.Children.forEach(children, (child) => {
-      if (!React.isValidElement(child)) return;
-      switch (child.type) {
-        case Form.Initial:
-          renderedSlots.initial = child;
-          break;
-        case Form.Footer:
-          renderedSlots.footer = child;
-          break;
-        default:
-          break;
-      }
-    });
+    return slots;
+  }, [flowState, lastHandle, middleware, showBanner]);
 
-    return renderedSlots;
-  }, [children, flowState, lastHandle, middleware, showBanner]);
+  const slots = useSlots({ children, defaultSlots });
 
   return (
     <div className={clsx("sid-form", styles.form, className)}>
       <ConfigurationOverrides text={text} factors={factors}>
         {flowState.status === "initial" && (
-          <FormProvider>
-            {slots.initial}
-          </FormProvider>
+          <FormProvider>{slots.initial}</FormProvider>
         )}
         {flowState.status === "authenticating" && (
           <FormProvider>

@@ -17,6 +17,7 @@ import {
   useOrganizations,
 } from "./main";
 import { defaultOrganization } from "./middleware/default-organization";
+import { Slot } from "./components/slot";
 
 const rootOid = "b6f94b67-d20f-7fc3-51df-bf6e3b82683e";
 
@@ -168,8 +169,8 @@ const BasicForm = () => {
           <LoggedIn>Logged in!</LoggedIn>
           <LoggedOut>
             <Form>
-              <Form.Initial>What a mess!</Form.Initial>
-              <Form.Footer>
+              <Slot name="initial">What a mess!</Slot>
+              <Slot name="footer">
                 <p>
                   Some footer text with a{" "}
                   <a
@@ -180,7 +181,7 @@ const BasicForm = () => {
                     link
                   </a>
                 </p>
-              </Form.Footer>
+              </Slot>
             </Form>
           </LoggedOut>
         </>
