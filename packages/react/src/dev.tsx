@@ -116,7 +116,6 @@ function Config() {
       </LoggedIn>
       <GDPRConsentDialog
         forceConsent
-        forceOpen
         necessaryCookiesRequired
         defaultRejectAllLevels={["none", "necessary"]}
         className="gdprConsentDialogClass"
@@ -168,7 +167,21 @@ const BasicForm = () => {
         <>
           <LoggedIn>Logged in!</LoggedIn>
           <LoggedOut>
-            <Form />
+            <Form>
+              <Form.Initial>What a mess!</Form.Initial>
+              <Form.Footer>
+                <p>
+                  Some footer text with a{" "}
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href="https://www.google.com"
+                  >
+                    link
+                  </a>
+                </p>
+              </Form.Footer>
+            </Form>
           </LoggedOut>
         </>
       </SlashIDLoaded>

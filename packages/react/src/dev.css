@@ -18,7 +18,7 @@ body {
 }
 
 .sid-theme-root.testClass {
-  --sid-color-primary: yellow;
+  --sid-color-primary: #95b8d1;
 }
 
 .gdprConsentDialogClass {

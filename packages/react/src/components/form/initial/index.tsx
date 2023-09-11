@@ -12,17 +12,13 @@ import * as styles from "./initial.css";
 import { Logo } from "./logo";
 import { Oidc } from "./oidc";
 
-type Props = {
+export type Props = {
   flowState: InitialState;
   lastHandle?: Handle;
   middleware?: LoginOptions["middleware"];
 };
 
-export const Initial: React.FC<Props> = ({
-  flowState,
-  lastHandle,
-  middleware,
-}) => {
+export const Initial = ({ flowState, lastHandle, middleware }: Props) => {
   const { factors, logo } = useConfiguration();
 
   const oidcFactors: FactorLabeledOIDC[] = useMemo(
@@ -62,3 +58,10 @@ export const Initial: React.FC<Props> = ({
     </article>
   );
 };
+
+const initialSlot = ({ children }: { children: React.ReactNode }) => {
+  return <>{children}</>;
+};
+initialSlot.displayName = "Initial";
+
+export const InitialSlot = initialSlot;
