@@ -44,12 +44,6 @@ export const OtpInput = ({
     inputRefs.current = inputRefs.current.slice(0, numInputs);
   }, [numInputs]);
 
-  useEffect(() => {
-    if (shouldAutoFocus) {
-      inputRefs.current[0]?.focus();
-    }
-  }, [shouldAutoFocus]);
-
   const isInputTypeValid = (value: string) => {
     return isInputNum ? !isNaN(Number(value)) : typeof value === "string";
   };
@@ -188,6 +182,7 @@ export const OtpInput = ({
           // enable autofill only on the first input
           autoComplete={index === 0 ? "one-time-code" : "off"}
           maxLength={index === 0 ? numInputs : 1}
+          autoFocus={index === 0 && shouldAutoFocus}
           type="text"
           inputMode={isInputNum ? "numeric" : "text"}
           aria-label={`Please enter OTP ${isInputNum ? "digit" : "character"} ${
