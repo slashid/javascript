@@ -15,15 +15,30 @@ import {
   ConfigurationOverrides,
   ConfigurationOverridesProps,
 } from "../configuration-overrides";
-import { LoginOptions } from "../../domain/types";
-import React from "react";
+import { Handle, LoginOptions } from "../../domain/types";
+import React, { useCallback } from "react";
 import { useSlots } from "../slot";
+import { Factor } from "@slashid/slashid";
 
 export type Props = ConfigurationOverridesProps & {
   className?: string;
   onSuccess?: CreateFlowOptions["onSuccess"];
   middleware?: LoginOptions["middleware"];
   children?: React.ReactElement<FooterProps | InitialProps>[];
+};
+
+export type InternalFormContextType = {
+  flowState: ReturnType<typeof useFlowState> | null;
+  handleSubmit: (factor: Factor, handle?: Handle) => void;
+};
+export const InternalFormContext = React.createContext<InternalFormContextType>(
+  {
+    flowState: null,
+    handleSubmit: () => null,
+  }
+);
+export const useInternalFormContext = () => {
+  return React.useContext(InternalFormContext);
 };
 
 export const Form = ({
@@ -55,22 +70,39 @@ export const Form = ({
 
   const slots = useSlots({ children, defaultSlots });
 
+  const handleSubmit = useCallback(
+    (factor: Factor, handle?: Handle) => {
+      if (flowState.status !== "initial") return;
+
+      flowState.logIn(
+        {
+          factor,
+          handle,
+        },
+        { middleware }
+      );
+    },
+    [flowState, middleware]
+  );
+
   return (
-    <div className={clsx("sid-form", styles.form, className)}>
-      <ConfigurationOverrides text={text} factors={factors}>
-        {flowState.status === "initial" && (
-          <FormProvider>{slots.initial}</FormProvider>
-        )}
-        {flowState.status === "authenticating" && (
-          <FormProvider>
-            <Authenticating flowState={flowState} />
-          </FormProvider>
-        )}
-        {flowState.status === "error" && <Error flowState={flowState} />}
-        {flowState.status === "success" && <Success flowState={flowState} />}
-        {slots.footer}
-      </ConfigurationOverrides>
-    </div>
+    <InternalFormContext.Provider value={{ flowState, handleSubmit }}>
+      <div className={clsx("sid-form", styles.form, className)}>
+        <ConfigurationOverrides text={text} factors={factors}>
+          {flowState.status === "initial" && (
+            <FormProvider>{slots.initial}</FormProvider>
+          )}
+          {flowState.status === "authenticating" && (
+            <FormProvider>
+              <Authenticating flowState={flowState} />
+            </FormProvider>
+          )}
+          {flowState.status === "error" && <Error flowState={flowState} />}
+          {flowState.status === "success" && <Success flowState={flowState} />}
+          {slots.footer}
+        </ConfigurationOverrides>
+      </div>
+    </InternalFormContext.Provider>
   );
 };
 

@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { Logo as TLogo } from "../../../context/config-context";
 import * as styles from "./initial.css";
 
-type Props = {
+export type Props = {
   logo?: TLogo;
 };
 
