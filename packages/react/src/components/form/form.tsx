@@ -29,12 +29,10 @@ export const Form: React.FC<Props> = ({
   factors,
   text,
   middleware,
-}) => { 
+}) => {
   const flowState = useFlowState({ onSuccess });
   const { showBanner } = useConfiguration();
   const { lastHandle } = useLastHandle();
-
-
 
   return (
     <div className={clsx("sid-form", styles.form, className)}>
@@ -49,9 +47,9 @@ export const Form: React.FC<Props> = ({
           </FormProvider>
         )}
         {flowState.status === "authenticating" && (
-        <FormProvider>
-          <Authenticating flowState={flowState} />
-        </FormProvider>
+          <FormProvider>
+            <Authenticating flowState={flowState} />
+          </FormProvider>
         )}
         {flowState.status === "error" && <Error flowState={flowState} />}
         {flowState.status === "success" && <Success flowState={flowState} />}
