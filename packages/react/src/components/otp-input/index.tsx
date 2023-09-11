@@ -66,10 +66,12 @@ export const OtpInput = ({
    */
   const spreadOTPInputValue = (value: string) => {
     const otp = getOTPValue();
-    let nextActiveInput = activeInput;
 
-    // Get value in an array of max size (num of inputs - current position)
-    const valueArray = value.slice(0, numInputs - activeInput).split("");
+    // Get value in an array of max size equal to numInputs
+    const valueArray = value.slice(0, numInputs).split("");
+
+    // Get the next or last input to focus on after spreading the value.
+    const nextActiveInput = Math.min(valueArray.length, numInputs);
 
     // Skip operation if the values contain non-numeric values for number inputs
     if (isInputNum && valueArray.some((value) => isNaN(Number(value)))) {
@@ -78,9 +80,8 @@ export const OtpInput = ({
 
     // Insert data from focused input onwards
     for (let pos = 0; pos < numInputs; ++pos) {
-      if (pos >= activeInput && valueArray.length > 0) {
+      if (pos >= 0 && valueArray.length > 0) {
         otp[pos] = valueArray.shift() ?? "";
-        nextActiveInput++;
       }
     }
 
@@ -179,9 +180,8 @@ export const OtpInput = ({
         <input
           key={index}
           className={styles.otpInput}
-          // enable autofill only on the first input
-          autoComplete={index === 0 ? "one-time-code" : "off"}
-          maxLength={index === 0 ? numInputs : 1}
+          autoComplete="one-time-code"
+          maxLength={numInputs}
           autoFocus={index === 0 && shouldAutoFocus}
           type="text"
           inputMode={isInputNum ? "numeric" : "text"}
