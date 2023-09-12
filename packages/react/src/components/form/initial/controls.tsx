@@ -1,10 +1,11 @@
-import { Validator, useEffect, useMemo, useState } from "react";
+import { Children, useEffect, useMemo, useState } from "react";
 import {
   filterFactors,
   getHandleTypes,
   isFactorNonOidc,
   isFactorOidc,
   parsePhoneNumber,
+  resolveLastHandleValue,
 } from "../../../domain/handles";
 import { useConfiguration } from "../../../hooks/use-configuration";
 import { FactorNonOIDC, Handle, HandleType } from "../../../domain/types";
@@ -19,6 +20,10 @@ import { GB_FLAG, Input, PhoneInput } from "../../input";
 import { ErrorMessage } from "../error-message";
 import { isValidPhoneNumber, isValidEmail } from "../validation";
 import { FACTOR_LABEL_MAP } from "./handle-form";
+import { Button } from "../../button";
+import { FormStatus } from "../../../context/form-context";
+import { Tabs } from "../../tabs";
+import { TAB_NAME, tabIDByHandle } from "./configured-handle-form";
 
 type ControlsProps = {
   factors: FactorNonOIDC[];
@@ -68,6 +73,8 @@ export const Controls = ({ children }: Props) => {
   const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
 
+    console.log("submitting", submitPayloadRef.current);
+
     // cancel if the form is invalid
     if (
       !submitPayloadRef.current.handleType ||
@@ -85,6 +92,7 @@ export const Controls = ({ children }: Props) => {
   };
 
   if (typeof children === "function") {
+    console.log("Controls is a function");
     // consider if the form element should be rendered here - probably so
     return (
       <form onSubmit={registerSubmit(onSubmit)}>
@@ -102,7 +110,9 @@ export const Controls = ({ children }: Props) => {
 
   return (
     <form onSubmit={registerSubmit(onSubmit)}>
-      {children || (
+      {Children.count(children) ? (
+        children
+      ) : (
         <>
           <FormInput />
           <Submit />
@@ -113,41 +123,115 @@ export const Controls = ({ children }: Props) => {
 };
 
 const FormInput = () => {
-  const { handleSubmit, submitPayloadRef } = useInternalFormContext();
-  const { factors } = useConfiguration();
+  const { lastHandle } = useInternalFormContext();
+  const { factors, text } = useConfiguration();
 
   // @ts-expect-error TODO fix inference
   const nonOidcFactors: FactorNonOIDC[] = useMemo(
     () => factors.filter((f) => isFactorNonOidc(f)),
     [factors]
   );
+
+  const handleTypes = useMemo(() => {
+    return getHandleTypes(factors);
+  }, [factors]);
+
   // case: 1 input
-
-  // case: tabs
-
-  // TODO last handle support
-
-  return (
-    <HandleForm
-      handleSubmit={handleSubmit}
-      handleType={submitPayloadRef.current.handleType || "email_address"}
-      factors={nonOidcFactors}
-    />
-  );
+  if (handleTypes.length === 1) {
+    return (
+      <>
+        <HandleForm
+          factors={nonOidcFactors}
+          handleType={handleTypes[0]}
+          defaultValue={resolveLastHandleValue(lastHandle, handleTypes[0])}
+        />
+      </>
+    );
+  } else {
+    return (
+      <Tabs
+        className={sprinkles({ marginY: "6" })}
+        defaultValue={tabIDByHandle[lastHandle?.type ?? "email_address"]}
+        tabs={[
+          {
+            id: TAB_NAME.email,
+            title: text["initial.handle.email"],
+            content: (
+              <HandleForm
+                factors={nonOidcFactors}
+                handleType="email_address"
+                defaultValue={resolveLastHandleValue(
+                  lastHandle,
+                  "email_address"
+                )}
+              />
+            ),
+          },
+          {
+            id: TAB_NAME.phone,
+            title: text["initial.handle.phone"],
+            content: (
+              <HandleForm
+                factors={nonOidcFactors}
+                handleType="phone_number"
+                defaultValue={resolveLastHandleValue(
+                  lastHandle,
+                  "phone_number"
+                )}
+              />
+            ),
+          },
+        ]}
+      />
+    );
+  }
 };
 
 FormInput.displayName = "Input";
 
-function Submit() {
+type SubmitProps = {
+  children?:
+    | React.ReactNode
+    | (({
+        text,
+        status,
+      }: {
+        text: TextConfig;
+        status: FormStatus;
+      }) => React.ReactNode);
+};
+
+const Submit = ({ children }: SubmitProps) => {
+  const { text } = useConfiguration();
+  const { status } = useForm();
+
   // render submit button based on context values
-  return null;
-}
+  if (typeof children === "function") {
+    return <>{children({ text, status })}</>;
+  }
+
+  if (Children.count(children) > 0) {
+    return <>{children}</>;
+  }
+
+  return (
+    <Button
+      className={sprinkles({ marginTop: "6" })}
+      type="submit"
+      variant="primary"
+      testId="sid-form-initial-submit-button"
+      disabled={status === "invalid"}
+    >
+      {text["initial.submit"]}
+    </Button>
+  );
+};
+
+Submit.displayName = "Submit";
 
 type PropsInternal = {
   handleType: HandleType;
   factors: Factor[];
-  handleSubmit: (factor: Factor, handle: Handle) => void;
-  validate?: Validator<string>;
   defaultValue?: string;
 };
 
@@ -156,7 +240,7 @@ export const HandleForm: React.FC<PropsInternal> = ({
   factors,
   defaultValue,
 }) => {
-  const { setSelectedFactor } = useInternalFormContext();
+  const { setSelectedFactor, submitPayloadRef } = useInternalFormContext();
   const filteredFactors = useMemo(
     () => filterFactors(factors, handleType).filter((f) => !isFactorOidc(f)),
     [factors, handleType]
@@ -176,6 +260,14 @@ export const HandleForm: React.FC<PropsInternal> = ({
   useEffect(() => {
     return resetForm;
   }, [resetForm]);
+
+  useEffect(() => {
+    const handleValue = values[handleType];
+    submitPayloadRef.current = {
+      handleType,
+      handleValue,
+    };
+  }, [handleType, submitPayloadRef, values]);
 
   const input = useMemo(() => {
     if (handleType === "phone_number") {
@@ -254,3 +346,4 @@ export const HandleForm: React.FC<PropsInternal> = ({
 
 Controls.displayName = "Controls";
 Controls.Input = FormInput;
+Controls.Submit = Submit;

@@ -18,7 +18,7 @@ export const TAB_NAME = {
   phone: "phone",
 };
 
-const tabIDByHandle: Record<HandleType, string> = {
+export const tabIDByHandle: Record<HandleType, string> = {
   phone_number: TAB_NAME.phone,
   email_address: TAB_NAME.email,
 };

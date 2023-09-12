@@ -162,7 +162,11 @@ const ConfiguredDynamicFlow = () => {
 const BasicForm = () => {
   return (
     <ConfigurationProvider
-      factors={[{ method: "email_link" }, { method: "otp_via_email" }]}
+      factors={[
+        { method: "email_link" },
+        { method: "otp_via_email" },
+        { method: "otp_via_sms" },
+      ]}
     >
       <SlashIDLoaded>
         <>
@@ -175,7 +179,9 @@ const BasicForm = () => {
                 <Form.Initial.Controls>
                   <h2>Controls should be here</h2>
                   <Form.Initial.Controls.Input />
-                  <p>Text below controls</p>
+                  <p>Text below controls, on top of the submit button</p>
+                  <Form.Initial.Controls.Submit />
+                  <p>Text right below the submit button</p>
                 </Form.Initial.Controls>
                 <p>Some text below the form</p>
               </Slot>
