@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { clsx } from "clsx";
 import { useFlowState } from "./useFlowState";
-import { AuthenticatingState, CreateFlowOptions } from "./flow";
+import { CreateFlowOptions } from "./flow";
 import { Initial } from "./initial";
 import { Authenticating } from "./authenticating";
 import { Error } from "./error";
@@ -28,7 +27,7 @@ export const Form: React.FC<Props> = ({
   onSuccess,
   factors,
   text,
-  middleware,
+  middleware
 }) => {
   const flowState = useFlowState({ onSuccess });
   const { showBanner } = useConfiguration();
@@ -39,11 +38,7 @@ export const Form: React.FC<Props> = ({
       <ConfigurationOverrides text={text} factors={factors}>
         {flowState.status === "initial" && (
           <FormProvider>
-            <Initial
-              flowState={flowState}
-              lastHandle={lastHandle}
-              middleware={middleware}
-            />
+            <Initial flowState={flowState} lastHandle={lastHandle} middleware={middleware} />
           </FormProvider>
         )}
         {flowState.status === "authenticating" && (
