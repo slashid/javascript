@@ -73,8 +73,6 @@ export const Controls = ({ children }: Props) => {
   const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
 
-    console.log("submitting", submitPayloadRef.current);
-
     // cancel if the form is invalid
     if (
       !submitPayloadRef.current.handleType ||
@@ -89,7 +87,6 @@ export const Controls = ({ children }: Props) => {
       return;
     }
 
-    // TODO flag value chaos - should be resolved on the lower level
     handleSubmit(selectedFactor, {
       type: handleType,
       value:
