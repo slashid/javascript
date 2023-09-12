@@ -3,11 +3,13 @@ import react from "@vitejs/plugin-react";
 import { vanillaExtractPlugin } from "@vanilla-extract/vite-plugin";
 
 export default defineConfig({
-  // @ts-ignore
   plugins: [react(), vanillaExtractPlugin()],
   test: {
     globals: true,
     environment: "jsdom",
-    setupFiles: "./scripts/test-setup.js",
+    setupFiles: ["./scripts/test-setup.js"],
+    deps: {
+      inline: ["vitest-canvas-mock"],
+    },
   },
 });
