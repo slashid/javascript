@@ -13,7 +13,7 @@ import { Logo } from "./logo";
 import type { Props as LogoProps } from "./logo";
 import { Oidc } from "./oidc";
 import { TextConfig } from "../../text/constants";
-import { InternalFormContext } from "../form";
+import { InternalFormContext, useInternalFormContext } from "../form";
 
 const LogoSlot = ({
   children,
@@ -89,7 +89,18 @@ const OIDCSlot = ({
 
 OIDCSlot.displayName = "OIDC";
 
-const ControlsSlot = () => {
+export type ControlsSlotProps = {
+  lastHandle: Handle | undefined;
+  handleSubmit: (factor: Factor, handle?: Handle) => void;
+};
+
+const ControlsSlot = ({
+  children,
+}: {
+  children?: (props: ControlsSlotProps) => React.ReactNode;
+}) => {
+  const { lastHandle, handleSubmit } = useInternalFormContext();
+
   // break down the form controls into separate slots
 
   // tabs should only control the form fields
@@ -108,8 +119,19 @@ const ControlsSlot = () => {
   </Form.Initial.Controls>
   
   */
-  return null;
+  if (typeof children !== "function") {
+    return (
+      <ConfiguredHandleForm
+        lastHandle={lastHandle}
+        handleSubmit={handleSubmit}
+      />
+    );
+  }
+
+  return <>{children({ lastHandle, handleSubmit })}</>;
 };
+
+ControlsSlot.displayName = "Controls";
 
 export type Props = {
   flowState: InitialState;
@@ -152,6 +174,7 @@ initialSlot.displayName = "Initial";
 initialSlot.Logo = LogoSlot;
 initialSlot.Heading = HeadingSlot;
 initialSlot.OIDC = OIDCSlot;
+initialSlot.Controls = ControlsSlot;
 
 export const InitialSlot = initialSlot;
 

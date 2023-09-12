@@ -29,11 +29,13 @@ export type Props = ConfigurationOverridesProps & {
 
 export type InternalFormContextType = {
   flowState: ReturnType<typeof useFlowState> | null;
+  lastHandle?: Handle;
   handleSubmit: (factor: Factor, handle?: Handle) => void;
 };
 export const InternalFormContext = React.createContext<InternalFormContextType>(
   {
     flowState: null,
+    lastHandle: undefined,
     handleSubmit: () => null,
   }
 );
@@ -86,7 +88,7 @@ export const Form = ({
   );
 
   return (
-    <InternalFormContext.Provider value={{ flowState, handleSubmit }}>
+    <InternalFormContext.Provider value={{ flowState, lastHandle, handleSubmit }}>
       <div className={clsx("sid-form", styles.form, className)}>
         <ConfigurationOverrides text={text} factors={factors}>
           {flowState.status === "initial" && (
