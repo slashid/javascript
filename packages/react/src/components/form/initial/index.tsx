@@ -1,7 +1,10 @@
 import { Factor } from "@slashid/slashid";
-import React from "react";
+import React, { useMemo } from "react";
 
-import { isFactorOidc } from "../../../domain/handles";
+import {
+  hasOidcAndNonOidcFactors,
+  isFactorOidc,
+} from "../../../domain/handles";
 import { FactorLabeledOIDC, Handle, LoginOptions } from "../../../domain/types";
 import { useConfiguration } from "../../../hooks/use-configuration";
 import { Text } from "../../text";
@@ -14,6 +17,7 @@ import { Oidc } from "./oidc";
 import { TextConfig } from "../../text/constants";
 import { InternalFormContext } from "../form";
 import { Controls } from "./controls";
+import { Divider } from "../../divider";
 
 const LogoSlot = ({
   children,
@@ -96,11 +100,19 @@ export type Props = {
 };
 
 export const Initial = () => {
+  const { factors, text } = useConfiguration();
+
+  const shouldRenderDivider = useMemo(
+    () => hasOidcAndNonOidcFactors(factors),
+    [factors]
+  );
+
   return (
     <article data-testid="sid-form-initial-state">
       <LogoSlot />
       <HeadingSlot />
       <Controls />
+      {shouldRenderDivider && <Divider>{text["initial.divider"]}</Divider>}
       <OIDCSlot />
     </article>
   );

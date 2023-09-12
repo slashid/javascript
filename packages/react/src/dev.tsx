@@ -166,6 +166,41 @@ const BasicForm = () => {
         { method: "email_link" },
         { method: "otp_via_email" },
         { method: "otp_via_sms" },
+        {
+          method: "oidc",
+          options: {
+            provider: "google",
+            client_id: import.meta.env.VITE_GOOGLE_SSO_CLIENT_ID,
+          },
+        },
+      ]}
+    >
+      <SlashIDLoaded>
+        <>
+          <LoggedIn>Logged in!</LoggedIn>
+          <LoggedOut>
+            <Form />
+          </LoggedOut>
+        </>
+      </SlashIDLoaded>
+    </ConfigurationProvider>
+  );
+};
+
+const ComposedForm = () => {
+  return (
+    <ConfigurationProvider
+      factors={[
+        { method: "email_link" },
+        { method: "otp_via_email" },
+        { method: "otp_via_sms" },
+        {
+          method: "oidc",
+          options: {
+            provider: "google",
+            client_id: import.meta.env.VITE_GOOGLE_SSO_CLIENT_ID,
+          },
+        },
       ]}
     >
       <SlashIDLoaded>
@@ -174,6 +209,8 @@ const BasicForm = () => {
           <LoggedOut>
             <Form>
               <Slot name="initial">
+                <Form.Initial.Logo />
+                <Form.Initial.Heading />
                 <h1>What a mess!</h1>
                 <p>Some text on top of the form</p>
                 <Form.Initial.Controls>
@@ -183,6 +220,7 @@ const BasicForm = () => {
                   <Form.Initial.Controls.Submit />
                   <p>Text right below the submit button</p>
                 </Form.Initial.Controls>
+                <Form.Initial.OIDC />
                 <p>Some text below the form</p>
               </Slot>
               <Slot name="footer">
@@ -218,6 +256,10 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
           <div>
             <h2>Basic form</h2>
             <BasicForm />
+          </div>
+          <div>
+            <h2>Composed form</h2>
+            <ComposedForm />
           </div>
           <div>
             <h2>Switch to default org</h2>
