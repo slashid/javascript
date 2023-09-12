@@ -82,17 +82,24 @@ export const Controls = ({ children }: Props) => {
       !selectedFactor
     )
       return;
-    const { handleType, handleValue } = submitPayloadRef.current;
+
+    const { handleType, handleValue, flag } = submitPayloadRef.current;
+
+    if (handleType === "phone_number" && !flag) {
+      return;
+    }
 
     // TODO flag value chaos - should be resolved on the lower level
     handleSubmit(selectedFactor, {
       type: handleType,
-      value: handleValue,
+      value:
+        handleType === "phone_number"
+          ? `${flag!.dial_code}${handleValue}`
+          : handleValue,
     });
   };
 
   if (typeof children === "function") {
-    console.log("Controls is a function");
     // consider if the form element should be rendered here - probably so
     return (
       <form onSubmit={registerSubmit(onSubmit)}>
@@ -107,22 +114,30 @@ export const Controls = ({ children }: Props) => {
   // also pass the functions to be used instead of controls
 
   // TODO can we use asChild pattern instead of render props
+  if (Children.count(children) > 0)
+    return <form onSubmit={registerSubmit(onSubmit)}>{children}</form>;
 
   return (
     <form onSubmit={registerSubmit(onSubmit)}>
-      {Children.count(children) ? (
-        children
-      ) : (
-        <>
-          <FormInput />
-          <Submit />
-        </>
-      )}
+      <FormInput />
+      <Submit />
     </form>
   );
 };
 
-const FormInput = () => {
+type FormInputProps = {
+  children?:
+    | React.ReactNode
+    | (({
+        factors,
+        handleTypes,
+      }: {
+        factors: FactorNonOIDC[];
+        handleTypes: HandleType[];
+      }) => React.ReactNode);
+};
+
+const FormInput = ({ children }: FormInputProps) => {
   const { lastHandle } = useInternalFormContext();
   const { factors, text } = useConfiguration();
 
@@ -135,6 +150,14 @@ const FormInput = () => {
   const handleTypes = useMemo(() => {
     return getHandleTypes(factors);
   }, [factors]);
+
+  if (typeof children === "function") {
+    return <>{children({ factors: nonOidcFactors, handleTypes })}</>;
+  }
+
+  if (Children.count(children) > 0) {
+    return <>{children}</>;
+  }
 
   // case: 1 input
   if (handleTypes.length === 1) {
@@ -262,8 +285,13 @@ export const HandleForm: React.FC<PropsInternal> = ({
   }, [resetForm]);
 
   useEffect(() => {
+    submitPayloadRef.current.flag = flag;
+  }, [flag, submitPayloadRef]);
+
+  useEffect(() => {
     const handleValue = values[handleType];
     submitPayloadRef.current = {
+      ...submitPayloadRef.current,
       handleType,
       handleValue,
     };

@@ -19,6 +19,7 @@ import { Handle, HandleType, LoginOptions } from "../../domain/types";
 import React, { useCallback } from "react";
 import { useSlots } from "../slot";
 import { Factor } from "@slashid/slashid";
+import { Flag } from "../input";
 
 export type Props = ConfigurationOverridesProps & {
   className?: string;
@@ -30,6 +31,7 @@ export type Props = ConfigurationOverridesProps & {
 type PayloadOptions = {
   handleType?: HandleType;
   handleValue?: string;
+  flag?: Flag;
 };
 
 export type InternalFormContextType = {
@@ -68,6 +70,7 @@ export const Form = ({
   const submitPayloadRef = React.useRef<PayloadOptions>({
     handleType: undefined,
     handleValue: undefined,
+    flag: undefined,
   });
   const [selectedFactor, setSelectedFactor] = React.useState<
     Factor | undefined
