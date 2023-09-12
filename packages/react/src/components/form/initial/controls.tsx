@@ -57,13 +57,11 @@ type Props = {
     | (({ factors, handleTypes }: ControlsProps) => React.ReactNode);
 };
 
+/**
+ * Component responsible for rendering the form and the related controls.
+ * Sets up the form context and provides the submit handler.
+ */
 export const Controls = ({ children }: Props) => {
-  // manage the form state here
-
-  // selected handle type based on tabs
-
-  // submit handler
-
   const { factors, text } = useConfiguration();
   const { handleSubmit, submitPayloadRef, selectedFactor } =
     useInternalFormContext();
@@ -75,12 +73,6 @@ export const Controls = ({ children }: Props) => {
     [factors]
   );
 
-  // TODO move this up
-  /*   const shouldRenderDivider = useMemo(
-    () => hasOidcAndNonOidcFactors(factors),
-    [factors]
-  ); */
-
   const handleTypes = useMemo(() => {
     return getHandleTypes(factors);
   }, [factors]);
@@ -89,7 +81,6 @@ export const Controls = ({ children }: Props) => {
     return null;
   }
 
-  // prepare the submit handler
   const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
 
@@ -125,12 +116,7 @@ export const Controls = ({ children }: Props) => {
     );
   }
 
-  // get the configured form
-  // split it so it can render controls separately
-  // pass the controls as props
-  // also pass the functions to be used instead of controls
-
-  // TODO can we use asChild pattern instead of render props
+  // TODO can we use asChild pattern from Radix instead of render props
   if (Children.count(children) > 0)
     return <form onSubmit={registerSubmit(onSubmit)}>{children}</form>;
 
@@ -154,6 +140,11 @@ type FormInputProps = {
       }) => React.ReactNode);
 };
 
+/**
+ * Component responsible for rendering the form input fields.
+ * This includes managing the handle types and appropriate input fields.
+ * Tabs will be rendered if there are multiple handle types.
+ */
 const FormInput = ({ children }: FormInputProps) => {
   const { lastHandle } = useInternalFormContext();
   const { factors, text } = useConfiguration();
@@ -180,7 +171,7 @@ const FormInput = ({ children }: FormInputProps) => {
   if (handleTypes.length === 1) {
     return (
       <>
-        <HandleForm
+        <HandleInput
           factors={nonOidcFactors}
           handleType={handleTypes[0]}
           defaultValue={resolveLastHandleValue(lastHandle, handleTypes[0])}
@@ -197,7 +188,7 @@ const FormInput = ({ children }: FormInputProps) => {
             id: TAB_NAME.email,
             title: text["initial.handle.email"],
             content: (
-              <HandleForm
+              <HandleInput
                 factors={nonOidcFactors}
                 handleType="email_address"
                 defaultValue={resolveLastHandleValue(
@@ -211,7 +202,7 @@ const FormInput = ({ children }: FormInputProps) => {
             id: TAB_NAME.phone,
             title: text["initial.handle.phone"],
             content: (
-              <HandleForm
+              <HandleInput
                 factors={nonOidcFactors}
                 handleType="phone_number"
                 defaultValue={resolveLastHandleValue(
@@ -241,6 +232,10 @@ type SubmitProps = {
       }) => React.ReactNode);
 };
 
+/**
+ * Component responsible for rendering the submit control.
+ * Can be overriden by the user.
+ */
 const Submit = ({ children }: SubmitProps) => {
   const { text } = useConfiguration();
   const { status } = useForm();
@@ -275,7 +270,10 @@ type PropsInternal = {
   defaultValue?: string;
 };
 
-export const HandleForm: React.FC<PropsInternal> = ({
+/**
+ * Responsible for rendering a specific input field based on the handle type.
+ */
+const HandleInput: React.FC<PropsInternal> = ({
   handleType,
   factors,
   defaultValue,
