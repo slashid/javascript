@@ -1,5 +1,5 @@
 import { Factor } from "@slashid/slashid";
-import React, { useCallback } from "react";
+import React from "react";
 
 import { isFactorOidc } from "../../../domain/handles";
 import { FactorLabeledOIDC, Handle, LoginOptions } from "../../../domain/types";
@@ -7,13 +7,13 @@ import { useConfiguration } from "../../../hooks/use-configuration";
 import { Text } from "../../text";
 import { InitialState } from "../flow";
 
-import { ConfiguredHandleForm } from "./configured-handle-form";
 import * as styles from "./initial.css";
 import { Logo } from "./logo";
 import type { Props as LogoProps } from "./logo";
 import { Oidc } from "./oidc";
 import { TextConfig } from "../../text/constants";
-import { InternalFormContext, useInternalFormContext } from "../form";
+import { InternalFormContext } from "../form";
+import { Controls } from "./controls";
 
 const LogoSlot = ({
   children,
@@ -89,78 +89,18 @@ const OIDCSlot = ({
 
 OIDCSlot.displayName = "OIDC";
 
-export type ControlsSlotProps = {
-  lastHandle: Handle | undefined;
-  handleSubmit: (factor: Factor, handle?: Handle) => void;
-};
-
-const ControlsSlot = ({
-  children,
-}: {
-  children?: (props: ControlsSlotProps) => React.ReactNode;
-}) => {
-  const { lastHandle, handleSubmit } = useInternalFormContext();
-
-  // break down the form controls into separate slots
-
-  // tabs should only control the form fields
-
-  // the rest of the form should be a wrapper
-
-  // when tabs change value, the form also renders again
-
-  // return the form and then render the controls
-
-  /* 
-  
-  <Form.Initial.Controls> // prepares the form
-    <Form.Initial.Controls.Input/> // adds the form fields
-    <Form.Initial.Controls.Submit/> // adds the submit button
-  </Form.Initial.Controls>
-  
-  */
-  if (typeof children !== "function") {
-    return (
-      <ConfiguredHandleForm
-        lastHandle={lastHandle}
-        handleSubmit={handleSubmit}
-      />
-    );
-  }
-
-  return <>{children({ lastHandle, handleSubmit })}</>;
-};
-
-ControlsSlot.displayName = "Controls";
-
 export type Props = {
   flowState: InitialState;
   lastHandle?: Handle;
   middleware?: LoginOptions["middleware"];
 };
 
-export const Initial = ({ flowState, lastHandle, middleware }: Props) => {
-  const handleSubmit = useCallback(
-    (factor: Factor, handle?: Handle) => {
-      flowState.logIn(
-        {
-          factor,
-          handle,
-        },
-        { middleware }
-      );
-    },
-    [flowState, middleware]
-  );
-
+export const Initial = () => {
   return (
     <article data-testid="sid-form-initial-state">
       <LogoSlot />
       <HeadingSlot />
-      <ConfiguredHandleForm
-        lastHandle={lastHandle}
-        handleSubmit={handleSubmit}
-      />
+      <Controls />
       <OIDCSlot />
     </article>
   );
@@ -174,7 +114,7 @@ initialSlot.displayName = "Initial";
 initialSlot.Logo = LogoSlot;
 initialSlot.Heading = HeadingSlot;
 initialSlot.OIDC = OIDCSlot;
-initialSlot.Controls = ControlsSlot;
+initialSlot.Controls = Controls;
 
 export const InitialSlot = initialSlot;
 

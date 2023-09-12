@@ -169,7 +169,16 @@ const BasicForm = () => {
           <LoggedIn>Logged in!</LoggedIn>
           <LoggedOut>
             <Form>
-              <Slot name="initial">What a mess!</Slot>
+              <Slot name="initial">
+                <h1>What a mess!</h1>
+                <p>Some text on top of the form</p>
+                <Form.Initial.Controls>
+                  <h2>Controls should be here</h2>
+                  <Form.Initial.Controls.Input />
+                  <p>Text below controls</p>
+                </Form.Initial.Controls>
+                <p>Some text below the form</p>
+              </Slot>
               <Slot name="footer">
                 <p>
                   Some footer text with a{" "}

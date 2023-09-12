@@ -15,7 +15,7 @@ import {
   ConfigurationOverrides,
   ConfigurationOverridesProps,
 } from "../configuration-overrides";
-import { Handle, LoginOptions } from "../../domain/types";
+import { Handle, HandleType, LoginOptions } from "../../domain/types";
 import React, { useCallback } from "react";
 import { useSlots } from "../slot";
 import { Factor } from "@slashid/slashid";
@@ -27,16 +27,27 @@ export type Props = ConfigurationOverridesProps & {
   children?: React.ReactElement<FooterProps | InitialProps>[];
 };
 
+type PayloadOptions = {
+  handleType?: HandleType;
+  handleValue?: string;
+};
+
 export type InternalFormContextType = {
   flowState: ReturnType<typeof useFlowState> | null;
   lastHandle?: Handle;
+  submitPayloadRef: React.MutableRefObject<PayloadOptions>;
   handleSubmit: (factor: Factor, handle?: Handle) => void;
+  selectedFactor?: Factor;
+  setSelectedFactor: React.Dispatch<React.SetStateAction<Factor | undefined>>;
 };
 export const InternalFormContext = React.createContext<InternalFormContextType>(
   {
     flowState: null,
     lastHandle: undefined,
+    submitPayloadRef: { current: {} },
     handleSubmit: () => null,
+    selectedFactor: undefined,
+    setSelectedFactor: () => null,
   }
 );
 export const useInternalFormContext = () => {
@@ -54,21 +65,22 @@ export const Form = ({
   const flowState = useFlowState({ onSuccess });
   const { showBanner } = useConfiguration();
   const { lastHandle } = useLastHandle();
+  const submitPayloadRef = React.useRef<PayloadOptions>({
+    handleType: undefined,
+    handleValue: undefined,
+  });
+  const [selectedFactor, setSelectedFactor] = React.useState<
+    Factor | undefined
+  >();
 
   const defaultSlots = React.useMemo(() => {
     const slots = {
       footer: showBanner ? <Footer /> : null,
-      initial: flowState.status === "initial" && (
-        <Initial
-          flowState={flowState}
-          lastHandle={lastHandle}
-          middleware={middleware}
-        />
-      ),
+      initial: flowState.status === "initial" && <Initial />,
     };
 
     return slots;
-  }, [flowState, lastHandle, middleware, showBanner]);
+  }, [flowState, showBanner]);
 
   const slots = useSlots({ children, defaultSlots });
 
@@ -88,7 +100,16 @@ export const Form = ({
   );
 
   return (
-    <InternalFormContext.Provider value={{ flowState, lastHandle, handleSubmit }}>
+    <InternalFormContext.Provider
+      value={{
+        flowState,
+        lastHandle,
+        handleSubmit,
+        submitPayloadRef,
+        selectedFactor,
+        setSelectedFactor,
+      }}
+    >
       <div className={clsx("sid-form", styles.form, className)}>
         <ConfigurationOverrides text={text} factors={factors}>
           {flowState.status === "initial" && (
