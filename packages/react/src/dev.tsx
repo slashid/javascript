@@ -261,14 +261,16 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
             <h2>Composed form</h2>
             <ComposedForm />
           </div>
+        </div>
+        <div>
           <div>
             <h2>Switch to default org</h2>
             <Config />
           </div>
-        </div>
-        <div>
-          <h2>Dynamic flow - factor based on handle</h2>
-          <ConfiguredDynamicFlow />
+          <div>
+            <h2>Dynamic flow - factor based on handle</h2>
+            <ConfiguredDynamicFlow />
+          </div>
         </div>
       </div>
     </SlashIDProvider>
