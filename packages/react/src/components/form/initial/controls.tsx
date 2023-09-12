@@ -9,7 +9,7 @@ import {
 } from "../../../domain/handles";
 import { useConfiguration } from "../../../hooks/use-configuration";
 import { FactorNonOIDC, Handle, HandleType } from "../../../domain/types";
-import { TextConfig } from "../../text/constants";
+import { TextConfig, TextConfigKey } from "../../text/constants";
 import { useInternalFormContext } from "../form";
 import { useForm } from "../../../hooks/use-form";
 import { Factor } from "@slashid/slashid";
@@ -19,11 +19,31 @@ import { Dropdown } from "../../dropdown";
 import { GB_FLAG, Input, PhoneInput } from "../../input";
 import { ErrorMessage } from "../error-message";
 import { isValidPhoneNumber, isValidEmail } from "../validation";
-import { FACTOR_LABEL_MAP } from "./handle-form";
 import { Button } from "../../button";
 import { FormStatus } from "../../../context/form-context";
 import { Tabs } from "../../tabs";
-import { TAB_NAME, tabIDByHandle } from "./configured-handle-form";
+
+export const FACTOR_LABEL_MAP: Record<
+  Exclude<Factor["method"], "webauthn_via_email" | "webauthn_via_sms">,
+  TextConfigKey
+> = {
+  email_link: "factor.emailLink",
+  otp_via_sms: "factor.otpViaSms",
+  otp_via_email: "factor.otpViaEmail",
+  sms_link: "factor.smsLink",
+  webauthn: "factor.webauthn",
+  oidc: "",
+};
+
+export const TAB_NAME = {
+  email: "email",
+  phone: "phone",
+};
+
+export const tabIDByHandle: Record<HandleType, string> = {
+  phone_number: TAB_NAME.phone,
+  email_address: TAB_NAME.email,
+};
 
 type ControlsProps = {
   factors: FactorNonOIDC[];

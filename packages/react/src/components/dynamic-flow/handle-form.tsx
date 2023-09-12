@@ -5,19 +5,18 @@ import {
   filterFactors,
   isFactorOidc,
   parsePhoneNumber,
-} from "../../../domain/handles";
-import { HandleType, Handle } from "../../../domain/types";
-import { useConfiguration } from "../../../hooks/use-configuration";
-import { useForm } from "../../../hooks/use-form";
+} from "../../domain/handles";
+import { HandleType, Handle } from "../../domain/types";
+import { useConfiguration } from "../../hooks/use-configuration";
+import { useForm } from "../../hooks/use-form";
 
-import { Button } from "../../button";
-import { Dropdown } from "../../dropdown";
-import { Flag, GB_FLAG, PhoneInput, Input } from "../../input";
-import { ErrorMessage } from "../error-message";
-import { isValidPhoneNumber, isValidEmail } from "../validation";
-import { TextConfigKey } from "../../text/constants";
-import { useSlots, type Props as SlotProps } from "../../slot";
-import { sprinkles } from "../../../theme/sprinkles.css";
+import { Button } from "../button";
+import { Dropdown } from "../dropdown";
+import { Flag, GB_FLAG, PhoneInput, Input } from "../input";
+import { ErrorMessage } from "../form/error-message";
+import { isValidPhoneNumber, isValidEmail } from "../form/validation";
+import { TextConfigKey } from "../text/constants";
+import { sprinkles } from "../../theme/sprinkles.css";
 import React from "react";
 
 export const FACTOR_LABEL_MAP: Record<
@@ -38,7 +37,6 @@ export type Props = {
   handleSubmit: (factor: Factor, handle: Handle) => void;
   validate?: Validator<string>;
   defaultValue?: string;
-  children?: React.ReactElement<SlotProps<"initial.submit">>[];
 };
 
 export const HandleForm: React.FC<Props> = ({
@@ -46,7 +44,6 @@ export const HandleForm: React.FC<Props> = ({
   factors,
   handleSubmit,
   defaultValue,
-  children,
 }) => {
   const filteredFactors = useMemo(
     () => filterFactors(factors, handleType).filter((f) => !isFactorOidc(f)),
@@ -61,24 +58,6 @@ export const HandleForm: React.FC<Props> = ({
   );
   const [factor, setFactor] = useState<Factor>(filteredFactors[0]);
   const { text } = useConfiguration();
-
-  const defaultSlots = React.useMemo(() => {
-    return {
-      "initial.submit": (
-        <Button
-          className={sprinkles({ marginTop: "6" })}
-          type="submit"
-          variant="primary"
-          testId="sid-form-initial-submit-button"
-          disabled={status === "invalid"}
-        >
-          {text["initial.submit"]}
-        </Button>
-      ),
-    };
-  }, [status, text]);
-
-  const slots = useSlots({ children, defaultSlots });
 
   useEffect(() => {
     setFactor(filteredFactors[0]);
@@ -170,7 +149,15 @@ export const HandleForm: React.FC<Props> = ({
       )}
       {input}
       <ErrorMessage name={handleType} />
-      {slots["initial.submit"]}
+      <Button
+        className={sprinkles({ marginTop: "6" })}
+        type="submit"
+        variant="primary"
+        testId="sid-form-initial-submit-button"
+        disabled={status === "invalid"}
+      >
+        {text["initial.submit"]}
+      </Button>
     </form>
   );
 };

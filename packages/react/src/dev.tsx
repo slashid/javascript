@@ -210,7 +210,7 @@ const ComposedForm = () => {
             <Form>
               <Slot name="initial">
                 <Form.Initial.Logo />
-                <Form.Initial.Heading />
+                <Form.Initial.Header />
                 <h1>What a mess!</h1>
                 <p>Some text on top of the form</p>
                 <Form.Initial.Controls>

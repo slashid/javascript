@@ -1,9 +1,9 @@
 import { Factor } from "@slashid/slashid";
-import { Handle, HandleType } from "../../../domain/types";
-import { useConfiguration } from "../../../hooks/use-configuration";
-import { sprinkles } from "../../../theme/sprinkles.css";
-import { Divider } from "../../divider";
-import { Tabs } from "../../tabs";
+import { Handle, HandleType } from "../../domain/types";
+import { useConfiguration } from "../../hooks/use-configuration";
+import { sprinkles } from "../../theme/sprinkles.css";
+import { Divider } from "../divider";
+import { Tabs } from "../tabs";
 import { HandleForm } from "./handle-form";
 import { useMemo } from "react";
 import {
@@ -11,7 +11,7 @@ import {
   hasOidcAndNonOidcFactors,
   isFactorOidc,
   resolveLastHandleValue,
-} from "../../../domain/handles";
+} from "../../domain/handles";
 
 export const TAB_NAME = {
   email: "email",

@@ -1,7 +1,7 @@
 import { clsx } from "clsx";
 import { useFlowState } from "./useFlowState";
 import { CreateFlowOptions } from "./flow";
-import { Initial, InitialSlot } from "./initial";
+import { Initial } from "./initial";
 import type { Props as InitialProps } from "./initial";
 import { Authenticating } from "./authenticating";
 import { Error } from "./error";
@@ -152,4 +152,5 @@ const footerSlot: Component = ({ children, className }: FooterProps) => {
 
 Form.Footer = footerSlot;
 Form.Footer.displayName = "Form.Footer";
-Form.Initial = InitialSlot;
+
+Form.Initial = Initial;

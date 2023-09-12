@@ -5,7 +5,7 @@ import { Logo } from "../form/initial/logo";
 import { Oidc } from "../form/initial/oidc";
 import { Text } from "../text";
 import { useConfiguration } from "../../hooks/use-configuration";
-import { ConfiguredHandleForm } from "../form/initial/configured-handle-form";
+import { ConfiguredHandleForm } from "./configured-handle-form";
 import { Factor } from "@slashid/slashid";
 import { FactorLabeledOIDC, Handle, LoginOptions } from "../../domain/types";
 import { useMemo } from "react";
