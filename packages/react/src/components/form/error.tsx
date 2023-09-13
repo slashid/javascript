@@ -37,8 +37,16 @@ export const Error: React.FC<Props> = ({ flowState }) => {
       >
         {text["authenticating.back"]}
       </LinkButton>
-      <Text as="h1" t="error.title" variant={{ size: "2xl-title" }} />
-      <Text as="h2" t="error.subtitle" variant={{ color: "contrast" }} />
+      <Text
+        as="h1"
+        t="error.title"
+        variant={{ size: "2xl-title", weight: "bold" }}
+      />
+      <Text
+        as="h2"
+        t="error.subtitle"
+        variant={{ color: "contrast", weight: "semibold" }}
+      />
       <div
         className={clsx(styles.error, sprinkles({ marginY: "12" }), centered)}
       >

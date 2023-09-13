@@ -25,8 +25,16 @@ type Props = {
 export const Success: React.FC<Props> = () => {
   return (
     <article data-testid="sid-form-success-state">
-      <Text as="h1" t="success.title" variant={{ size: "2xl-title" }} />
-      <Text as="h2" t="success.subtitle" variant={{ color: "contrast" }} />
+      <Text
+        as="h1"
+        t="success.title"
+        variant={{ size: "2xl-title", weight: "bold" }}
+      />
+      <Text
+        as="h2"
+        t="success.subtitle"
+        variant={{ color: "contrast", weight: "semibold" }}
+      />
       <div
         className={clsx(styles.check, sprinkles({ marginY: "12" }), centered)}
       >
