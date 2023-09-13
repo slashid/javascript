@@ -74,22 +74,23 @@ export const Form = ({
   const [selectedFactor, setSelectedFactor] = React.useState<
     Factor | undefined
   >();
+  const { status } = flowState;
 
   const defaultSlots = React.useMemo(() => {
     const slots = {
       footer: showBanner ? <Footer /> : null,
-      initial: flowState.status === "initial" && <Initial />,
-      authenticating: flowState.status === "authenticating" && (
-        <Authenticating flowState={flowState} />
-      ),
-      success: flowState.status === "success" && (
-        <Success flowState={flowState} />
-      ),
-      error: flowState.status === "error" && <Error flowState={flowState} />,
+      initial: status === "initial" ? <Initial /> : undefined,
+      authenticating:
+        status === "authenticating" ? (
+          <Authenticating flowState={flowState} />
+        ) : undefined,
+      success:
+        status === "success" ? <Success flowState={flowState} /> : undefined,
+      error: status === "error" ? <Error flowState={flowState} /> : undefined,
     };
 
     return slots;
-  }, [flowState, showBanner]);
+  }, [status, showBanner, flowState]);
 
   const slots = useSlots({ children, defaultSlots });
 
@@ -127,8 +128,8 @@ export const Form = ({
           {flowState.status === "authenticating" && (
             <FormProvider>{slots.authenticating}</FormProvider>
           )}
-          {slots.error}
-          {slots.success}
+          {flowState.status === "success" && slots.success}
+          {flowState.status === "error" && slots.success}
           {slots.footer}
         </ConfigurationOverrides>
       </div>

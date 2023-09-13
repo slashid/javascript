@@ -5,6 +5,9 @@ import { createTestUser, inputEmail } from "../test-utils";
 import { Slot } from "../slot";
 import userEvent from "@testing-library/user-event";
 import { ConfigurationProvider } from "../../main";
+import { useState } from "react";
+import { Factor } from "@slashid/slashid";
+import { Handle } from "../../domain/types";
 
 describe("#Form - customisation", () => {
   test("should render the footer slot", () => {
@@ -122,7 +125,7 @@ describe("#Form - customisation", () => {
         screen.getByTestId("sid-form-initial-submit-button")
       ).toBeInTheDocument();
       expect(
-        screen.getByTestId("sid-form-initial-default")
+        screen.getByTestId("sid-form-initial-children")
       ).toBeInTheDocument();
     });
 
@@ -165,6 +168,81 @@ describe("#Form - customisation", () => {
       ).toBeInTheDocument();
       expect(screen.getByText("email_link")).toBeInTheDocument();
       expect(screen.getByText("email_address")).toBeInTheDocument();
+    });
+
+    test("should authenticate users with a form composed of children as functions", async () => {
+      const logInMock = vi.fn(async () => createTestUser());
+      const user = userEvent.setup();
+
+      const ComposedForm = ({
+        handleSubmit,
+      }: {
+        handleSubmit: (factor: Factor, handle?: Handle | undefined) => void;
+      }) => {
+        const [email, setEmail] = useState("");
+
+        return (
+          <form
+            data-testid="composed-form"
+            onSubmit={(e) => {
+              e.preventDefault();
+              console.log("Test Submit", { email });
+              handleSubmit(
+                { method: "email_link" },
+                { type: "email_address", value: email }
+              );
+            }}
+          >
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="email"
+            />
+            <Form.Initial.Controls.Submit />
+          </form>
+        );
+      };
+
+      render(
+        <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+          <ConfigurationProvider factors={[{ method: "email_link" }]}>
+            <Form>
+              <Slot name="initial">
+                <Form.Initial.Controls>
+                  {({ handleSubmit }) => {
+                    return <ComposedForm handleSubmit={handleSubmit} />;
+                  }}
+                </Form.Initial.Controls>
+              </Slot>
+              <Slot name="success">
+                <div data-testid="custom-success">Custom success</div>
+              </Slot>
+            </Form>
+          </ConfigurationProvider>
+        </TestSlashIDProvider>
+      );
+
+      expect(
+        screen.getByTestId("sid-form-initial-function")
+      ).toBeInTheDocument();
+      expect(screen.getByTestId("composed-form")).toBeInTheDocument();
+
+      const emailAddress = "valid@email.com";
+      inputEmail(emailAddress, "email");
+      user.click(screen.getByTestId("sid-form-initial-submit-button"));
+
+      await expect(
+        screen.findByTestId("custom-success")
+      ).resolves.toBeInTheDocument();
+
+      expect(logInMock).toHaveBeenCalledWith(
+        {
+          factor: { method: "email_link" },
+          handle: { type: "email_address", value: emailAddress },
+        },
+        { middleware: undefined }
+      );
     });
   });
 });
