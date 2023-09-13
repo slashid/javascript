@@ -129,7 +129,7 @@ export const Form = ({
             <FormProvider>{slots.authenticating}</FormProvider>
           )}
           {flowState.status === "success" && slots.success}
-          {flowState.status === "error" && slots.success}
+          {flowState.status === "error" && slots.error}
           {slots.footer}
         </ConfigurationOverrides>
       </div>
