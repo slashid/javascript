@@ -10,6 +10,24 @@ import { Factor } from "@slashid/slashid";
 import { Handle } from "../../domain/types";
 
 describe("#Form - customisation", () => {
+  test(`should not render any components that are not a <Slot name="initial | authenticating | success | error | footer">`, () => {
+    const logInMock = vi.fn(async () => createTestUser());
+
+    render(
+      <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+        <Form>
+          <Slot name="wrong">
+            <div data-testid="wrong-slot-name">Incorrect slot name</div>
+          </Slot>
+          <div data-testid="incorrect-component">Incorrect component</div>
+        </Form>
+      </TestSlashIDProvider>
+    );
+
+    expect(screen.queryByTestId("wrong-slot-name")).toBeFalsy();
+    expect(screen.queryByTestId("incorrect-component")).toBeFalsy();
+  });
+
   test("should render the footer slot", () => {
     const logInMock = vi.fn(async () => createTestUser());
 
@@ -186,7 +204,6 @@ describe("#Form - customisation", () => {
             data-testid="composed-form"
             onSubmit={(e) => {
               e.preventDefault();
-              console.log("Test Submit", { email });
               handleSubmit(
                 { method: "email_link" },
                 { type: "email_address", value: email }
