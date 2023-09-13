@@ -37,7 +37,7 @@ describe("#Form - customisation", () => {
       </TestSlashIDProvider>
     );
 
-    expect(screen.findByTestId("sid-form-initial-state")).toBeFalsy();
+    expect(screen.queryByTestId("sid-form-initial-state")).toBeFalsy();
     expect(screen.getByTestId("custom-initial")).toBeInTheDocument();
   });
 
@@ -61,7 +61,7 @@ describe("#Form - customisation", () => {
     await expect(
       screen.findByTestId("custom-authenticating")
     ).resolves.toBeInTheDocument();
-    expect(screen.findByTestId("sid-form-authenticating-state")).toBeFalsy();
+    expect(screen.queryByTestId("sid-form-authenticating-state")).toBeFalsy();
   });
 
   test("should render the error slot", async () => {
@@ -89,7 +89,7 @@ describe("#Form - customisation", () => {
   });
 
   describe("#Form.Initial - composition API", () => {
-    test("should render the controls and arbitrary children", () => {
+    test("should render the default controls and arbitrary children", () => {
       const logInMock = vi.fn(async () => createTestUser());
 
       render(
@@ -115,14 +115,56 @@ describe("#Form - customisation", () => {
         </TestSlashIDProvider>
       );
 
-      expect(screen.findByTestId("sid-form-initial-state")).toBeFalsy();
-      expect(screen.getByTestId("custom-initial")).toBeInTheDocument();
+      expect(screen.queryByTestId("sid-form-initial-state")).toBeFalsy();
       expect(screen.getByTestId("custom-text-initial")).toBeInTheDocument();
       expect(screen.getByTestId("custom-text-controls")).toBeInTheDocument();
       expect(
         screen.getByTestId("sid-form-initial-submit-button")
       ).toBeInTheDocument();
+      expect(
+        screen.getByTestId("sid-form-initial-default")
+      ).toBeInTheDocument();
     });
-    expect(screen.getByTestId("sid-form-initial-default")).toBeInTheDocument();
+
+    test("should render custom controls when children are passed as functions", () => {
+      const logInMock = vi.fn(async () => createTestUser());
+
+      render(
+        <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+          <ConfigurationProvider factors={[{ method: "email_link" }]}>
+            <Form>
+              <Slot name="initial">
+                <Form.Initial.Controls>
+                  <Form.Initial.Controls.Input>
+                    {({ factors, handleTypes }) => {
+                      return (
+                        <div data-testid="initial-controls-input-function">
+                          {factors.map((factor) => (
+                            <div key={factor.method}>{factor.method}</div>
+                          ))}
+                          {handleTypes.map((handleType) => (
+                            <div key={handleType}>{handleType}</div>
+                          ))}
+                        </div>
+                      );
+                    }}
+                  </Form.Initial.Controls.Input>
+                  <Form.Initial.Controls.Submit />
+                </Form.Initial.Controls>
+              </Slot>
+            </Form>
+          </ConfigurationProvider>
+        </TestSlashIDProvider>
+      );
+
+      expect(
+        screen.getByTestId("sid-form-initial-children")
+      ).toBeInTheDocument();
+      expect(
+        screen.getByTestId("initial-controls-input-function")
+      ).toBeInTheDocument();
+      expect(screen.getByText("email_link")).toBeInTheDocument();
+      expect(screen.getByText("email_address")).toBeInTheDocument();
+    });
   });
 });

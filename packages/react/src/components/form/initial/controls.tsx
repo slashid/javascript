@@ -49,12 +49,18 @@ type ControlsProps = {
   factors: FactorNonOIDC[];
   handleTypes: Handle["type"][];
   text: TextConfig;
+  handleSubmit: (factor: Factor, handle?: Handle) => void;
 };
 
 type Props = {
   children?:
     | React.ReactNode
-    | (({ factors, handleTypes }: ControlsProps) => React.ReactNode);
+    | (({
+        factors,
+        handleTypes,
+        text,
+        handleSubmit,
+      }: ControlsProps) => React.ReactNode);
 };
 
 /**
@@ -110,12 +116,9 @@ export const Controls = ({ children }: Props) => {
   if (typeof children === "function") {
     // consider if the form element should be rendered here - probably so
     return (
-      <form
-        data-testid="sid-form-initial-function"
-        onSubmit={registerSubmit(onSubmit)}
-      >
-        {children({ factors: nonOidcFactors, handleTypes, text })}
-      </form>
+      <div data-testid="sid-form-initial-function">
+        {children({ handleSubmit, factors: nonOidcFactors, handleTypes, text })}
+      </div>
     );
   }
 
@@ -180,7 +183,6 @@ const FormInput = ({ children }: FormInputProps) => {
     return <>{children}</>;
   }
 
-  // case: 1 input
   if (handleTypes.length === 1) {
     return (
       <>
