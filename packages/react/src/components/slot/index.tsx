@@ -16,10 +16,9 @@ export type Props<Name extends string> = {
  * @returns
  */
 export function Slot<N extends string>({ children, name, asChild }: Props<N>) {
-    if (asChild) {
-        // pass props to the immediate child
-                
-    }
+  if (asChild) {
+    // pass props to the immediate child
+  }
   return <div className={`sid-slot-${name}`}>{children}</div>;
 }
 

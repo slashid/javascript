@@ -2,7 +2,6 @@ import { clsx } from "clsx";
 import { useFlowState } from "./useFlowState";
 import { CreateFlowOptions } from "./flow";
 import { Initial } from "./initial";
-import type { Props as InitialProps } from "./initial";
 import { Authenticating } from "./authenticating";
 import { Error } from "./error";
 import { Success } from "./success";
@@ -25,7 +24,7 @@ export type Props = ConfigurationOverridesProps & {
   className?: string;
   onSuccess?: CreateFlowOptions["onSuccess"];
   middleware?: LoginOptions["middleware"];
-  children?: React.ReactElement<FooterProps | InitialProps>[];
+  children?: React.ReactNode;
 };
 
 type PayloadOptions = {
@@ -80,6 +79,13 @@ export const Form = ({
     const slots = {
       footer: showBanner ? <Footer /> : null,
       initial: flowState.status === "initial" && <Initial />,
+      authenticating: flowState.status === "authenticating" && (
+        <Authenticating flowState={flowState} />
+      ),
+      success: flowState.status === "success" && (
+        <Success flowState={flowState} />
+      ),
+      error: flowState.status === "error" && <Error flowState={flowState} />,
     };
 
     return slots;
@@ -119,38 +125,15 @@ export const Form = ({
             <FormProvider>{slots.initial}</FormProvider>
           )}
           {flowState.status === "authenticating" && (
-            <FormProvider>
-              <Authenticating flowState={flowState} />
-            </FormProvider>
+            <FormProvider>{slots.authenticating}</FormProvider>
           )}
-          {flowState.status === "error" && <Error flowState={flowState} />}
-          {flowState.status === "success" && <Success flowState={flowState} />}
+          {slots.error}
+          {slots.success}
           {slots.footer}
         </ConfigurationOverrides>
       </div>
     </InternalFormContext.Provider>
   );
 };
-
-type FooterProps = {
-  className?: string;
-  children: React.ReactNode;
-};
-
-type FooterSlot = (props: FooterProps) => JSX.Element;
-type InitialSlot = (props: InitialProps) => JSX.Element;
-
-type Slots = FooterSlot | InitialSlot;
-
-type Component = {
-  displayName?: string;
-} & Slots;
-
-const footerSlot: Component = ({ children, className }: FooterProps) => {
-  return <div className={className}>{children}</div>;
-};
-
-Form.Footer = footerSlot;
-Form.Footer.displayName = "Form.Footer";
 
 Form.Initial = Initial;
