@@ -4,6 +4,7 @@ import { TestSlashIDProvider } from "../../context/test-slash-id-provider";
 import { createTestUser, inputEmail } from "../test-utils";
 import { Slot } from "../slot";
 import userEvent from "@testing-library/user-event";
+import { ConfigurationProvider } from "../../main";
 
 describe("#Form - customisation", () => {
   test("should render the footer slot", () => {
@@ -63,7 +64,7 @@ describe("#Form - customisation", () => {
     expect(screen.findByTestId("sid-form-authenticating-state")).toBeFalsy();
   });
 
-  test.only("should render the error slot", async () => {
+  test("should render the error slot", async () => {
     const logInMock = vi.fn(() => Promise.reject("login error"));
     const user = userEvent.setup();
 
@@ -85,5 +86,43 @@ describe("#Form - customisation", () => {
     await expect(
       screen.findByTestId("custom-error")
     ).resolves.toBeInTheDocument();
+  });
+
+  describe("#Form.Initial - composition API", () => {
+    test("should render the controls and arbitrary children", () => {
+      const logInMock = vi.fn(async () => createTestUser());
+
+      render(
+        <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+          <ConfigurationProvider factors={[{ method: "email_link" }]}>
+            <Form>
+              <Slot name="initial">
+                <Form.Initial.Logo />
+                <Form.Initial.Header />
+                <div data-testid="custom-text-initial">
+                  Components can be added to the initial slot
+                </div>
+                <Form.Initial.Controls>
+                  <Form.Initial.Controls.Input />
+                  <div data-testid="custom-text-controls">
+                    Components can be added to the controls slot
+                  </div>
+                  <Form.Initial.Controls.Submit />
+                </Form.Initial.Controls>
+              </Slot>
+            </Form>
+          </ConfigurationProvider>
+        </TestSlashIDProvider>
+      );
+
+      expect(screen.findByTestId("sid-form-initial-state")).toBeFalsy();
+      expect(screen.getByTestId("custom-initial")).toBeInTheDocument();
+      expect(screen.getByTestId("custom-text-initial")).toBeInTheDocument();
+      expect(screen.getByTestId("custom-text-controls")).toBeInTheDocument();
+      expect(
+        screen.getByTestId("sid-form-initial-submit-button")
+      ).toBeInTheDocument();
+    });
+    expect(screen.getByTestId("sid-form-initial-default")).toBeInTheDocument();
   });
 });

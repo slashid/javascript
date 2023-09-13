@@ -110,7 +110,10 @@ export const Controls = ({ children }: Props) => {
   if (typeof children === "function") {
     // consider if the form element should be rendered here - probably so
     return (
-      <form onSubmit={registerSubmit(onSubmit)}>
+      <form
+        data-testid="sid-form-initial-function"
+        onSubmit={registerSubmit(onSubmit)}
+      >
         {children({ factors: nonOidcFactors, handleTypes, text })}
       </form>
     );
@@ -118,10 +121,20 @@ export const Controls = ({ children }: Props) => {
 
   // TODO can we use asChild pattern from Radix instead of render props
   if (Children.count(children) > 0)
-    return <form onSubmit={registerSubmit(onSubmit)}>{children}</form>;
+    return (
+      <form
+        data-testid="sid-form-initial-children"
+        onSubmit={registerSubmit(onSubmit)}
+      >
+        {children}
+      </form>
+    );
 
   return (
-    <form onSubmit={registerSubmit(onSubmit)}>
+    <form
+      data-testid="sid-form-initial-default"
+      onSubmit={registerSubmit(onSubmit)}
+    >
       <FormInput />
       <Submit />
     </form>
