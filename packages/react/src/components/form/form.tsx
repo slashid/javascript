@@ -16,7 +16,7 @@ import {
 } from "../configuration-overrides";
 import { Handle, HandleType, LoginOptions } from "../../domain/types";
 import React, { useCallback } from "react";
-import { useSlots } from "../slot";
+import { Slots, useSlots } from "../slot";
 import { Factor } from "@slashid/slashid";
 import { Flag } from "../input";
 
@@ -24,7 +24,7 @@ export type Props = ConfigurationOverridesProps & {
   className?: string;
   onSuccess?: CreateFlowOptions["onSuccess"];
   middleware?: LoginOptions["middleware"];
-  children?: React.ReactNode;
+  children?: Slots<"initial" | "authenticating" | "success" | "error">; // TS does not enforce this, but it is used for documentation
 };
 
 type PayloadOptions = {
@@ -55,6 +55,11 @@ export const useInternalFormContext = () => {
   return React.useContext(InternalFormContext);
 };
 
+/**
+ * Render a form that can be used to sign in or sign up a user.
+ * The form can be customized significantly using the built-in slots and CSS custom properties.
+ * Check the documentation for more information.
+ */
 export const Form = ({
   className,
   onSuccess,

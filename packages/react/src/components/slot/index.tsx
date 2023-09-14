@@ -1,24 +1,24 @@
 import React from "react";
+import { MaybeArray } from "../../domain/types";
 
 export type Props<Name extends string> = {
   children: React.ReactNode;
   name: Name; // name of the slot the component is being rendered into
-  asChild?: boolean; // pass props to the immediate child
 };
 
-// TODO consider using asChild prop as an alternative to render props = passes props to the immediate child
-
-// add render props here
+export type Slots<SlotNames extends string> = MaybeArray<
+  React.ReactElement<
+    React.JSXElementConstructor<React.PropsWithChildren<Props<SlotNames>>>
+  >
+>;
 
 /**
- * TODO document this component
- * - issue: it is not typesafe, it is possible to render a slot with a name that does not exist
- * @returns
+ * Fill a named slot with the components passed as children. This is a layout concept entirely - no business logic is associated with this component.
+ * If a parent component exposes a named slot, it will also be responsible for rendering a default component in case no component is passed to the slot.
+ * Slot itself does not pass any props or share state with child components.
+ * Check the docs of the parent component to see if it exposes any stateful components you can use.
  */
-export function Slot<N extends string>({ children, name, asChild }: Props<N>) {
-  if (asChild) {
-    // pass props to the immediate child
-  }
+export function Slot<N extends string>({ children, name }: Props<N>) {
   return <div className={`sid-slot-${name}`}>{children}</div>;
 }
 
@@ -27,6 +27,10 @@ type PopulateSlotsOptions = {
   defaultSlots: Record<string, React.ReactNode | null>;
 };
 
+/**
+ * Given a list of slots with their default components, populate the slots with the components passed as children.
+ * Ensures a component gets rendered in place of the slot.
+ */
 export function useSlots({ children, defaultSlots }: PopulateSlotsOptions) {
   const slots = React.useMemo(() => {
     const renderedSlots: Record<string, React.ReactNode> = { ...defaultSlots };
