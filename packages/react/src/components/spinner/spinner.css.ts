@@ -36,11 +36,13 @@ export const spinnerVariants = styleVariants({
 });
 
 export const background = style({
-  padding: "16px",
   display: "flex",
-  width: "fit-content",
-  height: "fit-content",
+  justifyContent: "center",
+  alignItems: "center",
+  width: "128px",
+  height: "128px",
   borderRadius: "50%",
+  margin: "16px auto 24px auto",
   background:
     "linear-gradient(148.27deg, rgba(42, 106, 255, 0.86) 14.4%, rgba(42, 106, 255, 0.74) 87.37%)",
 });

@@ -1,12 +1,5 @@
 import { Factor } from "@slashid/slashid";
-import { clsx } from "clsx";
-import {
-  FormEventHandler,
-  ReactNode,
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
+import { FormEventHandler, useCallback, useEffect, useState } from "react";
 import {
   getAuthenticatingMessage,
   isFactorEmailLink,
@@ -16,25 +9,19 @@ import {
 import { useConfiguration } from "../../hooks/use-configuration";
 import { useForm } from "../../hooks/use-form";
 import { useSlashID } from "../../main";
-import { centered, sprinkles } from "../../theme/sprinkles.css";
+import { sprinkles } from "../../theme/sprinkles.css";
 import { Button } from "../button";
 import { LinkButton } from "../button/link-button";
 import { Chat } from "../icon/chat";
 import { Email } from "../icon/email";
 import { Input } from "../input";
-import { Circle as CircleIcon } from "../spinner/circle";
+import { Circle } from "../spinner/circle";
 import { Spinner } from "../spinner/spinner";
 import { Text } from "../text";
 import * as styles from "./authenticating.css";
 import { ErrorMessage } from "./error-message";
 import { AuthenticatingState } from "./flow";
 import { isValidOTPCode } from "./validation";
-
-const Circle = ({ children }: { children: ReactNode }) => (
-  <div className={clsx(sprinkles({ marginY: "12" }), centered)}>
-    <CircleIcon>{children}</CircleIcon>
-  </div>
-);
 
 const Loader = () => (
   <Circle>
