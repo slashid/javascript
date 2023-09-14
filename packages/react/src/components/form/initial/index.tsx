@@ -49,10 +49,14 @@ export const Initial: React.FC<Props> = ({
       <div className={styles.header}>
         <Text
           as="h1"
-          variant={{ size: "2xl-title", weight: "bold" }}
           t="initial.title"
+          variant={{ size: "2xl-title", weight: "bold" }}
         />
-        <Text variant={{ color: "tertiary" }} as="h2" t="initial.subtitle" />
+        <Text
+          as="h2"
+          t="initial.subtitle"
+          variant={{ color: "contrast", weight: "semibold" }}
+        />
       </div>
       <ConfiguredHandleForm
         lastHandle={lastHandle}
