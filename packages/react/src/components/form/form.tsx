@@ -24,7 +24,9 @@ export type Props = ConfigurationOverridesProps & {
   className?: string;
   onSuccess?: CreateFlowOptions["onSuccess"];
   middleware?: LoginOptions["middleware"];
-  children?: Slots<"initial" | "authenticating" | "success" | "error">; // TS does not enforce this, but it is used for documentation
+  children?: Slots<
+    "initial" | "authenticating" | "success" | "error" | "footer"
+  >; // TS does not enforce this, but it is used for documentation
 };
 
 type PayloadOptions = {
