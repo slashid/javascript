@@ -38,10 +38,19 @@ export function useSlots({ children, defaultSlots }: PopulateSlotsOptions) {
     React.Children.forEach(children, (child) => {
       if (!React.isValidElement(child)) return;
 
-      if (child.type !== Slot) return;
+      // TODO during development print a console log with details in the case of a missing slot
+
+      if (child.type !== Slot) {
+        console.warn(`Passed a non-<Slot> component to a slot: ${child.type}`);
+        return;
+      }
 
       if (child.props.name in defaultSlots) {
         renderedSlots[child.props.name] = child;
+      } else {
+        console.warn(
+          `Passed a <Slot> with an unsupported name: ${child.props.name}`
+        );
       }
     });
 

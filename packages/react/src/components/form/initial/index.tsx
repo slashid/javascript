@@ -55,7 +55,7 @@ export type Props = {
   middleware?: LoginOptions["middleware"];
 };
 
-export const Initial = () => {
+const Initial = () => {
   const { factors, text } = useConfiguration();
 
   const shouldRenderDivider = useMemo(
@@ -78,3 +78,5 @@ Initial.Logo = LogoSlot;
 Initial.Header = HeaderSlot;
 Initial.Controls = Controls;
 Initial.OIDC = OIDCSlot;
+
+export { Initial };
