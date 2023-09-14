@@ -52,6 +52,14 @@ export function isFactorOidc(factor: Factor): factor is FactorOIDC {
   return factor.method === "oidc";
 }
 
+export function isFactorEmailLink(factor: Factor): boolean {
+  return factor.method === "email_link";
+}
+
+export function isFactorSmsLink(factor: Factor): boolean {
+  return factor.method === "sms_link";
+}
+
 export function hasOidcAndNonOidcFactors(factors: Factor[]): boolean {
   return factors.some(isFactorOidc) && factors.some((f) => !isFactorOidc(f));
 }
