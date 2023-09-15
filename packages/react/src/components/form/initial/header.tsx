@@ -23,7 +23,11 @@ export const HeaderSlot = ({
           variant={{ size: "2xl-title", weight: "bold" }}
           t="initial.title"
         />
-        <Text variant={{ color: "tertiary" }} as="h2" t="initial.subtitle" />
+        <Text
+          variant={{ color: "contrast", weight: "semibold" }}
+          as="h2"
+          t="initial.subtitle"
+        />
       </div>
     );
   }, []);
