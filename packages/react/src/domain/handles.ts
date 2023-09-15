@@ -1,10 +1,16 @@
-import { HandleType, FactorOIDC, Handle, FactorOTP } from "./types";
 import { Factor } from "@slashid/slashid";
 import {
-  getList,
   findFlagByDialCode,
+  getList,
 } from "country-list-with-dial-code-and-flag";
 import { TextConfigKey } from "../components/text/constants";
+import {
+  FactorNonOIDC,
+  FactorOIDC,
+  FactorOTP,
+  Handle,
+  HandleType,
+} from "./types";
 
 const FACTORS_WITH_EMAIL = ["webauthn", "otp_via_email", "email_link"];
 const FACTORS_WITH_PHONE = ["otp_via_sms", "sms_link"];
@@ -58,6 +64,10 @@ export function isFactorEmailLink(factor: Factor): boolean {
 
 export function isFactorSmsLink(factor: Factor): boolean {
   return factor.method === "sms_link";
+}
+
+export function isFactorNonOidc(factor: Factor): factor is FactorNonOIDC {
+  return factor.method !== "oidc";
 }
 
 export function hasOidcAndNonOidcFactors(factors: Factor[]): boolean {

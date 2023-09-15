@@ -7,6 +7,9 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
+
+import slashIDstyles from "@slashid/react/style.css";
+import profileStyles from "demo-form/style.css";
 import styles from "~/styles/global.css";
 
 export const meta: MetaFunction = () => ({
@@ -15,7 +18,11 @@ export const meta: MetaFunction = () => ({
   viewport: "width=device-width,initial-scale=1",
 });
 
-export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
+export const links: LinksFunction = () => [
+  { rel: "stylesheet", href: styles },
+  { rel: "stylesheet", href: slashIDstyles },
+  { rel: "stylesheet", href: profileStyles },
+];
 
 export default function App() {
   return (

@@ -19,6 +19,7 @@ type Props = {
   defaultValue?: string;
   onChange: (value: string) => void;
   disabled?: boolean;
+  contentProps?: Select.SelectContentProps;
 };
 
 export const Dropdown: React.FC<Props> = ({
@@ -28,6 +29,7 @@ export const Dropdown: React.FC<Props> = ({
   defaultValue,
   onChange,
   className,
+  contentProps,
   disabled = false,
 }) => {
   const [selected, onSelect] = useState<string | undefined>(defaultValue);
@@ -64,7 +66,12 @@ export const Dropdown: React.FC<Props> = ({
         </Select.Trigger>
 
         <Select.Content
-          className={clsx("sid-dropdown__popover", styles.content)}
+          {...contentProps}
+          className={clsx(
+            "sid-dropdown__popover",
+            styles.content,
+            contentProps?.className
+          )}
         >
           <Select.Viewport
             className={clsx("sid-dropdown__viewport", styles.viewport)}
