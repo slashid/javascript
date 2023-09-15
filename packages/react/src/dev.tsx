@@ -17,6 +17,7 @@ import {
   useOrganizations,
 } from "./main";
 import { defaultOrganization } from "./middleware/default-organization";
+import { Slot } from "./components/slot";
 
 const rootOid = "b6f94b67-d20f-7fc3-51df-bf6e3b82683e";
 
@@ -116,7 +117,6 @@ function Config() {
       </LoggedIn>
       <GDPRConsentDialog
         forceConsent
-        forceOpen
         necessaryCookiesRequired
         defaultRejectAllLevels={["none", "necessary"]}
         className="gdprConsentDialogClass"
@@ -162,13 +162,80 @@ const ConfiguredDynamicFlow = () => {
 const BasicForm = () => {
   return (
     <ConfigurationProvider
-      factors={[{ method: "email_link" }, { method: "otp_via_email" }]}
+      factors={[
+        { method: "email_link" },
+        { method: "otp_via_email" },
+        { method: "otp_via_sms" },
+        {
+          method: "oidc",
+          options: {
+            provider: "google",
+            client_id: import.meta.env.VITE_GOOGLE_SSO_CLIENT_ID,
+          },
+        },
+      ]}
     >
       <SlashIDLoaded>
         <>
           <LoggedIn>Logged in!</LoggedIn>
           <LoggedOut>
             <Form />
+          </LoggedOut>
+        </>
+      </SlashIDLoaded>
+    </ConfigurationProvider>
+  );
+};
+
+const ComposedForm = () => {
+  return (
+    <ConfigurationProvider
+      factors={[
+        { method: "email_link" },
+        { method: "otp_via_email" },
+        { method: "otp_via_sms" },
+        {
+          method: "oidc",
+          options: {
+            provider: "google",
+            client_id: import.meta.env.VITE_GOOGLE_SSO_CLIENT_ID,
+          },
+        },
+      ]}
+    >
+      <SlashIDLoaded>
+        <>
+          <LoggedIn>Logged in!</LoggedIn>
+          <LoggedOut>
+            <Form>
+              <Slot name="initial">
+                <Form.Initial.Logo />
+                <Form.Initial.Header />
+                <h1>What a mess!</h1>
+                <p>Some text on top of the form</p>
+                <Form.Initial.Controls>
+                  <h2>Controls should be here</h2>
+                  <Form.Initial.Controls.Input />
+                  <p>Text below controls, on top of the submit button</p>
+                  <Form.Initial.Controls.Submit />
+                  <p>Text right below the submit button</p>
+                </Form.Initial.Controls>
+                <Form.Initial.OIDC />
+                <p>Some text below the form</p>
+              </Slot>
+              <Slot name="footer">
+                <p>
+                  Some footer text with a{" "}
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href="https://www.google.com"
+                  >
+                    link
+                  </a>
+                </p>
+              </Slot>
+            </Form>
           </LoggedOut>
         </>
       </SlashIDLoaded>
@@ -191,13 +258,19 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
             <BasicForm />
           </div>
           <div>
-            <h2>Switch to default org</h2>
-            <Config />
+            <h2>Composed form</h2>
+            <ComposedForm />
           </div>
         </div>
         <div>
-          <h2>Dynamic flow - factor based on handle</h2>
-          <ConfiguredDynamicFlow />
+          <div>
+            <h2>Switch to default org</h2>
+            <Config />
+          </div>
+          <div>
+            <h2>Dynamic flow - factor based on handle</h2>
+            <ConfiguredDynamicFlow />
+          </div>
         </div>
       </div>
     </SlashIDProvider>

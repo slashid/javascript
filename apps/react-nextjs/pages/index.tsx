@@ -1,8 +1,9 @@
 import {
+  CompositeFormPageRoute,
   FormPageRoute,
   GDPRConsentDialogPageRoute,
   MFAPageRoute,
-  StepUpAuthPageRoute
+  StepUpAuthPageRoute,
 } from "demo-form";
 import Head from "next/head";
 import Link from "next/link";
@@ -27,11 +28,17 @@ function Home() {
         <p className={styles.docs}>
           <Link href={FormPageRoute}>{`<Form />`}</Link>
           <br />
+          <Link
+            href={CompositeFormPageRoute}
+          >{`<Form /> - Slots & composition API`}</Link>
+          <br />
           <Link href={MFAPageRoute}>{`<MultiFactorAuth />`}</Link>
           <br />
           <Link href={StepUpAuthPageRoute}>{`<StepUpAuth />`}</Link>
           <br />
-          <Link href={GDPRConsentDialogPageRoute}>{`<GDPRConsentDialog />`}</Link>
+          <Link
+            href={GDPRConsentDialogPageRoute}
+          >{`<GDPRConsentDialog />`}</Link>
         </p>
 
         <p className={styles.docs}>

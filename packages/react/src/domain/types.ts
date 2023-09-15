@@ -27,6 +27,11 @@ export interface LoginOptions {
 
 export type FactorOIDC = Extract<Factor, { method: "oidc" }>;
 
+export type FactorNonOIDC = Exclude<
+  FactorConfiguration,
+  FactorOIDC | FactorLabeledOIDC
+>;
+
 export type FactorOTP = Extract<
   Factor,
   { method: "otp_via_email" } | { method: "otp_via_sms" }
@@ -63,3 +68,5 @@ export type ValidationError = {
 };
 
 export type Validator<T = unknown> = (value: T) => ValidationError | undefined;
+
+export type MaybeArray<T> = T | T[];

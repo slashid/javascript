@@ -1,8 +1,9 @@
 import clsx from "clsx";
 import { Logo as TLogo } from "../../../context/config-context";
 import * as styles from "./initial.css";
+import { useConfiguration } from "../../../hooks/use-configuration";
 
-type Props = {
+export type Props = {
   logo?: TLogo;
 };
 
@@ -23,3 +24,19 @@ export const Logo: React.FC<Props> = ({ logo }) => {
     </div>
   );
 };
+
+export const LogoSlot = ({
+  children,
+}: {
+  children?: (props: Props) => React.ReactNode;
+}) => {
+  const { logo } = useConfiguration();
+
+  if (typeof children !== "function") {
+    return <Logo logo={logo} />;
+  }
+
+  return <>{children({ logo })}</>;
+};
+
+LogoSlot.displayName = "Logo";

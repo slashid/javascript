@@ -1,5 +1,7 @@
-import { Factor, OAuthProvider } from "@slashid/slashid";
+import React from "react";
 import clsx from "clsx";
+import { Factor, OAuthProvider } from "@slashid/slashid";
+
 import { FactorLabeledOIDC } from "../../../domain/types";
 import { useConfiguration } from "../../../hooks/use-configuration";
 import { sprinkles } from "../../../theme/sprinkles.css";
@@ -34,8 +36,8 @@ const PROVIDER_TO_PRETTY_NAME: Record<OAuthProvider, string> = {
   gitlab: "GitLab",
   line: "LINE",
   bitbucket: "Bitbucket",
-  azuread: "Azure AD"
-}
+  azuread: "Azure AD",
+};
 
 type Props = {
   providers: FactorLabeledOIDC[];
