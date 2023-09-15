@@ -46,7 +46,7 @@ export const input = style({
   fontWeight: theme.font.weight.semibold,
   color: publicVariables.color.foreground,
   display: "grid",
-  gridTemplateColumns: "auto 24px"
+  gridTemplateColumns: "auto 24px",
 });
 
 export const content = style({
@@ -60,13 +60,14 @@ export const content = style({
 });
 
 export const viewport = style({
-  padding: "12px 24px",
+  padding: "12px",
 });
 
 export const item = style({
   fontFamily: publicVariables.font.fontFamily,
   fontWeight: theme.font.weight.bold,
   fontSize: theme.font.size.base,
+  lineHeight: "100%",
   color: publicVariables.color.foreground,
   borderRadius: "12px",
   padding: "16px 12px",
@@ -85,11 +86,17 @@ export const item = style({
 export const icon = style({
   position: "absolute",
   right: "16px",
-  zIndex: 0
+  zIndex: 0,
+
+  selectors: {
+    [`${trigger}[data-state='open'] > &`]: {
+      transform: "rotate(180deg)",
+    },
+  },
 });
 
 export const selectedIcon = style({
   height: "16px",
   marginLeft: "auto",
-  justifySelf: "flex-end"
-})
+  justifySelf: "flex-end",
+});

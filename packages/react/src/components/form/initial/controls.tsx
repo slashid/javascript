@@ -23,6 +23,8 @@ import { Button } from "../../button";
 import { FormStatus } from "../../../context/form-context";
 import { Tabs } from "../../tabs";
 
+import * as styles from "./initial.css";
+
 export const FACTOR_LABEL_MAP: Record<
   Exclude<Factor["method"], "webauthn_via_email" | "webauthn_via_sms">,
   TextConfigKey
@@ -393,6 +395,10 @@ const HandleInput: React.FC<PropsInternal> = ({
           onChange={(method) => {
             const newFactor = filteredFactors.find((f) => f.method === method)!;
             setSelectedFactor(newFactor);
+          }}
+          contentProps={{
+            className: styles.dropdownContent,
+            position: "popper",
           }}
         />
       )}

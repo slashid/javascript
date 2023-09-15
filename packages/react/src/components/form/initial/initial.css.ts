@@ -21,3 +21,8 @@ export const header = style({
   flexDirection: "column",
   gap: theme.space[1],
 });
+
+export const dropdownContent = style({
+  width: "var(--radix-select-trigger-width)",
+  marginTop: "4px",
+});

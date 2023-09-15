@@ -1,6 +1,8 @@
+import React from "react";
+import { Validator, useEffect, useMemo, useState } from "react";
 import { Factor } from "@slashid/slashid";
 import { findFlag } from "country-list-with-dial-code-and-flag";
-import { Validator, useMemo, useState, useEffect } from "react";
+
 import {
   filterFactors,
   isFactorOidc,
@@ -16,8 +18,9 @@ import { Flag, GB_FLAG, PhoneInput, Input } from "../input";
 import { ErrorMessage } from "../form/error-message";
 import { isValidPhoneNumber, isValidEmail } from "../form/validation";
 import { TextConfigKey } from "../text/constants";
+
 import { sprinkles } from "../../theme/sprinkles.css";
-import React from "react";
+import * as styles from "./dynamic-flow.css";
 
 export const FACTOR_LABEL_MAP: Record<
   Exclude<Factor["method"], "webauthn_via_email" | "webauthn_via_sms">,
@@ -145,6 +148,10 @@ export const HandleForm: React.FC<Props> = ({
           onChange={(method) =>
             setFactor(factors.find((f) => f.method === method)!)
           }
+          contentProps={{
+            className: styles.dropdownContent,
+            position: "popper",
+          }}
         />
       )}
       {input}
