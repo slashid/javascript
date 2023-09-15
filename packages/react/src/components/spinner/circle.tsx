@@ -1,8 +1,6 @@
 import { clsx } from "clsx";
-import * as styles from "./spinner.css";
 import { ReactNode } from "react";
-import BlueBackground from "./bg-blue.svg";
-import RedBackground from "./bg-red.svg";
+import * as styles from "./circle.css";
 
 type Variant = "blue" | "red";
 
@@ -12,22 +10,15 @@ type Props = {
   children: ReactNode;
 };
 
-const BACKGROUND_MAP: Record<Variant, string> = {
-  blue: BlueBackground,
-  red: RedBackground,
-};
-
 export const Circle: React.FC<Props> = ({
   children,
   className,
   variant = "blue",
 }) => (
-  <div
-    className={clsx(styles.background, className)}
-    style={{
-      backgroundImage: `url(${BACKGROUND_MAP[variant]})`,
-    }}
-  >
-    {children}
+  <div className={clsx(styles.background, className)}>
+    <div className={styles.outerCircleVariants[variant]} />
+    <div className={styles.middleCircleVariants[variant]} />
+    <div className={styles.innerCircleVariants[variant]} />
+    <div className={styles.content}>{children}</div>
   </div>
 );
