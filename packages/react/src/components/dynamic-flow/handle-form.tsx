@@ -5,18 +5,19 @@ import {
   filterFactors,
   isFactorOidc,
   parsePhoneNumber,
-} from "../../../domain/handles";
-import { HandleType, Handle } from "../../../domain/types";
-import { useConfiguration } from "../../../hooks/use-configuration";
-import { useForm } from "../../../hooks/use-form";
+} from "../../domain/handles";
+import { HandleType, Handle } from "../../domain/types";
+import { useConfiguration } from "../../hooks/use-configuration";
+import { useForm } from "../../hooks/use-form";
 
-import { Button } from "../../button";
-import { Dropdown } from "../../dropdown";
-import { Flag, GB_FLAG, PhoneInput, Input } from "../../input";
-import { ErrorMessage } from "../error-message";
-import { isValidPhoneNumber, isValidEmail } from "../validation";
-import { TextConfigKey } from "../../text/constants";
-import { sprinkles } from "../../../theme/sprinkles.css";
+import { Button } from "../button";
+import { Dropdown } from "../dropdown";
+import { Flag, GB_FLAG, PhoneInput, Input } from "../input";
+import { ErrorMessage } from "../form/error-message";
+import { isValidPhoneNumber, isValidEmail } from "../form/validation";
+import { TextConfigKey } from "../text/constants";
+import { sprinkles } from "../../theme/sprinkles.css";
+import React from "react";
 
 export const FACTOR_LABEL_MAP: Record<
   Exclude<Factor["method"], "webauthn_via_email" | "webauthn_via_sms">,
