@@ -6,7 +6,7 @@ import { Text } from "../text";
 import { ErrorState } from "./flow";
 
 const ErrorIcon = () => (
-  <Circle variant="red">
+  <Circle variant="red" shouldAnimate={false}>
     <svg
       width="5"
       height="20"

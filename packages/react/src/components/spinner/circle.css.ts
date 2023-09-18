@@ -71,11 +71,15 @@ export const background = style({
 
 const outerCircle = style({
   position: "absolute",
-  width: "50px",
-  height: "50px",
+  width: "128px",
+  height: "128px",
   borderRadius: "100%",
   boxSizing: "border-box",
   opacity: 0.5,
+});
+export const outerCircleWithAnimation = style({
+  width: "50px",
+  height: "50px",
   animation: `${expandFrom50To128} ${animationProps}`,
 });
 export const outerCircleVariants = styleVariants({
@@ -99,10 +103,14 @@ export const outerCircleVariants = styleVariants({
 
 const middleCircle = style({
   position: "absolute",
-  width: "50px",
-  height: "50px",
+  width: "88px",
+  height: "88px",
   borderRadius: "100%",
   boxSizing: "border-box",
+});
+export const middleCircleWithAnimation = style({
+  width: "50px",
+  height: "50px",
   animation: `${expandFrom50To88} ${animationProps}`,
 });
 export const middleCircleVariants = styleVariants({
@@ -126,11 +134,15 @@ export const middleCircleVariants = styleVariants({
 
 const innerCircle = style({
   position: "absolute",
-  width: "50px",
-  height: "50px",
+  width: "53px",
+  height: "53px",
   borderRadius: "100%",
   boxSizing: "border-box",
   boxShadow: "32px 80px 116px 0px rgba(91, 140, 255, 0.10)",
+});
+export const innerCircleWithAnimation = style({
+  width: "50px",
+  height: "50px",
   animation: `${expandFrom50To53} ${animationProps}`,
 });
 export const innerCircleVariants = styleVariants({
