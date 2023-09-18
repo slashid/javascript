@@ -34,6 +34,7 @@ export const dropdownContent = style({
   width: "calc(var(--radix-select-trigger-width) + 2px)",
   maxHeight: "264px",
   marginTop: "4px",
+  marginLeft: "-1px",
 });
 
 export const dropdown = style({
