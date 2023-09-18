@@ -10,7 +10,7 @@ import {
 } from "react";
 import { Validator, ValidationError } from "../domain/types";
 
-type FormStatus = "valid" | "invalid";
+export type FormStatus = "valid" | "invalid";
 
 type RegisteredFieldOptions = {
   defaultValue?: string;

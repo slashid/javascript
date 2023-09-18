@@ -1,22 +1,26 @@
+import React from "react";
+import { Validator, useEffect, useMemo, useState } from "react";
 import { Factor } from "@slashid/slashid";
 import { findFlag } from "country-list-with-dial-code-and-flag";
-import { Validator, useMemo, useState, useEffect } from "react";
+
 import {
   filterFactors,
   isFactorOidc,
   parsePhoneNumber,
-} from "../../../domain/handles";
-import { HandleType, Handle } from "../../../domain/types";
-import { useConfiguration } from "../../../hooks/use-configuration";
-import { useForm } from "../../../hooks/use-form";
+} from "../../domain/handles";
+import { HandleType, Handle } from "../../domain/types";
+import { useConfiguration } from "../../hooks/use-configuration";
+import { useForm } from "../../hooks/use-form";
 
-import { Button } from "../../button";
-import { Dropdown } from "../../dropdown";
-import { Flag, GB_FLAG, PhoneInput, Input } from "../../input";
-import { ErrorMessage } from "../error-message";
-import { isValidPhoneNumber, isValidEmail } from "../validation";
-import { TextConfigKey } from "../../text/constants";
-import { sprinkles } from "../../../theme/sprinkles.css";
+import { Button } from "../button";
+import { Dropdown } from "../dropdown";
+import { Flag, GB_FLAG, PhoneInput, Input } from "../input";
+import { ErrorMessage } from "../form/error-message";
+import { isValidPhoneNumber, isValidEmail } from "../form/validation";
+import { TextConfigKey } from "../text/constants";
+
+import { sprinkles } from "../../theme/sprinkles.css";
+import * as styles from "./dynamic-flow.css";
 
 export const FACTOR_LABEL_MAP: Record<
   Exclude<Factor["method"], "webauthn_via_email" | "webauthn_via_sms">,
@@ -144,6 +148,10 @@ export const HandleForm: React.FC<Props> = ({
           onChange={(method) =>
             setFactor(factors.find((f) => f.method === method)!)
           }
+          contentProps={{
+            className: styles.dropdownContent,
+            position: "popper",
+          }}
         />
       )}
       {input}

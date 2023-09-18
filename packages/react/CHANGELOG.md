@@ -1,5 +1,15 @@
 # @slashid/react
 
+## 1.13.0
+
+### Minor Changes
+
+- e6498fa: Introduce the Slots API - compose your own <Form>
+
+### Patch Changes
+
+- 7c9b8b9: Fix styling of the dropdown in the <Form> component
+
 ## 1.12.0
 
 ### Minor Changes

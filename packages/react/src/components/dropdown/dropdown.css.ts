@@ -87,6 +87,12 @@ export const icon = style({
   position: "absolute",
   right: "16px",
   zIndex: 0,
+
+  selectors: {
+    [`${trigger}[data-state='open'] > &`]: {
+      transform: "rotate(180deg)",
+    },
+  },
 });
 
 export const selectedIcon = style({

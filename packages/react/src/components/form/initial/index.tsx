@@ -1,68 +1,82 @@
-import { Factor } from "@slashid/slashid";
-import React, { useCallback, useMemo } from "react";
+import { useMemo } from "react";
 
-import { isFactorOidc } from "../../../domain/handles";
+import {
+  hasOidcAndNonOidcFactors,
+  isFactorOidc,
+} from "../../../domain/handles";
 import { FactorLabeledOIDC, Handle, LoginOptions } from "../../../domain/types";
 import { useConfiguration } from "../../../hooks/use-configuration";
-import { Text } from "../../text";
 import { InitialState } from "../flow";
 
-import { ConfiguredHandleForm } from "./configured-handle-form";
-import * as styles from "./initial.css";
-import { Logo } from "./logo";
 import { Oidc } from "./oidc";
+import { Controls } from "./controls";
+import { Divider } from "../../divider";
+import { LogoSlot } from "./logo";
+import { HeaderSlot } from "./header";
+import { Factor } from "@slashid/slashid";
+import React from "react";
+import { InternalFormContext } from "../form";
 
-type Props = {
+// TODO does not work as a standalone module?
+export type OIDCSlotProps = {
+  factors: FactorLabeledOIDC[];
+  handleClick: (factor: Factor, handle?: Handle) => void;
+};
+
+export const OIDCSlot = ({
+  children,
+}: {
+  children?: (props: OIDCSlotProps) => React.ReactNode;
+}) => {
+  const { factors } = useConfiguration();
+  const { handleSubmit } = React.useContext(InternalFormContext);
+  const oidcFactors: FactorLabeledOIDC[] = factors.filter(isFactorOidc);
+
+  const OIDC = React.useMemo(() => {
+    return <Oidc providers={oidcFactors} handleClick={handleSubmit} />;
+  }, [handleSubmit, oidcFactors]);
+
+  if (typeof children === "function") {
+    return <>{children({ factors: oidcFactors, handleClick: handleSubmit })}</>;
+  }
+
+  if (React.Children.count(children) > 0) {
+    return <>{children}</>;
+  }
+
+  return OIDC;
+};
+
+OIDCSlot.displayName = "OIDC";
+
+export type Props = {
   flowState: InitialState;
   lastHandle?: Handle;
   middleware?: LoginOptions["middleware"];
 };
 
-export const Initial: React.FC<Props> = ({
-  flowState,
-  lastHandle,
-  middleware,
-}) => {
-  const { factors, logo } = useConfiguration();
+const Initial = () => {
+  const { factors, text } = useConfiguration();
 
-  const oidcFactors: FactorLabeledOIDC[] = useMemo(
-    () => factors.filter(isFactorOidc),
+  const shouldRenderDivider = useMemo(
+    () => hasOidcAndNonOidcFactors(factors),
     [factors]
-  );
-
-  const handleSubmit = useCallback(
-    (factor: Factor, handle?: Handle) => {
-      flowState.logIn(
-        {
-          factor,
-          handle,
-        },
-        { middleware }
-      );
-    },
-    [flowState, middleware]
   );
 
   return (
     <article data-testid="sid-form-initial-state">
-      <Logo logo={logo} />
-      <div className={styles.header}>
-        <Text
-          as="h1"
-          t="initial.title"
-          variant={{ size: "2xl-title", weight: "bold" }}
-        />
-        <Text
-          as="h2"
-          t="initial.subtitle"
-          variant={{ color: "contrast", weight: "semibold" }}
-        />
-      </div>
-      <ConfiguredHandleForm
-        lastHandle={lastHandle}
-        handleSubmit={handleSubmit}
-      />
-      <Oidc providers={oidcFactors} handleClick={handleSubmit} />
+      <LogoSlot />
+      <HeaderSlot />
+      <Controls />
+      {shouldRenderDivider && <Divider>{text["initial.divider"]}</Divider>}
+      <OIDCSlot />
     </article>
   );
 };
+
+Initial.Logo = LogoSlot;
+Initial.Header = HeaderSlot;
+Initial.Controls = Controls;
+Initial.OIDC = OIDCSlot;
+
+export { Initial };

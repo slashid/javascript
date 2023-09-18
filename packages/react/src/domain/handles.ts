@@ -1,4 +1,4 @@
-import { HandleType, FactorOIDC, Handle, FactorOTP } from "./types";
+import { HandleType, FactorOIDC, Handle, FactorOTP, FactorNonOIDC } from "./types";
 import { Factor } from "@slashid/slashid";
 import {
   getList,
@@ -50,6 +50,10 @@ export function isFactorOTP(factor: Factor): factor is FactorOTP {
 
 export function isFactorOidc(factor: Factor): factor is FactorOIDC {
   return factor.method === "oidc";
+}
+
+export function isFactorNonOidc(factor: Factor): factor is FactorNonOIDC {
+  return factor.method !== "oidc";
 }
 
 export function hasOidcAndNonOidcFactors(factors: Factor[]): boolean {
