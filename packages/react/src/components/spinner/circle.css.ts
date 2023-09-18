@@ -1,61 +1,63 @@
 import { keyframes, style, styleVariants } from "@vanilla-extract/css";
 
-const expandTo128 = keyframes({
-  // delay for 10% of the animation duration i.e. 0.5s
+const animationDuration = "3s";
+
+const expandFrom50To128 = keyframes({
+  // delay for 10% of the total animation duration, here: 0.3s
   "0%, 10%": {
     transform: "scale(1)",
   },
-  // animate for 20% of the animation duration i.e. 1s
+  // animate for 20% of the total animation duration, here: 0.6s
   "30%": {
     transform: "scale(calc(88 / 50))",
   },
-  // animate for 20% of the animation duration i.e. 1s
-  // then pause for 30% of the animation duration i.e. 1.5s
+  // animate for 20% of the total animation duration, here: 0.6s
+  // then pause for 30% of the total animation duration, here: 0.9s
   "50%, 80%": {
     transform: "scale(calc(128 / 50))",
   },
-  // animate for 10% of the animation duration i.e. 0.5s
-  // then pause for 10% of the animation duration i.e. 0.5s
+  // animate for 10% of the total animation duration, here: 0.3s
+  // then pause for 10% of the total animation duration, here: 0.3s
   "90%, 100%": {
     transform: "scale(1)",
   },
 });
 
-const expandTo88 = keyframes({
-  // delay for 10% of the animation duration i.e. 0.5s
+const expandFrom50To88 = keyframes({
+  // delay for 10% of the total animation duration, here: 0.3s
   "0%, 10%": {
     transform: "scale(1)",
   },
-  // animate for 20% of the animation duration i.e. 1s
-  // then pause for 50% of the animation duration i.e. 2.5s
+  // animate for 20% of the total animation duration, here: 0.6s
+  // then pause for 50% of the total animation duration, here: 1.5s
   "30%, 80%": {
     transform: "scale(calc(88 / 50))",
   },
-  // animate for 10% of the animation duration i.e. 0.5s
-  // then pause for 10% of the animation duration i.e. 0.5s
+  // animate for 10% of the total animation duration, here: 0.3s
+  // then pause for 10% of the total animation duration, here: 0.3s
   "90%, 100%": {
     transform: "scale(1)",
   },
 });
 
-const expandTo53 = keyframes({
-  // delay for 10% of the animation duration i.e. 0.5s
+const expandFrom50To53 = keyframes({
+  // delay for 10% of the total animation duration, here: 0.3s
   "0%, 10%": {
     transform: "scale(1)",
   },
-  // animate for 20% of the animation duration i.e. 1s
-  // then pause for 50% of the animation duration i.e. 2.5s
+  // animate for 20% of the total animation duration, here: 0.6s
+  // then pause for 50% of the total animation duration, here: 1.5s
   "30%, 80%": {
     transform: "scale(calc(53 / 50))",
   },
-  // animate for 10% of the animation duration i.e. 0.5s
-  // then pause for 10% of the animation duration i.e. 0.5s
+  // animate for 10% of the total animation duration, here: 0.3s
+  // then pause for 10% of the total animation duration, here: 0.3s
   "90%, 100%": {
     transform: "scale(1)",
   },
 });
 
-const animationProps = "5s cubic-bezier(0, 0, 0, 0.63) infinite";
+const animationProps = `${animationDuration} cubic-bezier(0, 0, 0, 0.63) infinite`;
 
 export const background = style({
   position: "relative",
@@ -74,7 +76,7 @@ const outerCircle = style({
   borderRadius: "100%",
   boxSizing: "border-box",
   opacity: 0.5,
-  animation: `${expandTo128} ${animationProps}`,
+  animation: `${expandFrom50To128} ${animationProps}`,
 });
 export const outerCircleVariants = styleVariants({
   blue: [
@@ -101,7 +103,7 @@ const middleCircle = style({
   height: "50px",
   borderRadius: "100%",
   boxSizing: "border-box",
-  animation: `${expandTo88} ${animationProps}`,
+  animation: `${expandFrom50To88} ${animationProps}`,
 });
 export const middleCircleVariants = styleVariants({
   blue: [
@@ -129,7 +131,7 @@ const innerCircle = style({
   borderRadius: "100%",
   boxSizing: "border-box",
   boxShadow: "32px 80px 116px 0px rgba(91, 140, 255, 0.10)",
-  animation: `${expandTo53} ${animationProps}`,
+  animation: `${expandFrom50To53} ${animationProps}`,
 });
 export const innerCircleVariants = styleVariants({
   blue: [
