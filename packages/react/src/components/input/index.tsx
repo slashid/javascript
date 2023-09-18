@@ -160,10 +160,6 @@ export const PhoneInput: React.FC<PhoneProps> = ({
               contentProps={{
                 className: styles.dropdownContent,
                 position: "popper",
-                align: "start",
-                alignOffset: -1,
-                side: "bottom",
-                sideOffset: 4,
               }}
             />
           </div>

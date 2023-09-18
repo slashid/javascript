@@ -33,6 +33,7 @@ export const dropdownWrapper = style({
 export const dropdownContent = style({
   width: "calc(var(--radix-select-trigger-width) + 2px)",
   maxHeight: "264px",
+  marginTop: "4px",
 });
 
 export const dropdown = style({
