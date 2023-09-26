@@ -37,6 +37,10 @@ export type FactorOTP = Extract<
   { method: "otp_via_email" } | { method: "otp_via_sms" }
 >;
 
+export type FactorEmailLink = Extract<Factor, { method: "email_link" }>;
+
+export type FactorSmsLink = Extract<Factor, { method: "sms_link" }>;
+
 /**
  * This makes it possible to add a label to the configured OIDC factors.
  * This is useful when you want to change the default display (capitalized provider name).

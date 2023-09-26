@@ -5,9 +5,11 @@ import {
 } from "country-list-with-dial-code-and-flag";
 import { TextConfigKey } from "../components/text/constants";
 import {
+  FactorEmailLink,
   FactorNonOIDC,
   FactorOIDC,
   FactorOTP,
+  FactorSmsLink,
   Handle,
   HandleType,
 } from "./types";
@@ -58,11 +60,11 @@ export function isFactorOidc(factor: Factor): factor is FactorOIDC {
   return factor.method === "oidc";
 }
 
-export function isFactorEmailLink(factor: Factor): boolean {
+export function isFactorEmailLink(factor: Factor): factor is FactorEmailLink {
   return factor.method === "email_link";
 }
 
-export function isFactorSmsLink(factor: Factor): boolean {
+export function isFactorSmsLink(factor: Factor): factor is FactorSmsLink {
   return factor.method === "sms_link";
 }
 
