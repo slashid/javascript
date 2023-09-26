@@ -1,4 +1,4 @@
-import { clsx } from "clsx";
+import { Factor } from "@slashid/slashid";
 import {
   FormEventHandler,
   useCallback,
@@ -6,12 +6,19 @@ import {
   useRef,
   useState,
 } from "react";
-import { getAuthenticatingMessage, isFactorOTP } from "../../domain/handles";
+import {
+  getAuthenticatingMessage,
+  isFactorEmailLink,
+  isFactorOTP,
+  isFactorSmsLink,
+} from "../../domain/handles";
 import { useConfiguration } from "../../hooks/use-configuration";
 import { useForm } from "../../hooks/use-form";
 import { useSlashID } from "../../main";
-import { centered, sprinkles } from "../../theme/sprinkles.css";
+import { sprinkles } from "../../theme/sprinkles.css";
 import { LinkButton } from "../button/link-button";
+import { Chat } from "../icon/chat";
+import { Email } from "../icon/email";
 import { OtpInput } from "../otp-input";
 import { Circle } from "../spinner/circle";
 import { Spinner } from "../spinner/spinner";
@@ -22,12 +29,34 @@ import { AuthenticatingState } from "./flow";
 import { OTP_CODE_LENGTH, isValidOTPCode } from "./validation";
 
 const Loader = () => (
-  <div className={clsx(sprinkles({ marginY: "12" }), centered)}>
-    <Circle>
-      <Spinner />
-    </Circle>
-  </div>
+  <Circle>
+    <Spinner />
+  </Circle>
 );
+
+const AuthenticatingContent = ({ factor }: { factor: Factor }) => {
+  if (isFactorOTP(factor)) {
+    return <OtpForm />;
+  }
+
+  if (isFactorEmailLink(factor)) {
+    return (
+      <Circle>
+        <Email />
+      </Circle>
+    );
+  }
+
+  if (isFactorSmsLink(factor)) {
+    return (
+      <Circle>
+        <Chat />
+      </Circle>
+    );
+  }
+
+  return <Loader />;
+};
 
 type Props = {
   flowState: AuthenticatingState;
@@ -130,7 +159,7 @@ export const Authenticating: React.FC<Props> = ({ flowState }) => {
         ) : undefined}
       </Text>
       <Text t={message} variant={{ color: "contrast", weight: "semibold" }} />
-      {isFactorOTP(factor) ? <OtpForm /> : <Loader />}
+      <AuthenticatingContent factor={factor} />
       <div className={styles.retryPrompt}>
         <Text
           variant={{ size: "sm", color: "tertiary", weight: "semibold" }}
