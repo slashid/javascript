@@ -1,28 +1,57 @@
-import { centered, sprinkles } from "../../theme/sprinkles.css";
-import { AuthenticatingState } from "./flow";
-import { Text } from "../text";
-import { LinkButton } from "../button/link-button";
-import * as styles from "./authenticating.css";
+import { Factor } from "@slashid/slashid";
+import { FormEventHandler, useCallback, useEffect, useState } from "react";
+import {
+  getAuthenticatingMessage,
+  isFactorEmailLink,
+  isFactorOTP,
+  isFactorSmsLink,
+} from "../../domain/handles";
 import { useConfiguration } from "../../hooks/use-configuration";
-import { getAuthenticatingMessage, isFactorOTP } from "../../domain/handles";
+import { useForm } from "../../hooks/use-form";
+import { useSlashID } from "../../main";
+import { sprinkles } from "../../theme/sprinkles.css";
+import { Button } from "../button";
+import { LinkButton } from "../button/link-button";
+import { Chat } from "../icon/chat";
+import { Email } from "../icon/email";
+import { Input } from "../input";
 import { Circle } from "../spinner/circle";
 import { Spinner } from "../spinner/spinner";
-import { clsx } from "clsx";
-import { FormEventHandler, useCallback, useEffect, useState } from "react";
-import { Input } from "../input";
-import { Button } from "../button";
+import { Text } from "../text";
+import * as styles from "./authenticating.css";
 import { ErrorMessage } from "./error-message";
-import { useSlashID } from "../../main";
+import { AuthenticatingState } from "./flow";
 import { isValidOTPCode } from "./validation";
-import { useForm } from "../../hooks/use-form";
 
 const Loader = () => (
-  <div className={clsx(sprinkles({ marginY: "12" }), centered)}>
-    <Circle>
-      <Spinner />
-    </Circle>
-  </div>
+  <Circle>
+    <Spinner />
+  </Circle>
 );
+
+const AuthenticatingContent = ({ factor }: { factor: Factor }) => {
+  if (isFactorOTP(factor)) {
+    return <OtpForm />;
+  }
+
+  if (isFactorEmailLink(factor)) {
+    return (
+      <Circle>
+        <Email />
+      </Circle>
+    );
+  }
+
+  if (isFactorSmsLink(factor)) {
+    return (
+      <Circle>
+        <Chat />
+      </Circle>
+    );
+  }
+
+  return <Loader />;
+};
 
 type Props = {
   flowState: AuthenticatingState;
@@ -108,7 +137,7 @@ export const Authenticating: React.FC<Props> = ({ flowState }) => {
         ) : undefined}
       </Text>
       <Text t={message} variant={{ color: "contrast", weight: "semibold" }} />
-      {isFactorOTP(factor) ? <OtpForm /> : <Loader />}
+      <AuthenticatingContent factor={factor} />
       <div className={styles.retryPrompt}>
         <Text
           variant={{ size: "sm", color: "tertiary", weight: "semibold" }}
