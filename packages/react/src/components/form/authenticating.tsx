@@ -10,6 +10,8 @@ import {
   getAuthenticatingMessage,
   isFactorEmailLink,
   isFactorOTP,
+  isFactorOTPEmail,
+  isFactorOTPSms,
   isFactorSmsLink,
 } from "../../domain/handles";
 import { useConfiguration } from "../../hooks/use-configuration";
@@ -34,35 +36,65 @@ const Loader = () => (
   </Circle>
 );
 
-const AuthenticatingContent = ({ factor }: { factor: Factor }) => {
-  if (isFactorOTP(factor)) {
-    return <OtpForm />;
-  }
+const EmailIcon = () => (
+  <Circle>
+    <Email />
+  </Circle>
+);
 
+const SmsIcon = () => (
+  <Circle>
+    <Chat />
+  </Circle>
+);
+
+const BackButton = ({ onCancel }: { onCancel: () => void }) => {
+  const { text } = useConfiguration();
+  return (
+    <LinkButton
+      className={sprinkles({ marginBottom: "4" })}
+      testId="sid-form-authenticating-cancel-button"
+      variant="back"
+      onClick={onCancel}
+    >
+      {text["authenticating.back"]}
+    </LinkButton>
+  );
+};
+
+const RetryPrompt = ({ onRetry }: { onRetry: () => void }) => {
+  const { text } = useConfiguration();
+  return (
+    <div className={styles.retryPrompt}>
+      <Text
+        variant={{ size: "sm", color: "tertiary", weight: "semibold" }}
+        t="authenticating.retryPrompt"
+      />
+      <LinkButton
+        className={sprinkles({ marginLeft: "1" })}
+        type="button"
+        testId="sid-form-authenticating-retry-button"
+        onClick={onRetry}
+      >
+        {text["authenticating.retry"]}
+      </LinkButton>
+    </div>
+  );
+};
+
+const AuthenticatingIcon = ({ factor }: { factor: Factor }) => {
   if (isFactorEmailLink(factor)) {
-    return (
-      <Circle>
-        <Email />
-      </Circle>
-    );
+    return <EmailIcon />;
   }
 
   if (isFactorSmsLink(factor)) {
-    return (
-      <Circle>
-        <Chat />
-      </Circle>
-    );
+    return <SmsIcon />;
   }
 
   return <Loader />;
 };
 
-type Props = {
-  flowState: AuthenticatingState;
-};
-
-const OtpForm = () => {
+const AuthenticatingOtpContent = ({ flowState }: Props) => {
   const { text } = useConfiguration();
   const { sid } = useSlashID();
   const { values, registerField, registerSubmit } = useForm();
@@ -70,6 +102,24 @@ const OtpForm = () => {
     "initial" | "input" | "submitting"
   >("initial");
   const submitInputRef = useRef<HTMLInputElement>(null);
+
+  const factor = flowState.context.config.factor;
+  const { title, message } = getAuthenticatingMessage(
+    factor,
+    formState === "submitting"
+  );
+
+  const renderOTPIcon = () => {
+    if (isFactorOTPEmail(factor)) {
+      return <EmailIcon />;
+    }
+
+    if (isFactorOTPSms(factor)) {
+      return <SmsIcon />;
+    }
+
+    return <Loader />;
+  };
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = useCallback(
     (e) => {
@@ -115,42 +165,43 @@ const OtpForm = () => {
     }
   }, [formState, sid]);
 
-  if (formState !== "input") {
-    return <Loader />;
-  }
-
   return (
-    <form onSubmit={registerSubmit(handleSubmit)} className={styles.otpForm}>
-      <OtpInput
-        shouldAutoFocus
-        inputType="number"
-        value={values["otp"] ?? ""}
-        onChange={handleChange}
-        numInputs={OTP_CODE_LENGTH}
-      />
-      <input hidden type="submit" ref={submitInputRef} />
-      <ErrorMessage name="otp" />
-    </form>
+    <>
+      <BackButton onCancel={() => flowState.cancel()} />
+      <Text as="h1" t={title} variant={{ size: "2xl-title", weight: "bold" }} />
+      <Text t={message} variant={{ color: "contrast", weight: "semibold" }} />
+      {formState === "initial" && renderOTPIcon()}
+      {formState === "input" && (
+        <form
+          onSubmit={registerSubmit(handleSubmit)}
+          className={styles.otpForm}
+        >
+          <OtpInput
+            shouldAutoFocus
+            inputType="number"
+            value={values["otp"] ?? ""}
+            onChange={handleChange}
+            numInputs={OTP_CODE_LENGTH}
+          />
+          <input hidden type="submit" ref={submitInputRef} />
+          <ErrorMessage name="otp" />
+        </form>
+      )}
+      {formState === "submitting" && <Loader />}
+      {formState !== "submitting" && (
+        <RetryPrompt onRetry={() => flowState.retry()} />
+      )}
+    </>
   );
 };
 
-export const Authenticating: React.FC<Props> = ({ flowState }) => {
-  const { text } = useConfiguration();
-  const { title, message } = getAuthenticatingMessage(
-    flowState.context.config.factor
-  );
+const AuthenticatingContent = ({ flowState }: Props) => {
   const factor = flowState.context.config.factor;
+  const { title, message } = getAuthenticatingMessage(factor);
 
   return (
-    <article data-testid="sid-form-authenticating-state">
-      <LinkButton
-        className={sprinkles({ marginBottom: "4" })}
-        testId="sid-form-authenticating-cancel-button"
-        variant="back"
-        onClick={() => flowState.cancel()}
-      >
-        {text["authenticating.back"]}
-      </LinkButton>
+    <>
+      <BackButton onCancel={() => flowState.cancel()} />
       <Text as="h1" t={title} variant={{ size: "2xl-title", weight: "bold" }}>
         {factor.method === "oidc" ? (
           <span className={styles.oidcTitle}>
@@ -159,21 +210,26 @@ export const Authenticating: React.FC<Props> = ({ flowState }) => {
         ) : undefined}
       </Text>
       <Text t={message} variant={{ color: "contrast", weight: "semibold" }} />
-      <AuthenticatingContent factor={factor} />
-      <div className={styles.retryPrompt}>
-        <Text
-          variant={{ size: "sm", color: "tertiary", weight: "semibold" }}
-          t="authenticating.retryPrompt"
-        />
-        <LinkButton
-          className={sprinkles({ marginLeft: "1" })}
-          type="button"
-          testId="sid-form-authenticating-retry-button"
-          onClick={() => flowState.retry()}
-        >
-          {text["authenticating.retry"]}
-        </LinkButton>
-      </div>
+      <AuthenticatingIcon factor={factor} />
+      <RetryPrompt onRetry={() => flowState.retry()} />
+    </>
+  );
+};
+
+type Props = {
+  flowState: AuthenticatingState;
+};
+
+export const Authenticating = ({ flowState }: Props) => {
+  const factor = flowState.context.config.factor;
+
+  return (
+    <article data-testid="sid-form-authenticating-state">
+      {isFactorOTP(factor) ? (
+        <AuthenticatingOtpContent flowState={flowState} />
+      ) : (
+        <AuthenticatingContent flowState={flowState} />
+      )}
     </article>
   );
 };

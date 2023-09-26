@@ -27,9 +27,16 @@ export const TEXT = {
   "authenticating.message.smsLink":
     "We have sent you a link via text. Follow the link provided to complete your registration.",
   "authenticating.title.smsLink": "Check your phone",
+  "authenticating.message.emailOtp":
+    "We have sent you a code via email. Please insert it here.",
+  "authenticating.title.emailOtp": "Check your email",
+  "authenticating.submitting.message.emailOtp": "We are verifying the code.",
+  "authenticating.submitting.title.emailOtp": "Please wait",
   "authenticating.message.smsOtp":
     "We have sent you a code via text. Please insert it here.",
   "authenticating.title.smsOtp": "Check your phone",
+  "authenticating.submitting.message.smsOtp": "We are verifying the code.",
+  "authenticating.submitting.title.smsOtp": "Please wait",
   "authenticating.message.oidc":
     "Please follow the instructions in the login screen from your SSO provider.",
   "authenticating.title.oidc": "Sign in with ",

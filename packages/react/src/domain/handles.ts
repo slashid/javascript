@@ -9,6 +9,8 @@ import {
   FactorNonOIDC,
   FactorOIDC,
   FactorOTP,
+  FactorOTPEmail,
+  FactorOTPSms,
   FactorSmsLink,
   Handle,
   HandleType,
@@ -52,8 +54,16 @@ export function filterFactors(factors: Factor[], handleType: HandleType) {
   return factors.filter((f) => getHandleType(f) === handleType);
 }
 
+export function isFactorOTPEmail(factor: Factor): factor is FactorOTPEmail {
+  return factor.method === "otp_via_email";
+}
+
+export function isFactorOTPSms(factor: Factor): factor is FactorOTPSms {
+  return factor.method === "otp_via_sms";
+}
+
 export function isFactorOTP(factor: Factor): factor is FactorOTP {
-  return factor.method === "otp_via_email" || factor.method === "otp_via_sms";
+  return isFactorOTPEmail(factor) || isFactorOTPSms(factor);
 }
 
 export function isFactorOidc(factor: Factor): factor is FactorOIDC {
@@ -112,7 +122,8 @@ export type AuthenticatingMessage = {
   message: TextConfigKey;
 };
 export function getAuthenticatingMessage(
-  factor: Factor
+  factor: Factor,
+  isSubmitting = false
 ): AuthenticatingMessage {
   switch (factor.method) {
     case "oidc":
@@ -131,10 +142,28 @@ export function getAuthenticatingMessage(
         message: "authenticating.message.smsLink",
         title: "authenticating.title.smsLink",
       };
-    case "otp_via_sms":
+    case "otp_via_sms": {
+      if (isSubmitting) {
+        return {
+          message: "authenticating.submitting.message.smsOtp",
+          title: "authenticating.submitting.title.smsOtp",
+        };
+      }
       return {
         message: "authenticating.message.smsOtp",
         title: "authenticating.title.smsOtp",
+      };
+    }
+    case "otp_via_email":
+      if (isSubmitting) {
+        return {
+          message: "authenticating.submitting.message.emailOtp",
+          title: "authenticating.submitting.title.emailOtp",
+        };
+      }
+      return {
+        message: "authenticating.message.emailOtp",
+        title: "authenticating.title.emailOtp",
       };
     case "email_link":
     default:
