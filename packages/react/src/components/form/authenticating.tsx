@@ -101,6 +101,30 @@ const SmsIcon = () => (
   </Circle>
 );
 
+const OTPIcon = ({ factor }: { factor: Factor }) => {
+  if (isFactorOTPEmail(factor)) {
+    return <EmailIcon />;
+  }
+
+  if (isFactorOTPSms(factor)) {
+    return <SmsIcon />;
+  }
+
+  return <Loader />;
+};
+
+const NonOTPIcon = ({ factor }: { factor: Factor }) => {
+  if (isFactorEmailLink(factor)) {
+    return <EmailIcon />;
+  }
+
+  if (isFactorSmsLink(factor)) {
+    return <SmsIcon />;
+  }
+
+  return <Loader />;
+};
+
 const BackButton = ({ onCancel }: { onCancel: () => void }) => {
   const { text } = useConfiguration();
   return (
@@ -135,19 +159,11 @@ const RetryPrompt = ({ onRetry }: { onRetry: () => void }) => {
   );
 };
 
-const AuthenticatingIcon = ({ factor }: { factor: Factor }) => {
-  if (isFactorEmailLink(factor)) {
-    return <EmailIcon />;
-  }
-
-  if (isFactorSmsLink(factor)) {
-    return <SmsIcon />;
-  }
-
-  return <Loader />;
+type Props = {
+  flowState: AuthenticatingState;
 };
 
-const AuthenticatingOtpContent = ({ flowState }: Props) => {
+const OTPContent = ({ flowState }: Props) => {
   const { text } = useConfiguration();
   const { sid } = useSlashID();
   const { values, registerField, registerSubmit } = useForm();
@@ -161,18 +177,6 @@ const AuthenticatingOtpContent = ({ flowState }: Props) => {
     factor,
     formState === "submitting"
   );
-
-  const renderOTPIcon = () => {
-    if (isFactorOTPEmail(factor)) {
-      return <EmailIcon />;
-    }
-
-    if (isFactorOTPSms(factor)) {
-      return <SmsIcon />;
-    }
-
-    return <Loader />;
-  };
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = useCallback(
     (e) => {
@@ -223,7 +227,7 @@ const AuthenticatingOtpContent = ({ flowState }: Props) => {
       <BackButton onCancel={() => flowState.cancel()} />
       <Text as="h1" t={title} variant={{ size: "2xl-title", weight: "bold" }} />
       <Text t={message} variant={{ color: "contrast", weight: "semibold" }} />
-      {formState === "initial" && renderOTPIcon()}
+      {formState === "initial" && <OTPIcon factor={factor} />}
       {formState === "input" && (
         <form
           onSubmit={registerSubmit(handleSubmit)}
@@ -240,15 +244,16 @@ const AuthenticatingOtpContent = ({ flowState }: Props) => {
           <ErrorMessage name="otp" />
         </form>
       )}
-      {formState === "submitting" && <Loader />}
-      {formState !== "submitting" && (
+      {formState === "submitting" ? (
+        <Loader />
+      ) : (
         <RetryPrompt onRetry={() => flowState.retry()} />
       )}
     </>
   );
 };
 
-const AuthenticatingContent = ({ flowState }: Props) => {
+const NonOTPContent = ({ flowState }: Props) => {
   const factor = flowState.context.config.factor;
   const { title, message } = getAuthenticatingMessage(factor);
 
@@ -263,26 +268,18 @@ const AuthenticatingContent = ({ flowState }: Props) => {
         ) : undefined}
       </Text>
       <Text t={message} variant={{ color: "contrast", weight: "semibold" }} />
-      <AuthenticatingIcon factor={factor} />
+      <NonOTPIcon factor={factor} />
       <RetryPrompt onRetry={() => flowState.retry()} />
     </>
   );
 };
 
-type Props = {
-  flowState: AuthenticatingState;
-};
-
-export const Authenticating = ({ flowState }: Props) => {
-  const factor = flowState.context.config.factor;
-
-  return (
-    <article data-testid="sid-form-authenticating-state">
-      {isFactorOTP(factor) ? (
-        <AuthenticatingOtpContent flowState={flowState} />
-      ) : (
-        <AuthenticatingContent flowState={flowState} />
-      )}
-    </article>
-  );
-};
+export const Authenticating = ({ flowState }: Props) => (
+  <article data-testid="sid-form-authenticating-state">
+    {isFactorOTP(flowState.context.config.factor) ? (
+      <OTPContent flowState={flowState} />
+    ) : (
+      <NonOTPContent flowState={flowState} />
+    )}
+  </article>
+);
