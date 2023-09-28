@@ -32,10 +32,11 @@ export type FactorNonOIDC = Exclude<
   FactorOIDC | FactorLabeledOIDC
 >;
 
-export type FactorOTP = Extract<
-  Factor,
-  { method: "otp_via_email" } | { method: "otp_via_sms" }
->;
+export type FactorOTPEmail = Extract<Factor, { method: "otp_via_email" }>;
+
+export type FactorOTPSms = Extract<Factor, { method: "otp_via_sms" }>;
+
+export type FactorOTP = FactorOTPEmail | FactorOTPSms;
 
 export type FactorEmailLink = Extract<Factor, { method: "email_link" }>;
 
