@@ -8,6 +8,7 @@ import * as styles from "./dropdown.css";
 type Item = {
   label: ReactNode;
   value: string;
+  textValue?: string;
 };
 
 type Props = {
@@ -86,6 +87,7 @@ export const Dropdown: React.FC<Props> = ({
                   )}
                   key={item.value}
                   value={item.value}
+                  textValue={item.textValue}
                 >
                   <Select.ItemText>{item.label}</Select.ItemText>
                   <Select.ItemIndicator className={styles.selectedIcon}>

@@ -156,6 +156,7 @@ export const PhoneInput: React.FC<PhoneProps> = ({
                   </>
                 ),
                 value: country.code,
+                textValue: country.name,
               }))}
               contentProps={{
                 className: styles.dropdownContent,
