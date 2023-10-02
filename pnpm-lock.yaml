@@ -205,7 +205,7 @@ importers:
       '@radix-ui/react-select': ^1.1.2
       '@radix-ui/react-switch': ^1.0.3
       '@radix-ui/react-tabs': ^1.0.1
-      '@slashid/slashid': ^3.13.2
+      '@slashid/slashid': ^3.14.0
       '@storybook/addon-essentials': 7.0.0-rc.2
       '@storybook/addon-interactions': 7.4.0
       '@storybook/addon-links': 7.4.0
@@ -260,7 +260,7 @@ importers:
       country-list-with-dial-code-and-flag: 3.0.3
     devDependencies:
       '@faker-js/faker': 8.0.2
-      '@slashid/slashid': 3.13.2
+      '@slashid/slashid': 3.14.0
       '@storybook/addon-essentials': 7.0.0-rc.2_biqbaboplfbrettd7655fr4n2y
       '@storybook/addon-interactions': 7.4.0_zkisbtryv3xtasf42ecsrjh3ky
       '@storybook/addon-links': 7.4.0_biqbaboplfbrettd7655fr4n2y
@@ -5683,8 +5683,8 @@ packages:
       uuid: 8.3.2
     dev: false
 
-  /@slashid/slashid/3.13.2:
-    resolution: {integrity: sha512-/qIuZMRXZ70MI8lmCRYt1CQxpagGrzDSKX/soDTCCC5/r0O2boEnX6YCoMrmv9gxV4a68P7BAfH4gr9VncL1kg==}
+  /@slashid/slashid/3.14.0:
+    resolution: {integrity: sha512-4rPhosFdWro8HSWYwKHkPKlsSHV0CAmVNthMjuyiJ74Q3eXncxY6mYzIWiwovtxj3qbmUr3Q5LD0yqReu1wvjA==}
     dependencies:
       '@changesets/cli': 2.26.2
       '@types/uuid': 8.3.4
