@@ -1,7 +1,7 @@
 import { Factor } from "@slashid/slashid";
 import { createContext, ReactNode, useMemo } from "react";
-import { TEXT, TextConfig } from "../components/text/constants";
 import { SlashID } from "../components/icon/slashid";
+import { TEXT, TextConfig } from "../components/text/constants";
 import { FactorConfiguration } from "../domain/types";
 
 export type Logo = string | React.ReactNode;
@@ -12,6 +12,7 @@ export interface IConfigurationContext {
   logo: Logo;
   storeLastHandle: boolean;
   showBanner: boolean;
+  defaultCountryCode: string;
 }
 
 export const initialContextValue: IConfigurationContext = {
@@ -20,6 +21,7 @@ export const initialContextValue: IConfigurationContext = {
   logo: <SlashID />,
   storeLastHandle: false,
   showBanner: true,
+  defaultCountryCode: "US",
 };
 
 export const ConfigurationContext =
@@ -32,26 +34,22 @@ type Props = {
   logo?: Logo;
   storeLastHandle?: boolean;
   showBanner?: boolean;
+  defaultCountryCode?: string;
   children: ReactNode;
 };
 
 export const ConfigurationProvider: React.FC<Props> = ({
   text,
-  factors,
-  logo,
   children,
-  storeLastHandle,
-  showBanner = true,
+  ...props
 }) => {
   const contextValue = useMemo(() => {
     return {
+      ...initialContextValue,
+      ...props,
       text: text ? { ...TEXT, ...text } : initialContextValue.text,
-      factors: factors || initialContextValue.factors,
-      logo: logo || initialContextValue.logo,
-      storeLastHandle: storeLastHandle || initialContextValue.storeLastHandle,
-      showBanner: showBanner,
     };
-  }, [text, factors, logo, storeLastHandle, showBanner]);
+  }, [props, text]);
 
   return (
     <ConfigurationContext.Provider value={contextValue}>

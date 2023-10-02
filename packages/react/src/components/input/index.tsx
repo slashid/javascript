@@ -90,7 +90,6 @@ export const Input: React.FC<InputProps> = ({
 };
 
 export type Flag = ReturnType<typeof getList>[0];
-export const GB_FLAG: Flag = findFlag("GB")!;
 
 type PhoneProps = BaseProps & {
   type?: "tel";

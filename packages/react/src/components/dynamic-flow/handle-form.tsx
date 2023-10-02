@@ -1,22 +1,21 @@
-import React from "react";
-import { Validator, useEffect, useMemo, useState } from "react";
 import { Factor } from "@slashid/slashid";
 import { findFlag } from "country-list-with-dial-code-and-flag";
+import React, { Validator, useEffect, useMemo, useState } from "react";
 
 import {
   filterFactors,
   isFactorOidc,
   parsePhoneNumber,
 } from "../../domain/handles";
-import { HandleType, Handle } from "../../domain/types";
+import { Handle, HandleType } from "../../domain/types";
 import { useConfiguration } from "../../hooks/use-configuration";
 import { useForm } from "../../hooks/use-form";
 
 import { Button } from "../button";
 import { Dropdown } from "../dropdown";
-import { Flag, GB_FLAG, PhoneInput, Input } from "../input";
 import { ErrorMessage } from "../form/error-message";
-import { isValidPhoneNumber, isValidEmail } from "../form/validation";
+import { isValidEmail, isValidPhoneNumber } from "../form/validation";
+import { Flag, Input, PhoneInput } from "../input";
 import { TextConfigKey } from "../text/constants";
 
 import { sprinkles } from "../../theme/sprinkles.css";
@@ -52,15 +51,17 @@ export const HandleForm: React.FC<Props> = ({
     () => filterFactors(factors, handleType).filter((f) => !isFactorOidc(f)),
     [factors, handleType]
   );
-  const shouldRenderFactorDropdown = filteredFactors.length > 1;
+  const { text, defaultCountryCode } = useConfiguration();
   const { registerField, registerSubmit, values, status, resetForm } =
     useForm();
+
+  const shouldRenderFactorDropdown = filteredFactors.length > 1;
   const parsedPhoneNumber = parsePhoneNumber(defaultValue ?? "");
+
   const [flag, setFlag] = useState<Flag>(
-    findFlag(parsedPhoneNumber?.countryCode ?? "") ?? GB_FLAG
+    findFlag(parsedPhoneNumber?.countryCode ?? defaultCountryCode)!
   );
   const [factor, setFactor] = useState<Factor>(filteredFactors[0]);
-  const { text } = useConfiguration();
 
   useEffect(() => {
     setFactor(filteredFactors[0]);
