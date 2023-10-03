@@ -1,7 +1,16 @@
 import { clsx } from "clsx";
 import { polyfillCountryFlagEmojis } from "country-flag-emoji-polyfill";
-import { findFlag, getList } from "country-list-with-dial-code-and-flag";
-import { ChangeEventHandler, useCallback, useLayoutEffect } from "react";
+import {
+  Flag as CountryFlag,
+  findFlag,
+  getList,
+} from "country-list-with-dial-code-and-flag";
+import {
+  ChangeEventHandler,
+  useCallback,
+  useLayoutEffect,
+  useMemo,
+} from "react";
 import { sprinkles } from "../../theme/sprinkles.css";
 import { Dropdown } from "../dropdown";
 import { ChevronDown } from "../icon/chevron-down";
@@ -89,7 +98,7 @@ export const Input: React.FC<InputProps> = ({
   );
 };
 
-export type Flag = ReturnType<typeof getList>[0];
+export type Flag = CountryFlag;
 
 type PhoneProps = BaseProps & {
   type?: "tel";
@@ -108,8 +117,6 @@ export const PhoneInput: React.FC<PhoneProps> = ({
   onChange,
   onFlagChange,
 }) => {
-  const countries = getList();
-
   useLayoutEffect(() => {
     polyfillCountryFlagEmojis();
   }, []);
@@ -120,6 +127,27 @@ export const PhoneInput: React.FC<PhoneProps> = ({
     },
     [onFlagChange]
   );
+
+  const items = useMemo(() => {
+    return getList().map((country) => ({
+      label: (
+        <>
+          <span>{country.flag}</span>
+          <span
+            className={sprinkles({
+              marginLeft: "3",
+              marginRight: "1",
+            })}
+          >
+            {country.name}
+          </span>
+          <span>{country.dial_code}</span>
+        </>
+      ),
+      value: country.code,
+      textValue: country.name,
+    }));
+  }, []);
 
   return (
     <div
@@ -139,24 +167,7 @@ export const PhoneInput: React.FC<PhoneProps> = ({
               className={styles.dropdown}
               label=""
               onChange={handleChangeCountryCode}
-              items={countries.map((country) => ({
-                label: (
-                  <>
-                    <span>{country.flag}</span>
-                    <span
-                      className={sprinkles({
-                        marginLeft: "3",
-                        marginRight: "1",
-                      })}
-                    >
-                      {country.name}
-                    </span>
-                    <span>{country.dial_code}</span>
-                  </>
-                ),
-                value: country.code,
-                textValue: country.name,
-              }))}
+              items={items}
               contentProps={{
                 className: styles.dropdownContent,
                 position: "popper",
