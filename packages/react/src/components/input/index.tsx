@@ -5,14 +5,7 @@ import {
   findFlag,
   getList,
 } from "country-list-with-dial-code-and-flag";
-import {
-  ChangeEventHandler,
-  useCallback,
-  useLayoutEffect,
-  useMemo,
-} from "react";
-import { sprinkles } from "../../theme/sprinkles.css";
-import { Dropdown } from "../dropdown";
+import { ChangeEventHandler, useCallback, useLayoutEffect } from "react";
 import { ChevronDown } from "../icon/chevron-down";
 import * as styles from "./input.css";
 
@@ -122,32 +115,12 @@ export const PhoneInput: React.FC<PhoneProps> = ({
   }, []);
 
   const handleChangeCountryCode = useCallback(
-    (value: string) => {
-      onFlagChange(findFlag(value)!);
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      const newCountryCode = e.target.value;
+      onFlagChange(findFlag(newCountryCode)!);
     },
     [onFlagChange]
   );
-
-  const items = useMemo(() => {
-    return getList().map((country) => ({
-      label: (
-        <>
-          <span>{country.flag}</span>
-          <span
-            className={sprinkles({
-              marginLeft: "3",
-              marginRight: "1",
-            })}
-          >
-            {country.name}
-          </span>
-          <span>{country.dial_code}</span>
-        </>
-      ),
-      value: country.code,
-      textValue: country.name,
-    }));
-  }, []);
 
   return (
     <div
@@ -161,19 +134,17 @@ export const PhoneInput: React.FC<PhoneProps> = ({
             </div>
             <ChevronDown />
           </div>
-          <div className={styles.dropdownWrapper}>
-            <Dropdown
-              defaultValue={flag.code}
-              className={styles.dropdown}
-              label=""
-              onChange={handleChangeCountryCode}
-              items={items}
-              contentProps={{
-                className: styles.dropdownContent,
-                position: "popper",
-              }}
-            />
-          </div>
+          <select
+            className={styles.select}
+            value={flag.code}
+            onChange={handleChangeCountryCode}
+          >
+            {getList().map((country) => (
+              <option key={country.code} value={country.code}>
+                {country.name} {country.dial_code}
+              </option>
+            ))}
+          </select>
         </div>
       ) : null}
       <BaseInput

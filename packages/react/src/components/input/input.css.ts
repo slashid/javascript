@@ -25,20 +25,10 @@ globalStyle(`${input}:-webkit-autofill`, {
   WebkitTextFillColor: publicVariables.color.foreground,
 });
 
-export const dropdownWrapper = style({
-  position: "absolute",
-  width: "100%",
-});
-
-export const dropdownContent = style({
-  width: "calc(var(--radix-select-trigger-width) + 2px)",
-  maxHeight: "264px",
-  marginTop: "4px",
-  marginLeft: "-1px",
-});
-
-export const dropdown = style({
+export const select = style({
   opacity: 0,
+  width: "100%",
+  height: "100%",
 
   ":hover": {
     cursor: "pointer",
@@ -46,25 +36,25 @@ export const dropdown = style({
 });
 
 export const countryHost = style({
+  position: "relative",
   height: "100%",
-  width: "122px",
+  width: "212px",
   borderRight: `1px solid ${publicVariables.color.subtle}`,
 
   selectors: {
-    [`&:has(${dropdown}:active)`]: {
+    [`&:has(${select}:active)`]: {
       borderRight: `1px solid ${publicVariables.color.tertiary}`,
     },
-    [`&:has(${dropdown}:focus)`]: {
+    [`&:has(${select}:focus)`]: {
       borderRight: `1px solid ${publicVariables.color.tertiary}`,
     },
-    [`&:has(${dropdown}:hover)`]: {
+    [`&:has(${select}:hover)`]: {
       borderRight: `1px solid ${publicVariables.color.placeholder}`,
     },
   },
 });
 
 export const host = style({
-  position: "relative",
   display: "flex",
   alignItems: "flex-start",
   border: `1px solid ${publicVariables.color.subtle}`,
@@ -85,13 +75,13 @@ export const host = style({
     [`&:has(${input}:hover)`]: {
       border: `1px solid ${publicVariables.color.placeholder}`,
     },
-    [`&:has(${dropdown}:active)`]: {
+    [`&:has(${select}:active)`]: {
       border: `1px solid ${publicVariables.color.tertiary}`,
     },
-    [`&:has(${dropdown}:focus)`]: {
+    [`&:has(${select}:focus)`]: {
       border: `1px solid ${publicVariables.color.tertiary}`,
     },
-    [`&:has(${dropdown}:hover)`]: {
+    [`&:has(${select}:hover)`]: {
       border: `1px solid ${publicVariables.color.placeholder}`,
     },
   },
@@ -116,9 +106,6 @@ export const inputHost = styleVariants({
   tel: [
     inputHostBase,
     {
-      flex: 1,
-      zIndex: 1,
-
       selectors: {
         [`&:has(${input}:active)`]: {
           borderLeft: `1px solid ${publicVariables.color.tertiary}`,
