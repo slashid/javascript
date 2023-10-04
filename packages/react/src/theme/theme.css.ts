@@ -224,10 +224,4 @@ export const [themeClass, theme] = createTheme({
   },
 });
 
-export const centered = style({
-  // HACK: this is needed to override CSS applied to body by Radix Select causing layout shift
-  // https://github.com/radix-ui/primitives/issues/1925
-  margin: "0 auto !important",
-});
-
 export type Theme = "light" | "dark" | "auto";

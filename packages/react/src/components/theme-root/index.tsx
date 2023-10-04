@@ -2,7 +2,6 @@ import { clsx } from "clsx";
 import {
   Theme,
   autoTheme,
-  centered,
   darkTheme,
   lightThemeVars,
   themeClass,
@@ -27,7 +26,6 @@ function createClassNames({ theme, className }: ThemeProps) {
     "sid-theme-root",
     `sid-theme-root__${theme}`,
     themeClass,
-    centered,
     {
       [darkTheme]: theme === "dark",
       [autoTheme]: theme === "auto",
