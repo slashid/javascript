@@ -57,6 +57,7 @@
     "@vanilla-extract/recipes": "^0.3.0",
     "@vanilla-extract/sprinkles": "^1.5.1",
     "compress.js": "^1.2.2",
+    "country-flag-emoji-polyfill": "^0.1.4",
     "country-list-with-dial-code-and-flag": "^3.0.2"
   },
   "devDependencies": {
@@ -92,6 +93,7 @@
     "tsconfig": "workspace:*",
     "vite": "^3.1.0",
     "vitest": "^0.25.2",
+    "vitest-canvas-mock": "^0.3.3",
     "yalc": "1.0.0-pre.53"
   },
   "peerDependencies": {

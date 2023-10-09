@@ -1,4 +1,7 @@
+import { Factor } from "@slashid/slashid";
+import { Flag, findFlag } from "country-list-with-dial-code-and-flag";
 import { Children, useEffect, useMemo, useState } from "react";
+import { FormStatus } from "../../../context/form-context";
 import {
   filterFactors,
   getHandleTypes,
@@ -7,21 +10,18 @@ import {
   parsePhoneNumber,
   resolveLastHandleValue,
 } from "../../../domain/handles";
-import { useConfiguration } from "../../../hooks/use-configuration";
 import { FactorNonOIDC, Handle, HandleType } from "../../../domain/types";
-import { TextConfig, TextConfigKey } from "../../text/constants";
-import { useInternalFormContext } from "../form";
+import { useConfiguration } from "../../../hooks/use-configuration";
 import { useForm } from "../../../hooks/use-form";
-import { Factor } from "@slashid/slashid";
-import { Flag, findFlag } from "country-list-with-dial-code-and-flag";
 import { sprinkles } from "../../../theme/sprinkles.css";
-import { Dropdown } from "../../dropdown";
-import { GB_FLAG, Input, PhoneInput } from "../../input";
-import { ErrorMessage } from "../error-message";
-import { isValidPhoneNumber, isValidEmail } from "../validation";
 import { Button } from "../../button";
-import { FormStatus } from "../../../context/form-context";
+import { Dropdown } from "../../dropdown";
+import { Input, PhoneInput } from "../../input";
 import { Tabs } from "../../tabs";
+import { TextConfig, TextConfigKey } from "../../text/constants";
+import { ErrorMessage } from "../error-message";
+import { useInternalFormContext } from "../form";
+import { isValidEmail, isValidPhoneNumber } from "../validation";
 
 import * as styles from "./initial.css";
 
@@ -300,13 +300,14 @@ const HandleInput: React.FC<PropsInternal> = ({
     () => filterFactors(factors, handleType).filter((f) => !isFactorOidc(f)),
     [factors, handleType]
   );
-  const shouldRenderFactorDropdown = filteredFactors.length > 1;
+  const { text, defaultCountryCode } = useConfiguration();
   const { registerField, values, resetForm } = useForm();
+
+  const shouldRenderFactorDropdown = filteredFactors.length > 1;
   const parsedPhoneNumber = parsePhoneNumber(defaultValue ?? "");
   const [flag, setFlag] = useState<Flag>(
-    findFlag(parsedPhoneNumber?.countryCode ?? "") ?? GB_FLAG
+    findFlag(parsedPhoneNumber?.countryCode ?? defaultCountryCode)!
   );
-  const { text } = useConfiguration();
 
   useEffect(() => {
     setSelectedFactor(filteredFactors[0]);

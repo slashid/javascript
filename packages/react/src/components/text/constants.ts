@@ -4,7 +4,7 @@ export type TextConfigKey = keyof TextConfig;
 export const TEXT = {
   "": "NYI",
   "footer.branding": "Top-tier security by SlashID",
-  "initial.title": "Welcome",
+  "initial.title": "Welcome to SlashID",
   "initial.subtitle": "Sign in to your account",
   "initial.oidc": "Sign in with",
   "initial.authenticationMethod": "Authentication method",
@@ -14,8 +14,8 @@ export const TEXT = {
   "initial.handle.phone.placeholder": "Type your phone number",
   "initial.submit": "Continue",
   "initial.divider": "or",
-  "authenticating.retryPrompt": "Did not work?",
-  "authenticating.retry": "Retry",
+  "authenticating.retryPrompt": "Didn’t receive the code?",
+  "authenticating.retry": "Resend",
   "authenticating.back": "Back",
   "authenticating.message.webauthn":
     "If you are registering for the first time, you will receive an email to verify your email address.",
@@ -27,9 +27,16 @@ export const TEXT = {
   "authenticating.message.smsLink":
     "We have sent you a link via text. Follow the link provided to complete your registration.",
   "authenticating.title.smsLink": "Check your phone",
+  "authenticating.message.emailOtp":
+    "We have sent you a code via email. Please insert it here.",
+  "authenticating.title.emailOtp": "Check your email",
+  "authenticating.submitting.message.emailOtp": "We are verifying the code.",
+  "authenticating.submitting.title.emailOtp": "Please wait",
   "authenticating.message.smsOtp":
     "We have sent you a code via text. Please insert it here.",
   "authenticating.title.smsOtp": "Check your phone",
+  "authenticating.submitting.message.smsOtp": "We are verifying the code.",
+  "authenticating.submitting.title.smsOtp": "Please wait",
   "authenticating.message.oidc":
     "Please follow the instructions in the login screen from your SSO provider.",
   "authenticating.title.oidc": "Sign in with ",

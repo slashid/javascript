@@ -3,12 +3,13 @@ import {
   findFlagByDialCode,
   getList,
 } from "country-list-with-dial-code-and-flag";
-import { TextConfigKey } from "../components/text/constants";
 import {
   FactorEmailLink,
   FactorNonOIDC,
   FactorOIDC,
   FactorOTP,
+  FactorOTPEmail,
+  FactorOTPSms,
   FactorSmsLink,
   Handle,
   HandleType,
@@ -52,8 +53,16 @@ export function filterFactors(factors: Factor[], handleType: HandleType) {
   return factors.filter((f) => getHandleType(f) === handleType);
 }
 
+export function isFactorOTPEmail(factor: Factor): factor is FactorOTPEmail {
+  return factor.method === "otp_via_email";
+}
+
+export function isFactorOTPSms(factor: Factor): factor is FactorOTPSms {
+  return factor.method === "otp_via_sms";
+}
+
 export function isFactorOTP(factor: Factor): factor is FactorOTP {
-  return factor.method === "otp_via_email" || factor.method === "otp_via_sms";
+  return isFactorOTPEmail(factor) || isFactorOTPSms(factor);
 }
 
 export function isFactorOidc(factor: Factor): factor is FactorOIDC {
@@ -104,43 +113,5 @@ export function parsePhoneNumber(
         countryCode: findFlagByDialCode(flag.dial_code).code,
       };
     }
-  }
-}
-
-export type AuthenticatingMessage = {
-  title: TextConfigKey;
-  message: TextConfigKey;
-};
-export function getAuthenticatingMessage(
-  factor: Factor
-): AuthenticatingMessage {
-  switch (factor.method) {
-    case "oidc":
-      return {
-        message: "authenticating.message.oidc",
-        title: "authenticating.title.oidc",
-      };
-    case "webauthn":
-      return {
-        message: "authenticating.message.webauthn",
-        title: "authenticating.title.webauthn",
-      };
-
-    case "sms_link":
-      return {
-        message: "authenticating.message.smsLink",
-        title: "authenticating.title.smsLink",
-      };
-    case "otp_via_sms":
-      return {
-        message: "authenticating.message.smsOtp",
-        title: "authenticating.title.smsOtp",
-      };
-    case "email_link":
-    default:
-      return {
-        message: "authenticating.message.emailLink",
-        title: "authenticating.title.emailLink",
-      };
   }
 }

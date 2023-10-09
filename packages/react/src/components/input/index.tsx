@@ -1,8 +1,13 @@
 import { clsx } from "clsx";
-import { ChangeEvent, useCallback, ChangeEventHandler } from "react";
-import { getList, findFlag } from "country-list-with-dial-code-and-flag";
-import * as styles from "./input.css";
+import { polyfillCountryFlagEmojis } from "country-flag-emoji-polyfill";
+import {
+  Flag as CountryFlag,
+  findFlag,
+  getList,
+} from "country-list-with-dial-code-and-flag";
+import { ChangeEventHandler, useCallback, useLayoutEffect } from "react";
 import { ChevronDown } from "../icon/chevron-down";
+import * as styles from "./input.css";
 
 type BaseProps = {
   id: string;
@@ -86,8 +91,7 @@ export const Input: React.FC<InputProps> = ({
   );
 };
 
-export type Flag = ReturnType<typeof getList>[0];
-export const GB_FLAG: Flag = findFlag("GB")!;
+export type Flag = CountryFlag;
 
 type PhoneProps = BaseProps & {
   type?: "tel";
@@ -106,10 +110,12 @@ export const PhoneInput: React.FC<PhoneProps> = ({
   onChange,
   onFlagChange,
 }) => {
-  const countries = getList();
+  useLayoutEffect(() => {
+    polyfillCountryFlagEmojis();
+  }, []);
 
   const handleChangeCountryCode = useCallback(
-    (e: ChangeEvent<HTMLSelectElement>) => {
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
       const newCountryCode = e.target.value;
       onFlagChange(findFlag(newCountryCode)!);
     },
@@ -133,7 +139,7 @@ export const PhoneInput: React.FC<PhoneProps> = ({
             value={flag.code}
             onChange={handleChangeCountryCode}
           >
-            {countries.map((country) => (
+            {getList().map((country) => (
               <option key={country.code} value={country.code}>
                 {country.name} {country.dial_code}
               </option>

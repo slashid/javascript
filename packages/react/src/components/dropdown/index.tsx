@@ -1,13 +1,14 @@
 import * as Select from "@radix-ui/react-select";
 import { clsx } from "clsx";
+import { ReactNode, useCallback, useState } from "react";
 import { Check } from "../icon/check";
 import { ChevronDown } from "../icon/chevron-down";
 import * as styles from "./dropdown.css";
-import { ReactNode, useCallback, useState } from "react";
 
 type Item = {
   label: ReactNode;
   value: string;
+  textValue?: string;
 };
 
 type Props = {
@@ -86,6 +87,7 @@ export const Dropdown: React.FC<Props> = ({
                   )}
                   key={item.value}
                   value={item.value}
+                  textValue={item.textValue}
                 >
                   <Select.ItemText>{item.label}</Select.ItemText>
                   <Select.ItemIndicator className={styles.selectedIcon}>

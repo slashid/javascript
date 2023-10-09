@@ -231,6 +231,7 @@ importers:
       '@vitejs/plugin-react': ^2.1.0
       clsx: ^1.2.1
       compress.js: ^1.2.2
+      country-flag-emoji-polyfill: ^0.1.4
       country-list-with-dial-code-and-flag: ^3.0.2
       cross-fetch: ^4.0.0
       jsdom: ^20.0.2
@@ -242,6 +243,7 @@ importers:
       tsconfig: workspace:*
       vite: ^3.1.0
       vitest: ^0.25.2
+      vitest-canvas-mock: ^0.3.3
       yalc: 1.0.0-pre.53
     dependencies:
       '@radix-ui/react-accordion': 1.1.2_zkisbtryv3xtasf42ecsrjh3ky
@@ -254,6 +256,7 @@ importers:
       '@vanilla-extract/recipes': 0.3.0_zd2pmj2rl4fq6dchynq6tm4lty
       '@vanilla-extract/sprinkles': 1.6.1_zd2pmj2rl4fq6dchynq6tm4lty
       compress.js: 1.2.2
+      country-flag-emoji-polyfill: 0.1.4
       country-list-with-dial-code-and-flag: 3.0.3
     devDependencies:
       '@faker-js/faker': 8.0.2
@@ -288,6 +291,7 @@ importers:
       tsconfig: link:../tsconfig
       vite: 3.2.7
       vitest: 0.25.8_jsdom@20.0.3
+      vitest-canvas-mock: 0.3.3_vitest@0.25.8
       yalc: 1.0.0-pre.53
 
   packages/tests:
@@ -9132,6 +9136,12 @@ packages:
       yaml: 1.10.2
     dev: false
 
+  /country-flag-emoji-polyfill/0.1.4:
+    resolution: {integrity: sha512-e20azlb9yHb3mpL3lAlhkidmJgB5TELpA8oe0DPlyIfnqXhAGBmgLDpC+mm+Envh57n1xPrOfkJtXq2CrpvoGQ==}
+    dependencies:
+      is-emoji-supported: 0.0.5
+    dev: false
+
   /country-list-with-dial-code-and-flag/3.0.3:
     resolution: {integrity: sha512-s7e62HFHQhF4agdFoFzGJQYnx3qspBMyeUKJy9bOD0GsK6MRLdduTzXs1asiV5FcXlGYXmdhkSmNbSY28SKtPA==}
     dev: false
@@ -9199,6 +9209,10 @@ packages:
     resolution: {integrity: sha512-/Tb/JcjK111nNScGob5MNtsntNM1aCNUDipB/TkwZFhyDrrE47SOx/18wF2bbjgc3ZzCSKW1T5nt5EbFoAz/Vg==}
     engines: {node: '>=4'}
     hasBin: true
+
+  /cssfontparser/1.2.1:
+    resolution: {integrity: sha512-6tun4LoZnj7VN6YeegOVb67KBX/7JJsqvj+pv3ZA7F878/eN33AbGa5b/S/wXxS/tcp8nc40xRUrsPlxIyNUPg==}
+    dev: true
 
   /cssom/0.3.8:
     resolution: {integrity: sha512-b0tGHbfegbhPJpxpiBPU2sCkigAqtM9O121le6bbOlgyV+NyGyCmVfJ6QW9eRjz8CpNfWEOYBIMIGRYkLwsIYg==}
@@ -12227,6 +12241,10 @@ packages:
     hasBin: true
     dev: true
 
+  /is-emoji-supported/0.0.5:
+    resolution: {integrity: sha512-WOlXUhDDHxYqcSmFZis+xWhhqXiK2SU0iYiqmth5Ip0FHLZQAt9rKL5ahnilE8/86WH8tZ3bmNNNC+bTzamqlw==}
+    dev: false
+
   /is-extendable/0.1.1:
     resolution: {integrity: sha512-5BMULNob1vgFX6EjQw5izWDxrecWK9AM72rugNr0TFldMOi0fj6Jk+zeKIt0xGj4cEfQIJth4w3OKWOJ4f+AFw==}
     engines: {node: '>=0.10.0'}
@@ -12515,6 +12533,13 @@ packages:
 
   /javascript-stringify/2.1.0:
     resolution: {integrity: sha512-JVAfqNPTvNq3sB/VHQJAFxN/sPgKnsKrCwyRt15zwNCdrMMJDdcEOdubuy+DuJYYdm0ox1J4uzEuYKkN+9yhVg==}
+    dev: true
+
+  /jest-canvas-mock/2.5.2:
+    resolution: {integrity: sha512-vgnpPupjOL6+L5oJXzxTxFrlGEIbHdZqFU+LFNdtLxZ3lRDCl17FlTMM7IatoRQkrcyOTMlDinjUguqmQ6bR2A==}
+    dependencies:
+      cssfontparser: 1.2.1
+      moo-color: 1.0.3
     dev: true
 
   /jest-diff/29.6.2:
@@ -13755,6 +13780,12 @@ packages:
       pathe: 1.1.1
       pkg-types: 1.0.3
       ufo: 1.2.0
+    dev: true
+
+  /moo-color/1.0.3:
+    resolution: {integrity: sha512-i/+ZKXMDf6aqYtBhuOcej71YSlbjT3wCO/4H1j8rPvxDJEifdwgg5MaFyu6iYAT8GBZJg2z0dkgK4YMzvURALQ==}
+    dependencies:
+      color-name: 1.1.4
     dev: true
 
   /morgan/1.10.0:
@@ -17292,6 +17323,15 @@ packages:
       rollup: 3.28.0
     optionalDependencies:
       fsevents: 2.3.3
+    dev: true
+
+  /vitest-canvas-mock/0.3.3_vitest@0.25.8:
+    resolution: {integrity: sha512-3P968tYBpqYyzzOaVtqnmYjqbe13576/fkjbDEJSfQAkHtC5/UjuRHOhFEN/ZV5HVZIkaROBUWgazDKJ+Ibw+Q==}
+    peerDependencies:
+      vitest: '*'
+    dependencies:
+      jest-canvas-mock: 2.5.2
+      vitest: 0.25.8_jsdom@20.0.3
     dev: true
 
   /vitest/0.25.8_jsdom@20.0.3:

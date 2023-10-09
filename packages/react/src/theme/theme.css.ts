@@ -122,7 +122,7 @@ export const darkThemeColors = {
 export const lightTheme = {
   color: lightThemeColors,
   font: {
-    fontFamily: "sans-serif",
+    fontFamily: "'Twemoji Country Flags', sans-serif",
   },
   border: {
     radius: "16px",
