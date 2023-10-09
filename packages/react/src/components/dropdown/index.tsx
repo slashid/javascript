@@ -6,8 +6,15 @@ import { ChevronDown } from "../icon/chevron-down";
 import * as styles from "./dropdown.css";
 
 type Item = {
-  label: ReactNode;
+  /** The value of the item. */
   value: string;
+  /** The label of the item, used for display purposes only (the `.textContent` of the `<Select.ItemText>` part). */
+  label: ReactNode;
+  /**
+   * Optional text used for typeahead purposes. By default the typeahead behavior will use the `label` prop.
+   * Use this when the content is complex, or you have non-textual content inside.
+   * For example, if you have an icon at the start of the item, you should pass the searchable text value here so that the typeahead behavior can match against it.
+   */
   textValue?: string;
 };
 
