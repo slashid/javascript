@@ -40,6 +40,8 @@ export const closeButton = style({
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
+  width: "16px",
+  height: "16px",
   borderRadius: "50%",
 
   ":hover": {
