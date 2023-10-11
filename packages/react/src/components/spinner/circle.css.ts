@@ -164,4 +164,5 @@ export const innerCircleVariants = styleVariants({
 
 export const content = style({
   position: "absolute",
+  display: "inline-flex",
 });
