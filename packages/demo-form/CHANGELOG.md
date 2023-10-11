@@ -1,5 +1,18 @@
 # demo-form
 
+## 0.0.35
+
+### Patch Changes
+
+- Updated dependencies [a9c5f81]
+- Updated dependencies [5423771]
+- Updated dependencies [5423771]
+- Updated dependencies [3d2a082]
+- Updated dependencies [c663117]
+- Updated dependencies [bba9671]
+- Updated dependencies [686b2c9]
+  - @slashid/react@1.14.0
+
 ## 0.0.34
 
 ### Patch Changes

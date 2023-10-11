@@ -1,5 +1,22 @@
 # @slashid/react
 
+## 1.14.0
+
+### Minor Changes
+
+- bba9671: Require @slashid/slashid@3.14.0 as peer
+
+### Patch Changes
+
+- a9c5f81: Add Dropdown Item docs
+- 5423771: Improve the OTP code form to be more user friendly
+- 5423771: Update text and icons for the OTP authenticating states
+  Hide the retry section when the OTP code is being submitted
+- 3d2a082: Fix the `storeLastHandle` functionality
+- c663117: Fix GDPR dialog close button outline
+  Fix Login form icon position
+- 686b2c9: Fix styling of icons in the <Form> component
+
 ## 1.13.0
 
 ### Minor Changes
