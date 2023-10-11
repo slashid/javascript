@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useCallback } from "react";
+import { useEffect, useMemo, useCallback } from "react";
 import { Handle } from "../domain/types";
 import { useConfiguration } from "./use-configuration";
 import { useSlashID } from "./use-slash-id";
