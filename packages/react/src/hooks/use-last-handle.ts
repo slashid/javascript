@@ -16,8 +16,7 @@ type SuccessEvent = {
 
 export const useLastHandle: UseLastHandle = () => {
   const { storeLastHandle } = useConfiguration();
-  const { sid, sdkState } = useSlashID();
-  const subscribed = useRef(false);
+  const { sid } = useSlashID();
 
   const lastHandle = useMemo(() => {
     if (!isBrowser()) {
@@ -44,25 +43,16 @@ export const useLastHandle: UseLastHandle = () => {
   }, []);
 
   useEffect(() => {
-    if (!storeLastHandle || sdkState !== "loaded" || sid === undefined) {
-      return;
-    }
-
-    if (!subscribed.current) {
-      subscribed.current = true;
+    if (storeLastHandle && sid) {
       // @ts-expect-error TODO core SDK does not export the correct event handler type
       sid.subscribe("idFlowSucceeded", handler);
     }
-  }, [storeLastHandle, sid, sdkState, handler]);
 
-  useEffect(() => {
     return () => {
-      if (subscribed.current) {
-        // @ts-expect-error TODO core SDK does not export the correct event handler type
-        sid?.unsubscribe("idFlowSucceeded", handler);
-      }
+      // @ts-expect-error TODO core SDK does not export the correct event handler type
+      sid?.unsubscribe("idFlowSucceeded", handler);
     };
-  }, [handler, sid]);
+  }, [storeLastHandle, sid, handler]);
 
   return { lastHandle };
 };
