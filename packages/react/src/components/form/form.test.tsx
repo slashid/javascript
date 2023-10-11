@@ -1,5 +1,5 @@
-import { User } from "@slashid/slashid";
-import { render, screen } from "@testing-library/react";
+import { SlashID, User } from "@slashid/slashid";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { vi, describe, afterEach } from "vitest";
 import { Form } from ".";
@@ -303,6 +303,7 @@ describe("#Form", () => {
 
 describe("<Form /> configuration", () => {
   const getItemSpy = vi.spyOn(Storage.prototype, "getItem");
+  const setItemSpy = vi.spyOn(Storage.prototype, "setItem");
 
   afterEach(() => {
     localStorage.clear();
@@ -366,11 +367,46 @@ describe("<Form /> configuration", () => {
     ).toHaveValue(phoneNumber);
   });
 
+  test("should store last handle on successful login", async () => {
+    const TEST_HANDLE = {
+      type: "email_address",
+      value: "test@email.com",
+    };
+    const sid = new SlashID();
+    const user = userEvent.setup();
+    const testUser = createTestUser();
+    const logInMock = vi.fn(async () => testUser);
+
+    render(
+      <TestSlashIDProvider sdkState="ready" logIn={logInMock} sid={sid}>
+        <ConfigurationProvider storeLastHandle={true}>
+          <Form />
+        </ConfigurationProvider>
+      </TestSlashIDProvider>
+    );
+
+    inputEmail(TEST_HANDLE.value);
+
+    user.click(screen.getByTestId("sid-form-initial-submit-button"));
+
+    await expect(
+      screen.findByTestId("sid-form-success-state")
+    ).resolves.toBeInTheDocument();
+
+    // @ts-expect-error private property
+    const emitter: any = sid["emitter"];
+
+    emitter.emit("idFlowSucceeded", { handle: TEST_HANDLE });
+    expect(setItemSpy).toHaveBeenCalledWith(
+      STORAGE_LAST_HANDLE_KEY,
+      JSON.stringify(TEST_HANDLE)
+    );
+  });
+
   test("show banner - default", () => {
     render(
       <TestSlashIDProvider sdkState="ready">
         <ConfigurationProvider
-          storeLastHandle={true}
           factors={[{ method: "email_link" }, { method: "otp_via_sms" }]}
         >
           <Form />
@@ -385,7 +421,6 @@ describe("<Form /> configuration", () => {
     render(
       <TestSlashIDProvider sdkState="ready">
         <ConfigurationProvider
-          storeLastHandle={true}
           factors={[{ method: "email_link" }, { method: "otp_via_sms" }]}
           showBanner={false}
         >
