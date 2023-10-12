@@ -3,6 +3,12 @@ import { TEXT } from "./text/constants";
 import { FactorMethod, OrganizationDetails, User } from "@slashid/slashid";
 import { faker } from "@faker-js/faker";
 import { Handle } from "../domain/types";
+import {
+  Handler,
+  PublicReadEvents,
+  SlashID,
+  SlashIDOptions,
+} from "@slashid/slashid";
 
 export const inputEmail = (
   value: string,
@@ -78,7 +84,7 @@ export function createTestUser({
         ...payload,
         ...(authMethods ? { authenticated_methods: authMethods } : {}),
         ...(oid ? { oid } : {}),
-        ...(authentications ? { authentications } : {})
+        ...(authentications ? { authentications } : {}),
       })
     ),
     TEST_TOKEN_SIGNATURE,
@@ -119,3 +125,55 @@ export const polyfillPointerEvent = () => {
   window.HTMLElement.prototype.hasPointerCapture = vi.fn();
   window.HTMLElement.prototype.releasePointerCapture = vi.fn();
 };
+
+/**
+ * This class is a wrapper on top of the SlashID instance, with mocked
+ * pubsub mechanism. This allows us to test all subscription-related logic
+ * with ease, without the need of accessing private SlashID emitter property.
+ */
+export class MockSlashID extends SlashID {
+  private observers: Map<keyof PublicReadEvents, GenericHandler[]>;
+
+  constructor(opts?: SlashIDOptions) {
+    super(opts);
+    this.observers = new Map();
+  }
+
+  public subscribe<Key extends keyof PublicReadEvents>(
+    type: Key,
+    handler: Handler<PublicReadEvents[Key]>
+  ): void {
+    const handlers = this.observers.get(type);
+    if (handlers) {
+      handlers.push(handler as GenericHandler);
+    } else {
+      this.observers.set(type, [handler as GenericHandler]);
+    }
+  }
+
+  public unsubscribe<Key extends keyof PublicReadEvents>(
+    type: Key,
+    handler: Handler<PublicReadEvents[Key]>
+  ): void {
+    const handlers = this.observers.get(type);
+    if (handlers) {
+      if (handler) {
+        handlers.splice(handlers.indexOf(handler as GenericHandler) >>> 0, 1);
+      } else {
+        this.observers.set(type, []);
+      }
+    }
+  }
+
+  public mockPublish<Key extends keyof PublicReadEvents>(
+    type: Key,
+    payload: PublicReadEvents[Key]
+  ): void {
+    const handlers = this.observers.get(type);
+    if (handlers) {
+      handlers.forEach((handler) => handler(payload));
+    }
+  }
+}
+
+type GenericHandler = Handler<PublicReadEvents[keyof PublicReadEvents]>;

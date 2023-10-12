@@ -1,11 +1,11 @@
-import { User } from "@slashid/slashid";
+import { PersonHandle, User } from "@slashid/slashid";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { vi, describe, afterEach } from "vitest";
 import { Form } from ".";
 import { TEXT } from "../text/constants";
 import { STORAGE_LAST_HANDLE_KEY } from "../../hooks/use-last-handle";
-import { createTestUser, inputEmail } from "../test-utils";
+import { createTestUser, inputEmail, MockSlashID } from "../test-utils";
 
 import { TestSlashIDProvider } from "../../context/test-slash-id-provider";
 import { ConfigurationProvider } from "../../context/config-context";
@@ -303,6 +303,7 @@ describe("#Form", () => {
 
 describe("<Form /> configuration", () => {
   const getItemSpy = vi.spyOn(Storage.prototype, "getItem");
+  const setItemSpy = vi.spyOn(Storage.prototype, "setItem");
 
   afterEach(() => {
     localStorage.clear();
@@ -366,11 +367,46 @@ describe("<Form /> configuration", () => {
     ).toHaveValue(phoneNumber);
   });
 
+  test("should store last handle on successful login", async () => {
+    const TEST_HANDLE: PersonHandle = {
+      type: "email_address",
+      value: "test@email.com",
+    };
+    const sid = new MockSlashID();
+    const user = userEvent.setup();
+    const testUser = createTestUser();
+    const logInMock = vi.fn(async () => testUser);
+
+    render(
+      <TestSlashIDProvider sdkState="ready" logIn={logInMock} sid={sid}>
+        <ConfigurationProvider storeLastHandle={true}>
+          <Form />
+        </ConfigurationProvider>
+      </TestSlashIDProvider>
+    );
+
+    inputEmail(TEST_HANDLE.value);
+
+    user.click(screen.getByTestId("sid-form-initial-submit-button"));
+
+    await expect(
+      screen.findByTestId("sid-form-success-state")
+    ).resolves.toBeInTheDocument();
+
+    sid.mockPublish("idFlowSucceeded", {
+      handle: TEST_HANDLE,
+      token: testUser.token,
+    });
+    expect(setItemSpy).toHaveBeenCalledWith(
+      STORAGE_LAST_HANDLE_KEY,
+      JSON.stringify(TEST_HANDLE)
+    );
+  });
+
   test("show banner - default", () => {
     render(
       <TestSlashIDProvider sdkState="ready">
         <ConfigurationProvider
-          storeLastHandle={true}
           factors={[{ method: "email_link" }, { method: "otp_via_sms" }]}
         >
           <Form />
@@ -385,7 +421,6 @@ describe("<Form /> configuration", () => {
     render(
       <TestSlashIDProvider sdkState="ready">
         <ConfigurationProvider
-          storeLastHandle={true}
           factors={[{ method: "email_link" }, { method: "otp_via_sms" }]}
           showBanner={false}
         >
