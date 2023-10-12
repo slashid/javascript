@@ -1,11 +1,11 @@
-import { SlashID, User } from "@slashid/slashid";
+import { PersonHandle, User } from "@slashid/slashid";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { vi, describe, afterEach } from "vitest";
 import { Form } from ".";
 import { TEXT } from "../text/constants";
 import { STORAGE_LAST_HANDLE_KEY } from "../../hooks/use-last-handle";
-import { createTestUser, inputEmail } from "../test-utils";
+import { createTestUser, inputEmail, MockSlashID } from "../test-utils";
 
 import { TestSlashIDProvider } from "../../context/test-slash-id-provider";
 import { ConfigurationProvider } from "../../context/config-context";
@@ -368,11 +368,11 @@ describe("<Form /> configuration", () => {
   });
 
   test("should store last handle on successful login", async () => {
-    const TEST_HANDLE = {
+    const TEST_HANDLE: PersonHandle = {
       type: "email_address",
       value: "test@email.com",
     };
-    const sid = new SlashID();
+    const sid = new MockSlashID();
     const user = userEvent.setup();
     const testUser = createTestUser();
     const logInMock = vi.fn(async () => testUser);
@@ -393,10 +393,10 @@ describe("<Form /> configuration", () => {
       screen.findByTestId("sid-form-success-state")
     ).resolves.toBeInTheDocument();
 
-    // @ts-expect-error private property
-    const emitter: any = sid["emitter"];
-
-    emitter.emit("idFlowSucceeded", { handle: TEST_HANDLE });
+    sid.mockPublish("idFlowSucceeded", {
+      handle: TEST_HANDLE,
+      token: testUser.token,
+    });
     expect(setItemSpy).toHaveBeenCalledWith(
       STORAGE_LAST_HANDLE_KEY,
       JSON.stringify(TEST_HANDLE)

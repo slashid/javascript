@@ -7,7 +7,7 @@ import {
 
 type TestProviderProps = Partial<ISlashIDContext> & {
   children: React.ReactNode;
-}
+};
 
 export const TestSlashIDProvider: React.FC<TestProviderProps> = ({
   sid,
@@ -16,7 +16,7 @@ export const TestSlashIDProvider: React.FC<TestProviderProps> = ({
   children,
   logIn,
   mfa,
-  __switchOrganizationInContext = async () => undefined
+  __switchOrganizationInContext = async () => undefined,
 }) => {
   const value = useMemo(
     () => ({
@@ -26,14 +26,12 @@ export const TestSlashIDProvider: React.FC<TestProviderProps> = ({
       user,
       ...(logIn ? { logIn } : {}),
       ...(mfa ? { mfa } : {}),
-      __switchOrganizationInContext
+      __switchOrganizationInContext,
     }),
     [logIn, mfa, sdkState, sid, user, __switchOrganizationInContext]
   );
 
   return (
-    <SlashIDContext.Provider value={value}>
-      {children}
-    </SlashIDContext.Provider>
+    <SlashIDContext.Provider value={value}>{children}</SlashIDContext.Provider>
   );
 };
