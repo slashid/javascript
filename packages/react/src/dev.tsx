@@ -169,7 +169,7 @@ const BasicForm = () => {
         {
           method: "oidc",
           options: {
-            provider: "google",
+            provider: "okta",
             client_id: import.meta.env.VITE_GOOGLE_SSO_CLIENT_ID,
           },
         },
