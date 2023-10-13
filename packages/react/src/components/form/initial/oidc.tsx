@@ -14,6 +14,7 @@ import { Github } from "../../icon/github";
 import { Gitlab } from "../../icon/gitlab";
 import { Google } from "../../icon/google";
 import { Line } from "../../icon/line";
+import { Okta } from "../../icon/okta";
 
 import * as styles from "./initial.css";
 
@@ -26,6 +27,7 @@ const PROVIDER_TO_ICON: Record<OAuthProvider, React.ReactNode> = {
   line: <Line />,
   bitbucket: <Bitbucket />,
   azuread: <AzureAD />,
+  okta: <Okta />,
 };
 
 const PROVIDER_TO_PRETTY_NAME: Record<OAuthProvider, string> = {
@@ -37,6 +39,7 @@ const PROVIDER_TO_PRETTY_NAME: Record<OAuthProvider, string> = {
   line: "LINE",
   bitbucket: "Bitbucket",
   azuread: "Azure AD",
+  okta: "Okta",
 };
 
 type Props = {

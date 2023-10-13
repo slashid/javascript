@@ -16,7 +16,7 @@
     "@buildo/formo": "^2.0.1",
     "@fontsource/inter": "^4.5.14",
     "@slashid/react": "workspace:*",
-    "@slashid/slashid": "^3.3.2",
+    "@slashid/slashid": "^3.14.1",
     "@tanstack/react-location": "^3.7.4",
     "design-system": "*",
     "prop-types": "^15.8.1",
