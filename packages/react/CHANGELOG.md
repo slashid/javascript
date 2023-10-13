@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 1.14.1
+
+### Patch Changes
+
+- c5ecee8: Add Okta as an OIDC provider
+
 ## 1.14.0
 
 ### Minor Changes
