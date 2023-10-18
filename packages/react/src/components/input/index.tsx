@@ -5,8 +5,17 @@ import {
   findFlag,
   getList,
 } from "country-list-with-dial-code-and-flag";
-import { ChangeEventHandler, useCallback, useLayoutEffect } from "react";
+import {
+  ChangeEventHandler,
+  Profiler,
+  ProfilerOnRenderCallback,
+  useCallback,
+  useLayoutEffect,
+  useMemo
+} from "react";
+import { sprinkles } from '../../theme/sprinkles.css';
 import { ChevronDown } from "../icon/chevron-down";
+import { Listbox } from '../listbox';
 import * as styles from "./input.css";
 
 type BaseProps = {
@@ -115,12 +124,32 @@ export const PhoneInput: React.FC<PhoneProps> = ({
   }, []);
 
   const handleChangeCountryCode = useCallback(
-    (e: React.ChangeEvent<HTMLSelectElement>) => {
-      const newCountryCode = e.target.value;
-      onFlagChange(findFlag(newCountryCode)!);
+    (value: string) => {
+      onFlagChange(findFlag(value)!);
     },
     [onFlagChange]
   );
+
+  const items = useMemo(() => {
+    return getList().map((country) => ({
+      label: (
+        <>
+          <span>{country.flag}</span>
+          <span
+            className={sprinkles({
+              marginLeft: "3",
+              marginRight: "1",
+            })}
+          >
+            {country.name}
+          </span>
+          <span>{country.dial_code}</span>
+        </>
+      ),
+      value: country.code,
+      textValue: country.name,
+    }));
+  }, []);
 
   return (
     <div
@@ -134,17 +163,17 @@ export const PhoneInput: React.FC<PhoneProps> = ({
             </div>
             <ChevronDown />
           </div>
-          <select
-            className={styles.select}
-            value={flag.code}
-            onChange={handleChangeCountryCode}
-          >
-            {getList().map((country) => (
-              <option key={country.code} value={country.code}>
-                {country.name} {country.dial_code}
-              </option>
-            ))}
-          </select>
+          <div className={styles.dropdownWrapper}>
+            <Profiler id="Dropdown" onRender={onRenderCallback}>
+              <Listbox
+                defaultValue={flag.code}
+                className={styles.dropdown}
+                onChange={handleChangeCountryCode}
+                items={items}
+                contentClassName={styles.dropdownContent}
+              />
+            </Profiler>
+          </div>
         </div>
       ) : null}
       <BaseInput
@@ -159,4 +188,28 @@ export const PhoneInput: React.FC<PhoneProps> = ({
       />
     </div>
   );
+};
+
+const onRenderCallback: ProfilerOnRenderCallback = (
+  id, // the "id" prop of the Profiler tree that has just committed
+  phase, // either "mount" (if the tree just mounted) or "update" (if it re-rendered)
+  actualDuration, // time spent rendering the committed update
+  baseDuration, // estimated time to render the entire subtree without memoization
+  startTime, // when React began rendering this update
+  commitTime, // when React committed this update
+  interactions // the Set of interactions belonging to this update
+) => {
+  if (phase !== "update" || actualDuration < 2) {
+    return;
+  }
+  // Aggregate or log render timings...
+  console.log({
+    id,
+    phase,
+    actualDuration,
+    baseDuration,
+    startTime,
+    commitTime,
+    interactions,
+  });
 };
