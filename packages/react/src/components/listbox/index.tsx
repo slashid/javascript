@@ -3,13 +3,9 @@ import { clsx } from "clsx";
 import {
   Fragment,
   ReactNode,
-  memo,
   useCallback,
-  useRef,
-  useState,
+  useState
 } from "react";
-import {   areEqual } from "react-window";
-// import { FixedSizeList as List, areEqual } from "react-window";
 import { Check } from "../icon/check";
 import { ChevronDown } from "../icon/chevron-down";
 import * as styles from "./listbox.css";
@@ -29,44 +25,6 @@ type Props = {
   disabled?: boolean;
 };
 
-type OptionProps = {
-  data: { items: Item[] };
-  index: number;
-  style: React.CSSProperties;
-};
-
-const Option = memo(({ data, index, style }: OptionProps) => {
-  const { items } = data;
-  const item = items[index];
-  console.log("render option", item);
-
-  return (
-    <div style={style}>
-      <HeadlessListbox.Option key={item.value} value={item.value} as={Fragment}>
-        {({ selected, active }) => (
-          <div
-            className={clsx(
-              "sid-listbox__item",
-              selected && "sid-listbox__item--selected",
-              active && styles.activeItem,
-              styles.item
-            )}
-          >
-            <span>{item.label}</span>
-            {selected && (
-              <span className={styles.selectedIcon}>
-                <Check className="sid-listbox__item--selected__icon" />
-              </span>
-            )}
-          </div>
-        )}
-      </HeadlessListbox.Option>
-    </div>
-  );
-}, areEqual);
-
-Option.displayName = "Option";
-
 export const Listbox = ({
   items,
   defaultValue,
@@ -84,11 +42,8 @@ export const Listbox = ({
     [onChange]
   );
 
-  // const listRef = useRef<List>(null);
-
   return (
     <div className="sid-listbox">
-      {/* TODO: test SSR */}
       <HeadlessListbox
         disabled={disabled}
         value={value}
@@ -110,20 +65,6 @@ export const Listbox = ({
               contentClassName
             )}
           >
-            {/* <HeadlessListbox.Options as="div">
-              <List
-                ref={listRef}
-                itemCount={items.length}
-                itemData={{
-                  items,
-                }}
-                itemSize={50}
-                height={250}
-                width={350}
-              >
-                {Option}
-              </List>
-            </HeadlessListbox.Options> */}
             <HeadlessListbox.Options>
               {items.map((item) => (
                 <HeadlessListbox.Option
@@ -152,54 +93,6 @@ export const Listbox = ({
             </HeadlessListbox.Options>
           </div>
         </div>
-        {/* {({ open }) => {
-          if (listRef.current && open) {
-            listRef.current.scrollToItem(
-              items.findIndex((item) => item.value === value),
-              "center"
-            );
-          }
-
-          return (
-            <>
-              <HeadlessListbox.Button
-                className={clsx(
-                  "sid-listbox__button",
-                  styles.trigger,
-                  className
-                )}
-              >
-                <ChevronDown
-                  className={clsx("sid-listbox__trigger__icon", styles.icon)}
-                />
-              </HeadlessListbox.Button>
-              <div>
-                <div
-                  className={clsx(
-                    "sid-listbox__popover",
-                    styles.content,
-                    contentClassName
-                  )}
-                >
-                  <HeadlessListbox.Options as="div">
-                    <List
-                      ref={listRef}
-                      itemCount={items.length}
-                      itemData={{
-                        items,
-                      }}
-                      itemSize={50}
-                      height={250}
-                      width={350}
-                    >
-                      {Option}
-                    </List>
-                  </HeadlessListbox.Options>
-                </div>
-              </div>
-            </>
-          );
-        }} */}
       </HeadlessListbox>
     </div>
   );
