@@ -97,12 +97,19 @@ export const Form = ({
         ) : undefined,
       success:
         status === "success" ? <Success flowState={flowState} /> : undefined,
-      error: status === "error" ? <Error flowState={flowState} /> : undefined,
+      error:
+        status === "error" ? (
+          <div>
+            defue
+            <Error />
+          </div>
+        ) : undefined,
     };
 
     return slots;
-  }, [status, showBanner, flowState]);
+  }, [status, showBanner, flowState, children]);
 
+  console.log({children})
   const slots = useSlots({ children, defaultSlots });
 
   const handleSubmit = useCallback(

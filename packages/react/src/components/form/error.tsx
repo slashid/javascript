@@ -7,6 +7,8 @@ import { Text } from "../text";
 import { TextConfigKey } from "../text/constants";
 import { ErrorState } from "./flow";
 import { errors } from "@slashid/slashid";
+import { useInternalFormContext } from "./form";
+import { Children } from "react";
 
 const ErrorIcon = () => (
   <Circle variant="red" shouldAnimate={false}>
@@ -58,8 +60,45 @@ type Props = {
   flowState: ErrorState;
 };
 
-export const Error: React.FC<Props> = ({ flowState }) => {
+type ErrorProps = {
+  context: ErrorState["context"];
+  retry: () => void;
+  cancel: () => void;
+};
+
+type ErrorTemplateProps = {
+  children?: React.ReactNode | (({ context }: ErrorProps) => React.ReactNode);
+};
+
+export const Error = ({ children }: ErrorTemplateProps) => {
+  const { flowState } = useInternalFormContext();
+
+  console.log({ children, status: flowState?.status });
+  if (flowState?.status !== "error") return null;
+
+  if (typeof children === "function") {
+    return (
+      <div data-testid="sid-form-error-function">
+        {children({
+          context: flowState.context,
+          retry: flowState.retry,
+          cancel: flowState.cancel,
+        })}
+      </div>
+    );
+  }
+
+  if (Children.count(children) > 0)
+    return <div data-testid="sid-form-error-children">{children}</div>;
+
+  return <ErrorImplementation flowState={flowState} />;
+};
+
+Error.displayName = "Form.Error";
+
+const ErrorImplementation: React.FC<Props> = ({ flowState }) => {
   const { text } = useConfiguration();
+
   const errorType = getErrorType(flowState.context.error);
 
   return (

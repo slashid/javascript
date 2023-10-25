@@ -18,6 +18,7 @@ import {
 } from "./main";
 import { defaultOrganization } from "./middleware/default-organization";
 import { Slot } from "./components/slot";
+import { FormErrorState } from "./components/form";
 
 const rootOid = "b6f94b67-d20f-7fc3-51df-bf6e3b82683e";
 
@@ -163,9 +164,9 @@ const BasicForm = () => {
   return (
     <ConfigurationProvider
       factors={[
+        { method: "webauthn" },
         { method: "email_link" },
         { method: "otp_via_email" },
-        { method: "webauthn" },
         { method: "otp_via_sms" },
         {
           method: "oidc",
@@ -228,6 +229,17 @@ const ComposedForm = () => {
                 <Form.Initial.OIDC />
                 <p>Some text below the form</p>
               </Slot>
+              <Slot name="error" key="error slot">
+                <FormErrorState key="error slot child">
+                  {({ context, retry, cancel }) => (
+                    <div>
+                      <h1>{context.error.message}</h1>
+                      <button onClick={retry}>Retry</button>
+                      <button onClick={cancel}>Cancel</button>
+                    </div>
+                  )}
+                </FormErrorState>
+              </Slot>
               <Slot name="footer">
                 <p>
                   Some footer text with a{" "}
@@ -263,17 +275,17 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
           </div>
           <div>
             <h2>Composed form</h2>
-            <ComposedForm />
+            {/* <ComposedForm /> */}
           </div>
         </div>
         <div>
           <div>
             <h2>Switch to default org</h2>
-            <Config />
+            {/* <Config /> */}
           </div>
           <div>
             <h2>Dynamic flow - factor based on handle</h2>
-            <ConfiguredDynamicFlow />
+            {/* <ConfiguredDynamicFlow /> */}
           </div>
         </div>
       </div>
