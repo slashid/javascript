@@ -49,6 +49,7 @@ export const TEXT = {
     "There has been an error while submitting your form. Please try again.",
   "error.subtitle.rateLimit":
     "Your request has been rate limited. Please try again later.",
+  "error.retry": "Try again",
   "factor.webauthn": "Passkeys",
   "factor.otpViaSms": "OTP via SMS",
   "factor.otpViaEmail": "OTP via email",

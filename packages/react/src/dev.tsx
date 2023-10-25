@@ -180,7 +180,11 @@ const BasicForm = () => {
         <>
           <LoggedIn>Logged in!</LoggedIn>
           <LoggedOut>
-            <Form />
+            <Form
+              onError={(error, context) =>
+                console.log("onError", { error, context })
+              }
+            />
           </LoggedOut>
         </>
       </SlashIDLoaded>

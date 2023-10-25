@@ -33,6 +33,7 @@ export interface ErrorState {
   context: AuthenticatingState["context"] & {
     error: Error;
   };
+  retry: Retry;
   cancel: Cancel;
 }
 
@@ -103,6 +104,9 @@ const createErrorState = (
   return {
     status: "error",
     context,
+    retry: () => {
+      send({ type: "sid_retry" });
+    },
     cancel: () => {
       send({ type: "sid_cancel" });
     },
@@ -111,6 +115,7 @@ const createErrorState = (
 
 export type CreateFlowOptions = {
   onSuccess?: (user: User) => void;
+  onError?: (error: Error, context: ErrorState["context"]) => void;
 };
 
 export function createFlow(opts: CreateFlowOptions = {}) {
@@ -120,7 +125,7 @@ export function createFlow(opts: CreateFlowOptions = {}) {
   };
   let state: FlowState = createInitialState(send);
   let logInFn: undefined | LogIn | MFA = undefined;
-  const { onSuccess } = opts;
+  const { onSuccess, onError } = opts;
 
   function setState(s: FlowState) {
     state = s;
@@ -136,7 +141,7 @@ export function createFlow(opts: CreateFlowOptions = {}) {
               const loginContext: AuthenticatingState["context"] = {
                 config: e.config,
                 options: e.options,
-                attempt: 0,
+                attempt: 1,
               };
 
               setState(createAuthenticatingState(send, loginContext));
@@ -150,12 +155,19 @@ export function createFlow(opts: CreateFlowOptions = {}) {
 
                 setState(createSuccessState());
               } catch (loginError) {
-                console.error(loginError);
+                const safeError =
+                  loginError instanceof Error
+                    ? loginError
+                    : new Error(JSON.stringify(loginError));
 
                 const errorContext: ErrorState["context"] = {
                   ...loginContext,
-                  error: loginError as Error,
+                  error: safeError,
                 };
+
+                if (onError) {
+                  onError(safeError, errorContext);
+                }
 
                 setState(createErrorState(send, errorContext));
               }
@@ -184,18 +196,26 @@ export function createFlow(opts: CreateFlowOptions = {}) {
                     state.context.config,
                     state.context.options
                   );
+
                   if (onSuccess && user) {
                     onSuccess(user);
                   }
 
                   setState(createSuccessState());
                 } catch (retryError) {
-                  console.error(retryError);
+                  const safeError =
+                    retryError instanceof Error
+                      ? retryError
+                      : new Error(JSON.stringify(retryError));
 
                   const errorContext: ErrorState["context"] = {
                     ...retryContext,
-                    error: retryError as Error,
+                    error: safeError,
                   };
+
+                  if (onError) {
+                    onError(safeError, errorContext);
+                  }
 
                   setState(createErrorState(send, errorContext));
                 }
@@ -213,9 +233,48 @@ export function createFlow(opts: CreateFlowOptions = {}) {
 
       case "error": {
         switch (e.type) {
-          case "sid_cancel":
+          case "sid_cancel": {
+            setState(createInitialState(send));
+          }
+          case "sid_retry":
             {
-              setState(createInitialState(send));
+              if (!logInFn) return;
+
+              const retryContext: AuthenticatingState["context"] = {
+                ...state.context,
+                attempt: state.context.attempt + 1,
+              };
+
+              try {
+                setState(createAuthenticatingState(send, retryContext));
+
+                const user = await logInFn(
+                  state.context.config,
+                  state.context.options
+                );
+
+                if (onSuccess && user) {
+                  onSuccess(user);
+                }
+
+                setState(createSuccessState());
+              } catch (retryError) {
+                const safeError =
+                  retryError instanceof Error
+                    ? retryError
+                    : new Error(JSON.stringify(retryError));
+
+                const errorContext: ErrorState["context"] = {
+                  ...retryContext,
+                  error: safeError,
+                };
+
+                if (onError) {
+                  onError(safeError, errorContext);
+                }
+
+                setState(createErrorState(send, errorContext));
+              }
             }
             break;
         }

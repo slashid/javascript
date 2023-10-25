@@ -1,5 +1,6 @@
 import { useConfiguration } from "../../hooks/use-configuration";
 import { sprinkles } from "../../theme/sprinkles.css";
+import { Button } from "../button";
 import { LinkButton } from "../button/link-button";
 import { Circle } from "../spinner/circle";
 import { Text } from "../text";
@@ -82,6 +83,14 @@ export const Error: React.FC<Props> = ({ flowState }) => {
         variant={{ color: "contrast", weight: "semibold" }}
       />
       <ErrorIcon />
+      <Button
+        type="submit"
+        variant="primary"
+        testId="sid-form-error-retry-button"
+        onClick={() => flowState.retry()}
+      >
+        {text["error.retry"]}
+      </Button>
     </article>
   );
 };

@@ -23,6 +23,7 @@ import { Flag } from "../input";
 export type Props = ConfigurationOverridesProps & {
   className?: string;
   onSuccess?: CreateFlowOptions["onSuccess"];
+  onError?: CreateFlowOptions["onError"];
   middleware?: LoginOptions["middleware"];
   children?: Slots<
     "initial" | "authenticating" | "success" | "error" | "footer"
@@ -43,6 +44,7 @@ export type InternalFormContextType = {
   selectedFactor?: Factor;
   setSelectedFactor: React.Dispatch<React.SetStateAction<Factor | undefined>>;
 };
+
 export const InternalFormContext = React.createContext<InternalFormContextType>(
   {
     flowState: null,
@@ -53,6 +55,7 @@ export const InternalFormContext = React.createContext<InternalFormContextType>(
     setSelectedFactor: () => null,
   }
 );
+
 export const useInternalFormContext = () => {
   return React.useContext(InternalFormContext);
 };
@@ -65,12 +68,13 @@ export const useInternalFormContext = () => {
 export const Form = ({
   className,
   onSuccess,
+  onError,
   factors,
   text,
   middleware,
   children,
 }: Props) => {
-  const flowState = useFlowState({ onSuccess });
+  const flowState = useFlowState({ onSuccess, onError });
   const { showBanner } = useConfiguration();
   const { lastHandle } = useLastHandle();
   const submitPayloadRef = React.useRef<PayloadOptions>({
