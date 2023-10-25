@@ -165,6 +165,7 @@ const BasicForm = () => {
       factors={[
         { method: "email_link" },
         { method: "otp_via_email" },
+        { method: "webauthn" },
         { method: "otp_via_sms" },
         {
           method: "oidc",
@@ -246,10 +247,9 @@ const ComposedForm = () => {
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <SlashIDProvider
-      oid={import.meta.env.VITE_ORG_ID}
+      oid="00000000-0000-0000-1400-000000000000"
       themeProps={{ theme: "dark", className: "testClass" }}
-      tokenStorage="localStorage"
-      baseApiUrl="https://api.slashid.com"
+      baseApiUrl="https://slashid.local"
     >
       <div className="layout">
         <div>

@@ -1,5 +1,12 @@
 import { User } from "@slashid/slashid";
-import { Cancel, LogIn, LoginConfiguration, Retry, MFA, LoginOptions } from "../../domain/types";
+import {
+  Cancel,
+  LogIn,
+  LoginConfiguration,
+  Retry,
+  MFA,
+  LoginOptions,
+} from "../../domain/types";
 
 export interface InitialState {
   status: "initial";
@@ -23,6 +30,9 @@ export interface SuccessState {
 
 export interface ErrorState {
   status: "error";
+  context: AuthenticatingState["context"] & {
+    error: Error;
+  };
   cancel: Cancel;
 }
 
@@ -62,14 +72,14 @@ const createInitialState = (send: Send): InitialState => {
 
 const createAuthenticatingState = (
   send: Send,
-  context: { config: LoginConfiguration, options?: LoginOptions }
+  context: { config: LoginConfiguration; options?: LoginOptions }
 ): AuthenticatingState => {
   return {
     status: "authenticating",
     context: {
       attempt: 0,
       config: context.config,
-      options: context.options
+      options: context.options,
     },
     retry: () => {
       send({ type: "sid_retry" });
@@ -86,9 +96,13 @@ const createSuccessState = (): SuccessState => {
   };
 };
 
-const createErrorState = (send: Send): ErrorState => {
+const createErrorState = (
+  send: Send,
+  context: ErrorState["context"]
+): ErrorState => {
   return {
     status: "error",
+    context,
     cancel: () => {
       send({ type: "sid_cancel" });
     },
@@ -119,17 +133,31 @@ export function createFlow(opts: CreateFlowOptions = {}) {
         switch (e.type) {
           case "sid_login":
             if (logInFn) {
-              setState(createAuthenticatingState(send, { config: e.config, options: e.options }));
+              const loginContext: AuthenticatingState["context"] = {
+                config: e.config,
+                options: e.options,
+                attempt: 0,
+              };
+
+              setState(createAuthenticatingState(send, loginContext));
+
               try {
                 const user = await logInFn(e.config, e.options);
+
                 if (onSuccess && user) {
                   onSuccess(user);
                 }
 
                 setState(createSuccessState());
-              } catch (e) {
-                console.error(e);
-                setState(createErrorState(send));
+              } catch (loginError) {
+                console.error(loginError);
+
+                const errorContext: ErrorState["context"] = {
+                  ...loginContext,
+                  error: loginError as Error,
+                };
+
+                setState(createErrorState(send, errorContext));
               }
             }
         }
@@ -141,24 +169,35 @@ export function createFlow(opts: CreateFlowOptions = {}) {
           case "sid_retry":
             {
               if (logInFn) {
+                const retryContext: AuthenticatingState["context"] = {
+                  ...state.context,
+                  attempt: state.context.attempt + 1,
+                };
+
                 try {
                   setState({
                     ...state,
-                    context: {
-                      ...state.context,
-                      attempt: state.context.attempt + 1,
-                    },
+                    context: retryContext,
                   });
 
-                  const user = await logInFn(state.context.config, state.context.options);
+                  const user = await logInFn(
+                    state.context.config,
+                    state.context.options
+                  );
                   if (onSuccess && user) {
                     onSuccess(user);
                   }
 
                   setState(createSuccessState());
-                } catch (e) {
-                  console.error(e);
-                  setState(createErrorState(send));
+                } catch (retryError) {
+                  console.error(retryError);
+
+                  const errorContext: ErrorState["context"] = {
+                    ...retryContext,
+                    error: retryError as Error,
+                  };
+
+                  setState(createErrorState(send, errorContext));
                 }
               }
             }

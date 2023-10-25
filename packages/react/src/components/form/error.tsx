@@ -3,7 +3,9 @@ import { sprinkles } from "../../theme/sprinkles.css";
 import { LinkButton } from "../button/link-button";
 import { Circle } from "../spinner/circle";
 import { Text } from "../text";
+import { TextConfigKey } from "../text/constants";
 import { ErrorState } from "./flow";
+import { errors } from "@slashid/slashid";
 
 const ErrorIcon = () => (
   <Circle variant="red" shouldAnimate={false}>
@@ -28,12 +30,36 @@ const ErrorIcon = () => (
   </Circle>
 );
 
+type ErrorType = "response" | "rateLimit" | "unknown";
+
+function getErrorType(error: Error): ErrorType {
+  if (errors.isResponseError(error)) {
+    return "response";
+  }
+
+  if (errors.isRateLimitError(error)) {
+    return "rateLimit";
+  }
+
+  return "unknown";
+}
+
+function mapErrorTypeToText(errorType: ErrorType): TextConfigKey {
+  switch (errorType) {
+    case "rateLimit":
+      return "error.subtitle.rateLimit";
+    default:
+      return "error.subtitle";
+  }
+}
+
 type Props = {
   flowState: ErrorState;
 };
 
 export const Error: React.FC<Props> = ({ flowState }) => {
   const { text } = useConfiguration();
+  const errorType = getErrorType(flowState.context.error);
 
   return (
     <article data-testid="sid-form-error-state">
@@ -52,7 +78,7 @@ export const Error: React.FC<Props> = ({ flowState }) => {
       />
       <Text
         as="h2"
-        t="error.subtitle"
+        t={mapErrorTypeToText(errorType)}
         variant={{ color: "contrast", weight: "semibold" }}
       />
       <ErrorIcon />
