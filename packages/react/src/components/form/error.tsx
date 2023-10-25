@@ -73,7 +73,6 @@ type ErrorTemplateProps = {
 export const Error = ({ children }: ErrorTemplateProps) => {
   const { flowState } = useInternalFormContext();
 
-  console.log({ children, status: flowState?.status });
   if (flowState?.status !== "error") return null;
 
   if (typeof children === "function") {

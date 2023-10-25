@@ -134,63 +134,128 @@ export function createFlow(opts: CreateFlowOptions = {}) {
 
   async function processEvent(e: Event) {
     switch (state.status) {
-      case "initial": {
-        switch (e.type) {
-          case "sid_login":
-            if (logInFn) {
-              const loginContext: AuthenticatingState["context"] = {
-                config: e.config,
-                options: e.options,
-                attempt: 1,
-              };
-
-              setState(createAuthenticatingState(send, loginContext));
-
-              try {
-                const user = await logInFn(e.config, e.options);
-
-                if (onSuccess && user) {
-                  onSuccess(user);
-                }
-
-                setState(createSuccessState());
-              } catch (loginError) {
-                const safeError =
-                  loginError instanceof Error
-                    ? loginError
-                    : new Error(JSON.stringify(loginError));
-
-                const errorContext: ErrorState["context"] = {
-                  ...loginContext,
-                  error: safeError,
+      case "initial":
+        {
+          switch (e.type) {
+            case "sid_login":
+              if (logInFn) {
+                const loginContext: AuthenticatingState["context"] = {
+                  config: e.config,
+                  options: e.options,
+                  attempt: 1,
                 };
 
-                if (onError) {
-                  onError(safeError, errorContext);
-                }
+                setState(createAuthenticatingState(send, loginContext));
 
-                setState(createErrorState(send, errorContext));
+                try {
+                  const user = await logInFn(e.config, e.options);
+
+                  if (onSuccess && user) {
+                    onSuccess(user);
+                  }
+
+                  setState(createSuccessState());
+                } catch (loginError) {
+                  const safeError =
+                    loginError instanceof Error
+                      ? loginError
+                      : new Error(JSON.stringify(loginError));
+
+                  const errorContext: ErrorState["context"] = {
+                    ...loginContext,
+                    error: safeError,
+                  };
+
+                  if (onError) {
+                    onError(safeError, errorContext);
+                  }
+
+                  setState(createErrorState(send, errorContext));
+                }
               }
-            }
+            default:
+              break;
+          }
         }
         break;
-      }
 
-      case "authenticating": {
-        switch (e.type) {
-          case "sid_retry":
-            {
-              if (logInFn) {
+      case "authenticating":
+        {
+          switch (e.type) {
+            case "sid_retry":
+              {
+                if (logInFn) {
+                  const retryContext: AuthenticatingState["context"] = {
+                    ...state.context,
+                    attempt: state.context.attempt + 1,
+                  };
+
+                  try {
+                    setState({
+                      ...state,
+                      context: retryContext,
+                    });
+
+                    const user = await logInFn(
+                      state.context.config,
+                      state.context.options
+                    );
+
+                    if (onSuccess && user) {
+                      onSuccess(user);
+                    }
+
+                    setState(createSuccessState());
+                  } catch (retryError) {
+                    const safeError =
+                      retryError instanceof Error
+                        ? retryError
+                        : new Error(JSON.stringify(retryError));
+
+                    const errorContext: ErrorState["context"] = {
+                      ...retryContext,
+                      error: safeError,
+                    };
+
+                    if (onError) {
+                      onError(safeError, errorContext);
+                    }
+
+                    setState(createErrorState(send, errorContext));
+                  }
+                }
+              }
+              break;
+            case "sid_cancel":
+              {
+                setState(createInitialState(send));
+              }
+              break;
+            default:
+              break;
+          }
+        }
+        break;
+
+      case "error":
+        {
+          switch (e.type) {
+            case "sid_cancel":
+              {
+                setState(createInitialState(send));
+              }
+              break;
+            case "sid_retry":
+              {
+                if (!logInFn) return;
+
                 const retryContext: AuthenticatingState["context"] = {
                   ...state.context,
                   attempt: state.context.attempt + 1,
                 };
 
                 try {
-                  setState({
-                    ...state,
-                    context: retryContext,
-                  });
+                  setState(createAuthenticatingState(send, retryContext));
 
                   const user = await logInFn(
                     state.context.config,
@@ -220,65 +285,15 @@ export function createFlow(opts: CreateFlowOptions = {}) {
                   setState(createErrorState(send, errorContext));
                 }
               }
-            }
-            break;
-          case "sid_cancel":
-            {
-              setState(createInitialState(send));
-            }
-            break;
+              break;
+            default:
+              break;
+          }
         }
         break;
-      }
 
-      case "error": {
-        switch (e.type) {
-          case "sid_cancel": {
-            setState(createInitialState(send));
-          }
-          case "sid_retry":
-            {
-              if (!logInFn) return;
-
-              const retryContext: AuthenticatingState["context"] = {
-                ...state.context,
-                attempt: state.context.attempt + 1,
-              };
-
-              try {
-                setState(createAuthenticatingState(send, retryContext));
-
-                const user = await logInFn(
-                  state.context.config,
-                  state.context.options
-                );
-
-                if (onSuccess && user) {
-                  onSuccess(user);
-                }
-
-                setState(createSuccessState());
-              } catch (retryError) {
-                const safeError =
-                  retryError instanceof Error
-                    ? retryError
-                    : new Error(JSON.stringify(retryError));
-
-                const errorContext: ErrorState["context"] = {
-                  ...retryContext,
-                  error: safeError,
-                };
-
-                if (onError) {
-                  onError(safeError, errorContext);
-                }
-
-                setState(createErrorState(send, errorContext));
-              }
-            }
-            break;
-        }
-      }
+      default:
+        break;
     }
   }
 

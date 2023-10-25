@@ -109,7 +109,6 @@ export const Form = ({
     return slots;
   }, [status, showBanner, flowState, children]);
 
-  console.log({children})
   const slots = useSlots({ children, defaultSlots });
 
   const handleSubmit = useCallback(

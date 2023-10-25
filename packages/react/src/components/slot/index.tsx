@@ -35,22 +35,16 @@ export function useSlots({ children, defaultSlots }: PopulateSlotsOptions) {
   const slots = React.useMemo(() => {
     const renderedSlots: Record<string, React.ReactNode> = { ...defaultSlots };
 
-    console.log("Here we are!", children);
-    
     React.Children.forEach(children, (child) => {
-      console.log("Here we are! 2");
       if (!React.isValidElement(child)) return;
-      
-      console.log("Here we are! 3");
+
       // TODO during development print a console log with details in the case of a missing slot
-      
       if (child.type !== Slot) {
         console.warn(`Passed a non-<Slot> component to a slot: ${child.type}`);
         return;
       }
-      
+
       if (child.props.name in defaultSlots) {
-        console.log("Here we are! 4", child.props.name);
         renderedSlots[child.props.name] = child;
       } else {
         console.warn(

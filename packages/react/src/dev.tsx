@@ -197,6 +197,7 @@ const ComposedForm = () => {
   return (
     <ConfigurationProvider
       factors={[
+        { method: "webauthn" },
         { method: "email_link" },
         { method: "otp_via_email" },
         { method: "otp_via_sms" },
@@ -271,11 +272,11 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         <div>
           <div>
             <h2>Basic form</h2>
-            <BasicForm />
+            {/* <BasicForm /> */}
           </div>
           <div>
             <h2>Composed form</h2>
-            {/* <ComposedForm /> */}
+            <ComposedForm />
           </div>
         </div>
         <div>
