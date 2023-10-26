@@ -173,6 +173,7 @@ export function createFlow(opts: CreateFlowOptions = {}) {
                   setState(createErrorState(send, errorContext));
                 }
               }
+              break;
             default:
               break;
           }
