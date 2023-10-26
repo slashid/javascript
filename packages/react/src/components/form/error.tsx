@@ -6,7 +6,7 @@ import { Circle } from "../spinner/circle";
 import { Text } from "../text";
 import { TextConfigKey } from "../text/constants";
 import { ErrorState } from "./flow";
-import { errors } from "@slashid/slashid";
+import { Errors } from "@slashid/slashid";
 import { useInternalFormContext } from "./form";
 import { Children } from "react";
 
@@ -36,11 +36,11 @@ const ErrorIcon = () => (
 type ErrorType = "response" | "rateLimit" | "unknown";
 
 function getErrorType(error: Error): ErrorType {
-  if (errors.isResponseError(error)) {
+  if (Errors.isResponseError(error)) {
     return "response";
   }
 
-  if (errors.isRateLimitError(error)) {
+  if (Errors.isRateLimitError(error)) {
     return "rateLimit";
   }
 

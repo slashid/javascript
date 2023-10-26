@@ -272,7 +272,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         <div>
           <div>
             <h2>Basic form</h2>
-            {/* <BasicForm /> */}
+            <BasicForm />
           </div>
           <div>
             <h2>Composed form</h2>
@@ -282,11 +282,11 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         <div>
           <div>
             <h2>Switch to default org</h2>
-            {/* <Config /> */}
+            <Config />
           </div>
           <div>
             <h2>Dynamic flow - factor based on handle</h2>
-            {/* <ConfiguredDynamicFlow /> */}
+            <ConfiguredDynamicFlow />
           </div>
         </div>
       </div>
