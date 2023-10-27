@@ -111,6 +111,27 @@ export function CompositeFormPage() {
             </Form>
           </ConfigurationProvider>
         </div>
+        <div style={{ width: 390 }}>
+          <h2>Composition - error handling</h2>
+          <p>
+            In this example we`ll replace the `error` slot with our custom
+            implementation that will render a special error message when a form
+            error happens.
+          </p>
+          <ConfigurationProvider factors={factors}>
+            <Form>
+              <Slot name="error">
+                <Form.Error>
+                  {({ context }) => (
+                    <div data-testid="custom-error">
+                      {context.error.message}
+                    </div>
+                  )}
+                </Form.Error>
+              </Slot>
+            </Form>
+          </ConfigurationProvider>
+        </div>
       </div>
     </PageLayout>
   );
