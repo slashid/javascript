@@ -34,7 +34,7 @@ importers:
       '@buildo/formo': ^2.0.1
       '@fontsource/inter': ^4.5.14
       '@slashid/react': workspace:*
-      '@slashid/slashid': ^3.14.1
+      '@slashid/slashid': ^3.15.0
       '@tanstack/react-location': ^3.7.4
       '@types/react': ^18.0.24
       '@types/react-dom': ^18.0.8
@@ -54,7 +54,7 @@ importers:
       '@buildo/formo': 2.0.2_react@18.2.0
       '@fontsource/inter': 4.5.15
       '@slashid/react': link:../../packages/react
-      '@slashid/slashid': 3.14.1
+      '@slashid/slashid': 3.15.0
       '@tanstack/react-location': 3.7.4_biqbaboplfbrettd7655fr4n2y
       design-system: 2.5.0
       prop-types: 15.8.1
@@ -75,7 +75,7 @@ importers:
     specifiers:
       '@playwright/test': ^1.32.1
       '@slashid/react': workspace:*
-      '@slashid/slashid': ^3.14.1
+      '@slashid/slashid': ^3.15.0
       '@slashid/tests': workspace:*
       '@types/node': 18.11.9
       '@types/react': 18.0.25
@@ -91,7 +91,7 @@ importers:
       typescript: ^4.6.4
     dependencies:
       '@slashid/react': link:../../packages/react
-      '@slashid/slashid': 3.14.1
+      '@slashid/slashid': 3.15.0
       '@slashid/tests': link:../../packages/tests
       '@types/node': 18.11.9
       '@types/react': 18.0.25
@@ -116,7 +116,7 @@ importers:
       '@remix-run/react': ^1.13.0
       '@remix-run/serve': ^1.13.0
       '@slashid/react': workspace:*
-      '@slashid/slashid': ^3.14.1
+      '@slashid/slashid': ^3.15.0
       '@types/react': ^18.0.25
       '@types/react-dom': ^18.0.8
       demo-form: workspace:*
@@ -130,7 +130,7 @@ importers:
       '@remix-run/react': 1.19.3_biqbaboplfbrettd7655fr4n2y
       '@remix-run/serve': 1.19.3
       '@slashid/react': link:../../packages/react
-      '@slashid/slashid': 3.14.1
+      '@slashid/slashid': 3.15.0
       demo-form: link:../../packages/demo-form
       isbot: 3.6.13
       react: 18.2.0
@@ -146,7 +146,7 @@ importers:
   apps/react-vite:
     specifiers:
       '@slashid/react': workspace:*
-      '@slashid/slashid': ^3.14.1
+      '@slashid/slashid': ^3.15.0
       '@types/react': ^18.0.22
       '@types/react-dom': ^18.0.7
       '@vitejs/plugin-react': ^2.2.0
@@ -157,7 +157,7 @@ importers:
       vite: ^3.2.0
     dependencies:
       '@slashid/react': link:../../packages/react
-      '@slashid/slashid': 3.14.1
+      '@slashid/slashid': 3.15.0
       demo-form: link:../../packages/demo-form
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
@@ -172,7 +172,7 @@ importers:
     specifiers:
       '@radix-ui/react-dropdown-menu': ^0.1.6
       '@slashid/react': workspace:*
-      '@slashid/slashid': ^3.14.1
+      '@slashid/slashid': ^3.15.0
       '@types/react': 18.0.25
       '@vitejs/plugin-react': ^3.1.0
       next: 13.0.2
@@ -185,7 +185,7 @@ importers:
     dependencies:
       '@radix-ui/react-dropdown-menu': 0.1.6_2zx2umvpluuhvlq44va5bta2da
       '@slashid/react': link:../react
-      '@slashid/slashid': 3.14.1
+      '@slashid/slashid': 3.15.0
       next: 13.0.2_biqbaboplfbrettd7655fr4n2y
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
@@ -205,7 +205,7 @@ importers:
       '@radix-ui/react-select': ^1.1.2
       '@radix-ui/react-switch': ^1.0.3
       '@radix-ui/react-tabs': ^1.0.1
-      '@slashid/slashid': link:/Users/ivankovic/projects/slashid/ng-evangelion/web/sdk
+      '@slashid/slashid': 3.15.0
       '@storybook/addon-essentials': 7.0.0-rc.2
       '@storybook/addon-interactions': 7.4.0
       '@storybook/addon-links': 7.4.0
@@ -260,7 +260,7 @@ importers:
       country-list-with-dial-code-and-flag: 3.0.3
     devDependencies:
       '@faker-js/faker': 8.0.2
-      '@slashid/slashid': link:../../../ng-evangelion/web/sdk
+      '@slashid/slashid': 3.15.0
       '@storybook/addon-essentials': 7.0.0-rc.2_biqbaboplfbrettd7655fr4n2y
       '@storybook/addon-interactions': 7.4.0_zkisbtryv3xtasf42ecsrjh3ky
       '@storybook/addon-links': 7.4.0_biqbaboplfbrettd7655fr4n2y
@@ -5667,8 +5667,8 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /@slashid/slashid/3.14.1:
-    resolution: {integrity: sha512-IYub48WDOfoxh7DcNod5LBmF7IfwchaWGk3mtcJ6mXx6U+riJvqEq+xsDSL94o9QW4HOPhpaQoJp+9a5Iza4hQ==}
+  /@slashid/slashid/3.15.0:
+    resolution: {integrity: sha512-2hlXmP2MrM76C7w5CBA2tKawszdr9Hz5c9nxhmFQAWz2MEUIe00/gfOydB3Pa5lBz54wzEEwl2AwXBSMhxKQNg==}
     dependencies:
       '@changesets/cli': 2.26.2
       '@types/uuid': 8.3.4
@@ -5681,7 +5681,6 @@ packages:
       regenerator-runtime: 0.13.11
       url: 0.11.1
       uuid: 8.3.2
-    dev: false
 
   /@storybook/addon-actions/7.0.0-rc.2_biqbaboplfbrettd7655fr4n2y:
     resolution: {integrity: sha512-e4VXOoeejRnz+yTtPGtenAvrMtwRWO4VRxbGBHDPyMo+FOlQPC6plOrQMZ+lSRaE20J3KfTo6wSLZgnHQUQtRw==}
@@ -7576,7 +7575,6 @@ packages:
 
   /@types/uuid/8.3.4:
     resolution: {integrity: sha512-c/I8ZRb51j+pYGAu5CrFMRxqZ2ke4y2grEBO5AUjgSkSk+qT2Ea+OdWElz/OiMf5MNpn2b17kuVBwZLQJXzihw==}
-    dev: false
 
   /@types/yargs-parser/21.0.0:
     resolution: {integrity: sha512-iO9ZQHkZxHn4mSakYV0vFHAVDyEOIJQrV2uZ06HxEPcx+mt8swXoZHIbaaJ2crJYFfErySgktuTZ3BeLz+XmFA==}
@@ -8790,7 +8788,6 @@ packages:
     dependencies:
       udc: 1.0.1
       underscore: 1.13.6
-    dev: false
 
   /character-entities-html4/2.1.0:
     resolution: {integrity: sha512-1v7fgQRj6hnSwFpq1Eu0ynr/CDEw0rXo2B61qXrLNdHZmPKgb7fqS1a2JwF0rISo9q77jDI8VMEHoApn8qDoZA==}
@@ -9627,7 +9624,6 @@ packages:
 
   /dijkstrajs/1.0.3:
     resolution: {integrity: sha512-qiSlmBq9+BCdCA/L46dw8Uy93mloxsPSbwnm5yrKn2vMPiy8KyAskTF6zuV/j5BMsmOGZDPs7KjU+mjb670kfA==}
-    dev: false
 
   /dir-glob/3.0.1:
     resolution: {integrity: sha512-WkrWp9GR4KXfKGYzOLmTuGVi1UWFfws377n9cc55/tb6DuqyF6pcQ5AbiHEshaDpY9v6oaSr2XCDidGmMwdzIA==}
@@ -9637,7 +9633,6 @@ packages:
 
   /docdash/1.2.0:
     resolution: {integrity: sha512-IYZbgYthPTspgqYeciRJNPhSwL51yer7HAwDXhF5p+H7mTDbPvY3PCk/QDjNxdPCpWkaJVFC4t7iCNB/t9E5Kw==}
-    dev: false
 
   /doctrine/2.1.0:
     resolution: {integrity: sha512-35mSku4ZXK0vfCuHEDAwt55dg2jNajHZ1odvF+8SSr82EsZY4QmXfuWso8oEd8zRhVObSN18aM0CjSdoBX7zIw==}
@@ -9732,7 +9727,6 @@ packages:
 
   /encode-utf8/1.0.3:
     resolution: {integrity: sha512-ucAnuBEhUK4boH2HjVYG5Q2mQyPorvv0u/ocS+zhdw0S8AlHYY+GOFhP1Gio5z4icpP2ivFSvhtFjQi8+T9ppw==}
-    dev: false
 
   /encodeurl/1.0.2:
     resolution: {integrity: sha512-TPJXq8JqFaVYm2CWmPvnP2Iyo4ZSM7/QKcSmuMLDObfpH5fi7RUGmd/rTDf+rut/saiDiQEeVTNgAmJEdAOx0w==}
@@ -12829,7 +12823,6 @@ packages:
 
   /jwt-decode/3.1.2:
     resolution: {integrity: sha512-UfpWE/VZn0iP50d8cz9NrZLM9lSWhcJ+0Gt/nm4by88UL+J1SiKN8/5dkjMmbEzwL2CAe+67GsegCbIKtbp75A==}
-    dev: false
 
   /keyv/4.5.3:
     resolution: {integrity: sha512-QCiSav9WaX1PgETJ+SpNnx2PRRapJ/oRSXM4VO5OGYGSjrxbKPVFVhB3l2OCbLCk329N8qyAtsJjSjvVBWzEug==}
@@ -13741,7 +13734,6 @@ packages:
 
   /mitt/3.0.1:
     resolution: {integrity: sha512-vKivATfr97l2/QBCYAkXYDbrIWPM2IIKEl7YPhjCvKlG3kE2gm+uBo6nEXK3M5/Ffh/FLpKExzOQ3JJoJGFKBw==}
-    dev: false
 
   /mixme/0.5.9:
     resolution: {integrity: sha512-VC5fg6ySUscaWUpI4gxCBTQMH2RdUpNrk+MsbpCYtIvf9SBJdiUey4qE7BXviJsJR4nDQxCZ+3yaYNW3guz/Pw==}
@@ -14489,7 +14481,6 @@ packages:
   /pngjs/5.0.0:
     resolution: {integrity: sha512-40QW5YalBNfQo5yRYmiw7Yz6TKKVr3h6970B2YE+3fQpsWcrbj1PzJgxeJ19DRQjhMbKPIuMY8rFaXc8moolVw==}
     engines: {node: '>=10.13.0'}
-    dev: false
 
   /polished/4.2.2:
     resolution: {integrity: sha512-Sz2Lkdxz6F2Pgnpi9U5Ng/WdWAUZxmHrNPoVlm3aAemxoy2Qy7LGjQg4uf8qKelDAUW94F4np3iH2YPf2qefcQ==}
@@ -14803,7 +14794,6 @@ packages:
 
   /punycode/1.4.1:
     resolution: {integrity: sha512-jmYNElW7yvO7TV33CjSmvSiE2yco3bV2czu/OzDKdMNVZQWfxCblURLhf+47syQRBntjfLdd/H0egrzIG+oaFQ==}
-    dev: false
 
   /punycode/2.3.0:
     resolution: {integrity: sha512-rRV+zQD8tVFys26lAGR9WUuS4iUAngJScM+ZRSKtvl5tKeZ2t5bvdNFdNHBW9FWR4guGHlgmsZ1G7BSm2wTbuA==}
@@ -14838,7 +14828,6 @@ packages:
       encode-utf8: 1.0.3
       pngjs: 5.0.0
       yargs: 15.4.1
-    dev: false
 
   /qs/6.11.0:
     resolution: {integrity: sha512-MvjoMCJwEarSbUYk5O+nmoSzSutSsTwF85zcHPQ9OrlFoZOYIjaqBAJIqIXjptyD5vThxGq52Xu/MaJzRkIk4Q==}
@@ -14865,7 +14854,6 @@ packages:
   /querystring-es3/0.2.1:
     resolution: {integrity: sha512-773xhDQnZBMFobEiztv8LIl70ch5MSF/jUQVlhwFyBILqq96anmoctVIYz+ZRp0qbCKATTn6ev02M3r7Ga5vqA==}
     engines: {node: '>=0.4.x'}
-    dev: false
 
   /querystringify/2.2.0:
     resolution: {integrity: sha512-FIqgj2EUvTa7R50u0rGsyTftzjYmv/a3hO345bZNrqabNqjtgiDMgmo4mkUjd+nzU5oF3dClKqFIPUKybUyqoQ==}
@@ -16753,7 +16741,6 @@ packages:
 
   /udc/1.0.1:
     resolution: {integrity: sha512-jv+D9de1flsum5QkFtBdjyppCQAdz9kTck/0xST5Vx48T9LL2BYnw0Iw77dSKDQ9KZ/PS3qPO1vfXHDpLZlxcQ==}
-    dev: false
 
   /ufo/1.2.0:
     resolution: {integrity: sha512-RsPyTbqORDNDxqAdQPQBpgqhWle1VcTSou/FraClYlHf6TZnQcGslpLcAphNR+sQW4q5lLWLbOsRlh9j24baQg==}
@@ -16777,7 +16764,6 @@ packages:
 
   /underscore/1.13.6:
     resolution: {integrity: sha512-+A5Sja4HP1M08MaXya7p5LvjuM7K6q/2EaC0+iovj/wOcMsTzMvDFbasi/oSapiwOlt252IqsKqPjCl7huKS0A==}
-    dev: false
 
   /unicode-canonical-property-names-ecmascript/2.0.0:
     resolution: {integrity: sha512-yY5PpDlfVIU5+y/BSCxAJRBIS1Zc2dDG3Ujq+sR0U+JjUevW2JhocOF+soROYDSaAezOzOKuyyixhD6mBknSmQ==}
@@ -16981,7 +16967,6 @@ packages:
     dependencies:
       punycode: 1.4.1
       qs: 6.11.2
-    dev: false
 
   /use-callback-ref/1.3.0_fan5qbzahqtxlm5dzefqlqx5ia:
     resolution: {integrity: sha512-3FT9PRuRdbB9HfXhEq35u4oZkvpJ5kuYbpqhCfmiZyReuRgpnhDlbr2ZEnnuS0RrJAPn6l23xjFg9kpDM+Ms7w==}
@@ -17100,7 +17085,6 @@ packages:
   /uuid/8.3.2:
     resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
     hasBin: true
-    dev: false
 
   /uvu/0.5.6:
     resolution: {integrity: sha512-+g8ENReyr8YsOc6fv/NVJs2vFdHBnBNdfE49rshrTzDWOlUx4Gq7KOS2GD8eqhy2j+Ejq29+SbKH8yjkAqXqoA==}
