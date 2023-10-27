@@ -14,11 +14,12 @@ import {
   ConfigurationOverrides,
   ConfigurationOverridesProps,
 } from "../configuration-overrides";
-import { Handle, HandleType, LoginOptions } from "../../domain/types";
+import { Handle, LoginOptions } from "../../domain/types";
 import React, { useCallback } from "react";
 import { Slots, useSlots } from "../slot";
 import { Factor } from "@slashid/slashid";
-import { Flag } from "../input";
+import { PayloadOptions } from "./types";
+import { InternalFormContext } from "./internal-context";
 
 export type Props = ConfigurationOverridesProps & {
   className?: string;
@@ -28,36 +29,6 @@ export type Props = ConfigurationOverridesProps & {
   children?: Slots<
     "initial" | "authenticating" | "success" | "error" | "footer"
   >; // TS does not enforce this, but it is used for documentation
-};
-
-type PayloadOptions = {
-  handleType?: HandleType;
-  handleValue?: string;
-  flag?: Flag;
-};
-
-export type InternalFormContextType = {
-  flowState: ReturnType<typeof useFlowState> | null;
-  lastHandle?: Handle;
-  submitPayloadRef: React.MutableRefObject<PayloadOptions>;
-  handleSubmit: (factor: Factor, handle?: Handle) => void;
-  selectedFactor?: Factor;
-  setSelectedFactor: React.Dispatch<React.SetStateAction<Factor | undefined>>;
-};
-
-export const InternalFormContext = React.createContext<InternalFormContextType>(
-  {
-    flowState: null,
-    lastHandle: undefined,
-    submitPayloadRef: { current: {} },
-    handleSubmit: () => null,
-    selectedFactor: undefined,
-    setSelectedFactor: () => null,
-  }
-);
-
-export const useInternalFormContext = () => {
-  return React.useContext(InternalFormContext);
 };
 
 /**
@@ -107,7 +78,7 @@ export const Form = ({
     };
 
     return slots;
-  }, [status, showBanner, flowState, children]);
+  }, [status, showBanner, flowState]);
 
   const slots = useSlots({ children, defaultSlots });
 
@@ -155,3 +126,4 @@ export const Form = ({
 };
 
 Form.Initial = Initial;
+Form.Error = Error;

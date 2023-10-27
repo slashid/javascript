@@ -7,8 +7,8 @@ import { Text } from "../text";
 import { TextConfigKey } from "../text/constants";
 import { ErrorState } from "./flow";
 import { Errors } from "@slashid/slashid";
-import { useInternalFormContext } from "./form";
 import { Children } from "react";
+import { useInternalFormContext } from "./internal-context";
 
 const ErrorIcon = () => (
   <Circle variant="red" shouldAnimate={false}>

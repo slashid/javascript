@@ -15,7 +15,7 @@ import { LogoSlot } from "./logo";
 import { HeaderSlot } from "./header";
 import { Factor } from "@slashid/slashid";
 import React from "react";
-import { InternalFormContext } from "../form";
+import { useInternalFormContext } from "../internal-context";
 
 // TODO does not work as a standalone module?
 export type OIDCSlotProps = {
@@ -29,7 +29,7 @@ export const OIDCSlot = ({
   children?: (props: OIDCSlotProps) => React.ReactNode;
 }) => {
   const { factors } = useConfiguration();
-  const { handleSubmit } = React.useContext(InternalFormContext);
+  const { handleSubmit } = useInternalFormContext();
   const oidcFactors: FactorLabeledOIDC[] = factors.filter(isFactorOidc);
 
   const OIDC = React.useMemo(() => {

@@ -20,10 +20,10 @@ import { Input, PhoneInput } from "../../input";
 import { Tabs } from "../../tabs";
 import { TextConfig, TextConfigKey } from "../../text/constants";
 import { ErrorMessage } from "../error-message";
-import { useInternalFormContext } from "../form";
 import { isValidEmail, isValidPhoneNumber } from "../validation";
 
 import * as styles from "./initial.css";
+import { useInternalFormContext } from "../internal-context";
 
 export const FACTOR_LABEL_MAP: Record<
   Exclude<Factor["method"], "webauthn_via_email" | "webauthn_via_sms">,

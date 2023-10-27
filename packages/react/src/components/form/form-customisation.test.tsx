@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { Form, FormErrorState } from ".";
+import { Form } from ".";
 import { TestSlashIDProvider } from "../../context/test-slash-id-provider";
 import { createTestUser, inputEmail } from "../test-utils";
 import { Slot } from "../slot";
@@ -93,7 +93,7 @@ describe("#Form - customisation", () => {
       <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
         <Form>
           <Slot name="error">
-            <FormErrorState key="error slot child">
+            <Form.Error key="error slot child">
               {({ context, retry, cancel }) => (
                 <div data-testid="custom-error-function">
                   <h1>{context.error.message}</h1>
@@ -101,7 +101,7 @@ describe("#Form - customisation", () => {
                   <button onClick={cancel}>Cancel</button>
                 </div>
               )}
-            </FormErrorState>
+            </Form.Error>
           </Slot>
         </Form>
       </TestSlashIDProvider>

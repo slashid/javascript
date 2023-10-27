@@ -18,7 +18,6 @@ import {
 } from "./main";
 import { defaultOrganization } from "./middleware/default-organization";
 import { Slot } from "./components/slot";
-import { FormErrorState } from "./components/form";
 
 const rootOid = "b6f94b67-d20f-7fc3-51df-bf6e3b82683e";
 
@@ -230,8 +229,8 @@ const ComposedForm = () => {
                 <Form.Initial.OIDC />
                 <p>Some text below the form</p>
               </Slot>
-              <Slot name="error" key="error slot">
-                <FormErrorState key="error slot child">
+              <Slot name="error">
+                <Form.Error>
                   {({ context, retry, cancel }) => (
                     <div>
                       <h1>{context.error.message}</h1>
@@ -239,7 +238,7 @@ const ComposedForm = () => {
                       <button onClick={cancel}>Cancel</button>
                     </div>
                   )}
-                </FormErrorState>
+                </Form.Error>
               </Slot>
               <Slot name="footer">
                 <p>
@@ -264,9 +263,10 @@ const ComposedForm = () => {
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <SlashIDProvider
-      oid="00000000-0000-0000-1400-000000000000"
+      oid={import.meta.env.VITE_ORG_ID}
       themeProps={{ theme: "dark", className: "testClass" }}
-      baseApiUrl="https://slashid.local"
+      baseApiUrl="https://api.slashid.com"
+      tokenStorage="localStorage"
     >
       <div className="layout">
         <div>
