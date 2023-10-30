@@ -23,6 +23,5 @@ export function useFlowState(opts: CreateFlowOptions = {}) {
     }
   }, [logIn, mfa, user]);
 
-
   return state;
 }

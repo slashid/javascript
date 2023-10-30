@@ -39,7 +39,6 @@ export function useSlots({ children, defaultSlots }: PopulateSlotsOptions) {
       if (!React.isValidElement(child)) return;
 
       // TODO during development print a console log with details in the case of a missing slot
-
       if (child.type !== Slot) {
         console.warn(`Passed a non-<Slot> component to a slot: ${child.type}`);
         return;

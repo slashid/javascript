@@ -14,47 +14,21 @@ import {
   ConfigurationOverrides,
   ConfigurationOverridesProps,
 } from "../configuration-overrides";
-import { Handle, HandleType, LoginOptions } from "../../domain/types";
+import { Handle, LoginOptions } from "../../domain/types";
 import React, { useCallback } from "react";
 import { Slots, useSlots } from "../slot";
 import { Factor } from "@slashid/slashid";
-import { Flag } from "../input";
+import { PayloadOptions } from "./types";
+import { InternalFormContext } from "./internal-context";
 
 export type Props = ConfigurationOverridesProps & {
   className?: string;
   onSuccess?: CreateFlowOptions["onSuccess"];
+  onError?: CreateFlowOptions["onError"];
   middleware?: LoginOptions["middleware"];
   children?: Slots<
     "initial" | "authenticating" | "success" | "error" | "footer"
   >; // TS does not enforce this, but it is used for documentation
-};
-
-type PayloadOptions = {
-  handleType?: HandleType;
-  handleValue?: string;
-  flag?: Flag;
-};
-
-export type InternalFormContextType = {
-  flowState: ReturnType<typeof useFlowState> | null;
-  lastHandle?: Handle;
-  submitPayloadRef: React.MutableRefObject<PayloadOptions>;
-  handleSubmit: (factor: Factor, handle?: Handle) => void;
-  selectedFactor?: Factor;
-  setSelectedFactor: React.Dispatch<React.SetStateAction<Factor | undefined>>;
-};
-export const InternalFormContext = React.createContext<InternalFormContextType>(
-  {
-    flowState: null,
-    lastHandle: undefined,
-    submitPayloadRef: { current: {} },
-    handleSubmit: () => null,
-    selectedFactor: undefined,
-    setSelectedFactor: () => null,
-  }
-);
-export const useInternalFormContext = () => {
-  return React.useContext(InternalFormContext);
 };
 
 /**
@@ -65,12 +39,13 @@ export const useInternalFormContext = () => {
 export const Form = ({
   className,
   onSuccess,
+  onError,
   factors,
   text,
   middleware,
   children,
 }: Props) => {
-  const flowState = useFlowState({ onSuccess });
+  const flowState = useFlowState({ onSuccess, onError });
   const { showBanner } = useConfiguration();
   const { lastHandle } = useLastHandle();
   const submitPayloadRef = React.useRef<PayloadOptions>({
@@ -93,7 +68,7 @@ export const Form = ({
         ) : undefined,
       success:
         status === "success" ? <Success flowState={flowState} /> : undefined,
-      error: status === "error" ? <Error flowState={flowState} /> : undefined,
+      error: status === "error" ? <Error /> : undefined,
     };
 
     return slots;
@@ -145,3 +120,4 @@ export const Form = ({
 };
 
 Form.Initial = Initial;
+Form.Error = Error;
