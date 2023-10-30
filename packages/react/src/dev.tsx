@@ -52,6 +52,13 @@ const withWan: FactorConfiguration[] = [
       client_id: "TEST",
     },
   },
+  {
+    method: "saml",
+    options: {
+      provider_credentials_id: "test",
+    },
+    label: "testsaml",
+  },
 ];
 
 function Config() {

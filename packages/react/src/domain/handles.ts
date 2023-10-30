@@ -10,6 +10,7 @@ import {
   FactorOTP,
   FactorOTPEmail,
   FactorOTPSms,
+  FactorSSO,
   FactorSmsLink,
   Handle,
   HandleType,
@@ -17,6 +18,7 @@ import {
 
 const FACTORS_WITH_EMAIL = ["webauthn", "otp_via_email", "email_link"];
 const FACTORS_WITH_PHONE = ["otp_via_sms", "sms_link"];
+const SSO_FACTORS = ["oidc", "saml"];
 
 function getHandleType(factor: Factor): HandleType | null {
   if (FACTORS_WITH_EMAIL.includes(factor.method)) {
@@ -69,6 +71,9 @@ export function isFactorOidc(factor: Factor): factor is FactorOIDC {
   return factor.method === "oidc";
 }
 
+export function isFactorSSO(factor: Factor): factor is FactorSSO {
+  return SSO_FACTORS.includes(factor.method);
+}
 export function isFactorEmailLink(factor: Factor): factor is FactorEmailLink {
   return factor.method === "email_link";
 }

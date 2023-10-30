@@ -31,6 +31,7 @@ export const FACTOR_LABEL_MAP: Record<
   sms_link: "factor.smsLink",
   webauthn: "factor.webauthn",
   oidc: "",
+  saml: "",
 };
 
 export type Props = {

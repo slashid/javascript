@@ -5,6 +5,10 @@ export const oidcProvider = style({
   marginLeft: theme.space[1],
 });
 
+export const ssoProvider = style({
+  marginLeft: theme.space[1],
+});
+
 export const oidcList = style({
   display: "flex",
   flexDirection: "column",

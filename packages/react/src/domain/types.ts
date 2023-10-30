@@ -1,4 +1,5 @@
 import { Factor, SlashID, User } from "@slashid/slashid";
+import { ReactNode } from "react";
 
 export type HandleType = "email_address" | "phone_number";
 
@@ -27,10 +28,15 @@ export interface LoginOptions {
 
 export type FactorOIDC = Extract<Factor, { method: "oidc" }>;
 
+export type FactorSAML = Extract<Factor, { method: "saml" }>;
+
 export type FactorNonOIDC = Exclude<
   FactorConfiguration,
   FactorOIDC | FactorLabeledOIDC
 >;
+export type FactorSSO = FactorLabeledOIDC | FactorCustomizableSAML;
+
+export type FactorNonSSO = Exclude<FactorConfiguration, FactorSSO>;
 
 export type FactorOTPEmail = Extract<Factor, { method: "otp_via_email" }>;
 
@@ -49,11 +55,21 @@ export type FactorSmsLink = Extract<Factor, { method: "sms_link" }>;
 export type FactorLabeledOIDC = FactorOIDC & { label?: string };
 
 /**
+ * SAML integration requires a label as we don't have a predefined list of providers.
+ * You can also add a custom logo for a given provider.
+ */
+export type FactorCustomizableSAML = FactorSAML & {
+  label: string;
+  logo?: string | ReactNode;
+};
+
+/**
  * All factors that can be configured for usage in our UI components.
  */
 export type FactorConfiguration =
-  | Exclude<Factor, FactorOIDC>
-  | FactorLabeledOIDC;
+  | Exclude<Factor, FactorOIDC | FactorSAML>
+  | FactorLabeledOIDC
+  | FactorCustomizableSAML;
 
 export type LogIn = (
   config: LoginConfiguration,
