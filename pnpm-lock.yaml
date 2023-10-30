@@ -259,7 +259,7 @@ importers:
       country-flag-emoji-polyfill: 0.1.4
       country-list-with-dial-code-and-flag: 3.0.3
     devDependencies:
-      '@faker-js/faker': 8.0.2
+      '@faker-js/faker': 8.2.0
       '@slashid/slashid': 3.15.0
       '@storybook/addon-essentials': 7.0.0-rc.2_biqbaboplfbrettd7655fr4n2y
       '@storybook/addon-interactions': 7.4.0_qq2tm5tyxoczjeumywy4spsakm
