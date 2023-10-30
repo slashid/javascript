@@ -144,7 +144,6 @@ export const HandleForm: React.FC<Props> = ({
           className={sprinkles({ marginBottom: "3", marginTop: "6" })}
           label={text["initial.authenticationMethod"]}
           items={filteredFactors.map((f) => ({
-            // @ts-expect-error TODO @kasper SAML will fix this
             label: text[FACTOR_LABEL_MAP[f.method]],
             value: f.method,
           }))}
