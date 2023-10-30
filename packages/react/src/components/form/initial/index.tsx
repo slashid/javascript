@@ -68,7 +68,7 @@ const SSOSlot = ({
   children?: (props: SSOSlotProps) => ReactNode;
 }) => {
   const { factors } = useConfiguration();
-  const { handleSubmit } = React.useContext(InternalFormContext);
+  const { handleSubmit } = useInternalFormContext();
   const ssoFactors: FactorSSO[] = factors.filter(isFactorSSO);
 
   const SSO = React.useMemo(() => {
