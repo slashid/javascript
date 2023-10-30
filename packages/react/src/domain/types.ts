@@ -59,7 +59,7 @@ export type FactorLabeledOIDC = FactorOIDC & { label?: string };
  * You can also add a custom logo for a given provider.
  */
 export type FactorCustomizableSAML = FactorSAML & {
-  label: string;
+  label?: string;
   logo?: string | ReactNode;
 };
 

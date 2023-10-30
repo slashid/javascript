@@ -77,7 +77,7 @@ function Logo({ logo }: LogoProps) {
     return <div>logo URL</div>;
   }
 
-  return logo;
+  return <>logo</>;
 }
 
 export type OIDCProviderProps = {
