@@ -15,6 +15,7 @@ import {
   SlashIDLoaded,
   SlashIDProvider,
   useOrganizations,
+  useSlashID,
 } from "./main";
 import { defaultOrganization } from "./middleware/default-organization";
 import { Slot } from "./components/slot";
@@ -260,6 +261,15 @@ const ComposedForm = () => {
   );
 };
 
+const LogOut = () => {
+  const { logOut } = useSlashID();
+  return (
+    <LoggedIn>
+      <button onClick={() => logOut()}>Log out</button>
+    </LoggedIn>
+  );
+};
+
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <SlashIDProvider
@@ -268,6 +278,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
       baseApiUrl="https://api.slashid.com"
       tokenStorage="localStorage"
     >
+      <LogOut />
       <div className="layout">
         <div>
           <div>

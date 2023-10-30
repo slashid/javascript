@@ -68,13 +68,7 @@ export const Form = ({
         ) : undefined,
       success:
         status === "success" ? <Success flowState={flowState} /> : undefined,
-      error:
-        status === "error" ? (
-          <div>
-            defue
-            <Error />
-          </div>
-        ) : undefined,
+      error: status === "error" ? <Error /> : undefined,
     };
 
     return slots;

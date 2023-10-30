@@ -43,15 +43,31 @@ interface LoginEvent {
   options?: LoginOptions;
 }
 
+interface LoginSuccessEvent {
+  type: "sid_login.success";
+  user: User;
+}
+
+interface LoginErrorEvent {
+  type: "sid_login.error";
+  error: Error;
+}
+
 interface CancelEvent {
   type: "sid_cancel";
 }
 
 interface RetryEvent {
   type: "sid_retry";
+  context: AuthenticatingState["context"];
 }
 
-type Event = LoginEvent | RetryEvent | CancelEvent;
+type Event =
+  | LoginEvent
+  | LoginSuccessEvent
+  | LoginErrorEvent
+  | RetryEvent
+  | CancelEvent;
 
 export type FlowState =
   | InitialState
@@ -73,19 +89,41 @@ const createInitialState = (send: Send): InitialState => {
 
 const createAuthenticatingState = (
   send: Send,
-  context: { config: LoginConfiguration; options?: LoginOptions }
+  context: AuthenticatingState["context"],
+  logInFn: LogIn | MFA
 ): AuthenticatingState => {
+  function performLogin() {
+    return logInFn(context.config, context.options)
+      .then((user) => {
+        if (user) {
+          send({ type: "sid_login.success", user });
+        } else {
+          send({
+            type: "sid_login.error",
+            error: new Error("User not returned from /id"),
+          });
+        }
+      })
+      .catch((error) => {
+        send({ type: "sid_login.error", error });
+      });
+  }
+
+  // start authenticating as soon as the instance is created
+  performLogin();
+
   return {
     status: "authenticating",
     context: {
-      attempt: 0,
+      attempt: context.attempt,
       config: context.config,
       options: context.options,
     },
     retry: () => {
-      send({ type: "sid_retry" });
+      send({ type: "sid_retry", context });
     },
     cancel: () => {
+      // Cancellation API needs to be exposed from the core SDK
       send({ type: "sid_cancel" });
     },
   };
@@ -105,7 +143,7 @@ const createErrorState = (
     status: "error",
     context,
     retry: () => {
-      send({ type: "sid_retry" });
+      send({ type: "sid_retry", context });
     },
     cancel: () => {
       send({ type: "sid_cancel" });
@@ -118,194 +156,121 @@ export type CreateFlowOptions = {
   onError?: (error: Error, context: ErrorState["context"]) => void;
 };
 
+type HistoryEntry = {
+  state: FlowState;
+  event: Event | null;
+};
+
+/**
+ * Flow API factory function.
+ *
+ * Responsible for creating the flow state machine and providing the flow API.
+ * Internally it delegates event processing to the underlying state instances.
+ *
+ * When a transition is requested, this function will create a new state instance and notify subscribers.
+ * It will not do any checks to see if the transition is valid as it is the responsibility of the state instances.
+ *
+ * @param opts
+ * @returns
+ */
 export function createFlow(opts: CreateFlowOptions = {}) {
+  let logInFn: undefined | LogIn | MFA = undefined;
   let observers: Observer[] = [];
   const send = (event: Event) => {
-    processEvent(event);
+    transition(event);
   };
+
   let state: FlowState = createInitialState(send);
-  let logInFn: undefined | LogIn | MFA = undefined;
+  // each history entry contains a state and the event that triggered the transition to that state
+  const history: HistoryEntry[] = [{ state, event: null }];
+
   const { onSuccess, onError } = opts;
 
-  function setState(s: FlowState) {
+  // notify subscribers every time the state changes
+  function setState(s: FlowState, e: Event) {
     state = s;
+
+    // keep a history of state transitions for debugging purposes
+    history.push({ state, event: e });
+
+    // TODO should we include the event that triggered the state change here?
     observers.forEach((o) => o(state));
   }
 
-  async function processEvent(e: Event) {
-    switch (state.status) {
-      case "initial":
-        {
-          switch (e.type) {
-            case "sid_login":
-              if (logInFn) {
-                const loginContext: AuthenticatingState["context"] = {
-                  config: e.config,
-                  options: e.options,
-                  attempt: 1,
-                };
+  async function transition(e: Event) {
+    switch (e.type) {
+      case "sid_login":
+        // TODO replace with a check for ready state
+        if (!logInFn) break;
 
-                setState(createAuthenticatingState(send, loginContext));
+        const loginContext: AuthenticatingState["context"] = {
+          config: e.config,
+          options: e.options,
+          attempt: 1,
+        };
 
-                try {
-                  const user = await logInFn(e.config, e.options);
-
-                  if (onSuccess && user) {
-                    onSuccess(user);
-                  }
-
-                  setState(createSuccessState());
-                } catch (loginError) {
-                  const safeError =
-                    loginError instanceof Error
-                      ? loginError
-                      : new Error(JSON.stringify(loginError));
-
-                  const errorContext: ErrorState["context"] = {
-                    ...loginContext,
-                    error: safeError,
-                  };
-
-                  if (onError) {
-                    onError(safeError, errorContext);
-                  }
-
-                  setState(createErrorState(send, errorContext));
-                }
-              }
-              break;
-            default:
-              break;
-          }
-        }
+        setState(createAuthenticatingState(send, loginContext, logInFn), e);
         break;
-
-      case "authenticating":
-        {
-          switch (e.type) {
-            case "sid_retry":
-              {
-                if (logInFn) {
-                  const retryContext: AuthenticatingState["context"] = {
-                    ...state.context,
-                    attempt: state.context.attempt + 1,
-                  };
-
-                  try {
-                    setState({
-                      ...state,
-                      context: retryContext,
-                    });
-
-                    const user = await logInFn(
-                      state.context.config,
-                      state.context.options
-                    );
-
-                    if (onSuccess && user) {
-                      onSuccess(user);
-                    }
-
-                    setState(createSuccessState());
-                  } catch (retryError) {
-                    const safeError =
-                      retryError instanceof Error
-                        ? retryError
-                        : new Error(JSON.stringify(retryError));
-
-                    const errorContext: ErrorState["context"] = {
-                      ...retryContext,
-                      error: safeError,
-                    };
-
-                    if (onError) {
-                      onError(safeError, errorContext);
-                    }
-
-                    setState(createErrorState(send, errorContext));
-                  }
-                }
-              }
-              break;
-            case "sid_cancel":
-              {
-                setState(createInitialState(send));
-              }
-              break;
-            default:
-              break;
-          }
+      case "sid_login.success":
+        // call onSuccess if present
+        if (typeof onSuccess === "function") {
+          onSuccess(e.user);
         }
+
+        setState(createSuccessState(), e);
         break;
+      case "sid_login.error":
+        if (state.status !== "authenticating") break;
 
-      case "error":
-        {
-          switch (e.type) {
-            case "sid_cancel":
-              {
-                setState(createInitialState(send));
-              }
-              break;
-            case "sid_retry":
-              {
-                if (!logInFn) return;
+        const safeError =
+          e.error instanceof Error
+            ? e.error
+            : new Error(JSON.stringify(e.error));
 
-                const retryContext: AuthenticatingState["context"] = {
-                  ...state.context,
-                  attempt: state.context.attempt + 1,
-                };
+        const errorContext: ErrorState["context"] = {
+          ...state.context,
+          error: safeError,
+        };
 
-                try {
-                  setState(createAuthenticatingState(send, retryContext));
-
-                  const user = await logInFn(
-                    state.context.config,
-                    state.context.options
-                  );
-
-                  if (onSuccess && user) {
-                    onSuccess(user);
-                  }
-
-                  setState(createSuccessState());
-                } catch (retryError) {
-                  const safeError =
-                    retryError instanceof Error
-                      ? retryError
-                      : new Error(JSON.stringify(retryError));
-
-                  const errorContext: ErrorState["context"] = {
-                    ...retryContext,
-                    error: safeError,
-                  };
-
-                  if (onError) {
-                    onError(safeError, errorContext);
-                  }
-
-                  setState(createErrorState(send, errorContext));
-                }
-              }
-              break;
-            default:
-              break;
-          }
+        // call onError if present
+        if (typeof onError === "function") {
+          onError(e.error, errorContext);
         }
-        break;
 
+        setState(createErrorState(send, errorContext), e);
+        break;
+      case "sid_retry":
+        // TODO replace with a check for ready state
+        if (!logInFn) break;
+
+        const retryContext: AuthenticatingState["context"] = {
+          config: e.context.config,
+          options: e.context.options,
+          attempt: e.context.attempt + 1,
+        };
+
+        setState(createAuthenticatingState(send, retryContext, logInFn), e);
+        break;
+      case "sid_cancel":
+        setState(createInitialState(send), e);
+        break;
       default:
         break;
     }
   }
 
+  // provide the flow API - send events, subscribe to state changes
   return {
+    // not part of the API - internal detail, external world should not be able to send events, only consume the state APIs
     send,
+    history,
     unsubscribe: (observer: Observer) => {
       observers = observers.filter((ob) => ob === observer);
     },
     subscribe: (observer: Observer) => {
       observers.push(observer);
     },
+    // SDK is instantiated asynchronously, so we need to set the logIn function when it is ready
     setLogIn: (fn: LogIn | MFA) => {
       logInFn = fn;
     },
