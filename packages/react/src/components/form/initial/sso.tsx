@@ -56,7 +56,7 @@ export function SAMLProvider({ provider: p, handleClick }: SAMLProviderProps) {
     <Button
       onClick={() => handleClick({ method: "saml", options: p.options })}
       variant="secondary"
-      icon={<Logo logo={p.logo} />}
+      icon={<Logo logo={p.logo} id={p.options.provider_credentials_id} />}
       className={clsx("sid-oidc--button")}
     >
       {text["initial.sso"]}
@@ -66,18 +66,26 @@ export function SAMLProvider({ provider: p, handleClick }: SAMLProviderProps) {
 }
 
 type LogoProps = {
+  id: string;
   logo?: FactorCustomizableSAML["logo"];
 };
 
-function Logo({ logo }: LogoProps) {
+function Logo({ logo, id }: LogoProps) {
   if (!logo) return null;
 
-  // TODO implement proper logo
   if (typeof logo === "string") {
-    return <div>logo URL</div>;
+    return (
+      <img
+        className={clsx("sid-sso-logo", `sid-sso-logo--${id}`)}
+        src={logo}
+        alt="SSO provider logo"
+      />
+    );
   }
 
-  return <>logo</>;
+  return (
+    <div className={clsx("sid-sso-logo", `sid-sso-logo--${id}`)}>{logo}</div>
+  );
 }
 
 export type OIDCProviderProps = {

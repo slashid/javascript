@@ -19,6 +19,7 @@ import {
 } from "./main";
 import { defaultOrganization } from "./middleware/default-organization";
 import { Slot } from "./components/slot";
+import { Okta } from "./components/icon/okta";
 
 const rootOid = "b6f94b67-d20f-7fc3-51df-bf6e3b82683e";
 
@@ -59,6 +60,7 @@ const withWan: FactorConfiguration[] = [
       provider_credentials_id: "test",
     },
     label: "testsaml",
+    logo: <Okta />,
   },
 ];
 
