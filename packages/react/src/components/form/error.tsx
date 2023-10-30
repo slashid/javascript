@@ -1,9 +1,14 @@
 import { useConfiguration } from "../../hooks/use-configuration";
 import { sprinkles } from "../../theme/sprinkles.css";
+import { Button } from "../button";
 import { LinkButton } from "../button/link-button";
 import { Circle } from "../spinner/circle";
 import { Text } from "../text";
+import { TextConfigKey } from "../text/constants";
 import { ErrorState } from "./flow";
+import { Errors } from "@slashid/slashid";
+import { Children } from "react";
+import { useInternalFormContext } from "./internal-context";
 
 const ErrorIcon = () => (
   <Circle variant="red" shouldAnimate={false}>
@@ -28,12 +33,72 @@ const ErrorIcon = () => (
   </Circle>
 );
 
+type ErrorType = "response" | "rateLimit" | "unknown";
+
+function getErrorType(error: Error): ErrorType {
+  if (Errors.isResponseError(error)) {
+    return "response";
+  }
+
+  if (Errors.isRateLimitError(error)) {
+    return "rateLimit";
+  }
+
+  return "unknown";
+}
+
+function mapErrorTypeToText(errorType: ErrorType): TextConfigKey {
+  switch (errorType) {
+    case "rateLimit":
+      return "error.subtitle.rateLimit";
+    default:
+      return "error.subtitle";
+  }
+}
+
 type Props = {
   flowState: ErrorState;
 };
 
-export const Error: React.FC<Props> = ({ flowState }) => {
+type ErrorProps = {
+  context: ErrorState["context"];
+  retry: () => void;
+  cancel: () => void;
+};
+
+type ErrorTemplateProps = {
+  children?: React.ReactNode | (({ context }: ErrorProps) => React.ReactNode);
+};
+
+export const Error = ({ children }: ErrorTemplateProps) => {
+  const { flowState } = useInternalFormContext();
+
+  if (flowState?.status !== "error") return null;
+
+  if (typeof children === "function") {
+    return (
+      <div data-testid="sid-form-error-function">
+        {children({
+          context: flowState.context,
+          retry: flowState.retry,
+          cancel: flowState.cancel,
+        })}
+      </div>
+    );
+  }
+
+  if (Children.count(children) > 0)
+    return <div data-testid="sid-form-error-children">{children}</div>;
+
+  return <ErrorImplementation flowState={flowState} />;
+};
+
+Error.displayName = "Form.Error";
+
+const ErrorImplementation: React.FC<Props> = ({ flowState }) => {
   const { text } = useConfiguration();
+
+  const errorType = getErrorType(flowState.context.error);
 
   return (
     <article data-testid="sid-form-error-state">
@@ -52,10 +117,18 @@ export const Error: React.FC<Props> = ({ flowState }) => {
       />
       <Text
         as="h2"
-        t="error.subtitle"
+        t={mapErrorTypeToText(errorType)}
         variant={{ color: "contrast", weight: "semibold" }}
       />
       <ErrorIcon />
+      <Button
+        type="submit"
+        variant="primary"
+        testId="sid-form-error-retry-button"
+        onClick={() => flowState.retry()}
+      >
+        {text["error.retry"]}
+      </Button>
     </article>
   );
 };

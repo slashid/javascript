@@ -173,6 +173,17 @@ export const WithCompositionAndCustomisation: Story = {
               }}
             </Form.Initial.Controls>
           </Slot>
+          <Slot name="error">
+            <Form.Error>
+              {({ context, retry, cancel }) => (
+                <div>
+                  <h1>{context.error.message}</h1>
+                  <button onClick={retry}>Retry</button>
+                  <button onClick={cancel}>Cancel</button>
+                </div>
+              )}
+            </Form.Error>
+          </Slot>
           <Slot name="success">
             <div data-testid="custom-success">Custom success</div>
           </Slot>

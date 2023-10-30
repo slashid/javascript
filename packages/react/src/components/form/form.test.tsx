@@ -299,6 +299,49 @@ describe("#Form", () => {
       screen.findByTestId("sid-form-initial-state")
     ).resolves.toBeInTheDocument();
   });
+
+  test("should allow a retry if login fails", async () => {
+    let loginShouldSucceed = false;
+    const logInMock = vi.fn(() => {
+      if (!loginShouldSucceed) return Promise.reject("login error");
+      return Promise.resolve(createTestUser());
+    });
+    const user = userEvent.setup();
+
+    render(
+      <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+        <Form />
+      </TestSlashIDProvider>
+    );
+
+    inputEmail("valid@email.com");
+
+    user.click(screen.getByTestId("sid-form-initial-submit-button"));
+
+    console.log("awaiting error state");
+
+    await expect(logInMock).rejects.toMatch("login error");
+    await expect(
+      screen.findByTestId("sid-form-error-state")
+    ).resolves.toBeInTheDocument();
+
+    const retryButton = await screen.findByTestId(
+      "sid-form-error-retry-button"
+    );
+
+    loginShouldSucceed = true;
+    user.click(retryButton);
+
+    console.log("clicked retry");
+
+    await expect(
+      screen.findByTestId("sid-form-authenticating-state")
+    ).resolves.toBeInTheDocument();
+
+    await expect(
+      screen.findByTestId("sid-form-success-state")
+    ).resolves.toBeInTheDocument();
+  });
 });
 
 describe("<Form /> configuration", () => {

@@ -85,7 +85,7 @@ describe("#Form - customisation", () => {
     expect(screen.queryByTestId("sid-form-authenticating-state")).toBeFalsy();
   });
 
-  test("should render the error slot", async () => {
+  test("should render the error slot with children as a function", async () => {
     const logInMock = vi.fn(() => Promise.reject("login error"));
     const user = userEvent.setup();
 
@@ -93,7 +93,15 @@ describe("#Form - customisation", () => {
       <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
         <Form>
           <Slot name="error">
-            <div data-testid="custom-error">Custom error</div>
+            <Form.Error key="error slot child">
+              {({ context, retry, cancel }) => (
+                <div data-testid="custom-error-function">
+                  <h1>{context.error.message}</h1>
+                  <button onClick={retry}>Retry</button>
+                  <button onClick={cancel}>Cancel</button>
+                </div>
+              )}
+            </Form.Error>
           </Slot>
         </Form>
       </TestSlashIDProvider>
@@ -105,7 +113,7 @@ describe("#Form - customisation", () => {
 
     await expect(logInMock).rejects.toMatch("login error");
     await expect(
-      screen.findByTestId("custom-error")
+      screen.findByTestId("custom-error-function")
     ).resolves.toBeInTheDocument();
   });
 

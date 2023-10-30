@@ -15,6 +15,7 @@ import {
   SlashIDLoaded,
   SlashIDProvider,
   useOrganizations,
+  useSlashID,
 } from "./main";
 import { defaultOrganization } from "./middleware/default-organization";
 import { Slot } from "./components/slot";
@@ -163,6 +164,7 @@ const BasicForm = () => {
   return (
     <ConfigurationProvider
       factors={[
+        { method: "webauthn" },
         { method: "email_link" },
         { method: "otp_via_email" },
         { method: "otp_via_sms" },
@@ -179,7 +181,11 @@ const BasicForm = () => {
         <>
           <LoggedIn>Logged in!</LoggedIn>
           <LoggedOut>
-            <Form />
+            <Form
+              onError={(error, context) =>
+                console.log("onError", { error, context })
+              }
+            />
           </LoggedOut>
         </>
       </SlashIDLoaded>
@@ -191,6 +197,7 @@ const ComposedForm = () => {
   return (
     <ConfigurationProvider
       factors={[
+        { method: "webauthn" },
         { method: "email_link" },
         { method: "otp_via_email" },
         { method: "otp_via_sms" },
@@ -223,6 +230,17 @@ const ComposedForm = () => {
                 <Form.Initial.OIDC />
                 <p>Some text below the form</p>
               </Slot>
+              <Slot name="error">
+                <Form.Error>
+                  {({ context, retry, cancel }) => (
+                    <div>
+                      <h1>{context.error.message}</h1>
+                      <button onClick={retry}>Retry</button>
+                      <button onClick={cancel}>Cancel</button>
+                    </div>
+                  )}
+                </Form.Error>
+              </Slot>
               <Slot name="footer">
                 <p>
                   Some footer text with a{" "}
@@ -243,14 +261,24 @@ const ComposedForm = () => {
   );
 };
 
+const LogOut = () => {
+  const { logOut } = useSlashID();
+  return (
+    <LoggedIn>
+      <button onClick={() => logOut()}>Log out</button>
+    </LoggedIn>
+  );
+};
+
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <SlashIDProvider
       oid={import.meta.env.VITE_ORG_ID}
       themeProps={{ theme: "dark", className: "testClass" }}
-      tokenStorage="localStorage"
       baseApiUrl="https://api.slashid.com"
+      tokenStorage="localStorage"
     >
+      <LogOut />
       <div className="layout">
         <div>
           <div>
