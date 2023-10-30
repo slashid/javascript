@@ -25,9 +25,8 @@ import { isValidEmail, isValidPhoneNumber } from "../validation";
 import * as styles from "./initial.css";
 import { useInternalFormContext } from "../internal-context";
 
-// TODO @kasper SAML
 export const FACTOR_LABEL_MAP: Record<
-  Exclude<Factor["method"], "webauthn_via_email" | "webauthn_via_sms" | "saml">,
+  Exclude<Factor["method"], "webauthn_via_email" | "webauthn_via_sms">,
   TextConfigKey
 > = {
   email_link: "factor.emailLink",
