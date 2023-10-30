@@ -22,7 +22,7 @@ import { HeaderSlot } from "./header";
 import { Factor } from "@slashid/slashid";
 import React from "react";
 import { useInternalFormContext } from "../internal-context";
-import { SSOProvider } from "./sso";
+import { SSOProviders } from "./sso";
 
 // TODO does not work as a standalone module?
 export type OIDCSlotProps = {
@@ -41,7 +41,7 @@ export const OIDCSlot = ({
   const oidcFactors: FactorLabeledOIDC[] = factors.filter(isFactorOidc);
 
   const OIDC = React.useMemo(() => {
-    return <SSOProvider providers={oidcFactors} handleClick={handleSubmit} />;
+    return <SSOProviders providers={oidcFactors} handleClick={handleSubmit} />;
   }, [handleSubmit, oidcFactors]);
 
   if (typeof children === "function") {
@@ -72,7 +72,7 @@ const SSOSlot = ({
   const ssoFactors: FactorSSO[] = factors.filter(isFactorSSO);
 
   const SSO = React.useMemo(() => {
-    return <SSOProvider providers={ssoFactors} handleClick={handleSubmit} />;
+    return <SSOProviders providers={ssoFactors} handleClick={handleSubmit} />;
   }, [handleSubmit, ssoFactors]);
 
   if (typeof children === "function") {
@@ -108,8 +108,7 @@ const Initial = () => {
       <HeaderSlot />
       <Controls />
       {shouldRenderDivider && <Divider>{text["initial.divider"]}</Divider>}
-      {/* how to render this properly? */}
-      {<SSOSlot /> || <OIDCSlot />}
+      <SSOSlot />
     </article>
   );
 };

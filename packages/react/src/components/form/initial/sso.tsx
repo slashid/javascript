@@ -57,10 +57,10 @@ export function SAMLProvider({ provider: p, handleClick }: SAMLProviderProps) {
       onClick={() => handleClick({ method: "saml", options: p.options })}
       variant="secondary"
       icon={<Logo logo={p.logo} id={p.options.provider_credentials_id} />}
-      className={clsx("sid-oidc--button")}
+      className={clsx("sid-saml--button")}
     >
       {text["initial.sso"]}
-      <span className={styles.ssoProvider}>{p.label}</span>
+      <span className={styles.ssoProvider}>{p.label || "SAML"}</span>
     </Button>
   );
 }
@@ -76,7 +76,7 @@ function Logo({ logo, id }: LogoProps) {
   if (typeof logo === "string") {
     return (
       <img
-        className={clsx("sid-sso-logo", `sid-sso-logo--${id}`)}
+        className={clsx("sid-sso-logo", `sid-sso-logo--${id}`, styles.ssoLogo)}
         src={logo}
         alt="SSO provider logo"
       />
@@ -84,7 +84,11 @@ function Logo({ logo, id }: LogoProps) {
   }
 
   return (
-    <div className={clsx("sid-sso-logo", `sid-sso-logo--${id}`)}>{logo}</div>
+    <div
+      className={clsx("sid-sso-logo", `sid-sso-logo--${id}`, styles.ssoLogo)}
+    >
+      {logo}
+    </div>
   );
 }
 
@@ -120,13 +124,19 @@ type Props = {
   handleClick: (factor: Factor) => void;
 };
 
-export function SSOProvider({ providers, handleClick }: Props) {
+export function SSOProviders({ providers, handleClick }: Props) {
   if (!providers.length) {
     return null;
   }
 
   return (
-    <div className={clsx(sprinkles({ marginTop: "4" }), styles.oidcList)}>
+    <div
+      className={clsx(
+        "sid-form-sso",
+        sprinkles({ marginTop: "4" }),
+        styles.oidcList
+      )}
+    >
       {providers.map((p) => {
         switch (p.method) {
           case "oidc":

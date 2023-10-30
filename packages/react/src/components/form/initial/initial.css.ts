@@ -30,3 +30,7 @@ export const dropdownContent = style({
   width: "var(--radix-select-trigger-width)",
   marginTop: "4px",
 });
+
+export const ssoLogo = style({
+  height: "16px",
+});
