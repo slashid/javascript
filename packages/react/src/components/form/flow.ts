@@ -7,6 +7,7 @@ import {
   MFA,
   LoginOptions,
 } from "../../domain/types";
+import { ensureError } from "../../domain/errors";
 
 export interface InitialState {
   status: "initial";
@@ -22,6 +23,7 @@ export interface AuthenticatingState {
   };
   retry: Retry;
   cancel: Cancel;
+  entry: () => void;
 }
 
 export interface SuccessState {
@@ -62,20 +64,27 @@ interface RetryEvent {
   context: AuthenticatingState["context"];
 }
 
+interface InitEvent {
+  type: "sid_init";
+}
+
 type Event =
+  | InitEvent
   | LoginEvent
   | LoginSuccessEvent
   | LoginErrorEvent
   | RetryEvent
   | CancelEvent;
 
-export type FlowState =
-  | InitialState
-  | AuthenticatingState
-  | SuccessState
-  | ErrorState;
+type FlowActions = {
+  // a function that will be called when the state is entered
+  entry?: () => void;
+};
 
-type Observer = (status: FlowState) => void;
+export type FlowState = FlowActions &
+  (InitialState | AuthenticatingState | SuccessState | ErrorState);
+
+type Observer = (state: FlowState, event: Event) => void;
 type Send = (e: Event) => void;
 
 const createInitialState = (send: Send): InitialState => {
@@ -92,6 +101,7 @@ const createAuthenticatingState = (
   context: AuthenticatingState["context"],
   logInFn: LogIn | MFA
 ): AuthenticatingState => {
+  // to be called when the state is entered
   function performLogin() {
     return logInFn(context.config, context.options)
       .then((user) => {
@@ -109,9 +119,6 @@ const createAuthenticatingState = (
       });
   }
 
-  // start authenticating as soon as the instance is created
-  performLogin();
-
   return {
     status: "authenticating",
     context: {
@@ -126,6 +133,7 @@ const createAuthenticatingState = (
       // Cancellation API needs to be exposed from the core SDK
       send({ type: "sid_cancel" });
     },
+    entry: performLogin,
   };
 };
 
@@ -158,7 +166,7 @@ export type CreateFlowOptions = {
 
 type HistoryEntry = {
   state: FlowState;
-  event: Event | null;
+  event: Event;
 };
 
 /**
@@ -169,6 +177,9 @@ type HistoryEntry = {
  *
  * When a transition is requested, this function will create a new state instance and notify subscribers.
  * It will not do any checks to see if the transition is valid as it is the responsibility of the state instances.
+ *
+ * The Flow API is not symetric - external code can interact with it using the fields and methods of the state object.
+ * Internally the state object communicates with the flow using the send function, emitting events and letting the flow API orchestrate the state transitions.
  *
  * @param opts
  * @returns
@@ -182,19 +193,23 @@ export function createFlow(opts: CreateFlowOptions = {}) {
 
   let state: FlowState = createInitialState(send);
   // each history entry contains a state and the event that triggered the transition to that state
-  const history: HistoryEntry[] = [{ state, event: null }];
+  const history: HistoryEntry[] = [{ state, event: { type: "sid_init" } }];
 
   const { onSuccess, onError } = opts;
 
   // notify subscribers every time the state changes
-  function setState(s: FlowState, e: Event) {
-    state = s;
+  function setState(newState: FlowState, changeEvent: Event) {
+    state = newState;
 
     // keep a history of state transitions for debugging purposes
-    history.push({ state, event: e });
+    history.push({ state, event: changeEvent });
 
-    // TODO should we include the event that triggered the state change here?
-    observers.forEach((o) => o(state));
+    // trigger the state entry function if present
+    if (typeof state.entry === "function") {
+      state.entry();
+    }
+
+    observers.forEach((o) => o(state, changeEvent));
   }
 
   async function transition(e: Event) {
@@ -222,14 +237,9 @@ export function createFlow(opts: CreateFlowOptions = {}) {
       case "sid_login.error":
         if (state.status !== "authenticating") break;
 
-        const safeError =
-          e.error instanceof Error
-            ? e.error
-            : new Error(JSON.stringify(e.error));
-
         const errorContext: ErrorState["context"] = {
           ...state.context,
-          error: safeError,
+          error: ensureError(e.error),
         };
 
         // call onError if present
@@ -259,10 +269,8 @@ export function createFlow(opts: CreateFlowOptions = {}) {
     }
   }
 
-  // provide the flow API - send events, subscribe to state changes
+  // provide the flow API - interact with the flow using the state object, subscribe and unsubscribe to state changes
   return {
-    // not part of the API - internal detail, external world should not be able to send events, only consume the state APIs
-    send,
     history,
     unsubscribe: (observer: Observer) => {
       observers = observers.filter((ob) => ob === observer);
