@@ -1,7 +1,7 @@
 import { ReactNode, useMemo } from "react";
 
 import {
-  hasOidcAndNonOidcFactors,
+  hasSSOAndNonSSOFactors,
   isFactorOidc,
   isFactorSSO,
 } from "../../../domain/handles";
@@ -98,7 +98,7 @@ const Initial = () => {
   const { factors, text } = useConfiguration();
 
   const shouldRenderDivider = useMemo(
-    () => hasOidcAndNonOidcFactors(factors),
+    () => hasSSOAndNonSSOFactors(factors),
     [factors]
   );
 

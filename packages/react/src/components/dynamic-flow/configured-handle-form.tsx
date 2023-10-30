@@ -8,7 +8,7 @@ import { HandleForm } from "./handle-form";
 import { useMemo } from "react";
 import {
   getHandleTypes,
-  hasOidcAndNonOidcFactors,
+  hasSSOAndNonSSOFactors,
   isFactorOidc,
   resolveLastHandleValue,
 } from "../../domain/handles";
@@ -38,7 +38,7 @@ export const ConfiguredHandleForm = ({ handleSubmit, lastHandle }: Props) => {
   );
 
   const shouldRenderDivider = useMemo(
-    () => hasOidcAndNonOidcFactors(factors),
+    () => hasSSOAndNonSSOFactors(factors),
     [factors]
   );
 

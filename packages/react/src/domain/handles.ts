@@ -74,6 +74,7 @@ export function isFactorOidc(factor: Factor): factor is FactorOIDC {
 export function isFactorSSO(factor: Factor): factor is FactorSSO {
   return SSO_FACTORS.includes(factor.method);
 }
+
 export function isFactorEmailLink(factor: Factor): factor is FactorEmailLink {
   return factor.method === "email_link";
 }
@@ -88,6 +89,10 @@ export function isFactorNonOidc(factor: Factor): factor is FactorNonOIDC {
 
 export function hasOidcAndNonOidcFactors(factors: Factor[]): boolean {
   return factors.some(isFactorOidc) && factors.some((f) => !isFactorOidc(f));
+}
+
+export function hasSSOAndNonSSOFactors(factors: Factor[]): boolean {
+  return factors.some(isFactorSSO) && factors.some((f) => !isFactorSSO(f));
 }
 
 export function resolveLastHandleValue(
