@@ -1,5 +1,15 @@
 # @slashid/react
 
+## 1.15.0
+
+### Minor Changes
+
+- 1d07d6d: Added the Form.Error primitive component to facilitate error UI customisation
+
+### Patch Changes
+
+- 3660cdf: Added a backward compatible Form.Initial.SSO section that encompasses both OIDC and SAML connections
+
 ## 1.14.1
 
 ### Patch Changes
