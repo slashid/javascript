@@ -1,14 +1,20 @@
-import { useMemo } from "react";
+import { ReactNode, useMemo } from "react";
 
 import {
-  hasOidcAndNonOidcFactors,
+  hasSSOAndNonSSOFactors,
   isFactorOidc,
+  isFactorSSO,
 } from "../../../domain/handles";
-import { FactorLabeledOIDC, Handle, LoginOptions } from "../../../domain/types";
+import {
+  FactorCustomizableSAML,
+  FactorLabeledOIDC,
+  FactorSSO,
+  Handle,
+  LoginOptions,
+} from "../../../domain/types";
 import { useConfiguration } from "../../../hooks/use-configuration";
 import { InitialState } from "../flow";
 
-import { Oidc } from "./oidc";
 import { Controls } from "./controls";
 import { Divider } from "../../divider";
 import { LogoSlot } from "./logo";
@@ -16,6 +22,7 @@ import { HeaderSlot } from "./header";
 import { Factor } from "@slashid/slashid";
 import React from "react";
 import { useInternalFormContext } from "../internal-context";
+import { SSOProviders } from "./sso";
 
 // TODO does not work as a standalone module?
 export type OIDCSlotProps = {
@@ -23,6 +30,7 @@ export type OIDCSlotProps = {
   handleClick: (factor: Factor, handle?: Handle) => void;
 };
 
+// TODO: backwards compatiblility layer, deprecate with the next change
 export const OIDCSlot = ({
   children,
 }: {
@@ -33,7 +41,7 @@ export const OIDCSlot = ({
   const oidcFactors: FactorLabeledOIDC[] = factors.filter(isFactorOidc);
 
   const OIDC = React.useMemo(() => {
-    return <Oidc providers={oidcFactors} handleClick={handleSubmit} />;
+    return <SSOProviders providers={oidcFactors} handleClick={handleSubmit} />;
   }, [handleSubmit, oidcFactors]);
 
   if (typeof children === "function") {
@@ -49,6 +57,37 @@ export const OIDCSlot = ({
 
 OIDCSlot.displayName = "OIDC";
 
+export type SSOSlotProps = {
+  factors: Array<FactorLabeledOIDC | FactorCustomizableSAML>;
+  handleClick: (factor: Factor, handle?: Handle) => void;
+};
+
+const SSOSlot = ({
+  children,
+}: {
+  children?: (props: SSOSlotProps) => ReactNode;
+}) => {
+  const { factors } = useConfiguration();
+  const { handleSubmit } = useInternalFormContext();
+  const ssoFactors: FactorSSO[] = factors.filter(isFactorSSO);
+
+  const SSO = React.useMemo(() => {
+    return <SSOProviders providers={ssoFactors} handleClick={handleSubmit} />;
+  }, [handleSubmit, ssoFactors]);
+
+  if (typeof children === "function") {
+    return <>{children({ factors: ssoFactors, handleClick: handleSubmit })}</>;
+  }
+
+  if (React.Children.count(children) > 0) {
+    return <>{children}</>;
+  }
+
+  return SSO;
+};
+
+SSOSlot.displayName = "SSO";
+
 export type Props = {
   flowState: InitialState;
   lastHandle?: Handle;
@@ -59,7 +98,7 @@ const Initial = () => {
   const { factors, text } = useConfiguration();
 
   const shouldRenderDivider = useMemo(
-    () => hasOidcAndNonOidcFactors(factors),
+    () => hasSSOAndNonSSOFactors(factors),
     [factors]
   );
 
@@ -69,7 +108,7 @@ const Initial = () => {
       <HeaderSlot />
       <Controls />
       {shouldRenderDivider && <Divider>{text["initial.divider"]}</Divider>}
-      <OIDCSlot />
+      <SSOSlot />
     </article>
   );
 };
@@ -77,6 +116,8 @@ const Initial = () => {
 Initial.Logo = LogoSlot;
 Initial.Header = HeaderSlot;
 Initial.Controls = Controls;
+/** @deprecated Use `Initial.SSO` instead. */
 Initial.OIDC = OIDCSlot;
+Initial.SSO = SSOSlot;
 
 export { Initial };

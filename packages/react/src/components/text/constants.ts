@@ -7,6 +7,7 @@ export const TEXT = {
   "initial.title": "Welcome to SlashID",
   "initial.subtitle": "Sign in to your account",
   "initial.oidc": "Sign in with",
+  "initial.sso": "Sign in with",
   "initial.authenticationMethod": "Authentication method",
   "initial.handle.email": "Email address",
   "initial.handle.phone": "Phone number",

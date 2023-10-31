@@ -87,15 +87,12 @@ function createOptions(method: FactorMethod): Factor["options"] {
       return {
         client_id:
           "519241041566-gn4khi1cb57djuidqrie5lu3bprdcfgn.apps.googleusercontent.com",
-        // @ts-expect-error TODO enums are terrible here
         provider: "google",
-        // @ts-expect-error TODO enums again
         ux_mode: "popup",
       };
     }
     case "webauthn": {
       return {
-        // @ts-expect-error TODO enums again
         attachment: "platform",
       };
     }

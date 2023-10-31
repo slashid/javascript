@@ -175,6 +175,14 @@ const BasicForm = () => {
             client_id: import.meta.env.VITE_GOOGLE_SSO_CLIENT_ID,
           },
         },
+        {
+          method: "saml",
+          options: {
+            provider_credentials_id: "test",
+          },
+          label: "SAML test",
+          logo: "https://www.oasis-open.org/committees/download.php/29723/draft-saml-logo-03.png",
+        },
       ]}
     >
       <SlashIDLoaded>
@@ -208,6 +216,13 @@ const ComposedForm = () => {
             client_id: import.meta.env.VITE_GOOGLE_SSO_CLIENT_ID,
           },
         },
+
+        {
+          method: "saml",
+          options: {
+            provider_credentials_id: "test",
+          },
+        },
       ]}
     >
       <SlashIDLoaded>
@@ -227,7 +242,7 @@ const ComposedForm = () => {
                   <Form.Initial.Controls.Submit />
                   <p>Text right below the submit button</p>
                 </Form.Initial.Controls>
-                <Form.Initial.OIDC />
+                <Form.Initial.SSO />
                 <p>Some text below the form</p>
               </Slot>
               <Slot name="error">
@@ -275,7 +290,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <SlashIDProvider
       oid={import.meta.env.VITE_ORG_ID}
       themeProps={{ theme: "dark", className: "testClass" }}
-      baseApiUrl="https://api.slashid.com"
+      baseApiUrl="https://api.sandbox.slashid.com"
       tokenStorage="localStorage"
     >
       <LogOut />

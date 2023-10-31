@@ -65,7 +65,7 @@ const createStorage = (storageType: StorageOption) => {
   }
 };
 
-export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
+export const SlashIDProvider = ({
   oid: initialOid,
   initialToken,
   tokenStorage = "memory",
@@ -74,7 +74,7 @@ export const SlashIDProvider: React.FC<SlashIDProviderProps> = ({
   analyticsEnabled = false,
   themeProps,
   children
-}) => {
+}: SlashIDProviderProps) => {
   const [oid, setOid] = useState(initialOid)
   const [token, setToken] = useState(initialToken)
   const [state, setState] = useState<SDKState>(initialContextValue.sdkState);

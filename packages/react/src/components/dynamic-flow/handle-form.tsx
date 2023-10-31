@@ -21,9 +21,8 @@ import { TextConfigKey } from "../text/constants";
 import { sprinkles } from "../../theme/sprinkles.css";
 import * as styles from "./dynamic-flow.css";
 
-// TODO @kasper remove this when we have a proper mapping
 export const FACTOR_LABEL_MAP: Record<
-  Exclude<Factor["method"], "webauthn_via_email" | "webauthn_via_sms" | "saml">,
+  Exclude<Factor["method"], "webauthn_via_email" | "webauthn_via_sms">,
   TextConfigKey
 > = {
   email_link: "factor.emailLink",
@@ -32,6 +31,7 @@ export const FACTOR_LABEL_MAP: Record<
   sms_link: "factor.smsLink",
   webauthn: "factor.webauthn",
   oidc: "",
+  saml: "",
 };
 
 export type Props = {
@@ -144,7 +144,6 @@ export const HandleForm: React.FC<Props> = ({
           className={sprinkles({ marginBottom: "3", marginTop: "6" })}
           label={text["initial.authenticationMethod"]}
           items={filteredFactors.map((f) => ({
-            // @ts-expect-error TODO @kasper SAML will fix this
             label: text[FACTOR_LABEL_MAP[f.method]],
             value: f.method,
           }))}

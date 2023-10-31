@@ -5,6 +5,10 @@ export const oidcProvider = style({
   marginLeft: theme.space[1],
 });
 
+export const ssoProvider = style({
+  marginLeft: theme.space[1],
+});
+
 export const oidcList = style({
   display: "flex",
   flexDirection: "column",
@@ -25,4 +29,8 @@ export const header = style({
 export const dropdownContent = style({
   width: "var(--radix-select-trigger-width)",
   marginTop: "4px",
+});
+
+export const ssoLogo = style({
+  height: "16px",
 });

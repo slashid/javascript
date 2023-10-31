@@ -1,4 +1,3 @@
-import { Factor } from "@slashid/slashid";
 import { createContext, ReactNode, useMemo } from "react";
 import { SlashID } from "../components/icon/slashid";
 import { TEXT, TextConfig } from "../components/text/constants";
@@ -30,7 +29,7 @@ ConfigurationContext.displayName = "SlashIDConfigurationContext";
 
 type Props = {
   text?: Partial<TextConfig>;
-  factors?: Factor[];
+  factors?: FactorConfiguration[];
   logo?: Logo;
   storeLastHandle?: boolean;
   showBanner?: boolean;
