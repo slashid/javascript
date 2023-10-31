@@ -116,6 +116,7 @@ const Initial = () => {
 Initial.Logo = LogoSlot;
 Initial.Header = HeaderSlot;
 Initial.Controls = Controls;
+/** @deprecated Use `Initial.SSO` instead. */
 Initial.OIDC = OIDCSlot;
 Initial.SSO = SSOSlot;
 
