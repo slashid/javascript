@@ -18,6 +18,7 @@ export const oidcList = style({
 export const logo = style({
   display: "flex",
   marginBottom: theme.space[4],
+  maxHeight: "32px",
 });
 
 export const header = style({
