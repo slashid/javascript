@@ -1,5 +1,12 @@
 # @slashid/react
 
+## 1.15.1
+
+### Patch Changes
+
+- cdb4283: Make sure the loading/error indicators are not hidden with div:empty as some apps use by default.
+- cdb4283: Limit the form logo height to 32px per design. Default to the SlashID logo in case an invalid logo is configured.
+
 ## 1.15.0
 
 ### Minor Changes
