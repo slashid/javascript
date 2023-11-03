@@ -2,13 +2,14 @@ import clsx from "clsx";
 import { Logo as TLogo } from "../../../context/config-context";
 import * as styles from "./initial.css";
 import { useConfiguration } from "../../../hooks/use-configuration";
+import { SlashID } from "../../icon/slashid";
 
 export type Props = {
   logo?: TLogo;
 };
 
 export const Logo: React.FC<Props> = ({ logo }) => {
-  if (typeof logo === "string") {
+  if (typeof logo === "string" && logo) {
     return (
       <img
         className={clsx("sid-logo", "sid-logo--image", styles.logo)}
@@ -18,9 +19,15 @@ export const Logo: React.FC<Props> = ({ logo }) => {
     );
   }
 
+  const logoComponent = logo ? logo : <SlashID />;
+
+  if (!logo) {
+    console.info("SlashID: No logo provided. Using default logo.");
+  }
+
   return (
     <div className={clsx("sid-logo", "sid-logo--component", styles.logo)}>
-      {logo}
+      {logoComponent}
     </div>
   );
 };

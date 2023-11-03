@@ -76,6 +76,10 @@ const outerCircle = style({
   borderRadius: "100%",
   boxSizing: "border-box",
   opacity: 0.5,
+  // Shopify compatibility - it hides all empty divs by default
+  ":empty": {
+    display: "block",
+  },
 });
 export const outerCircleWithAnimation = style({
   width: "50px",
@@ -107,6 +111,10 @@ const middleCircle = style({
   height: "88px",
   borderRadius: "100%",
   boxSizing: "border-box",
+  // Shopify compatibility - it hides all empty divs by default
+  ":empty": {
+    display: "block",
+  },
 });
 export const middleCircleWithAnimation = style({
   width: "50px",
@@ -133,12 +141,17 @@ export const middleCircleVariants = styleVariants({
 });
 
 const innerCircle = style({
+  display: "block",
   position: "absolute",
   width: "53px",
   height: "53px",
   borderRadius: "100%",
   boxSizing: "border-box",
   boxShadow: "32px 80px 116px 0px rgba(91, 140, 255, 0.10)",
+  // Shopify compatibility - it hides all empty divs by default
+  ":empty": {
+    display: "block",
+  },
 });
 export const innerCircleWithAnimation = style({
   width: "50px",
