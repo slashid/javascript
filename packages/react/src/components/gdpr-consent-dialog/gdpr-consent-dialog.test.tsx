@@ -185,7 +185,7 @@ describe("#GDPRConsentDialog", () => {
         </TestSlashIDProvider>
       );
 
-      expectDialogToBeOpenWithInitialState();
+      await expectDialogToBeOpenWithInitialState();
     });
 
     test("should not open the dialog by default on second visit", async () => {
@@ -322,7 +322,7 @@ describe("#GDPRConsentDialog", () => {
         </TestSlashIDProvider>
       );
 
-      expectDialogToBeOpenWithInitialState();
+      await expectDialogToBeOpenWithInitialState();
     });
 
     test("should not open the dialog by default on second visit", async () => {

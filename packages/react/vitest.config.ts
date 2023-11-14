@@ -9,7 +9,11 @@ export default defineConfig({
     environment: "jsdom",
     setupFiles: ["./scripts/test-setup.js"],
     deps: {
-      inline: ["vitest-canvas-mock"],
+      optimizer: {
+        web: {
+          include: ["vitest-canvas-mock"],
+        },
+      },
     },
   },
 });

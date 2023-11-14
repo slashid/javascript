@@ -8,7 +8,7 @@
 </p>
 
 This monorepo contains the public `/id` JavaScript packages.
-All packages require the `/id` SDK to be installed - please [request access](https://slashid.dev/request-access) here.
+All packages require the `/id` SDK to be installed.
 
 ## Packages
 

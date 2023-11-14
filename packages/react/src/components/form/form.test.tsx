@@ -318,8 +318,6 @@ describe("#Form", () => {
 
     user.click(screen.getByTestId("sid-form-initial-submit-button"));
 
-    console.log("awaiting error state");
-
     await expect(logInMock).rejects.toMatch("login error");
     await expect(
       screen.findByTestId("sid-form-error-state")
@@ -331,8 +329,6 @@ describe("#Form", () => {
 
     loginShouldSucceed = true;
     user.click(retryButton);
-
-    console.log("clicked retry");
 
     await expect(
       screen.findByTestId("sid-form-authenticating-state")
