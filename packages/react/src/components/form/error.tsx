@@ -1,6 +1,6 @@
+import { Button } from "@slashid/react-primitives";
 import { useConfiguration } from "../../hooks/use-configuration";
 import { sprinkles } from "../../theme/sprinkles.css";
-import { Button } from "../button";
 import { LinkButton } from "../button/link-button";
 import { Circle } from "../spinner/circle";
 import { Text } from "../text";

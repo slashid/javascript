@@ -1,4 +1,5 @@
 import { Factor, OAuthProvider } from "@slashid/slashid";
+import { Button } from "@slashid/react-primitives";
 import clsx from "clsx";
 import {
   FactorCustomizableSAML,
@@ -6,7 +7,6 @@ import {
 } from "../../../domain/types";
 import { sprinkles } from "../../../theme/sprinkles.css";
 import { useConfiguration } from "../../../hooks/use-configuration";
-import { Button } from "../../button";
 import { AzureAD } from "../../icon/azuread";
 import { Bitbucket } from "../../icon/bitbucket";
 import { Facebook } from "../../icon/facebook";

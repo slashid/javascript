@@ -1,6 +1,7 @@
 import { useState } from "react";
 // @ts-expect-error TODO fix enums in KYC SDK
 import { DocumentSide, DocumentType } from "@slashid/slashid";
+import { Button } from "@slashid/react-primitives";
 import {
   blobResize,
   blobToBase64,
@@ -9,7 +10,6 @@ import {
 } from "../utils";
 import { FileUpload } from "../file-upload";
 import { Banner } from "../banner";
-import { Button } from "../button";
 import { darkThemeColors, lightTheme } from "../../theme/theme.css";
 import { Text } from "../text";
 import { Stack } from "../stack";

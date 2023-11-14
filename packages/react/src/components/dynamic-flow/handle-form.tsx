@@ -1,6 +1,7 @@
 import { Factor } from "@slashid/slashid";
 import { findFlag } from "country-list-with-dial-code-and-flag";
 import React, { Validator, useEffect, useMemo, useState } from "react";
+import { Button } from "@slashid/react-primitives";
 
 import {
   filterFactors,
@@ -11,7 +12,6 @@ import { Handle, HandleType } from "../../domain/types";
 import { useConfiguration } from "../../hooks/use-configuration";
 import { useForm } from "../../hooks/use-form";
 
-import { Button } from "../button";
 import { Dropdown } from "../dropdown";
 import { ErrorMessage } from "../form/error-message";
 import { isValidEmail, isValidPhoneNumber } from "../form/validation";

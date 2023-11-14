@@ -1,6 +1,6 @@
 import React, { forwardRef } from 'react'
+import { Button } from "@slashid/react-primitives";
 import { Teleport } from '../teleport'
-import { Button } from '../button'
 import { clsx } from "clsx";
 import { Cookie } from "../icon/cookie";
 import * as styles from "./style.css";

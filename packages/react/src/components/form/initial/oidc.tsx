@@ -1,11 +1,11 @@
 import React from "react";
 import clsx from "clsx";
 import { Factor, OAuthProvider } from "@slashid/slashid";
+import { Button } from "@slashid/react-primitives";
 
 import { FactorLabeledOIDC } from "../../../domain/types";
 import { useConfiguration } from "../../../hooks/use-configuration";
 import { sprinkles } from "../../../theme/sprinkles.css";
-import { Button } from "../../button";
 // import { Apple } from "../../icon/apple";
 import { AzureAD } from "../../icon/azuread";
 import { Bitbucket } from "../../icon/bitbucket";
