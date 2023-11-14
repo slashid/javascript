@@ -11,30 +11,3 @@ body {
   padding: 0;
   background-color: darkgray;
 }
-
-.formWrapper {
-  width: 420px !important;
-  margin: 32px;
-}
-
-.sid-theme-root.testClass {
-  --sid-color-primary: #95b8d1;
-}
-
-.gdprConsentDialogClass {
-  max-height: 600px;
-}
-
-.gdprConsentDialogTriggerClass {
-  border-radius: 15px;
-}
-
-.layout {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-
-.layout .sid-form {
-  width: 480px;
-}

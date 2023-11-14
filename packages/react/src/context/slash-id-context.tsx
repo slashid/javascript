@@ -12,7 +12,7 @@ import { PersonHandleType, SlashID, User } from "@slashid/slashid";
 import { MemoryStorage } from "../browser/memory-storage";
 import { LogIn, MFA } from "../domain/types";
 import { SDKState } from "../domain/sdk-state";
-import { ThemeProps, ThemeRoot } from "../components/theme-root";
+import { ThemeProps, ThemeRoot } from "@slashid/react-primitives";
 export type StorageOption = "memory" | "localStorage";
 
 export interface SlashIDProviderProps {
