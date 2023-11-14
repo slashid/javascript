@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, act } from "@testing-library/react";
 import { Form } from ".";
 import { TestSlashIDProvider } from "../../context/test-slash-id-provider";
 import { createTestUser, inputEmail } from "../test-utils";
@@ -109,7 +109,9 @@ describe("#Form - customisation", () => {
 
     inputEmail("valid@email.com");
 
-    user.click(screen.getByTestId("sid-form-initial-submit-button"));
+    await act(() => {
+      user.click(screen.getByTestId("sid-form-initial-submit-button"));
+    });
 
     await expect(logInMock).rejects.toMatch("login error");
     await expect(
@@ -255,7 +257,10 @@ describe("#Form - customisation", () => {
 
       const emailAddress = "valid@email.com";
       inputEmail(emailAddress, "email");
-      user.click(screen.getByTestId("sid-form-initial-submit-button"));
+
+      await act(() => {
+        user.click(screen.getByTestId("sid-form-initial-submit-button"));
+      });
 
       await expect(
         screen.findByTestId("custom-success")
