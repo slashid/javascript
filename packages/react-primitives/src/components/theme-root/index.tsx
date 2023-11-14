@@ -9,6 +9,7 @@ import {
 import { useLayoutEffect } from "react";
 import React from "react";
 import { isBrowser } from "../../browser/is-browser";
+import { THEME_ROOT_CLASS_NAME } from "./theme.css";
 
 export type ThemeProps = {
   theme?: Theme;
@@ -23,8 +24,8 @@ type Props = {
 
 function createClassNames({ theme, className }: ThemeProps) {
   return clsx(
-    "sid-theme-root",
-    `sid-theme-root__${theme}`,
+    THEME_ROOT_CLASS_NAME,
+    `${THEME_ROOT_CLASS_NAME}__${theme}`,
     themeClass,
     {
       [darkTheme]: theme === "dark",

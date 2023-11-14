@@ -1,3 +1,7 @@
+// set up theming
+// TODO should we export .css.ts files and make this a responsibility of the consumer?
+import "@slashid/react-primitives/style.css";
+
 import { DynamicFlow } from "./components/dynamic-flow";
 import { Form } from "./components/form";
 import { Slot } from "./components/slot";

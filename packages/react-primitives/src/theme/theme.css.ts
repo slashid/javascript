@@ -1,7 +1,6 @@
 import {
   createTheme,
   createGlobalThemeContract,
-  createGlobalTheme,
   style,
   assignVars,
 } from "@vanilla-extract/css";
@@ -131,9 +130,6 @@ export const lightTheme = {
     },
   },
 };
-
-// default: light theme
-createGlobalTheme(".sid-theme-root", publicVariables, lightTheme);
 
 export const darkTheme = style({
   vars: assignVars(publicVariables.color, darkThemeColors),

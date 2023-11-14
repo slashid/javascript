@@ -1,4 +1,5 @@
 import { Factor } from "@slashid/slashid";
+import { LinkButton } from "@slashid/react-primitives";
 import {
   FormEventHandler,
   useCallback,
@@ -17,7 +18,6 @@ import { useConfiguration } from "../../hooks/use-configuration";
 import { useForm } from "../../hooks/use-form";
 import { useSlashID } from "../../main";
 import { sprinkles } from "../../theme/sprinkles.css";
-import { LinkButton } from "../button/link-button";
 import { Chat } from "../icon/chat";
 import { Email } from "../icon/email";
 import { OtpInput } from "../otp-input";

@@ -25,7 +25,9 @@
   "types": "dist/main.d.ts",
   "main": "dist/main.js",
   "module": "dist/main.js",
-  "sideEffects": false,
+  "sideEffects": [
+    "./src/components/theme-root/theme.css.ts"
+  ],
   "exports": {
     ".": {
       "import": "./dist/main.js"
