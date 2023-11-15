@@ -1,6 +1,9 @@
 import * as styles from "./stack.css";
 import { clsx } from "clsx";
-import { sprinkles, Sprinkles } from "../../theme/sprinkles.css";
+import {
+  sprinkles,
+  Sprinkles,
+} from "@slashid/react-primitives/src/theme/sprinkles.css";
 import { CSSProperties } from "react";
 
 type Props = {

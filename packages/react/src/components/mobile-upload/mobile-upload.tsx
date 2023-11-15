@@ -10,7 +10,10 @@ import {
 } from "../utils";
 import { FileUpload } from "../file-upload";
 import { Banner } from "../banner";
-import { darkThemeColors, lightTheme } from "../../theme/theme.css";
+import {
+  lightTheme,
+  darkThemeColors,
+} from "@slashid/react-primitives/src/theme/theme.css";
 import { Text } from "../text";
 import { Stack } from "../stack";
 import { ImageQualityError } from "../error";

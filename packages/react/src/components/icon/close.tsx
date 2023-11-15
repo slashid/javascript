@@ -1,6 +1,6 @@
 import { clsx } from "clsx";
 import { DARK_MODE } from ".";
-import { publicVariables } from "../../theme/theme.css";
+import { publicVariables } from "@slashid/react-primitives/src/theme/theme.css";
 
 type Props = {
   className?: string;

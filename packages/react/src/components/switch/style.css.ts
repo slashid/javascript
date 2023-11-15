@@ -1,5 +1,9 @@
 import { style } from "@vanilla-extract/css";
-import { colors, publicVariables, theme } from "../../theme/theme.css";
+import {
+  colors,
+  publicVariables,
+  theme,
+} from "@slashid/react-primitives/src/theme/theme.css";
 
 export const radixSwitch = style({
   all: "unset",

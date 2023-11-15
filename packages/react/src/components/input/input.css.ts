@@ -1,5 +1,8 @@
 import { style, styleVariants, globalStyle } from "@vanilla-extract/css";
-import { publicVariables, theme } from "../../theme/theme.css";
+import {
+  theme,
+  publicVariables,
+} from "@slashid/react-primitives/src/theme/theme.css";
 
 export const input = style({
   all: "unset",

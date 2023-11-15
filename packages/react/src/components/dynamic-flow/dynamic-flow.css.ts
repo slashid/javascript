@@ -1,5 +1,5 @@
 import { style } from "@vanilla-extract/css";
-import { publicVariables, theme } from "../../theme/theme.css";
+import { theme, publicVariables } from "@slashid/react-primitives/src/theme/theme.css";
 
 export const form = style({
   fontFamily: publicVariables.font.fontFamily,

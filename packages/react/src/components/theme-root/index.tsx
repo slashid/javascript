@@ -5,7 +5,7 @@ import {
   darkTheme,
   lightThemeVars,
   themeClass,
-} from "../../theme/theme.css";
+} from "@slashid/react-primitives/src/theme/theme.css";
 import { useLayoutEffect } from "react";
 import React from "react";
 import { isBrowser } from "../../browser/is-browser";

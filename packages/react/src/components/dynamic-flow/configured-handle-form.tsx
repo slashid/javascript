@@ -1,7 +1,7 @@
 import { Factor } from "@slashid/slashid";
 import { Handle, HandleType } from "../../domain/types";
 import { useConfiguration } from "../../hooks/use-configuration";
-import { sprinkles } from "../../theme/sprinkles.css";
+import { sprinkles } from "@slashid/react-primitives/src/theme/sprinkles.css";
 import { Divider } from "../divider";
 import { Tabs } from "../tabs";
 import { HandleForm } from "./handle-form";

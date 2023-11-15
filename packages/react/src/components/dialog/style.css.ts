@@ -1,5 +1,5 @@
 import { keyframes, style } from "@vanilla-extract/css";
-import { publicVariables, theme } from "../../theme/theme.css";
+import { theme, publicVariables } from "@slashid/react-primitives/src/theme/theme.css";
 
 const show = keyframes({
   "0%": { opacity: "0" },

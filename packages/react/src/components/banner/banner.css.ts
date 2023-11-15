@@ -1,4 +1,4 @@
-import { colors, publicVariables } from "../../theme/theme.css";
+import { colors, publicVariables } from "@slashid/react-primitives/src/theme/theme.css";
 import { style, styleVariants } from "@vanilla-extract/css";
 
 const base = style({

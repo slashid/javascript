@@ -1,4 +1,8 @@
-import { colors, publicVariables, theme } from "../../theme/theme.css";
+import {
+  colors,
+  publicVariables,
+  theme,
+} from "@slashid/react-primitives/src/theme/theme.css";
 import { recipe, RecipeVariants } from "@vanilla-extract/recipes";
 
 export const text = recipe({

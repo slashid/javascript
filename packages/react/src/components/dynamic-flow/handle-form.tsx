@@ -18,7 +18,7 @@ import { isValidEmail, isValidPhoneNumber } from "../form/validation";
 import { Flag, Input, PhoneInput } from "../input";
 import { TextConfigKey } from "../text/constants";
 
-import { sprinkles } from "../../theme/sprinkles.css";
+import { sprinkles } from "@slashid/react-primitives/src/theme/sprinkles.css";
 import * as styles from "./dynamic-flow.css";
 
 export const FACTOR_LABEL_MAP: Record<
