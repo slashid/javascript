@@ -3,6 +3,7 @@ import {
   createGlobalThemeContract,
   style,
   assignVars,
+  createGlobalTheme,
 } from "@vanilla-extract/css";
 
 // private color palette
@@ -118,10 +119,9 @@ export const darkThemeColors = {
   backgroundFailure: "#FFF0F4",
 };
 
-export const lightTheme = {
-  color: lightThemeColors,
+export const defaultVars = {
   font: {
-    fontFamily: "'Twemoji Country Flags', sans-serif",
+    fontFamily: "Inter, sans-serif",
   },
   border: {
     radius: "16px",
@@ -132,11 +132,17 @@ export const lightTheme = {
 };
 
 export const darkTheme = style({
-  vars: assignVars(publicVariables.color, darkThemeColors),
+  vars: assignVars(publicVariables, {
+    ...defaultVars,
+    color: darkThemeColors,
+  }),
 });
 
 export const lightThemeVars = style({
-  vars: assignVars(publicVariables.color, lightThemeColors),
+  vars: assignVars(publicVariables, {
+    ...defaultVars,
+    color: lightThemeColors,
+  }),
 });
 
 // overrides the color theme based on system settings
@@ -221,3 +227,8 @@ export const [themeClass, theme] = createTheme({
 });
 
 export type Theme = "light" | "dark" | "auto";
+
+export const THEME_ROOT_CLASS_NAME = "sid-theme-root";
+
+// side effect - listed in package.json "sideEffects"
+createGlobalTheme(`.${THEME_ROOT_CLASS_NAME}`, publicVariables);

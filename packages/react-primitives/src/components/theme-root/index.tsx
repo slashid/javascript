@@ -1,5 +1,6 @@
 import { clsx } from "clsx";
 import {
+  THEME_ROOT_CLASS_NAME,
   Theme,
   autoTheme,
   darkTheme,
@@ -9,7 +10,6 @@ import {
 import { useLayoutEffect } from "react";
 import React from "react";
 import { isBrowser } from "../../browser/is-browser";
-import { THEME_ROOT_CLASS_NAME } from "./theme.css";
 
 export type ThemeProps = {
   theme?: Theme;
