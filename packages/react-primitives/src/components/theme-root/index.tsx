@@ -2,8 +2,8 @@ import { clsx } from "clsx";
 import {
   THEME_ROOT_CLASS_NAME,
   Theme,
-  autoTheme,
-  darkTheme,
+  autoThemeVars,
+  darkThemeVars,
   lightThemeVars,
   themeClass,
 } from "../../theme/theme.css";
@@ -28,8 +28,8 @@ function createClassNames({ theme, className }: ThemeProps) {
     `${THEME_ROOT_CLASS_NAME}__${theme}`,
     themeClass,
     {
-      [darkTheme]: theme === "dark",
-      [autoTheme]: theme === "auto",
+      [darkThemeVars]: theme === "dark",
+      [autoThemeVars]: theme === "auto",
       [lightThemeVars]: theme === "light",
     },
     className

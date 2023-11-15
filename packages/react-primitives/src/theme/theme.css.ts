@@ -131,7 +131,7 @@ export const defaultVars = {
   },
 };
 
-export const darkTheme = style({
+export const darkThemeVars = style({
   vars: assignVars(publicVariables, {
     ...defaultVars,
     color: darkThemeColors,
@@ -146,7 +146,7 @@ export const lightThemeVars = style({
 });
 
 // overrides the color theme based on system settings
-export const autoTheme = style({
+export const autoThemeVars = style({
   "@media": {
     "(prefers-color-scheme: dark)": {
       vars: assignVars(publicVariables.color, darkThemeColors),
