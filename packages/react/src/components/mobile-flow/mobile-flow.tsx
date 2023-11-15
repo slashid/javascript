@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import {
-  darkTheme,
+  darkThemeVars,
   publicVariables,
   themeClass,
 } from "@slashid/react-primitives/src/theme/theme.css";
@@ -268,7 +268,7 @@ export const MobileFlow = (props: Props) => {
   const logo = props.logo ? props.logo() : <Logo />;
 
   return (
-    <Stack className={clsx(rootClass, themeClass, darkTheme, clsx(mobileFlow))}>
+    <Stack className={clsx(rootClass, themeClass, darkThemeVars, clsx(mobileFlow))}>
       {props.theme && (
         <style>
           {`.${rootClass} {${assignInlineVars(publicVariables, props.theme)}}`}
@@ -277,7 +277,7 @@ export const MobileFlow = (props: Props) => {
       {props.darkThemeColors && (
         <style>
           {`@media (prefers-color-scheme: dark) {
-            .${darkTheme}{${assignInlineVars(darkThemeColorsOverride)}}}`}
+            .${darkThemeVars}{${assignInlineVars(darkThemeColorsOverride)}}}`}
         </style>
       )}
       {logo && <Header logo={logo} />}

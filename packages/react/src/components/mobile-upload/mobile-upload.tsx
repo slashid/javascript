@@ -11,14 +11,14 @@ import {
 import { FileUpload } from "../file-upload";
 import { Banner } from "../banner";
 import {
-  lightTheme,
+  publicVariables,
   darkThemeColors,
 } from "@slashid/react-primitives/src/theme/theme.css";
 import { Text } from "../text";
 import { Stack } from "../stack";
 import { ImageQualityError } from "../error";
 
-export type Theme = typeof lightTheme;
+export type Theme = typeof publicVariables;
 export type DarkThemeColors = Partial<typeof darkThemeColors>;
 
 type Props = CommonProps & {
