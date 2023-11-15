@@ -25,3 +25,7 @@ dist-ssr
 
 # Storybook
 storybook-static
+
+# yalc
+.yalc
+yalc.lock

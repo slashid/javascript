@@ -62,7 +62,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^8.0.2",
-    "@slashid/slashid": "3.15.0",
+    "@slashid/slashid": "file:.yalc/@slashid/slashid",
     "@storybook/addon-essentials": "7.0.0-rc.2",
     "@storybook/addon-interactions": "7.4.0",
     "@storybook/addon-links": "7.4.0",
