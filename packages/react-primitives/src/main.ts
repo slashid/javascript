@@ -13,7 +13,10 @@ import { Banner } from "./components/banner";
 import { Dropdown } from "./components/dropdown";
 import { Tabs } from "./components/tabs";
 import { Teleport } from "./components/teleport";
+import { Text, Props as TextProps } from "./components/text";
+import { TextContext, TextProvider } from "./components/text/text-context";
 
+// components
 export {
   ThemeRoot,
   Button,
@@ -31,8 +34,14 @@ export {
   Dropdown,
   Tabs,
   Teleport,
+  Text,
 };
 
+// context
+export { TextContext, TextProvider };
+
+// icons
 export * from "./components/icon";
 
-export type { ThemeProps, DialogProps, Flag };
+// types
+export type { ThemeProps, DialogProps, TextProps, Flag };

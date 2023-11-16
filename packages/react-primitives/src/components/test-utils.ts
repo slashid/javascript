@@ -1,5 +1,3 @@
-import { screen, fireEvent } from "@testing-library/react";
-import { TEXT } from "./text/constants";
 import { FactorMethod, OrganizationDetails, User } from "@slashid/slashid";
 import { faker } from "@faker-js/faker";
 import { Handle } from "../domain/types";
@@ -9,22 +7,6 @@ import {
   SlashID,
   SlashIDOptions,
 } from "@slashid/slashid";
-
-export const inputEmail = (
-  value: string,
-  inputPlaceholder: string = TEXT["initial.handle.phone.email"]
-) => {
-  const input = screen.getByPlaceholderText(inputPlaceholder);
-  fireEvent.change(input, { target: { value } });
-};
-
-export const inputPhone = (
-  value: string,
-  inputPlaceholder: string = TEXT["initial.handle.phone.placeholder"]
-) => {
-  const input = screen.getByPlaceholderText(inputPlaceholder);
-  fireEvent.change(input, { target: { value } });
-};
 
 export const TEST_ORG_ID = "ad5399ea-4e88-b04a-16ca-82958c955740";
 export const TEST_PERSON_ID =

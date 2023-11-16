@@ -3,7 +3,7 @@ import * as styles from "./banner.css";
 import { Failure } from "../icon/failure";
 import { Text } from "../text";
 import { Check } from "../icon/check";
-import { TextConfigKey } from "../text/constants";
+import { TextConfigKey } from "../text/types";
 import { Stack } from "../stack";
 
 type Props = {

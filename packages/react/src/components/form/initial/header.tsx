@@ -1,7 +1,7 @@
 import React from "react";
 import { useConfiguration } from "../../../hooks/use-configuration";
-import { TextConfig } from "../../text/constants";
 import { Text } from "../../text";
+import { TextConfig } from "../../text/constants";
 
 import * as styles from "./initial.css";
 

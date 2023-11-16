@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useMemo } from "react";
-import { SlashID } from "@slashid/react-primitives";
+import { SlashID, TextProvider } from "@slashid/react-primitives";
 import { TEXT, TextConfig } from "../components/text/constants";
 import { FactorConfiguration } from "../domain/types";
 
@@ -52,7 +52,7 @@ export const ConfigurationProvider: React.FC<Props> = ({
 
   return (
     <ConfigurationContext.Provider value={contextValue}>
-      {children}
+      <TextProvider text={contextValue.text}>{children}</TextProvider>
     </ConfigurationContext.Provider>
   );
 };
