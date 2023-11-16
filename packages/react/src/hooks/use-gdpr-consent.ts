@@ -1,6 +1,6 @@
 import { BaseUser, GDPRConsent, GDPRConsentLevel } from "@slashid/slashid";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { isBrowser } from "../browser/is-browser";
+import { isBrowser } from "@slashid/react-primitives";
 import { useSlashID } from "./use-slash-id";
 
 export const STORAGE_GDPR_CONSENT_KEY = "@slashid/GDPR_CONSENT";

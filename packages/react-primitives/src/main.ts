@@ -15,6 +15,8 @@ import { Tabs } from "./components/tabs";
 import { Teleport } from "./components/teleport";
 import { Text, Props as TextProps } from "./components/text";
 import { TextContext, TextProvider } from "./components/text/text-context";
+import { isBrowser } from "./browser/is-browser";
+import { MemoryStorage } from "./browser/memory-storage";
 
 // components
 export {
@@ -42,6 +44,9 @@ export { TextContext, TextProvider };
 
 // icons
 export * from "./components/icon";
+
+// utils
+export { isBrowser, MemoryStorage };
 
 // types
 export type { ThemeProps, DialogProps, TextProps, Flag };
