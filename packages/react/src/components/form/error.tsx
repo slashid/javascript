@@ -1,12 +1,12 @@
-import { Button, LinkButton } from "@slashid/react-primitives";
+import { Children } from "react";
+import { Errors } from "@slashid/slashid";
+import { Button, LinkButton, Circle } from "@slashid/react-primitives";
 import { sprinkles } from "@slashid/react-primitives/src/theme/sprinkles.css";
+
 import { useConfiguration } from "../../hooks/use-configuration";
-import { Circle } from "../spinner/circle";
 import { Text } from "../text";
 import { TextConfigKey } from "../text/constants";
 import { ErrorState } from "./flow";
-import { Errors } from "@slashid/slashid";
-import { Children } from "react";
 import { useInternalFormContext } from "./internal-context";
 
 const ErrorIcon = () => (

@@ -7,6 +7,9 @@ import {
   useRef,
   useState,
 } from "react";
+import { Chat, Email, Circle, Spinner } from "@slashid/react-primitives";
+import { sprinkles } from "@slashid/react-primitives/src/theme/sprinkles.css";
+
 import {
   isFactorEmailLink,
   isFactorOTP,
@@ -17,17 +20,14 @@ import {
 import { useConfiguration } from "../../hooks/use-configuration";
 import { useForm } from "../../hooks/use-form";
 import { useSlashID } from "../../main";
-import { sprinkles } from "@slashid/react-primitives/src/theme/sprinkles.css";
-import { Chat, Email } from "@slashid/react-primitives";
 import { OtpInput } from "../otp-input";
-import { Circle } from "../spinner/circle";
-import { Spinner } from "../spinner/spinner";
 import { Text } from "../text";
 import { TextConfigKey } from "../text/constants";
-import * as styles from "./authenticating.css";
 import { ErrorMessage } from "./error-message";
 import { AuthenticatingState } from "./flow";
 import { OTP_CODE_LENGTH, isValidOTPCode } from "./validation";
+
+import * as styles from "./authenticating.css";
 
 function getAuthenticatingMessage(
   factor: Factor,

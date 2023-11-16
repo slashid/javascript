@@ -6,6 +6,8 @@ import { Divider } from "./components/divider";
 import { Accordion } from "./components/accordion";
 import { Dialog, DialogProps } from "./components/dialog";
 import { Switch } from "./components/switch";
+import { Spinner } from "./components/spinner/spinner";
+import { Circle } from "./components/spinner/circle";
 
 export {
   ThemeRoot,
@@ -17,6 +19,8 @@ export {
   Accordion,
   Dialog,
   Switch,
+  Spinner,
+  Circle,
 };
 
 export * from "./components/icon";
