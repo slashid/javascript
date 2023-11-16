@@ -1,13 +1,13 @@
-import { Accordion } from "@slashid/react-primitives";
-import { Switch } from "../switch";
+import { Accordion, Switch } from "@slashid/react-primitives";
 import { Text } from "../text";
 import { CONSENT_LEVELS_WITHOUT_NONE } from "./constants";
-import * as styles from "./style.css";
 import {
   ConsentSettings,
   ConsentSettingsLevel,
   GDPRConsentDialogProps,
 } from "./types";
+
+import * as styles from "./style.css";
 
 type Props = {
   consentSettings: ConsentSettings;

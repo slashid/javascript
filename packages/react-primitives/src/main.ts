@@ -5,6 +5,7 @@ import { Input, PhoneInput, Flag } from "./components/input";
 import { Divider } from "./components/divider";
 import { Accordion } from "./components/accordion";
 import { Dialog, DialogProps } from "./components/dialog";
+import { Switch } from "./components/switch";
 
 export {
   ThemeRoot,
@@ -15,6 +16,7 @@ export {
   Divider,
   Accordion,
   Dialog,
+  Switch,
 };
 
 export * from "./components/icon";
