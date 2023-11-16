@@ -8,6 +8,7 @@ import { Dialog, DialogProps } from "./components/dialog";
 import { Switch } from "./components/switch";
 import { Spinner } from "./components/spinner/spinner";
 import { Circle } from "./components/spinner/circle";
+import { Stack } from "./components/stack";
 
 export {
   ThemeRoot,
@@ -21,6 +22,7 @@ export {
   Switch,
   Spinner,
   Circle,
+  Stack,
 };
 
 export * from "./components/icon";

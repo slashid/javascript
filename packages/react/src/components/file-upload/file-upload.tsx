@@ -1,6 +1,5 @@
 import clsx from "clsx";
-import { Loading as IconLoading } from "@slashid/react-primitives";
-import { Stack } from "../stack";
+import { Loading as IconLoading, Stack } from "@slashid/react-primitives";
 import { Text } from "../text";
 import { TextConfigKey } from "../text/constants";
 import * as styles from "./file-upload.css";

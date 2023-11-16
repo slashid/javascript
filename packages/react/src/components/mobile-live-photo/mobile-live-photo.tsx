@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { Button } from "@slashid/react-primitives";
+import { Button, Stack } from "@slashid/react-primitives";
 import { Banner } from "../banner";
 import { LivePhotoError } from "../error";
 import { FileUpload } from "../file-upload";
-import { Stack } from "../stack";
 import { Text } from "../text";
 import {
   CommonProps,

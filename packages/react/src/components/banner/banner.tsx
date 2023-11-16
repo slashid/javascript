@@ -1,8 +1,7 @@
 import { clsx } from "clsx";
-import { Failure, Check } from "@slashid/react-primitives";
+import { Failure, Check, Stack } from "@slashid/react-primitives";
 import { Text } from "../text";
 import { TextConfigKey } from "../text/constants";
-import { Stack } from "../stack";
 
 import * as styles from "./banner.css";
 
