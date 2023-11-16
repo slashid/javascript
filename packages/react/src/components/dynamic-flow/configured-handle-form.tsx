@@ -1,8 +1,8 @@
 import { Factor } from "@slashid/slashid";
+import { Divider } from "@slashid/react-primitives";
+import { sprinkles } from "@slashid/react-primitives/src/theme/sprinkles.css";
 import { Handle, HandleType } from "../../domain/types";
 import { useConfiguration } from "../../hooks/use-configuration";
-import { sprinkles } from "@slashid/react-primitives/src/theme/sprinkles.css";
-import { Divider } from "../divider";
 import { Tabs } from "../tabs";
 import { HandleForm } from "./handle-form";
 import { useMemo } from "react";
