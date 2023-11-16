@@ -7,13 +7,12 @@ import {
 } from "@slashid/react-primitives/src/theme/theme.css";
 // @ts-expect-error TODO fix enums in KYC SDK
 import { DocumentSide, KYC, DocumentType, KYCStatus } from "@slashid/slashid";
-import { Logo, Stack } from "@slashid/react-primitives";
+import { Logo, Stack, Banner } from "@slashid/react-primitives";
 import { assignInlineVars } from "@vanilla-extract/dynamic";
 
 import { DarkThemeColors, MobileUpload, Theme } from "../mobile-upload";
 import { isUploadSupported } from "../utils";
 import { MobileLivePhoto } from "../mobile-live-photo";
-import { Banner } from "../banner";
 import { Header } from "../header";
 
 import { mobileFlow } from "./mobile-flow.css";

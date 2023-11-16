@@ -9,6 +9,7 @@ import { Switch } from "./components/switch";
 import { Spinner } from "./components/spinner/spinner";
 import { Circle } from "./components/spinner/circle";
 import { Stack } from "./components/stack";
+import { Banner } from "./components/banner";
 
 export {
   ThemeRoot,
@@ -23,6 +24,7 @@ export {
   Spinner,
   Circle,
   Stack,
+  Banner,
 };
 
 export * from "./components/icon";
