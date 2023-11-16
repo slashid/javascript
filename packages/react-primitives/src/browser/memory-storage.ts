@@ -14,7 +14,7 @@ export class MemoryStorage implements Storage {
   }
 
   key(index: number): string | null {
-    return [...this.data.keys()][Number(index)] ?? null;
+    return Array.from(this.data.keys())[Number(index)] ?? null;
   }
 
   setItem(key: string, value: string): void {
