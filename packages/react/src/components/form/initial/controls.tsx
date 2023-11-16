@@ -1,7 +1,7 @@
 import { Factor } from "@slashid/slashid";
 import { Flag, findFlag } from "country-list-with-dial-code-and-flag";
 import { Children, useEffect, useMemo, useState } from "react";
-import { Button } from "@slashid/react-primitives";
+import { Button, Input, PhoneInput } from "@slashid/react-primitives";
 import { sprinkles } from "@slashid/react-primitives/src/theme/sprinkles.css";
 import { FormStatus } from "../../../context/form-context";
 import {
@@ -16,7 +16,6 @@ import { FactorNonOIDC, Handle, HandleType } from "../../../domain/types";
 import { useConfiguration } from "../../../hooks/use-configuration";
 import { useForm } from "../../../hooks/use-form";
 import { Dropdown } from "../../dropdown";
-import { Input, PhoneInput } from "../../input";
 import { Tabs } from "../../tabs";
 import { TextConfig, TextConfigKey } from "../../text/constants";
 import { ErrorMessage } from "../error-message";
