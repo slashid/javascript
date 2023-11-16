@@ -12,6 +12,7 @@ import { Stack } from "./components/stack";
 import { Banner } from "./components/banner";
 import { Dropdown } from "./components/dropdown";
 import { Tabs } from "./components/tabs";
+import { Teleport } from "./components/teleport";
 
 export {
   ThemeRoot,
@@ -29,6 +30,7 @@ export {
   Banner,
   Dropdown,
   Tabs,
+  Teleport,
 };
 
 export * from "./components/icon";
