@@ -7,7 +7,7 @@ import { TEXT } from "../text/constants";
 import { STORAGE_LAST_HANDLE_KEY } from "../../hooks/use-last-handle";
 import { createTestUser, inputEmail, MockSlashID } from "../test-utils";
 
-import { TestSlashIDProvider } from "../../context/test-slash-id-provider";
+import { TestSlashIDProvider } from "../../context/test-providers";
 import { ConfigurationProvider } from "../../context/config-context";
 
 describe("#Form", () => {

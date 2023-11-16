@@ -2,7 +2,7 @@ import { StepUpAuth } from "./step-up-auth";
 import { render, screen, waitFor } from "@testing-library/react";
 import {
   TestSlashIDProvider
-} from "../../context/test-slash-id-provider";
+} from "../../context/test-providers";
 import userEvent from "@testing-library/user-event";
 import { createTestUser, inputPhone } from "../test-utils";
 

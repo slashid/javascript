@@ -1,7 +1,7 @@
 import { GDPRConsent, GDPRConsentLevel, User } from "@slashid/slashid";
 import { render, screen } from "@testing-library/react";
 import { createTestUser } from "../components/test-utils";
-import { TestSlashIDProvider } from "../context/test-slash-id-provider";
+import { TestSlashIDProvider } from "../context/test-providers";
 import { STORAGE_GDPR_CONSENT_KEY, useGDPRConsent } from "./use-gdpr-consent";
 
 const NO_CONSENTS_TEXT = "No consents";

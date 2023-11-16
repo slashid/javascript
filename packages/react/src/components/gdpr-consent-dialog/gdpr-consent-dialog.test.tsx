@@ -5,7 +5,10 @@ import userEvent, {
 } from "@testing-library/user-event";
 import { describe } from "vitest";
 import { GDPRConsentDialog } from ".";
-import { TestSlashIDProvider } from "../../context/test-slash-id-provider";
+import {
+  TestSlashIDProvider,
+  TestTextProvider,
+} from "../../context/test-providers";
 import { STORAGE_GDPR_CONSENT_KEY } from "../../hooks/use-gdpr-consent";
 import { createTestUser } from "../test-utils";
 import { TEXT } from "../text/constants";
@@ -126,9 +129,11 @@ describe("#GDPRConsentDialog", () => {
   describe("general features", () => {
     test("should allow toggling the necessary consent in the customize state when necessaryCookiesRequired is false", async () => {
       render(
-        <TestSlashIDProvider sdkState="ready">
-          <GDPRConsentDialog necessaryCookiesRequired={false} />
-        </TestSlashIDProvider>
+        <TestTextProvider text={TEXT}>
+          <TestSlashIDProvider sdkState="ready">
+            <GDPRConsentDialog necessaryCookiesRequired={false} />
+          </TestSlashIDProvider>
+        </TestTextProvider>
       );
 
       await expectDialogToBeOpenWithInitialState();
@@ -156,9 +161,11 @@ describe("#GDPRConsentDialog", () => {
 
     test("should block toggling the necessary consent in the customize state when necessaryCookiesRequired is true", async () => {
       render(
-        <TestSlashIDProvider sdkState="ready">
-          <GDPRConsentDialog necessaryCookiesRequired />
-        </TestSlashIDProvider>
+        <TestTextProvider text={TEXT}>
+          <TestSlashIDProvider sdkState="ready">
+            <GDPRConsentDialog necessaryCookiesRequired />
+          </TestSlashIDProvider>
+        </TestTextProvider>
       );
 
       await expectDialogToBeOpenWithInitialState();
@@ -180,9 +187,11 @@ describe("#GDPRConsentDialog", () => {
   describe("anonymous user", () => {
     test("should open the dialog by default on first visit in the initial state", async () => {
       render(
-        <TestSlashIDProvider sdkState="ready">
-          <GDPRConsentDialog />
-        </TestSlashIDProvider>
+        <TestTextProvider text={TEXT}>
+          <TestSlashIDProvider sdkState="ready">
+            <GDPRConsentDialog />
+          </TestSlashIDProvider>
+        </TestTextProvider>
       );
 
       await expectDialogToBeOpenWithInitialState();
@@ -194,9 +203,11 @@ describe("#GDPRConsentDialog", () => {
       );
 
       render(
-        <TestSlashIDProvider sdkState="ready">
-          <GDPRConsentDialog />
-        </TestSlashIDProvider>
+        <TestTextProvider text={TEXT}>
+          <TestSlashIDProvider sdkState="ready">
+            <GDPRConsentDialog />
+          </TestSlashIDProvider>
+        </TestTextProvider>
       );
 
       await expectDialogToBeClosed();
@@ -208,9 +219,11 @@ describe("#GDPRConsentDialog", () => {
       getItemSpy.mockReturnValue(null);
 
       render(
-        <TestSlashIDProvider sdkState="ready">
-          <GDPRConsentDialog onSuccess={onSuccessMock} />
-        </TestSlashIDProvider>
+        <TestTextProvider text={TEXT}>
+          <TestSlashIDProvider sdkState="ready">
+            <GDPRConsentDialog onSuccess={onSuccessMock} />
+          </TestSlashIDProvider>
+        </TestTextProvider>
       );
 
       await expectDialogToBeOpenWithInitialState();
@@ -235,9 +248,11 @@ describe("#GDPRConsentDialog", () => {
       getItemSpy.mockReturnValue(null);
 
       render(
-        <TestSlashIDProvider sdkState="ready">
-          <GDPRConsentDialog onSuccess={onSuccessMock} />
-        </TestSlashIDProvider>
+        <TestTextProvider text={TEXT}>
+          <TestSlashIDProvider sdkState="ready">
+            <GDPRConsentDialog onSuccess={onSuccessMock} />
+          </TestSlashIDProvider>
+        </TestTextProvider>
       );
 
       await expectDialogToBeOpenWithInitialState();
@@ -269,12 +284,14 @@ describe("#GDPRConsentDialog", () => {
       );
 
       render(
-        <TestSlashIDProvider sdkState="ready">
-          <GDPRConsentDialog
-            necessaryCookiesRequired
-            onSuccess={onSuccessMock}
-          />
-        </TestSlashIDProvider>
+        <TestTextProvider text={TEXT}>
+          <TestSlashIDProvider sdkState="ready">
+            <GDPRConsentDialog
+              necessaryCookiesRequired
+              onSuccess={onSuccessMock}
+            />
+          </TestSlashIDProvider>
+        </TestTextProvider>
       );
 
       await expectDialogToBeClosed();
@@ -317,9 +334,11 @@ describe("#GDPRConsentDialog", () => {
       getItemSpy.mockReturnValue(null);
 
       render(
-        <TestSlashIDProvider sdkState="ready" user={testUser}>
-          <GDPRConsentDialog />
-        </TestSlashIDProvider>
+        <TestTextProvider text={TEXT}>
+          <TestSlashIDProvider sdkState="ready" user={testUser}>
+            <GDPRConsentDialog />
+          </TestSlashIDProvider>
+        </TestTextProvider>
       );
 
       await expectDialogToBeOpenWithInitialState();
@@ -331,9 +350,11 @@ describe("#GDPRConsentDialog", () => {
       );
 
       render(
-        <TestSlashIDProvider sdkState="ready" user={testUser}>
-          <GDPRConsentDialog />
-        </TestSlashIDProvider>
+        <TestTextProvider text={TEXT}>
+          <TestSlashIDProvider sdkState="ready" user={testUser}>
+            <GDPRConsentDialog />
+          </TestSlashIDProvider>
+        </TestTextProvider>
       );
 
       await expectDialogToBeClosed();
@@ -355,12 +376,14 @@ describe("#GDPRConsentDialog", () => {
       );
 
       render(
-        <TestSlashIDProvider sdkState="ready" user={testUser}>
-          <GDPRConsentDialog
-            defaultAcceptAllLevels={acceptAllLevels}
-            onSuccess={onSuccessMock}
-          />
-        </TestSlashIDProvider>
+        <TestTextProvider text={TEXT}>
+          <TestSlashIDProvider sdkState="ready" user={testUser}>
+            <GDPRConsentDialog
+              defaultAcceptAllLevels={acceptAllLevels}
+              onSuccess={onSuccessMock}
+            />
+          </TestSlashIDProvider>
+        </TestTextProvider>
       );
 
       await expectDialogToBeOpenWithInitialState();
@@ -384,12 +407,14 @@ describe("#GDPRConsentDialog", () => {
       );
 
       render(
-        <TestSlashIDProvider sdkState="ready" user={testUser}>
-          <GDPRConsentDialog
-            defaultRejectAllLevels={rejectAllLevels}
-            onSuccess={onSuccessMock}
-          />
-        </TestSlashIDProvider>
+        <TestTextProvider text={TEXT}>
+          <TestSlashIDProvider sdkState="ready" user={testUser}>
+            <GDPRConsentDialog
+              defaultRejectAllLevels={rejectAllLevels}
+              onSuccess={onSuccessMock}
+            />
+          </TestSlashIDProvider>
+        </TestTextProvider>
       );
 
       await expectDialogToBeOpenWithInitialState();
@@ -420,12 +445,14 @@ describe("#GDPRConsentDialog", () => {
       );
 
       render(
-        <TestSlashIDProvider sdkState="ready" user={testUser}>
-          <GDPRConsentDialog
-            necessaryCookiesRequired
-            onSuccess={onSuccessMock}
-          />
-        </TestSlashIDProvider>
+        <TestTextProvider text={TEXT}>
+          <TestSlashIDProvider sdkState="ready" user={testUser}>
+            <GDPRConsentDialog
+              necessaryCookiesRequired
+              onSuccess={onSuccessMock}
+            />
+          </TestSlashIDProvider>
+        </TestTextProvider>
       );
 
       await expectDialogToBeClosed();

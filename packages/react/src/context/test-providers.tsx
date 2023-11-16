@@ -3,7 +3,9 @@ import {
   SlashIDContext,
   ISlashIDContext,
   initialContextValue,
-} from "../context/slash-id-context";
+} from "./slash-id-context";
+import { TextConfig } from "../components/text/constants";
+import { TextContext } from "@slashid/react-primitives";
 
 type TestProviderProps = Partial<ISlashIDContext> & {
   children: React.ReactNode;
@@ -33,5 +35,15 @@ export const TestSlashIDProvider: React.FC<TestProviderProps> = ({
 
   return (
     <SlashIDContext.Provider value={value}>{children}</SlashIDContext.Provider>
+  );
+};
+
+export type TestTextProviderProps = {
+  children: React.ReactNode;
+  text: TextConfig;
+};
+export const TestTextProvider = ({ children, text }: TestTextProviderProps) => {
+  return (
+    <TextContext.Provider value={{ text }}>{children}</TextContext.Provider>
   );
 };

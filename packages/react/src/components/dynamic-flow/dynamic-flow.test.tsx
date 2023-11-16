@@ -4,7 +4,7 @@ import userEvent from "@testing-library/user-event";
 import { vi, describe } from "vitest";
 import { createTestUser, inputEmail } from "../test-utils";
 
-import { TestSlashIDProvider } from "../../context/test-slash-id-provider";
+import { TestSlashIDProvider } from "../../context/test-providers";
 import { DynamicFlow } from ".";
 import { ConfigurationProvider } from "../../main";
 
