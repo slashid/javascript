@@ -1,7 +1,8 @@
-import { clsx } from "clsx";
-import * as styles from "./style.css";
+import { Lock } from "@slashid/react-primitives";
 import * as RadixSwitch from "@radix-ui/react-switch";
-import { Lock } from "../icon/lock";
+import { clsx } from "clsx";
+
+import * as styles from "./style.css";
 
 type Props = RadixSwitch.SwitchProps & {
   /** blocked state where the switch is disabled and a lock icon is displayed */

@@ -1,5 +1,5 @@
 import { clsx } from "clsx";
-import { DARK_MODE } from ".";
+import { DARK_MODE } from "./dark-mode";
 
 type Props = {
   className?: string;

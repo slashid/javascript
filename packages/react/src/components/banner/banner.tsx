@@ -1,10 +1,10 @@
 import { clsx } from "clsx";
-import * as styles from "./banner.css";
-import { Failure } from "../icon/failure";
+import { Failure, Check } from "@slashid/react-primitives";
 import { Text } from "../text";
-import { Check } from "../icon/check";
 import { TextConfigKey } from "../text/constants";
 import { Stack } from "../stack";
+
+import * as styles from "./banner.css";
 
 type Props = {
   variant: "success" | "failure";

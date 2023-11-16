@@ -1,21 +1,23 @@
+import { useCallback, useEffect, useMemo, useState } from "react";
 import clsx from "clsx";
 import {
   darkThemeVars,
   publicVariables,
   themeClass,
 } from "@slashid/react-primitives/src/theme/theme.css";
-import { DarkThemeColors, MobileUpload, Theme } from "../mobile-upload";
-import { Stack } from "../stack";
-import { assignInlineVars } from "@vanilla-extract/dynamic";
-import { mobileFlow } from "./mobile-flow.css";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { isUploadSupported } from "../utils";
 // @ts-expect-error TODO fix enums in KYC SDK
 import { DocumentSide, KYC, DocumentType, KYCStatus } from "@slashid/slashid";
+import { Logo } from "@slashid/react-primitives";
+import { assignInlineVars } from "@vanilla-extract/dynamic";
+
+import { DarkThemeColors, MobileUpload, Theme } from "../mobile-upload";
+import { Stack } from "../stack";
+import { isUploadSupported } from "../utils";
 import { MobileLivePhoto } from "../mobile-live-photo";
 import { Banner } from "../banner";
-import { Logo } from "../icon/logo";
 import { Header } from "../header";
+
+import { mobileFlow } from "./mobile-flow.css";
 
 export class InvalidStateError extends Error {
   constructor(flowId: string, invalidStatus: KYCStatus) {
@@ -268,7 +270,9 @@ export const MobileFlow = (props: Props) => {
   const logo = props.logo ? props.logo() : <Logo />;
 
   return (
-    <Stack className={clsx(rootClass, themeClass, darkThemeVars, clsx(mobileFlow))}>
+    <Stack
+      className={clsx(rootClass, themeClass, darkThemeVars, clsx(mobileFlow))}
+    >
       {props.theme && (
         <style>
           {`.${rootClass} {${assignInlineVars(publicVariables, props.theme)}}`}

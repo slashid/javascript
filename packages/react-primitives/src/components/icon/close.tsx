@@ -1,5 +1,5 @@
 import { clsx } from "clsx";
-import { DARK_MODE } from ".";
+import { DARK_MODE } from "./dark-mode";
 import { publicVariables } from "../../theme/theme.css";
 
 type Props = {

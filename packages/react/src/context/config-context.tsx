@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useMemo } from "react";
-import { SlashID } from "../components/icon/slashid";
+import { SlashID } from "@slashid/react-primitives";
 import { TEXT, TextConfig } from "../components/text/constants";
 import { FactorConfiguration } from "../domain/types";
 

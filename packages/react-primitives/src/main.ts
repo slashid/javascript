@@ -17,4 +17,6 @@ export {
   Dialog,
 };
 
+export * from "./components/icon";
+
 export type { ThemeProps, DialogProps, Flag };

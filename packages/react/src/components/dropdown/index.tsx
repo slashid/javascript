@@ -1,8 +1,7 @@
 import * as Select from "@radix-ui/react-select";
 import { clsx } from "clsx";
 import { ReactNode, useCallback, useState } from "react";
-import { Check } from "../icon/check";
-import { ChevronDown } from "../icon/chevron-down";
+import { Check, ChevronDown } from "@slashid/react-primitives";
 import * as styles from "./dropdown.css";
 
 type Item = {

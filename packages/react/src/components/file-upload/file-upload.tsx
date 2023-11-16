@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { Loading as IconLoading } from "../icon/loading";
+import { Loading as IconLoading } from "@slashid/react-primitives";
 import { Stack } from "../stack";
 import { Text } from "../text";
 import { TextConfigKey } from "../text/constants";

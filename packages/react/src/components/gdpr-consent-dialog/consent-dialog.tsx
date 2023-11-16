@@ -1,10 +1,9 @@
 import { GDPRConsent, GDPRConsentLevel } from "@slashid/slashid";
 import { clsx } from "clsx";
 import { useEffect, useMemo, useReducer } from "react";
-import { Button, Dialog } from "@slashid/react-primitives";
+import { Button, Dialog, Cookie } from "@slashid/react-primitives";
 import { publicVariables } from "@slashid/react-primitives/src/theme/theme.css";
 
-import { Cookie } from "../icon/cookie";
 import { Text } from "../text";
 import { ActionButton } from "./action-button";
 import { CONSENT_LEVELS_WITHOUT_NONE } from "./constants";

@@ -1,4 +1,4 @@
-import { DARK_MODE } from ".";
+import { DARK_MODE } from "./dark-mode";
 
 export const Facebook = () => (
   <svg
