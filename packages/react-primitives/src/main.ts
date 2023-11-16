@@ -11,6 +11,7 @@ import { Circle } from "./components/spinner/circle";
 import { Stack } from "./components/stack";
 import { Banner } from "./components/banner";
 import { Dropdown } from "./components/dropdown";
+import { Tabs } from "./components/tabs";
 
 export {
   ThemeRoot,
@@ -27,6 +28,7 @@ export {
   Stack,
   Banner,
   Dropdown,
+  Tabs,
 };
 
 export * from "./components/icon";
