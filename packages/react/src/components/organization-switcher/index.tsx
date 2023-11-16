@@ -1,10 +1,10 @@
 import { ReactNode, useMemo } from "react";
 import { clsx } from "clsx";
 import { OrganizationDetails } from "@slashid/slashid";
+import { Dropdown } from "@slashid/react-primitives";
 import { sprinkles } from "@slashid/react-primitives/src/theme/sprinkles.css";
 import { useConfiguration } from "../../hooks/use-configuration";
 import { useOrganizations } from "../../hooks/use-organizations";
-import { Dropdown } from "../dropdown";
 import * as styles from "./index.css";
 
 interface Props {

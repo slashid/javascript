@@ -10,6 +10,7 @@ import { Spinner } from "./components/spinner/spinner";
 import { Circle } from "./components/spinner/circle";
 import { Stack } from "./components/stack";
 import { Banner } from "./components/banner";
+import { Dropdown } from "./components/dropdown";
 
 export {
   ThemeRoot,
@@ -25,6 +26,7 @@ export {
   Circle,
   Stack,
   Banner,
+  Dropdown,
 };
 
 export * from "./components/icon";
