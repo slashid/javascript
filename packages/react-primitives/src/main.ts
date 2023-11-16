@@ -13,7 +13,6 @@ import { Banner } from "./components/banner";
 import { Dropdown } from "./components/dropdown";
 import { Tabs } from "./components/tabs";
 import { Teleport } from "./components/teleport";
-import { Text, TextVariants } from "./components/text";
 
 export {
   ThemeRoot,
@@ -32,9 +31,8 @@ export {
   Dropdown,
   Tabs,
   Teleport,
-  Text,
 };
 
 export * from "./components/icon";
 
-export type { ThemeProps, DialogProps, Flag, TextVariants };
+export type { ThemeProps, DialogProps, Flag };

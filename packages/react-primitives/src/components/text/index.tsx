@@ -1,30 +1,24 @@
 import { clsx } from "clsx";
+import { useConfiguration } from "../../hooks/use-configuration";
+import { TextConfigKey } from "./constants";
 import * as styles from "./text.css";
 
-export type TextKeys = Record<string, string>;
-
-export type TextVariants = styles.TextVariants;
-
-type Props<Keys extends TextKeys> = {
-  t: keyof Keys;
+type Props = {
+  t: TextConfigKey;
   children?: React.ReactNode;
   as?: "h1" | "h2" | "h3" | "p";
   variant?: styles.TextVariants;
   className?: string;
 };
 
-/**
- * Given a record of text keys, returns a component that renders the text based on the key.
- * Can be wrapped in a higher order component to provide the text keys.
- */
-export function Text<Keys extends TextKeys>({
-  t,
+export const Text: React.FC<Props> = ({
   as,
+  t,
   variant,
   className,
   children,
-  text,
-}: Props<Keys> & { text: Keys }) {
+}) => {
+  const { text } = useConfiguration();
   const Component = as ? as : "p";
 
   return (
@@ -40,4 +34,4 @@ export function Text<Keys extends TextKeys>({
       {children ? children : null}
     </Component>
   );
-}
+};
