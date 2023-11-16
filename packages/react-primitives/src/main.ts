@@ -3,7 +3,8 @@ import { Button } from "./components/button";
 import { LinkButton } from "./components/button/link-button";
 import { Input, PhoneInput, Flag } from "./components/input";
 import { Divider } from "./components/divider";
+import { Accordion } from "./components/accordion";
 
-export { ThemeRoot, Button, LinkButton, Input, PhoneInput, Divider };
+export { ThemeRoot, Button, LinkButton, Input, PhoneInput, Divider, Accordion };
 
 export type { ThemeProps, Flag };

@@ -1,4 +1,4 @@
-import { Accordion } from "../accordion";
+import { Accordion } from "@slashid/react-primitives";
 import { Switch } from "../switch";
 import { Text } from "../text";
 import { CONSENT_LEVELS_WITHOUT_NONE } from "./constants";
