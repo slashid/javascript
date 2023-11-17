@@ -3,7 +3,7 @@ import {
   theme,
   publicVariables,
   colors,
-} from "@slashid/react-primitives/src/theme/theme.css";
+} from "@slashid/react-primitives";
 
 export const imagePreview = style({
   width: "100%",

@@ -2,7 +2,7 @@ import {
   colors,
   publicVariables,
   theme,
-} from "@slashid/react-primitives/src/theme/theme.css";
+} from "@slashid/react-primitives";
 import { recipe, RecipeVariants } from "@vanilla-extract/recipes";
 
 export const text = recipe({

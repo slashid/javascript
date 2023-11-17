@@ -18,6 +18,10 @@ import { TextContext, TextProvider } from "./components/text/text-context";
 import { isBrowser } from "./browser/is-browser";
 import { MemoryStorage } from "./browser/memory-storage";
 
+// theming
+export * from "./theme/theme.css";
+export * from "./theme/sprinkles.css";
+
 // components
 export {
   ThemeRoot,

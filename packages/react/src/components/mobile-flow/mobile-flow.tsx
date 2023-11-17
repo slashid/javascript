@@ -4,7 +4,7 @@ import {
   darkThemeVars,
   publicVariables,
   themeClass,
-} from "@slashid/react-primitives/src/theme/theme.css";
+} from "@slashid/react-primitives";
 // @ts-expect-error TODO fix enums in KYC SDK
 import { DocumentSide, KYC, DocumentType, KYCStatus } from "@slashid/slashid";
 import { Logo, Stack, Banner } from "@slashid/react-primitives";

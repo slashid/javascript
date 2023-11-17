@@ -5,7 +5,7 @@ import { Button, Stack, Banner } from "@slashid/react-primitives";
 import {
   publicVariables,
   darkThemeColors,
-} from "@slashid/react-primitives/src/theme/theme.css";
+} from "@slashid/react-primitives";
 
 import {
   blobResize,
