@@ -71,7 +71,7 @@ export const SlashIDProvider = ({
   tokenStorage = "memory",
   baseApiUrl,
   sdkUrl,
-  analyticsEnabled = false,
+  analyticsEnabled,
   themeProps,
   children
 }: SlashIDProviderProps) => {
@@ -104,7 +104,7 @@ export const SlashIDProvider = ({
 
       setUser(newUser);
       storageRef.current?.setItem(STORAGE_TOKEN_KEY, newUser.token);
-      
+
       try {
         const { token } = newUser
         sidRef.current?.getAnalytics().trackPersonIdentified({ token })
