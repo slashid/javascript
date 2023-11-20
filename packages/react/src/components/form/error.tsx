@@ -1,7 +1,11 @@
 import { Children } from "react";
 import { Errors } from "@slashid/slashid";
-import { Button, LinkButton, Circle } from "@slashid/react-primitives";
-import { sprinkles } from "@slashid/react-primitives/src/theme/sprinkles.css";
+import {
+  Button,
+  LinkButton,
+  Circle,
+  sprinkles,
+} from "@slashid/react-primitives";
 
 import { useConfiguration } from "../../hooks/use-configuration";
 import { Text } from "../text";

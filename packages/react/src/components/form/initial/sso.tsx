@@ -9,8 +9,8 @@ import {
   Google,
   Line,
   Okta,
+  sprinkles,
 } from "@slashid/react-primitives";
-import { sprinkles } from "@slashid/react-primitives/src/theme/sprinkles.css";
 import clsx from "clsx";
 
 import {

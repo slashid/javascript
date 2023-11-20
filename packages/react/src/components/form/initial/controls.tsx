@@ -7,8 +7,8 @@ import {
   PhoneInput,
   Dropdown,
   Tabs,
+  sprinkles,
 } from "@slashid/react-primitives";
-import { sprinkles } from "@slashid/react-primitives/src/theme/sprinkles.css";
 import { FormStatus } from "../../../context/form-context";
 import {
   filterFactors,

@@ -11,8 +11,8 @@ import {
   Google,
   Line,
   Okta,
+  sprinkles,
 } from "@slashid/react-primitives";
-import { sprinkles } from "@slashid/react-primitives/src/theme/sprinkles.css";
 
 import { FactorLabeledOIDC } from "../../../domain/types";
 import { useConfiguration } from "../../../hooks/use-configuration";

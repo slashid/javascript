@@ -1,7 +1,6 @@
 import { useMemo } from "react";
 import { Factor } from "@slashid/slashid";
-import { Divider, Tabs } from "@slashid/react-primitives";
-import { sprinkles } from "@slashid/react-primitives/src/theme/sprinkles.css";
+import { Divider, Tabs, sprinkles } from "@slashid/react-primitives";
 
 import { Handle, HandleType } from "../../domain/types";
 import { useConfiguration } from "../../hooks/use-configuration";

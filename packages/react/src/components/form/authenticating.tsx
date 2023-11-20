@@ -7,8 +7,13 @@ import {
   useRef,
   useState,
 } from "react";
-import { Chat, Email, Circle, Spinner } from "@slashid/react-primitives";
-import { sprinkles } from "@slashid/react-primitives/src/theme/sprinkles.css";
+import {
+  Chat,
+  Email,
+  Circle,
+  Spinner,
+  sprinkles,
+} from "@slashid/react-primitives";
 
 import {
   isFactorEmailLink,

@@ -7,6 +7,7 @@ import {
   Input,
   PhoneInput,
   Dropdown,
+  sprinkles,
 } from "@slashid/react-primitives";
 
 import {
@@ -22,7 +23,6 @@ import { ErrorMessage } from "../form/error-message";
 import { isValidEmail, isValidPhoneNumber } from "../form/validation";
 import { TextConfigKey } from "../text/constants";
 
-import { sprinkles } from "@slashid/react-primitives/src/theme/sprinkles.css";
 import * as styles from "./dynamic-flow.css";
 
 export const FACTOR_LABEL_MAP: Record<
