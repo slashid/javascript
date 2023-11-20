@@ -106,8 +106,7 @@ export const SlashIDProvider = ({
       storageRef.current?.setItem(STORAGE_TOKEN_KEY, newUser.token);
 
       try {
-        const { token } = newUser
-        sidRef.current?.getAnalytics().trackPersonIdentified({ token })
+        sidRef.current?.getAnalytics().identify(newUser)
       } catch {
         // fail silently
       }

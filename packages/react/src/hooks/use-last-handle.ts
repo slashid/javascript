@@ -44,13 +44,11 @@ export const useLastHandle: UseLastHandle = () => {
 
   useEffect(() => {
     if (storeLastHandle && sid) {
-      // @ts-expect-error TODO core SDK does not export the correct event handler type
       sid.subscribe("idFlowSucceeded", handler);
     }
 
     return () => {
       if (storeLastHandle && sid) {
-        // @ts-expect-error TODO core SDK does not export the correct event handler type
         sid.unsubscribe("idFlowSucceeded", handler);
       }
     };
