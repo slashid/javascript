@@ -25,6 +25,9 @@
   "types": "src/main.ts",
   "main": "src/main.ts",
   "module": "src/main.ts",
+  "exports": {
+    ".": "./src/main.ts"
+  },
   "sideEffects": [
     "./src/components/theme-root/theme.css.ts"
   ],
