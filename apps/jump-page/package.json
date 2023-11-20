@@ -5,11 +5,13 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro check && astro build",
+    "test": "astro check",
+    "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/check": "^0.3.1",
     "@astrojs/react": "^3.0.5",
     "@slashid/react-primitives": "workspace:*",
     "@slashid/slashid": "3.15.0",
