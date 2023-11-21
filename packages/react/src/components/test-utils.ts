@@ -173,7 +173,6 @@ export class MockSlashID extends SlashID {
     type: Key,
     payload: PublicReadEvents[Key]
   ): void {
-    console.log(this.observers, this)
     const handlers = this.observers.get(type);
     if (handlers) {
       handlers.forEach((handler) => handler(payload));
