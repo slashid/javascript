@@ -349,7 +349,7 @@ describe("<Form /> configuration", () => {
     getItemSpy.mockClear();
   });
 
-  test.skip("should use stored email address", async () => {
+  test("should use stored email address", async () => {
     const testEmail = "test@email.com";
 
     getItemSpy.mockReturnValueOnce(
@@ -375,7 +375,7 @@ describe("<Form /> configuration", () => {
     ).toHaveValue(testEmail);
   });
 
-  test.skip("should use stored phone number", async () => {
+  test("should use stored phone number", async () => {
     const dialCode = "+48";
     const phoneNumber = "123123123";
     const testPhoneNumber = dialCode + phoneNumber;
@@ -442,7 +442,7 @@ describe("<Form /> configuration", () => {
     );
   });
 
-  test.skip("show banner - default", () => {
+  test("show banner - default", () => {
     render(
       <TestSlashIDProvider sdkState="ready">
         <ConfigurationProvider
@@ -456,7 +456,7 @@ describe("<Form /> configuration", () => {
     expect(screen.getByText(TEXT["footer.branding"])).toBeInTheDocument();
   });
 
-  test.skip("hide banner", () => {
+  test("hide banner", () => {
     render(
       <TestSlashIDProvider sdkState="ready">
         <ConfigurationProvider
