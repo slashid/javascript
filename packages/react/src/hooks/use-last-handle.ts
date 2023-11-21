@@ -44,11 +44,13 @@ export const useLastHandle: UseLastHandle = () => {
 
   useEffect(() => {
     if (storeLastHandle && sid) {
+      // @ts-expect-error
       sid.subscribe("idFlowSucceeded", handler);
     }
 
     return () => {
       if (storeLastHandle && sid) {
+        // @ts-expect-error
         sid.unsubscribe("idFlowSucceeded", handler);
       }
     };
