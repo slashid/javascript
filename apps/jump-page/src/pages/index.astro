@@ -1,11 +1,8 @@
 ---
 import Page from "../layouts/page.astro";
 import { App } from "../components/app";
-import { Flow } from "../components/flow";
 ---
 
 <Page title="/id | Jump page">
-    <App client:load>
-        <Flow />
-    </App>
+    <App client:load/> 
 </Page>
