@@ -14,11 +14,15 @@
     "@astrojs/check": "^0.3.1",
     "@astrojs/react": "^3.0.5",
     "@slashid/react-primitives": "workspace:*",
-    "@slashid/slashid": "3.15.0",
+    "@slashid/slashid": "link:/Users/ivankovic/projects/slashid/ng-evangelion/web/sdk",
     "@types/react": "^18.0.21",
     "@types/react-dom": "^18.0.6",
     "astro": "^3.5.5",
     "react": "^18.0.0",
     "react-dom": "^18.0.0"
+  },
+  "devDependencies": {
+    "@vanilla-extract/css": "^1.9.2",
+    "@vanilla-extract/vite-plugin": "^3.9.2"
   }
 }
