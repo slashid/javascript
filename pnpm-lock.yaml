@@ -205,7 +205,7 @@ importers:
       '@radix-ui/react-select': ^1.1.2
       '@radix-ui/react-switch': ^1.0.3
       '@radix-ui/react-tabs': ^1.0.1
-      '@slashid/slashid': 3.15.0
+      '@slashid/slashid': 3.16.0
       '@storybook/addon-essentials': 7.0.0-rc.2
       '@storybook/addon-interactions': 7.4.0
       '@storybook/addon-links': 7.4.0
@@ -260,7 +260,7 @@ importers:
       country-list-with-dial-code-and-flag: 3.0.3
     devDependencies:
       '@faker-js/faker': 8.2.0
-      '@slashid/slashid': 3.15.0
+      '@slashid/slashid': 3.16.0
       '@storybook/addon-essentials': 7.0.0-rc.2_biqbaboplfbrettd7655fr4n2y
       '@storybook/addon-interactions': 7.4.0_qq2tm5tyxoczjeumywy4spsakm
       '@storybook/addon-links': 7.4.0_biqbaboplfbrettd7655fr4n2y
@@ -5759,6 +5759,23 @@ packages:
       regenerator-runtime: 0.13.11
       url: 0.11.3
       uuid: 8.3.2
+    dev: false
+
+  /@slashid/slashid/3.16.0:
+    resolution: {integrity: sha512-FfpC5COX5A+wE12i/k6wbIRg34+MmIM5elL+uwTIPfkYSQOJe2TF0wRg3G0zq5UBVFuWYQ+xbPJ4n1IM4PC21Q==}
+    dependencies:
+      '@changesets/cli': 2.26.2
+      '@types/uuid': 8.3.4
+      changeset: 0.2.6
+      docdash: 1.2.0
+      jwt-decode: 3.1.2
+      mitt: 3.0.1
+      qrcode: 1.5.3
+      querystring-es3: 0.2.1
+      regenerator-runtime: 0.13.11
+      url: 0.11.3
+      uuid: 8.3.2
+    dev: true
 
   /@storybook/addon-actions/7.0.0-rc.2_biqbaboplfbrettd7655fr4n2y:
     resolution: {integrity: sha512-e4VXOoeejRnz+yTtPGtenAvrMtwRWO4VRxbGBHDPyMo+FOlQPC6plOrQMZ+lSRaE20J3KfTo6wSLZgnHQUQtRw==}

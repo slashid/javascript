@@ -411,7 +411,7 @@ describe("<Form /> configuration", () => {
       type: "email_address",
       value: "test@email.com",
     };
-    const sid = new MockSlashID();
+    const sid = new MockSlashID({ oid: "test-oid" });
     const user = userEvent.setup();
     const testUser = createTestUser();
     const logInMock = vi.fn(async () => testUser);
