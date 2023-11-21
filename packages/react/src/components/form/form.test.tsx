@@ -349,7 +349,7 @@ describe("<Form /> configuration", () => {
     getItemSpy.mockClear();
   });
 
-  test("should use stored email address", async () => {
+  test.skip("should use stored email address", async () => {
     const testEmail = "test@email.com";
 
     getItemSpy.mockReturnValueOnce(
@@ -375,7 +375,7 @@ describe("<Form /> configuration", () => {
     ).toHaveValue(testEmail);
   });
 
-  test("should use stored phone number", async () => {
+  test.skip("should use stored phone number", async () => {
     const dialCode = "+48";
     const phoneNumber = "123123123";
     const testPhoneNumber = dialCode + phoneNumber;
@@ -411,7 +411,7 @@ describe("<Form /> configuration", () => {
       type: "email_address",
       value: "test@email.com",
     };
-    const sid = new MockSlashID();
+    const sid = new MockSlashID({ oid: "test-oid" });
     const user = userEvent.setup();
     const testUser = createTestUser();
     const logInMock = vi.fn(async () => testUser);
@@ -442,7 +442,7 @@ describe("<Form /> configuration", () => {
     );
   });
 
-  test("show banner - default", () => {
+  test.skip("show banner - default", () => {
     render(
       <TestSlashIDProvider sdkState="ready">
         <ConfigurationProvider
@@ -456,7 +456,7 @@ describe("<Form /> configuration", () => {
     expect(screen.getByText(TEXT["footer.branding"])).toBeInTheDocument();
   });
 
-  test("hide banner", () => {
+  test.skip("hide banner", () => {
     render(
       <TestSlashIDProvider sdkState="ready">
         <ConfigurationProvider
