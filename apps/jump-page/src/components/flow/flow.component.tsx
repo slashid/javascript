@@ -1,21 +1,41 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card } from "../card";
-import { Text } from "../text";
 import { InitialState } from "./flow.initial";
-import type { State } from "./flow.types";
+import type { Challenges, State, FlowType } from "./flow.types";
+import { useAppContext } from "../app/app.context";
+
+function getFlowTypeFromChallenges(challenges: Challenges): FlowType {
+  console.log(challenges);
+
+  // challenges=W3siaWQiOiJWM0FtcGpUVUpiX2VNVk1Ob2luUC13Iiwib3B0aW9ucyI6eyJjaGFsbGVuZ2UiOiJNMlJMR0hwUGVUb0pKVm9hNmZqangxd3M3eU5QQkZyWWJReDlLbXZmZVU1RkFMeWN0MFRROEdlZ3lhTkFpLTA5X2F3UjNWOVVmQktseDU1bl9TNTlldyJ9LCJ0eXBlIjoibm9uY2UifV0
+
+  return "catch-all";
+}
 
 export function Flow() {
-  const [state] = useState<State>("initial");
+  const [flowState] = useState<State>("initial");
+  const { sdk, state: appState } = useAppContext();
 
-  return (
-    <Card>
-      {state === "initial" && <InitialState />}
-      {state === "clicked" && (
-        <div>
-          <Text t="success.title" />
-          <Text t="success.details" />
-        </div>
-      )}
-    </Card>
-  );
+  useEffect(() => {
+    if (appState !== "ready") return;
+
+    async function processChallenges() {
+      if (appState !== "ready") return;
+
+      const challenges = await sdk.getChallengesFromURL();
+
+      if (!challenges) {
+        console.log("No challenges found");
+        return;
+      }
+
+      const flowType = getFlowTypeFromChallenges(challenges);
+
+      console.log(flowType);
+    }
+
+    processChallenges();
+  }, [appState, sdk]);
+
+  return <Card>{flowState === "initial" && <InitialState />}</Card>;
 }
