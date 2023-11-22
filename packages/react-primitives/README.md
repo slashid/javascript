@@ -68,7 +68,7 @@ export function App({ children }) {
 
 Since the library does not know about the text config specific to the app, we need to specify the type of the text config to be used to get type safety. This is done by creating a type alias for the text config and creating a wrapper for the `<Text>` component that uses it:
 
-```tsx
+```jsx
 import { Text as BaseText, TextProps } from "@slashid/react-primitives";
 import { TextConfig } from "./text";
 
