@@ -51,7 +51,7 @@ export const textConfig = {
 export type TextConfig = typeof textConfig;
 ```
 
-#### Wrapping the app with <TextProvider>
+#### Wrapping the app with the `<TextProvider>`
 
 The text config we created in the previous section needs to be passed to the `<TextProvider>` that acts as a wrapper for the app, making the config available to the text components.
 
@@ -64,7 +64,7 @@ export function App({ children }) {
 }
 ```
 
-#### Using the <Text> component
+#### Using the `<Text>` component
 
 Since the library does not know about the text config specific to the app, we need to specify the type of the text config to be used to get type safety. This is done by creating a type alias for the text config and creating a wrapper for the `<Text>` component that uses it:
 
