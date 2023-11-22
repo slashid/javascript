@@ -15,6 +15,7 @@ export function detectLanguage(): Language {
 }
 
 export const defaultStrings = {
+  "footer.text": "Top-tier security by SlashID",
   "initial.title": "Logging you in...",
   "initial.details": "Please follow the on-screen instructions.",
   "success.title": "Thank you, you're signed in!",
@@ -32,6 +33,7 @@ export type Translations = {
 export const I18N: Translations = {
   en: defaultStrings,
   ja: {
+    "footer.text": defaultStrings["footer.text"],
     "initial.title": "ログイン処理を行っています。",
     "initial.details": "処理完了後、画面は自動で切り替わります。",
     "success.title": "認証が完了しました！",
@@ -42,7 +44,9 @@ export const I18N: Translations = {
 
 export type TranslationKey = keyof Translations[Language];
 
-export type Translate = (key: TranslationKey) => typeof I18N[Language][TranslationKey];
+export type Translate = (
+  key: TranslationKey
+) => (typeof I18N)[Language][TranslationKey];
 
 export const createI18n = (language: Language) => (key: TranslationKey) =>
   I18N[language][key];

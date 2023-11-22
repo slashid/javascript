@@ -173,6 +173,7 @@ export const [themeClass, theme] = createTheme({
   space: {
     "0": "0",
     px: "1px",
+    "0.25": "0.0625rem",
     "0.5": "0.125rem",
     "1": "0.25rem",
     "1.5": "0.375rem",
