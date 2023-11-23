@@ -4,9 +4,9 @@ import { Loader } from "./flow.loader";
 export function Initial() {
   return (
     <>
-      <Stack space="0.75">
+      <Stack space="2">
         <Skeleton width={"75%"} height={24} />
-        <Skeleton width={"50%"} height={18} />
+        <Skeleton width={"50%"} height={16} />
       </Stack>
       <Loader />
     </>
