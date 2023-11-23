@@ -2,6 +2,9 @@
   "name": "@slashid/jump-page",
   "type": "module",
   "version": "0.0.1",
+  "bin": {
+    "sid-cli": "./cli.js"
+  },
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
