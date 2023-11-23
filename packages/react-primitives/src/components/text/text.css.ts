@@ -27,6 +27,7 @@ export const text = recipe({
     color: {
       contrast: { color: publicVariables.color.contrast },
       tertiary: { color: publicVariables.color.tertiary },
+      placeholder: { color: publicVariables.color.placeholder },
       // KYC
       white: { color: colors.white },
       success: { color: publicVariables.color.foregroundSuccess },
