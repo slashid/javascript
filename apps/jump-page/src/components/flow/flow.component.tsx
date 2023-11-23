@@ -8,11 +8,9 @@ import { Progress } from "./flow.progress";
 import type { ChallengeListInner } from "@slashid/slashid";
 import { Success } from "./flow.success";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function getFlowTypeFromChallenges(challenges: Challenges): FlowType {
-  console.log(challenges);
-
-  // challenges=W3siaWQiOiJWM0FtcGpUVUpiX2VNVk1Ob2luUC13Iiwib3B0aW9ucyI6eyJjaGFsbGVuZ2UiOiJNMlJMR0hwUGVUb0pKVm9hNmZqangxd3M3eU5QQkZyWWJReDlLbXZmZVU1RkFMeWN0MFRROEdlZ3lhTkFpLTA5X2F3UjNWOVVmQktseDU1bl9TNTlldyJ9LCJ0eXBlIjoibm9uY2UifV0
-
+  // TODO treat passwords as a special case
   return "catch-all";
 }
 
@@ -53,6 +51,17 @@ export function Flow() {
     });
   };
 
+  const handleError = ({ error }: { error: Error }) => {
+    if (flowState.state !== "progress") return;
+
+    setFlowState({
+      state: "error",
+      challenges: flowState.challenges,
+      flowType: flowState.flowType,
+      error,
+    });
+  };
+
   return (
     <Card>
       {(appState !== "ready" || flowState.state === "parsing-url") && (
@@ -61,10 +70,11 @@ export function Flow() {
       {appState === "ready" && (
         <>
           {flowState.state === "progress" && (
-            <Progress onSuccess={handleSuccess} />
+            <Progress onSuccess={handleSuccess} onError={handleError} />
           )}
           {flowState.state === "no-challenges" && <Error type="warning" />}
           {flowState.state === "success" && <Success />}
+          {flowState.state === "error" && <Error type="error" />}
         </>
       )}
     </Card>
