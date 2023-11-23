@@ -46,16 +46,31 @@ function setThemeRootClassNames({ theme, className }: ThemeProps) {
  * We cannot rely on useLayoutEffect to set the correct class names on the <body> element server side.
  */
 const ServerThemeRoot = ({ children }: Props) => {
-  return <>{children}</>;
+  return <div className={createClassNames({ theme: "light" })}>{children}</div>;
 };
 
 const ClientThemeRoot = ({ children, theme = "light", className }: Props) => {
+  // used to fix a hydration mismatch between server and client side
+  const [hydrated, setHydrated] = React.useState(false);
+
   // this effect runs client side only
   useLayoutEffect(() => {
-    setThemeRootClassNames({ theme, className });
-  }, [className, theme]);
+    if (!hydrated) {
+      setHydrated(true);
+    }
+  }, [className, hydrated, theme]);
 
-  return <>{children}</>;
+  useLayoutEffect(() => {
+    if (hydrated) {
+      setThemeRootClassNames({ theme, className });
+    }
+  }, [className, hydrated, theme]);
+
+  return hydrated ? (
+    <>{children}</>
+  ) : (
+    <ServerThemeRoot>{children}</ServerThemeRoot>
+  );
 };
 
 /**

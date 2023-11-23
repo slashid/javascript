@@ -20,7 +20,8 @@ export const defaultStrings = {
   "initial.details": "Please follow the on-screen instructions.",
   "success.title": "Thank you, you're signed in!",
   "success.details": "You can now close this page.",
-  "error.title": "Please log in again.",
+  "error.title": "Something went wrong...",
+  "error.detail": "Please log in again.",
 };
 
 export type TranslationKeys = keyof typeof defaultStrings;
@@ -38,7 +39,8 @@ export const I18N: Translations = {
     "initial.details": "処理完了後、画面は自動で切り替わります。",
     "success.title": "認証が完了しました！",
     "success.details": "このページを閉じて、元のページへ戻ってください。",
-    "error.title": "再度ログインをしてください。",
+    "error.title": defaultStrings["error.title"],
+    "error.detail": "再度ログインをしてください。",
   },
 } as const;
 

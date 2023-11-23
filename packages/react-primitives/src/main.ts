@@ -11,6 +11,7 @@ import { Circle } from "./components/spinner/circle";
 import { Stack } from "./components/stack";
 import { Banner } from "./components/banner";
 import { Dropdown } from "./components/dropdown";
+import { Skeleton } from "./components/skeleton";
 import { Tabs } from "./components/tabs";
 import { Teleport } from "./components/teleport";
 import { Text, Props as TextProps } from "./components/text";
@@ -36,6 +37,7 @@ export {
   Spinner,
   Circle,
   Stack,
+  Skeleton,
   Banner,
   Dropdown,
   Tabs,

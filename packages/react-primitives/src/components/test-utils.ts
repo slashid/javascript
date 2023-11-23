@@ -1,6 +1,5 @@
-import { FactorMethod, OrganizationDetails, User } from "@slashid/slashid";
+import { FactorMethod, OrganizationDetails, User, PersonHandleType as Handle } from "@slashid/slashid";
 import { faker } from "@faker-js/faker";
-import { Handle } from "../domain/types";
 import {
   Handler,
   PublicReadEvents,

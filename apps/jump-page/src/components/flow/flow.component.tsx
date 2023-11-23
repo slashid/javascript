@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { Card } from "../card";
-import { InitialState } from "./flow.initial";
+import { Initial } from "./flow.initial";
+import { Error } from "./flow.error";
 import type { Challenges, State, FlowType } from "./flow.types";
 import { useAppContext } from "../app/app.context";
+import { Progress } from "./flow.progress";
 
 function getFlowTypeFromChallenges(challenges: Challenges): FlowType {
   console.log(challenges);
@@ -13,29 +15,42 @@ function getFlowTypeFromChallenges(challenges: Challenges): FlowType {
 }
 
 export function Flow() {
-  const [flowState] = useState<State>("initial");
+  const [flowState, setFlowState] = useState<State>({ state: "initial" });
   const { sdk, state: appState } = useAppContext();
 
   useEffect(() => {
-    if (appState !== "ready") return;
+    if (flowState.state !== "initial") return;
 
     async function processChallenges() {
-      if (appState !== "ready") return;
+      if (!sdk) return;
+      setFlowState({ state: "parsing-url" });
 
       const challenges = await sdk.getChallengesFromURL();
 
       if (!challenges) {
-        console.log("No challenges found");
+        setFlowState({ state: "no-challenges", challenges: null });
         return;
       }
 
       const flowType = getFlowTypeFromChallenges(challenges);
 
-      console.log(flowType);
+      setFlowState({ state: "progress", challenges, flowType });
     }
 
     processChallenges();
-  }, [appState, sdk]);
+  }, [appState, flowState.state, sdk]);
 
-  return <Card>{flowState === "initial" && <InitialState />}</Card>;
+  return (
+    <Card>
+      {(appState !== "ready" || flowState.state === "parsing-url") && (
+        <Initial />
+      )}
+      {appState === "ready" && (
+        <>
+          {flowState.state === "progress" && <Progress />}
+          {flowState.state === "no-challenges" && <Error type="warning" />}
+        </>
+      )}
+    </Card>
+  );
 }
