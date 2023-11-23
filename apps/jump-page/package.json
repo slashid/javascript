@@ -13,6 +13,7 @@
   "dependencies": {
     "@astrojs/check": "^0.3.1",
     "@astrojs/react": "^3.0.5",
+    "@sentry/react": "^7.81.1",
     "@slashid/react-primitives": "workspace:*",
     "@slashid/slashid": "link:/Users/ivankovic/projects/slashid/ng-evangelion/web/sdk",
     "@types/react": "^18.0.21",

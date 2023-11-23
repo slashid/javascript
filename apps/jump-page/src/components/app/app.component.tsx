@@ -1,4 +1,5 @@
 import { SlashID } from "@slashid/slashid";
+import * as Sentry from "@sentry/react";
 import { Logo, TextProvider, ThemeRoot } from "@slashid/react-primitives";
 
 import {
@@ -10,9 +11,26 @@ import {
 } from "./app.context";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { I18N, detectLanguage } from "../../domain/i18n";
-import { Flow } from "../flow";
+import { Flow, Error } from "../flow";
+import { Card } from "../card";
 
 import * as styles from "./app.css";
+
+Sentry.init({
+  dsn: "https://6435e8a20ba8b61404fb4621d2aedd4a@o4505317722619904.ingest.sentry.io/4506275681075200",
+  integrations: [
+    new Sentry.BrowserTracing({
+      // Set 'tracePropagationTargets' to control for which URLs distributed tracing should be enabled
+      tracePropagationTargets: ["localhost", /^https:\/\/yourserver\.io\/api/],
+    }),
+    new Sentry.Replay(),
+  ],
+  // Performance Monitoring
+  tracesSampleRate: 1.0, // Capture 100% of the transactions
+  // Session Replay
+  replaysSessionSampleRate: 0.1, // This sets the sample rate at 10%. You may want to change it to 100% while in development and then sample at a lower rate in production.
+  replaysOnErrorSampleRate: 1.0, // If you're not already sampling the entire session, change the sample rate to 100% when sampling sessions where errors occur.
+});
 
 export function App() {
   const isBrowser = !!globalThis.window;
@@ -49,13 +67,21 @@ export function App() {
 
   return (
     <ThemeRoot theme="light">
-      <AppContext.Provider value={state}>
-        <TextProvider text={I18N[state.language]}>
-          <main className={styles.app}>
-            <Flow />
-          </main>
-        </TextProvider>
-      </AppContext.Provider>
+      <Sentry.ErrorBoundary
+        fallback={
+          <Card>
+            <Error type="error" />
+          </Card>
+        }
+      >
+        <AppContext.Provider value={state}>
+          <TextProvider text={I18N[state.language]}>
+            <main className={styles.app}>
+              <Flow />
+            </main>
+          </TextProvider>
+        </AppContext.Provider>
+      </Sentry.ErrorBoundary>
     </ThemeRoot>
   );
 }

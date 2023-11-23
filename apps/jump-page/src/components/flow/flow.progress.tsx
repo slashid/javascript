@@ -1,11 +1,41 @@
 import { Stack } from "@slashid/react-primitives";
+import * as Sentry from "@sentry/react";
 import { Loader } from "./flow.loader";
 import { Text } from "../text";
 import { useEffect } from "react";
 import { useAppContext } from "../app/app.context";
 
+type SlashIDErrorMessage = { message: string };
+class SlashIDError extends Error {
+  errors: SlashIDErrorMessage[];
+
+  constructor(errors: SlashIDErrorMessage[]) {
+    super(errors.length > 0 ? errors[0].message : "Unknown SlashID error");
+    this.errors = errors;
+  }
+}
+
+function isSlashIDError(e: unknown): e is SlashIDError {
+  if (
+    typeof e === "object" &&
+    e !== null &&
+    "errors" in e &&
+    Array.isArray(e.errors)
+  ) {
+    return true;
+  }
+
+  return false;
+}
+
 function ensureError(value: unknown): Error {
   if (value instanceof Error) return value;
+
+  // special case - sometimes the core SDK throws a non-error object
+  if (isSlashIDError(value)) {
+    const error = new SlashIDError(value.errors);
+    return error;
+  }
 
   let stringified = "[Unable to stringify the thrown value]";
   try {
@@ -35,7 +65,9 @@ export function Progress({ onSuccess, onError }: Props) {
         await sdk?.getUserFromURL();
         onSuccess();
       } catch (e: unknown) {
-        onError({ error: ensureError(e) });
+        const safeError = ensureError(e);
+        Sentry.captureException(safeError);
+        onError({ error: safeError });
       }
     }
 
