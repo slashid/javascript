@@ -35,7 +35,7 @@ export function Card({
   return (
     <article className={styles.card}>
       {header && <header className={styles.header}>{header}</header>}
-      {children}
+      <div>{children}</div>
       {footer && <footer className={styles.footer}>{footer}</footer>}
     </article>
   );

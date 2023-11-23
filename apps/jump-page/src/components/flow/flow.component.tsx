@@ -5,6 +5,8 @@ import { Error } from "./flow.error";
 import type { Challenges, State, FlowType } from "./flow.types";
 import { useAppContext } from "../app/app.context";
 import { Progress } from "./flow.progress";
+import type { ChallengeListInner } from "@slashid/slashid";
+import { Success } from "./flow.success";
 
 function getFlowTypeFromChallenges(challenges: Challenges): FlowType {
   console.log(challenges);
@@ -25,7 +27,8 @@ export function Flow() {
       if (!sdk) return;
       setFlowState({ state: "parsing-url" });
 
-      const challenges = await sdk.getChallengesFromURL();
+      // const challenges = await sdk.getChallengesFromURL();
+      const challenges: ChallengeListInner[] = [];
 
       if (!challenges) {
         setFlowState({ state: "no-challenges", challenges: null });
@@ -40,6 +43,16 @@ export function Flow() {
     processChallenges();
   }, [appState, flowState.state, sdk]);
 
+  const handleSuccess = () => {
+    if (flowState.state !== "progress") return;
+
+    setFlowState({
+      state: "success",
+      challenges: flowState.challenges,
+      flowType: flowState.flowType,
+    });
+  };
+
   return (
     <Card>
       {(appState !== "ready" || flowState.state === "parsing-url") && (
@@ -47,8 +60,11 @@ export function Flow() {
       )}
       {appState === "ready" && (
         <>
-          {flowState.state === "progress" && <Progress />}
+          {flowState.state === "progress" && (
+            <Progress onSuccess={handleSuccess} />
+          )}
           {flowState.state === "no-challenges" && <Error type="warning" />}
+          {flowState.state === "success" && <Success />}
         </>
       )}
     </Card>

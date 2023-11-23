@@ -1,8 +1,21 @@
 import { Stack } from "@slashid/react-primitives";
 import { Loader } from "./flow.loader";
 import { Text } from "../text";
+import { useEffect } from "react";
 
-export function Progress() {
+export type Props = {
+  onSuccess: () => void;
+};
+
+export function Progress({ onSuccess }: Props) {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onSuccess();
+    }, 2500);
+
+    return () => clearTimeout(timer);
+  }, [onSuccess]);
+
   return (
     <>
       <Stack space="0.25">
