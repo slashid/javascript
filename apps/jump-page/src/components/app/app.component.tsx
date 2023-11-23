@@ -15,6 +15,7 @@ import { Flow, Error } from "../flow";
 import { Card } from "../card";
 
 import * as styles from "./app.css";
+import { config } from "../../config";
 
 export function App() {
   const isBrowser = !!globalThis.window;
@@ -29,6 +30,8 @@ export function App() {
 
       sidRef.current = new SlashID({
         analyticsEnabled: false,
+        sdkURL: config.sdkURL,
+        baseURL: config.baseURL,
       });
 
       setAppState("ready");

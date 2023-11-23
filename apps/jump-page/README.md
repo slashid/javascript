@@ -2,6 +2,15 @@
 
 WIP jump page implementation for the SDK. SSG + client side rendering.
 
+## Running the app via CLI
+
+This package comes with CLI support so you can run it locally:
+
+```bash
+npm install -g @slashid/jump-page
+sid-jump-cli
+```
+
 ## Astro gotchas
 
 ### React hydration
