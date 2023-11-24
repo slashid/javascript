@@ -8,7 +8,20 @@ This package comes with CLI support so you can run it locally:
 
 ```bash
 npm install -g @slashid/jump-page
-sid-jump-cli
+```
+
+### CLI docs
+
+```bash
+Usage: sid-jump-cli serve [options]
+
+Start the development server
+
+Options:
+  -p, --port <number>   Port to use for the development server (default: 4321)
+  -a, --api-url <char>  SlashID API URL (default: "https://api.slashid.com")
+  -s, --sdk-url <char>  SlashID SDK URL (default: "https://cdn.slashid.com/sdk.html")
+  -h, --help            display help for command
 ```
 
 ## Astro gotchas

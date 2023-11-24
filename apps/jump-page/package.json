@@ -2,6 +2,10 @@
   "name": "@slashid/jump-page",
   "type": "module",
   "version": "0.0.1",
+  "private": false,
+  "publishConfig": {
+    "access": "restricted"
+  },
   "bin": {
     "sid-jump-cli": "./cli.js"
   },
