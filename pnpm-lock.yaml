@@ -57,8 +57,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/react-primitives
       '@slashid/slashid':
-        specifier: link:/Users/ivankovic/projects/slashid/ng-evangelion/web/sdk
-        version: link:../../../ng-evangelion/web/sdk
+        specifier: 3.16.0
+        version: 3.16.0
       '@types/react':
         specifier: ^18.0.21
         version: 18.2.37
@@ -367,8 +367,8 @@ importers:
         specifier: ^8.0.2
         version: 8.3.1
       '@slashid/slashid':
-        specifier: link:/Users/ivankovic/projects/slashid/ng-evangelion/web/sdk
-        version: link:../../../ng-evangelion/web/sdk
+        specifier: 3.16.0
+        version: 3.16.0
       '@storybook/addon-essentials':
         specifier: 7.0.0-rc.2
         version: 7.0.0-rc.2(react-dom@18.2.0)(react@18.2.0)
@@ -6447,6 +6447,21 @@ packages:
 
   /@slashid/slashid@3.15.0:
     resolution: {integrity: sha512-2hlXmP2MrM76C7w5CBA2tKawszdr9Hz5c9nxhmFQAWz2MEUIe00/gfOydB3Pa5lBz54wzEEwl2AwXBSMhxKQNg==}
+    dependencies:
+      '@changesets/cli': 2.26.2
+      '@types/uuid': 8.3.4
+      changeset: 0.2.6
+      docdash: 1.2.0
+      jwt-decode: 3.1.2
+      mitt: 3.0.1
+      qrcode: 1.5.3
+      querystring-es3: 0.2.1
+      regenerator-runtime: 0.13.11
+      url: 0.11.3
+      uuid: 8.3.2
+
+  /@slashid/slashid@3.16.0:
+    resolution: {integrity: sha512-FfpC5COX5A+wE12i/k6wbIRg34+MmIM5elL+uwTIPfkYSQOJe2TF0wRg3G0zq5UBVFuWYQ+xbPJ4n1IM4PC21Q==}
     dependencies:
       '@changesets/cli': 2.26.2
       '@types/uuid': 8.3.4

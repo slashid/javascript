@@ -22,7 +22,7 @@
     "@astrojs/react": "^3.0.5",
     "@sentry/react": "^7.81.1",
     "@slashid/react-primitives": "workspace:*",
-    "@slashid/slashid": "link:/Users/ivankovic/projects/slashid/ng-evangelion/web/sdk",
+    "@slashid/slashid": "3.16.0",
     "@types/react": "^18.0.21",
     "@types/react-dom": "^18.0.6",
     "astro": "^3.5.5",
