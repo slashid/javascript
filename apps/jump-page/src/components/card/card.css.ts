@@ -5,14 +5,16 @@ export const card = style({
   display: "grid",
   gridTemplateRows: "auto 1fr auto",
   backgroundColor: publicVariables.color.panel,
-  width: "465px",
-  minHeight: "330px",
+  width: "100%",
+  minHeight: "100vh",
   padding: "32px 32px 16px 32px",
   boxSizing: "border-box",
 
   "@media": {
     "screen and (min-width: 768px)": {
       borderRadius: `calc(2 * ${publicVariables.border.radius})`,
+      width: "465px",
+      minHeight: "330px",
     },
   },
 });
