@@ -1,6 +1,11 @@
 import { SlashID } from "@slashid/slashid";
 import { init, ErrorBoundary } from "@sentry/react";
-import { Logo, TextProvider, ThemeRoot } from "@slashid/react-primitives";
+import {
+  Logo,
+  TextProvider,
+  ThemeRoot,
+  isBrowser,
+} from "@slashid/react-primitives";
 
 import {
   AppContext,
@@ -18,7 +23,7 @@ import * as styles from "./app.css";
 import { config } from "../../config";
 
 export function App() {
-  const isBrowser = !!globalThis.window;
+  const isClientSide = isBrowser();
   const [appState, setAppState] = useState<AppState>("initial");
   const sidRef = useRef<SlashID | undefined>(undefined);
 
@@ -41,7 +46,7 @@ export function App() {
   const state: AppContextState = useMemo(() => {
     // checking for hydration makes the first client side render the same as the one on the server side
     // language check and URL params can only be done on the client side so we need to wait for the first render
-    if (!isBrowser || appState == "initial") {
+    if (!isClientSide || appState == "initial") {
       return initialAppContextState;
     }
 
@@ -54,7 +59,7 @@ export function App() {
     };
 
     return appReadyState;
-  }, [appState, isBrowser]);
+  }, [appState, isClientSide]);
 
   return (
     <ThemeRoot theme="light">
