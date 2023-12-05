@@ -63,7 +63,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^8.0.2",
-    "@slashid/slashid": "3.15.0",
+    "@slashid/slashid": "3.16.0",
     "@storybook/addon-essentials": "7.0.0-rc.2",
     "@storybook/addon-interactions": "7.4.0",
     "@storybook/addon-links": "7.4.0",
@@ -98,7 +98,7 @@
     "yalc": "1.0.0-pre.53"
   },
   "peerDependencies": {
-    "@slashid/slashid": ">= 3.15.0",
+    "@slashid/slashid": ">= 3.16.0",
     "react": ">=16",
     "react-dom": ">=16"
   }

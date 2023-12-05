@@ -12,6 +12,7 @@ import { Chat } from "./chat";
 import { Close } from "./close";
 import { Check } from "./check";
 import { Email } from "./email";
+import { Exclamation } from "./exclamation";
 import { ChevronDown } from "./chevron-down";
 import { ChevronLeft } from "./chevron-left";
 import { Cookie } from "./cookie";
@@ -35,6 +36,7 @@ export {
   Close,
   Check,
   Email,
+  Exclamation,
   ChevronDown,
   ChevronLeft,
   Cookie,
