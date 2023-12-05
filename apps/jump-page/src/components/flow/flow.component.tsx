@@ -7,6 +7,8 @@ import { useAppContext } from "../app/app.context";
 import { Progress } from "./flow.progress";
 import type { ChallengeListInner } from "@slashid/slashid";
 import { Success } from "./flow.success";
+import { captureException } from "@sentry/react";
+import { ensureError } from "./flow.domain";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function getFlowTypeFromChallenges(challenges: Challenges): FlowType {
@@ -25,8 +27,13 @@ export function Flow() {
       if (!sdk) return;
       setFlowState({ state: "parsing-url" });
 
-      // const challenges = await sdk.getChallengesFromURL();
-      const challenges: ChallengeListInner[] = [];
+      let challenges: ChallengeListInner[] | null = [];
+
+      try {
+        challenges = await sdk.getChallengesFromURL();
+      } catch (e: unknown) {
+        captureException(ensureError(e));
+      }
 
       if (!challenges) {
         setFlowState({ state: "no-challenges", challenges: null });
