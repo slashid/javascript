@@ -20,6 +20,8 @@ import { Slots, useSlots } from "../slot";
 import { Factor } from "@slashid/slashid";
 import { PayloadOptions } from "./types";
 import { InternalFormContext } from "./internal-context";
+import { ClientSideAuthenticationErrorBoundary } from "./client-side-authentication-error-boundary.component";
+import { useSlashID } from "../../main";
 
 export type Props = ConfigurationOverridesProps & {
   className?: string;
@@ -36,7 +38,19 @@ export type Props = ConfigurationOverridesProps & {
  * The form can be customized significantly using the built-in slots and CSS custom properties.
  * Check the documentation for more information.
  */
-export const Form = ({
+export const Form = (props: Props) => {
+  const { sid } = useSlashID()
+
+  return (
+    <ClientSideAuthenticationErrorBoundary sid={sid}>
+      <FormComponent
+        {...props}
+      />
+    </ClientSideAuthenticationErrorBoundary>
+  )
+}
+
+const FormComponent = ({
   className,
   onSuccess,
   onError,
@@ -121,3 +135,4 @@ export const Form = ({
 
 Form.Initial = Initial;
 Form.Error = Error;
+FormComponent.displayName = "Form"
