@@ -1,4 +1,4 @@
-import React, {
+import {
   ReactNode,
   createContext,
   useCallback,
@@ -13,7 +13,8 @@ import { MemoryStorage } from "../browser/memory-storage";
 import { LogIn, MFA } from "../domain/types";
 import { SDKState } from "../domain/sdk-state";
 import { ThemeProps, ThemeRoot } from "../components/theme-root";
-export type StorageOption = "memory" | "localStorage";
+import { CookieStorage } from "../browser/cookie-storage";
+export type StorageOption = "memory" | "localStorage" | "cookie";
 
 export interface SlashIDProviderProps {
   oid: string;
@@ -60,6 +61,11 @@ const createStorage = (storageType: StorageOption) => {
       return new MemoryStorage();
     case "localStorage":
       return window.localStorage;
+    case "cookie":
+      const c = new CookieStorage();
+      console.log('cookie storage')
+      ;(window as any).cc = c
+      return c
     default:
       return new MemoryStorage();
   }
