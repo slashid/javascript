@@ -46,7 +46,7 @@ export const initialContextValue = {
   logIn: () => Promise.reject("NYI"),
   mfa: () => Promise.reject("NYI"),
   validateToken: async () => false,
-  __switchOrganizationInContext: async () => undefined
+  __switchOrganizationInContext: async () => undefined,
 };
 
 export const SlashIDContext =
@@ -62,10 +62,7 @@ const createStorage = (storageType: StorageOption) => {
     case "localStorage":
       return window.localStorage;
     case "cookie":
-      const c = new CookieStorage();
-      console.log('cookie storage')
-      ;(window as any).cc = c
-      return c
+      return new CookieStorage();
     default:
       return new MemoryStorage();
   }
@@ -79,10 +76,10 @@ export const SlashIDProvider = ({
   sdkUrl,
   analyticsEnabled,
   themeProps,
-  children
+  children,
 }: SlashIDProviderProps) => {
-  const [oid, setOid] = useState(initialOid)
-  const [token, setToken] = useState(initialToken)
+  const [oid, setOid] = useState(initialOid);
+  const [token, setToken] = useState(initialToken);
   const [state, setState] = useState<SDKState>(initialContextValue.sdkState);
   const [user, setUser] = useState<User | undefined>(undefined);
   const storageRef = useRef<Storage | undefined>(undefined);
@@ -92,15 +89,18 @@ export const SlashIDProvider = ({
    * Restarts the React SDK lifecycle with a new
    * organizational context
    */
-  const __switchOrganizationInContext = useCallback(async ({ oid: newOid }: { oid: string }) => {
-    if (!user) return
+  const __switchOrganizationInContext = useCallback(
+    async ({ oid: newOid }: { oid: string }) => {
+      if (!user) return;
 
-    const newToken = await user.getTokenForOrganization(newOid)
+      const newToken = await user.getTokenForOrganization(newOid);
 
-    setToken(newToken)
-    setOid(newOid)
-    setState("initial")
-  }, [user])
+      setToken(newToken);
+      setOid(newOid);
+      setState("initial");
+    },
+    [user]
+  );
 
   const storeUser = useCallback(
     (newUser: User) => {
@@ -112,13 +112,13 @@ export const SlashIDProvider = ({
       storageRef.current?.setItem(STORAGE_TOKEN_KEY, newUser.token);
 
       try {
-        sidRef.current?.getAnalytics().identify(newUser)
+        sidRef.current?.getAnalytics().identify(newUser);
       } catch {
         // fail silently
       }
 
       if (newUser.oid !== oid) {
-        __switchOrganizationInContext({ oid: newUser.oid })
+        __switchOrganizationInContext({ oid: newUser.oid });
       }
     },
     [state, __switchOrganizationInContext, oid]
@@ -135,7 +135,7 @@ export const SlashIDProvider = ({
     }
 
     try {
-      sidRef.current?.getAnalytics().logout()
+      sidRef.current?.getAnalytics().logout();
     } catch {
       // fail silently
     }
@@ -146,9 +146,11 @@ export const SlashIDProvider = ({
     setOid(initialOid);
   }, [state, user, initialOid]);
 
-
   const logIn = useCallback<LogIn>(
-    async ({ factor, handle }, { middleware } = {}): Promise<User | undefined> => {
+    async (
+      { factor, handle },
+      { middleware } = {}
+    ): Promise<User | undefined> => {
       if (state === "initial") {
         return;
       }
@@ -167,20 +169,20 @@ export const SlashIDProvider = ({
                 value: handle.value,
               };
 
-        // @ts-expect-error TODO make the identifier optional
-        const user = await sid.id(oid, identifier, factor)
-            .then(async user => {
-              if (middleware === undefined) return user
+        const user = await sid
+          // @ts-expect-error TODO make the identifier optional
+          .id(oid, identifier, factor)
+          .then(async (user) => {
+            if (middleware === undefined) return user;
 
-              const middlewares = Array.isArray(middleware)
-                ? middleware
-                : [middleware]
+            const middlewares = Array.isArray(middleware)
+              ? middleware
+              : [middleware];
 
-              return middlewares
-                .reduce((previous, next) => {
-                  return previous.then(user => next({ user, sid }))
-                }, Promise.resolve(user))
-            })
+            return middlewares.reduce((previous, next) => {
+              return previous.then((user) => next({ user, sid }));
+            }, Promise.resolve(user));
+          });
 
         storeUser(user);
         return user;
@@ -300,7 +302,7 @@ export const SlashIDProvider = ({
         logIn,
         mfa,
         validateToken,
-        __switchOrganizationInContext
+        __switchOrganizationInContext,
       };
     }
 
@@ -312,15 +314,21 @@ export const SlashIDProvider = ({
       logIn,
       mfa,
       validateToken,
-      __switchOrganizationInContext
+      __switchOrganizationInContext,
     };
-  }, [logIn, logOut, user, validateToken, state, mfa, __switchOrganizationInContext]);
+  }, [
+    logIn,
+    logOut,
+    user,
+    validateToken,
+    state,
+    mfa,
+    __switchOrganizationInContext,
+  ]);
 
   return (
     <SlashIDContext.Provider value={contextValue}>
-      <ThemeRoot {...themeProps}>
-        {children}
-      </ThemeRoot>
+      <ThemeRoot {...themeProps}>{children}</ThemeRoot>
     </SlashIDContext.Provider>
   );
 };

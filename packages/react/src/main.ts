@@ -13,7 +13,11 @@ import {
   ConfigurationContext,
   ConfigurationProvider,
 } from "./context/config-context";
-import { SlashIDContext, SlashIDProvider } from "./context/slash-id-context";
+import {
+  SlashIDContext,
+  SlashIDProvider,
+  SlashIDProviderProps,
+} from "./context/slash-id-context";
 import { useGDPRConsent } from "./hooks/use-gdpr-consent";
 import { useOrganizations } from "./hooks/use-organizations";
 import { useSlashID } from "./hooks/use-slash-id";
@@ -50,4 +54,5 @@ export {
   defaultOrganization,
   type LoginMiddleware,
   type LoginMiddlewareContext,
+  type SlashIDProviderProps,
 };
