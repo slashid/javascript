@@ -1,11 +1,10 @@
+import { useMemo } from "react";
 import { Factor } from "@slashid/slashid";
+import { Divider, Tabs, sprinkles } from "@slashid/react-primitives";
+
 import { Handle, HandleType } from "../../domain/types";
 import { useConfiguration } from "../../hooks/use-configuration";
-import { sprinkles } from "../../theme/sprinkles.css";
-import { Divider } from "../divider";
-import { Tabs } from "../tabs";
 import { HandleForm } from "./handle-form";
-import { useMemo } from "react";
 import {
   getHandleTypes,
   hasSSOAndNonSSOFactors,

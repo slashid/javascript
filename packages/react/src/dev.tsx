@@ -285,11 +285,13 @@ const LogOut = () => {
   );
 };
 
-ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+const container = document.getElementById("root") as HTMLElement;
+const root = ReactDOM.createRoot(container);
+root.render(
   <React.StrictMode>
     <SlashIDProvider
       oid={import.meta.env.VITE_ORG_ID}
-      themeProps={{ theme: "dark", className: "testClass" }}
+      themeProps={{ theme: "dark" }}
       baseApiUrl="https://api.sandbox.slashid.com"
       tokenStorage="localStorage"
     >

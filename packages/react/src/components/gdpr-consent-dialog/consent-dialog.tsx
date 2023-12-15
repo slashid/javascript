@@ -1,18 +1,18 @@
 import { GDPRConsent, GDPRConsentLevel } from "@slashid/slashid";
 import { clsx } from "clsx";
 import { useEffect, useMemo, useReducer } from "react";
-import { publicVariables } from "../../theme/theme.css";
-import { Button } from "../button";
-import { Dialog } from "../dialog";
-import { Cookie } from "../icon/cookie";
+import { Button, Dialog, Cookie } from "@slashid/react-primitives";
+import { publicVariables } from "@slashid/react-primitives";
+
 import { Text } from "../text";
 import { ActionButton } from "./action-button";
 import { CONSENT_LEVELS_WITHOUT_NONE } from "./constants";
 import { Settings } from "./settings";
 import { createInitialState, mapConsentsToSettings, reducer } from "./state";
-import * as styles from "./style.css";
 import { TriggerButton } from "./trigger-button";
 import { ActionType, GDPRConsentDialogProps, UpdateGdprConsent } from "./types";
+
+import * as styles from "./style.css";
 
 type Props = GDPRConsentDialogProps & {
   consents: GDPRConsent[];

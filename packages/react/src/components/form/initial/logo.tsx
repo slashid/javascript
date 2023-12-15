@@ -1,8 +1,9 @@
 import clsx from "clsx";
+import { SlashID } from "@slashid/react-primitives";
 import { Logo as TLogo } from "../../../context/config-context";
-import * as styles from "./initial.css";
 import { useConfiguration } from "../../../hooks/use-configuration";
-import { SlashID } from "../../icon/slashid";
+
+import * as styles from "./initial.css";
 
 export type Props = {
   logo?: TLogo;

@@ -9,11 +9,15 @@ import {
 } from "react";
 
 import { PersonHandleType, SlashID, User } from "@slashid/slashid";
-import { MemoryStorage } from "../browser/memory-storage";
+import {
+  ThemeProps,
+  ThemeRoot,
+  MemoryStorage,
+  CookieStorage,
+} from "@slashid/react-primitives";
 import { LogIn, MFA } from "../domain/types";
 import { SDKState } from "../domain/sdk-state";
-import { ThemeProps, ThemeRoot } from "../components/theme-root";
-import { CookieStorage } from "../browser/cookie-storage";
+
 export type StorageOption = "memory" | "localStorage" | "cookie";
 
 export interface SlashIDProviderProps {

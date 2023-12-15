@@ -1,17 +1,21 @@
-import clsx from "clsx";
-import { darkTheme, publicVariables, themeClass } from "../../theme/theme.css";
-import { DarkThemeColors, MobileUpload, Theme } from "../mobile-upload";
-import { Stack } from "../stack";
-import { assignInlineVars } from "@vanilla-extract/dynamic";
-import { mobileFlow } from "./mobile-flow.css";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { isUploadSupported } from "../utils";
+import clsx from "clsx";
+import {
+  darkThemeVars,
+  publicVariables,
+  themeClass,
+} from "@slashid/react-primitives";
 // @ts-expect-error TODO fix enums in KYC SDK
 import { DocumentSide, KYC, DocumentType, KYCStatus } from "@slashid/slashid";
+import { Logo, Stack, Banner } from "@slashid/react-primitives";
+import { assignInlineVars } from "@vanilla-extract/dynamic";
+
+import { DarkThemeColors, MobileUpload, Theme } from "../mobile-upload";
+import { isUploadSupported } from "../utils";
 import { MobileLivePhoto } from "../mobile-live-photo";
-import { Banner } from "../banner";
-import { Logo } from "../icon/logo";
 import { Header } from "../header";
+
+import { mobileFlow } from "./mobile-flow.css";
 
 export class InvalidStateError extends Error {
   constructor(flowId: string, invalidStatus: KYCStatus) {
@@ -122,28 +126,31 @@ export const MobileFlow = (props: Props) => {
     {}
   );
 
-  const action = useMemo(() => ({
-    loading: () => setState({ status: "loading" }),
-    error: (reason: ErrorReason, msg: string) => {
-      console.error(msg);
-      setState({ status: "error", reason });
-    },
-    document: (
-      flowId: string,
-      documentType: DocumentType,
-      side: DocumentSide,
-      remainingSides: DocumentSide[]
-    ) =>
-      setState({
-        status: "document",
-        documentType,
-        side,
-        remainingSides,
-        flowId,
-      }),
-    livephoto: (flowId: string) => setState({ status: "livephoto", flowId }),
-    completed: () => setState({ status: "completed" }),
-  }), []);
+  const action = useMemo(
+    () => ({
+      loading: () => setState({ status: "loading" }),
+      error: (reason: ErrorReason, msg: string) => {
+        console.error(msg);
+        setState({ status: "error", reason });
+      },
+      document: (
+        flowId: string,
+        documentType: DocumentType,
+        side: DocumentSide,
+        remainingSides: DocumentSide[]
+      ) =>
+        setState({
+          status: "document",
+          documentType,
+          side,
+          remainingSides,
+          flowId,
+        }),
+      livephoto: (flowId: string) => setState({ status: "livephoto", flowId }),
+      completed: () => setState({ status: "completed" }),
+    }),
+    []
+  );
 
   const content: JSX.Element = (() => {
     switch (state.status) {
@@ -227,7 +234,7 @@ export const MobileFlow = (props: Props) => {
       case "hybrid":
         return props.kyc.resumeFromMobile().then(onFlowFetched);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [onFlowFetched, (props as FullModeProps).flowId, props.kyc, props.mode]);
 
   // On mount
@@ -244,16 +251,16 @@ export const MobileFlow = (props: Props) => {
         ? action.error("invalid_state", e.message)
         : action.error("generic", e.message)
     );
-  /**
-   * TODO:
-   * The useEffect dependencies below were added to satisfy the linter,
-   * we need to test this component in depth before we decide to expose
-   * the KYC feature.
-   */
+    /**
+     * TODO:
+     * The useEffect dependencies below were added to satisfy the linter,
+     * we need to test this component in depth before we decide to expose
+     * the KYC feature.
+     */
   }, [action, makeResume]);
 
   // On state change
-  const { onComplete } = props
+  const { onComplete } = props;
   useEffect(() => {
     state.status === "completed" && onComplete?.();
   }, [state, onComplete]);
@@ -261,7 +268,9 @@ export const MobileFlow = (props: Props) => {
   const logo = props.logo ? props.logo() : <Logo />;
 
   return (
-    <Stack className={clsx(rootClass, themeClass, darkTheme, clsx(mobileFlow))}>
+    <Stack
+      className={clsx(rootClass, themeClass, darkThemeVars, clsx(mobileFlow))}
+    >
       {props.theme && (
         <style>
           {`.${rootClass} {${assignInlineVars(publicVariables, props.theme)}}`}
@@ -270,7 +279,7 @@ export const MobileFlow = (props: Props) => {
       {props.darkThemeColors && (
         <style>
           {`@media (prefers-color-scheme: dark) {
-            .${darkTheme}{${assignInlineVars(darkThemeColorsOverride)}}}`}
+            .${darkThemeVars}{${assignInlineVars(darkThemeColorsOverride)}}}`}
         </style>
       )}
       {logo && <Header logo={logo} />}

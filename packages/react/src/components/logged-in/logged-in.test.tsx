@@ -2,7 +2,7 @@ import { FactorMethod } from "@slashid/slashid";
 import { render, screen } from "@testing-library/react";
 
 import { LoggedIn } from ".";
-import { TestSlashIDProvider } from "../../context/test-slash-id-provider";
+import { TestSlashIDProvider } from "../../context/test-providers";
 import { createTestUser } from "../test-utils";
 
 const TestComponent = () => <h1>Test</h1>;

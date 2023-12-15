@@ -1,9 +1,7 @@
 import { useState } from "react";
-import { Banner } from "../banner";
-import { Button } from "../button";
+import { Button, Stack, Banner } from "@slashid/react-primitives";
 import { LivePhotoError } from "../error";
 import { FileUpload } from "../file-upload";
-import { Stack } from "../stack";
 import { Text } from "../text";
 import {
   CommonProps,
@@ -143,10 +141,7 @@ export const MobileLivePhoto = (props: Props) => {
     switch (state.status) {
       case "success":
         return (
-          <Button
-            variant="primary"
-            onClick={props.onContinue}
-          >
+          <Button variant="primary" onClick={props.onContinue}>
             <Text t="kyc.livephoto.mobile.upload.cta.continue" />
           </Button>
         );

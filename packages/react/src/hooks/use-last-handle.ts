@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useCallback } from "react";
+import { isBrowser } from "@slashid/react-primitives";
 import { Handle } from "../domain/types";
 import { useConfiguration } from "./use-configuration";
 import { useSlashID } from "./use-slash-id";
-import { isBrowser } from "../browser/is-browser";
 
 export const STORAGE_LAST_HANDLE_KEY = "@slashid/LAST_HANDLE";
 

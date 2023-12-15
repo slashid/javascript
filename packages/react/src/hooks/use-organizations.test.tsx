@@ -2,7 +2,7 @@ import { act, render, screen, waitFor } from "@testing-library/react";
 import { useOrganizations } from "../main";
 import { faker } from "@faker-js/faker";
 import { OrganizationDetails } from "@slashid/slashid";
-import { TestSlashIDProvider } from "../context/test-slash-id-provider";
+import { TestSlashIDProvider } from "../context/test-providers";
 import { createTestOrganization, createTestUser } from "../components/test-utils";
 
 interface Props {

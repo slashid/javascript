@@ -1,5 +1,8 @@
 import { style } from "@vanilla-extract/css";
-import { publicVariables, theme } from "../../theme/theme.css";
+import {
+  theme,
+  publicVariables,
+} from "@slashid/react-primitives";
 
 export const footer = style({
   width: "100%",

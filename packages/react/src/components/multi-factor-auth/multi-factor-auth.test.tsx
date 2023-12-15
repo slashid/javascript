@@ -4,7 +4,7 @@ import userEvent from "@testing-library/user-event";
 import { render, screen, waitFor } from "@testing-library/react";
 import {
   TestSlashIDProvider
-} from "../../context/test-slash-id-provider";
+} from "../../context/test-providers";
 import { createTestUser, inputEmail, inputPhone } from "../test-utils";
 
 describe("#MultiFactorAuth", () => {

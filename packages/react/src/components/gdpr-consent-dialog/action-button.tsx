@@ -1,5 +1,5 @@
 import { ComponentProps } from "react";
-import { Button } from "../button";
+import { Button } from "@slashid/react-primitives";
 
 type Props = {
   variant: ComponentProps<typeof Button>["variant"];

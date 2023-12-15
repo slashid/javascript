@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { SlashIDLoaded } from ".";
-import { TestSlashIDProvider } from "../../context/test-slash-id-provider";
+import { TestSlashIDProvider } from "../../context/test-providers";
 import { faker } from '@faker-js/faker'
 import { sdkNotReadyStates } from "../../domain/sdk-state";
 
