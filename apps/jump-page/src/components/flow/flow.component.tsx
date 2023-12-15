@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import * as Sentry from "@sentry/react";
 import { Card } from "../card";
 import { Initial } from "./flow.initial";
 import { Error } from "./flow.error";
@@ -7,7 +8,6 @@ import { useAppContext } from "../app/app.context";
 import { Progress } from "./flow.progress";
 import type { ChallengeListInner } from "@slashid/slashid";
 import { Success } from "./flow.success";
-import { captureException } from "@sentry/react";
 import { ensureError } from "./flow.domain";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -32,7 +32,7 @@ export function Flow() {
       try {
         challenges = await sdk.getChallengesFromURL();
       } catch (e: unknown) {
-        captureException(ensureError(e));
+        Sentry.captureException(ensureError(e));
       }
 
       if (!challenges) {

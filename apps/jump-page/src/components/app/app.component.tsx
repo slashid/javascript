@@ -1,5 +1,5 @@
 import { SlashID } from "@slashid/slashid";
-import { init, ErrorBoundary } from "@sentry/react";
+import * as Sentry from "@sentry/react";
 import {
   Logo,
   TextProvider,
@@ -29,7 +29,7 @@ export function App() {
 
   useEffect(() => {
     if (appState === "initial") {
-      init({
+      Sentry.init({
         dsn: "https://6435e8a20ba8b61404fb4621d2aedd4a@o4505317722619904.ingest.sentry.io/4506275681075200",
       });
 
@@ -63,7 +63,7 @@ export function App() {
 
   return (
     <ThemeRoot theme="light">
-      <ErrorBoundary
+      <Sentry.ErrorBoundary
         fallback={
           <Card>
             <Error type="error" />
@@ -77,7 +77,7 @@ export function App() {
             </main>
           </TextProvider>
         </AppContext.Provider>
-      </ErrorBoundary>
+      </Sentry.ErrorBoundary>
     </ThemeRoot>
   );
 }
