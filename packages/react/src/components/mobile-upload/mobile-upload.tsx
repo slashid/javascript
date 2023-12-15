@@ -1,6 +1,12 @@
 import { useState } from "react";
 // @ts-expect-error TODO fix enums in KYC SDK
 import { DocumentSide, DocumentType } from "@slashid/slashid";
+import { Button, Stack, Banner } from "@slashid/react-primitives";
+import {
+  publicVariables,
+  darkThemeColors,
+} from "@slashid/react-primitives";
+
 import {
   blobResize,
   blobToBase64,
@@ -8,14 +14,11 @@ import {
   CommonProps,
 } from "../utils";
 import { FileUpload } from "../file-upload";
-import { Banner } from "../banner";
-import { Button } from "../button";
-import { darkThemeColors, lightTheme } from "../../theme/theme.css";
+
 import { Text } from "../text";
-import { Stack } from "../stack";
 import { ImageQualityError } from "../error";
 
-export type Theme = typeof lightTheme;
+export type Theme = typeof publicVariables;
 export type DarkThemeColors = Partial<typeof darkThemeColors>;
 
 type Props = CommonProps & {

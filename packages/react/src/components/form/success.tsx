@@ -1,4 +1,4 @@
-import { Circle } from "../spinner/circle";
+import { Circle } from "@slashid/react-primitives";
 import { Text } from "../text";
 import { SuccessState } from "./flow";
 

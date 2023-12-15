@@ -1,6 +1,6 @@
 import { render, screen, waitFor, within } from "@testing-library/react";
 import { OrganizationSwitcher } from ".";
-import { TestSlashIDProvider } from "../../context/test-slash-id-provider";
+import { TestSlashIDProvider } from "../../context/test-providers";
 import { TEXT } from "../text/constants";
 import { ConfigurationProvider } from "../../context/config-context";
 import { faker } from "@faker-js/faker";

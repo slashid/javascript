@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 import { Groups } from ".";
 import {
   TestSlashIDProvider
-} from "../../context/test-slash-id-provider";
+} from "../../context/test-providers";
 import { createTestUser } from "../test-utils";
 import { faker } from "@faker-js/faker";
 

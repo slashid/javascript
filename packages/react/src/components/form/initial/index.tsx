@@ -1,4 +1,6 @@
-import { ReactNode, useMemo } from "react";
+import React, { ReactNode, useMemo } from "react";
+import { Factor } from "@slashid/slashid";
+import { Divider } from "@slashid/react-primitives";
 
 import {
   hasSSOAndNonSSOFactors,
@@ -16,11 +18,8 @@ import { useConfiguration } from "../../../hooks/use-configuration";
 import { InitialState } from "../flow";
 
 import { Controls } from "./controls";
-import { Divider } from "../../divider";
 import { LogoSlot } from "./logo";
 import { HeaderSlot } from "./header";
-import { Factor } from "@slashid/slashid";
-import React from "react";
 import { useInternalFormContext } from "../internal-context";
 import { SSOProviders } from "./sso";
 

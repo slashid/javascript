@@ -1,15 +1,17 @@
+import { useMemo } from "react";
+import { Factor } from "@slashid/slashid";
+import { Divider } from "@slashid/react-primitives";
+
 import { FormProvider } from "../../context/form-context";
-import { Divider } from "../divider";
 import { InitialState } from "../form/flow";
 import { Logo } from "../form/initial/logo";
 import { Oidc } from "../form/initial/oidc";
 import { Text } from "../text";
 import { useConfiguration } from "../../hooks/use-configuration";
 import { ConfiguredHandleForm } from "./configured-handle-form";
-import { Factor } from "@slashid/slashid";
 import { FactorLabeledOIDC, Handle, LoginOptions } from "../../domain/types";
-import { useMemo } from "react";
 import { isFactorOidc } from "../../domain/handles";
+
 import * as styles from "./dynamic-flow.css";
 
 type Props = {

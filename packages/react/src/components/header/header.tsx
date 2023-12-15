@@ -1,4 +1,4 @@
-import { Stack } from "../stack";
+import { Stack } from "@slashid/react-primitives";
 import clsx from "clsx";
 import * as styles from "./header.css";
 

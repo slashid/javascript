@@ -1,5 +1,5 @@
 import { style } from "@vanilla-extract/css";
-import { theme } from "../../../theme/theme.css";
+import { theme } from "@slashid/react-primitives";
 
 export const oidcProvider = style({
   marginLeft: theme.space[1],

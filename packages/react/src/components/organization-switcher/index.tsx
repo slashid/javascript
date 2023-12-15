@@ -1,11 +1,10 @@
 import { ReactNode, useMemo } from "react";
+import { clsx } from "clsx";
+import { OrganizationDetails } from "@slashid/slashid";
+import { Dropdown, sprinkles } from "@slashid/react-primitives";
 import { useConfiguration } from "../../hooks/use-configuration";
 import { useOrganizations } from "../../hooks/use-organizations";
-import { sprinkles } from "../../theme/sprinkles.css";
-import { Dropdown } from "../dropdown";
-import { clsx } from "clsx";
 import * as styles from "./index.css";
-import { OrganizationDetails } from "@slashid/slashid";
 
 interface Props {
   fallback?: ReactNode;
@@ -34,10 +33,7 @@ const DefaultFallback = () => {
 const Root = ({ children }: { children: ReactNode }) => {
   return (
     <div
-      className={clsx(
-        styles.organizationSwitcher,
-        "sid-organization-switcher"
-      )}
+      className={clsx(styles.organizationSwitcher, "sid-organization-switcher")}
     >
       {children}
     </div>
@@ -46,13 +42,13 @@ const Root = ({ children }: { children: ReactNode }) => {
 
 /**
  * First class client-side organization switcher.
- * 
+ *
  * Renders a list of the users available organizations, upon selection
  * the SDK will switch organizational context to the selected organization
  * and trigger re-render for all code which implements the user object.
- * 
+ *
  * See also: useOrganizations()
- * 
+ *
  * @param filter A predicate function to filter the available organizations shown
  * @param fallback The content shown while organizations are being fetched
  * @param renderLabel A render function called for each item in the menu
@@ -87,9 +83,7 @@ export const OrganizationSwitcher = ({
         className={className}
         label={text["org.switcher.label"]}
         items={organizations.map((org) => ({
-          label: renderLabel
-            ? renderLabel(org)
-            : org.org_name,
+          label: renderLabel ? renderLabel(org) : org.org_name,
           value: org.id,
         }))}
         onChange={(oid) => switchOrganization({ oid })}

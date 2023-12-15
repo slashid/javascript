@@ -15,12 +15,14 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
-      - uses: pnpm/action-setup@v2.2.4
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
 
-      - name: Use Node.js 16.14.0
+      - name: Use Node.js 20.9.0
         uses: actions/setup-node@v3
         with:
-          node-version: 16.14.0
+          node-version: 20.9.0
           cache: "pnpm"
           node-version-file: ".nvmrc"
           registry-url: "https://registry.npmjs.org/"
@@ -32,7 +34,7 @@ jobs:
 
       - name: create and publish versions
         uses: changesets/action@v1
-        with:          
+        with:
           publish: pnpm ci:publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

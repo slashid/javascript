@@ -1,37 +1,8 @@
-import { clsx } from "clsx";
-import { useConfiguration } from "../../hooks/use-configuration";
-import { TextConfigKey } from "./constants";
-import * as styles from "./text.css";
+import { Text as BaseText, TextProps } from "@slashid/react-primitives";
+import { TextConfig } from "./constants";
 
-type Props = {
-  t: TextConfigKey;
-  children?: React.ReactNode;
-  as?: "h1" | "h2" | "h3" | "p";
-  variant?: styles.TextVariants;
-  className?: string;
-};
+type Props = TextProps<TextConfig>;
 
-export const Text: React.FC<Props> = ({
-  as,
-  t,
-  variant,
-  className,
-  children,
-}) => {
-  const { text } = useConfiguration();
-  const Component = as ? as : "p";
-
-  return (
-    <Component
-      className={clsx(
-        "sid-text",
-        `sid-text--${as}`,
-        styles.text(variant),
-        className
-      )}
-    >
-      {text[t]}
-      {children ? children : null}
-    </Component>
-  );
+export const Text: React.FC<Props> = (props) => {
+  return <BaseText {...props} />;
 };

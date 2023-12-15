@@ -1,20 +1,23 @@
 import { Factor, OAuthProvider } from "@slashid/slashid";
+import {
+  Button,
+  AzureAD,
+  Bitbucket,
+  Facebook,
+  Github,
+  Gitlab,
+  Google,
+  Line,
+  Okta,
+  sprinkles,
+} from "@slashid/react-primitives";
 import clsx from "clsx";
+
 import {
   FactorCustomizableSAML,
   FactorLabeledOIDC,
 } from "../../../domain/types";
-import { sprinkles } from "../../../theme/sprinkles.css";
 import { useConfiguration } from "../../../hooks/use-configuration";
-import { Button } from "../../button";
-import { AzureAD } from "../../icon/azuread";
-import { Bitbucket } from "../../icon/bitbucket";
-import { Facebook } from "../../icon/facebook";
-import { Github } from "../../icon/github";
-import { Gitlab } from "../../icon/gitlab";
-import { Google } from "../../icon/google";
-import { Line } from "../../icon/line";
-import { Okta } from "../../icon/okta";
 
 import * as styles from "./initial.css";
 
