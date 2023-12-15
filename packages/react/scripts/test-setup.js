@@ -12,6 +12,7 @@ expect.extend(matchers);
 global.fetch = fetch;
 global.Request = Request;
 global.Response = Response;
+global.navigator.sendBeacon = () => {}
 
 beforeEach(() => {
   // msw

@@ -75,7 +75,7 @@ export const SlashIDProvider = ({
   tokenStorage = "memory",
   baseApiUrl,
   sdkUrl,
-  analyticsEnabled = false,
+  analyticsEnabled,
   themeProps,
   children,
 }: SlashIDProviderProps) => {
@@ -112,6 +112,12 @@ export const SlashIDProvider = ({
       setUser(newUser);
       storageRef.current?.setItem(STORAGE_TOKEN_KEY, newUser.token);
 
+      try {
+        sidRef.current?.getAnalytics().identify(newUser)
+      } catch {
+        // fail silently
+      }
+
       if (newUser.oid !== oid) {
         __switchOrganizationInContext({ oid: newUser.oid });
       }
@@ -127,6 +133,12 @@ export const SlashIDProvider = ({
     storageRef.current?.removeItem(STORAGE_TOKEN_KEY);
     if (!user) {
       return;
+    }
+
+    try {
+      sidRef.current?.getAnalytics().logout()
+    } catch {
+      // fail silently
     }
 
     user.logout();

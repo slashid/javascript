@@ -1,5 +1,15 @@
 # @slashid/react
 
+## 1.16.0
+
+### Minor Changes
+
+- c1b0305: User analytics are now enabled by default
+
+### Patch Changes
+
+- 5de98fa: Update Vite to v4.5.0
+
 ## 1.15.1
 
 ### Patch Changes
