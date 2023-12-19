@@ -32,7 +32,8 @@
     "./src/components/theme-root/theme.css.ts"
   ],
   "files": [
-    "dist/*"
+    "dist/*",
+    "src/*"
   ],
   "scripts": {
     "dev": "vite",
