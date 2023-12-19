@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 0.1.3
+
+### Patch Changes
+
+- 21c2948: Use the internal Flag type
+
 ## 0.1.2
 
 ### Patch Changes

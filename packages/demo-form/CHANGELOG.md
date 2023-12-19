@@ -1,5 +1,11 @@
 # demo-form
 
+## 0.0.43
+
+### Patch Changes
+
+- @slashid/react@1.16.4
+
 ## 0.0.42
 
 ### Patch Changes

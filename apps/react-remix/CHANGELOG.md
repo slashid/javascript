@@ -1,5 +1,12 @@
 # react-remix
 
+## 0.1.30
+
+### Patch Changes
+
+- @slashid/react@1.16.4
+- demo-form@0.0.43
+
 ## 0.1.29
 
 ### Patch Changes
