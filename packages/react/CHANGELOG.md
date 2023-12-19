@@ -1,5 +1,14 @@
 # @slashid/react
 
+## 1.16.1
+
+### Patch Changes
+
+- 6527fe3: Update the core SDK dependency to 3.17.1
+- c1cf068: Add the skeleton component. Expose the jump page
+- Updated dependencies [c1cf068]
+  - @slashid/react-primitives@0.1.0
+
 ## 1.16.0
 
 ### Minor Changes
