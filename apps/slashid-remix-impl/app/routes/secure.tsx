@@ -1,4 +1,9 @@
-import type { LoaderFunction, MetaFunction } from "@remix-run/node";
+import {
+  redirect,
+  type LoaderFunction,
+  type MetaFunction,
+} from "@remix-run/node";
+import { getUserFromRequest } from "@slashid/remix";
 
 export const meta: MetaFunction = () => {
   return [
@@ -10,9 +15,16 @@ export const meta: MetaFunction = () => {
 export const loader: LoaderFunction = async (args) => {
   // TODO
   // API to check if the user is authenticated
+  const user = getUserFromRequest(args.request);
 
-  return {}
-}
+  console.log({ user });
+
+  if (!user) {
+    return redirect("/");
+  }
+
+  return {};
+};
 
 export default function Secure() {
   return (
