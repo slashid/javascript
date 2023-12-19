@@ -1,5 +1,11 @@
 # kyc-demo
 
+## 0.1.28
+
+### Patch Changes
+
+- @slashid/react@1.16.2
+
 ## 0.1.27
 
 ### Patch Changes
