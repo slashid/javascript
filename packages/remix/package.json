@@ -6,6 +6,7 @@
   "module": "dist/main.js",
   "dependencies": {
     "@slashid/react": "workspace:*",
+    "@slashid/react-primitives": "workspace:*",
     "@slashid/slashid": "^3.16.0"
   },
   "devDependencies": {

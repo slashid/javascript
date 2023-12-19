@@ -668,6 +668,9 @@ importers:
       '@slashid/react':
         specifier: workspace:*
         version: link:../react
+      '@slashid/react-primitives':
+        specifier: workspace:*
+        version: link:../react-primitives
       '@slashid/slashid':
         specifier: ^3.16.0
         version: 3.16.0

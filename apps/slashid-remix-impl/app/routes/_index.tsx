@@ -1,7 +1,14 @@
 import type { MetaFunction } from "@remix-run/node";
 import { Link } from "@remix-run/react";
-import { ConfigurationProvider, Form, LoggedIn, LoggedOut, type Factor, useSlashID } from "@slashid/remix";
-import "@slashid/react/style.css"
+import {
+  ConfigurationProvider,
+  Form,
+  LoggedIn,
+  LoggedOut,
+  type Factor,
+  useSlashID,
+} from "@slashid/remix";
+import "@slashid/react/style.css";
 
 export const meta: MetaFunction = () => {
   return [
@@ -13,16 +20,22 @@ export const meta: MetaFunction = () => {
 const factors: Factor[] = [{ method: "email_link" }];
 
 export default function Index() {
-  const { logOut } = useSlashID()
+  const { logOut, user, sdkState, isAuthenticated, isLoading } = useSlashID();
+
+  console.log({ user, sdkState, isAuthenticated, isLoading });
 
   return (
-    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8", background: "grey" }}>
+    <div
+      style={{
+        fontFamily: "system-ui, sans-serif",
+        lineHeight: "1.8",
+        background: "grey",
+      }}
+    >
       <h1>Welcome to Remix</h1>
       <LoggedIn>
         You are logged in
-        <button onClick={logOut}>
-          Log out
-        </button>
+        <button onClick={logOut}>Log out</button>
       </LoggedIn>
       <LoggedOut>
         You are logged out
@@ -34,18 +47,10 @@ export default function Index() {
       </LoggedOut>
       <ul>
         <li>
-          <Link
-            to="/secure"
-          >
-            Secure page
-          </Link>
+          <Link to="/secure">Secure page</Link>
         </li>
         <li>
-        <Link
-            to="/insecure"
-          >
-            Insecure page
-          </Link>
+          <Link to="/insecure">Insecure page</Link>
         </li>
       </ul>
     </div>

@@ -18,11 +18,7 @@ export function Wrapper({
   children: React.ReactNode;
   options: SlashIDAppOptions;
 }) {
-  const data = useLoaderData<RootAuthLoader>();
-
-  console.log("root loader response", data);
-
-  const { slashid } = data;
+  const { slashid } = useLoaderData<RootAuthLoader>();
 
   return (
     <SlashIDProvider
