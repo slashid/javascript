@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 0.1.2
+
+### Patch Changes
+
+- 0e2fb6b: Include the src
+
 ## 0.1.1
 
 ### Patch Changes
