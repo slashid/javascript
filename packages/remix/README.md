@@ -64,15 +64,10 @@ npm install @slashid/remix
 ## Not done
 
 1. I haven't worked out exactly what things need to be re-exported through `@slashid/remix` yet
-2. CSS is currently not re-exported through `@slashid/remix`, this is a pain point because it's the only reason so far that installing `@slashid/react` is necessary.
-3. Token is parsed from cookie but it is not yet validated. We can do this with JWKS or User.validateToken(), but I've done neither.
-4. There is no remix-native nice way to check if a user is authenticated for protecting routes.
-   - As far as I know `useSlashID()` won't work because of SSR, so we need some alike that exposes `SSR.User` or something like that.
-   - What would be ideal is a custom remix hook which gets the token from `useLoaderData` and exposes a nice API for interacting with it.
-     - Optionally we could decorate the loader data with the same state from our regular react hooks i.e. user, organization, etc. This is what Clerk does but I'm not sold on that as an API.
-   - Stretch goal: If we had an API similar to our control components, that would be ideal. Some function which you can call with expected groups or login state, and then have different behaviours depending on the outcome.
-5. The root loader does not fully support the second overload I created, which allows users to have their own root loader in addition to ours.
-6. Logging in via DirectID can only be done client side, as it takes an API call to resolve the challenge and we only have a single render cycle server side. If both a cookie and direct ID are present, we prefer the direct ID.
+1. CSS is currently not re-exported through `@slashid/remix`, this is a pain point because it's the only reason so far that installing `@slashid/react` is necessary.
+1. Token is parsed from cookie but it is not yet validated. We can do this with JWKS or User.validateToken(), but I've done neither.
+1. The root loader does not fully support the second overload I created, which allows users to have their own root loader in addition to ours.
+1. Logging in via DirectID can only be done client side, as it takes an API call to resolve the challenge and we only have a single render cycle server side. If both a cookie and direct ID are present, we prefer the direct ID.
 
 # How to use `@slashid/remix`
 
@@ -84,7 +79,7 @@ This is some high-level points about how the library works from a user POV
 npm i @slashid/remix
 ```
 
-## 2. Setup the root auth loader
+## 2. Set up the root auth loader
 
 ```tsx
 // root.tsx
@@ -135,8 +130,6 @@ export default {
 
 ## 5. Implement the form with control components + import css
 
-Note: these don't seem to SSR from what I can tell
-
 This isn't the best DX, I think ideally there is a straightforward way to redirect people to a dedicated login page when auth is missing instead of using these control components.
 
 ```tsx
@@ -172,7 +165,23 @@ export default function Index() {
 }
 ```
 
-## 6. (Optional) Extend the root loader with your own loader code
+## 6. Protect the routes
+
+If you want to restrict access to a route, use the `getUserFromRequest` helper. This will return `undefined` if the user is not logged in, or the user object if they are.
+
+```ts
+import { getUserFromRequest } from "@slashid/remix";
+
+export const loader: LoaderFunction = (args) => {
+  const user = getUserFromRequest(args);
+  if (!user) {
+    return redirect("/login");
+  }
+  return json({ user });
+};
+```
+
+## 7. (Optional) Extend the root loader with your own loader code
 
 _This is not fully implemented yet_
 
