@@ -1,5 +1,12 @@
 # @slashid/react
 
+## 1.16.3
+
+### Patch Changes
+
+- Updated dependencies [0e2fb6b]
+  - @slashid/react-primitives@0.1.2
+
 ## 1.16.2
 
 ### Patch Changes
