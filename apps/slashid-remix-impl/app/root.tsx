@@ -1,4 +1,4 @@
-import { SlashIDApp, rootAuthLoader } from "@slashid/remix";
+import { Wrapper, rootAuthLoader } from "@slashid/remix";
 import { cssBundleHref } from "@remix-run/css-bundle";
 import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import {
@@ -15,9 +15,9 @@ export const links: LinksFunction = () => [
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
 ];
 
-export const loader: LoaderFunction = (args) => rootAuthLoader(args)
+export const loader: LoaderFunction = (args) => rootAuthLoader(args);
 
-function App() {
+export default function App() {
   return (
     <html lang="en">
       <head>
@@ -27,13 +27,15 @@ function App() {
         <Links />
       </head>
       <body>
-        <Outlet />
-        <ScrollRestoration />
-        <Scripts />
-        <LiveReload />
+        <Wrapper options={{ oid: "b6f94b67-d20f-7fc3-51df-bf6e3b82683e" }}>
+          <Outlet />
+          <ScrollRestoration />
+          <Scripts />
+          <LiveReload />
+        </Wrapper>
       </body>
     </html>
   );
 }
 
-export default SlashIDApp(App, { oid: "b6f94b67-d20f-7fc3-51df-bf6e3b82683e" })
+// export default SlashIDApp(App, { oid: "b6f94b67-d20f-7fc3-51df-bf6e3b82683e" })
