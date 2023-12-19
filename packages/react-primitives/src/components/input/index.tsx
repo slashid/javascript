@@ -1,10 +1,6 @@
 import { clsx } from "clsx";
 import { polyfillCountryFlagEmojis } from "country-flag-emoji-polyfill";
-import {
-  Flag as CountryFlag,
-  findFlag,
-  getList,
-} from "country-list-with-dial-code-and-flag";
+import { findFlag, getList } from "country-list-with-dial-code-and-flag";
 import { ChangeEventHandler, useCallback, useLayoutEffect } from "react";
 import { ChevronDown } from "../icon/chevron-down";
 import * as styles from "./input.css";
@@ -91,7 +87,13 @@ export const Input: React.FC<InputProps> = ({
   );
 };
 
-export type Flag = CountryFlag;
+export type Flag = {
+  name: string;
+  dial_code: string;
+  code: string;
+  flag: string;
+  preferred?: boolean;
+};
 
 type PhoneProps = BaseProps & {
   type?: "tel";
