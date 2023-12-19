@@ -294,6 +294,7 @@ root.render(
       themeProps={{ theme: "dark" }}
       baseApiUrl="https://api.sandbox.slashid.com"
       tokenStorage="localStorage"
+      analyticsEnabled
     >
       <LogOut />
       <div className="layout">
