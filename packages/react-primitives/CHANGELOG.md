@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 0.1.0
+
+### Minor Changes
+
+- c1cf068: Add the skeleton component. Expose the jump page
+
 ## 1.15.1
 
 ### Patch Changes
