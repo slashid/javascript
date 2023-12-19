@@ -1,5 +1,12 @@
 # react-vite
 
+## 0.0.48
+
+### Patch Changes
+
+- @slashid/react@1.16.2
+- demo-form@0.0.41
+
 ## 0.0.47
 
 ### Patch Changes

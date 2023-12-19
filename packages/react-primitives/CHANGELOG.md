@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 0.1.1
+
+### Patch Changes
+
+- 0e4746c: Make the primitives package public
+
 ## 0.1.0
 
 ### Minor Changes
