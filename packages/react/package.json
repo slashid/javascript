@@ -22,13 +22,16 @@
     "jwt"
   ],
   "type": "module",
-  "types": "dist/main.d.ts",
+  "types": "dist/react/src/main.d.ts",
   "main": "dist/main.js",
   "module": "dist/main.js",
   "sideEffects": false,
   "exports": {
     ".": {
-      "import": "./dist/main.js"
+      "import": {
+        "default": "./dist/main.js",
+        "types": "./dist/react/src/main.d.ts"
+      }
     },
     "./style.css": "./dist/style.css"
   },
