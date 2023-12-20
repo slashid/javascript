@@ -7,6 +7,14 @@ import * as packageJson from "./package.json";
 
 export default defineConfig({
   plugins: [react(), vanillaExtractPlugin()],
+  resolve: {
+    alias: {
+      "@slashid/react-primitives": resolve(
+        __dirname,
+        "../react-primitives/src/main.ts"
+      ),
+    },
+  },
   build: {
     lib: {
       entry: resolve(__dirname, "src/main.ts"),
