@@ -29,8 +29,8 @@
   "exports": {
     ".": {
       "import": {
-        "default": "./dist/main.js",
-        "types": "./dist/react/src/main.d.ts"
+        "types": "./dist/react/src/main.d.ts",
+        "default": "./dist/main.js"
       }
     },
     "./style.css": "./dist/style.css"
