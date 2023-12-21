@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useCallback } from "react";
 import { isBrowser } from "@slashid/react-primitives";
-import { Handle } from "../domain/types";
+import { Handle, isHandle } from "../domain/types";
 import { useConfiguration } from "./use-configuration";
 import { useSlashID } from "./use-slash-id";
 
@@ -31,14 +31,18 @@ export const useLastHandle: UseLastHandle = () => {
     return JSON.parse(storedHandle);
   }, [storeLastHandle]);
 
-  const handler = useCallback((e: SuccessEvent) => {
+  const handler = useCallback(({ handle }: SuccessEvent) => {
     if (!isBrowser()) {
       return;
     }
 
+    if (!isHandle(handle)) {
+      return
+    }
+
     window.localStorage.setItem(
       STORAGE_LAST_HANDLE_KEY,
-      JSON.stringify(e.handle)
+      JSON.stringify(handle)
     );
   }, []);
 
