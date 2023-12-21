@@ -1,9 +1,9 @@
 {
   "name": "@slashid/react-primitives",
   "version": "0.1.3",
-  "private": false,
+  "private": true,
   "publishConfig": {
-    "access": "public"
+    "access": "restricted"
   },
   "repository": {
     "type": "git",
