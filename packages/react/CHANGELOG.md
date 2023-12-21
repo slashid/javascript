@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 1.16.6
+
+### Patch Changes
+
+- 25a820c: Invalid handles are no longer stored as part of storeLastHandle
+
 ## 1.16.5
 
 ### Patch Changes
