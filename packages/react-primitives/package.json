@@ -1,6 +1,6 @@
 {
   "name": "@slashid/react-primitives",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "private": true,
   "publishConfig": {
     "access": "restricted"

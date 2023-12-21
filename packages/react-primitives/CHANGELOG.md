@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 0.1.4
+
+### Patch Changes
+
+- 64212fd: Make the react-primitives package private again
+
 ## 0.1.3
 
 ### Patch Changes

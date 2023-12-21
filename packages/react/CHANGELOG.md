@@ -1,5 +1,12 @@
 # @slashid/react
 
+## 1.16.5
+
+### Patch Changes
+
+- 64212fd: Fix the embedded types
+- 64212fd: Update the package so that it does not depend on react primitives on npm
+
 ## 1.16.4
 
 ### Patch Changes

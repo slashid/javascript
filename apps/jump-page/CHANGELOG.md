@@ -1,5 +1,12 @@
 # @slashid/jump-page
 
+## 0.0.6
+
+### Patch Changes
+
+- Updated dependencies [64212fd]
+  - @slashid/react-primitives@0.1.4
+
 ## 0.0.5
 
 ### Patch Changes
