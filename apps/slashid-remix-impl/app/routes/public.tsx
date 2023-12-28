@@ -2,15 +2,15 @@ import type { MetaFunction } from "@remix-run/node";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Insecure" },
-    { name: "description", content: "This is insecure" },
+    { title: "Public" },
+    { name: "description", content: "This is public" },
   ];
 };
 
-export default function Insecure() {
+export default function Public() {
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
-      <h1>This page is insecure!</h1>
+      <h1>This page is public!</h1>
     </div>
   );
 }

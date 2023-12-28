@@ -4,21 +4,22 @@ import {
   RemixSlashIDProviderOptions,
   SlashIDProvider,
 } from "./slashid-provider";
-import { RootAuthLoader } from "./root-auth-loader";
+import { RootLoader, rootAuthLoader } from "./root-auth-loader";
+import { LoaderFunctionArgs, LoaderFunction } from "@remix-run/server-runtime";
 
 type SlashIDAppOptions = Omit<
   RemixSlashIDProviderOptions,
   "children" | "initialToken"
 >;
 
-export function Wrapper({
+function Wrapper({
   children,
   options,
 }: {
   children: React.ReactNode;
   options: SlashIDAppOptions;
 }) {
-  const { slashid } = useLoaderData<RootAuthLoader>();
+  const { slashid } = useLoaderData<RootLoader>();
 
   return (
     <SlashIDProvider
@@ -32,24 +33,36 @@ export function Wrapper({
   );
 }
 
-export function SlashIDApp(App: () => JSX.Element, options: SlashIDAppOptions) {
-  return () => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const data = useLoaderData<RootAuthLoader>();
-
-    console.log("root loader response", data);
-
-    const { slashid } = data;
-
-    return (
-      <SlashIDProvider
-        baseApiUrl="https://api.slashid.com"
-        sdkUrl="https://cdn.slashid.com/sdk.html"
-        initialToken={slashid}
-        {...options}
-      >
-        <App />
-      </SlashIDProvider>
-    );
+export const createSlashIDApp = (
+  App: () => JSX.Element,
+  options: SlashIDAppOptions
+) => {
+  const opts = {
+    baseApiUrl: "https://api.slashid.com",
+    sdkUrl: "https://cdn.slashid.com/sdk.html",
+    ...options,
   };
-}
+
+  const SlashIDApp = ({ children }: any) => (
+    <Wrapper options={options}>
+      {children}
+    </Wrapper>
+  );
+
+  // @ts-ignore
+  const slashIDRootLoader: RootLoader = async (
+    args: LoaderFunctionArgs,
+    callback: any
+  ): Promise<ReturnType<LoaderFunction>> => {
+    const argsWithSid = Object.assign(args, {
+      sid: { baseApiUrl: opts.baseApiUrl, oid: opts.oid },
+    });
+
+    return rootAuthLoader(argsWithSid, callback);
+  };
+
+  return {
+    SlashIDApp,
+    slashIDRootLoader,
+  };
+};

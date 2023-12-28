@@ -1,23 +1,19 @@
-// import { useSlashID } from "@slashid/react"
 import {
   LoaderFunctionArgs,
   json,
-  DataFunctionArgs,
   type defer,
 } from "@remix-run/server-runtime";
 import { RootAuthLoaderCallbackReturn } from "./callback";
 import { SSR } from "@slashid/slashid";
 
-export type LoaderFunctionWithSlashIDProps = DataFunctionArgs & {
-  request: DataFunctionArgs["request"] & { slashid: "hello world!" };
+export type LoaderFunctionWithSlashIDProps = LoaderFunctionArgs & {
+  request: LoaderFunctionArgs["request"] & { slashid?: string };
 };
 
-export const addSlashIdToRequest = (args: LoaderFunctionArgs, slashid: any) => {
-  // const { user } = useSlashID()
+export const addSlashIdToRequest = (args: LoaderFunctionArgs, slashid: { slashid?: string }) => {
+  Object.assign(args.request, slashid)
 
-  Object.assign(args.request, slashid);
-
-  return args as LoaderFunctionWithSlashIDProps;
+  return args as LoaderFunctionWithSlashIDProps
 };
 
 export const addSlashIdToResponse = async (

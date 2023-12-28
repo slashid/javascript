@@ -20,9 +20,7 @@ export const meta: MetaFunction = () => {
 const factors: Factor[] = [{ method: "email_link" }];
 
 export default function Index() {
-  const { logOut, user, sdkState, isAuthenticated, isLoading } = useSlashID();
-
-  console.log({ user, sdkState, isAuthenticated, isLoading });
+  const { logOut, isAuthenticated } = useSlashID();
 
   return (
     <div
@@ -45,12 +43,19 @@ export default function Index() {
           </ConfigurationProvider>
         </div>
       </LoggedOut>
+      <br />
+      <br />
+      <h2>
+        Navigation
+      </h2>
       <ul>
         <li>
-          <Link to="/secure">Secure page</Link>
+          <Link to="/protected">
+            Protected page {isAuthenticated ? "" : "(requires login)"}
+          </Link>
         </li>
         <li>
-          <Link to="/insecure">Insecure page</Link>
+          <Link to="/public">Public page</Link>
         </li>
       </ul>
     </div>

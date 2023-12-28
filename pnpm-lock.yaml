@@ -674,13 +674,19 @@ importers:
       '@slashid/slashid':
         specifier: ^3.16.0
         version: 3.16.0
+      jose:
+        specifier: ^5.2.0
+        version: 5.2.0
+      url-join:
+        specifier: ^5.0.0
+        version: 5.0.0
     devDependencies:
       '@remix-run/react':
         specifier: ^2.3.1
-        version: 2.4.0(react-dom@18.2.0)(react@18.2.0)(typescript@4.9.5)
+        version: 2.4.0(react-dom@18.2.0)(react@18.2.0)
       '@remix-run/server-runtime':
         specifier: ^2.3.1
-        version: 2.4.0(typescript@4.9.5)
+        version: 2.4.0
       '@types/react':
         specifier: ^18.2.42
         version: 18.2.45
@@ -7733,7 +7739,7 @@ packages:
       react-router-dom: 6.14.2(react-dom@18.2.0)(react@18.2.0)
     dev: false
 
-  /@remix-run/react@2.4.0(react-dom@18.2.0)(react@18.2.0)(typescript@4.9.5):
+  /@remix-run/react@2.4.0(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-SO+VTSTd5oN7eAoTXV2E//LEu7cEO3VsqVDqETZG3X+MfpaU6dtng18FnY6X/ulBP62BjlH6HTwdTK8Lk+2msQ==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
@@ -7745,12 +7751,11 @@ packages:
         optional: true
     dependencies:
       '@remix-run/router': 1.14.0
-      '@remix-run/server-runtime': 2.4.0(typescript@4.9.5)
+      '@remix-run/server-runtime': 2.4.0
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       react-router: 6.21.0(react@18.2.0)
       react-router-dom: 6.21.0(react-dom@18.2.0)(react@18.2.0)
-      typescript: 4.9.5
     dev: true
 
   /@remix-run/react@2.4.0(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3):
@@ -7823,7 +7828,7 @@ packages:
       set-cookie-parser: 2.6.0
       source-map: 0.7.4
 
-  /@remix-run/server-runtime@2.4.0(typescript@4.9.5):
+  /@remix-run/server-runtime@2.4.0:
     resolution: {integrity: sha512-okNGtxB2eqEEsI0aDbmC/yCFhsDVD41P0TNPDHBxXy7PK3nzI9yywhknxLvim0lrxc/zKri/5gVKVJpipRekGQ==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
@@ -7838,7 +7843,6 @@ packages:
       cookie: 0.5.0
       set-cookie-parser: 2.6.0
       source-map: 0.7.4
-      typescript: 4.9.5
     dev: true
 
   /@remix-run/server-runtime@2.4.0(typescript@5.3.3):
@@ -16067,6 +16071,10 @@ packages:
     resolution: {integrity: sha512-8wb9Yw966OSxApiCt0K3yNJL8pnNeIv+OEq2YMidz4FKP6nonSRoOXc80iXY4JaN2FC11B9qsNmDsm+ZOfMROA==}
     dev: true
 
+  /jose@5.2.0:
+    resolution: {integrity: sha512-oW3PCnvyrcm1HMvGTzqjxxfnEs9EoFOFWi2HsEGhlFVOXxTE3K9GKWVMFoFw06yPUqwpvEWic1BmtUZBI/tIjw==}
+    dev: false
+
   /js-cookie@2.2.1:
     resolution: {integrity: sha512-HvdH2LzI/EAZcUwA8+0nKNtWHqS+ZmijLA30RwZA0bo7ToCckjK5MkGhjED9KoRcXO6BaGI3I9UIzSA1FKFPOQ==}
     dev: false
@@ -21336,6 +21344,11 @@ packages:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
     dependencies:
       punycode: 2.3.1
+
+  /url-join@5.0.0:
+    resolution: {integrity: sha512-n2huDr9h9yzd6exQVnH/jU5mr+Pfx08LRXXZhkLLetAMESRj+anQsTAh940iMrIetKAmry9coFuZQ2jY8/p3WA==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+    dev: false
 
   /url-parse@1.5.10:
     resolution: {integrity: sha512-WypcfiRhfeUP9vvF0j6rw0J3hrWrw6iZv3+22h6iRMJ/8z1Tj6XfLP4DsUix5MhMPnXpiHDoKyoZ/bdCkwBCiQ==}

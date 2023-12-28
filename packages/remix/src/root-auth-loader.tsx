@@ -1,4 +1,4 @@
-import { DataFunctionArgs, LoaderFunction } from "@remix-run/server-runtime";
+import { LoaderFunctionArgs, LoaderFunction } from "@remix-run/server-runtime";
 import { isDeferredData } from "@remix-run/server-runtime/dist/responses";
 import {
   addSlashIdToDeferredResponse,
@@ -10,27 +10,34 @@ import {
   isResponse,
 } from "./util";
 import { RootAuthLoaderCallback, isCallbackDefined } from "./callback";
+import { verifyToken } from "./verify";
 
-export interface RootAuthLoader {
+export interface RootLoader {
   <T extends RootAuthLoaderCallback>(
-    args: DataFunctionArgs,
+    args: LoaderFunctionArgs,
     callback: T
   ): Promise<ReturnType<T>>;
 
-  (args: DataFunctionArgs): Promise<ReturnType<LoaderFunction>>;
+  (args: LoaderFunctionArgs): Promise<ReturnType<LoaderFunction>>;
 }
 
 // @ts-ignore
-export const rootAuthLoader: RootAuthLoader = async (
-  args: DataFunctionArgs,
+export const rootAuthLoader: RootLoader = async (
+  args: LoaderFunctionArgs & { sid: { baseApiUrl: string, oid: string } },
   callback: any
 ): Promise<ReturnType<LoaderFunction>> => {
   const token = getUserTokenFromCookies(args.request.headers.get("cookie"));
 
-  // TODO: validate the token, and if invalid then discard it
+  const verified = await verifyToken({ token, baseApiUrl: args.sid.baseApiUrl, oid: args.sid.oid })
+      .then(() => true)
+      .catch(() => false)
+
+  console.log("token verified?", verified)
 
   const slashid = {
-    slashid: token,
+    slashid: verified
+      ? token
+      : undefined,
   };
 
   if (!isCallbackDefined(callback)) {

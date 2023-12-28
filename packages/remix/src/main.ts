@@ -1,6 +1,6 @@
-export { SlashIDApp, Wrapper } from "./slashid-app";
+// export { SlashIDApp, Wrapper } from "./slashid-app";
 export { getUserFromRequest } from "./util";
-export { rootAuthLoader } from "./root-auth-loader";
+// export { rootAuthLoader } from "./root-auth-loader";
 export { type Factor, SSR } from "@slashid/slashid";
 export {
   Form,
@@ -9,3 +9,4 @@ export {
   ConfigurationProvider,
   useSlashID,
 } from "@slashid/react";
+export { createSlashIDApp } from './slashid-app'
