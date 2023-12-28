@@ -4,7 +4,7 @@ import {
   SlashIDProviderProps,
   useSlashID,
 } from "@slashid/react";
-import { SSR, User } from "@slashid/slashid";
+import { SSR, SlashIDOptions, User } from "@slashid/slashid";
 import { useEffect, useMemo, useState } from "react";
 
 export type RemixSlashIDProviderOptions = Omit<
@@ -23,27 +23,31 @@ function SlashIDProviderSSR({
   ...props
 }: RemixSlashIDProviderOptions) {
   const value = useMemo(() => {
+    const options: SlashIDOptions = {
+      baseURL: props.baseApiUrl,
+      sdkURL: props.sdkUrl,
+      oid: props.oid,
+      analyticsEnabled: props.analyticsEnabled
+    }
+
     const user = props.initialToken
-      ? (new SSR.User(props.initialToken) as User)
+      ? (new SSR.User(props.initialToken, options) as User)
       : undefined;
+
     return {
       sid: undefined,
-      // TODO remember to pass the options to the User
       user,
       sdkState: user ? ("ready" as const) : ("initial" as const),
       // this might require a bit more work
-      logOut: user
-        ? () => {
-            user.logout();
-            return undefined;
-          }
-        : () => undefined,
+      logOut: () => {
+        throw new Error("Operation not possible in this state")
+      },
       logIn: () => Promise.reject("Operation not possible in this state"),
       mfa: () => Promise.reject("Operation not possible in this state"),
       validateToken: async () => false,
       __switchOrganizationInContext: async () => undefined,
     };
-  }, [props.initialToken]);
+  }, [props.analyticsEnabled, props.baseApiUrl, props.initialToken, props.oid, props.sdkUrl]);
 
   return (
     <SlashIDContext.Provider value={value}>{children}</SlashIDContext.Provider>
