@@ -57,8 +57,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/react-primitives
       '@slashid/slashid':
-        specifier: 3.16.0
-        version: 3.16.0
+        specifier: 3.17.1
+        version: 3.17.1
       '@types/react':
         specifier: ^18.0.21
         version: 18.2.37
@@ -100,8 +100,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/react
       '@slashid/slashid':
-        specifier: ^3.15.0
-        version: 3.15.0
+        specifier: 3.17.1
+        version: 3.17.1
       '@tanstack/react-location':
         specifier: ^3.7.4
         version: 3.7.4(react-dom@18.2.0)(react@18.2.0)
@@ -152,8 +152,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/react
       '@slashid/slashid':
-        specifier: ^3.15.0
-        version: 3.15.0
+        specifier: 3.17.1
+        version: 3.17.1
       '@slashid/tests':
         specifier: workspace:*
         version: link:../../packages/tests
@@ -213,8 +213,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/react
       '@slashid/slashid':
-        specifier: ^3.15.0
-        version: 3.15.0
+        specifier: 3.17.1
+        version: 3.17.1
       demo-form:
         specifier: workspace:*
         version: link:../../packages/demo-form
@@ -253,8 +253,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/react
       '@slashid/slashid':
-        specifier: ^3.15.0
-        version: 3.15.0
+        specifier: 3.17.1
+        version: 3.17.1
       demo-form:
         specifier: workspace:*
         version: link:../../packages/demo-form
@@ -299,7 +299,7 @@ importers:
         specifier: ^2.3.1
         version: 2.4.0(typescript@5.3.3)
       '@slashid/remix':
-        specifier: workspace:^0.1.0
+        specifier: workspace:*
         version: link:../../packages/remix
       isbot:
         specifier: ^3.6.8
@@ -339,8 +339,8 @@ importers:
         specifier: workspace:*
         version: link:../react
       '@slashid/slashid':
-        specifier: ^3.15.0
-        version: 3.15.0
+        specifier: 3.17.1
+        version: 3.17.1
       next:
         specifier: 13.0.2
         version: 13.0.2(@babel/core@7.23.3)(react-dom@18.2.0)(react@18.2.0)
@@ -416,8 +416,8 @@ importers:
         specifier: ^8.0.2
         version: 8.3.1
       '@slashid/slashid':
-        specifier: 3.16.0
-        version: 3.16.0
+        specifier: 3.17.1
+        version: 3.17.1
       '@storybook/addon-essentials':
         specifier: 7.0.0-rc.2
         version: 7.0.0-rc.2(react-dom@18.2.0)(react@18.2.0)
@@ -561,8 +561,8 @@ importers:
         specifier: ^8.0.2
         version: 8.3.1
       '@slashid/slashid':
-        specifier: 3.15.0
-        version: 3.15.0
+        specifier: 3.17.1
+        version: 3.17.1
       '@storybook/addon-essentials':
         specifier: 7.0.0-rc.2
         version: 7.0.0-rc.2(react-dom@18.2.0)(react@18.2.0)
@@ -669,8 +669,8 @@ importers:
         specifier: workspace:*
         version: link:../react-primitives
       '@slashid/slashid':
-        specifier: ^3.16.0
-        version: 3.16.0
+        specifier: latest
+        version: 3.17.1
       jose:
         specifier: ^5.2.0
         version: 5.2.0
@@ -8142,23 +8142,8 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /@slashid/slashid@3.15.0:
-    resolution: {integrity: sha512-2hlXmP2MrM76C7w5CBA2tKawszdr9Hz5c9nxhmFQAWz2MEUIe00/gfOydB3Pa5lBz54wzEEwl2AwXBSMhxKQNg==}
-    dependencies:
-      '@changesets/cli': 2.26.2
-      '@types/uuid': 8.3.4
-      changeset: 0.2.6
-      docdash: 1.2.0
-      jwt-decode: 3.1.2
-      mitt: 3.0.1
-      qrcode: 1.5.3
-      querystring-es3: 0.2.1
-      regenerator-runtime: 0.13.11
-      url: 0.11.3
-      uuid: 8.3.2
-
-  /@slashid/slashid@3.16.0:
-    resolution: {integrity: sha512-FfpC5COX5A+wE12i/k6wbIRg34+MmIM5elL+uwTIPfkYSQOJe2TF0wRg3G0zq5UBVFuWYQ+xbPJ4n1IM4PC21Q==}
+  /@slashid/slashid@3.17.1:
+    resolution: {integrity: sha512-hlWvLRPK/XlE5V9QraYA+g4UkNqwVkMRIOtsxHYLC0TyMWRq9zpjGNGgavkPgDpLCjomg7KvMO5FVm5pu0LKMg==}
     dependencies:
       '@changesets/cli': 2.26.2
       '@types/uuid': 8.3.4

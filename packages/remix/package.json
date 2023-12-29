@@ -7,7 +7,7 @@
   "dependencies": {
     "@slashid/react": "workspace:*",
     "@slashid/react-primitives": "workspace:*",
-    "@slashid/slashid": "^3.16.0",
+    "@slashid/slashid": "latest",
     "jose": "^5.2.0",
     "url-join": "^5.0.0"
   },
