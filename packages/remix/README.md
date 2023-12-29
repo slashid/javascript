@@ -173,7 +173,7 @@ To protect your routes you can use the `slashIDLoader` you created in step 2. Th
 
 You'll check if the user exists, and if not redirect them to the login page.
 
-The `useSlashID()` provides authentication state & helper functions to your React code, here you'll implement `logOut` too.
+The `useSlashID()` hook provides authentication state & helper functions to your React code, here you'll implement `logOut` too.
 
 ```tsx
 // routes/_index.tsx
