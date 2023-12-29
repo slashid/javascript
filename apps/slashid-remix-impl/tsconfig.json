@@ -13,7 +13,8 @@
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./app/*"]
+      "~/*": ["./app/*"],
+      "@slashid/react-primitives": ["../../apps/react-primitives/src/main.ts"],
     },
 
     // Remix takes care of building everything in `remix build`.

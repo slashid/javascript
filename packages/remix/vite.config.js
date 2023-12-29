@@ -12,6 +12,14 @@ export default defineConfig({
   define: {
     __REACT_FORM_STYLES__: css
   },
+  resolve: {
+    alias: {
+      "@slashid/react-primitives": resolve(
+        __dirname,
+        "../react-primitives/src/main.ts"
+      ),
+    },
+  },
   build: {
     lib: {
       entry: resolve(__dirname, "src/main.ts"),

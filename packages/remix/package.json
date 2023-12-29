@@ -1,13 +1,12 @@
 {
-  "name": "@slashid/remix",
-  "version": "0.1.0",
+  "name": "@slashid/remix2",
+  "version": "0.1.2",
   "type": "module",
   "main": "dist/main.js",
   "module": "dist/main.js",
   "dependencies": {
-    "@slashid/react": "workspace:*",
-    "@slashid/react-primitives": "workspace:*",
-    "@slashid/slashid": "latest",
+    "@slashid/react": "^1.17.0",
+    "@slashid/slashid": "^3.17.1",
     "jose": "^5.2.0",
     "url-join": "^5.0.0"
   },

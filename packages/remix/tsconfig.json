@@ -11,7 +11,10 @@
     "emitDeclarationOnly": true,
     "declarationDir": "./dist",
     "types": [],
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "paths": {
+      "@slashid/react-primitives": ["../react-primitives/src/main.ts"],
+    }
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]
