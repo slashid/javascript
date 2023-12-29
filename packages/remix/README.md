@@ -209,7 +209,7 @@ export default function Index() {
 ##### Client side
 SlashID has several [Control Components](https://developer.slashid.dev/docs/access/react-sdk/reference/components/react-sdk-reference-loggedin) that allow you to conditionally show or hide content based on the users authentication state.
 
-Once again, you'll implement the `logOut` helper function from the `useSlashID()` hook.
+You'll implement `<LoggedIn>`, `<LoggedOut>`, and provide the option to log-out by implementing the `logOut` helper function from the `useSlashID()` hook.
 
 ```tsx
 // routes/_index.tsx
