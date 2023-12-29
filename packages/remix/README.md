@@ -38,7 +38,7 @@ export const {
   SlashIDApp,
   slashIDRootLoader,
   slashIDLoader
-} = createSlashIDApp({ oid: "b6f94b67-d20f-7fc3-51df-bf6e3b82683e" });
+} = createSlashIDApp({ oid: "YOUR_ORGANIZATION_ID" });
 
 ```
 Tip: `oid` is your organization ID, you can find it in the [SlashID console](https://console.slashid.dev/) under [Settings -> General](https://console.slashid.dev/settings/general).
