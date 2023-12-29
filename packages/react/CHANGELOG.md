@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 1.17.0
+
+### Minor Changes
+
+- d86d7b6: Add ServerThemeRoot to public API
+
 ## 1.16.6
 
 ### Patch Changes
