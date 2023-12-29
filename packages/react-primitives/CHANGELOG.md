@@ -1,5 +1,35 @@
 # @slashid/react
 
+## 0.1.4
+
+### Patch Changes
+
+- 64212fd: Make the react-primitives package private again
+
+## 0.1.3
+
+### Patch Changes
+
+- 21c2948: Use the internal Flag type
+
+## 0.1.2
+
+### Patch Changes
+
+- 0e2fb6b: Include the src
+
+## 0.1.1
+
+### Patch Changes
+
+- 0e4746c: Make the primitives package public
+
+## 0.1.0
+
+### Minor Changes
+
+- c1cf068: Add the skeleton component. Expose the jump page
+
 ## 1.15.1
 
 ### Patch Changes

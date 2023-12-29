@@ -387,9 +387,6 @@ importers:
       '@radix-ui/react-tabs':
         specifier: ^1.0.1
         version: 1.0.4(@types/react-dom@18.2.15)(@types/react@18.2.37)(react-dom@18.2.0)(react@18.2.0)
-      '@slashid/react-primitives':
-        specifier: workspace:*
-        version: link:../react-primitives
       '@vanilla-extract/css':
         specifier: ^1.9.2
         version: 1.14.0
@@ -7240,6 +7237,23 @@ packages:
       regenerator-runtime: 0.13.11
       url: 0.11.3
       uuid: 8.3.2
+    dev: false
+
+  /@slashid/slashid@3.17.1:
+    resolution: {integrity: sha512-hlWvLRPK/XlE5V9QraYA+g4UkNqwVkMRIOtsxHYLC0TyMWRq9zpjGNGgavkPgDpLCjomg7KvMO5FVm5pu0LKMg==}
+    dependencies:
+      '@changesets/cli': 2.26.2
+      '@types/uuid': 8.3.4
+      changeset: 0.2.6
+      docdash: 1.2.0
+      jwt-decode: 3.1.2
+      mitt: 3.0.1
+      qrcode: 1.5.3
+      querystring-es3: 0.2.1
+      regenerator-runtime: 0.13.11
+      url: 0.11.3
+      uuid: 8.3.2
+    dev: true
 
   /@storybook/addon-actions@7.0.0-rc.2(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-e4VXOoeejRnz+yTtPGtenAvrMtwRWO4VRxbGBHDPyMo+FOlQPC6plOrQMZ+lSRaE20J3KfTo6wSLZgnHQUQtRw==}

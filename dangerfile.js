@@ -8,7 +8,7 @@ const zlib = require("zlib");
 const filesToCheck = [
   "packages/react/dist/main.js",
   "packages/react/dist/style.css",
-  "packages/react/dist/main.d.ts",
+  "packages/react/dist/react/src/main.d.ts",
 ];
 
 function getFileSize(filePath) {

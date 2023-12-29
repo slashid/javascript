@@ -1,5 +1,48 @@
 # @slashid/react
 
+## 1.16.6
+
+### Patch Changes
+
+- 25a820c: Invalid handles are no longer stored as part of storeLastHandle
+
+## 1.16.5
+
+### Patch Changes
+
+- 64212fd: Fix the embedded types
+- 64212fd: Update the package so that it does not depend on react primitives on npm
+
+## 1.16.4
+
+### Patch Changes
+
+- Updated dependencies [21c2948]
+  - @slashid/react-primitives@0.1.3
+
+## 1.16.3
+
+### Patch Changes
+
+- Updated dependencies [0e2fb6b]
+  - @slashid/react-primitives@0.1.2
+
+## 1.16.2
+
+### Patch Changes
+
+- Updated dependencies [0e4746c]
+  - @slashid/react-primitives@0.1.1
+
+## 1.16.1
+
+### Patch Changes
+
+- 6527fe3: Update the core SDK dependency to 3.17.1
+- c1cf068: Add the skeleton component. Expose the jump page
+- Updated dependencies [c1cf068]
+  - @slashid/react-primitives@0.1.0
+
 ## 1.16.0
 
 ### Minor Changes

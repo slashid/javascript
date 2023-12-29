@@ -1,6 +1,6 @@
 {
   "name": "@slashid/react",
-  "version": "1.16.0",
+  "version": "1.16.6",
   "private": false,
   "publishConfig": {
     "access": "public"
@@ -22,13 +22,16 @@
     "jwt"
   ],
   "type": "module",
-  "types": "dist/main.d.ts",
+  "types": "dist/react/src/main.d.ts",
   "main": "dist/main.js",
   "module": "dist/main.js",
   "sideEffects": false,
   "exports": {
     ".": {
-      "import": "./dist/main.js"
+      "import": {
+        "types": "./dist/react/src/main.d.ts",
+        "default": "./dist/main.js"
+      }
     },
     "./style.css": "./dist/style.css"
   },
@@ -52,7 +55,6 @@
     "@radix-ui/react-select": "^1.1.2",
     "@radix-ui/react-switch": "^1.0.3",
     "@radix-ui/react-tabs": "^1.0.1",
-    "@slashid/react-primitives": "workspace:*",
     "@vanilla-extract/css": "^1.9.2",
     "@vanilla-extract/dynamic": "^2.0.3",
     "@vanilla-extract/recipes": "^0.3.0",
