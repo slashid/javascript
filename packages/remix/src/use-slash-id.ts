@@ -1,7 +1,7 @@
 import { useRevalidator } from "@remix-run/react";
-import { useSlashID as useSlashIDReact } from "@slashid/react";
+import { useSlashID as useSlashIDReact, type UseSlashID } from "@slashid/react";
 
-export const useSlashID = () => {
+export const useSlashID = (): UseSlashID => {
   const { logOut, ...rest } = useSlashIDReact();
   const revalidator = useRevalidator();
 
@@ -9,6 +9,7 @@ export const useSlashID = () => {
     logOut: () => {
       logOut();
       revalidator.revalidate();
+      return undefined
     },
     ...rest,
   };

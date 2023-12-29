@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { ISlashIDContext, SlashIDContext } from "../context/slash-id-context";
 
-interface UseSlashID extends ISlashIDContext {
+export interface UseSlashID extends ISlashIDContext {
   isLoading: boolean;
   isAuthenticated: boolean;
 }

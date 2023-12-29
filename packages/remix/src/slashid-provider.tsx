@@ -1,11 +1,11 @@
 import {
   SlashIDContext,
+  ISlashIDContext,
   SlashIDProvider as ReactSlashIDProvider,
   SlashIDProviderProps,
   useSlashID,
   ServerThemeRoot,
 } from "@slashid/react";
-import { ISlashIDContext } from "@slashid/react/dist/context/slash-id-context";
 import { SSR, SlashIDOptions, User } from "@slashid/slashid";
 import { useEffect, useMemo, useState } from "react";
 
