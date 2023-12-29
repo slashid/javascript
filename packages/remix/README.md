@@ -50,6 +50,7 @@ Import the `slashIDRootLoader` you created in the previous step, invoke it and e
 
 ```tsx
 // root.ts
+
 import { LoaderFunction } from "@remix-run/node";
 import {
   Links,
