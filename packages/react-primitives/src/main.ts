@@ -1,4 +1,8 @@
-import { ThemeRoot, ThemeProps } from "./components/theme-root";
+import {
+  ThemeRoot,
+  ThemeProps,
+  ServerThemeRoot,
+} from "./components/theme-root";
 import { Button } from "./components/button";
 import { LinkButton } from "./components/button/link-button";
 import { Input, PhoneInput, Flag } from "./components/input";
@@ -18,6 +22,7 @@ import { Text, Props as TextProps } from "./components/text";
 import { TextContext, TextProvider } from "./components/text/text-context";
 import { isBrowser } from "./browser/is-browser";
 import { MemoryStorage } from "./browser/memory-storage";
+import { CookieStorage } from "./browser/cookie-storage";
 
 // theming
 export * from "./theme/theme.css";
@@ -26,6 +31,7 @@ export * from "./theme/sprinkles.css";
 // components
 export {
   ThemeRoot,
+  ServerThemeRoot,
   Button,
   LinkButton,
   Input,
@@ -52,7 +58,7 @@ export { TextContext, TextProvider };
 export * from "./components/icon";
 
 // utils
-export { isBrowser, MemoryStorage };
+export { isBrowser, MemoryStorage, CookieStorage };
 
 // types
 export type { ThemeProps, DialogProps, TextProps, Flag };

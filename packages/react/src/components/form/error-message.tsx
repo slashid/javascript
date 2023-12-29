@@ -7,10 +7,10 @@ type ErrorMessageProps = {
 
 export const ErrorMessage = ({ name }: ErrorMessageProps) => {
   const { errors } = useForm();
-  const error = errors[name]
+  const error = errors[name];
 
   if (!error) {
-    return null
+    return null;
   }
 
   return (

@@ -79,7 +79,7 @@ describe("OrganizationSwitcher", () => {
     const user = createTestUser({ oid: org.id });
     const spy = vi.fn(async () => [org]);
     const expectedLabel = faker.company.buzzPhrase();
-    const currentOrgName = org.org_name
+    const currentOrgName = org.org_name;
 
     user.getOrganizations = spy;
 
@@ -120,7 +120,7 @@ describe("OrganizationSwitcher", () => {
     const org = createTestOrganization();
     const user = createTestUser({ oid: org.id });
     const spy = vi.fn(async () => [org]);
-    const currentOrgName = org.org_name
+    const currentOrgName = org.org_name;
 
     user.getOrganizations = spy;
 
@@ -179,7 +179,7 @@ describe("OrganizationSwitcher", () => {
     const anotherOrg = createTestOrganization();
     const spy = vi.fn(async () => [org, anotherOrg]);
     const event = userEvent.setup();
-    const currentOrgName = org.org_name
+    const currentOrgName = org.org_name;
 
     user.getOrganizations = spy;
 
@@ -215,7 +215,7 @@ describe("OrganizationSwitcher", () => {
       () => createTestOrganization()
     );
     const shuffledOrgs = faker.helpers.shuffle([org, ...others]);
-    const currentOrgName = org.org_name
+    const currentOrgName = org.org_name;
 
     const spy = vi.fn(async () => shuffledOrgs);
     const event = userEvent.setup();
@@ -260,7 +260,7 @@ describe("OrganizationSwitcher", () => {
     const validOrgs = [a, b, c, org];
     const ids = validOrgs.map((org) => org.id);
     const predicate = (org: OrganizationDetails) => ids.includes(org.id);
-    const currentOrgName = org.org_name
+    const currentOrgName = org.org_name;
 
     const spy = vi.fn(async () => shuffledOrgs);
     const event = userEvent.setup();
@@ -322,16 +322,21 @@ describe("OrganizationSwitcher", () => {
       // select a random number of shuffledORgs to override
       .slice(0, faker.number.int({ min: 2, max: shuffledOrgs.length - 1 }))
       // create label overrides, append index for uniqueness
-      .map((org, i) => ({ id: org.id, org_name: faker.commerce.product() + i }));
-    
+      .map((org, i) => ({
+        id: org.id,
+        org_name: faker.commerce.product() + i,
+      }));
+
     const notOverridenOrgs = shuffledOrgs.filter(
       (org) => !overridenOrgs.find(({ id }) => id === org.id)
     );
 
-    const currentOrgName = [...overridenOrgs, ...notOverridenOrgs]
-      .find(org => org.id === currentOrg.id)?.org_name 
+    const currentOrgName = [...overridenOrgs, ...notOverridenOrgs].find(
+      (org) => org.id === currentOrg.id
+    )?.org_name;
 
-    if (!currentOrgName) throw new Error("currentOrgName did not resolve correctly")
+    if (!currentOrgName)
+      throw new Error("currentOrgName did not resolve correctly");
 
     const spy = vi.fn(async () => shuffledOrgs);
     const event = userEvent.setup();
@@ -385,7 +390,7 @@ describe("OrganizationSwitcher", () => {
     const others = Array.from(Array(faker.number.int({ min: 3, max: 10 }))).map(
       () => createTestOrganization()
     );
-    const overrideOrgName = `${faker.commerce.productMaterial()}__default`
+    const overrideOrgName = `${faker.commerce.productMaterial()}__default`;
 
     const shuffledOrgs = faker.helpers.shuffle([currentOrg, ...others]);
     const testId = `test-${faker.string.uuid()}`;
@@ -443,7 +448,7 @@ describe("OrganizationSwitcher", () => {
     const user = createTestUser({ oid: org.id });
     const spy = vi.fn(async () => [org]);
     const expected = faker.commerce.productDescription();
-    const currentOrgName = org.org_name
+    const currentOrgName = org.org_name;
 
     user.getOrganizations = spy;
 
@@ -476,7 +481,7 @@ describe("OrganizationSwitcher", () => {
       () => createTestOrganization()
     );
     const shuffledOrgs = faker.helpers.shuffle([org, ...others]);
-    const currentOrgName = org.org_name
+    const currentOrgName = org.org_name;
 
     const getOrganizations = vi.fn(async () => shuffledOrgs);
     const event = userEvent.setup();
@@ -531,7 +536,7 @@ describe("OrganizationSwitcher", () => {
       () => createTestOrganization()
     );
     const shuffledOrgs = faker.helpers.shuffle([org, ...others]);
-    const currentOrgName = org.org_name
+    const currentOrgName = org.org_name;
 
     const getOrganizations = vi.fn(async () => shuffledOrgs);
     const event = userEvent.setup();

@@ -3,16 +3,16 @@ import { useSlashID } from "../../main";
 
 type Props = {
   belongsTo: string | ((groups: string[]) => boolean);
-  children: ReactNode
-}
+  children: ReactNode;
+};
 
 /**
  * Conditional rendering helper.
- * 
+ *
  * Use this component where some content should be shown only to users belonging to one or more specific groups.
- * 
+ *
  * @param belongsTo group name or predicate function - the predicate function is called with a list of group names that the user belongs to.
- * 
+ *
  * @example
  * User belongs to group "admin"
  * ```tsx
@@ -22,7 +22,7 @@ type Props = {
  *  ...
  * </Groups>
  * ```
- * 
+ *
  * @example
  * User belongs to either "admin" or "user"
  * ```tsx
@@ -32,7 +32,7 @@ type Props = {
  *  ...
  * </Groups>
  * ```
- * 
+ *
  * @example
  * User belongs to both "admin" and "user"
  * ```tsx
@@ -50,11 +50,11 @@ export const Groups = ({ belongsTo, children }: Props) => {
     if (!user) {
       return false;
     }
-    const groups = user.getGroups()
+    const groups = user.getGroups();
 
     return typeof belongsTo === "string"
       ? groups.includes(belongsTo)
-      : belongsTo(groups)
+      : belongsTo(groups);
   }, [user, belongsTo]);
 
   if (!shouldRender) {
@@ -64,5 +64,11 @@ export const Groups = ({ belongsTo, children }: Props) => {
   return <>{children}</>;
 };
 
-Groups.some = (...groups: string[]) => (userGroups: string[]) => groups.some(group => userGroups.includes(group))
-Groups.all = (...groups: string[]) => (userGroups: string[]) => groups.every(group => userGroups.includes(group))
+Groups.some =
+  (...groups: string[]) =>
+  (userGroups: string[]) =>
+    groups.some((group) => userGroups.includes(group));
+Groups.all =
+  (...groups: string[]) =>
+  (userGroups: string[]) =>
+    groups.every((group) => userGroups.includes(group));

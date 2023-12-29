@@ -1,8 +1,6 @@
 import { StepUpAuth } from "./step-up-auth";
 import { render, screen, waitFor } from "@testing-library/react";
-import {
-  TestSlashIDProvider
-} from "../../context/test-providers";
+import { TestSlashIDProvider } from "../../context/test-providers";
 import userEvent from "@testing-library/user-event";
 import { createTestUser, inputPhone } from "../test-utils";
 
@@ -14,7 +12,11 @@ describe("#StepUpAuth", () => {
 
     // already authenticated user is presented with Step-Up Auth challenge
     render(
-      <TestSlashIDProvider sdkState="ready" user={createTestUser()} mfa={mfaMock}>
+      <TestSlashIDProvider
+        sdkState="ready"
+        user={createTestUser()}
+        mfa={mfaMock}
+      >
         <StepUpAuth
           factors={[{ method: "otp_via_sms" }]}
           text={{

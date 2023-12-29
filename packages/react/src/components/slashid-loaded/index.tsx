@@ -17,12 +17,8 @@ export const SlashIDLoaded = ({ fallback, children }: Props) => {
   if (isLoading) {
     if (!fallback) return null;
 
-    return <>
-      {fallback};
-    </>
+    return <>{fallback};</>;
   }
 
-  return <>
-    {children}
-  </>
+  return <>{children}</>;
 };

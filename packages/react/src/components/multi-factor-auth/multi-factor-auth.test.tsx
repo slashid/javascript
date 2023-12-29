@@ -2,14 +2,12 @@ import type { StepConfig } from "./multi-factor-auth";
 import { MultiFactorAuth } from "./multi-factor-auth";
 import userEvent from "@testing-library/user-event";
 import { render, screen, waitFor } from "@testing-library/react";
-import {
-  TestSlashIDProvider
-} from "../../context/test-providers";
+import { TestSlashIDProvider } from "../../context/test-providers";
 import { createTestUser, inputEmail, inputPhone } from "../test-utils";
 
 describe("#MultiFactorAuth", () => {
   test("MFA flow", async () => {
-    const testUser = createTestUser({ authMethods: ['email_link'] })
+    const testUser = createTestUser({ authMethods: ["email_link"] });
     const logInMock = vi.fn(async () => testUser);
     const mfaMock = vi.fn(async () => testUser);
     const user = userEvent.setup();

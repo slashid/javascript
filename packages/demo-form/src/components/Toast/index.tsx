@@ -1,6 +1,6 @@
-import React, { FC } from 'react';
+import React, { FC } from "react";
 
-import css from './toast.module.css';
+import css from "./toast.module.css";
 
 interface Props {
   message: string;

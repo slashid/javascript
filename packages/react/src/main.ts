@@ -13,10 +13,15 @@ import {
   ConfigurationContext,
   ConfigurationProvider,
 } from "./context/config-context";
-import { SlashIDContext, SlashIDProvider } from "./context/slash-id-context";
+import {
+  SlashIDContext,
+  type ISlashIDContext,
+  SlashIDProvider,
+  SlashIDProviderProps,
+} from "./context/slash-id-context";
 import { useGDPRConsent } from "./hooks/use-gdpr-consent";
 import { useOrganizations } from "./hooks/use-organizations";
-import { useSlashID } from "./hooks/use-slash-id";
+import { useSlashID, type UseSlashID } from "./hooks/use-slash-id";
 import {
   defaultOrganization,
   type LoginMiddleware,
@@ -38,16 +43,21 @@ export {
   MultiFactorAuth,
   OrganizationSwitcher,
   Slot,
+  type ISlashIDContext,
   SlashIDContext,
   SlashIDLoaded,
   SlashIDProvider,
   StepUpAuth,
   useGDPRConsent,
   useOrganizations,
+  type UseSlashID,
   useSlashID,
 
   // middleware
   defaultOrganization,
   type LoginMiddleware,
   type LoginMiddlewareContext,
+  type SlashIDProviderProps,
 };
+
+export { ServerThemeRoot } from "@slashid/react-primitives";

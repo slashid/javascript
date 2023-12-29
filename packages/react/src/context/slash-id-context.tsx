@@ -1,4 +1,4 @@
-import React, {
+import {
   ReactNode,
   createContext,
   useCallback,
@@ -13,11 +13,12 @@ import {
   ThemeProps,
   ThemeRoot,
   MemoryStorage,
+  CookieStorage,
 } from "@slashid/react-primitives";
 import { LogIn, MFA } from "../domain/types";
 import { SDKState } from "../domain/sdk-state";
 
-export type StorageOption = "memory" | "localStorage";
+export type StorageOption = "memory" | "localStorage" | "cookie";
 
 export interface SlashIDProviderProps {
   oid: string;
@@ -64,6 +65,8 @@ const createStorage = (storageType: StorageOption) => {
       return new MemoryStorage();
     case "localStorage":
       return window.localStorage;
+    case "cookie":
+      return new CookieStorage();
     default:
       return new MemoryStorage();
   }
@@ -113,7 +116,7 @@ export const SlashIDProvider = ({
       storageRef.current?.setItem(STORAGE_TOKEN_KEY, newUser.token);
 
       try {
-        sidRef.current?.getAnalytics().identify(newUser)
+        sidRef.current?.getAnalytics().identify(newUser);
       } catch {
         // fail silently
       }
@@ -136,7 +139,7 @@ export const SlashIDProvider = ({
     }
 
     try {
-      sidRef.current?.getAnalytics().logout()
+      sidRef.current?.getAnalytics().logout();
     } catch {
       // fail silently
     }

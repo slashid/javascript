@@ -1,9 +1,5 @@
 import { style, styleVariants } from "@vanilla-extract/css";
-import {
-  theme,
-  publicVariables,
-  colors,
-} from "@slashid/react-primitives";
+import { theme, publicVariables, colors } from "@slashid/react-primitives";
 
 export const imagePreview = style({
   width: "100%",

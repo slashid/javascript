@@ -22,7 +22,7 @@
     "@astrojs/react": "^3.0.5",
     "@sentry/react": "^7.81.1",
     "@slashid/react-primitives": "workspace:*",
-    "@slashid/slashid": "3.16.0",
+    "@slashid/slashid": "3.17.1",
     "@types/react": "^18.0.21",
     "@types/react-dom": "^18.0.6",
     "astro": "^3.5.5",

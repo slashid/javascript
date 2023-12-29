@@ -20,7 +20,6 @@ type Item = {
 
 type Props = {
   label: string;
-  placeholder?: string;
   className?: string;
   type?: "text" | "email" | "tel";
   items: Item[];
@@ -32,7 +31,6 @@ type Props = {
 
 export const Dropdown: React.FC<Props> = ({
   label,
-  placeholder,
   items,
   defaultValue,
   onChange,
@@ -62,10 +60,7 @@ export const Dropdown: React.FC<Props> = ({
           <label className={clsx("sid-dropdown__trigger__label", styles.label)}>
             {label}
           </label>
-          <div
-            className={clsx("sid-dropdown__trigger__input", styles.input)}
-            placeholder={placeholder}
-          >
+          <div className={clsx("sid-dropdown__trigger__input", styles.input)}>
             <Select.Value />
           </div>
           <ChevronDown

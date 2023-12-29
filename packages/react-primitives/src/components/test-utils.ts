@@ -1,4 +1,9 @@
-import { FactorMethod, OrganizationDetails, User, PersonHandleType as Handle } from "@slashid/slashid";
+import {
+  FactorMethod,
+  OrganizationDetails,
+  User,
+  PersonHandleType as Handle,
+} from "@slashid/slashid";
 import { faker } from "@faker-js/faker";
 import {
   Handler,

@@ -1,10 +1,10 @@
-import { FC } from 'react';
+import { FC } from "react";
 
-import css from './spinner.module.css';
+import css from "./spinner.module.css";
 
 export enum SpinnerColorType {
-  Light = 'light',
-  Blue = 'blue',
+  Light = "light",
+  Blue = "blue",
 }
 
 interface Props {
@@ -16,7 +16,7 @@ interface Props {
 const Spinner: FC<Props> = ({ color, isBig, size }) => {
   return (
     <div
-      className={`${css.host} ${css[color]} ${isBig ? css.big : ''}`}
+      className={`${css.host} ${css[color]} ${isBig ? css.big : ""}`}
       style={{ width: `${size}px`, height: `${size}px` }}
     >
       {[...Array(4)].map((_, i) => (
