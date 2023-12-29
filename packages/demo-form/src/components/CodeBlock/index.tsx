@@ -1,6 +1,6 @@
-import { FC } from 'react';
+import { FC } from "react";
 
-import css from './code-block.module.css';
+import css from "./code-block.module.css";
 
 interface Props {
   code: string;
@@ -9,7 +9,7 @@ interface Props {
 const CodeBlock: FC<Props> = ({ code }) => {
   return (
     <pre className={css.host}>
-      <code>{JSON.stringify(code, null, ' ')}</code>
+      <code>{JSON.stringify(code, null, " ")}</code>
     </pre>
   );
 };

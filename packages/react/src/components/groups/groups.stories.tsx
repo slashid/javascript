@@ -10,11 +10,7 @@ export default meta;
 type Story = StoryObj<typeof Groups>;
 
 export const Default: Story = {
-  render: () => (
-    <Groups belongsTo={"admin"}>
-      Only visible for admins.
-    </Groups>
-  ),
+  render: () => <Groups belongsTo={"admin"}>Only visible for admins.</Groups>,
 };
 
 export const Or: Story = {

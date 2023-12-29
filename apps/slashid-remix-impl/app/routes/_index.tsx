@@ -1,10 +1,6 @@
 import { type MetaFunction } from "@remix-run/node";
 import { Link, useNavigate } from "@remix-run/react";
-import {
-  useSlashID,
-  LoggedIn,
-  LoggedOut
-} from "@slashid/remix";
+import { useSlashID, LoggedIn, LoggedOut } from "@slashid/remix";
 import { useCallback } from "react";
 
 export const meta: MetaFunction = () => {
@@ -16,11 +12,11 @@ export const meta: MetaFunction = () => {
 
 export default function Index() {
   const { logOut, isAuthenticated } = useSlashID();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const login = useCallback(() => {
-    navigate("/login")
-  }, [])
+    navigate("/login");
+  }, []);
 
   return (
     <div
@@ -37,15 +33,11 @@ export default function Index() {
       </LoggedIn>
       <LoggedOut>
         You are logged out
-        <button onClick={login}>
-          Log in
-        </button>
+        <button onClick={login}>Log in</button>
       </LoggedOut>
       <br />
       <br />
-      <h2>
-        Navigation
-      </h2>
+      <h2>Navigation</h2>
       <ul>
         <li>
           <Link to="/protected">

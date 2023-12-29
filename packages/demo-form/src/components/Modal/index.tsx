@@ -1,6 +1,6 @@
-import { FC } from 'react';
+import { FC } from "react";
 
-import css from './modal.module.css';
+import css from "./modal.module.css";
 
 interface Props {
   children: React.ReactNode;

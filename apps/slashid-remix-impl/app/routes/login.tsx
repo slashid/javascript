@@ -4,15 +4,12 @@ import {
   ConfigurationProvider,
   Form,
   type Factor,
-  getUser
+  getUser,
 } from "@slashid/remix";
 import { slashIDLoader } from "~/slashid";
 
 export const meta: MetaFunction = () => {
-  return [
-    { title: "Login" },
-    { name: "description", content: "Login" },
-  ];
+  return [{ title: "Login" }, { name: "description", content: "Login" }];
 };
 
 export const loader = slashIDLoader(async (args) => {
@@ -25,11 +22,9 @@ export const loader = slashIDLoader(async (args) => {
   return {};
 });
 
-
 const factors: Factor[] = [{ method: "email_link" }];
 
 export default function Index() {
-
   return (
     <div style={{ width: "500px" }}>
       <ConfigurationProvider factors={factors}>

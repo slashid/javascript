@@ -1,22 +1,22 @@
-import { set, get, getAll, remove } from 'tiny-cookie'
+import { set, get, getAll, remove } from "tiny-cookie";
 
 export class CookieStorage implements Storage {
   clear(): void {
-    const all = getAll()
+    const all = getAll();
 
-    const keys = Object.keys(all)
+    const keys = Object.keys(all);
 
     for (const key of keys) {
-      remove(String(key))
+      remove(String(key));
     }
   }
 
   getItem(key: string): string | null {
-    return get(String(key))
+    return get(String(key));
   }
 
   removeItem(key: string): void {
-    remove(String(key))
+    remove(String(key));
   }
 
   key(index: number): string | null {
@@ -24,10 +24,10 @@ export class CookieStorage implements Storage {
   }
 
   setItem(key: string, value: string): void {
-    set(String(key), String(value))
+    set(String(key), String(value));
   }
 
   get length(): number {
-    return Object.keys(getAll()).length
+    return Object.keys(getAll()).length;
   }
 }

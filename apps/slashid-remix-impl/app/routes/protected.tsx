@@ -1,9 +1,6 @@
-import {
-  redirect,
-  type MetaFunction,
-} from "@remix-run/node";
+import { redirect, type MetaFunction } from "@remix-run/node";
 import { getUser, useSlashID } from "@slashid/remix";
-import { slashIDLoader } from '../slashid'
+import { slashIDLoader } from "../slashid";
 
 export const meta: MetaFunction = () => {
   return [
@@ -23,7 +20,7 @@ export const loader = slashIDLoader(async (args) => {
 });
 
 export default function Protected() {
-  const { logOut } = useSlashID()
+  const { logOut } = useSlashID();
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
       <h1>This page is protected!</h1>

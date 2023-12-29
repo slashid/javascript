@@ -1,5 +1,5 @@
-import React, { FC, useRef } from 'react';
-import css from './switch.module.css';
+import React, { FC, useRef } from "react";
+import css from "./switch.module.css";
 
 interface Props {
   labelActive: string;
@@ -22,14 +22,14 @@ const Switch: FC<Props> = ({
     <div className={css.host}>
       <input
         ref={checkboxRef}
-        type='checkbox'
+        type="checkbox"
         name={name}
         checked={isActive}
         onChange={onChange}
       ></input>
 
       <button
-        type='button'
+        type="button"
         className={`${css.container} ${isActive ? css.on : css.off}`}
         onClick={() => {
           checkboxRef.current?.click();

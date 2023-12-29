@@ -20,8 +20,12 @@ export const verifyToken = async ({
 
   // throws if verification fails
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { payload: _, protectedHeader: __ } = await jose.jwtVerify(token, JWKS, {
-    issuer: baseApiUrl,
-    audience: oid,
-  });
+  const { payload: _, protectedHeader: __ } = await jose.jwtVerify(
+    token,
+    JWKS,
+    {
+      issuer: baseApiUrl,
+      audience: oid,
+    }
+  );
 };

@@ -1,4 +1,8 @@
-import { ThemeRoot, ThemeProps, ServerThemeRoot } from "./components/theme-root";
+import {
+  ThemeRoot,
+  ThemeProps,
+  ServerThemeRoot,
+} from "./components/theme-root";
 import { Button } from "./components/button";
 import { LinkButton } from "./components/button/link-button";
 import { Input, PhoneInput, Flag } from "./components/input";

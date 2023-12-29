@@ -1,8 +1,5 @@
 import { style } from "@vanilla-extract/css";
-import {
-  publicVariables,
-  theme,
-} from "@slashid/react-primitives";
+import { publicVariables, theme } from "@slashid/react-primitives";
 
 export const container = style({
   display: "flex",

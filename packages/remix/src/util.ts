@@ -15,16 +15,20 @@ export const addSlashIdToResponse = async <T extends (...args: any) => any>(
 
   clone.headers.set("content-type", "application/json");
 
-  return json({ ...(data || {}), ...slashid }, clone) as ReturnType<T & { slashid?: string }>
+  return json({ ...(data || {}), ...slashid }, clone) as ReturnType<
+    T & { slashid?: string }
+  >;
 };
 
-export const addSlashIdToDeferredResponse = async <T extends (...args: any) => any>(
+export const addSlashIdToDeferredResponse = async <
+  T extends (...args: any) => any
+>(
   response: ReturnType<typeof defer>,
   slashid: { slashid?: string }
 ) => {
   response.data.slashid = slashid;
 
-  return response as ReturnType<T & { slashid?: string }>
+  return response as ReturnType<T & { slashid?: string }>;
 };
 
 export function assertCallbackResult(

@@ -3,7 +3,7 @@ import {
   SlashIDProvider as ReactSlashIDProvider,
   SlashIDProviderProps,
   useSlashID,
-  ServerThemeRoot
+  ServerThemeRoot,
 } from "@slashid/react";
 import { SSR, SlashIDOptions, User } from "@slashid/slashid";
 import { useEffect, useMemo, useState } from "react";
@@ -28,8 +28,8 @@ function SlashIDProviderSSR({
       baseURL: props.baseApiUrl,
       sdkURL: props.sdkUrl,
       oid: props.oid,
-      analyticsEnabled: props.analyticsEnabled
-    }
+      analyticsEnabled: props.analyticsEnabled,
+    };
 
     const user = props.initialToken
       ? (new SSR.User(props.initialToken, options) as User)
@@ -40,18 +40,26 @@ function SlashIDProviderSSR({
       user,
       sdkState: user ? ("ready" as const) : ("initial" as const),
       logOut: () => {
-        throw new Error("Operation not possible in this state")
+        throw new Error("Operation not possible in this state");
       },
       logIn: () => Promise.reject("Operation not possible in this state"),
       mfa: () => Promise.reject("Operation not possible in this state"),
       validateToken: async () => false,
       __switchOrganizationInContext: async () => undefined,
     };
-  }, [props.analyticsEnabled, props.baseApiUrl, props.initialToken, props.oid, props.sdkUrl]);
+  }, [
+    props.analyticsEnabled,
+    props.baseApiUrl,
+    props.initialToken,
+    props.oid,
+    props.sdkUrl,
+  ]);
 
   return (
     <ServerThemeRoot>
-      <SlashIDContext.Provider value={value}>{children}</SlashIDContext.Provider>
+      <SlashIDContext.Provider value={value}>
+        {children}
+      </SlashIDContext.Provider>
     </ServerThemeRoot>
   );
 }

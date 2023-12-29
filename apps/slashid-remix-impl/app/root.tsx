@@ -1,5 +1,9 @@
 import { cssBundleHref } from "@remix-run/css-bundle";
-import type { LinksFunction, LoaderFunction, LoaderFunctionArgs } from "@remix-run/node";
+import type {
+  LinksFunction,
+  LoaderFunction,
+  LoaderFunctionArgs,
+} from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -7,7 +11,7 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  useLoaderData
+  useLoaderData,
 } from "@remix-run/react";
 import { SlashIDApp, slashIDRootLoader } from "./slashid";
 
@@ -15,7 +19,7 @@ export const links: LinksFunction = () => [
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
 ];
 
-export const loader: LoaderFunction = slashIDRootLoader()
+export const loader: LoaderFunction = slashIDRootLoader();
 // (args: LoaderFunctionArgs) => {
 //   console.log('root loader', args)
 
@@ -27,7 +31,7 @@ export const loader: LoaderFunction = slashIDRootLoader()
 // });
 
 export default function App() {
-  const { hello } = useLoaderData<{ hello: string }>()
+  const { hello } = useLoaderData<{ hello: string }>();
 
   return (
     <html lang="en">

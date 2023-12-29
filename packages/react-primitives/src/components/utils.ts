@@ -76,7 +76,7 @@ export const documentConstraints = {
 };
 
 export const fromEntries = <
-  T extends ReadonlyArray<readonly [PropertyKey, unknown]>,
+  T extends ReadonlyArray<readonly [PropertyKey, unknown]>
 >(
   entries: T
 ): { [K in T[number] as K[0]]: K[1] } => {

@@ -132,11 +132,11 @@ export const polyfillPointerEvent = () => {
  * with ease, without the need of accessing private SlashID emitter property.
  */
 export class MockSlashID extends SlashID {
-  private _observers: Map<keyof PublicReadEvents, GenericHandler[]> = new Map()
+  private _observers: Map<keyof PublicReadEvents, GenericHandler[]> = new Map();
 
   private get observers() {
-    if (!this._observers) this._observers = new Map()
-    return this._observers
+    if (!this._observers) this._observers = new Map();
+    return this._observers;
   }
 
   constructor(opts?: SlashIDOptions) {

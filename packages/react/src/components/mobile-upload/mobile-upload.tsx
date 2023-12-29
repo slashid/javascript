@@ -2,10 +2,7 @@ import { useState } from "react";
 // @ts-expect-error TODO fix enums in KYC SDK
 import { DocumentSide, DocumentType } from "@slashid/slashid";
 import { Button, Stack, Banner } from "@slashid/react-primitives";
-import {
-  publicVariables,
-  darkThemeColors,
-} from "@slashid/react-primitives";
+import { publicVariables, darkThemeColors } from "@slashid/react-primitives";
 
 import {
   blobResize,

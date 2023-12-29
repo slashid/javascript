@@ -12,6 +12,8 @@ export type RootAuthLoaderCallback = (
   args: LoaderFunctionArgs
 ) => RootAuthLoaderCallbackReturn;
 
-export const isCallbackDefined = (callback: any): callback is RootAuthLoaderCallback => {
-  return callback !== undefined
-}
+export const isCallbackDefined = (
+  callback: any
+): callback is RootAuthLoaderCallback => {
+  return callback !== undefined;
+};
