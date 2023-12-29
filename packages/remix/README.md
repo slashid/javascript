@@ -1,100 +1,71 @@
-![SlashID React SDK](https://raw.githubusercontent.com/slashid/javascript/main/packages/react/slashid_react_banner.png)
+![SlashID Remix SDK](./banner.png)
 
 ![npm](https://img.shields.io/npm/v/@slashid/remix)
 ![build](https://github.com/slashid/javascript/actions/workflows/ci.yml/badge.svg)
 
 ## Documentation
 
-Check out our [developer docs](https://developer.slashid.dev/) for guides and API documentation. You can also check out the demo on CodeSandbox:
-
-[![Try on CodeSandbox](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/hopeful-austin-486cco?fontsize=14&hidenavigation=1&theme=dark)
+Check out our [developer docs](https://developer.slashid.dev/) for guides and API documentation.
 
 ## Setup
 
 ### Prerequisites
 
-Your organization needs to [sign up](https://slashid.dev/request-access) with `/id` to get access to the core SDK and an organization ID.
+You will need to [sign up to SlashID](https://console.slashid.dev/) and create an organization, once you've complete this you'll find your organization ID in [Settings -> General](https://console.slashid.dev/settings/general).
 
 Your environment should have the following dependencies installed:
+- `node.js` => `>=20.x.x`
+- `react` => `>=18.x.x`
 
-- `node.js` => `v16+`
-- `react` => `v16+`
-- `@slashid/slashid` => `v1.8+`
+### Quick start
 
-### Installation
-
-After obtaining your organization ID, install the package:
-
+#### 1. Install `@slashid/remix`
+Once you have a Remix application ready to go, you need to install the SlashID Remix SDK. This SDK provides a prebuilt log-in & sign-up form, control components and hooks - tailor made for Remix.
 ```
 npm install @slashid/remix
 ```
 
-## WIP Implementation
+#### 2. Create SlashID app primitives
+In your Remix application create a file `app/slashid.ts`.
 
-### High-level
+In this file create the SlashID application primitives and re-export them, you'll use them later.
+```ts
+// app/slashid.ts
 
-- We have a remix lib `@slashid/remix`
-- We have a test bed for the lib `apps/slashid-remix-impl`
-- You can log in and out!
-- The user token is set in the root loader, and _should_ be available in other loaders.
-- Cookie storage works
+import { createSlashIDApp } from '@slashid/remix'
 
-### `packages/@slashid/react`
-
-- Add `CookieStorage` for js token storage in `@slashid/react`
-- Login works with cookie storage
-
-### `packages/@slashid/remix`
-
-- Create package
-- Add build (remix doesn't support `.ts` or `.tsx` out of the box)
-- Remix native `SlashIDProvider`
-  - `tokenStorage` defaults to `cookie`, is not configurable. In future this would be extended to support `http-only-cookie`
-  - Has better defaults for sdk and api urls (production). I think this is an important stumbling block to remove as part of remix onboarding.
-- Add `SlashIDApp` and `rootAuthLoader`
-  - Implements `SlashIDProvider`
-  - Can parse cookie from request (`rootAuthLoader`)
-
-### `apps/slashid-remix-impl`
-
-- Implements `@slashid/remix`
-- There is a "protected page" and an "unprotected page"
-  - The protected page is not protected yet, but all the boilerplate is done
-
-## Not done
-
-1. I haven't worked out exactly what things need to be re-exported through `@slashid/remix` yet
-1. CSS is currently not re-exported through `@slashid/remix`, this is a pain point because it's the only reason so far that installing `@slashid/react` is necessary.
-1. Token is parsed from cookie but it is not yet validated. We can do this with JWKS or User.validateToken(), but I've done neither.
-1. The root loader does not fully support the second overload I created, which allows users to have their own root loader in addition to ours.
-1. Logging in via DirectID can only be done client side, as it takes an API call to resolve the challenge and we only have a single render cycle server side. If both a cookie and direct ID are present, we prefer the direct ID.
-
-# How to use `@slashid/remix`
-
-This is some high-level points about how the library works from a user POV
-
-## 1. Install `@slashid/remix`
+export const {
+  SlashIDApp,
+  slashIDRootLoader,
+  slashIDLoader
+} = createSlashIDApp({ oid: "b6f94b67-d20f-7fc3-51df-bf6e3b82683e" });
 
 ```
-npm i @slashid/remix
-```
+Tip: `oid` is your organization ID, you can find it in the [SlashID console](https://console.slashid.dev/) under [Settings -> General](https://console.slashid.dev/settings/general).
 
-## 2. Set up the root auth loader
+#### 3. Configure `slashIDRootLoader`
+To configure SlashID in your Remix application you'll need to update your root loader. With a small change you'll have easy access to authentication in all of your Remix routes.
+
+Import the `slashIDRootLoader` you created in the previous step, invoke it and export it as `loader`.
 
 ```tsx
-// root.tsx
-import { rootAuthLoader } from "@slashid/remix";
+// root.ts
+import { LoaderFunction } from "@remix-run/node";
+import {
+  Links,
+  LiveReload,
+  Meta,
+  Outlet,
+  Scripts,
+  ScrollRestoration,
+  useLoaderData,
+} from "@remix-run/react";
 
-export const loader: LoaderFunction = (args) => rootAuthLoader(args);
-```
-
-## 3. Wrap your app in `SlashIDApp`, set your org id
-
-```tsx
-// root.tsx
-import { SlashIDApp } from "@slashid/remix";
-
-function App() {
+import { slashIDRootLoader } from "~/slashid";
+ 
+export const loader: LoaderFunction = slashIDRootLoader();
+ 
+export default function App() {
   return (
     <html lang="en">
       <head>
@@ -112,87 +83,155 @@ function App() {
     </html>
   );
 }
-
-export default SlashIDApp(App, { oid: "YOUR_ORG_ID" });
 ```
 
-## 4. Add (one of) the slashid libraries to server deps, for CSS
+If you need to load additional data via the root loader, you can simply pass a loader function to `slashIDRootLoader`. You can even check for authentication right here in the root loader.
 
-Without this it doens't get bundled for SSR, this seems like a point where people will trip
+```ts
+// root.ts
 
-```js
-// remix.config.js
-export default {
-  //  ...
-  serverDependenciesToBundle: ["@slashid/react"],
-};
+import { slashIDRootLoader } from "~/slashid"
+import { getUser } from '@slashid/remix'
+
+export const loader: LoaderFunction = slashIDRootLoader((args) => {
+  const user = getUser(args)
+
+  if (user) {
+    // the user is logged in
+  }
+
+  // fetch data
+
+  return {
+    hello: "world!" // your data
+  }
+});
 ```
 
-## 5. Implement the form with control components + import css
-
-This isn't the best DX, I think ideally there is a straightforward way to redirect people to a dedicated login page when auth is missing instead of using these control components.
+#### 4. Wrap your application body with `<SlashIDApp>`
+In step 2 you created `SlashIDApp`, it provides authentication state to your React component tree. There is no configuration, just add it to your Remix application.
 
 ```tsx
-import "@slashid/react/style.css";
-import {
-  ConfigurationProvider,
-  Form,
-  LoggedIn,
-  LoggedOut,
-  type Factor,
-  useSlashID,
-} from "@slashid/remix";
+// root.tsx
 
-const factors: Factor[] = [{ method: "email_link" }];
+import { SlashIDApp } from '~/slashid'
 
-export default function Index() {
+export default function App() {
   return (
-    <>
-      <LoggedIn>
-        You are logged in
-        <button onClick={logOut}>Log out</button>
-      </LoggedIn>
-      <LoggedOut>
-        You are logged out
-        <div style={{ width: "500px" }}>
-          <ConfigurationProvider factors={factors}>
-            <Form />
-          </ConfigurationProvider>
-        </div>
-      </LoggedOut>
-    </>
+    <html lang="en">
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <Meta />
+        <Links />
+      </head>
+      <body>
+        {/* Wrap the contents of your <body> with SlashIDApp */}
+        <SlashIDApp>
+          <Outlet />
+          <ScrollRestoration />
+          <Scripts />
+          <LiveReload />
+        </SlashIDApp>
+      </body>
+    </html>
   );
 }
 ```
 
-## 6. Protect the routes
+#### 5. Create your log-in/sign-up page
+SlashID offers a prebuilt form that works for both log-in and sign-up. Users with an account can log-in here and users without one need to simply complete the form to create their account.
 
-If you want to restrict access to a route, use the `getUserFromRequest` helper. This will return `undefined` if the user is not logged in, or the user object if they are.
+```tsx
+// routes/login.tsx
 
-```ts
-import { getUserFromRequest } from "@slashid/remix";
+import {
+  ConfigurationProvider,
+  Form,
+  type Factor,
+} from "@slashid/remix";
 
-export const loader: LoaderFunction = (args) => {
-  const user = getUserFromRequest(args);
+const factors: Factor[] = [
+  { method: "email_link" }
+];
+
+export default function LogIn() {
+  return (
+    <div style={{ width: "500px" }}>
+      <ConfigurationProvider factors={factors}>
+        <Form />
+      </ConfigurationProvider>
+    </div>
+  );
+}
+```
+#### 6. Protecting your pages
+
+##### Server side
+To protect your routes you can use the `slashIDLoader` you created in step 2. This utility is a wrapper for your loaders that provides authentication state to your loader code.
+
+You'll check if the user exists, and if not redirect them to the login page.
+
+The `useSlashID()` provides authentication state & helper functions to your React code, here you'll implement `logOut` too.
+
+```tsx
+// routes/_index.tsx
+
+import { slashIDLoader } from '~/slashid'
+import { getUser, useSlashID } from '@slashid/remix'
+ 
+export const loader = slashIDLoader((args) => {
+  const user = getUser(args)
+
   if (!user) {
-    return redirect("/login");
+    return redirect("login")
   }
-  return json({ user });
-};
+
+  return {}
+})
+
+export default function Index() {
+  const { logOut } = useSlashID()
+
+  return (
+    <div>
+      <h1>Index</h1>
+      <p>You are logged in!</p>
+      <button onClick={logOut}>
+        Log out
+      </button>
+    </div>
+  )
+}
 ```
 
-## 7. (Optional) Extend the root loader with your own loader code
+##### Client side
+SlashID has several [Control Components](https://developer.slashid.dev/docs/access/react-sdk/reference/components/react-sdk-reference-loggedin) that allow you to conditionally show or hide content based on the users authentication state.
 
-_This is not fully implemented yet_
+Once again, you'll implement the `logOut` helper function from the `useSlashID()` hook.
 
-Note: you might choose to drop this for the MVP, but it felt quite important to me because without it people cannot have a root loader which seems a common pattern.
+```tsx
+// routes/_index.tsx
 
-```jsx
-// root.tsx
+import { LoggedIn, LoggedOut, useSlashID } from '@slashid/remix'
+import { useNavigate } from "@remix-run/react";
 
-export const loader: LoaderFunction = (args) =>
-  rootAuthLoader(args, (argsWithSlashID) => {
-    // loader code goes here
-    // argsWithSlashID.slashid is user token, or some hook works here?
-  });
+export default function Index() {
+  const { logOut } = useSlashID()
+  const navigate = useNavigate();
+
+  return (
+    <div>
+      <LoggedIn>
+        You are logged in!
+        <button onClick={logOut}>
+          Log out
+        </button>
+      </LoggedIn>
+      <LoggedOut>
+        {navigate("login")}
+      </LoggedOut>
+    </div>
+  )
+}
 ```

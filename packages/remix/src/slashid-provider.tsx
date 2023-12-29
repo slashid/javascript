@@ -5,6 +5,7 @@ import {
   useSlashID,
   ServerThemeRoot,
 } from "@slashid/react";
+import { ISlashIDContext } from "@slashid/react/dist/context/slash-id-context";
 import { SSR, SlashIDOptions, User } from "@slashid/slashid";
 import { useEffect, useMemo, useState } from "react";
 
@@ -23,7 +24,7 @@ function SlashIDProviderSSR({
   children,
   ...props
 }: RemixSlashIDProviderOptions) {
-  const value = useMemo(() => {
+  const value: ISlashIDContext = useMemo(() => {
     const options: SlashIDOptions = {
       baseURL: props.baseApiUrl,
       sdkURL: props.sdkUrl,
@@ -32,12 +33,12 @@ function SlashIDProviderSSR({
     };
 
     const user = props.initialToken
-      ? (new SSR.User(props.initialToken, options) as User)
+      ? new SSR.User(props.initialToken, options)
       : undefined;
 
     return {
       sid: undefined,
-      user,
+      user: user as unknown as User,
       sdkState: user ? ("ready" as const) : ("initial" as const),
       logOut: () => {
         throw new Error("Operation not possible in this state");
