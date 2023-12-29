@@ -1,14 +1,11 @@
-import type { MetaFunction } from "@remix-run/node";
-import { Link } from "@remix-run/react";
+import { type MetaFunction } from "@remix-run/node";
+import { Link, useNavigate } from "@remix-run/react";
 import {
-  ConfigurationProvider,
-  Form,
-  LoggedIn,
-  LoggedOut,
-  type Factor,
   useSlashID,
+  LoggedIn,
+  LoggedOut
 } from "@slashid/remix";
-import "@slashid/react/style.css";
+import { useCallback } from "react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -17,10 +14,13 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-const factors: Factor[] = [{ method: "email_link" }];
-
 export default function Index() {
   const { logOut, isAuthenticated } = useSlashID();
+  const navigate = useNavigate()
+
+  const login = useCallback(() => {
+    navigate("/login")
+  }, [])
 
   return (
     <div
@@ -37,11 +37,9 @@ export default function Index() {
       </LoggedIn>
       <LoggedOut>
         You are logged out
-        <div style={{ width: "500px" }}>
-          <ConfigurationProvider factors={factors}>
-            <Form />
-          </ConfigurationProvider>
-        </div>
+        <button onClick={login}>
+          Log in
+        </button>
       </LoggedOut>
       <br />
       <br />

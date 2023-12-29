@@ -45,7 +45,7 @@ function setThemeRootClassNames({ theme, className }: ThemeProps) {
 /**
  * We cannot rely on useLayoutEffect to set the correct class names on the <body> element server side.
  */
-const ServerThemeRoot = ({ children }: Props) => {
+export const ServerThemeRoot = ({ children }: Props) => {
   return <div className={createClassNames({ theme: "light" })}>{children}</div>;
 };
 

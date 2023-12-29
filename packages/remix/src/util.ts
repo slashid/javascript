@@ -6,35 +6,25 @@ import {
 import { RootAuthLoaderCallbackReturn } from "./callback";
 import { SSR } from "@slashid/slashid";
 
-export type LoaderFunctionWithSlashIDProps = LoaderFunctionArgs & {
-  request: LoaderFunctionArgs["request"] & { slashid?: string };
-};
-
-export const addSlashIdToRequest = (args: LoaderFunctionArgs, slashid: { slashid?: string }) => {
-  Object.assign(args.request, slashid)
-
-  return args as LoaderFunctionWithSlashIDProps
-};
-
-export const addSlashIdToResponse = async (
+export const addSlashIdToResponse = async <T extends (...args: any) => any>(
   response: Response,
-  slashid: any
+  slashid: { slashid?: string }
 ) => {
   const clone = response.clone();
   const data = (await clone.json()) ?? {};
 
   clone.headers.set("content-type", "application/json");
 
-  return json({ ...(data || {}), ...slashid }, clone);
+  return json({ ...(data || {}), ...slashid }, clone) as ReturnType<T & { slashid?: string }>
 };
 
-export const addSlashIdToDeferredResponse = async (
+export const addSlashIdToDeferredResponse = async <T extends (...args: any) => any>(
   response: ReturnType<typeof defer>,
-  slashid: any
+  slashid: { slashid?: string }
 ) => {
   response.data.slashid = slashid;
 
-  return response;
+  return response as ReturnType<T & { slashid?: string }>
 };
 
 export function assertCallbackResult(
@@ -81,25 +71,24 @@ type BaseUser = typeof SSR.User;
  * @param request
  * @returns
  */
-export const getUserFromRequest = (request: Request): BaseUser | undefined => {
-  const cookies = request.headers.get("cookie");
-  const token = getUserTokenFromCookies(cookies);
+export const getUser = (args: LoaderFunctionArgs): BaseUser | undefined => {
+  const { user } = args.context as { user?: BaseUser };
 
-  if (!token) return undefined;
-
-  // TODO options are missing here - do not create a user without making sure the same options are used as for the base SDK
-  // @ts-expect-error
-  return new SSR.User(token);
+  return user;
 };
 
 export const isResponse = (
-  callback: RootAuthLoaderCallbackReturn
+  callback: Awaited<RootAuthLoaderCallbackReturn>
 ): callback is Response => {
-  console.log(callback);
-  throw new Error("Not implemented");
+  if (callback === null) return false;
+  return (
+    typeof callback.body !== "undefined" &&
+    typeof callback.headers === "object" &&
+    typeof callback.status === "number" &&
+    typeof callback.statusText === "string"
+  );
 };
 
-export const isRedirect = (callback: RootAuthLoaderCallbackReturn): boolean => {
-  console.log(callback);
-  throw new Error("Not implemented");
+export const isRedirect = ({ status }: Response): boolean => {
+  return status >= 300 && status < 400;
 };

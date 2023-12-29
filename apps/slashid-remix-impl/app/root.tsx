@@ -1,5 +1,5 @@
 import { cssBundleHref } from "@remix-run/css-bundle";
-import type { LinksFunction, LoaderFunction } from "@remix-run/node";
+import type { LinksFunction, LoaderFunction, LoaderFunctionArgs } from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -7,14 +7,28 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData
 } from "@remix-run/react";
-import { createSlashIDApp } from "@slashid/remix";
+import { SlashIDApp, slashIDRootLoader } from "./slashid";
 
 export const links: LinksFunction = () => [
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
 ];
 
-function App() {
+export const loader: LoaderFunction = slashIDRootLoader()
+// (args: LoaderFunctionArgs) => {
+//   console.log('root loader', args)
+
+//   const user = getUser(args)
+
+//   return {
+//     hello: "world" + " (" + (user ? "logged in" : "logged out") + ")"
+//   }
+// });
+
+export default function App() {
+  const { hello } = useLoaderData<{ hello: string }>()
+
   return (
     <html lang="en">
       <head>
@@ -24,35 +38,14 @@ function App() {
         <Links />
       </head>
       <body>
-        <Outlet />
-        <ScrollRestoration />
-        <Scripts />
-        <LiveReload />
+        hello: {hello}
+        <SlashIDApp>
+          <Outlet />
+          <ScrollRestoration />
+          <Scripts />
+          <LiveReload />
+        </SlashIDApp>
       </body>
     </html>
   );
 }
-
-const { SlashIDApp, slashIDRootLoader } = createSlashIDApp(App, {
-  oid: "b6f94b67-d20f-7fc3-51df-bf6e3b82683e",
-});
-
-export const loader: LoaderFunction = (args) => slashIDRootLoader(args);
-export default () => (
-  <html lang="en">
-    <head>
-      <meta charSet="utf-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <Meta />
-      <Links />
-    </head>
-    <body>
-      <SlashIDApp>
-        <Outlet />
-        <ScrollRestoration />
-        <Scripts />
-        <LiveReload />
-      </SlashIDApp>
-    </body>
-  </html>
-);

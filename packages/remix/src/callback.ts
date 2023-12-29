@@ -1,4 +1,4 @@
-import { LoaderFunctionWithSlashIDProps } from "./util";
+import { LoaderFunctionArgs } from "@remix-run/server-runtime";
 
 type ObjectAlike = Record<string, unknown> | null;
 
@@ -9,7 +9,7 @@ export type RootAuthLoaderCallbackReturn =
   | ObjectAlike;
 
 export type RootAuthLoaderCallback = (
-  args: LoaderFunctionWithSlashIDProps
+  args: LoaderFunctionArgs
 ) => RootAuthLoaderCallbackReturn;
 
 export const isCallbackDefined = (callback: any): callback is RootAuthLoaderCallback => {

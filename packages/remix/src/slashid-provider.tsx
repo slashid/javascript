@@ -3,6 +3,7 @@ import {
   SlashIDProvider as ReactSlashIDProvider,
   SlashIDProviderProps,
   useSlashID,
+  ServerThemeRoot
 } from "@slashid/react";
 import { SSR, SlashIDOptions, User } from "@slashid/slashid";
 import { useEffect, useMemo, useState } from "react";
@@ -49,7 +50,9 @@ function SlashIDProviderSSR({
   }, [props.analyticsEnabled, props.baseApiUrl, props.initialToken, props.oid, props.sdkUrl]);
 
   return (
-    <SlashIDContext.Provider value={value}>{children}</SlashIDContext.Provider>
+    <ServerThemeRoot>
+      <SlashIDContext.Provider value={value}>{children}</SlashIDContext.Provider>
+    </ServerThemeRoot>
   );
 }
 

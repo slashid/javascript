@@ -4,8 +4,10 @@ import {
   RemixSlashIDProviderOptions,
   SlashIDProvider,
 } from "./slashid-provider";
-import { RootLoader, rootAuthLoader } from "./root-auth-loader";
-import { LoaderFunctionArgs, LoaderFunction } from "@remix-run/server-runtime";
+import { rootLoader } from "./root-loader";
+import { LoaderFunctionArgs, type LoaderFunction } from "@remix-run/server-runtime";
+import { getUserTokenFromCookies } from "./util";
+import { SSR } from "@slashid/slashid";
 
 type SlashIDAppOptions = Omit<
   RemixSlashIDProviderOptions,
@@ -19,7 +21,9 @@ function Wrapper({
   children: React.ReactNode;
   options: SlashIDAppOptions;
 }) {
-  const { slashid } = useLoaderData<RootLoader>();
+  const out = useLoaderData();
+
+  const { slashid } = out as unknown as { slashid?: string }
 
   return (
     <SlashIDProvider
@@ -34,7 +38,6 @@ function Wrapper({
 }
 
 export const createSlashIDApp = (
-  App: () => JSX.Element,
   options: SlashIDAppOptions
 ) => {
   const opts = {
@@ -49,20 +52,39 @@ export const createSlashIDApp = (
     </Wrapper>
   );
 
-  // @ts-ignore
-  const slashIDRootLoader: RootLoader = async (
-    args: LoaderFunctionArgs,
-    callback: any
-  ): Promise<ReturnType<LoaderFunction>> => {
-    const argsWithSid = Object.assign(args, {
-      sid: { baseApiUrl: opts.baseApiUrl, oid: opts.oid },
-    });
-
-    return rootAuthLoader(argsWithSid, callback);
+  const createSlashIDRootLoader = () => {
+    const context = {
+      baseApiUrl: opts.baseApiUrl,
+      sdkUrl: opts.sdkUrl,
+      analyticsEnabled: opts.analyticsEnabled,
+      oid: opts.oid
+    }
+    return rootLoader(context);
   };
+
+  const slashIDLoader = (loader: LoaderFunction) => (args: LoaderFunctionArgs) => {
+    const cookies = args.request.headers.get("cookie");
+    const token = getUserTokenFromCookies(cookies);
+
+    if (!token) return loader(args)
+
+    return loader({
+      ...args,
+      context: {
+        ...args.context,
+        user: new SSR.User(token, {
+          baseURL: opts.baseApiUrl,
+          sdkURL: opts.sdkUrl,
+          oid: opts.oid,
+          analyticsEnabled: opts.analyticsEnabled,
+        })
+      }
+    })
+  }
 
   return {
     SlashIDApp,
-    slashIDRootLoader,
+    slashIDRootLoader: createSlashIDRootLoader(),
+    slashIDLoader
   };
 };

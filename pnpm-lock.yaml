@@ -298,9 +298,6 @@ importers:
       '@remix-run/serve':
         specifier: ^2.3.1
         version: 2.4.0(typescript@5.3.3)
-      '@slashid/react':
-        specifier: workspace:^1.16.0
-        version: link:../../packages/react
       '@slashid/remix':
         specifier: workspace:^0.1.0
         version: link:../../packages/remix
@@ -683,10 +680,10 @@ importers:
     devDependencies:
       '@remix-run/react':
         specifier: ^2.3.1
-        version: 2.4.0(react-dom@18.2.0)(react@18.2.0)
+        version: 2.4.0(react-dom@18.2.0)(react@18.2.0)(typescript@4.9.5)
       '@remix-run/server-runtime':
         specifier: ^2.3.1
-        version: 2.4.0
+        version: 2.4.0(typescript@4.9.5)
       '@types/react':
         specifier: ^18.2.42
         version: 18.2.45
@@ -7739,7 +7736,7 @@ packages:
       react-router-dom: 6.14.2(react-dom@18.2.0)(react@18.2.0)
     dev: false
 
-  /@remix-run/react@2.4.0(react-dom@18.2.0)(react@18.2.0):
+  /@remix-run/react@2.4.0(react-dom@18.2.0)(react@18.2.0)(typescript@4.9.5):
     resolution: {integrity: sha512-SO+VTSTd5oN7eAoTXV2E//LEu7cEO3VsqVDqETZG3X+MfpaU6dtng18FnY6X/ulBP62BjlH6HTwdTK8Lk+2msQ==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
@@ -7751,11 +7748,12 @@ packages:
         optional: true
     dependencies:
       '@remix-run/router': 1.14.0
-      '@remix-run/server-runtime': 2.4.0
+      '@remix-run/server-runtime': 2.4.0(typescript@4.9.5)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       react-router: 6.21.0(react@18.2.0)
       react-router-dom: 6.21.0(react-dom@18.2.0)(react@18.2.0)
+      typescript: 4.9.5
     dev: true
 
   /@remix-run/react@2.4.0(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3):
@@ -7828,7 +7826,7 @@ packages:
       set-cookie-parser: 2.6.0
       source-map: 0.7.4
 
-  /@remix-run/server-runtime@2.4.0:
+  /@remix-run/server-runtime@2.4.0(typescript@4.9.5):
     resolution: {integrity: sha512-okNGtxB2eqEEsI0aDbmC/yCFhsDVD41P0TNPDHBxXy7PK3nzI9yywhknxLvim0lrxc/zKri/5gVKVJpipRekGQ==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
@@ -7843,6 +7841,7 @@ packages:
       cookie: 0.5.0
       set-cookie-parser: 2.6.0
       source-map: 0.7.4
+      typescript: 4.9.5
     dev: true
 
   /@remix-run/server-runtime@2.4.0(typescript@5.3.3):

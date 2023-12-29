@@ -54,5 +54,7 @@ export {
   defaultOrganization,
   type LoginMiddleware,
   type LoginMiddlewareContext,
-  type SlashIDProviderProps,
+  type SlashIDProviderProps
 };
+
+export { ServerThemeRoot } from '@slashid/react-primitives'
