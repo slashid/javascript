@@ -299,7 +299,7 @@ importers:
         specifier: ^2.3.1
         version: 2.4.1(typescript@5.3.3)
       '@slashid/remix':
-        specifier: 0.1.1
+        specifier: workspace:*
         version: link:../../packages/remix
       isbot:
         specifier: ^3.6.8
