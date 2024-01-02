@@ -1,5 +1,11 @@
 # @slashid/remix
 
+## 0.1.2
+
+### Patch Changes
+
+- e1a4492: Make package public
+
 ## 0.1.0
 
 ### Minor Changes
