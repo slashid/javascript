@@ -1,5 +1,11 @@
 # @slashid/remix
 
+## 0.1.3
+
+### Patch Changes
+
+- cd92468: Improve quick start documentation
+
 ## 0.1.2
 
 ### Patch Changes
