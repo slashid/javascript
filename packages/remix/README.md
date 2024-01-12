@@ -1,4 +1,4 @@
-![SlashID Remix SDK](https://raw.githubusercontent.com/slashid/javascript/main/packages/remix/banner.png)
+![SlashID Remix SDK](https://raw.githubusercontent.com/slashid/javascript/main/packages/remix/slashid_remix_banner.png)
 
 ![npm](https://img.shields.io/npm/v/@slashid/remix)
 ![build](https://github.com/slashid/javascript/actions/workflows/ci.yml/badge.svg)
