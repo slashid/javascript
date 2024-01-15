@@ -1,5 +1,14 @@
 # @slashid/remix
 
+## 0.1.4
+
+### Patch Changes
+
+- c38b140: Update README.md with standard brand banner
+- Updated dependencies [c38b140]
+- Updated dependencies [0f7710a]
+  - @slashid/react@1.17.1
+
 ## 0.1.3
 
 ### Patch Changes
