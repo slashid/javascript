@@ -1,6 +1,6 @@
 {
   "name": "@slashid/remix",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "private": false,
   "publishConfig": {
     "access": "public"
@@ -9,7 +9,7 @@
   "main": "dist/main.js",
   "module": "dist/main.js",
   "dependencies": {
-    "@slashid/react": "^1.17.0",
+    "@slashid/react": "^1.17.1",
     "@slashid/slashid": "^3.17.3",
     "jose": "^5.2.0",
     "url-join": "^5.0.0"

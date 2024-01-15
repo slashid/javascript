@@ -1,5 +1,12 @@
 # @slashid/react
 
+## 1.17.1
+
+### Patch Changes
+
+- c38b140: Update README.md with standard brand banner
+- 0f7710a: CSRF protection for SSO
+
 ## 1.17.0
 
 ### Minor Changes
