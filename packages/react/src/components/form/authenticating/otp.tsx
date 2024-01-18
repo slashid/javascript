@@ -23,7 +23,7 @@ import { isFactorOTPEmail, isFactorOTPSms } from "../../../domain/handles";
 import { EmailIcon, SmsIcon, Loader } from "./icons";
 import { BackButton, RetryPrompt } from "./authenticating.components";
 
-const OTPIcon = ({ factor }: { factor: Factor }) => {
+const FactorIcon = ({ factor }: { factor: Factor }) => {
   if (isFactorOTPEmail(factor)) {
     return <EmailIcon />;
   }
@@ -100,7 +100,7 @@ export const OTPState = ({ flowState }: Props) => {
       <BackButton onCancel={() => flowState.cancel()} />
       <Text as="h1" t={title} variant={{ size: "2xl-title", weight: "bold" }} />
       <Text t={message} variant={{ color: "contrast", weight: "semibold" }} />
-      {formState === "initial" && <OTPIcon factor={factor} />}
+      {formState === "initial" && <FactorIcon factor={factor} />}
       {formState === "input" && (
         <form
           onSubmit={registerSubmit(handleSubmit)}
