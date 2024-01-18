@@ -20,7 +20,7 @@ import { useConfiguration } from "../../hooks/use-configuration";
 import { useForm } from "../../hooks/use-form";
 
 import { ErrorMessage } from "../form/error-message";
-import { isValidEmail, isValidPhoneNumber } from "../form/validation";
+import { isValidEmail, isValidPhoneNumber } from "../form/authenticating/validation";
 import { TextConfigKey } from "../text/constants";
 
 import * as styles from "./dynamic-flow.css";

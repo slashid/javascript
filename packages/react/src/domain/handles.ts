@@ -10,14 +10,20 @@ import {
   FactorOTP,
   FactorOTPEmail,
   FactorOTPSms,
+  FactorPassword,
   FactorSSO,
   FactorSmsLink,
   Handle,
   HandleType,
 } from "./types";
 
-const FACTORS_WITH_EMAIL = ["webauthn", "otp_via_email", "email_link"];
-const FACTORS_WITH_PHONE = ["otp_via_sms", "sms_link"];
+const FACTORS_WITH_EMAIL = [
+  "webauthn",
+  "otp_via_email",
+  "email_link",
+  "password",
+];
+const FACTORS_WITH_PHONE = ["otp_via_sms", "sms_link", "password"];
 const SSO_FACTORS = ["oidc", "saml"];
 
 function getHandleType(factor: Factor): HandleType | null {
@@ -65,6 +71,10 @@ export function isFactorOTPSms(factor: Factor): factor is FactorOTPSms {
 
 export function isFactorOTP(factor: Factor): factor is FactorOTP {
   return isFactorOTPEmail(factor) || isFactorOTPSms(factor);
+}
+
+export function isFactorPassword(factor: Factor): factor is FactorPassword {
+  return factor.method === "password";
 }
 
 export function isFactorOidc(factor: Factor): factor is FactorOIDC {
