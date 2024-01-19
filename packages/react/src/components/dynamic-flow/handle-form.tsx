@@ -34,6 +34,7 @@ export const FACTOR_LABEL_MAP: Record<
   otp_via_email: "factor.otpViaEmail",
   sms_link: "factor.smsLink",
   webauthn: "factor.webauthn",
+  password: "factor.password",
   oidc: "",
   saml: "",
 };
