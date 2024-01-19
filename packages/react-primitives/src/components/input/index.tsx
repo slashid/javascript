@@ -11,7 +11,7 @@ type BaseProps = {
   label: string;
   placeholder?: string;
   className?: string;
-  type?: "text" | "email" | "tel";
+  type?: "text" | "email" | "tel" | "password";
   value: string;
   onChange: ChangeEventHandler<HTMLInputElement>;
 };
@@ -51,7 +51,7 @@ const BaseInput: React.FC<BaseProps> = ({
 };
 
 type InputProps = BaseProps & {
-  type?: "text" | "email";
+  type?: "text" | "email" | "password";
 };
 
 export const Input: React.FC<InputProps> = ({

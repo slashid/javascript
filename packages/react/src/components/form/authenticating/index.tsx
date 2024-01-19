@@ -7,7 +7,6 @@ import {
   isFactorSmsLink,
 } from "../../../domain/handles";
 import { Text } from "../../text";
-import { AuthenticatingState } from "./../flow";
 
 import { EmailIcon, SmsIcon, Loader } from "./icons";
 import { getAuthenticatingMessage } from "./messages";
@@ -30,7 +29,7 @@ const FactorIcon = ({ factor }: { factor: Factor }) => {
   return <Loader />;
 };
 
-const AuthenticatingState = ({ flowState }: Props) => {
+const LoadingState = ({ flowState }: Props) => {
   const factor = flowState.context.config.factor;
   const { title, message } = getAuthenticatingMessage(factor);
 
@@ -78,7 +77,7 @@ export const Authenticating = ({ flowState }: Props) => {
 
   return (
     <Wrapper>
-      <AuthenticatingState flowState={flowState} />
+      <LoadingState flowState={flowState} />
     </Wrapper>
   );
 };

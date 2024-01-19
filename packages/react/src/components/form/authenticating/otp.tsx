@@ -35,7 +35,10 @@ const FactorIcon = ({ factor }: { factor: Factor }) => {
   return <Loader />;
 };
 
-// special case handling for OTPs - exists, needs to be refactored
+/**
+ * Presents the user with a form to enter an OTP code.
+ * Handles retries in case of submitting an incorrect OTP code.
+ */
 export const OTPState = ({ flowState }: Props) => {
   const { text } = useConfiguration();
   const { sid } = useSlashID();

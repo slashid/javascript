@@ -103,6 +103,7 @@ const inputHostBase = style({
 export const inputHost = styleVariants({
   text: [inputHostBase, {}],
   email: [inputHostBase, {}],
+  password: [inputHostBase, {}],
   tel: [
     inputHostBase,
     {

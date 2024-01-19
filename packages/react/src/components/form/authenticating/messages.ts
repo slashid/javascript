@@ -1,6 +1,7 @@
 import { Factor } from "@slashid/slashid";
 import { TextConfigKey } from "../../text/constants";
 
+// TODO add case for password
 export function getAuthenticatingMessage(
   factor: Factor,
   isSubmitting = false
