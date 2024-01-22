@@ -17,6 +17,7 @@ import { sprinkles } from "../../../../../react-primitives/src/theme/sprinkles.c
 import { LinkButton } from "../../../../../react-primitives/src/components/button/link-button";
 import { AuthenticatingState } from "../flow";
 import { HandleType } from "../../../domain/types";
+import { InvalidPasswordSubmittedEvent } from "@slashid/slashid";
 
 const PasswordRecoveryPrompt = ({
   onRecoverClick,
@@ -119,6 +120,11 @@ function getTextKeys(
   return TEXT_KEYS[formState];
 }
 
+function getValidationMessage(errorEvent: InvalidPasswordSubmittedEvent) {
+  // TODO each individual message needs a text entry
+  return errorEvent.failedRules.map((rule) => rule.name).join(", ");
+}
+
 /**
  * Renders a form that enables authentication via a password.
  * Handles retries in case of submitting an invalid/incorrect password.
@@ -126,7 +132,8 @@ function getTextKeys(
 export const PasswordState = ({ flowState }: Props) => {
   const { sid } = useSlashID();
   const { text } = useConfiguration();
-  const { values, registerField, registerSubmit } = useForm();
+  const { values, registerField, setError, clearError, registerSubmit } =
+    useForm();
   const [formState, setFormState] = useState<FormState>("initial");
 
   // TODO handle needs to be verified in case of registration
@@ -169,8 +176,9 @@ export const PasswordState = ({ flowState }: Props) => {
       const onChange = registerField("passwordConfirm", {});
 
       onChange(event);
+      clearError("password");
     },
-    [registerField]
+    [clearError, registerField]
   );
 
   const handleRecovery = useCallback(async () => {
@@ -188,15 +196,30 @@ export const PasswordState = ({ flowState }: Props) => {
   useEffect(() => {
     const onSetPassword = () => setFormState("setPassword");
     const onVerifyPassword = () => setFormState("verifyPassword");
+    const onIncorrectPassword = () =>
+      setError("password", {
+        message: text["authenticating.setPassword.validation.incorrect"],
+      });
+    const onInvalidPassword = (
+      invalidPasswordEvent: InvalidPasswordSubmittedEvent
+    ) =>
+      setError("password", {
+        message:
+          text["authenticating.setPassword.validation.invalid"] +
+          " " +
+          getValidationMessage(invalidPasswordEvent),
+      });
 
     sid?.subscribe("passwordSetReady", onSetPassword);
     sid?.subscribe("passwordVerifyReady", onVerifyPassword);
+    sid?.subscribe("incorrectPasswordSubmitted", onIncorrectPassword);
+    sid?.subscribe("invalidPasswordSubmitted", onInvalidPassword);
 
     return () => {
       sid?.unsubscribe("passwordSetReady", onSetPassword);
       sid?.unsubscribe("passwordVerifyReady", onVerifyPassword);
     };
-  }, [sid]);
+  }, [setError, sid, text]);
 
   return (
     <>
@@ -211,6 +234,7 @@ export const PasswordState = ({ flowState }: Props) => {
       {(formState === "setPassword" || formState === "verifyPassword") && (
         <form onSubmit={registerSubmit(handleSubmit)}>
           <div className={styles.formInputs}>
+            {/* TODO add an error state to the input (change border color) */}
             <Input
               id="password-input"
               label={text["authenticating.password.label"]}

@@ -26,10 +26,15 @@ type RegisterSubmitFn = (
   onSubmit: React.FormEventHandler<HTMLFormElement>
 ) => React.FormEventHandler<HTMLFormElement>;
 
+type SetErrorFn = (fieldName: string, error: ValidationError) => void;
+type ClearErrorFn = (fieldName: string) => void;
+
 export interface IFormContext {
   registerField: RegisterFieldFn;
   registerSubmit: RegisterSubmitFn;
   resetForm: () => void;
+  setError: SetErrorFn;
+  clearError: ClearErrorFn;
   values: Record<string, string>;
   errors: Record<string, ValidationError>;
   status: FormStatus;
@@ -45,6 +50,8 @@ const initialContextValues: IFormContext = {
   resetForm: () => {
     return null;
   },
+  setError: () => null,
+  clearError: () => null,
   values: {},
   errors: {},
   status: "valid",
@@ -132,16 +139,40 @@ export const FormProvider = ({ children }: FormProviderProps) => {
     registeredFields.current = {};
   }, [setValues, setErrors, setStatus]);
 
+  // used to set errors from the outside
+  const setError = useCallback<SetErrorFn>((fieldName, error) => {
+    setErrors((e) => ({ ...e, [fieldName]: error }));
+  }, []);
+
+  const clearError = useCallback<ClearErrorFn>((fieldName) => {
+    setErrors((e) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { [fieldName]: _, ...rest } = { ...e };
+      return rest;
+    });
+  }, []);
+
   const value = useMemo<IFormContext>(
     () => ({
       registerField,
       registerSubmit,
       resetForm,
+      setError,
+      clearError,
       values,
       status,
       errors,
     }),
-    [registerField, registerSubmit, status, values, errors, resetForm]
+    [
+      registerField,
+      registerSubmit,
+      resetForm,
+      setError,
+      clearError,
+      values,
+      status,
+      errors,
+    ]
   );
 
   return <FormContext.Provider value={value}>{children}</FormContext.Provider>;

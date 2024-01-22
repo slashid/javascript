@@ -28,6 +28,9 @@ export const TEXT = {
     "If you are using a password for the first time, you will receive a message to verify your phone number.",
   "authenticating.setPassword.title": "Create your password",
   "authenticating.setPassword.message": "Define a secure password to sign up.",
+  "authenticating.setPassword.validation.incorrect":
+    "Incorrect handle or password",
+  "authenticating.setPassword.validation.invalid": "Invalid password",
   "authenticating.verifyPassword.title": "Enter your password",
   "authenticating.verifyPassword.message": "Type your password to sign in.",
   "authenticating.verifyPassword.recover.prompt": "Forgot password?",
