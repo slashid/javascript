@@ -22,8 +22,10 @@ export const TEXT = {
   "authenticating.retry": "Resend",
   "authenticating.back": "Back",
   "authenticating.initial.password.title": "Log in with a password.",
-  "authenticating.initial.password.message":
+  "authenticating.initial.password.message.email":
     "If you are using a password for the first time, you will receive an email to verify your email address.",
+  "authenticating.initial.password.message.phone":
+    "If you are using a password for the first time, you will receive a message to verify your phone number.",
   "authenticating.setPassword.title": "Create your password",
   "authenticating.setPassword.message": "Define a secure password to sign up.",
   "authenticating.verifyPassword.title": "Enter your password",

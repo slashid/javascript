@@ -88,7 +88,10 @@ function getTextKeys(
   > = {
     initial: {
       title: "authenticating.initial.password.title",
-      message: "authenticating.initial.password.message",
+      message:
+        flowState.context.config.handle?.type === "email_address"
+          ? "authenticating.initial.password.message.email"
+          : "authenticating.initial.password.message.phone",
     },
     setPassword: {
       title: "authenticating.setPassword.title",
