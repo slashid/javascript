@@ -1,4 +1,4 @@
-import { Factor, SlashID, User } from "@slashid/slashid";
+import { Factor, RecoverableFactor, SlashID, User } from "@slashid/slashid";
 import { ReactNode } from "react";
 
 const handleTypes = ["email_address", "phone_number"] as const;
@@ -92,6 +92,14 @@ export type LogIn = (
 
 export type MFA = (
   config: LoginConfiguration,
+  options?: LoginOptions
+) => Promise<User | undefined>;
+
+export type Recover = (
+  config: {
+    handle: Handle;
+    factor: RecoverableFactor;
+  },
   options?: LoginOptions
 ) => Promise<User | undefined>;
 

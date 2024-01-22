@@ -15,8 +15,9 @@ import {
   MemoryStorage,
   CookieStorage,
 } from "@slashid/react-primitives";
-import { LogIn, MFA } from "../domain/types";
+import { LogIn, MFA, Recover } from "../domain/types";
 import { SDKState } from "../domain/sdk-state";
+import { applyMiddleware } from "../middleware";
 
 export type StorageOption = "memory" | "localStorage" | "cookie";
 
@@ -38,6 +39,7 @@ export interface ISlashIDContext {
   logOut: () => undefined;
   logIn: LogIn;
   mfa: MFA;
+  recover: Recover;
   validateToken: (token: string) => Promise<boolean>;
   __switchOrganizationInContext: ({ oid }: { oid: string }) => Promise<void>;
 }
@@ -49,6 +51,7 @@ export const initialContextValue = {
   logOut: () => undefined,
   logIn: () => Promise.reject("NYI"),
   mfa: () => Promise.reject("NYI"),
+  recover: () => Promise.reject("NYI"),
   validateToken: async () => false,
   __switchOrganizationInContext: async () => undefined,
 };
@@ -177,15 +180,7 @@ export const SlashIDProvider = ({
           // @ts-expect-error TODO make the identifier optional
           .id(oid, identifier, factor)
           .then(async (user) => {
-            if (middleware === undefined) return user;
-
-            const middlewares = Array.isArray(middleware)
-              ? middleware
-              : [middleware];
-
-            return middlewares.reduce((previous, next) => {
-              return previous.then((user) => next({ user, sid }));
-            }, Promise.resolve(user));
+            return applyMiddleware({ user, sid, middleware });
           });
 
         storeUser(user);
@@ -208,6 +203,26 @@ export const SlashIDProvider = ({
       return user;
     },
     [user, state]
+  );
+
+  /**
+   * Recover a user account based on a handle and a given recoverable factor.
+   */
+  const recover = useCallback<Recover>(
+    async ({ factor, handle }, { middleware } = {}) => {
+      if (state !== "ready" || !sidRef.current) return;
+
+      const user = await sidRef.current?.recover({ factor, handle });
+
+      const userWithMiddleware = applyMiddleware({
+        user,
+        sid: sidRef.current,
+        middleware,
+      });
+
+      return userWithMiddleware;
+    },
+    [state]
   );
 
   const validateToken = useCallback(async (token: string): Promise<boolean> => {
@@ -305,6 +320,7 @@ export const SlashIDProvider = ({
         logOut,
         logIn,
         mfa,
+        recover,
         validateToken,
         __switchOrganizationInContext,
       };
@@ -317,16 +333,18 @@ export const SlashIDProvider = ({
       logOut,
       logIn,
       mfa,
+      recover,
       validateToken,
       __switchOrganizationInContext,
     };
   }, [
-    logIn,
-    logOut,
-    user,
-    validateToken,
     state,
+    user,
+    logOut,
+    logIn,
     mfa,
+    recover,
+    validateToken,
     __switchOrganizationInContext,
   ]);
 

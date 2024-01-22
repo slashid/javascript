@@ -10,11 +10,8 @@ Internal package with UI primitives for React.
 ## Setup
 
 This package is only available in the `slashid/javascript` monorepo as an internal package. It is not published to npm.
-To install it, add it to the relevant `package.json`:
 
-```
-"@slashid/react-primitives": "workspace:*"
-```
+There is no need to install it separately - you can import it from this directory directly. The consuming package is responsible for building the project.
 
 ## Build
 

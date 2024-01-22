@@ -7,7 +7,7 @@ import { ErrorMessage } from "../error-message";
 import { Text } from "../../text";
 
 import * as styles from "./authenticating.css";
-import { Loader } from "./icons";
+import { EmailIcon, Loader, SmsIcon } from "./icons";
 import { BackButton } from "./authenticating.components";
 import { Input } from "../../../../../react-primitives/src/components/input";
 import { Button } from "../../../../../react-primitives/src/components/button";
@@ -15,9 +15,17 @@ import { TextConfigKey } from "../../text/constants";
 import { useConfiguration } from "../../../hooks/use-configuration";
 import { sprinkles } from "../../../../../react-primitives/src/theme/sprinkles.css";
 import { LinkButton } from "../../../../../react-primitives/src/components/button/link-button";
+import { AuthenticatingState } from "../flow";
+import { RecoverableFactor } from "@slashid/slashid";
+import { HandleType } from "../../../domain/types";
 
-const PasswordRecoveryPrompt = () => {
+const PasswordRecoveryPrompt = ({
+  onRecoverClick,
+}: {
+  onRecoverClick: () => void;
+}) => {
   const { text } = useConfiguration();
+
   return (
     <div className={styles.passwordRecoveryPrompt}>
       <Text
@@ -28,9 +36,7 @@ const PasswordRecoveryPrompt = () => {
         className={sprinkles({ marginLeft: "1" })}
         type="button"
         testId="sid-form-authenticating-retry-button"
-        onClick={() => {
-          console.log("TODO enter the recovery flow");
-        }}
+        onClick={onRecoverClick}
       >
         {text["authenticating.verifyPassword.recover.cta"]}
       </LinkButton>
@@ -38,9 +44,41 @@ const PasswordRecoveryPrompt = () => {
   );
 };
 
-type FormState = "initial" | "setPassword" | "verifyPassword" | "submitting";
+const ProgressIndicator = ({
+  formState,
+  handleType,
+}: {
+  formState: FormState;
+  handleType?: HandleType;
+}) => {
+  if (formState === "submitting") {
+    return <Loader />;
+  }
 
-function getTextKeys(formState: FormState): {
+  if (formState === "recoverPassword") {
+    if (handleType === "email_address") {
+      return <EmailIcon />;
+    }
+
+    if (handleType === "phone_number") {
+      return <SmsIcon />;
+    }
+  }
+
+  return null;
+};
+
+type FormState =
+  | "initial"
+  | "setPassword"
+  | "verifyPassword"
+  | "recoverPassword"
+  | "submitting";
+
+function getTextKeys(
+  formState: FormState,
+  flowState: AuthenticatingState
+): {
   title: TextConfigKey;
   message: TextConfigKey;
 } {
@@ -60,6 +98,16 @@ function getTextKeys(formState: FormState): {
       title: "authenticating.verifyPassword.title",
       message: "authenticating.verifyPassword.message",
     },
+    recoverPassword:
+      flowState.context.config.handle?.type === "email_address"
+        ? {
+            title: "authenticating.recoverPassword.title.email",
+            message: "authenticating.recoverPassword.message.email",
+          }
+        : {
+            title: "authenticating.recoverPassword.title.phone",
+            message: "authenticating.recoverPassword.message.phone",
+          },
     submitting: {
       title: "authenticating.submitting.password.title",
       message: "authenticating.submitting.password.message",
@@ -82,7 +130,18 @@ export const PasswordState = ({ flowState }: Props) => {
   // TODO handle needs to be verified in case of registration
   // render the correct message in that case (e.g. "Please verify your email address")
 
-  const { title, message } = getTextKeys(formState);
+  const { title, message } = getTextKeys(formState, flowState);
+  const interpolationTokens =
+    formState === "recoverPassword"
+      ? {
+          ...(flowState.context.config.handle?.type === "email_address" && {
+            EMAIL_ADDRESS: flowState.context.config.handle.value,
+          }),
+          ...(flowState.context.config.handle?.type === "phone_number" && {
+            PHONE_NUMBER: flowState.context.config.handle.value,
+          }),
+        }
+      : undefined;
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = useCallback(
     (e) => {
@@ -112,6 +171,24 @@ export const PasswordState = ({ flowState }: Props) => {
     [registerField]
   );
 
+  const handleRecovery = useCallback(async () => {
+    if (!sid || formState !== "verifyPassword") return;
+
+    const factorToRecover: RecoverableFactor = { method: "password" };
+
+    setFormState("recoverPassword");
+
+    await sid.recover({
+      // handle is present in the password flow
+      handle: flowState.context.config.handle!,
+      factor: factorToRecover,
+    });
+
+    // TODO update the flowState with a proper method to recover
+    // maybe orchestrate the flowState from the outside
+    // needs to go to the flow as this goes to the error state too when something bad happens
+  }, [flowState.context.config.handle, formState, sid]);
+
   useEffect(() => {
     const onSetPassword = () => setFormState("setPassword");
     const onVerifyPassword = () => setFormState("verifyPassword");
@@ -131,7 +208,11 @@ export const PasswordState = ({ flowState }: Props) => {
     <>
       <BackButton onCancel={() => flowState.cancel()} />
       <Text as="h1" t={title} variant={{ size: "2xl-title", weight: "bold" }} />
-      <Text t={message} variant={{ color: "contrast", weight: "semibold" }} />
+      <Text
+        t={message}
+        variant={{ color: "contrast", weight: "semibold" }}
+        tokens={interpolationTokens}
+      />
       {formState === "initial" && <Loader />}
       {(formState === "setPassword" || formState === "verifyPassword") && (
         <form onSubmit={registerSubmit(handleSubmit)}>
@@ -145,7 +226,9 @@ export const PasswordState = ({ flowState }: Props) => {
               value={values["password"] ?? ""}
               onChange={handleChange}
             />
-            {formState === "verifyPassword" && <PasswordRecoveryPrompt />}
+            {formState === "verifyPassword" && (
+              <PasswordRecoveryPrompt onRecoverClick={handleRecovery} />
+            )}
             {formState === "setPassword" && (
               <Input
                 id="password-input-confirm"
@@ -176,7 +259,10 @@ export const PasswordState = ({ flowState }: Props) => {
           </Button>
         </form>
       )}
-      {formState === "submitting" ? <Loader /> : null}
+      <ProgressIndicator
+        formState={formState}
+        handleType={flowState.context.config.handle?.type}
+      />
     </>
   );
 };

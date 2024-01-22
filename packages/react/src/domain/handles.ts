@@ -26,16 +26,19 @@ const FACTORS_WITH_EMAIL = [
 const FACTORS_WITH_PHONE = ["otp_via_sms", "sms_link", "password"];
 const SSO_FACTORS = ["oidc", "saml"];
 
-function getHandleType(factor: Factor): HandleType | null {
+// TODO this does not work for factors that can be used with multiple handle types (like passwords)
+function getPossibleHandleTypes(factor: Factor): Set<HandleType> {
+  const handleTypes = new Set<HandleType>();
+
   if (FACTORS_WITH_EMAIL.includes(factor.method)) {
-    return "email_address";
+    handleTypes.add("email_address");
   }
 
   if (FACTORS_WITH_PHONE.includes(factor.method)) {
-    return "phone_number";
+    handleTypes.add("phone_number");
   }
 
-  return null;
+  return handleTypes;
 }
 
 /**
@@ -45,10 +48,9 @@ export function getHandleTypes(factors: Factor[]): HandleType[] {
   const handleTypes = new Set<HandleType>();
 
   factors.forEach((f) => {
-    const handleType = getHandleType(f);
-    if (handleType) {
-      handleTypes.add(handleType);
-    }
+    getPossibleHandleTypes(f).forEach((handleType) =>
+      handleTypes.add(handleType)
+    );
   });
 
   return Array.from(handleTypes);
@@ -58,7 +60,9 @@ export function getHandleTypes(factors: Factor[]): HandleType[] {
  * Returns the auth methods that require the provided handle type
  */
 export function filterFactors(factors: Factor[], handleType: HandleType) {
-  return factors.filter((f) => getHandleType(f) === handleType);
+  return factors.filter((factor) =>
+    getHandleTypes([factor]).includes(handleType)
+  );
 }
 
 export function isFactorOTPEmail(factor: Factor): factor is FactorOTPEmail {

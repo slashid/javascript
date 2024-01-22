@@ -30,6 +30,12 @@ export const TEXT = {
   "authenticating.verifyPassword.message": "Type your password to sign in.",
   "authenticating.verifyPassword.recover.prompt": "Forgot password?",
   "authenticating.verifyPassword.recover.cta": "Reset",
+  "authenticating.recoverPassword.title.email": "Check your email",
+  "authenticating.recoverPassword.message.email":
+    "We have sent an email to {{EMAIL_ADDRESS}} with instructions for resetting your password. This email can take a few minutes to arrive, make sure to check your spam.",
+  "authenticating.recoverPassword.title.phone": "Check your phone",
+  "authenticating.recoverPassword.message.phone":
+    "We have sent a message to {{PHONE_NUMBER}} with instructions for resetting your password. This email can take a few minutes to arrive, make sure to check your spam.",
   "authenticating.password.submit": "Continue",
   "authenticating.submitting.password.title": "Logging you in...",
   "authenticating.submitting.password.message": "This may take some time.",
