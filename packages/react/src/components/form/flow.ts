@@ -6,8 +6,10 @@ import {
   Retry,
   MFA,
   LoginOptions,
+  Recover,
 } from "../../domain/types";
 import { ensureError } from "../../domain/errors";
+import { isFactorRecoverable } from "../../domain/handles";
 
 export interface InitialState {
   status: "initial";
@@ -23,6 +25,7 @@ export interface AuthenticatingState {
   };
   retry: Retry;
   cancel: Cancel;
+  recover: () => void;
   entry: () => void;
 }
 
@@ -55,6 +58,16 @@ interface LoginErrorEvent {
   error: Error;
 }
 
+interface RecoverSuccessEvent {
+  type: "sid_recover.success";
+  user: User;
+}
+
+interface RecoverErrorEvent {
+  type: "sid_recover.error";
+  error: Error;
+}
+
 interface CancelEvent {
   type: "sid_cancel";
 }
@@ -73,6 +86,8 @@ type Event =
   | LoginEvent
   | LoginSuccessEvent
   | LoginErrorEvent
+  | RecoverSuccessEvent
+  | RecoverErrorEvent
   | RetryEvent
   | CancelEvent;
 
@@ -99,7 +114,8 @@ const createInitialState = (send: Send): InitialState => {
 const createAuthenticatingState = (
   send: Send,
   context: AuthenticatingState["context"],
-  logInFn: LogIn | MFA
+  logInFn: LogIn | MFA,
+  recoverFn: Recover
 ): AuthenticatingState => {
   // to be called when the state is entered
   function performLogin() {
@@ -119,6 +135,31 @@ const createAuthenticatingState = (
       });
   }
 
+  async function recover() {
+    if (!isFactorRecoverable(context.config.factor) || !context.config.handle)
+      // TODO check if this needs more details
+      return undefined;
+
+    try {
+      const user = await recoverFn(
+        { factor: context.config.factor, handle: context.config.handle },
+        context.options
+      );
+
+      if (user) {
+        send({ type: "sid_recover.success", user });
+      } else {
+        send({
+          type: "sid_recover.error",
+          error: new Error("Unable to recover the /id user account"),
+        });
+      }
+    } catch (error) {
+      console.log("Recover error caught", { error });
+      send({ type: "sid_recover.error", error: ensureError(error) });
+    }
+  }
+
   return {
     status: "authenticating",
     context: {
@@ -129,6 +170,7 @@ const createAuthenticatingState = (
     retry: () => {
       send({ type: "sid_retry", context });
     },
+    recover,
     cancel: () => {
       // Cancellation API needs to be exposed from the core SDK
       send({ type: "sid_cancel" });
@@ -186,6 +228,7 @@ type HistoryEntry = {
  */
 export function createFlow(opts: CreateFlowOptions = {}) {
   let logInFn: undefined | LogIn | MFA = undefined;
+  let recoverFn: undefined | Recover = undefined;
   let observers: Observer[] = [];
   const send = (event: Event) => {
     transition(event);
@@ -216,7 +259,7 @@ export function createFlow(opts: CreateFlowOptions = {}) {
     switch (e.type) {
       case "sid_login":
         // TODO replace with a check for ready state
-        if (!logInFn) break;
+        if (!logInFn || !recoverFn) break;
 
         const loginContext: AuthenticatingState["context"] = {
           config: e.config,
@@ -224,9 +267,13 @@ export function createFlow(opts: CreateFlowOptions = {}) {
           attempt: 1,
         };
 
-        setState(createAuthenticatingState(send, loginContext, logInFn), e);
+        setState(
+          createAuthenticatingState(send, loginContext, logInFn, recoverFn),
+          e
+        );
         break;
       case "sid_login.success":
+      case "sid_recover.success":
         // call onSuccess if present
         if (typeof onSuccess === "function") {
           onSuccess(e.user);
@@ -235,6 +282,7 @@ export function createFlow(opts: CreateFlowOptions = {}) {
         setState(createSuccessState(), e);
         break;
       case "sid_login.error":
+      case "sid_recover.error":
         if (state.status !== "authenticating") break;
 
         const errorContext: ErrorState["context"] = {
@@ -251,7 +299,7 @@ export function createFlow(opts: CreateFlowOptions = {}) {
         break;
       case "sid_retry":
         // TODO replace with a check for ready state
-        if (!logInFn) break;
+        if (!logInFn || !recoverFn) break;
 
         const retryContext: AuthenticatingState["context"] = {
           config: e.context.config,
@@ -259,7 +307,10 @@ export function createFlow(opts: CreateFlowOptions = {}) {
           attempt: e.context.attempt + 1,
         };
 
-        setState(createAuthenticatingState(send, retryContext, logInFn), e);
+        setState(
+          createAuthenticatingState(send, retryContext, logInFn, recoverFn),
+          e
+        );
         break;
       case "sid_cancel":
         setState(createInitialState(send), e);
@@ -278,9 +329,12 @@ export function createFlow(opts: CreateFlowOptions = {}) {
     subscribe: (observer: Observer) => {
       observers.push(observer);
     },
-    // SDK is instantiated asynchronously, so we need to set the logIn function when it is ready
+    // SDK is instantiated asynchronously, so we need to set the logIn and recover functions when it is ready
     setLogIn: (fn: LogIn | MFA) => {
       logInFn = fn;
+    },
+    setRecover: (fn: Recover) => {
+      recoverFn = fn;
     },
     state,
   };

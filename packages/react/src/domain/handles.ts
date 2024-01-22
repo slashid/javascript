@@ -1,4 +1,4 @@
-import { Factor } from "@slashid/slashid";
+import { Factor, RecoverableFactor } from "@slashid/slashid";
 import {
   findFlagByDialCode,
   getList,
@@ -75,6 +75,13 @@ export function isFactorOTPSms(factor: Factor): factor is FactorOTPSms {
 
 export function isFactorOTP(factor: Factor): factor is FactorOTP {
   return isFactorOTPEmail(factor) || isFactorOTPSms(factor);
+}
+
+export function isFactorRecoverable(
+  factor: Factor
+): factor is RecoverableFactor {
+  // TODO check if this can be exposed from the core SDK or a better check can be made
+  return isFactorPassword(factor);
 }
 
 export function isFactorPassword(factor: Factor): factor is FactorPassword {

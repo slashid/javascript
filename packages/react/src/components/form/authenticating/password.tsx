@@ -16,7 +16,6 @@ import { useConfiguration } from "../../../hooks/use-configuration";
 import { sprinkles } from "../../../../../react-primitives/src/theme/sprinkles.css";
 import { LinkButton } from "../../../../../react-primitives/src/components/button/link-button";
 import { AuthenticatingState } from "../flow";
-import { RecoverableFactor } from "@slashid/slashid";
 import { HandleType } from "../../../domain/types";
 
 const PasswordRecoveryPrompt = ({
@@ -175,37 +174,29 @@ export const PasswordState = ({ flowState }: Props) => {
   );
 
   const handleRecovery = useCallback(async () => {
-    if (!sid || formState !== "verifyPassword") return;
-
-    const factorToRecover: RecoverableFactor = { method: "password" };
+    if (formState !== "verifyPassword") return;
 
     setFormState("recoverPassword");
 
-    await sid.recover({
-      // handle is present in the password flow
-      handle: flowState.context.config.handle!,
-      factor: factorToRecover,
-    });
+    await flowState.recover();
 
     // TODO update the flowState with a proper method to recover
     // maybe orchestrate the flowState from the outside
     // needs to go to the flow as this goes to the error state too when something bad happens
-  }, [flowState.context.config.handle, formState, sid]);
+  }, [flowState, formState]);
 
   useEffect(() => {
     const onSetPassword = () => setFormState("setPassword");
     const onVerifyPassword = () => setFormState("verifyPassword");
 
-    if (formState === "initial") {
-      sid?.subscribe("passwordSetReady", onSetPassword);
-      sid?.subscribe("passwordVerifyReady", onVerifyPassword);
-    }
+    sid?.subscribe("passwordSetReady", onSetPassword);
+    sid?.subscribe("passwordVerifyReady", onVerifyPassword);
 
     return () => {
       sid?.unsubscribe("passwordSetReady", onSetPassword);
       sid?.unsubscribe("passwordVerifyReady", onVerifyPassword);
     };
-  }, [formState, sid]);
+  }, [sid]);
 
   return (
     <>
