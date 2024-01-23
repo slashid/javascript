@@ -20,6 +20,7 @@ const CheckIcon = () => (
   </Circle>
 );
 
+// TODO this view always tells you are logged in, even in cases when you just verify the handle and not have a token
 export function Success() {
   return (
     <article data-testid="sid-form-success-state">
