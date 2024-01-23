@@ -54,8 +54,8 @@ importers:
         specifier: ^7.81.1
         version: 7.81.1(react@18.2.0)
       '@slashid/slashid':
-        specifier: 3.17.1
-        version: 3.17.1
+        specifier: 3.17.4-beta.3
+        version: 3.17.4-beta.3
       '@types/react':
         specifier: ^18.0.21
         version: 18.2.37
@@ -8176,7 +8176,6 @@ packages:
       regenerator-runtime: 0.13.11
       url: 0.11.3
       uuid: 8.3.2
-    dev: true
 
   /@storybook/addon-actions@7.0.0-rc.2(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-e4VXOoeejRnz+yTtPGtenAvrMtwRWO4VRxbGBHDPyMo+FOlQPC6plOrQMZ+lSRaE20J3KfTo6wSLZgnHQUQtRw==}

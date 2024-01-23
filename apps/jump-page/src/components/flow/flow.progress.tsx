@@ -1,9 +1,12 @@
-import { Stack } from "@slashid/react-primitives";
+import { useEffect, useState } from "react";
 import * as Sentry from "@sentry/react";
+import { Stack } from "@slashid/react-primitives";
+
 import { Loader } from "./flow.loader";
+import type { FlowType } from "./flow.types";
 import { Text } from "../text";
-import { useEffect } from "react";
 import { useAppContext } from "../app/app.context";
+import { Recover } from "./flow.recover";
 
 type SlashIDErrorMessage = { message: string };
 class SlashIDError extends Error {
@@ -51,12 +54,14 @@ function ensureError(value: unknown): Error {
 }
 
 export type Props = {
+  flowType: FlowType;
   onSuccess: () => void;
   onError: ({ error }: { error: Error }) => void;
 };
 
-export function Progress({ onSuccess, onError }: Props) {
+export function Progress({ onSuccess, onError, flowType }: Props) {
   const { sdk } = useAppContext();
+
   useEffect(() => {
     if (!sdk) return;
 
@@ -71,8 +76,28 @@ export function Progress({ onSuccess, onError }: Props) {
       }
     }
 
+    function handlePasswordResetEvent() {
+      console.log("Password reset - input ready");
+    }
+
+    if (flowType === "password-recovery") {
+      console.log("Subscribed");
+      sdk.subscribe("passwordResetReady", handlePasswordResetEvent);
+    }
+
     authenticate();
-  }, [onError, onSuccess, sdk]);
+
+    return () => {
+      if (flowType === "password-recovery") {
+        console.log("Cleaned up");
+        sdk.unsubscribe("passwordResetReady", handlePasswordResetEvent);
+      }
+    };
+  }, [flowType, onError, onSuccess, sdk]);
+
+  if (flowType === "password-recovery") {
+    return <Recover />;
+  }
 
   return (
     <>

@@ -40,7 +40,7 @@ export type State =
   | SuccessState
   | ErrorState;
 
-export type FlowType = "catch-all";
+export type FlowType = "catch-all" | "password-recovery";
 
 export type ChallengesInURL = Awaited<
   ReturnType<SlashID["getChallengesFromURL"]>

@@ -10,9 +10,15 @@ import type { ChallengeListInner } from "@slashid/slashid";
 import { Success } from "./flow.success";
 import { ensureError } from "./flow.domain";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function isPasswordRecoveryFlow(challenges: Challenges): boolean {
+  return challenges.some((challenge) => challenge.type === "password_reset");
+}
+
 function getFlowTypeFromChallenges(challenges: Challenges): FlowType {
-  // TODO treat passwords as a special case
+  if (isPasswordRecoveryFlow(challenges)) {
+    return "password-recovery";
+  }
+
   return "catch-all";
 }
 
@@ -77,7 +83,11 @@ export function Flow() {
       {appState === "ready" && (
         <>
           {flowState.state === "progress" && (
-            <Progress onSuccess={handleSuccess} onError={handleError} />
+            <Progress
+              onSuccess={handleSuccess}
+              onError={handleError}
+              flowType={flowState.flowType}
+            />
           )}
           {flowState.state === "no-challenges" && <Error type="warning" />}
           {flowState.state === "success" && <Success />}
