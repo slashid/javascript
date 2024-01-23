@@ -1,7 +1,7 @@
 {
   "name": "@slashid/jump-page",
   "type": "module",
-  "version": "0.0.7-beta.0",
+  "version": "0.0.7-beta.2",
   "private": false,
   "publishConfig": {
     "access": "restricted"
@@ -10,7 +10,7 @@
     "sid-jump-cli": "./cli.js"
   },
   "files": [
-    "src",
+    "dist",
     "package.json",
     "README.md",
     "cli.js",

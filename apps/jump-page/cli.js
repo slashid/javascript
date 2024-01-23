@@ -2,7 +2,7 @@
 
 import { program } from "commander";
 import { createRequire } from "node:module";
-import { build, preview } from "astro";
+import { preview } from "astro";
 
 const require = createRequire(import.meta.url);
 
@@ -27,18 +27,18 @@ program
   .option(
     "-a, --api-url <char>",
     "SlashID API URL",
-    "https://api.sandbox.slashid.com"
+    "https://slashid.local"
   )
   .option(
     "-s, --sdk-url <char>",
     "SlashID SDK URL",
-    "https://cdn.sandbox.slashid.com/sdk.html"
+    "https://jump.slashid.local"
   )
   .action(async (options) => {
     process.env.PUBLIC_SID_SDK_URL = options.sdkUrl;
     process.env.PUBLIC_SID_API_URL = options.apiUrl;
 
-    await build({});
+    // TODO this will build with the default values, not the ones passed in
     await preview({ server: { port: options.port } });
   });
 
