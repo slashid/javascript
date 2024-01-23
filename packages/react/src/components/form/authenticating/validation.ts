@@ -1,3 +1,6 @@
+import { InvalidPasswordSubmittedEvent } from "@slashid/slashid";
+import { TextConfigKey } from "../../text/constants";
+
 type ValidatorFn<T> = (value: T) => boolean;
 
 const EMAIL_REGEX = new RegExp(
@@ -29,3 +32,27 @@ export const isValidOTPCode: ValidatorFn<string> = (value) => {
 
   return true;
 };
+
+// TODO copied from the core SDK - consider exposing from there
+export const PasswordValidationRuleName = {
+  Length: "length",
+  PasswordVariants: "password_variants",
+  AdminVariants: "admin_variants",
+  UserVariants: "user_variants",
+  AlphanumericSequences1: "alphanumeric_sequences_1",
+  AlphanumericSequences2: "alphanumeric_sequences_2",
+  NumericSequencesAscending: "numeric_sequences_ascending",
+  NumericSequencesDescending: "numeric_sequences_descending",
+  NumericSubsequencesAscending: "numeric_subsequences_ascending",
+  NumericSubsequencesDescending: "numeric_subsequences_descending",
+  CommonPasswordXkcd: "common_password_xkcd",
+} as const;
+
+export function getValidationMessageKey(
+  errorEvent: InvalidPasswordSubmittedEvent
+): TextConfigKey {
+  const textKey = `authenticating.setPassword.validation.${errorEvent.failedRules[0].name}`;
+
+  // prefer the first error
+  return textKey as TextConfigKey;
+}

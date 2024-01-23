@@ -18,6 +18,7 @@ import { LinkButton } from "../../../../../react-primitives/src/components/butto
 import { AuthenticatingState } from "../flow";
 import { HandleType } from "../../../domain/types";
 import { InvalidPasswordSubmittedEvent } from "@slashid/slashid";
+import { getValidationMessageKey } from "./validation";
 
 const PasswordRecoveryPrompt = ({
   onRecoverClick,
@@ -120,11 +121,6 @@ function getTextKeys(
   return TEXT_KEYS[formState];
 }
 
-function getValidationMessage(errorEvent: InvalidPasswordSubmittedEvent) {
-  // TODO each individual message needs a text entry
-  return errorEvent.failedRules.map((rule) => rule.name).join(", ");
-}
-
 /**
  * Renders a form that enables authentication via a password.
  * Handles retries in case of submitting an invalid/incorrect password.
@@ -204,10 +200,7 @@ export const PasswordState = ({ flowState }: Props) => {
       invalidPasswordEvent: InvalidPasswordSubmittedEvent
     ) =>
       setError("password", {
-        message:
-          text["authenticating.setPassword.validation.invalid"] +
-          " " +
-          getValidationMessage(invalidPasswordEvent),
+        message: text[getValidationMessageKey(invalidPasswordEvent)],
       });
 
     sid?.subscribe("passwordSetReady", onSetPassword);

@@ -30,7 +30,26 @@ export const TEXT = {
   "authenticating.setPassword.message": "Define a secure password to sign up.",
   "authenticating.setPassword.validation.incorrect":
     "Incorrect handle or password",
-  "authenticating.setPassword.validation.invalid": "Invalid password",
+  "authenticating.setPassword.validation.length": "Password is too short",
+  "authenticating.setPassword.validation.password_variants":
+    "Contains word 'password'",
+  "authenticating.setPassword.validation.admin_variants":
+    "Contains word 'admin'",
+  "authenticating.setPassword.validation.user_variants": "Contains word 'user'",
+  "authenticating.setPassword.validation.alphanumeric_sequences_1":
+    "Sequence of alphanumeric characters",
+  "authenticating.setPassword.validation.alphanumeric_sequences_2":
+    "Sequence of alphanumeric characters",
+  "authenticating.setPassword.validation.numeric_sequences_ascending":
+    "Sequence of alphanumeric characters",
+  "authenticating.setPassword.validation.numeric_subsequences_ascending":
+    "Sequence of alphanumeric characters",
+  "authenticating.setPassword.validation.numeric_sequences_descending":
+    "Sequence of alphanumeric characters",
+  "authenticating.setPassword.validation.numeric_subsequences_descending":
+    "Sequence of alphanumeric characters",
+  "authenticating.setPassword.validation.common_password_xkcd":
+    "Common password",
   "authenticating.verifyPassword.title": "Enter your password",
   "authenticating.verifyPassword.message": "Type your password to sign in.",
   "authenticating.verifyPassword.recover.prompt": "Forgot password?",
