@@ -179,16 +179,11 @@ export const PasswordState = ({ flowState }: Props) => {
     [clearError, registerField]
   );
 
-  const handleRecovery = useCallback(async () => {
+  const handleRecovery = useCallback(() => {
     if (formState !== "verifyPassword") return;
 
     setFormState("recoverPassword");
-
-    await flowState.recover();
-
-    // TODO update the flowState with a proper method to recover
-    // maybe orchestrate the flowState from the outside
-    // needs to go to the flow as this goes to the error state too when something bad happens
+    flowState.recover();
   }, [flowState, formState]);
 
   useEffect(() => {
@@ -213,6 +208,8 @@ export const PasswordState = ({ flowState }: Props) => {
     return () => {
       sid?.unsubscribe("passwordSetReady", onSetPassword);
       sid?.unsubscribe("passwordVerifyReady", onVerifyPassword);
+      sid?.unsubscribe("incorrectPasswordSubmitted", onIncorrectPassword);
+      sid?.unsubscribe("invalidPasswordSubmitted", onInvalidPassword);
     };
   }, [setError, sid, text]);
 
@@ -254,7 +251,6 @@ export const PasswordState = ({ flowState }: Props) => {
                 className={sprinkles({ marginTop: "4" })}
               />
             )}
-            {/* TODO figure out how to display errors based on useForm */}
             <ErrorMessage name="password" />
           </div>
 

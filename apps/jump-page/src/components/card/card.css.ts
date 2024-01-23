@@ -26,6 +26,7 @@ export const header = style({
 export const footer = style({
   width: "100%",
   textAlign: "center",
+  marginTop: theme.space[8],
 });
 
 export const logo = style({

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import * as Sentry from "@sentry/react";
 import { Stack } from "@slashid/react-primitives";
 
