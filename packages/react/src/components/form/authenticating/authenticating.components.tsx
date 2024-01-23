@@ -1,5 +1,4 @@
-import { LinkButton } from "../../../../../react-primitives/src/components/button/link-button";
-import { sprinkles } from "../../../../../react-primitives/src/theme/sprinkles.css";
+import { LinkButton, sprinkles } from "@slashid/react-primitives";
 import { useConfiguration } from "../../../hooks/use-configuration";
 import { Text } from "../../text";
 

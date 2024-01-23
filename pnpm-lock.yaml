@@ -53,9 +53,6 @@ importers:
       '@sentry/react':
         specifier: ^7.81.1
         version: 7.81.1(react@18.2.0)
-      '@slashid/react-primitives':
-        specifier: workspace:*
-        version: link:../../packages/react-primitives
       '@slashid/slashid':
         specifier: 3.17.1
         version: 3.17.1

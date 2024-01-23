@@ -1,9 +1,4 @@
-import {
-  Email,
-  Chat,
-} from "../../../../../react-primitives/src/components/icon";
-import { Circle } from "../../../../../react-primitives/src/components/spinner/circle";
-import { Spinner } from "../../../../../react-primitives/src/components/spinner/spinner";
+import { Email, Chat, Circle, Spinner } from "@slashid/react-primitives";
 
 export const Loader = () => (
   <Circle>

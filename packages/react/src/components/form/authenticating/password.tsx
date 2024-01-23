@@ -9,12 +9,14 @@ import { Text } from "../../text";
 import * as styles from "./authenticating.css";
 import { EmailIcon, Loader, SmsIcon } from "./icons";
 import { BackButton } from "./authenticating.components";
-import { Input } from "../../../../../react-primitives/src/components/input";
-import { Button } from "../../../../../react-primitives/src/components/button";
+import {
+  Input,
+  Button,
+  LinkButton,
+  sprinkles,
+} from "@slashid/react-primitives";
 import { TextConfigKey } from "../../text/constants";
 import { useConfiguration } from "../../../hooks/use-configuration";
-import { sprinkles } from "../../../../../react-primitives/src/theme/sprinkles.css";
-import { LinkButton } from "../../../../../react-primitives/src/components/button/link-button";
 import { AuthenticatingState } from "../flow";
 import { HandleType } from "../../../domain/types";
 import { InvalidPasswordSubmittedEvent } from "@slashid/slashid";
