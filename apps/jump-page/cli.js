@@ -1,8 +1,14 @@
 #!/usr/bin/env node
 
-import { program } from "commander";
 import { createRequire } from "node:module";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+import { program } from "commander";
 import { preview } from "astro";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const require = createRequire(import.meta.url);
 
@@ -24,11 +30,7 @@ program
     },
     4321
   )
-  .option(
-    "-a, --api-url <char>",
-    "SlashID API URL",
-    "https://slashid.local"
-  )
+  .option("-a, --api-url <char>", "SlashID API URL", "https://slashid.local")
   .option(
     "-s, --sdk-url <char>",
     "SlashID SDK URL",
@@ -38,8 +40,13 @@ program
     process.env.PUBLIC_SID_SDK_URL = options.sdkUrl;
     process.env.PUBLIC_SID_API_URL = options.apiUrl;
 
+    console.log("outdir", path.resolve(__dirname, "dist"));
+
     // TODO this will build with the default values, not the ones passed in
-    await preview({ server: { port: options.port } });
+    await preview({
+      server: { port: options.port },
+      outDir: path.resolve(__dirname, "dist"),
+    });
   });
 
 // Parse the command line arguments
