@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 import { program } from "commander";
-import { exec } from "child_process";
 import { createRequire } from "node:module";
+import { build, preview } from "astro";
 
 const require = createRequire(import.meta.url);
 
@@ -16,7 +16,14 @@ program
 program
   .command("serve")
   .description("Start the development server")
-  .option("-p, --port <number>", "Port to use for the development server", 4321)
+  .option(
+    "-p, --port <number>",
+    "Port to use for the development server",
+    (value) => {
+      return parseInt(value);
+    },
+    4321
+  )
   .option(
     "-a, --api-url <char>",
     "SlashID API URL",
@@ -27,22 +34,12 @@ program
     "SlashID SDK URL",
     "https://cdn.sandbox.slashid.com/sdk.html"
   )
-  .action((options) => {
-    const command = `PUBLIC_SID_SDK_URL=${options.sdkUrl} PUBLIC_SID_API_URL=${options.apiUrl} npm run dev`;
+  .action(async (options) => {
+    process.env.PUBLIC_SID_SDK_URL = options.sdkUrl;
+    process.env.PUBLIC_SID_API_URL = options.apiUrl;
 
-    // Set the required env variables and execute the "dev" script defined in package.json
-    const childProcess = exec(command);
-
-    childProcess.stdout.pipe(process.stdout);
-    childProcess.stderr.pipe(process.stderr);
-
-    childProcess.on("error", (error) => {
-      console.error(`Error: ${error.message}`);
-    });
-
-    childProcess.on("close", (code) => {
-      console.log(`Child process exited with code ${code}`);
-    });
+    await build({});
+    await preview({ server: { port: options.port } });
   });
 
 // Parse the command line arguments

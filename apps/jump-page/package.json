@@ -1,7 +1,7 @@
 {
   "name": "@slashid/jump-page",
   "type": "module",
-  "version": "0.0.6",
+  "version": "0.0.7-beta.0",
   "private": false,
   "publishConfig": {
     "access": "restricted"
@@ -9,6 +9,14 @@
   "bin": {
     "sid-jump-cli": "./cli.js"
   },
+  "files": [
+    "src",
+    "package.json",
+    "README.md",
+    "cli.js",
+    "astro.config.mjs",
+    "tsconfig.json"
+  ],
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
