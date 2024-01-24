@@ -8,7 +8,8 @@ import {
   useRef,
   useState,
 } from "react";
-import * as styles from "./otp-input.css";
+
+import * as styles from "./input.otp.css";
 
 type Props = {
   /** Callback to be called when the OTP value changes */
