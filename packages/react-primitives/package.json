@@ -1,9 +1,9 @@
 {
   "name": "@slashid/react-primitives",
-  "version": "0.1.4",
-  "private": true,
+  "version": "0.1.4-beta.0",
+  "private": false,
   "publishConfig": {
-    "access": "restricted"
+    "access": "public"
   },
   "repository": {
     "type": "git",
@@ -22,23 +22,38 @@
     "jwt"
   ],
   "type": "module",
-  "types": "src/main.ts",
+  "types": "dist/main.ts",
   "main": "src/main.ts",
   "module": "src/main.ts",
   "exports": {
-    ".": "./src/main.ts"
+    ".": {
+      "import": {
+        "types": "./dist/main.d.ts",
+        "default": "./src/main.ts"
+      },
+      "require": {
+        "types": "./dist/main.d.ts",
+        "default": "./src/main.ts"
+      }
+    }
   },
   "sideEffects": [
     "./src/components/theme-root/theme.css.ts"
   ],
   "files": [
+    "src/*",
     "dist/*",
-    "src/*"
+    "README.md",
+    "tsconfig.json",
+    "tsconfig.node.json",
+    "vite.config.ts",
+    "vitest.config.ts",
+    "index.html"
   ],
   "scripts": {
     "dev": "vite",
     "dev:storybook": "storybook dev -p 6006",
-    "build": "vite build && tsc",
+    "build": "tsc",
     "build:storybook": "storybook build",
     "lint": "eslint ./src",
     "test:types": "tsc --noEmit --emitDeclarationOnly false",

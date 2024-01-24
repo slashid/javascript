@@ -26,7 +26,6 @@ const FACTORS_WITH_EMAIL = [
 const FACTORS_WITH_PHONE = ["otp_via_sms", "sms_link", "password"];
 const SSO_FACTORS = ["oidc", "saml"];
 
-// TODO this does not work for factors that can be used with multiple handle types (like passwords)
 function getPossibleHandleTypes(factor: Factor): Set<HandleType> {
   const handleTypes = new Set<HandleType>();
 

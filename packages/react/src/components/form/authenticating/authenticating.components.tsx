@@ -1,7 +1,10 @@
-import { LinkButton } from "../../../../../react-primitives/src/components/button/link-button";
-import { sprinkles } from "../../../../../react-primitives/src/theme/sprinkles.css";
+import { Factor } from "@slashid/slashid";
+import { LinkButton, sprinkles } from "@slashid/react-primitives";
+
 import { useConfiguration } from "../../../hooks/use-configuration";
 import { Text } from "../../text";
+import { isFactorEmailLink, isFactorSmsLink } from "../../../domain/handles";
+import { EmailIcon, SmsIcon, Loader } from "./icons";
 
 import * as styles from "./authenticating.css";
 
@@ -37,4 +40,16 @@ export const RetryPrompt = ({ onRetry }: { onRetry: () => void }) => {
       </LinkButton>
     </div>
   );
+};
+
+export const FactorIcon = ({ factor }: { factor: Factor }) => {
+  if (isFactorEmailLink(factor)) {
+    return <EmailIcon />;
+  }
+
+  if (isFactorSmsLink(factor)) {
+    return <SmsIcon />;
+  }
+
+  return <Loader />;
 };

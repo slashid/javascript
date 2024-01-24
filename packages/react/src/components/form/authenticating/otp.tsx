@@ -7,6 +7,7 @@ import {
 } from "react";
 
 import { Factor } from "@slashid/slashid";
+import { OtpInput } from "@slashid/react-primitives";
 
 import { useConfiguration } from "../../../hooks/use-configuration";
 import { useForm } from "../../../hooks/use-form";
@@ -14,7 +15,6 @@ import { useSlashID } from "../../../main";
 import { Props } from "./authenticating.types";
 import { getAuthenticatingMessage } from "./messages";
 import { OTP_CODE_LENGTH, isValidOTPCode } from "./validation";
-import { OtpInput } from "../../otp-input";
 import { ErrorMessage } from "../error-message";
 import { Text } from "../../text";
 

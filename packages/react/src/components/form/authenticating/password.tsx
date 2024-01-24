@@ -9,12 +9,14 @@ import { Text } from "../../text";
 import * as styles from "./authenticating.css";
 import { EmailIcon, Loader, SmsIcon } from "./icons";
 import { BackButton } from "./authenticating.components";
-import { Input } from "../../../../../react-primitives/src/components/input";
-import { Button } from "../../../../../react-primitives/src/components/button";
+import {
+  Input,
+  Button,
+  LinkButton,
+  sprinkles,
+} from "@slashid/react-primitives";
 import { TextConfigKey } from "../../text/constants";
 import { useConfiguration } from "../../../hooks/use-configuration";
-import { sprinkles } from "../../../../../react-primitives/src/theme/sprinkles.css";
-import { LinkButton } from "../../../../../react-primitives/src/components/button/link-button";
 import { AuthenticatingState } from "../flow";
 import { HandleType } from "../../../domain/types";
 import { InvalidPasswordSubmittedEvent } from "@slashid/slashid";
@@ -132,9 +134,6 @@ export const PasswordState = ({ flowState }: Props) => {
     useForm();
   const [formState, setFormState] = useState<FormState>("initial");
 
-  // TODO handle needs to be verified in case of registration
-  // render the correct message in that case (e.g. "Please verify your email address")
-
   const { title, message } = getTextKeys(formState, flowState);
   const interpolationTokens =
     formState === "recoverPassword"
@@ -158,7 +157,7 @@ export const PasswordState = ({ flowState }: Props) => {
     [sid, values]
   );
 
-  const handleChange = useCallback(
+  const handlePasswordChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const onChange = registerField("password", {});
 
@@ -177,16 +176,11 @@ export const PasswordState = ({ flowState }: Props) => {
     [clearError, registerField]
   );
 
-  const handleRecovery = useCallback(async () => {
+  const handleRecovery = useCallback(() => {
     if (formState !== "verifyPassword") return;
 
     setFormState("recoverPassword");
-
-    await flowState.recover();
-
-    // TODO update the flowState with a proper method to recover
-    // maybe orchestrate the flowState from the outside
-    // needs to go to the flow as this goes to the error state too when something bad happens
+    flowState.recover();
   }, [flowState, formState]);
 
   useEffect(() => {
@@ -211,6 +205,8 @@ export const PasswordState = ({ flowState }: Props) => {
     return () => {
       sid?.unsubscribe("passwordSetReady", onSetPassword);
       sid?.unsubscribe("passwordVerifyReady", onVerifyPassword);
+      sid?.unsubscribe("incorrectPasswordSubmitted", onIncorrectPassword);
+      sid?.unsubscribe("invalidPasswordSubmitted", onInvalidPassword);
     };
   }, [setError, sid, text]);
 
@@ -235,7 +231,7 @@ export const PasswordState = ({ flowState }: Props) => {
               name="password"
               type="password"
               value={values["password"] ?? ""}
-              onChange={handleChange}
+              onChange={handlePasswordChange}
             />
             {formState === "verifyPassword" && (
               <PasswordRecoveryPrompt onRecoverClick={handleRecovery} />
@@ -252,7 +248,6 @@ export const PasswordState = ({ flowState }: Props) => {
                 className={sprinkles({ marginTop: "4" })}
               />
             )}
-            {/* TODO figure out how to display errors based on useForm */}
             <ErrorMessage name="password" />
           </div>
 
@@ -260,9 +255,9 @@ export const PasswordState = ({ flowState }: Props) => {
             type="submit"
             variant="primary"
             testId="sid-form-initial-submit-button"
-            // TODO - only when the two passwords are not the same
             disabled={
               formState === "setPassword" &&
+              !values["password"] &&
               values["password"] !== values["passwordConfirm"]
             }
           >
