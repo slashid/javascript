@@ -8,7 +8,7 @@ import { useAppContext } from "../app/app.context";
 import { Progress } from "./flow.progress";
 import type { ChallengeListInner } from "@slashid/slashid";
 import { Success } from "./flow.success";
-import { ensureError } from "./flow.domain";
+import { ensureError } from "../../domain/errors";
 
 function isPasswordRecoveryFlow(challenges: Challenges): boolean {
   return challenges.some((challenge) => challenge.type === "password_reset");
