@@ -134,9 +134,6 @@ export const PasswordState = ({ flowState }: Props) => {
     useForm();
   const [formState, setFormState] = useState<FormState>("initial");
 
-  // TODO handle needs to be verified in case of registration
-  // render the correct message in that case (e.g. "Please verify your email address")
-
   const { title, message } = getTextKeys(formState, flowState);
   const interpolationTokens =
     formState === "recoverPassword"
@@ -258,9 +255,9 @@ export const PasswordState = ({ flowState }: Props) => {
             type="submit"
             variant="primary"
             testId="sid-form-initial-submit-button"
-            // TODO - only when the two passwords are not the same
             disabled={
               formState === "setPassword" &&
+              !values["password"] &&
               values["password"] !== values["passwordConfirm"]
             }
           >

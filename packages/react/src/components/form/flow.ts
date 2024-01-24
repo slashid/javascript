@@ -137,8 +137,7 @@ const createAuthenticatingState = (
 
   async function recover() {
     if (!isFactorRecoverable(context.config.factor) || !context.config.handle)
-      // TODO check if this needs more details
-      return undefined;
+      return;
 
     try {
       const user = await recoverFn(
