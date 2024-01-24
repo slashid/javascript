@@ -1,7 +1,7 @@
 {
   "name": "@slashid/react-primitives",
-  "version": "0.1.4",
-  "private": true,
+  "version": "0.1.5-beta.0",
+  "private": false,
   "publishConfig": {
     "access": "restricted"
   },
@@ -32,8 +32,13 @@
     "./src/components/theme-root/theme.css.ts"
   ],
   "files": [
-    "dist/*",
-    "src/*"
+    "src/*",
+    "README.md",
+    "tsconfig.json",
+    "tsconfig.node.json",
+    "vite.config.ts",
+    "vitest.config.ts",
+    "index.html"
   ],
   "scripts": {
     "dev": "vite",
