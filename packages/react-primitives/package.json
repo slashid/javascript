@@ -22,17 +22,27 @@
     "jwt"
   ],
   "type": "module",
-  "types": "src/main.ts",
+  "types": "dist/main.ts",
   "main": "src/main.ts",
   "module": "src/main.ts",
   "exports": {
-    ".": "./src/main.ts"
+    ".": {
+      "import": {
+        "types": "./dist/main.d.ts",
+        "default": "./src/main.ts"
+      },
+      "require": {
+        "types": "./dist/main.d.ts",
+        "default": "./src/main.ts"
+      }
+    }
   },
   "sideEffects": [
     "./src/components/theme-root/theme.css.ts"
   ],
   "files": [
     "src/*",
+    "dist/*",
     "README.md",
     "tsconfig.json",
     "tsconfig.node.json",
@@ -43,7 +53,7 @@
   "scripts": {
     "dev": "vite",
     "dev:storybook": "storybook dev -p 6006",
-    "build": "vite build && tsc",
+    "build": "tsc",
     "build:storybook": "storybook build",
     "lint": "eslint ./src",
     "test:types": "tsc --noEmit --emitDeclarationOnly false",
