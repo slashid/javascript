@@ -6,6 +6,7 @@ import {
 import { Button } from "./components/button";
 import { LinkButton } from "./components/button/link-button";
 import { Input, PhoneInput, Flag } from "./components/input";
+import { OtpInput } from "./components/otp-input";
 import { Divider } from "./components/divider";
 import { Accordion } from "./components/accordion";
 import { Dialog, DialogProps } from "./components/dialog";
@@ -36,6 +37,7 @@ export {
   LinkButton,
   Input,
   PhoneInput,
+  OtpInput,
   Divider,
   Accordion,
   Dialog,
