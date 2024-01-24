@@ -157,7 +157,7 @@ export const PasswordState = ({ flowState }: Props) => {
     [sid, values]
   );
 
-  const handleChange = useCallback(
+  const handlePasswordChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const onChange = registerField("password", {});
 
@@ -231,7 +231,7 @@ export const PasswordState = ({ flowState }: Props) => {
               name="password"
               type="password"
               value={values["password"] ?? ""}
-              onChange={handleChange}
+              onChange={handlePasswordChange}
             />
             {formState === "verifyPassword" && (
               <PasswordRecoveryPrompt onRecoverClick={handleRecovery} />
