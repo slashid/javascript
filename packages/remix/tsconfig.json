@@ -1,7 +1,7 @@
 {
   "extends": "tsconfig/react-library.json",
   "compilerOptions": {
-    "lib": ["es2015", "DOM"],
+    "lib": ["es2016", "DOM"],
     "useDefineForClassFields": true,
     "allowJs": false,
     "esModuleInterop": false,
