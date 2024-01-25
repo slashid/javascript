@@ -87,6 +87,10 @@ export const host = style({
   },
 });
 
+export const error = style({
+  borderColor: publicVariables.color.error,
+});
+
 const inputHostBase = style({
   display: "flex",
   alignItems: "flex-start",

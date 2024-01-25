@@ -130,8 +130,14 @@ function getTextKeys(
 export const PasswordState = ({ flowState }: Props) => {
   const { sid } = useSlashID();
   const { text } = useConfiguration();
-  const { values, registerField, setError, clearError, registerSubmit } =
-    useForm();
+  const {
+    values,
+    registerField,
+    setError,
+    hasError,
+    clearError,
+    registerSubmit,
+  } = useForm();
   const [formState, setFormState] = useState<FormState>("initial");
 
   const { title, message } = getTextKeys(formState, flowState);
@@ -162,8 +168,9 @@ export const PasswordState = ({ flowState }: Props) => {
       const onChange = registerField("password", {});
 
       onChange(event);
+      clearError("password");
     },
-    [registerField]
+    [clearError, registerField]
   );
 
   const handleConfirmPasswordChange = useCallback(
@@ -231,10 +238,8 @@ export const PasswordState = ({ flowState }: Props) => {
               name="password"
               value={values["password"] ?? ""}
               onChange={handlePasswordChange}
+              error={hasError("password")}
             />
-            {formState === "verifyPassword" && (
-              <PasswordRecoveryPrompt onRecoverClick={handleRecovery} />
-            )}
             {formState === "setPassword" && (
               <PasswordInput
                 id="password-input-confirm"
@@ -243,10 +248,14 @@ export const PasswordState = ({ flowState }: Props) => {
                 name="passwordConfirm"
                 value={values["passwordConfirm"] ?? ""}
                 onChange={handleConfirmPasswordChange}
+                error={hasError("password")}
                 className={sprinkles({ marginTop: "4" })}
               />
             )}
             <ErrorMessage name="password" />
+            {formState === "verifyPassword" && (
+              <PasswordRecoveryPrompt onRecoverClick={handleRecovery} />
+            )}
           </div>
 
           <Button
@@ -255,8 +264,8 @@ export const PasswordState = ({ flowState }: Props) => {
             testId="sid-form-initial-submit-button"
             disabled={
               formState === "setPassword" &&
-              !values["password"] &&
-              values["password"] !== values["passwordConfirm"]
+              (!values["password"] ||
+                values["password"] !== values["passwordConfirm"])
             }
           >
             {text["authenticating.password.submit"]}

@@ -5,6 +5,7 @@ import * as styles from "./input.css";
 
 export type InputProps = BaseInputProps & {
   type?: "text" | "email";
+  error?: boolean;
 };
 
 export const Input: React.FC<InputProps> = ({
@@ -15,6 +16,7 @@ export const Input: React.FC<InputProps> = ({
   className = "",
   type = "text",
   value,
+  error,
   onChange,
 }) => {
   return (
@@ -23,6 +25,7 @@ export const Input: React.FC<InputProps> = ({
         "sid-input",
         `sid-input--${type}`,
         styles.host,
+        error && styles.error,
         className
       )}
     >

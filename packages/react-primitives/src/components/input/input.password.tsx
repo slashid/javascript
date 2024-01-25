@@ -5,7 +5,9 @@ import * as styles from "./input.css";
 import { useState } from "react";
 import { Eye, EyeReveal } from "../icon";
 
-export type PasswordInputProps = Omit<BaseInputProps, "type">;
+export type PasswordInputProps = Omit<BaseInputProps, "type"> & {
+  error?: boolean;
+};
 
 export const PasswordInput: React.FC<PasswordInputProps> = (props) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -16,6 +18,7 @@ export const PasswordInput: React.FC<PasswordInputProps> = (props) => {
         "sid-input",
         `sid-input--password`,
         styles.host,
+        props.error && styles.error,
         props.className
       )}
     >

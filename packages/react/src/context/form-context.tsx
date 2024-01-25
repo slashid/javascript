@@ -27,6 +27,7 @@ type RegisterSubmitFn = (
 ) => React.FormEventHandler<HTMLFormElement>;
 
 type SetErrorFn = (fieldName: string, error: ValidationError) => void;
+type HasErrorFn = (fieldName: string) => boolean;
 type ClearErrorFn = (fieldName: string) => void;
 
 export interface IFormContext {
@@ -34,6 +35,7 @@ export interface IFormContext {
   registerSubmit: RegisterSubmitFn;
   resetForm: () => void;
   setError: SetErrorFn;
+  hasError: HasErrorFn;
   clearError: ClearErrorFn;
   values: Record<string, string>;
   errors: Record<string, ValidationError>;
@@ -51,6 +53,7 @@ const initialContextValues: IFormContext = {
     return null;
   },
   setError: () => null,
+  hasError: () => false,
   clearError: () => null,
   values: {},
   errors: {},
@@ -144,6 +147,13 @@ export const FormProvider = ({ children }: FormProviderProps) => {
     setErrors((e) => ({ ...e, [fieldName]: error }));
   }, []);
 
+  const hasError = useCallback<HasErrorFn>(
+    (fieldName) => {
+      return Boolean(errors[fieldName]);
+    },
+    [errors]
+  );
+
   const clearError = useCallback<ClearErrorFn>((fieldName) => {
     setErrors((e) => {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -158,6 +168,7 @@ export const FormProvider = ({ children }: FormProviderProps) => {
       registerSubmit,
       resetForm,
       setError,
+      hasError,
       clearError,
       values,
       status,
@@ -168,6 +179,7 @@ export const FormProvider = ({ children }: FormProviderProps) => {
       registerSubmit,
       resetForm,
       setError,
+      hasError,
       clearError,
       values,
       status,
