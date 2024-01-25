@@ -4,7 +4,7 @@ import { BaseInput, BaseInputProps } from "./input.base";
 import * as styles from "./input.css";
 
 export type InputProps = BaseInputProps & {
-  type?: "text" | "email" | "password";
+  type?: "text" | "email";
 };
 
 export const Input: React.FC<InputProps> = ({

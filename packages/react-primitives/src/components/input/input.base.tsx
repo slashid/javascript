@@ -10,7 +10,6 @@ export type BaseInputProps = {
   className?: string;
   type?: "text" | "email" | "tel" | "password";
   value: string;
-  rightSlot?: React.ReactNode;
   onChange: ChangeEventHandler<HTMLInputElement>;
 };
 
@@ -22,7 +21,6 @@ export const BaseInput: React.FC<BaseInputProps> = ({
   value,
   onChange,
   type = "text",
-  rightSlot,
 }) => {
   const handleChange = useCallback<ChangeEventHandler<HTMLInputElement>>(
     (e) => {
@@ -45,7 +43,6 @@ export const BaseInput: React.FC<BaseInputProps> = ({
         value={value}
         onChange={handleChange}
       />
-      {rightSlot ? rightSlot : null}
     </div>
   );
 };

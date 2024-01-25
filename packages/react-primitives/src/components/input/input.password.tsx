@@ -1,9 +1,32 @@
+import { clsx } from "clsx";
 import { BaseInput, BaseInputProps } from "./input.base";
+
+import * as styles from "./input.css";
+import { useState } from "react";
+import { Eye, EyeReveal } from "../icon";
 
 export type PasswordInputProps = Omit<BaseInputProps, "type">;
 
 export const PasswordInput: React.FC<PasswordInputProps> = (props) => {
-  // TODO add the eye icon to toggle between show password and hide password states
-  // TODO add the error prop to show the error state (red border)
-  return <BaseInput {...props} type={"password"} />;
+  const [showPassword, setShowPassword] = useState(false);
+
+  return (
+    <div
+      className={clsx(
+        "sid-input",
+        `sid-input--password`,
+        styles.host,
+        props.className
+      )}
+    >
+      <BaseInput {...props} type={showPassword ? "text" : "password"} />
+      <button
+        className={styles.passwordRevealButton}
+        type="button"
+        onClick={() => setShowPassword(!showPassword)}
+      >
+        {showPassword ? <EyeReveal /> : <Eye />}
+      </button>
+    </div>
+  );
 };

@@ -141,3 +141,18 @@ export const countryCode = style({
   fontSize: theme.font.size.base,
   color: publicVariables.color.contrast,
 });
+
+export const passwordRevealButton = style({
+  appearance: "none",
+  background: "none",
+  border: "none",
+  height: "100%",
+  paddingInline: theme.input.paddingHorizontal,
+  cursor: "pointer",
+  textDecoration: "none",
+  outline: "none",
+
+  ":hover": {
+    cursor: "pointer",
+  },
+});

@@ -10,10 +10,10 @@ import * as styles from "./authenticating.css";
 import { EmailIcon, Loader, SmsIcon } from "./icons";
 import { BackButton } from "./authenticating.components";
 import {
-  Input,
   Button,
   LinkButton,
   sprinkles,
+  PasswordInput,
 } from "@slashid/react-primitives";
 import { TextConfigKey } from "../../text/constants";
 import { useConfiguration } from "../../../hooks/use-configuration";
@@ -224,12 +224,11 @@ export const PasswordState = ({ flowState }: Props) => {
         <form onSubmit={registerSubmit(handleSubmit)}>
           <div className={styles.formInputs}>
             {/* TODO add an error state to the input (change border color) */}
-            <Input
+            <PasswordInput
               id="password-input"
               label={text["authenticating.password.label"]}
               placeholder={text["authenticating.password.placeholder"]}
               name="password"
-              type="password"
               value={values["password"] ?? ""}
               onChange={handlePasswordChange}
             />
@@ -237,12 +236,11 @@ export const PasswordState = ({ flowState }: Props) => {
               <PasswordRecoveryPrompt onRecoverClick={handleRecovery} />
             )}
             {formState === "setPassword" && (
-              <Input
+              <PasswordInput
                 id="password-input-confirm"
                 label={text["authenticating.passwordConfirm.label"]}
                 placeholder={text["authenticating.password.placeholder"]}
                 name="passwordConfirm"
-                type="password"
                 value={values["passwordConfirm"] ?? ""}
                 onChange={handleConfirmPasswordChange}
                 className={sprinkles({ marginTop: "4" })}
