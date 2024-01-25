@@ -1,6 +1,6 @@
 {
   "name": "@slashid/react-primitives",
-  "version": "0.1.4-beta.0",
+  "version": "0.1.4-beta.1",
   "private": false,
   "publishConfig": {
     "access": "public"
@@ -44,8 +44,6 @@
     "src/*",
     "dist/*",
     "README.md",
-    "tsconfig.json",
-    "tsconfig.node.json",
     "vite.config.ts",
     "vitest.config.ts",
     "index.html"
