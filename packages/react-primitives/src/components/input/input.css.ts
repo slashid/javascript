@@ -159,4 +159,10 @@ export const passwordRevealButton = style({
   ":hover": {
     cursor: "pointer",
   },
+
+  ":focus-visible": {
+    outline: `4px solid ${publicVariables.color.smooth}`,
+    outlineOffset: "-8px",
+    borderRadius: publicVariables.border.radius,
+  },
 });
