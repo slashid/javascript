@@ -154,7 +154,6 @@ const createAuthenticatingState = (
         });
       }
     } catch (error) {
-      console.log("Recover error caught", { error });
       send({ type: "sid_recover.error", error: ensureError(error) });
     }
   }
