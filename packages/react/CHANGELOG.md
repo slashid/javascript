@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 1.17.2
+
+### Patch Changes
+
+- 61c77e0: Gracefully fail when users have localStorage blocked
+
 ## 1.17.1
 
 ### Patch Changes
