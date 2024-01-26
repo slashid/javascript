@@ -43,11 +43,15 @@ export const useLastHandle: UseLastHandle = () => {
     if (!isHandle(handle)) {
       return
     }
-
-    window.localStorage.setItem(
-      STORAGE_LAST_HANDLE_KEY,
-      JSON.stringify(handle)
-    );
+    
+    try {
+      window.localStorage.setItem(
+        STORAGE_LAST_HANDLE_KEY,
+        JSON.stringify(handle)
+      );
+    } catch {
+      // do nothing
+    }
   }, []);
 
   useEffect(() => {
