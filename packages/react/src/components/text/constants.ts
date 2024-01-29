@@ -30,24 +30,24 @@ export const TEXT = {
   "authenticating.setPassword.message": "Define a secure password to sign up.",
   "authenticating.setPassword.validation.incorrect":
     "Incorrect handle or password",
-  "authenticating.setPassword.validation.length": "Password is too short",
+  "authenticating.setPassword.validation.length": "8-256 characters required",
   "authenticating.setPassword.validation.password_variants":
     "Contains word 'password'",
   "authenticating.setPassword.validation.admin_variants":
     "Contains word 'admin'",
   "authenticating.setPassword.validation.user_variants": "Contains word 'user'",
   "authenticating.setPassword.validation.alphanumeric_sequences_1":
-    "Sequence of alphanumeric characters",
+    "Illegal sequence: {{ILLEGAL_SEQUENCE}}",
   "authenticating.setPassword.validation.alphanumeric_sequences_2":
-    "Sequence of alphanumeric characters",
+    "Illegal sequence: {{ILLEGAL_SEQUENCE}}",
   "authenticating.setPassword.validation.numeric_sequences_ascending":
-    "Sequence of alphanumeric characters",
+    "Illegal sequence: {{ILLEGAL_SEQUENCE}}",
   "authenticating.setPassword.validation.numeric_subsequences_ascending":
-    "Sequence of alphanumeric characters",
+    "Illegal sequence: {{ILLEGAL_SEQUENCE}}",
   "authenticating.setPassword.validation.numeric_sequences_descending":
-    "Sequence of alphanumeric characters",
+    "Illegal sequence: {{ILLEGAL_SEQUENCE}}",
   "authenticating.setPassword.validation.numeric_subsequences_descending":
-    "Sequence of alphanumeric characters",
+    "Illegal sequence: {{ILLEGAL_SEQUENCE}}",
   "authenticating.setPassword.validation.common_password_xkcd":
     "Common password",
   "authenticating.verifyPassword.title": "Enter your password",

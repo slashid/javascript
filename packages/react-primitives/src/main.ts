@@ -25,6 +25,7 @@ import { Skeleton } from "./components/skeleton";
 import { Tabs } from "./components/tabs";
 import { Teleport } from "./components/teleport";
 import { Text, Props as TextProps } from "./components/text";
+import { interpolate } from "./components/text/interpolation";
 import { TextContext, TextProvider } from "./components/text/text-context";
 import { isBrowser } from "./browser/is-browser";
 import { MemoryStorage } from "./browser/memory-storage";
@@ -66,7 +67,7 @@ export { TextContext, TextProvider };
 export * from "./components/icon";
 
 // utils
-export { isBrowser, MemoryStorage, CookieStorage };
+export { isBrowser, interpolate, MemoryStorage, CookieStorage };
 
 // types
 export type { ThemeProps, DialogProps, TextProps, Flag };

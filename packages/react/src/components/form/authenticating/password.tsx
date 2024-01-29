@@ -14,13 +14,17 @@ import {
   LinkButton,
   sprinkles,
   PasswordInput,
+  interpolate,
 } from "@slashid/react-primitives";
 import { TextConfigKey } from "../../text/constants";
 import { useConfiguration } from "../../../hooks/use-configuration";
 import { AuthenticatingState } from "../flow";
 import { HandleType } from "../../../domain/types";
 import { InvalidPasswordSubmittedEvent } from "@slashid/slashid";
-import { getValidationMessageKey } from "./validation";
+import {
+  getValidationMessageKey,
+  getValidationInterpolationTokens,
+} from "./validation";
 
 const PasswordRecoveryPrompt = ({
   onRecoverClick,
@@ -201,7 +205,13 @@ export const PasswordState = ({ flowState }: Props) => {
       invalidPasswordEvent: InvalidPasswordSubmittedEvent
     ) =>
       setError("password", {
-        message: text[getValidationMessageKey(invalidPasswordEvent)],
+        message: interpolate(
+          text[getValidationMessageKey(invalidPasswordEvent)],
+          getValidationInterpolationTokens({
+            errorEvent: invalidPasswordEvent,
+            password: values["password"],
+          })
+        ),
       });
 
     sid?.subscribe("passwordSetReady", onSetPassword);
@@ -215,7 +225,7 @@ export const PasswordState = ({ flowState }: Props) => {
       sid?.unsubscribe("incorrectPasswordSubmitted", onIncorrectPassword);
       sid?.unsubscribe("invalidPasswordSubmitted", onInvalidPassword);
     };
-  }, [setError, sid, text]);
+  }, [setError, sid, text, values]);
 
   return (
     <>
@@ -230,7 +240,6 @@ export const PasswordState = ({ flowState }: Props) => {
       {(formState === "setPassword" || formState === "verifyPassword") && (
         <form onSubmit={registerSubmit(handleSubmit)}>
           <div className={styles.formInputs}>
-            {/* TODO add an error state to the input (change border color) */}
             <PasswordInput
               id="password-input"
               label={text["authenticating.password.label"]}

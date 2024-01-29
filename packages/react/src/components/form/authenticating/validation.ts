@@ -41,3 +41,27 @@ export function getValidationMessageKey(
   // prefer the first error
   return textKey as TextConfigKey;
 }
+
+export function getValidationInterpolationTokens({
+  errorEvent,
+  password,
+}: {
+  errorEvent: InvalidPasswordSubmittedEvent;
+  password: string;
+}): Record<string, string> {
+  const firstRuleToFail = errorEvent.failedRules[0];
+  let failingValue = "";
+
+  if (firstRuleToFail.matchType === "must_not_match") {
+    const matchResult = firstRuleToFail.regexp.exec(password);
+    failingValue = matchResult !== null ? matchResult[0] : "";
+  }
+
+  if (!failingValue) {
+    return {};
+  }
+
+  return {
+    ILLEGAL_SEQUENCE: failingValue,
+  };
+}
