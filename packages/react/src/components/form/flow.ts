@@ -58,16 +58,6 @@ interface LoginErrorEvent {
   error: Error;
 }
 
-interface RecoverSuccessEvent {
-  type: "sid_recover.success";
-  user: User;
-}
-
-interface RecoverErrorEvent {
-  type: "sid_recover.error";
-  error: Error;
-}
-
 interface CancelEvent {
   type: "sid_cancel";
 }
@@ -86,8 +76,6 @@ type Event =
   | LoginEvent
   | LoginSuccessEvent
   | LoginErrorEvent
-  | RecoverSuccessEvent
-  | RecoverErrorEvent
   | RetryEvent
   | CancelEvent;
 
@@ -145,16 +133,19 @@ const createAuthenticatingState = (
         context.options
       );
 
-      if (user) {
-        send({ type: "sid_recover.success", user });
-      } else {
+      if (!user) {
+        // this is an unexpected situation, so we emit a flow breaking error
         send({
-          type: "sid_recover.error",
-          error: new Error("Unable to recover the /id user account"),
+          type: "sid_login.error",
+          error: new Error("Failed the recovery flow"),
         });
       }
+
+      // recover does not authenticate on its own
+      // we still need to wait for login to complete
     } catch (error) {
-      send({ type: "sid_recover.error", error: ensureError(error) });
+      // this is not a flow breaking error so we want to retry the flow
+      send({ type: "sid_retry", context });
     }
   }
 
@@ -271,7 +262,6 @@ export function createFlow(opts: CreateFlowOptions = {}) {
         );
         break;
       case "sid_login.success":
-      case "sid_recover.success":
         // call onSuccess if present
         if (typeof onSuccess === "function") {
           onSuccess(e.user);
@@ -280,7 +270,6 @@ export function createFlow(opts: CreateFlowOptions = {}) {
         setState(createSuccessState(), e);
         break;
       case "sid_login.error":
-      case "sid_recover.error":
         if (state.status !== "authenticating") break;
 
         const errorContext: ErrorState["context"] = {
