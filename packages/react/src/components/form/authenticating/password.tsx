@@ -161,10 +161,24 @@ export const PasswordState = ({ flowState }: Props) => {
     (e) => {
       e.preventDefault();
 
+      if (!values["password"]) {
+        setError("password", {
+          message: text["authenticating.setPassword.validation.required"],
+        });
+        return;
+      }
+
+      if (values["password"] !== values["passwordConfirm"]) {
+        setError("password", {
+          message: text["authenticating.setPassword.validation.mismatch"],
+        });
+        return;
+      }
+
       setFormState("submitting");
       sid?.publish("passwordSubmitted", values["password"]);
     },
-    [sid, values]
+    [setError, sid, text, values]
   );
 
   const handlePasswordChange = useCallback(
@@ -271,11 +285,6 @@ export const PasswordState = ({ flowState }: Props) => {
             type="submit"
             variant="primary"
             testId="sid-form-initial-submit-button"
-            disabled={
-              formState === "setPassword" &&
-              (!values["password"] ||
-                values["password"] !== values["passwordConfirm"])
-            }
           >
             {text["authenticating.password.submit"]}
           </Button>

@@ -28,6 +28,8 @@ export const TEXT = {
     "If you are using a password for the first time, you will receive a message to verify your phone number.",
   "authenticating.setPassword.title": "Create your password",
   "authenticating.setPassword.message": "Define a secure password to sign up.",
+  "authenticating.setPassword.validation.required": "Password is required",
+  "authenticating.setPassword.validation.mismatch": "Passwords should match",
   "authenticating.setPassword.validation.incorrect":
     "Incorrect handle or password",
   "authenticating.setPassword.validation.length": "8-256 characters required",
