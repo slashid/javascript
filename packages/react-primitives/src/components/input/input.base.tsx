@@ -7,6 +7,7 @@ export type BaseInputProps = {
   name: string;
   label: string;
   placeholder?: string;
+  autoComplete?: string;
   className?: string;
   type?: "text" | "email" | "tel" | "password";
   value: string;
@@ -18,6 +19,7 @@ export const BaseInput: React.FC<BaseInputProps> = ({
   name,
   label,
   placeholder = "",
+  autoComplete = "",
   value,
   onChange,
   type = "text",
@@ -42,6 +44,7 @@ export const BaseInput: React.FC<BaseInputProps> = ({
         placeholder={placeholder}
         value={value}
         onChange={handleChange}
+        autoComplete={autoComplete}
       />
     </div>
   );

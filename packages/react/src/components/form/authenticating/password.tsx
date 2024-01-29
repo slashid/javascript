@@ -168,7 +168,10 @@ export const PasswordState = ({ flowState }: Props) => {
         return;
       }
 
-      if (values["password"] !== values["passwordConfirm"]) {
+      if (
+        formState === "setPassword" &&
+        values["password"] !== values["passwordConfirm"]
+      ) {
         setError("password", {
           message: text["authenticating.setPassword.validation.mismatch"],
         });
@@ -178,7 +181,7 @@ export const PasswordState = ({ flowState }: Props) => {
       setFormState("submitting");
       sid?.publish("passwordSubmitted", values["password"]);
     },
-    [setError, sid, text, values]
+    [formState, setError, sid, text, values]
   );
 
   const handlePasswordChange = useCallback(
@@ -253,6 +256,13 @@ export const PasswordState = ({ flowState }: Props) => {
       {formState === "initial" && <Loader />}
       {(formState === "setPassword" || formState === "verifyPassword") && (
         <form onSubmit={registerSubmit(handleSubmit)}>
+          {/* TODO support password managers by rendering a read only field */}
+          <input
+            type="hidden"
+            name="username"
+            value={flowState.context.config.handle?.value}
+            autoComplete="username"
+          />
           <div className={styles.formInputs}>
             <PasswordInput
               id="password-input"
@@ -262,6 +272,11 @@ export const PasswordState = ({ flowState }: Props) => {
               value={values["password"] ?? ""}
               onChange={handlePasswordChange}
               error={hasError("password")}
+              autoComplete={
+                formState === "setPassword"
+                  ? "new-password"
+                  : "current-password"
+              }
             />
             {formState === "setPassword" && (
               <PasswordInput
