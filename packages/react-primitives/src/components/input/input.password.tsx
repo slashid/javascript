@@ -24,6 +24,7 @@ export const PasswordInput: React.FC<PasswordInputProps> = (props) => {
     >
       <BaseInput {...props} type={showPassword ? "text" : "password"} />
       <button
+        tabIndex={-1}
         className={styles.passwordRevealButton}
         type="button"
         onClick={() => setShowPassword(!showPassword)}
