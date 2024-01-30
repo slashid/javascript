@@ -209,18 +209,10 @@ export const SlashIDProvider = ({
    * Recover a user account based on a handle and a given recoverable factor.
    */
   const recover = useCallback<Recover>(
-    async ({ factor, handle }, { middleware } = {}) => {
+    async ({ factor, handle }) => {
       if (state !== "ready" || !sidRef.current) return;
 
-      const user = await sidRef.current?.recover({ factor, handle });
-
-      const userWithMiddleware = applyMiddleware({
-        user,
-        sid: sidRef.current,
-        middleware,
-      });
-
-      return userWithMiddleware;
+      return sidRef.current?.recover({ factor, handle });
     },
     [state]
   );

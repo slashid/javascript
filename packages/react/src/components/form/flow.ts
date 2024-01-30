@@ -128,24 +128,15 @@ const createAuthenticatingState = (
       return;
 
     try {
-      const user = await recoverFn(
-        { factor: context.config.factor, handle: context.config.handle },
-        context.options
-      );
-
-      if (!user) {
-        // this is an unexpected situation, so we emit a flow breaking error
-        send({
-          type: "sid_login.error",
-          error: new Error("Failed the recovery flow"),
-        });
-      }
+      await recoverFn({
+        factor: context.config.factor,
+        handle: context.config.handle,
+      });
 
       // recover does not authenticate on its own
       // we still need to wait for login to complete
     } catch (error) {
-      // this is not a flow breaking error so we want to retry the flow
-      send({ type: "sid_retry", context });
+      send({ type: "sid_login.error", error: ensureError(error) });
     }
   }
 

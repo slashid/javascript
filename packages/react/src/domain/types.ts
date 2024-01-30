@@ -95,13 +95,10 @@ export type MFA = (
   options?: LoginOptions
 ) => Promise<User | undefined>;
 
-export type Recover = (
-  config: {
-    handle: Handle;
-    factor: RecoverableFactor;
-  },
-  options?: LoginOptions
-) => Promise<User | undefined>;
+export type Recover = (config: {
+  handle: Handle;
+  factor: RecoverableFactor;
+}) => Promise<void>;
 
 export type Retry = () => void;
 export type Cancel = () => void;

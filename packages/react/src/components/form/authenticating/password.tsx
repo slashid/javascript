@@ -204,11 +204,17 @@ export const PasswordState = ({ flowState }: Props) => {
     [clearError, registerField]
   );
 
-  const handleRecovery = useCallback(() => {
+  const handleRecovery = useCallback(async () => {
     if (formState !== "verifyPassword") return;
 
     setFormState("recoverPassword");
-    flowState.recover();
+
+    try {
+      await flowState.recover();
+      setFormState("verifyPassword");
+    } catch (e) {
+      // ignored
+    }
   }, [flowState, formState]);
 
   useEffect(() => {
