@@ -1,5 +1,16 @@
 # @slashid/remix
 
+## 0.2.0
+
+### Minor Changes
+
+- 4f256a6: Add the password authentication method and the corresponding recovery flow.
+
+### Patch Changes
+
+- Updated dependencies [4f256a6]
+  - @slashid/react@1.18.0
+
 ## 0.1.4
 
 ### Patch Changes

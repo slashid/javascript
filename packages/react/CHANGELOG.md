@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 1.18.0
+
+### Minor Changes
+
+- 4f256a6: Add the password authentication method and the corresponding recovery flow.
+
 ## 1.17.2
 
 ### Patch Changes
