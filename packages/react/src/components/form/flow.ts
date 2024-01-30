@@ -128,7 +128,7 @@ const createAuthenticatingState = (
       return;
 
     try {
-      await recoverFn({
+      return await recoverFn({
         factor: context.config.factor,
         handle: context.config.handle,
       });
