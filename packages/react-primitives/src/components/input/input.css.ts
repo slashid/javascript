@@ -87,6 +87,10 @@ export const host = style({
   },
 });
 
+export const error = style({
+  borderColor: publicVariables.color.error,
+});
+
 const inputHostBase = style({
   display: "flex",
   alignItems: "flex-start",
@@ -103,6 +107,7 @@ const inputHostBase = style({
 export const inputHost = styleVariants({
   text: [inputHostBase, {}],
   email: [inputHostBase, {}],
+  password: [inputHostBase, {}],
   tel: [
     inputHostBase,
     {
@@ -139,4 +144,25 @@ export const countryCode = style({
   transform: "translateY(-50%)",
   fontSize: theme.font.size.base,
   color: publicVariables.color.contrast,
+});
+
+export const passwordRevealButton = style({
+  appearance: "none",
+  background: "none",
+  border: "none",
+  height: "100%",
+  paddingInline: theme.input.paddingHorizontal,
+  cursor: "pointer",
+  textDecoration: "none",
+  outline: "none",
+
+  ":hover": {
+    cursor: "pointer",
+  },
+
+  ":focus-visible": {
+    outline: `4px solid ${publicVariables.color.smooth}`,
+    outlineOffset: "-8px",
+    borderRadius: publicVariables.border.radius,
+  },
 });

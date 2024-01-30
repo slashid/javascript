@@ -44,12 +44,12 @@ Overrides the input controls of the initial state of the form.
 
 ## Form.Authenticating
 
-TODO - Overrides the authenticating state of the form (alternative loading state).
+Overrides the authenticating state of the form (alternative loading state).
 
 ## Form.Error
 
-TODO - Overrides the error state of the form (custom error messages).
+Overrides the error state of the form (custom error messages).
 
 ## Form.Success
 
-TODO - Override the final state of the form.
+Override the final state of the form.

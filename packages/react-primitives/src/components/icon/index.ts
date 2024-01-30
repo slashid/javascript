@@ -13,6 +13,8 @@ import { Close } from "./close";
 import { Check } from "./check";
 import { Email } from "./email";
 import { Exclamation } from "./exclamation";
+import { Eye } from "./eye";
+import { EyeReveal } from "./eye-reveal";
 import { ChevronDown } from "./chevron-down";
 import { ChevronLeft } from "./chevron-left";
 import { Cookie } from "./cookie";
@@ -37,6 +39,8 @@ export {
   Check,
   Email,
   Exclamation,
+  Eye,
+  EyeReveal,
   ChevronDown,
   ChevronLeft,
   Cookie,

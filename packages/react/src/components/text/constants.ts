@@ -15,9 +15,56 @@ export const TEXT = {
   "initial.handle.phone.placeholder": "Type your phone number",
   "initial.submit": "Continue",
   "initial.divider": "or",
+  "authenticating.password.label": "Password",
+  "authenticating.password.placeholder": "Type your password",
+  "authenticating.passwordConfirm.label": "Confirm password",
   "authenticating.retryPrompt": "Didn’t receive the code?",
   "authenticating.retry": "Resend",
   "authenticating.back": "Back",
+  "authenticating.initial.password.title": "Log in with a password.",
+  "authenticating.initial.password.message.email":
+    "If you are using a password for the first time, you will receive an email to verify your email address.",
+  "authenticating.initial.password.message.phone":
+    "If you are using a password for the first time, you will receive a message to verify your phone number.",
+  "authenticating.setPassword.title": "Create your password",
+  "authenticating.setPassword.message": "Define a secure password to sign up.",
+  "authenticating.setPassword.validation.required": "Password is required",
+  "authenticating.setPassword.validation.mismatch": "Passwords should match",
+  "authenticating.setPassword.validation.incorrect":
+    "Incorrect handle or password",
+  "authenticating.setPassword.validation.length": "8-256 characters required",
+  "authenticating.setPassword.validation.password_variants":
+    "Contains word 'password'",
+  "authenticating.setPassword.validation.admin_variants":
+    "Contains word 'admin'",
+  "authenticating.setPassword.validation.user_variants": "Contains word 'user'",
+  "authenticating.setPassword.validation.alphanumeric_sequences_1":
+    "Illegal sequence: {{ILLEGAL_SEQUENCE}}",
+  "authenticating.setPassword.validation.alphanumeric_sequences_2":
+    "Illegal sequence: {{ILLEGAL_SEQUENCE}}",
+  "authenticating.setPassword.validation.numeric_sequences_ascending":
+    "Illegal sequence: {{ILLEGAL_SEQUENCE}}",
+  "authenticating.setPassword.validation.numeric_subsequences_ascending":
+    "Illegal sequence: {{ILLEGAL_SEQUENCE}}",
+  "authenticating.setPassword.validation.numeric_sequences_descending":
+    "Illegal sequence: {{ILLEGAL_SEQUENCE}}",
+  "authenticating.setPassword.validation.numeric_subsequences_descending":
+    "Illegal sequence: {{ILLEGAL_SEQUENCE}}",
+  "authenticating.setPassword.validation.common_password_xkcd":
+    "Common password",
+  "authenticating.verifyPassword.title": "Enter your password",
+  "authenticating.verifyPassword.message": "Type your password to sign in.",
+  "authenticating.verifyPassword.recover.prompt": "Forgot password?",
+  "authenticating.verifyPassword.recover.cta": "Reset",
+  "authenticating.recoverPassword.title.email": "Check your email",
+  "authenticating.recoverPassword.message.email":
+    "We have sent an email to {{EMAIL_ADDRESS}} with instructions for resetting your password. This email can take a few minutes to arrive, make sure to check your spam.",
+  "authenticating.recoverPassword.title.phone": "Check your phone",
+  "authenticating.recoverPassword.message.phone":
+    "We have sent a message to {{PHONE_NUMBER}} with instructions for resetting your password. This message can take a few minutes to arrive, make sure to check your spam.",
+  "authenticating.password.submit": "Continue",
+  "authenticating.submitting.password.title": "Logging you in...",
+  "authenticating.submitting.password.message": "This may take some time.",
   "authenticating.message.webauthn":
     "If you are registering for the first time, you will receive an email to verify your email address.",
   "authenticating.title.webauthn":
@@ -56,6 +103,7 @@ export const TEXT = {
   "factor.otpViaEmail": "OTP via email",
   "factor.emailLink": "Email link",
   "factor.smsLink": "SMS link",
+  "factor.password": "Password",
   "validationError.otp": "Please enter the OTP code.",
   "validationError.email": "Please enter your email address.",
   "validationError.phoneNumber": "Please enter your phone number.",

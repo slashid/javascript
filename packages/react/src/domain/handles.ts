@@ -1,4 +1,4 @@
-import { Factor } from "@slashid/slashid";
+import { Factor, RecoverableFactor } from "@slashid/slashid";
 import {
   findFlagByDialCode,
   getList,
@@ -10,26 +10,34 @@ import {
   FactorOTP,
   FactorOTPEmail,
   FactorOTPSms,
+  FactorPassword,
   FactorSSO,
   FactorSmsLink,
   Handle,
   HandleType,
 } from "./types";
 
-const FACTORS_WITH_EMAIL = ["webauthn", "otp_via_email", "email_link"];
-const FACTORS_WITH_PHONE = ["otp_via_sms", "sms_link"];
+const FACTORS_WITH_EMAIL = [
+  "webauthn",
+  "otp_via_email",
+  "email_link",
+  "password",
+];
+const FACTORS_WITH_PHONE = ["otp_via_sms", "sms_link", "password"];
 const SSO_FACTORS = ["oidc", "saml"];
 
-function getHandleType(factor: Factor): HandleType | null {
+function getPossibleHandleTypes(factor: Factor): Set<HandleType> {
+  const handleTypes = new Set<HandleType>();
+
   if (FACTORS_WITH_EMAIL.includes(factor.method)) {
-    return "email_address";
+    handleTypes.add("email_address");
   }
 
   if (FACTORS_WITH_PHONE.includes(factor.method)) {
-    return "phone_number";
+    handleTypes.add("phone_number");
   }
 
-  return null;
+  return handleTypes;
 }
 
 /**
@@ -39,10 +47,9 @@ export function getHandleTypes(factors: Factor[]): HandleType[] {
   const handleTypes = new Set<HandleType>();
 
   factors.forEach((f) => {
-    const handleType = getHandleType(f);
-    if (handleType) {
-      handleTypes.add(handleType);
-    }
+    getPossibleHandleTypes(f).forEach((handleType) =>
+      handleTypes.add(handleType)
+    );
   });
 
   return Array.from(handleTypes);
@@ -52,7 +59,9 @@ export function getHandleTypes(factors: Factor[]): HandleType[] {
  * Returns the auth methods that require the provided handle type
  */
 export function filterFactors(factors: Factor[], handleType: HandleType) {
-  return factors.filter((f) => getHandleType(f) === handleType);
+  return factors.filter((factor) =>
+    getHandleTypes([factor]).includes(handleType)
+  );
 }
 
 export function isFactorOTPEmail(factor: Factor): factor is FactorOTPEmail {
@@ -65,6 +74,17 @@ export function isFactorOTPSms(factor: Factor): factor is FactorOTPSms {
 
 export function isFactorOTP(factor: Factor): factor is FactorOTP {
   return isFactorOTPEmail(factor) || isFactorOTPSms(factor);
+}
+
+export function isFactorRecoverable(
+  factor: Factor
+): factor is RecoverableFactor {
+  // TODO check if this can be exposed from the core SDK or a better check can be made
+  return isFactorPassword(factor);
+}
+
+export function isFactorPassword(factor: Factor): factor is FactorPassword {
+  return factor.method === "password";
 }
 
 export function isFactorOidc(factor: Factor): factor is FactorOIDC {

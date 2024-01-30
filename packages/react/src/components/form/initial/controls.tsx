@@ -23,7 +23,7 @@ import { useConfiguration } from "../../../hooks/use-configuration";
 import { useForm } from "../../../hooks/use-form";
 import { TextConfig, TextConfigKey } from "../../text/constants";
 import { ErrorMessage } from "../error-message";
-import { isValidEmail, isValidPhoneNumber } from "../validation";
+import { isValidEmail, isValidPhoneNumber } from "../authenticating/validation";
 
 import * as styles from "./initial.css";
 import { useInternalFormContext } from "../internal-context";
@@ -37,6 +37,7 @@ export const FACTOR_LABEL_MAP: Record<
   otp_via_email: "factor.otpViaEmail",
   sms_link: "factor.smsLink",
   webauthn: "factor.webauthn",
+  password: "factor.password",
   oidc: "",
   saml: "",
 };

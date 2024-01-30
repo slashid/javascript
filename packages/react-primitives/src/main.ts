@@ -5,7 +5,13 @@ import {
 } from "./components/theme-root";
 import { Button } from "./components/button";
 import { LinkButton } from "./components/button/link-button";
-import { Input, PhoneInput, Flag } from "./components/input";
+import {
+  Input,
+  PhoneInput,
+  PasswordInput,
+  Flag,
+  OtpInput,
+} from "./components/input";
 import { Divider } from "./components/divider";
 import { Accordion } from "./components/accordion";
 import { Dialog, DialogProps } from "./components/dialog";
@@ -19,6 +25,7 @@ import { Skeleton } from "./components/skeleton";
 import { Tabs } from "./components/tabs";
 import { Teleport } from "./components/teleport";
 import { Text, Props as TextProps } from "./components/text";
+import { interpolate } from "./components/text/interpolation";
 import { TextContext, TextProvider } from "./components/text/text-context";
 import { isBrowser } from "./browser/is-browser";
 import { MemoryStorage } from "./browser/memory-storage";
@@ -36,6 +43,8 @@ export {
   LinkButton,
   Input,
   PhoneInput,
+  OtpInput,
+  PasswordInput,
   Divider,
   Accordion,
   Dialog,
@@ -58,7 +67,7 @@ export { TextContext, TextProvider };
 export * from "./components/icon";
 
 // utils
-export { isBrowser, MemoryStorage, CookieStorage };
+export { isBrowser, interpolate, MemoryStorage, CookieStorage };
 
 // types
 export type { ThemeProps, DialogProps, TextProps, Flag };

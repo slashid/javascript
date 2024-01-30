@@ -168,6 +168,7 @@ const BasicForm = () => {
         { method: "email_link" },
         { method: "otp_via_email" },
         { method: "otp_via_sms" },
+        { method: "password" },
         {
           method: "oidc",
           options: {
@@ -292,8 +293,9 @@ root.render(
     <SlashIDProvider
       oid={import.meta.env.VITE_ORG_ID}
       themeProps={{ theme: "dark" }}
-      baseApiUrl="https://api.sandbox.slashid.com"
-      tokenStorage="localStorage"
+      baseApiUrl="https://slashid.local"
+      sdkUrl="https://jump.slashid.local/sdk.html"
+      tokenStorage="memory"
       analyticsEnabled
     >
       <LogOut />

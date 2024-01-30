@@ -20,7 +20,7 @@ import { useConfiguration } from "../../hooks/use-configuration";
 import { useForm } from "../../hooks/use-form";
 
 import { ErrorMessage } from "../form/error-message";
-import { isValidEmail, isValidPhoneNumber } from "../form/validation";
+import { isValidEmail, isValidPhoneNumber } from "../form/authenticating/validation";
 import { TextConfigKey } from "../text/constants";
 
 import * as styles from "./dynamic-flow.css";
@@ -34,6 +34,7 @@ export const FACTOR_LABEL_MAP: Record<
   otp_via_email: "factor.otpViaEmail",
   sms_link: "factor.smsLink",
   webauthn: "factor.webauthn",
+  password: "factor.password",
   oidc: "",
   saml: "",
 };
