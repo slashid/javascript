@@ -23,12 +23,16 @@ export const useLastHandle: UseLastHandle = () => {
       return undefined;
     }
 
-    const storedHandle = window.localStorage.getItem(STORAGE_LAST_HANDLE_KEY);
-    if (!storeLastHandle || !storedHandle) {
-      return undefined;
-    }
+    try {
+      const storedHandle = window.localStorage.getItem(STORAGE_LAST_HANDLE_KEY);
+      if (!storeLastHandle || !storedHandle) {
+        return undefined;
+      }
 
-    return JSON.parse(storedHandle);
+      return JSON.parse(storedHandle);
+    } catch {
+      return undefined
+    }
   }, [storeLastHandle]);
 
   const handler = useCallback(({ handle }: SuccessEvent) => {
@@ -39,11 +43,15 @@ export const useLastHandle: UseLastHandle = () => {
     if (!isHandle(handle)) {
       return
     }
-
-    window.localStorage.setItem(
-      STORAGE_LAST_HANDLE_KEY,
-      JSON.stringify(handle)
-    );
+    
+    try {
+      window.localStorage.setItem(
+        STORAGE_LAST_HANDLE_KEY,
+        JSON.stringify(handle)
+      );
+    } catch {
+      // do nothing
+    }
   }, []);
 
   useEffect(() => {
