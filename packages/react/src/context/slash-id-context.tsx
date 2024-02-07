@@ -200,9 +200,11 @@ export const SlashIDProvider = ({
       }
 
       await user.mfa(handle, factor);
-      return user;
+      const userAfterMfa = new User(user.toString(), sidRef.current!);
+      storeUser(userAfterMfa);
+      return userAfterMfa;
     },
-    [user, state]
+    [state, user, storeUser]
   );
 
   /**
