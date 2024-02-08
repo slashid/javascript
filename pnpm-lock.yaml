@@ -617,11 +617,11 @@ importers:
   packages/remix:
     dependencies:
       '@slashid/react':
-        specifier: ^1.18.0
+        specifier: 1.18.1-beta.0
         version: link:../react
       '@slashid/slashid':
-        specifier: 3.18.0
-        version: 3.18.0
+        specifier: 3.18.2-beta.0
+        version: 3.18.2-beta.0
       jose:
         specifier: ^5.2.0
         version: 5.2.0
@@ -7937,22 +7937,6 @@ packages:
       url: 0.11.3
       uuid: 8.3.2
 
-  /@slashid/slashid@3.18.0:
-    resolution: {integrity: sha512-pPZ5eZvXkHuu5u58UuS2cCULH9Xi1BHQ/pzHKVE/tNE2SxjlBfGl3VcZaL4g/qMN6hV4mei779s0ieivsAWjHQ==}
-    dependencies:
-      '@changesets/cli': 2.26.2
-      '@types/uuid': 8.3.4
-      changeset: 0.2.6
-      docdash: 1.2.0
-      jwt-decode: 3.1.2
-      mitt: 3.0.1
-      qrcode: 1.5.3
-      querystring-es3: 0.2.1
-      regenerator-runtime: 0.13.11
-      url: 0.11.3
-      uuid: 8.3.2
-    dev: false
-
   /@slashid/slashid@3.18.2-beta.0:
     resolution: {integrity: sha512-AL1W/OH1WuvGPTZXElpSpofm96SPiU6N2NodMVNi5F/aLGIZa5d0TErebuClEm96+aE3HTN7z86Eg5XgtPaNeQ==}
     dependencies:
@@ -7967,7 +7951,6 @@ packages:
       regenerator-runtime: 0.13.11
       url: 0.11.3
       uuid: 8.3.2
-    dev: true
 
   /@storybook/addon-actions@7.0.0-rc.2(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-e4VXOoeejRnz+yTtPGtenAvrMtwRWO4VRxbGBHDPyMo+FOlQPC6plOrQMZ+lSRaE20J3KfTo6wSLZgnHQUQtRw==}
