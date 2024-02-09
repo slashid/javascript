@@ -1,11 +1,11 @@
-import { Factor } from "@slashid/slashid";
 import { PropsWithChildren } from "react";
 import { useConfiguration } from "../../hooks/use-configuration";
 import { ConfigurationProvider } from "../../context/config-context";
 import { TextConfig } from "../text/constants";
+import { FactorConfiguration } from "../../domain/types";
 
 export type ConfigurationOverridesProps = {
-  factors?: Factor[];
+  factors?: FactorConfiguration[];
   text?: Partial<TextConfig>;
 };
 
