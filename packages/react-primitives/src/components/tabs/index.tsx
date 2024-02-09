@@ -21,6 +21,7 @@ export const Tabs: React.FC<Props> = ({ className, tabs, defaultValue }) => {
 
   return (
     <RadixTabs.Root
+      data-testid="sid-handle-type-tabs"
       className={clsx("sid-tabs", className)}
       defaultValue={defaultValue ?? tabs[0]?.id}
     >
