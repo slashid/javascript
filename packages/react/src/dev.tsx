@@ -293,8 +293,8 @@ root.render(
     <SlashIDProvider
       oid={import.meta.env.VITE_ORG_ID}
       themeProps={{ theme: "dark" }}
-      baseApiUrl="https://slashid.local"
-      sdkUrl="https://jump.slashid.local/sdk.html"
+      baseApiUrl="https://api.slashid.com"
+      sdkUrl="https://cdn.slashid.com/sdk.html"
       tokenStorage="memory"
       analyticsEnabled
     >
