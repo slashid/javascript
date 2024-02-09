@@ -371,7 +371,7 @@ describe("<Form /> configuration", () => {
 
     expect(getItemSpy).toHaveBeenCalledWith(STORAGE_LAST_HANDLE_KEY);
     expect(
-      screen.getByPlaceholderText(TEXT["initial.handle.phone.email"])
+      screen.getByPlaceholderText(TEXT["initial.handle.email.placeholder"])
     ).toHaveValue(testEmail);
   });
 
