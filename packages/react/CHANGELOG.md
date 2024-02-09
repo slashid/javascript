@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 1.18.1
+
+### Patch Changes
+
+- bb92b36: Trigger a render after performing MFA
+
 ## 1.18.0
 
 ### Minor Changes
