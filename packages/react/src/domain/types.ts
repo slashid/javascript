@@ -63,6 +63,13 @@ export type FactorEmailLink = Extract<Factor, { method: "email_link" }>;
 export type FactorSmsLink = Extract<Factor, { method: "sms_link" }>;
 
 /**
+ * Utility type to specify allowed handle types in case given factor supports more than one.
+ */
+export type FactorWithAllowedHandleTypes = Factor & {
+  allowedHandleTypes?: HandleType[];
+};
+
+/**
  * This makes it possible to add a label to the configured OIDC factors.
  * This is useful when you want to change the default display (capitalized provider name).
  */
@@ -77,13 +84,17 @@ export type FactorCustomizableSAML = FactorSAML & {
   logo?: string | ReactNode;
 };
 
+export type FactorCustomizablePassword = FactorPassword &
+  FactorWithAllowedHandleTypes;
+
 /**
  * All factors that can be configured for usage in our UI components.
  */
 export type FactorConfiguration =
-  | Exclude<Factor, FactorOIDC | FactorSAML>
+  | Exclude<Factor, FactorOIDC | FactorSAML | FactorPassword>
   | FactorLabeledOIDC
-  | FactorCustomizableSAML;
+  | FactorCustomizableSAML
+  | FactorCustomizablePassword;
 
 export type LogIn = (
   config: LoginConfiguration,
@@ -110,3 +121,9 @@ export type ValidationError = {
 export type Validator<T = unknown> = (value: T) => ValidationError | undefined;
 
 export type MaybeArray<T> = T | T[];
+
+export function isFactorWithAllowedHandleTypes(
+  factor: Factor
+): factor is FactorWithAllowedHandleTypes {
+  return Object.hasOwn(factor, "allowedHandleTypes");
+}

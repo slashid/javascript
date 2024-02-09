@@ -15,6 +15,7 @@ import {
   FactorSmsLink,
   Handle,
   HandleType,
+  isFactorWithAllowedHandleTypes,
 } from "./types";
 
 const FACTORS_WITH_EMAIL = [
@@ -28,6 +29,10 @@ const SSO_FACTORS = ["oidc", "saml"];
 
 function getPossibleHandleTypes(factor: Factor): Set<HandleType> {
   const handleTypes = new Set<HandleType>();
+
+  if (isFactorWithAllowedHandleTypes(factor)) {
+    return new Set(factor.allowedHandleTypes);
+  }
 
   if (FACTORS_WITH_EMAIL.includes(factor.method)) {
     handleTypes.add("email_address");
