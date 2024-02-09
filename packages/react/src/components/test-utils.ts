@@ -12,7 +12,7 @@ import {
 
 export const inputEmail = (
   value: string,
-  inputPlaceholder: string = TEXT["initial.handle.phone.email"]
+  inputPlaceholder: string = TEXT["initial.handle.email.placeholder"]
 ) => {
   const input = screen.getByPlaceholderText(inputPlaceholder);
   fireEvent.change(input, { target: { value } });

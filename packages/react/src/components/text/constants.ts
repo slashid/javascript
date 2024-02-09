@@ -11,7 +11,7 @@ export const TEXT = {
   "initial.authenticationMethod": "Authentication method",
   "initial.handle.email": "Email address",
   "initial.handle.phone": "Phone number",
-  "initial.handle.phone.email": "Type your email",
+  "initial.handle.email.placeholder": "Type your email",
   "initial.handle.phone.placeholder": "Type your phone number",
   "initial.submit": "Continue",
   "initial.divider": "or",
