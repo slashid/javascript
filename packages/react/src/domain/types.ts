@@ -66,7 +66,11 @@ export type FactorSmsLink = Extract<Factor, { method: "sms_link" }>;
  * Utility type to specify allowed handle types in case given factor supports more than one.
  */
 export type FactorWithAllowedHandleTypes = Factor & {
-  allowedHandleTypes?: HandleType[];
+  /**
+   * Limits the allowed handle types for given factor method to the ones specified in the array.
+   * When this option is not specified, all factors are allowed.
+   */
+  allowedHandleTypes?: NonEmptyArray<HandleType>;
 };
 
 /**
@@ -127,3 +131,5 @@ export function isFactorWithAllowedHandleTypes(
 ): factor is FactorWithAllowedHandleTypes {
   return Object.hasOwn(factor, "allowedHandleTypes");
 }
+
+export type NonEmptyArray<T> = [T, ...T[]];
