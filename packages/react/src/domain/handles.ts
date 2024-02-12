@@ -13,6 +13,7 @@ import {
   FactorPassword,
   FactorSSO,
   FactorSmsLink,
+  FactorWithAllowedHandleTypes,
   Handle,
   HandleType,
   isFactorWithAllowedHandleTypes,
@@ -27,19 +28,28 @@ const FACTORS_WITH_EMAIL = [
 const FACTORS_WITH_PHONE = ["otp_via_sms", "sms_link", "password"];
 const SSO_FACTORS = ["oidc", "saml"];
 
-function getPossibleHandleTypes(factor: Factor): Set<HandleType> {
+function getPossibleHandleTypes(
+  factor: Factor | FactorWithAllowedHandleTypes
+): Set<HandleType> {
   const handleTypes = new Set<HandleType>();
 
-  if (isFactorWithAllowedHandleTypes(factor)) {
-    return new Set(factor.allowedHandleTypes);
-  }
-
   if (FACTORS_WITH_EMAIL.includes(factor.method)) {
-    handleTypes.add("email_address");
+    if (
+      !isFactorWithAllowedHandleTypes(factor) ||
+      (isFactorWithAllowedHandleTypes(factor) &&
+        factor.allowedHandleTypes?.includes("email_address"))
+    )
+      handleTypes.add("email_address");
   }
 
   if (FACTORS_WITH_PHONE.includes(factor.method)) {
-    handleTypes.add("phone_number");
+    if (
+      !isFactorWithAllowedHandleTypes(factor) ||
+      (isFactorWithAllowedHandleTypes(factor) &&
+        factor.allowedHandleTypes?.includes("phone_number"))
+    ) {
+      handleTypes.add("phone_number");
+    }
   }
 
   return handleTypes;
