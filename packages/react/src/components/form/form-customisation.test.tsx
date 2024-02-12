@@ -168,6 +168,21 @@ describe("#Form - customisation", () => {
 
       expect(screen.queryByTestId("sid-handle-type-tabs")).toBeInTheDocument();
     });
+
+    test("should render tabs when phone number factor is present", () => {
+      render(
+        <TestSlashIDProvider sdkState="ready">
+          <Form
+            factors={[
+              { method: "password", allowedHandleTypes: ["email_address"] },
+              { method: "otp_via_sms" },
+            ]}
+          />
+        </TestSlashIDProvider>
+      );
+
+      expect(screen.queryByTestId("sid-handle-type-tabs")).toBeInTheDocument();
+    });
   });
 
   describe("#Form.Initial - composition API", () => {
