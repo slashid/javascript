@@ -203,6 +203,7 @@ const FormInput = ({ children }: FormInputProps) => {
   } else {
     return (
       <Tabs
+        testId="sid-handle-type-tabs"
         className={sprinkles({ marginY: "6" })}
         defaultValue={tabIDByHandle[lastHandle?.type ?? "email_address"]}
         tabs={[
