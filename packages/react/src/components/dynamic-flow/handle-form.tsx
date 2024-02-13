@@ -110,7 +110,10 @@ export const HandleForm: React.FC<Props> = ({
         id={`sid-input-${handleType}`}
         name={handleType}
         label={text["initial.handle.email"]}
-        placeholder={text["initial.handle.email.placeholder"]}
+        placeholder={
+          text["initial.handle.phone.email"] ||
+          text["initial.handle.email.placeholder"]
+        }
         value={values[handleType] ?? ""}
         onChange={registerField(handleType, {
           defaultValue,
