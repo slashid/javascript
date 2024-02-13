@@ -96,6 +96,12 @@ export const OTPState = ({ flowState }: Props) => {
     if (formState === "initial") {
       sid?.subscribe("otpCodeSent", onOtpCodeSent);
     }
+
+    return () => {
+      if (formState === "initial") {
+        sid?.unsubscribe("otpCodeSent", onOtpCodeSent);
+      }
+    };
   }, [formState, sid]);
 
   return (

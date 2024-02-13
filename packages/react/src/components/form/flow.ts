@@ -1,4 +1,4 @@
-import { User } from "@slashid/slashid";
+import { SlashID, User } from "@slashid/slashid";
 import {
   Cancel,
   LogIn,
@@ -209,6 +209,7 @@ type HistoryEntry = {
 export function createFlow(opts: CreateFlowOptions = {}) {
   let logInFn: undefined | LogIn | MFA = undefined;
   let recoverFn: undefined | Recover = undefined;
+  let sid: undefined | SlashID = undefined;
   let observers: Observer[] = [];
   const send = (event: Event) => {
     transition(event);
@@ -277,7 +278,10 @@ export function createFlow(opts: CreateFlowOptions = {}) {
         break;
       case "sid_retry":
         // TODO replace with a check for ready state
-        if (!logInFn || !recoverFn) break;
+        if (!logInFn || !recoverFn || !sid) break;
+
+        // clear the SDK listeners before retrying
+        sid.clearPublicEventHandlers();
 
         const retryContext: AuthenticatingState["context"] = {
           config: e.context.config,
@@ -313,6 +317,9 @@ export function createFlow(opts: CreateFlowOptions = {}) {
     },
     setRecover: (fn: Recover) => {
       recoverFn = fn;
+    },
+    setSlashID: (instance: SlashID) => {
+      sid = instance;
     },
     state,
   };

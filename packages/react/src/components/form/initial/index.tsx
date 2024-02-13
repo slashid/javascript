@@ -1,4 +1,4 @@
-import React, { ReactNode, useMemo } from "react";
+import React, { ReactNode, useEffect, useMemo } from "react";
 import { Factor } from "@slashid/slashid";
 import { Divider } from "@slashid/react-primitives";
 
@@ -22,6 +22,7 @@ import { LogoSlot } from "./logo";
 import { HeaderSlot } from "./header";
 import { useInternalFormContext } from "../internal-context";
 import { SSOProviders } from "./sso";
+import { useSlashID } from "../../../main";
 
 // TODO does not work as a standalone module?
 export type OIDCSlotProps = {
@@ -95,11 +96,19 @@ export type Props = {
 
 const Initial = () => {
   const { factors, text } = useConfiguration();
+  const { sid } = useSlashID();
 
   const shouldRenderDivider = useMemo(
     () => hasSSOAndNonSSOFactors(factors),
     [factors]
   );
+
+  useEffect(() => {
+    if (sid) {
+      // clears listeners before you are able to start a new flow
+      sid.clearPublicEventHandlers();
+    }
+  }, [sid]);
 
   return (
     <article data-testid="sid-form-initial-state">
