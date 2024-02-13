@@ -1,6 +1,6 @@
 {
   "name": "@slashid/react",
-  "version": "1.18.1",
+  "version": "1.18.2-beta.0",
   "private": false,
   "publishConfig": {
     "access": "public"
