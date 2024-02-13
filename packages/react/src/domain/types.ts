@@ -68,7 +68,7 @@ export type FactorSmsLink = Extract<Factor, { method: "sms_link" }>;
 export type FactorWithAllowedHandleTypes = Factor & {
   /**
    * Limits the allowed handle types for given factor method to the ones specified in the array.
-   * When this option is not specified, all factors are allowed.
+   * When this option is not specified, all supported handle types are allowed.
    */
   allowedHandleTypes?: NonEmptyArray<HandleType>;
 };
@@ -129,7 +129,19 @@ export type MaybeArray<T> = T | T[];
 export function isFactorWithAllowedHandleTypes(
   factor: Factor
 ): factor is FactorWithAllowedHandleTypes {
-  return Object.hasOwn(factor, "allowedHandleTypes");
+  // check if factor has `allowedHandleTypes` property
+  if (!Object.hasOwn(factor, "allowedHandleTypes")) {
+    return false;
+  }
+
+  // check if the values in `allowedHandleTypes` array are correct
+  return (factor as FactorWithAllowedHandleTypes).allowedHandleTypes!.every(
+    (handleType) => {
+      return handleTypes.includes(handleType);
+    }
+  );
+
+  return true;
 }
 
 export type NonEmptyArray<T> = [T, ...T[]];
