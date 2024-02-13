@@ -22,7 +22,7 @@ import { LogoSlot } from "./logo";
 import { HeaderSlot } from "./header";
 import { useInternalFormContext } from "../internal-context";
 import { SSOProviders } from "./sso";
-import { useSlashID } from "../../../main";
+import { useSlashID } from "../../../hooks/use-slash-id";
 
 // TODO does not work as a standalone module?
 export type OIDCSlotProps = {
