@@ -1,5 +1,5 @@
 import { DynamicFlow } from "./components/dynamic-flow";
-import { Form } from "./components/form";
+import { Form } from "./components/form/form";
 import { Slot } from "./components/slot";
 import { GDPRConsentDialog } from "./components/gdpr-consent-dialog";
 import { Groups } from "./components/groups";
