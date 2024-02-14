@@ -69,13 +69,16 @@ export const OTPState = ({ flowState }: Props) => {
   );
 
   useEffect(() => {
-    sid?.subscribe("otpIncorrectCodeSubmitted", () => {
+    const handler = () => {
       setError("otp", {
         message: text["authenticating.itpInput.submit.error"],
       });
       values["otp"] = "";
-    });
-  });
+    };
+    sid?.subscribe("otpIncorrectCodeSubmitted", handler);
+
+    return () => sid?.unsubscribe("otpIncorrectCodeSubmitted", handler);
+  }, [setError, sid, text, values]);
 
   const handleChange = useCallback(
     (otp: string) => {
