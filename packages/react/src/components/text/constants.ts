@@ -11,7 +11,7 @@ export const TEXT = {
   "initial.authenticationMethod": "Authentication method",
   "initial.handle.email": "Email address",
   "initial.handle.phone": "Phone number",
-  "initial.handle.phone.email": "Type your email",
+  "initial.handle.email.placeholder": "Type your email",
   "initial.handle.phone.placeholder": "Type your phone number",
   "initial.submit": "Continue",
   "initial.divider": "or",
@@ -196,4 +196,9 @@ export const TEXT = {
     "Cookies that track your online behaviour, such as clicks, preferences, device specifications, location, and search history. This data helps in targeted advertising and gathering website analytics.",
   "gdpr.dialog.error.title": "Oops!",
   "gdpr.dialog.error.subtitle": "Looks like something went wrong...",
+  // deprecated keys
+  /**
+   * @deprecated Use 'initial.handle.email.placeholder' instead
+   */
+  "initial.handle.phone.email": "",
 };

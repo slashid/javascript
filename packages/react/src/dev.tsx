@@ -29,7 +29,7 @@ const initialFactors: Factor[] = [
     method: "oidc",
     options: {
       provider: "google",
-      client_id: import.meta.env.VITE_GOOGLE_SSO_CLIENT_ID,
+      client_id: import.meta.env.VITE_GOOGLE_SSO_CLIENT_ID ?? "test_oidc",
     },
   },
 ];
@@ -42,7 +42,7 @@ const withWan: FactorConfiguration[] = [
     method: "oidc",
     options: {
       provider: "google",
-      client_id: import.meta.env.VITE_GOOGLE_SSO_CLIENT_ID,
+      client_id: import.meta.env.VITE_GOOGLE_SSO_CLIENT_ID ?? "test_oidc_1",
     },
   },
   {
@@ -50,7 +50,7 @@ const withWan: FactorConfiguration[] = [
     label: "Google SSO - label test",
     options: {
       provider: "google",
-      client_id: "TEST",
+      client_id: "test_oidc_2",
     },
   },
 ];
@@ -142,7 +142,7 @@ const getFactor = (handle?: Handle) => {
       method: "oidc",
       options: {
         provider: "google",
-        client_id: import.meta.env.VITE_GOOGLE_SSO_CLIENT_ID,
+        client_id: import.meta.env.VITE_GOOGLE_SSO_CLIENT_ID ?? "test_oidc",
       },
     };
     return oidcFactor;
@@ -173,13 +173,13 @@ const BasicForm = () => {
           method: "oidc",
           options: {
             provider: "okta",
-            client_id: import.meta.env.VITE_GOOGLE_SSO_CLIENT_ID,
+            client_id: import.meta.env.VITE_GOOGLE_SSO_CLIENT_ID ?? "test_oidc",
           },
         },
         {
           method: "saml",
           options: {
-            provider_credentials_id: "test",
+            provider_credentials_id: "test_saml",
           },
           label: "SAML test",
           logo: "https://www.oasis-open.org/committees/download.php/29723/draft-saml-logo-03.png",
@@ -214,14 +214,14 @@ const ComposedForm = () => {
           method: "oidc",
           options: {
             provider: "google",
-            client_id: import.meta.env.VITE_GOOGLE_SSO_CLIENT_ID,
+            client_id: import.meta.env.VITE_GOOGLE_SSO_CLIENT_ID ?? "test_oidc",
           },
         },
 
         {
           method: "saml",
           options: {
-            provider_credentials_id: "test",
+            provider_credentials_id: "test_saml",
           },
         },
       ]}

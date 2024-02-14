@@ -203,6 +203,7 @@ const FormInput = ({ children }: FormInputProps) => {
   } else {
     return (
       <Tabs
+        testId="sid-handle-type-tabs"
         className={sprinkles({ marginY: "6" })}
         defaultValue={tabIDByHandle[lastHandle?.type ?? "email_address"]}
         tabs={[
@@ -365,7 +366,10 @@ const HandleInput: React.FC<PropsInternal> = ({
         id={`sid-input-${handleType}`}
         name={handleType}
         label={text["initial.handle.email"]}
-        placeholder={text["initial.handle.phone.email"]}
+        placeholder={
+          text["initial.handle.phone.email"] ||
+          text["initial.handle.email.placeholder"]
+        }
         value={values[handleType] ?? ""}
         onChange={registerField(handleType, {
           defaultValue,

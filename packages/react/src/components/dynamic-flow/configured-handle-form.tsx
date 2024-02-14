@@ -66,6 +66,7 @@ export const ConfiguredHandleForm = ({ handleSubmit, lastHandle }: Props) => {
   return (
     <>
       <Tabs
+        testId="sid-handle-type-tabs"
         className={sprinkles({ marginY: "6" })}
         defaultValue={tabIDByHandle[lastHandle?.type ?? "email_address"]}
         tabs={[

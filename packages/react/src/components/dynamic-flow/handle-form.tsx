@@ -20,7 +20,10 @@ import { useConfiguration } from "../../hooks/use-configuration";
 import { useForm } from "../../hooks/use-form";
 
 import { ErrorMessage } from "../form/error-message";
-import { isValidEmail, isValidPhoneNumber } from "../form/authenticating/validation";
+import {
+  isValidEmail,
+  isValidPhoneNumber,
+} from "../form/authenticating/validation";
 import { TextConfigKey } from "../text/constants";
 
 import * as styles from "./dynamic-flow.css";
@@ -107,7 +110,10 @@ export const HandleForm: React.FC<Props> = ({
         id={`sid-input-${handleType}`}
         name={handleType}
         label={text["initial.handle.email"]}
-        placeholder={text["initial.handle.phone.email"]}
+        placeholder={
+          text["initial.handle.phone.email"] ||
+          text["initial.handle.email.placeholder"]
+        }
         value={values[handleType] ?? ""}
         onChange={registerField(handleType, {
           defaultValue,

@@ -63,6 +63,17 @@ export type FactorEmailLink = Extract<Factor, { method: "email_link" }>;
 export type FactorSmsLink = Extract<Factor, { method: "sms_link" }>;
 
 /**
+ * Utility type to specify allowed handle types in case given factor supports more than one.
+ */
+export type FactorWithAllowedHandleTypes = Factor & {
+  /**
+   * Limits the allowed handle types for given factor method to the ones specified in the array.
+   * When this option is not specified, all supported handle types are allowed.
+   */
+  allowedHandleTypes?: NonEmptyArray<HandleType>;
+};
+
+/**
  * This makes it possible to add a label to the configured OIDC factors.
  * This is useful when you want to change the default display (capitalized provider name).
  */
@@ -77,13 +88,17 @@ export type FactorCustomizableSAML = FactorSAML & {
   logo?: string | ReactNode;
 };
 
+export type FactorCustomizablePassword = FactorPassword &
+  FactorWithAllowedHandleTypes;
+
 /**
  * All factors that can be configured for usage in our UI components.
  */
 export type FactorConfiguration =
-  | Exclude<Factor, FactorOIDC | FactorSAML>
+  | Exclude<Factor, FactorOIDC | FactorSAML | FactorPassword>
   | FactorLabeledOIDC
-  | FactorCustomizableSAML;
+  | FactorCustomizableSAML
+  | FactorCustomizablePassword;
 
 export type LogIn = (
   config: LoginConfiguration,
@@ -110,3 +125,23 @@ export type ValidationError = {
 export type Validator<T = unknown> = (value: T) => ValidationError | undefined;
 
 export type MaybeArray<T> = T | T[];
+
+export function isFactorWithAllowedHandleTypes(
+  factor: Factor
+): factor is FactorWithAllowedHandleTypes {
+  // check if factor has `allowedHandleTypes` property
+  if (!Object.hasOwn(factor, "allowedHandleTypes")) {
+    return false;
+  }
+
+  // check if the values in `allowedHandleTypes` array are correct
+  return (factor as FactorWithAllowedHandleTypes).allowedHandleTypes!.every(
+    (handleType) => {
+      return handleTypes.includes(handleType);
+    }
+  );
+
+  return true;
+}
+
+export type NonEmptyArray<T> = [T, ...T[]];

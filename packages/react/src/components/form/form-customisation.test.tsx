@@ -8,6 +8,7 @@ import { ConfigurationProvider } from "../../main";
 import { useState } from "react";
 import { Factor } from "@slashid/slashid";
 import { Handle } from "../../domain/types";
+import { TEXT } from "../text/constants";
 
 describe("#Form - customisation", () => {
   test(`should not render any components that are not a <Slot name="initial | authenticating | success | error | footer">`, () => {
@@ -117,6 +118,71 @@ describe("#Form - customisation", () => {
     await expect(
       screen.findByTestId("custom-error-function")
     ).resolves.toBeInTheDocument();
+  });
+
+  describe("#Form - `allowedFactorMethods`", () => {
+    test(`should render only phone input when option set to ["phone_number"]`, () => {
+      render(
+        <TestSlashIDProvider sdkState="ready">
+          <Form
+            factors={[
+              { method: "password", allowedHandleTypes: ["phone_number"] },
+            ]}
+          />
+        </TestSlashIDProvider>
+      );
+
+      expect(
+        screen.queryByPlaceholderText(TEXT["initial.handle.phone.placeholder"])
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByPlaceholderText(TEXT["initial.handle.email.placeholder"])
+      ).not.toBeInTheDocument();
+    });
+
+    test(`should render only email input when option set to ["email_address"]`, () => {
+      render(
+        <TestSlashIDProvider sdkState="ready">
+          <Form
+            factors={[
+              { method: "password", allowedHandleTypes: ["email_address"] },
+            ]}
+          />
+        </TestSlashIDProvider>
+      );
+
+      expect(
+        screen.queryByPlaceholderText(TEXT["initial.handle.email.placeholder"])
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByPlaceholderText(TEXT["initial.handle.phone.placeholder"])
+      ).not.toBeInTheDocument();
+    });
+
+    test("should render tabs with handle type selection when option is unset", () => {
+      render(
+        <TestSlashIDProvider sdkState="ready">
+          <Form factors={[{ method: "password" }]} />
+        </TestSlashIDProvider>
+      );
+
+      expect(screen.queryByTestId("sid-handle-type-tabs")).toBeInTheDocument();
+    });
+
+    test("should render tabs when phone number factor is present", () => {
+      render(
+        <TestSlashIDProvider sdkState="ready">
+          <Form
+            factors={[
+              { method: "password", allowedHandleTypes: ["email_address"] },
+              { method: "otp_via_sms" },
+            ]}
+          />
+        </TestSlashIDProvider>
+      );
+
+      expect(screen.queryByTestId("sid-handle-type-tabs")).toBeInTheDocument();
+    });
   });
 
   describe("#Form.Initial - composition API", () => {
