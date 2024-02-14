@@ -1,10 +1,18 @@
 import { Factor } from "@slashid/slashid";
 import { TextConfigKey } from "../../text/constants";
 
+type AuthenticatingMessageOptions = {
+  isSubmitting: boolean;
+  hasRetried: boolean;
+};
+
 // TODO add case for password
 export function getAuthenticatingMessage(
   factor: Factor,
-  isSubmitting = false
+  { isSubmitting, hasRetried }: AuthenticatingMessageOptions = {
+    isSubmitting: false,
+    hasRetried: false,
+  }
 ): { title: TextConfigKey; message: TextConfigKey } {
   switch (factor.method) {
     case "oidc":
@@ -24,6 +32,12 @@ export function getAuthenticatingMessage(
         title: "authenticating.title.smsLink",
       };
     case "otp_via_sms": {
+      if (isSubmitting && hasRetried) {
+        return {
+          message: "authenticating.retry.message.smsOtp",
+          title: "authenticating.retry.title.smsOtp",
+        };
+      }
       if (isSubmitting) {
         return {
           message: "authenticating.submitting.message.smsOtp",
@@ -36,6 +50,12 @@ export function getAuthenticatingMessage(
       };
     }
     case "otp_via_email":
+      if (isSubmitting && hasRetried) {
+        return {
+          message: "authenticating.retry.message.emailOtp",
+          title: "authenticating.retry.title.emailOtp",
+        };
+      }
       if (isSubmitting) {
         return {
           message: "authenticating.submitting.message.emailOtp",
