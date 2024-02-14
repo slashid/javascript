@@ -1,5 +1,15 @@
 # @slashid/react
 
+## 1.19.0
+
+### Minor Changes
+
+- 79f9e00: Add `allowedHandleTypes` configuration option to password
+
+### Patch Changes
+
+- 480142a: Improve handling of OTP error & resend
+
 ## 1.18.1
 
 ### Patch Changes

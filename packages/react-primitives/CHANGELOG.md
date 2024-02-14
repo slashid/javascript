@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 0.3.0
+
+### Minor Changes
+
+- 480142a: Create <Delayed> component
+
 ## 0.2.0
 
 ### Minor Changes
