@@ -95,12 +95,12 @@ export const OTPState = ({ flowState }: Props) => {
         },
       };
 
-      if (!values["otp"] && hasError("otp")) {
+      if (hasError("otp")) {
         clearError("otp");
       }
       onChange(event as never);
     },
-    [clearError, hasError, registerField, text, values]
+    [clearError, hasError, registerField, text]
   );
 
   const handleRetry = () => {
