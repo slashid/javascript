@@ -1,4 +1,4 @@
-import { style } from "@vanilla-extract/css";
+import { keyframes, style } from "@vanilla-extract/css";
 
 export const retryPrompt = style({
   display: "flex",
@@ -28,4 +28,13 @@ export const formInner = style({
   display: "flex",
   flexDirection: "column",
   gap: "8px",
+});
+
+const fadeIn = keyframes({
+  "0%": { opacity: "0" },
+  "100%": { opacity: "1" },
+});
+
+export const wrapper = style({
+  animation: `${fadeIn} 0.3s`,
 });

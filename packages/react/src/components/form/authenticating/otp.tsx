@@ -35,6 +35,8 @@ const FactorIcon = ({ factor }: { factor: Factor }) => {
   return <Loader />;
 };
 
+const BASE_RETRY_DELAY = 2000;
+
 /**
  * Presents the user with a form to enter an OTP code.
  * Handles retries in case of submitting an incorrect OTP code.
@@ -152,8 +154,13 @@ export const OTPState = ({ flowState }: Props) => {
       ) : null}
       {formState === "input" && (
         // fallback to prevent layout shift
-        <Delayed delayMs={3000} fallback={<div style={{ height: 16 }} />}>
-          <RetryPrompt onRetry={handleRetry} />
+        <Delayed
+          delayMs={BASE_RETRY_DELAY * flowState.context.attempt}
+          fallback={<div style={{ height: 16 }} />}
+        >
+          <div className={styles.wrapper}>
+            <RetryPrompt onRetry={handleRetry} />
+          </div>
         </Delayed>
       )}
     </>
