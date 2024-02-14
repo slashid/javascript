@@ -7,7 +7,7 @@ import {
 } from "react";
 
 import { Factor } from "@slashid/slashid";
-import { OtpInput } from "@slashid/react-primitives";
+import { OtpInput, Delayed } from "@slashid/react-primitives";
 
 import { useConfiguration } from "../../../hooks/use-configuration";
 import { useForm } from "../../../hooks/use-form";
@@ -103,6 +103,11 @@ export const OTPState = ({ flowState }: Props) => {
     [clearError, hasError, registerField, text, values]
   );
 
+  const handleRetry = () => {
+    setFormState("submitting");
+    flowState.retry();
+  };
+
   useEffect(() => {
     if (isValidOTPCode(values["otp"])) {
       // Automatically submit the form when the OTP code is valid
@@ -142,7 +147,10 @@ export const OTPState = ({ flowState }: Props) => {
       {formState === "submitting" ? (
         <Loader />
       ) : (
-        <RetryPrompt onRetry={() => flowState.retry()} />
+        // fallback to prevent layout shift
+        <Delayed delayMs={3000} fallback={<div style={{ height: 16 }} />}>
+          <RetryPrompt onRetry={handleRetry} />
+        </Delayed>
       )}
     </>
   );
