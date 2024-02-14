@@ -51,15 +51,12 @@ export const OTPState = ({ flowState }: Props) => {
     clearError,
   } = useForm();
   const [formState, setFormState] = useState<
-    "initial" | "input" | "submitting"
+    "initial" | "input" | "submitting" | "retry"
   >("initial");
   const submitInputRef = useRef<HTMLInputElement>(null);
 
   const factor = flowState.context.config.factor;
-  const { title, message } = getAuthenticatingMessage(
-    factor,
-    formState === "submitting"
-  );
+  const { title, message } = getAuthenticatingMessage(factor, formState);
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = useCallback(
     (e) => {
@@ -104,7 +101,7 @@ export const OTPState = ({ flowState }: Props) => {
   );
 
   const handleRetry = () => {
-    setFormState("submitting");
+    setFormState("retry");
     flowState.retry();
   };
 
@@ -144,9 +141,9 @@ export const OTPState = ({ flowState }: Props) => {
           <ErrorMessage name="otp" />
         </form>
       )}
-      {formState === "submitting" ? (
-        <Loader />
-      ) : (
+      {formState === "submitting" && <Loader />}
+      {formState === "retry" && <EmailIcon />}
+      {formState === "input" && (
         // fallback to prevent layout shift
         <Delayed delayMs={3000} fallback={<div style={{ height: 16 }} />}>
           <RetryPrompt onRetry={handleRetry} />

@@ -80,6 +80,8 @@ export const TEXT = {
   "authenticating.title.emailOtp": "Check your email",
   "authenticating.submitting.message.emailOtp": "We are verifying the code.",
   "authenticating.submitting.title.emailOtp": "Please wait",
+  "authenticating.retry.message.emailOtp": "We are resending the OTP code...",
+  "authenticating.retry.title.emailOtp": "Please wait",
   "authenticating.message.smsOtp":
     "We have sent you a code via text. Please insert it here.",
   "authenticating.title.smsOtp": "Check your phone",

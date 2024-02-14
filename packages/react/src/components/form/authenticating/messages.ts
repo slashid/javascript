@@ -4,8 +4,11 @@ import { TextConfigKey } from "../../text/constants";
 // TODO add case for password
 export function getAuthenticatingMessage(
   factor: Factor,
-  isSubmitting = false
+  formState: "initial" | "input" | "submitting" | "retry" = "initial"
 ): { title: TextConfigKey; message: TextConfigKey } {
+  const isSubmitting = formState === "submitting";
+  const isRetry = formState === "retry";
+
   switch (factor.method) {
     case "oidc":
       return {
@@ -40,6 +43,12 @@ export function getAuthenticatingMessage(
         return {
           message: "authenticating.submitting.message.emailOtp",
           title: "authenticating.submitting.title.emailOtp",
+        };
+      }
+      if (isRetry) {
+        return {
+          message: "authenticating.retry.message.emailOtp",
+          title: "authenticating.retry.title.emailOtp",
         };
       }
       return {
