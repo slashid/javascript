@@ -30,6 +30,7 @@ import { TextContext, TextProvider } from "./components/text/text-context";
 import { isBrowser } from "./browser/is-browser";
 import { MemoryStorage } from "./browser/memory-storage";
 import { CookieStorage } from "./browser/cookie-storage";
+import { Delayed } from "./components/delayed";
 
 // theming
 export * from "./theme/theme.css";
@@ -58,6 +59,7 @@ export {
   Tabs,
   Teleport,
   Text,
+  Delayed,
 };
 
 // context
