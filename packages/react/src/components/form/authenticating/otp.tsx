@@ -42,21 +42,19 @@ const FactorIcon = ({ factor }: { factor: Factor }) => {
 export const OTPState = ({ flowState }: Props) => {
   const { text } = useConfiguration();
   const { sid } = useSlashID();
-  const {
-    values,
-    registerField,
-    registerSubmit,
-    setError,
-    hasError,
-    clearError,
-  } = useForm();
+  const { values, registerField, registerSubmit, setError, clearError } =
+    useForm();
   const [formState, setFormState] = useState<
-    "initial" | "input" | "submitting" | "retry"
+    "initial" | "input" | "submitting"
   >("initial");
   const submitInputRef = useRef<HTMLInputElement>(null);
 
   const factor = flowState.context.config.factor;
-  const { title, message } = getAuthenticatingMessage(factor, formState);
+  const hasRetried = flowState.context.attempt > 1;
+  const { title, message } = getAuthenticatingMessage(factor, {
+    isSubmitting: formState === "submitting",
+    hasRetried,
+  });
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = useCallback(
     (e) => {
@@ -95,17 +93,16 @@ export const OTPState = ({ flowState }: Props) => {
         },
       };
 
-      if (hasError("otp")) {
-        clearError("otp");
-      }
+      clearError("otp");
       onChange(event as never);
     },
-    [clearError, hasError, registerField, text]
+    [clearError, registerField, text]
   );
 
   const handleRetry = () => {
-    setFormState("retry");
     flowState.retry();
+    clearError("otp");
+    setFormState("submitting");
   };
 
   useEffect(() => {
@@ -146,8 +143,13 @@ export const OTPState = ({ flowState }: Props) => {
           </div>
         </form>
       )}
-      {formState === "submitting" && <Loader />}
-      {formState === "retry" && <EmailIcon />}
+      {formState === "submitting" ? (
+        hasRetried ? (
+          <EmailIcon />
+        ) : (
+          <Loader />
+        )
+      ) : null}
       {formState === "input" && (
         // fallback to prevent layout shift
         <Delayed delayMs={3000} fallback={<div style={{ height: 16 }} />}>
