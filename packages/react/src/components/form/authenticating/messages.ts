@@ -32,6 +32,12 @@ export function getAuthenticatingMessage(
         title: "authenticating.title.smsLink",
       };
     case "otp_via_sms": {
+      if (isSubmitting && hasRetried) {
+        return {
+          message: "authenticating.retry.message.smsOtp",
+          title: "authenticating.retry.title.smsOtp",
+        };
+      }
       if (isSubmitting) {
         return {
           message: "authenticating.submitting.message.smsOtp",

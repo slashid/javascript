@@ -69,7 +69,7 @@ export const OTPState = ({ flowState }: Props) => {
   useEffect(() => {
     const handler = () => {
       setError("otp", {
-        message: text["authenticating.itpInput.submit.error"],
+        message: text["authenticating.otpInput.submit.error"],
       });
       values["otp"] = "";
     };

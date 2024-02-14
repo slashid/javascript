@@ -87,13 +87,14 @@ export const TEXT = {
   "authenticating.title.smsOtp": "Check your phone",
   "authenticating.submitting.message.smsOtp": "We are verifying the code.",
   "authenticating.submitting.title.smsOtp": "Please wait",
+  "authenticating.retry.message.smsOtp": "We are resending the OTP code...",
+  "authenticating.retry.title.smsOtp": "Please wait",
   "authenticating.message.oidc":
     "Please follow the instructions in the login screen from your SSO provider.",
   "authenticating.title.oidc": "Sign in with ",
   "authenticating.otpInput": "OTP",
   "authenticating.otpInput.submit": "Submit",
-  "authenticating.itpInput.submit.error":
-    "Incorrect OTP code submitted! Insert valid code.",
+  "authenticating.otpInput.submit.error": "Please enter a valid code",
   "success.title": "You are now authenticated!",
   "success.subtitle": "You can now close this page.",
   "error.title": "Something went wrong...",
