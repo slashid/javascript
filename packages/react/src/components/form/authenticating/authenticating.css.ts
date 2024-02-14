@@ -23,3 +23,9 @@ export const passwordRecoveryPrompt = style({
   alignItems: "baseline",
   marginTop: "8px",
 });
+
+export const formInner = style({
+  display: "flex",
+  flexDirection: "column",
+  gap: "8px",
+});

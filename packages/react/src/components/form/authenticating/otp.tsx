@@ -133,15 +133,17 @@ export const OTPState = ({ flowState }: Props) => {
           onSubmit={registerSubmit(handleSubmit)}
           className={styles.otpForm}
         >
-          <OtpInput
-            shouldAutoFocus
-            inputType="number"
-            value={values["otp"] ?? ""}
-            onChange={handleChange}
-            numInputs={OTP_CODE_LENGTH}
-          />
-          <input hidden type="submit" ref={submitInputRef} />
-          <ErrorMessage name="otp" />
+          <div className={styles.formInner}>
+            <OtpInput
+              shouldAutoFocus
+              inputType="number"
+              value={values["otp"] ?? ""}
+              onChange={handleChange}
+              numInputs={OTP_CODE_LENGTH}
+            />
+            <input hidden type="submit" ref={submitInputRef} />
+            <ErrorMessage name="otp" />
+          </div>
         </form>
       )}
       {formState === "submitting" && <Loader />}
