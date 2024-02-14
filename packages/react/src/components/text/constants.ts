@@ -90,6 +90,8 @@ export const TEXT = {
   "authenticating.title.oidc": "Sign in with ",
   "authenticating.otpInput": "OTP",
   "authenticating.otpInput.submit": "Submit",
+  "authenticating.itpInput.submit.error":
+    "Incorrect OTP code submitted! Insert valid code.",
   "success.title": "You are now authenticated!",
   "success.subtitle": "You can now close this page.",
   "error.title": "Something went wrong...",

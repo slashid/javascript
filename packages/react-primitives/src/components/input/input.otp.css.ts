@@ -22,6 +22,7 @@ export const otpInput = style({
   fontFamily: publicVariables.font.fontFamily,
   color: publicVariables.color.foreground,
   textAlign: "center",
+  marginBottom: "8px",
 
   "::placeholder": {
     color: publicVariables.color.placeholder,

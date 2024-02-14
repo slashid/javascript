@@ -42,7 +42,14 @@ const FactorIcon = ({ factor }: { factor: Factor }) => {
 export const OTPState = ({ flowState }: Props) => {
   const { text } = useConfiguration();
   const { sid } = useSlashID();
-  const { values, registerField, registerSubmit } = useForm();
+  const {
+    values,
+    registerField,
+    registerSubmit,
+    setError,
+    hasError,
+    clearError,
+  } = useForm();
   const [formState, setFormState] = useState<
     "initial" | "input" | "submitting"
   >("initial");
@@ -64,6 +71,15 @@ export const OTPState = ({ flowState }: Props) => {
     [sid, values]
   );
 
+  useEffect(() => {
+    sid?.subscribe("otpIncorrectCodeSubmitted", () => {
+      setError("otp", {
+        message: text["authenticating.itpInput.submit.error"],
+      });
+      values["otp"] = "";
+    });
+  });
+
   const handleChange = useCallback(
     (otp: string) => {
       const onChange = registerField("otp", {
@@ -79,9 +95,12 @@ export const OTPState = ({ flowState }: Props) => {
         },
       };
 
+      if (!values["otp"] && hasError("otp")) {
+        clearError("otp");
+      }
       onChange(event as never);
     },
-    [registerField, text]
+    [clearError, hasError, registerField, text, values]
   );
 
   useEffect(() => {
