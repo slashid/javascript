@@ -11,7 +11,7 @@ import { OtpInput, Delayed } from "@slashid/react-primitives";
 
 import { useConfiguration } from "../../../hooks/use-configuration";
 import { useForm } from "../../../hooks/use-form";
-import { useSlashID } from "../../../main";
+import { useSlashID } from "../../../entry.npm";
 import { Props } from "./authenticating.types";
 import { getAuthenticatingMessage } from "./messages";
 import { OTP_CODE_LENGTH, isValidOTPCode } from "./validation";

@@ -16,7 +16,7 @@ import {
   SlashIDProvider,
   useOrganizations,
   useSlashID,
-} from "./main";
+} from "./entry.npm";
 import { defaultOrganization } from "./middleware/default-organization";
 import { Slot } from "./components/slot";
 

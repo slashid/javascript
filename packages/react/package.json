@@ -39,9 +39,15 @@
     "dist/*"
   ],
   "scripts": {
-    "dev": "vite",
+    "html:npm": "cp ./index.npm.html ./index.html",
+    "html:web-component": "cp ./index.web-component.html ./index.html",
+    "dev": "echo 'Please specify the compile target i.e. dev:npm, dev:web-component, dev:storybook'",
+    "dev:npm": "pnpm html:npm && vite -c vite.config.npm.ts",
+    "dev:web-component": "pnpm html:web-component && vite -c vite.config.web-component.ts",
     "dev:storybook": "storybook dev -p 6006",
-    "build": "vite build && tsc",
+    "build": "echo 'Please specify the compile target i.e. build:npm, build:web-component, build:storybook'",
+    "build:npm": "pnpm html:npm && vite -c vite.config.npm.ts build && tsc",
+    "build:web-component": "pnpm html:web-component && vite -c vite.config.web-component.ts build && tsc",
     "build:storybook": "storybook build",
     "lint": "eslint ./src",
     "test:types": "tsc --noEmit --emitDeclarationOnly false",
@@ -50,6 +56,7 @@
     "publish:yalc": "node ./yalc.next.js && pnpm build && yalc publish"
   },
   "dependencies": {
+    "@r2wc/react-to-web-component": "^2.0.3",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-dialog": "^1.0.4",
     "@radix-ui/react-select": "^1.1.2",

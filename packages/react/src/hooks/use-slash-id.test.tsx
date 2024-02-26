@@ -1,5 +1,5 @@
 import { act, render, screen } from "@testing-library/react";
-import { SlashIDProvider } from "../main";
+import { SlashIDProvider } from "../entry.npm";
 import { useSlashID } from "./use-slash-id";
 import {
   TEST_ORG_ID,
