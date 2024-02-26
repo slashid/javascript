@@ -13,8 +13,13 @@ body {
 }
 
 .formWrapper {
-  width: 420px !important;
+  min-width: 420px !important;
   margin: 32px;
+}
+
+#root {
+  min-width: 465px;
+  max-width: 465px;
 }
 
 .sid-theme-root.testClass {
