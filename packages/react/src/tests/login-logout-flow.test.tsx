@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from "react";
 import { describe, it } from "vitest";
 import { renderHook, waitFor, act } from "@testing-library/react";
-import { useSlashID, SlashIDProvider } from "../main";
+import { useSlashID, SlashIDProvider } from "../entry.npm";
 
 describe("Log in / Log out flow", () => {
   it("should log in correctly after logging out", async () => {

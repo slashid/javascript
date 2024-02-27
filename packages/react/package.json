@@ -39,9 +39,11 @@
     "dist/*"
   ],
   "scripts": {
-    "dev": "vite",
+    "dev": "cp ./index.npm.html ./index.html && vite -c vite.config.npm.ts",
+    "dev:web-component": "cp ./index.web-component.html ./index.html && vite -c vite.config.web-component.ts",
     "dev:storybook": "storybook dev -p 6006",
-    "build": "vite build && tsc",
+    "build": "cp ./index.npm.html ./index.html && vite -c vite.npm.config.ts build && tsc",
+    "build:web-component": "cp ./index.web-component.html ./index.html && vite -c vite.web-component.config.ts build && tsc",
     "build:storybook": "storybook build",
     "lint": "eslint ./src",
     "test:types": "tsc --noEmit --emitDeclarationOnly false",
@@ -93,6 +95,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "semver": "^7.5.4",
+    "serve": "^14.2.1",
     "storybook": "7.4.0",
     "tsconfig": "workspace:*",
     "vite": "^4.5.0",

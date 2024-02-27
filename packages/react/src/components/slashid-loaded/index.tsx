@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { useSlashID } from "../../main";
+import { useSlashID } from "../../entry.npm";
 
 interface Props {
   fallback?: ReactNode;

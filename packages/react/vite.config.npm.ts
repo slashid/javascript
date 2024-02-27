@@ -8,12 +8,15 @@ export default defineConfig({
   ...config,
   build: {
     lib: {
-      entry: resolve(__dirname, "src/main.ts"),
+      entry: resolve(__dirname, "src/entry.npm.ts"),
       formats: ["es"],
-      fileName: `main`,
+      fileName: `main`
     },
     rollupOptions: {
       external: [...Object.keys(packageJson.peerDependencies)],
+      input: {
+        app: "./dev/npm/index.html"
+      }
     },
     sourcemap: true,
   },

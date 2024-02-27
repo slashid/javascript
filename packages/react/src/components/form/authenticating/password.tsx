@@ -1,7 +1,7 @@
 import { FormEventHandler, useCallback, useEffect, useState } from "react";
 
 import { useForm } from "../../../hooks/use-form";
-import { useSlashID } from "../../../main";
+import { useSlashID } from "../../../entry.npm";
 import { Props } from "./authenticating.types";
 import { ErrorMessage } from "../error-message";
 import { Text } from "../../text";

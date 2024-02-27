@@ -4,7 +4,7 @@ import { TestSlashIDProvider } from "../../context/test-providers";
 import { createTestUser, inputEmail } from "../test-utils";
 import { Slot } from "../slot";
 import userEvent from "@testing-library/user-event";
-import { ConfigurationProvider } from "../../main";
+import { ConfigurationProvider } from "../../entry.npm";
 import { useState } from "react";
 import { Factor } from "@slashid/slashid";
 import { Handle } from "../../domain/types";

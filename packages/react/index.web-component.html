@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hello world</title>
+  </head>
+  <body>
+    <script>
+      function sidOnSuccess() {
+        alert('Success!')
+      }
+    </script>
+
+    <slashid-form
+      style="width: 440px; display: block;"
+      factors='[{ "method": "email_link" }]'
+      oid="edc30eda-9c34-65c6-ca23-a1106d42c396"
+      base-api-url="https://api.slashid.com"
+      token-storage="memory"
+      on-success="sidOnSuccess"
+      analytics-enabled
+    ></slashid-form>
+
+    <script type="module" src="/src/entry.web-component.tsx"></script>
+  </body>
+</html>
