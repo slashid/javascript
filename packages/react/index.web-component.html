@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SlashID React (web component)</title>
+    <title>@slashid/react (web component)</title>
   </head>
   <body>
     <script>
@@ -14,9 +14,11 @@
 
     <slashid-form
       style="width: 440px; display: block;"
-      factors='[{ "method": "email_link" }]'
-      oid="edc30eda-9c34-65c6-ca23-a1106d42c396"
+      factors='[{"method":"webauthn"},{"method":"email_link"},{"method":"otp_via_email"},{"method":"otp_via_sms"},{"method":"password"}]'
+      theme-props='{ "theme": "dark" }'
+      oid="%VITE_ORG_ID%"
       base-api-url="https://api.slashid.com"
+      sdk-url="https://cdn.slashid.com/sdk.html"
       token-storage="memory"
       on-success="sidOnSuccess"
       analytics-enabled

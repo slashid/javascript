@@ -13,11 +13,6 @@ export default defineConfig({
       formats: ["es"],
       fileName: `main`
     },
-    sourcemap: true,
-    rollupOptions: {
-      input: {
-        app: "./dev/web-component/index.html"
-      }
-    }
+    sourcemap: true
   },
 });

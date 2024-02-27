@@ -14,9 +14,6 @@ export default defineConfig({
     },
     rollupOptions: {
       external: [...Object.keys(packageJson.peerDependencies)],
-      input: {
-        app: "./dev/npm/index.html"
-      }
     },
     sourcemap: true,
   },
