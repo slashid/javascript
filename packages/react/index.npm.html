@@ -3,27 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React + TS</title>
+    <title>SlashID React (npm)</title>
   </head>
   <body>
-    <script>
-      function sidOnSuccess() {
-        alert('Success!')
-      }
-    </script>
-
-    <div id="root">
-      <slashid-form
-        factors='[{ "method": "email_link" }]'
-        oid="f8602a6f-eb5c-c3d9-cef4-d77fc4a906fb"
-        theme-props='{ "theme": "dark" }'
-        base-api-url="https://api.sandbox.slashid.com"
-        token-storage="localStorage"
-        on-success="sidOnSuccess"
-        analytics-enabled
-      ></slashid-form>
-    </div>
-
+    <div id="root"></div>
     <script type="module" src="/src/dev.tsx"></script>
   </body>
 </html>
