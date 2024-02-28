@@ -31,7 +31,7 @@ export const useLastHandle: UseLastHandle = () => {
 
       return JSON.parse(storedHandle);
     } catch {
-      return undefined
+      return undefined;
     }
   }, [storeLastHandle]);
 
@@ -41,9 +41,9 @@ export const useLastHandle: UseLastHandle = () => {
     }
 
     if (!isHandle(handle)) {
-      return
+      return;
     }
-    
+
     try {
       window.localStorage.setItem(
         STORAGE_LAST_HANDLE_KEY,

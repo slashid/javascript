@@ -9,7 +9,7 @@ export const useSlashID = (): UseSlashID => {
     logOut: () => {
       logOut();
       revalidator.revalidate();
-      return undefined
+      return undefined;
     },
     ...rest,
   };

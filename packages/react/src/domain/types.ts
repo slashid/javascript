@@ -130,7 +130,7 @@ export function isFactorWithAllowedHandleTypes(
   factor: Factor
 ): factor is FactorWithAllowedHandleTypes {
   // check if factor has `allowedHandleTypes` property
-  if (!Object.hasOwn(factor, "allowedHandleTypes")) {
+  if (!("allowedHandleTypes" in factor)) {
     return false;
   }
 

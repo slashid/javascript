@@ -19207,6 +19207,7 @@ packages:
 
   /resolve@1.22.8:
     resolution: {integrity: sha512-oKWePCxqpd6FlLvGV1VU0x7bkPmmCNolxzjMf4NczoDnQcIWrAF+cPtZn5i6n+RfD2d9i0tzpKnG6Yk168yIyw==}
+    hasBin: true
     dependencies:
       is-core-module: 2.13.1
       path-parse: 1.0.7
@@ -19276,6 +19277,7 @@ packages:
   /rollup@4.9.1:
     resolution: {integrity: sha512-pgPO9DWzLoW/vIhlSoDByCzcpX92bKEorbgXuZrqxByte3JFk2xSW2JEeAcyLc9Ru9pqcNNW+Ob7ntsk2oT/Xw==}
     engines: {node: '>=18.0.0', npm: '>=8.0.0'}
+    hasBin: true
     optionalDependencies:
       '@rollup/rollup-android-arm-eabi': 4.9.1
       '@rollup/rollup-android-arm64': 4.9.1
@@ -20416,6 +20418,7 @@ packages:
   /typescript@5.3.3:
     resolution: {integrity: sha512-pXWcraxM0uxAS+tN0AG/BF2TyqmHO014Z070UsJ+pFvYuRSq8KH8DmWpnbXe0pEPDHXZV3FcAbJkijJ5oNEnWw==}
     engines: {node: '>=14.17'}
+    hasBin: true
 
   /udc@1.0.1:
     resolution: {integrity: sha512-jv+D9de1flsum5QkFtBdjyppCQAdz9kTck/0xST5Vx48T9LL2BYnw0Iw77dSKDQ9KZ/PS3qPO1vfXHDpLZlxcQ==}
