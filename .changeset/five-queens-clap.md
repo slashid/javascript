@@ -2,4 +2,4 @@
 "@slashid/react": patch
 ---
 
-Add Object.hasOwn() polyfill
+Use alternative to Object.hasOwn()
