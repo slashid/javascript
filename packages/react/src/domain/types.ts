@@ -126,13 +126,11 @@ export type Validator<T = unknown> = (value: T) => ValidationError | undefined;
 
 export type MaybeArray<T> = T | T[];
 
-const hasOwnProperty = Object.prototype.hasOwnProperty
-
 export function isFactorWithAllowedHandleTypes(
   factor: Factor
 ): factor is FactorWithAllowedHandleTypes {
   // check if factor has `allowedHandleTypes` property
-  if (!hasOwnProperty.call(factor, "allowedHandleTypes")) {
+  if (!("allowedHandleTypes" in factor)) {
     return false;
   }
 
