@@ -1,10 +1,10 @@
 import { type Factor } from "@slashid/slashid";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom/client";
 
 import { GDPRConsentDialog } from "./components/gdpr-consent-dialog";
 import "./dev.css";
-import { FactorConfiguration, Handle } from "./domain/types";
+import { Handle } from "./domain/types";
 import {
   ConfigurationProvider,
   DynamicFlow,
@@ -34,46 +34,46 @@ const initialFactors: Factor[] = [
   },
 ];
 
-const withWan: FactorConfiguration[] = [
-  { method: "webauthn", options: { attachment: "platform" } },
-  { method: "email_link" },
-  { method: "otp_via_sms" },
-  {
-    method: "oidc",
-    options: {
-      provider: "google",
-      client_id: import.meta.env.VITE_GOOGLE_SSO_CLIENT_ID ?? "test_oidc_1",
-    },
-  },
-  {
-    method: "oidc",
-    label: "Google SSO - label test",
-    options: {
-      provider: "google",
-      client_id: "test_oidc_2",
-    },
-  },
-];
+// const withWan: FactorConfiguration[] = [
+//   { method: "webauthn", options: { attachment: "platform" } },
+//   { method: "email_link" },
+//   { method: "otp_via_sms" },
+//   {
+//     method: "oidc",
+//     options: {
+//       provider: "google",
+//       client_id: import.meta.env.VITE_GOOGLE_SSO_CLIENT_ID ?? "test_oidc_1",
+//     },
+//   },
+//   {
+//     method: "oidc",
+//     label: "Google SSO - label test",
+//     options: {
+//       provider: "google",
+//       client_id: "test_oidc_2",
+//     },
+//   },
+// ];
 
 function Config() {
   const { currentOrganization } = useOrganizations();
-  const [factors, setFactors] = useState<Factor[]>(initialFactors);
+  const [factors] = useState<Factor[]>(initialFactors);
 
-  useEffect(() => {
-    const checkPlatformAuthenticator = async () => {
-      try {
-        const hasPlatformAuthenticator =
-          await window.PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
-        if (hasPlatformAuthenticator) {
-          setFactors(withWan);
-        }
-      } catch (e) {
-        console.log(e);
-      }
-    };
+  // useEffect(() => {
+  //   const checkPlatformAuthenticator = async () => {
+  //     try {
+  //       const hasPlatformAuthenticator =
+  //         await window.PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
+  //       if (hasPlatformAuthenticator) {
+  //         setFactors(withWan);
+  //       }
+  //     } catch (e) {
+  //       console.log(e);
+  //     }
+  //   };
 
-    checkPlatformAuthenticator();
-  }, []);
+  //   checkPlatformAuthenticator();
+  // }, []);
 
   return (
     <ConfigurationProvider factors={factors} storeLastHandle={true}>

@@ -24,6 +24,7 @@ import { useForm } from "../../../hooks/use-form";
 import { TextConfig, TextConfigKey } from "../../text/constants";
 import { ErrorMessage } from "../error-message";
 import { isValidEmail, isValidPhoneNumber } from "../authenticating/validation";
+import { passkeysSupported } from '../../../passkey'
 
 import * as styles from "./initial.css";
 import { useInternalFormContext } from "../internal-context";
@@ -172,15 +173,31 @@ const FormInput = ({ children }: FormInputProps) => {
   const { lastHandle } = useInternalFormContext();
   const { factors, text } = useConfiguration();
 
+  const [showPasskeys, setShowPasskeys] = useState<boolean | null>(null)
+  useEffect(() => {
+    (async () => {
+      const isSupported = await passkeysSupported
+      setShowPasskeys(isSupported)
+      console.log('passkey support', isSupported)
+    })()
+  }, [])
+
   // @ts-expect-error TODO fix inference
   const nonOidcFactors: FactorNonOIDC[] = useMemo(
-    () => factors.filter((f) => isFactorNonOidc(f)),
-    [factors]
+    () => factors.filter((f) => {
+      if (f.method === "webauthn" && showPasskeys === false) return false
+      return isFactorNonOidc(f)
+    }),
+    [factors, showPasskeys]
   );
 
   const handleTypes = useMemo(() => {
     return getHandleTypes(factors);
   }, [factors]);
+
+  if (showPasskeys === null) {
+    return null
+  }
 
   if (typeof children === "function") {
     return <>{children({ factors: nonOidcFactors, handleTypes })}</>;
