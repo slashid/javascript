@@ -24,7 +24,7 @@ import { useForm } from "../../../hooks/use-form";
 import { TextConfig, TextConfigKey } from "../../text/constants";
 import { ErrorMessage } from "../error-message";
 import { isValidEmail, isValidPhoneNumber } from "../authenticating/validation";
-import { passkeysSupported } from '../../../passkey'
+import { runtimeSupportsPasskeys } from '../../../passkey'
 
 import * as styles from "./initial.css";
 import { useInternalFormContext } from "../internal-context";
@@ -176,9 +176,8 @@ const FormInput = ({ children }: FormInputProps) => {
   const [showPasskeys, setShowPasskeys] = useState<boolean | null>(null)
   useEffect(() => {
     (async () => {
-      const isSupported = await passkeysSupported
+      const isSupported = await runtimeSupportsPasskeys
       setShowPasskeys(isSupported)
-      console.log('passkey support', isSupported)
     })()
   }, [])
 
@@ -195,7 +194,8 @@ const FormInput = ({ children }: FormInputProps) => {
     return getHandleTypes(factors);
   }, [factors]);
 
-  if (showPasskeys === null) {
+  const passkeySupportDetectionLoading = showPasskeys === null
+  if (passkeySupportDetectionLoading) {
     return null
   }
 

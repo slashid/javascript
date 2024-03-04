@@ -1,5 +1,3 @@
 import { Utils } from '@slashid/slashid'
 
-export const passkeysSupported = Utils.runtimeSupportsBestPasskeyUX()
-
-console.log('loading!')
+export const runtimeSupportsPasskeys = Utils.runtimeSupportsBestPasskeyUX()
