@@ -24,7 +24,7 @@ import { useForm } from "../../../hooks/use-form";
 import { TextConfig, TextConfigKey } from "../../text/constants";
 import { ErrorMessage } from "../error-message";
 import { isValidEmail, isValidPhoneNumber } from "../authenticating/validation";
-import { runtimeSupportsPasskeys } from '../../../passkey'
+import { runtimeSupportsPasskeys } from "../../../passkey";
 
 import * as styles from "./initial.css";
 import { useInternalFormContext } from "../internal-context";
@@ -173,20 +173,21 @@ const FormInput = ({ children }: FormInputProps) => {
   const { lastHandle } = useInternalFormContext();
   const { factors, text } = useConfiguration();
 
-  const [showPasskeys, setShowPasskeys] = useState<boolean | null>(null)
+  const [showPasskeys, setShowPasskeys] = useState<boolean | null>(null);
   useEffect(() => {
     (async () => {
-      const isSupported = await runtimeSupportsPasskeys
-      setShowPasskeys(isSupported)
-    })()
-  }, [])
+      const isSupported = await runtimeSupportsPasskeys;
+      setShowPasskeys(isSupported);
+    })();
+  }, []);
 
   // @ts-expect-error TODO fix inference
   const nonOidcFactors: FactorNonOIDC[] = useMemo(
-    () => factors.filter((f) => {
-      if (f.method === "webauthn" && showPasskeys === false) return false
-      return isFactorNonOidc(f)
-    }),
+    () =>
+      factors.filter((f) => {
+        if (f.method === "webauthn" && showPasskeys === false) return false;
+        return isFactorNonOidc(f);
+      }),
     [factors, showPasskeys]
   );
 
@@ -194,9 +195,9 @@ const FormInput = ({ children }: FormInputProps) => {
     return getHandleTypes(factors);
   }, [factors]);
 
-  const passkeySupportDetectionLoading = showPasskeys === null
+  const passkeySupportDetectionLoading = showPasskeys === null;
   if (passkeySupportDetectionLoading) {
-    return null
+    return null;
   }
 
   if (typeof children === "function") {

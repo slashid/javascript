@@ -1,3 +1,3 @@
-import { Utils } from '@slashid/slashid'
+import { Utils } from "@slashid/slashid";
 
-export const runtimeSupportsPasskeys = Utils.runtimeSupportsBestPasskeyUX()
+export const runtimeSupportsPasskeys = Utils.runtimeSupportsBestPasskeyUX();
