@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import { SlashIDProvider } from "../main";
 import { useSlashID } from "./use-slash-id";
 import {
@@ -50,10 +50,12 @@ describe("useSlashID", () => {
       sdkURL: "https://custom.sdk.url",
     };
 
-    render(
-      <SlashIDProvider environment={customEnv} oid={TEST_ORG_ID}>
-        <TestEnvironmentComponent />
-      </SlashIDProvider>
+    await act(() =>
+      render(
+        <SlashIDProvider environment={customEnv} oid={TEST_ORG_ID}>
+          <TestEnvironmentComponent />
+        </SlashIDProvider>
+      )
     );
 
     expect.assertions(2);
@@ -63,5 +65,28 @@ describe("useSlashID", () => {
     await expect(
       screen.findByText(customEnv.sdkURL)
     ).resolves.toBeInTheDocument();
+  });
+
+  test("should throw en error when you pass both `environment` and deprecated URLs props", async () => {
+    const customEnv = {
+      baseURL: "https://custom.base.url",
+      sdkURL: "https://custom.sdk.url",
+    };
+
+    // prevent noise in the output
+    vi.spyOn(console, "error").mockImplementation(() => null);
+
+    expect(() =>
+      render(
+        <SlashIDProvider
+          environment={customEnv}
+          baseApiUrl="test"
+          sdkUrl="test"
+          oid={TEST_ORG_ID}
+        >
+          <TestEnvironmentComponent />
+        </SlashIDProvider>
+      )
+    ).toThrow();
   });
 });
