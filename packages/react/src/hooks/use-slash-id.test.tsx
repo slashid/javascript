@@ -17,6 +17,19 @@ const TestComponent = () => {
   return <div>{user.ID}</div>;
 };
 
+const TestEnvironmentComponent = () => {
+  const { sid } = useSlashID();
+
+  if (!sid) return null;
+
+  return (
+    <>
+      <p>{sid.baseURL}</p>
+      <p>{sid.sdkURL}</p>
+    </>
+  );
+};
+
 describe("useSlashID", () => {
   test("should return a user instance when a valid initial token is passed to the SlashIDProvider", async () => {
     render(
@@ -28,6 +41,27 @@ describe("useSlashID", () => {
     expect.assertions(1);
     await expect(
       screen.findByText(TEST_PERSON_ID)
+    ).resolves.toBeInTheDocument();
+  });
+
+  test("should use proper custom environment", async () => {
+    const customEnv = {
+      baseURL: "https://custom.base.url",
+      sdkURL: "https://custom.sdk.url",
+    };
+
+    render(
+      <SlashIDProvider environment={customEnv} oid={TEST_ORG_ID}>
+        <TestEnvironmentComponent />
+      </SlashIDProvider>
+    );
+
+    expect.assertions(2);
+    await expect(
+      screen.findByText(customEnv.baseURL)
+    ).resolves.toBeInTheDocument();
+    await expect(
+      screen.findByText(customEnv.sdkURL)
     ).resolves.toBeInTheDocument();
   });
 });
