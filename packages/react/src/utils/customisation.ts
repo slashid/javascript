@@ -24,8 +24,8 @@ const cssVariables = [
 
 const permittedCssVariables = new Set(cssVariables);
 
-type CssVariable = (typeof cssVariables)[number];
-type CssVariableConfig = Partial<Record<CssVariable, string | number>>;
+export type CssVariable = (typeof cssVariables)[number];
+export type CssVariableConfig = Partial<Record<CssVariable, string | number>>;
 
 const sanitisers: Record<
   CssVariable,

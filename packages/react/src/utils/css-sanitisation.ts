@@ -1,8 +1,8 @@
-export const pixelValueRegexp = /([0-9]+)px/;
-export const hexValueRegexp = /#([\da-fA-F]{2})([\da-fA-F]{2})([\da-fA-F]{2})/;
-export const fontFamilyRegexp = /(?:['"]?([\\\w\d\- ]+)['"]?(?:,\s*)?)/g;
+export const pixelValueRegExp = /([0-9]+)px/;
+export const hexValueRegExp = /#([\da-fA-F]{2})([\da-fA-F]{2})([\da-fA-F]{2})/;
+export const fontFamilyRegExp = /(?:['"]?([\\\w\d\- ]+)['"]?(?:,\s*)?)/g;
 export const displayValues = ["flex", "none"];
-export const fontValues = ["Inter", "Open Sans", "sans-serif"];
+export const supportedFonts = ["Inter", "Open Sans", "sans-serif"];
 
 export const parseAndAssertMatch = (
   input: string | number,
@@ -13,7 +13,7 @@ export const parseAndAssertMatch = (
 
   const [match] = parsed;
 
-  const valid = pixelValueRegexp.test(match);
+  const valid = regexp.test(match);
   if (!valid) return null;
 
   return match;
@@ -24,7 +24,7 @@ export const pxSanitiser = (
 ): string | number | null => {
   if (Array.isArray(input)) return null;
 
-  return parseAndAssertMatch(input, pixelValueRegexp);
+  return parseAndAssertMatch(input, pixelValueRegExp);
 };
 
 export const hexSanitiser = (
@@ -32,7 +32,7 @@ export const hexSanitiser = (
 ): string | number | null => {
   if (Array.isArray(input)) return null;
 
-  return parseAndAssertMatch(input, hexValueRegexp);
+  return parseAndAssertMatch(input, hexValueRegExp);
 };
 
 export const exactMatchSanitiser =
@@ -51,7 +51,7 @@ export const filterDisallowedFonts = (fonts: string[]): string[] => {
   return fonts
     .map((font) => font.replaceAll(', ', '').trim())
     .filter((font) => {
-      for (const fontName of fontValues) {
+      for (const fontName of supportedFonts) {
         if (font === fontName) return true;
         if (font === `'${fontName}'`) return true;
         if (font === `"${fontName}"`) return true;
@@ -64,7 +64,7 @@ export const filterDisallowedFonts = (fonts: string[]): string[] => {
 export const fontFamilySanitiser = (
   input: string | number | (string | number)[]
 ): string | number | null => {
-  const fonts = input.toString().match(fontFamilyRegexp);
+  const fonts = input.toString().match(fontFamilyRegExp);
 
   if (!fonts) return null;
 

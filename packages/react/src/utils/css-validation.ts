@@ -1,9 +1,17 @@
 import {
   filterDisallowedFonts,
-  fontFamilyRegexp,
-  hexValueRegexp,
-  pixelValueRegexp,
+  fontFamilyRegExp,
+  hexValueRegExp,
+  pixelValueRegExp,
+  supportedFonts
 } from "./css-sanitisation";
+
+export {
+  fontFamilyRegExp,
+  hexValueRegExp,
+  pixelValueRegExp,
+  supportedFonts
+}
 
 export const validate = (input: string | number, regexp: RegExp): boolean => {
   const parsed = input.toString().match(regexp);
@@ -11,17 +19,17 @@ export const validate = (input: string | number, regexp: RegExp): boolean => {
 
   const [match] = parsed;
 
-  const valid = pixelValueRegexp.test(match);
+  const valid = pixelValueRegExp.test(match);
   if (!valid) return false;
 
   return true;
 };
 
 export const pxValidator = (input: string | number): boolean =>
-  validate(input, pixelValueRegexp);
+  validate(input, pixelValueRegExp);
 
 export const hexValidator = (input: string | number): boolean =>
-  validate(input, hexValueRegexp);
+  validate(input, hexValueRegExp);
 
 export const exactValidator =
   (values: any[]) =>
@@ -38,7 +46,7 @@ export const exactValidator =
 export const fontFamilyValidator = (
   input: string | number | (string | number)[]
 ): boolean => {
-  const fonts = input.toString().match(fontFamilyRegexp);
+  const fonts = input.toString().match(fontFamilyRegExp);
   if (!fonts) return false;
 
   const allowedFonts = filterDisallowedFonts(fonts);

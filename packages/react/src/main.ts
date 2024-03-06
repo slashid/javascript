@@ -27,6 +27,13 @@ import {
   type LoginMiddleware,
   type LoginMiddlewareContext,
 } from "./middleware";
+import { sanitiseCssVariableCustomisationConfig, type CssVariable, type CssVariableConfig } from "./utils/customisation";
+import * as validation from "./utils/css-validation";
+
+const customisation = {
+  sanitiseCssVariableCustomisationConfig,
+  ...validation
+}
 
 /**
  * TODO: think about code splitting
@@ -52,6 +59,9 @@ export {
   useOrganizations,
   type UseSlashID,
   useSlashID,
+  type CssVariable,
+  type CssVariableConfig,
+  customisation,
 
   // middleware
   defaultOrganization,
