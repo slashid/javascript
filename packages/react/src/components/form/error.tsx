@@ -6,6 +6,7 @@ import {
   Circle,
   Exclamation,
   sprinkles,
+  otherPublicVariables,
 } from "@slashid/react-primitives";
 
 import { useConfiguration } from "../../hooks/use-configuration";
@@ -113,6 +114,10 @@ const ErrorImplementation: React.FC<Props> = ({ flowState }) => {
         variant="primary"
         testId="sid-form-error-retry-button"
         onClick={() => flowState.retry()}
+        style={{
+          background: otherPublicVariables.formButtonPrimaryColor,
+          borderRadius: otherPublicVariables.formButtonBorderRadius
+        }}
       >
         {text["error.retry"]}
       </Button>

@@ -8,6 +8,7 @@ import {
   PhoneInput,
   Dropdown,
   sprinkles,
+  otherPublicVariables,
 } from "@slashid/react-primitives";
 
 import {
@@ -100,6 +101,10 @@ export const HandleForm: React.FC<Props> = ({
             },
           })}
           onFlagChange={setFlag}
+          style={{
+            borderRadius: otherPublicVariables.inputBorderRadius,
+            borderColor: otherPublicVariables.inputBorderColor
+          }}
         />
       );
     }
@@ -123,6 +128,10 @@ export const HandleForm: React.FC<Props> = ({
             }
           },
         })}
+        style={{
+          borderRadius: otherPublicVariables.inputBorderRadius,
+          borderColor: otherPublicVariables.inputBorderColor
+        }}
       />
     );
   }, [
@@ -175,6 +184,10 @@ export const HandleForm: React.FC<Props> = ({
         variant="primary"
         testId="sid-form-initial-submit-button"
         disabled={status === "invalid"}
+        style={{
+          background: otherPublicVariables.formButtonPrimaryColor,
+          borderRadius: otherPublicVariables.formButtonBorderRadius
+        }}
       >
         {text["initial.submit"]}
       </Button>

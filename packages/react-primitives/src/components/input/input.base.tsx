@@ -1,6 +1,7 @@
 import { ChangeEventHandler, useCallback } from "react";
 
 import * as styles from "./input.css";
+import { otherPublicVariables } from "../../main";
 
 export type BaseInputProps = {
   id: string;
@@ -12,6 +13,7 @@ export type BaseInputProps = {
   type?: "text" | "email" | "tel" | "password";
   value: string;
   onChange: ChangeEventHandler<HTMLInputElement>;
+  style?: Record<string, any>;
 };
 
 export const BaseInput: React.FC<BaseInputProps> = ({
@@ -23,6 +25,7 @@ export const BaseInput: React.FC<BaseInputProps> = ({
   value,
   onChange,
   type = "text",
+  style,
 }) => {
   const handleChange = useCallback<ChangeEventHandler<HTMLInputElement>>(
     (e) => {
@@ -33,10 +36,15 @@ export const BaseInput: React.FC<BaseInputProps> = ({
 
   return (
     <div className={styles.inputHost[type]}>
-      <label htmlFor={id} className={styles.label}>
+      <label
+        htmlFor={id}
+        className={styles.label}
+        style={{ color: otherPublicVariables.inputLabelColor }}
+      >
         {label}
       </label>
       <input
+        style={style}
         type={type}
         id={id}
         name={name}

@@ -21,6 +21,28 @@ export const colors = {
   red500: "#FF0042",
 };
 
+/**
+ * A less general variant of our public variables,
+ * intended to allow targeting styling of the form.
+ */
+export const otherPublicVariables = {
+  // form + sub elements
+  formLogoMarginBottom: 'var(--sid-form-logo-margin-bottom, 16px)',
+  formLogoWidth: 'var(--sid-form-logo-width, auto)',
+  formBorderRadius: 'var(--sid-form-border-radius, calc(2 * var(--sid-button-border-radius)))',
+  formButtonPrimaryColor: 'var(--sid-form-button-primary-color, var(--sid-color-primary))',
+  formSsoMarginTop: 'var(--sid-form-sso-margin-top, 16px)',
+  formButtonBorderRadius: 'var(--sid-form-button-border-radius, var(--sid-button-border-radius))',
+  formDividerDisplay: 'var(--sid-form-divider-display, flex)',
+  formFontFamily: 'var(--sid-form-font-family, var(--sid-font-family))',
+  formColorForeground: 'var(--sid-form-color-foreground, var(--sid-color-foreground))',
+
+  // input element
+  inputBorderRadius: 'var(--sid-input-border-radius, var(--sid-button-border-radius))',
+  inputBorderColor: 'var(--sid-input-border-color, var(--sid-color-subtle))',
+  inputLabelColor: 'var(--sid-input-label-color, var(--sid-color-contrast))'
+};
+
 // public CSS variables that can be customised
 export const publicVariables = createGlobalThemeContract(
   {

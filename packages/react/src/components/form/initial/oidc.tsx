@@ -12,6 +12,7 @@ import {
   Line,
   Okta,
   sprinkles,
+  otherPublicVariables,
 } from "@slashid/react-primitives";
 
 import { FactorLabeledOIDC } from "../../../domain/types";
@@ -67,6 +68,9 @@ export const Oidc: React.FC<Props> = ({ providers, handleClick }) => {
             variant="secondary"
             icon={PROVIDER_TO_ICON[p.options?.provider]}
             className={clsx("sid-oidc--button")}
+            style={{
+              borderRadius: otherPublicVariables.formButtonBorderRadius
+            }}
           >
             {text["initial.oidc"]}
             <span className={styles.oidcProvider}>

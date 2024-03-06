@@ -10,6 +10,7 @@ import {
   Line,
   Okta,
   sprinkles,
+  otherPublicVariables,
 } from "@slashid/react-primitives";
 import clsx from "clsx";
 
@@ -61,6 +62,9 @@ export function SAMLProvider({ provider: p, handleClick }: SAMLProviderProps) {
       variant="secondary"
       icon={<Logo logo={p.logo} id={p.options.provider_credentials_id} />}
       className={clsx("sid-saml--button")}
+      style={{
+        borderRadius: otherPublicVariables.formButtonBorderRadius
+      }}
     >
       {text["initial.sso"]}
       <span className={styles.ssoProvider}>{p.label || "SAML"}</span>
@@ -113,6 +117,9 @@ export function OIDCProvider({ provider: p, handleClick }: OIDCProviderProps) {
       variant="secondary"
       icon={PROVIDER_TO_ICON[p.options?.provider]}
       className={clsx("sid-oidc--button")}
+      style={{
+        borderRadius: otherPublicVariables.formButtonBorderRadius
+      }}
     >
       {text["initial.oidc"]}
       <span className={styles.oidcProvider}>
@@ -139,6 +146,9 @@ export function SSOProviders({ providers, handleClick }: Props) {
         sprinkles({ marginTop: "4" }),
         styles.oidcList
       )}
+      style={{
+        marginTop: otherPublicVariables.formSsoMarginTop
+      }}
     >
       {providers.map((p) => {
         switch (p.method) {

@@ -15,6 +15,7 @@ import {
   sprinkles,
   PasswordInput,
   interpolate,
+  otherPublicVariables,
 } from "@slashid/react-primitives";
 import { TextConfigKey } from "../../text/constants";
 import { useConfiguration } from "../../../hooks/use-configuration";
@@ -283,6 +284,10 @@ export const PasswordState = ({ flowState }: Props) => {
                   ? "new-password"
                   : "current-password"
               }
+              sidInputStyle={{
+                borderRadius: otherPublicVariables.inputBorderRadius,
+                borderColor: otherPublicVariables.inputBorderColor
+              }}
             />
             {formState === "setPassword" && (
               <PasswordInput
@@ -294,6 +299,10 @@ export const PasswordState = ({ flowState }: Props) => {
                 onChange={handleConfirmPasswordChange}
                 error={hasError("password")}
                 className={sprinkles({ marginTop: "4" })}
+                sidInputStyle={{
+                  borderRadius: otherPublicVariables.inputBorderRadius,
+                  borderColor: otherPublicVariables.inputBorderColor
+                }}
               />
             )}
             <ErrorMessage name="password" />
@@ -306,6 +315,10 @@ export const PasswordState = ({ flowState }: Props) => {
             type="submit"
             variant="primary"
             testId="sid-form-initial-submit-button"
+            style={{
+              background: otherPublicVariables.formButtonPrimaryColor,
+              borderRadius: otherPublicVariables.formButtonBorderRadius
+            }}
           >
             {text["authenticating.password.submit"]}
           </Button>

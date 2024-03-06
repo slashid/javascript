@@ -8,6 +8,7 @@ import {
   Dropdown,
   Tabs,
   sprinkles,
+  otherPublicVariables,
 } from "@slashid/react-primitives";
 import { FormStatus } from "../../../context/form-context";
 import {
@@ -274,7 +275,13 @@ const Submit = ({ children }: SubmitProps) => {
 
   return (
     <Button
-      className={sprinkles({ marginTop: "6" })}
+      className={sprinkles({
+        marginTop: "6",
+      })}
+      style={{
+        background: otherPublicVariables.formButtonPrimaryColor,
+        borderRadius: otherPublicVariables.formButtonBorderRadius
+      }}
       type="submit"
       variant="primary"
       testId="sid-form-initial-submit-button"
@@ -356,6 +363,10 @@ const HandleInput: React.FC<PropsInternal> = ({
             },
           })}
           onFlagChange={setFlag}
+          style={{
+            borderRadius: otherPublicVariables.inputBorderRadius,
+            borderColor: otherPublicVariables.inputBorderColor
+          }}
         />
       );
     }
@@ -379,6 +390,10 @@ const HandleInput: React.FC<PropsInternal> = ({
             }
           },
         })}
+        style={{
+          borderRadius: otherPublicVariables.inputBorderRadius,
+          borderColor: otherPublicVariables.inputBorderColor
+        }}
       />
     );
   }, [

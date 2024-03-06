@@ -1,9 +1,7 @@
-import React, { ReactNode, useMemo } from "react";
+import React, { ReactNode } from "react";
 import { Factor } from "@slashid/slashid";
-import { Divider } from "@slashid/react-primitives";
 
 import {
-  hasSSOAndNonSSOFactors,
   isFactorOidc,
   isFactorSSO,
 } from "../../../domain/handles";
@@ -22,6 +20,7 @@ import { LogoSlot } from "./logo";
 import { HeaderSlot } from "./header";
 import { useInternalFormContext } from "../internal-context";
 import { SSOProviders } from "./sso";
+import { Divider } from "./divider";
 
 // TODO does not work as a standalone module?
 export type OIDCSlotProps = {
@@ -94,19 +93,12 @@ export type Props = {
 };
 
 const Initial = () => {
-  const { factors, text } = useConfiguration();
-
-  const shouldRenderDivider = useMemo(
-    () => hasSSOAndNonSSOFactors(factors),
-    [factors]
-  );
-
   return (
     <article data-testid="sid-form-initial-state">
       <LogoSlot />
       <HeaderSlot />
       <Controls />
-      {shouldRenderDivider && <Divider>{text["initial.divider"]}</Divider>}
+      <Divider />
       <SSOSlot />
     </article>
   );
@@ -115,6 +107,7 @@ const Initial = () => {
 Initial.Logo = LogoSlot;
 Initial.Header = HeaderSlot;
 Initial.Controls = Controls;
+Initial.Divider = Divider
 /** @deprecated Use `Initial.SSO` instead. */
 Initial.OIDC = OIDCSlot;
 Initial.SSO = SSOSlot;

@@ -30,9 +30,9 @@ body {
 }
 
 .layout {
-  display: grid;
+  /* display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  gap: 1rem; */
 }
 
 .layout .sid-form {

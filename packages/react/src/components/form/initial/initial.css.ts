@@ -1,5 +1,5 @@
 import { style } from "@vanilla-extract/css";
-import { theme } from "@slashid/react-primitives";
+import { otherPublicVariables, theme } from "@slashid/react-primitives";
 
 export const oidcProvider = style({
   marginLeft: theme.space[1],
@@ -17,8 +17,9 @@ export const oidcList = style({
 
 export const logo = style({
   display: "flex",
-  marginBottom: theme.space[4],
   maxHeight: "32px",
+  marginBottom: otherPublicVariables.formLogoMarginBottom,
+  width: otherPublicVariables.formLogoWidth
 });
 
 export const header = style({

@@ -163,38 +163,90 @@ const ConfiguredDynamicFlow = () => {
 const BasicForm = () => {
   return (
     <ConfigurationProvider
+      logo="https://membersapp.checkatrade.com/static/media/logo.e930e0049182a5b0e5bf.png"
       factors={[
-        { method: "webauthn" },
-        { method: "email_link" },
-        { method: "otp_via_email" },
-        { method: "otp_via_sms" },
-        { method: "password" },
+        // { method: "webauthn" },
+        // { method: "email_link" },
+        // { method: "otp_via_email" },
+        // { method: "otp_via_sms" },
+        { method: "password", allowedHandleTypes: ["email_address"] },
+        {
+          method: "oidc",
+          label: "Facebook",
+          options: {
+            provider: "facebook",
+            client_id: import.meta.env.VITE_GOOGLE_SSO_CLIENT_ID ?? "text2",
+          },
+        },
         {
           method: "oidc",
           options: {
-            provider: "okta",
+            provider: "google",
             client_id: import.meta.env.VITE_GOOGLE_SSO_CLIENT_ID ?? "test_oidc",
           },
         },
-        {
-          method: "saml",
-          options: {
-            provider_credentials_id: "test_saml",
-          },
-          label: "SAML test",
-          logo: "https://www.oasis-open.org/committees/download.php/29723/draft-saml-logo-03.png",
-        },
+        // {
+        //   method: "saml",
+        //   options: {
+        //     provider_credentials_id: "test_saml",
+        //   },
+        //   label: "SAML test",
+        //   logo: "https://www.oasis-open.org/committees/download.php/29723/draft-saml-logo-03.png",
+        // },
       ]}
     >
       <SlashIDLoaded>
         <>
           <LoggedIn>Logged in!</LoggedIn>
           <LoggedOut>
-            <Form
-              onError={(error, context) =>
-                console.log("onError", { error, context })
+            <link rel="preconnect" href="https://fonts.googleapis.com"></link>
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin=""></link>
+            <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet"></link>
+            <style>{`
+              // body {
+              //   --sid-form-logo-margin-bottom: default 16px;
+              //   --sid-form-logo-width: auto;
+              //   --sid-form-border-radius: 32px;
+              //   --sid-form-button-primary-color: #2A6AFF;
+              //   --sid-form-button-border-radius: 16px;
+              //   --sid-form-sso-margin-top: 16px;
+
+              //   /*input*/
+              //   --sid-input-border-radius: 16px;
+              //   --sid-input-border-color: #F1F2F4;
+              //   --sid-input-label-color: #454C6B;
+
+              //   /*root*/
+              //   --sid-form-font-family: 'Inter', sans-serif;
+              //   --sid-form-color-foreground: #142049;
+              // }
+
+              .sid-form {
+                /*form and sub-elements*/
+                --sid-form-logo-margin-bottom: 32px;
+                --sid-form-logo-width: 150px;
+                --sid-form-border-radius: 0;
+                --sid-form-button-primary-color: #0058A2;
+                --sid-form-button-border-radius: 4px;
+                --sid-form-sso-margin-top: 240px;
+                --sid-form-font-family: 'Open Sans', sans-serif;
+                --sid-form-color-foreground: #171717;
+                --sid-form-divider-display: none;
+
+                /*input*/
+                --sid-input-border-radius: 4px;
+                --sid-input-border-color: #EDEDED;
+                --sid-input-label-color: #62687A;
               }
-            />
+            `}</style>
+            <Form text={{
+              "initial.title": "Create Trade Account",
+              "initial.subtitle": "",
+              "initial.submit": "Create account",
+              "footer.branding": "",
+              "initial.handle.email.placeholder": ""
+            }}>
+            </Form>
           </LoggedOut>
         </>
       </SlashIDLoaded>
@@ -292,7 +344,7 @@ root.render(
   <React.StrictMode>
     <SlashIDProvider
       oid={import.meta.env.VITE_ORG_ID}
-      themeProps={{ theme: "dark" }}
+      themeProps={{ theme: "light" }}
       baseApiUrl="https://api.slashid.com"
       sdkUrl="https://cdn.slashid.com/sdk.html"
       tokenStorage="memory"
@@ -305,12 +357,12 @@ root.render(
             <h2>Basic form</h2>
             <BasicForm />
           </div>
-          <div>
+          {/* <div>
             <h2>Composed form</h2>
             <ComposedForm />
-          </div>
+          </div> */}
         </div>
-        <div>
+        {/* <div>
           <div>
             <h2>Switch to default org</h2>
             <Config />
@@ -319,7 +371,7 @@ root.render(
             <h2>Dynamic flow - factor based on handle</h2>
             <ConfiguredDynamicFlow />
           </div>
-        </div>
+        </div> */}
       </div>
     </SlashIDProvider>
   </React.StrictMode>
