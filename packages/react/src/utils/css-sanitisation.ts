@@ -2,7 +2,8 @@ export const pixelValueRegExp = /([0-9]+)px/;
 export const hexValueRegExp = /#([\da-fA-F]{2})([\da-fA-F]{2})([\da-fA-F]{2})/;
 export const fontFamilyRegExp = /(?:['"]?([\\\w\d\- ]+)['"]?(?:,\s*)?)/g;
 export const displayValues = ["flex", "none"];
-export const supportedFonts = ["Inter", "Open Sans", "sans-serif"];
+export const googleFonts = new Set(["Open Sans"])
+export const supportedFonts = ["Inter", "sans-serif", ...googleFonts];
 
 export const parseAndAssertMatch = (
   input: string | number,
@@ -49,7 +50,7 @@ export const exactMatchSanitiser =
 
 export const filterDisallowedFonts = (fonts: string[]): string[] => {
   return fonts
-    .map((font) => font.replaceAll(', ', '').trim())
+    .map((font) => font.replaceAll(',', '').trim())
     .filter((font) => {
       for (const fontName of supportedFonts) {
         if (font === fontName) return true;
@@ -71,5 +72,5 @@ export const fontFamilySanitiser = (
   const allowedFonts = filterDisallowedFonts(fonts)
   if (!allowedFonts.length) return null;
 
-  return allowedFonts.join(",");
+  return allowedFonts.join(", ");
 };

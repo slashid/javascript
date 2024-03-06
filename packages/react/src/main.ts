@@ -27,13 +27,16 @@ import {
   type LoginMiddleware,
   type LoginMiddlewareContext,
 } from "./middleware";
-import { sanitiseCssVariableCustomisationConfig, type CssVariable, type CssVariableConfig } from "./utils/customisation";
+import { sanitiseCssVariableCustomisationConfig, type CssVariable, type CssVariableConfig, getGoogleFontImports } from "./utils/customisation";
 import * as validation from "./utils/css-validation";
 
-const customisation = {
+const Customisation = {
   sanitiseCssVariableCustomisationConfig,
+  getGoogleFontImports,
   ...validation
 }
+
+;(globalThis as any).Customisation = Customisation
 
 /**
  * TODO: think about code splitting
@@ -61,7 +64,7 @@ export {
   useSlashID,
   type CssVariable,
   type CssVariableConfig,
-  customisation,
+  Customisation,
 
   // middleware
   defaultOrganization,

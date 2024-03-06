@@ -19,9 +19,6 @@ import {
 } from "./main";
 import { defaultOrganization } from "./middleware/default-organization";
 import { Slot } from "./components/slot";
-import { sanitiseCssVariableCustomisationConfig } from "./utils/customisation";
-
-;(globalThis as any).sanitise = sanitiseCssVariableCustomisationConfig
 
 const rootOid = "b6f94b67-d20f-7fc3-51df-bf6e3b82683e";
 
@@ -172,7 +169,7 @@ const BasicForm = () => {
         // { method: "email_link" },
         // { method: "otp_via_email" },
         // { method: "otp_via_sms" },
-        { method: "password", allowedHandleTypes: ["email_address"] },
+        { method: "password",  },
         {
           method: "oidc",
           label: "Facebook",

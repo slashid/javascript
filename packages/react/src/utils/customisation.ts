@@ -4,6 +4,8 @@ import {
   fontFamilySanitiser,
   exactMatchSanitiser,
   displayValues,
+  fontFamilyRegExp,
+  googleFonts,
 } from "./css-sanitisation";
 import { toEntries } from "./object";
 
@@ -25,7 +27,7 @@ const cssVariables = [
 const permittedCssVariables = new Set(cssVariables);
 
 export type CssVariable = (typeof cssVariables)[number];
-export type CssVariableConfig = Partial<Record<CssVariable, string | number>>;
+export type CssVariableConfig = Partial<Record<CssVariable, string | number | (string | number)[]>>;
 
 const sanitisers: Record<
   CssVariable,
@@ -66,3 +68,26 @@ export const sanitiseCssVariableCustomisationConfig = (
       return acc;
     }, {});
 };
+
+export const getGoogleFontImports = (fontFamily: string) => {
+  const fonts = fontFamily.toString().match(fontFamilyRegExp)
+  
+  if (!fonts) return []
+  
+  const sanitisedFonts = fonts.map(font => font.replaceAll(',', '').replaceAll(`'`, '').replaceAll(`"`, '').trim())
+
+  const googleFontUrls = sanitisedFonts
+    .filter(font => googleFonts.has(font))
+    .map((font) => {
+      const urlFontName = font.replace(' ', '+')
+      return `<link href="https://fonts.googleapis.com/css2?family=${urlFontName}:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">`
+    })
+
+  if (!googleFontUrls.length) return []
+
+  return  [
+    `<link rel="preconnect" href="https://fonts.googleapis.com">`,
+    `<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>`,
+    ...googleFontUrls
+  ]
+}
