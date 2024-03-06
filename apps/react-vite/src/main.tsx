@@ -10,7 +10,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <SlashIDProvider
       oid={import.meta.env.VITE_ORG_ID}
       tokenStorage="localStorage"
-      baseApiUrl="https://api.sandbox.slashid.com"
+      environment="sandbox"
     >
       <App />
     </SlashIDProvider>

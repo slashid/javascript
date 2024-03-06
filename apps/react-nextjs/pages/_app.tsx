@@ -9,7 +9,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <SlashIDProvider
       oid={oid}
       tokenStorage="localStorage"
-      baseApiUrl="https://api.sandbox.slashid.com"
+      environment="sandbox"
     >
       <Component {...pageProps} />
     </SlashIDProvider>

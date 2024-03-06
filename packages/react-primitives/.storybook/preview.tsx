@@ -18,8 +18,7 @@ export const decorators = [
       oid={import.meta.env.VITE_ORG_ID}
       themeProps={{ theme: "auto" }}
       tokenStorage="localStorage"
-      baseApiUrl="https://api.sandbox.slashid.com"
-      sdkUrl="https://cdn.sandbox.slashid.com/sdk.html"
+      environment="sandbox"
     >
       <Story />
     </SlashIDProvider>
