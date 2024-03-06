@@ -8,7 +8,12 @@ import {
   useState,
 } from "react";
 
-import { PersonHandleType, SlashID, User } from "@slashid/slashid";
+import {
+  PersonHandleType,
+  SlashID,
+  SlashIDEnvironment,
+  User,
+} from "@slashid/slashid";
 import {
   ThemeProps,
   ThemeRoot,
@@ -25,7 +30,26 @@ export interface SlashIDProviderProps {
   oid: string;
   initialToken?: string;
   tokenStorage?: StorageOption;
+  /**
+   * The environment to connect to - either "production" or "sandbox".
+   * @default "production"
+   *
+   * To use a custom environment, pass an object with the following shape:
+   * @example
+   * environment: {
+   *  baseURL: "https://{YOUR_CUSTOM_API_DOMAIN}}",
+   *  sdkURL: "https://{YOUR_CUSTOM_SDK_DOMAIN}}/sdk.html"
+   * }
+   *
+   */
+  environment?: SlashIDEnvironment;
+  /**
+   * @deprecated Use the `environment` prop instead.
+   */
   baseApiUrl?: string;
+  /**
+   * @deprecated Use the `environment` prop instead.
+   */
   sdkUrl?: string;
   analyticsEnabled?: boolean;
   themeProps?: ThemeProps;
@@ -79,6 +103,7 @@ export const SlashIDProvider = ({
   oid: initialOid,
   initialToken,
   tokenStorage = "memory",
+  environment,
   baseApiUrl,
   sdkUrl,
   analyticsEnabled,
@@ -234,6 +259,7 @@ export const SlashIDProvider = ({
     if (state === "initial") {
       const slashId = new SlashID({
         oid,
+        ...(environment && { environment }),
         ...(baseApiUrl && { baseURL: baseApiUrl }),
         ...(sdkUrl && { sdkURL: sdkUrl }),
         ...(analyticsEnabled && { analyticsEnabled }),
@@ -245,7 +271,15 @@ export const SlashIDProvider = ({
 
       setState("loaded");
     }
-  }, [oid, baseApiUrl, sdkUrl, state, tokenStorage, analyticsEnabled]);
+  }, [
+    oid,
+    baseApiUrl,
+    sdkUrl,
+    state,
+    tokenStorage,
+    analyticsEnabled,
+    environment,
+  ]);
 
   useEffect(() => {
     if (state !== "loaded") {
