@@ -19,6 +19,9 @@ import {
 } from "./main";
 import { defaultOrganization } from "./middleware/default-organization";
 import { Slot } from "./components/slot";
+import { sanitiseCssVariableCustomisationConfig } from "./utils/customisation";
+
+;(globalThis as any).sanitise = sanitiseCssVariableCustomisationConfig
 
 const rootOid = "b6f94b67-d20f-7fc3-51df-bf6e3b82683e";
 
