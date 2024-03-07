@@ -2,7 +2,6 @@ import { clsx } from "clsx";
 import { BaseInput, BaseInputProps } from "./input.base";
 
 import * as styles from "./input.css";
-import { otherPublicVariables } from "../../main";
 
 export type InputProps = BaseInputProps & {
   type?: "text" | "email";
@@ -31,9 +30,6 @@ export const Input: React.FC<InputProps> = ({
         error && styles.error,
         className
       )}
-      style={{
-        borderColor: otherPublicVariables.inputBorderColor,
-      }}
     >
       <BaseInput
         style={style}

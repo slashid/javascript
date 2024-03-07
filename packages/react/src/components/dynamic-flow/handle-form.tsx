@@ -8,7 +8,6 @@ import {
   PhoneInput,
   Dropdown,
   sprinkles,
-  otherPublicVariables,
 } from "@slashid/react-primitives";
 
 import {
@@ -101,9 +100,6 @@ export const HandleForm: React.FC<Props> = ({
             },
           })}
           onFlagChange={setFlag}
-          style={{
-            borderColor: otherPublicVariables.inputBorderColor,
-          }}
         />
       );
     }
@@ -127,9 +123,6 @@ export const HandleForm: React.FC<Props> = ({
             }
           },
         })}
-        style={{
-          borderColor: otherPublicVariables.inputBorderColor,
-        }}
       />
     );
   }, [

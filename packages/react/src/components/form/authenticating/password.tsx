@@ -15,7 +15,6 @@ import {
   sprinkles,
   PasswordInput,
   interpolate,
-  otherPublicVariables,
 } from "@slashid/react-primitives";
 import { TextConfigKey } from "../../text/constants";
 import { useConfiguration } from "../../../hooks/use-configuration";
@@ -284,9 +283,6 @@ export const PasswordState = ({ flowState }: Props) => {
                   ? "new-password"
                   : "current-password"
               }
-              style={{
-                borderColor: otherPublicVariables.inputBorderColor,
-              }}
             />
             {formState === "setPassword" && (
               <PasswordInput
@@ -298,9 +294,6 @@ export const PasswordState = ({ flowState }: Props) => {
                 onChange={handleConfirmPasswordChange}
                 error={hasError("password")}
                 className={sprinkles({ marginTop: "4" })}
-                style={{
-                  borderColor: otherPublicVariables.inputBorderColor,
-                }}
               />
             )}
             <ErrorMessage name="password" />

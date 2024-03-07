@@ -8,7 +8,6 @@ import {
   Dropdown,
   Tabs,
   sprinkles,
-  otherPublicVariables,
 } from "@slashid/react-primitives";
 import { FormStatus } from "../../../context/form-context";
 import {
@@ -359,9 +358,6 @@ const HandleInput: React.FC<PropsInternal> = ({
             },
           })}
           onFlagChange={setFlag}
-          style={{
-            borderColor: otherPublicVariables.inputBorderColor,
-          }}
         />
       );
     }
@@ -385,9 +381,6 @@ const HandleInput: React.FC<PropsInternal> = ({
             }
           },
         })}
-        style={{
-          borderColor: otherPublicVariables.inputBorderColor,
-        }}
       />
     );
   }, [
