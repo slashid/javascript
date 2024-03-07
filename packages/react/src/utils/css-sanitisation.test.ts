@@ -43,6 +43,15 @@ describe("hexSanitiser", () => {
     expect(result).toBe(input);
   });
 
+  it("should return the input value case insensitive", () => {
+    const input = "#fafafa";
+    const inputCaps = "#FAFAFA";
+    const result = hexSanitiser(input);
+    const resultCaps = hexSanitiser(inputCaps);
+    expect(result).toBe(input);
+    expect(resultCaps).toBe(inputCaps);
+  });
+
   it("should return null if the input does not match the hex value regex", () => {
     const input = "#1234567";
     const result = hexSanitiser(input);

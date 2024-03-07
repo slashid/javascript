@@ -14,7 +14,7 @@ export const validate = (input: string | number, regexp: RegExp): boolean => {
 
   const [match] = parsed;
 
-  const valid = pixelValueRegExp.test(match);
+  const valid = regexp.test(match);
   if (!valid) return false;
 
   return true;

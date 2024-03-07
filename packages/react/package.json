@@ -1,6 +1,6 @@
 {
   "name": "@slashid/react",
-  "version": "1.20.0-customisation.5",
+  "version": "1.20.0-customisation.6",
   "private": false,
   "publishConfig": {
     "access": "public"
