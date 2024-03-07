@@ -11,6 +11,8 @@ import { ThemePublicVars, themeVarNames } from "@slashid/react-primitives";
 
 const permittedCssVariables = new Set(themeVarNames);
 
+export type CssVariable = ThemePublicVars;
+
 export type CssVariableConfig = Partial<
   Record<ThemePublicVars, string | number>
 >;
