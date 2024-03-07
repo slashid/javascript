@@ -1,5 +1,5 @@
-export const pixelValueRegExp = /([0-9]+)px/;
-export const hexValueRegExp = /#([\da-fA-F]{2})([\da-fA-F]{2})([\da-fA-F]{2})/;
+export const pixelValueRegExp = /([0-9]+)px$/;
+export const hexValueRegExp = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
 export const fontFamilyRegExp = /(?:['"]?([\\\w\d\- ]+)['"]?(?:,\s*)?)/g;
 export const displayValues = ["flex", "none"];
 export const googleFonts = new Set(["Open Sans", "Inter"]);
