@@ -21,21 +21,6 @@ export const colors = {
   red500: "#FF0042",
 };
 
-// TODO these have real values, maybe we can remove them?
-// formLogoMarginBottom: "var(--sid-form-logo-margin-bottom, 16px)",
-// formLogoWidth: "var(--sid-form-logo-width, auto)",
-// these are all based on the existing public variables
-// formBorderRadius: 'var(--sid-form-border-radius, calc(2 * var(--sid-button-border-radius)))',
-// formButtonPrimaryColor: 'var(--sid-form-button-primary-color, var(--sid-color-primary))',
-// formButtonBorderRadius: 'var(--sid-form-button-border-radius, var(--sid-button-border-radius))',
-// formFontFamily: 'var(--sid-form-font-family, var(--sid-font-family))',
-// formColorForeground: 'var(--sid-form-color-foreground, var(--sid-color-foreground))',
-// input element
-/* inputBorderRadius:
-    "var(--sid-input-border-radius, var(--sid-button-border-radius))" */
-// inputBorderColor: "var(--sid-input-border-color, var(--sid-color-subtle))",
-// inputLabelColor: "var(--sid-input-label-color, var(--sid-color-contrast))",
-
 // public CSS variables that can be customised
 export const publicVariables = createGlobalThemeContract(
   {

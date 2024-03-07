@@ -34,6 +34,7 @@ import { Delayed } from "./components/delayed";
 
 // theming
 export * from "./theme/theme.css";
+export * from "./theme/theme.types";
 export * from "./theme/sprinkles.css";
 
 // components
