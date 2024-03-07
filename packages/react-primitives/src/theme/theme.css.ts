@@ -30,7 +30,6 @@ export const otherPublicVariables = {
   formLogoMarginBottom: "var(--sid-form-logo-margin-bottom, 16px)",
   formLogoWidth: "var(--sid-form-logo-width, auto)",
   formSsoMarginTop: "var(--sid-form-sso-margin-top, 16px)",
-  formDividerDisplay: "var(--sid-form-divider-display, flex)",
 
   // these are all based on the existing public variables
   // formBorderRadius: 'var(--sid-form-border-radius, calc(2 * var(--sid-button-border-radius)))',
