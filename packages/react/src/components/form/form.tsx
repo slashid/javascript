@@ -20,7 +20,6 @@ import { Slots, useSlots } from "../slot";
 import { Factor } from "@slashid/slashid";
 import { PayloadOptions } from "./types";
 import { InternalFormContext } from "./internal-context";
-import { otherPublicVariables } from "../../../../react-primitives/src/theme/theme.css";
 
 export type Props = ConfigurationOverridesProps & {
   className?: string;
@@ -103,14 +102,7 @@ export const Form = ({
         setSelectedFactor,
       }}
     >
-      <div
-        className={clsx("sid-form", styles.form, className)}
-        style={{
-          borderRadius: otherPublicVariables.formBorderRadius,
-          fontFamily: otherPublicVariables.formFontFamily,
-          color: otherPublicVariables.formColorForeground
-        }}
-      >
+      <div className={clsx("sid-form", styles.form, className)}>
         <ConfigurationOverrides text={text} factors={factors}>
           {flowState.status === "initial" && (
             <FormProvider>{slots.initial}</FormProvider>

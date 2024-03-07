@@ -5,5 +5,5 @@ export const organizationSwitcher = style({
   fontFamily: publicVariables.font.fontFamily,
   color: publicVariables.color.foreground,
   backgroundColor: publicVariables.color.panel,
-  borderRadius: publicVariables.border.radius,
+  borderRadius: publicVariables.input.border.radius,
 });

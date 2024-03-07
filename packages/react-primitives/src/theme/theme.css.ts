@@ -26,21 +26,24 @@ export const colors = {
  * intended to allow targeting styling of the form.
  */
 export const otherPublicVariables = {
-  // form + sub elements
-  formLogoMarginBottom: 'var(--sid-form-logo-margin-bottom, 16px)',
-  formLogoWidth: 'var(--sid-form-logo-width, auto)',
-  formBorderRadius: 'var(--sid-form-border-radius, calc(2 * var(--sid-button-border-radius)))',
-  formButtonPrimaryColor: 'var(--sid-form-button-primary-color, var(--sid-color-primary))',
-  formSsoMarginTop: 'var(--sid-form-sso-margin-top, 16px)',
-  formButtonBorderRadius: 'var(--sid-form-button-border-radius, var(--sid-button-border-radius))',
-  formDividerDisplay: 'var(--sid-form-divider-display, flex)',
-  formFontFamily: 'var(--sid-form-font-family, var(--sid-font-family))',
-  formColorForeground: 'var(--sid-form-color-foreground, var(--sid-color-foreground))',
+  // TODO these have real values, maybe we can remove them?
+  formLogoMarginBottom: "var(--sid-form-logo-margin-bottom, 16px)",
+  formLogoWidth: "var(--sid-form-logo-width, auto)",
+  formSsoMarginTop: "var(--sid-form-sso-margin-top, 16px)",
+  formDividerDisplay: "var(--sid-form-divider-display, flex)",
+
+  // these are all based on the existing public variables
+  // formBorderRadius: 'var(--sid-form-border-radius, calc(2 * var(--sid-button-border-radius)))',
+  // formButtonPrimaryColor: 'var(--sid-form-button-primary-color, var(--sid-color-primary))',
+  // formButtonBorderRadius: 'var(--sid-form-button-border-radius, var(--sid-button-border-radius))',
+  // formFontFamily: 'var(--sid-form-font-family, var(--sid-font-family))',
+  // formColorForeground: 'var(--sid-form-color-foreground, var(--sid-color-foreground))',
 
   // input element
-  inputBorderRadius: 'var(--sid-input-border-radius, var(--sid-button-border-radius))',
-  inputBorderColor: 'var(--sid-input-border-color, var(--sid-color-subtle))',
-  inputLabelColor: 'var(--sid-input-label-color, var(--sid-color-contrast))'
+  /* inputBorderRadius:
+    "var(--sid-input-border-radius, var(--sid-button-border-radius))" */
+  // inputBorderColor: "var(--sid-input-border-color, var(--sid-color-subtle))",
+  // inputLabelColor: "var(--sid-input-label-color, var(--sid-color-contrast))",
 };
 
 // public CSS variables that can be customised
@@ -75,10 +78,30 @@ export const publicVariables = createGlobalThemeContract(
     font: {
       fontFamily: "font-family",
     },
+    // TODO deprecate
     border: {
       radius: "button-border-radius",
       width: {
         panel: "border-width-panel",
+      },
+    },
+    input: {
+      border: {
+        radius: "input-border-radius",
+        color: "input-border-color",
+      },
+      label: {
+        color: "input-label-color",
+      },
+    },
+    button: {
+      border: {
+        radius: "button-border-radius",
+      },
+    },
+    form: {
+      border: {
+        radius: "form-border-radius",
       },
     },
   },
@@ -145,10 +168,30 @@ export const defaultVars = {
   font: {
     fontFamily: "Inter, sans-serif",
   },
+  // TODO deprecate
   border: {
     radius: "16px",
     width: {
       panel: "2px",
+    },
+  },
+  input: {
+    border: {
+      radius: "8px",
+      color: publicVariables.color.subtle,
+    },
+    label: {
+      color: publicVariables.color.contrast,
+    },
+  },
+  button: {
+    border: {
+      radius: "16px",
+    },
+  },
+  form: {
+    border: {
+      radius: "16px",
     },
   },
 };

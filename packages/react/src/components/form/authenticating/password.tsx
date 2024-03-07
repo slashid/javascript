@@ -285,7 +285,6 @@ export const PasswordState = ({ flowState }: Props) => {
                   : "current-password"
               }
               style={{
-                borderRadius: otherPublicVariables.inputBorderRadius,
                 borderColor: otherPublicVariables.inputBorderColor,
               }}
             />
@@ -300,7 +299,6 @@ export const PasswordState = ({ flowState }: Props) => {
                 error={hasError("password")}
                 className={sprinkles({ marginTop: "4" })}
                 style={{
-                  borderRadius: otherPublicVariables.inputBorderRadius,
                   borderColor: otherPublicVariables.inputBorderColor,
                 }}
               />
@@ -315,10 +313,6 @@ export const PasswordState = ({ flowState }: Props) => {
             type="submit"
             variant="primary"
             testId="sid-form-initial-submit-button"
-            style={{
-              background: otherPublicVariables.formButtonPrimaryColor,
-              borderRadius: otherPublicVariables.formButtonBorderRadius,
-            }}
           >
             {text["authenticating.password.submit"]}
           </Button>

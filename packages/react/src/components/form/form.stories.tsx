@@ -6,7 +6,6 @@ import { ConfigurationProvider } from "../../context/config-context";
 import { Handle } from "../../domain/types";
 import { defaultOrganization } from "../../middleware";
 import { Slot } from "../slot";
-import { otherPublicVariables } from "@slashid/react-primitives";
 
 const meta: Meta<typeof Form> = {
   component: Form,
@@ -179,24 +178,8 @@ export const WithCompositionAndCustomisation: Story = {
               {({ context, retry, cancel }) => (
                 <div>
                   <h1>{context.error.message}</h1>
-                  <button
-                    onClick={retry}
-                    style={{
-                      background: otherPublicVariables.formButtonPrimaryColor,
-                      borderRadius: otherPublicVariables.formButtonBorderRadius,
-                    }}
-                  >
-                    Retry
-                  </button>
-                  <button
-                    onClick={cancel}
-                    style={{
-                      background: otherPublicVariables.formButtonPrimaryColor,
-                      borderRadius: otherPublicVariables.formButtonBorderRadius,
-                    }}
-                  >
-                    Cancel
-                  </button>
+                  <button onClick={retry}>Retry</button>
+                  <button onClick={cancel}>Cancel</button>
                 </div>
               )}
             </Form.Error>

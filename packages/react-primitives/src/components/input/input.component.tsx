@@ -32,7 +32,6 @@ export const Input: React.FC<InputProps> = ({
         className
       )}
       style={{
-        borderRadius: otherPublicVariables.inputBorderRadius,
         borderColor: otherPublicVariables.inputBorderColor,
       }}
     >

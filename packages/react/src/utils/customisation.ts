@@ -9,6 +9,7 @@ import {
 } from "./css-sanitisation";
 import { toEntries } from "./object";
 
+// TODO we can get this from the theme config
 const cssVariables = [
   "--sid-form-logo-margin-bottom",
   "--sid-form-logo-width",

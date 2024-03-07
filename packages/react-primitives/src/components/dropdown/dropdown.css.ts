@@ -14,7 +14,7 @@ export const trigger = style({
   boxSizing: "border-box",
   backgroundColor: publicVariables.color.offset,
   border: `1px solid ${publicVariables.color.subtle}`,
-  borderRadius: publicVariables.border.radius,
+  borderRadius: publicVariables.input.border.radius,
   fontFamily: publicVariables.font.fontFamily,
   position: "relative",
   textAlign: "left",

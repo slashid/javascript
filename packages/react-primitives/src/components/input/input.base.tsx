@@ -1,7 +1,6 @@
 import { ChangeEventHandler, useCallback } from "react";
 
 import * as styles from "./input.css";
-import { otherPublicVariables } from "../../main";
 
 export type BaseInputProps = {
   id: string;
@@ -36,11 +35,7 @@ export const BaseInput: React.FC<BaseInputProps> = ({
 
   return (
     <div className={styles.inputHost[type]}>
-      <label
-        htmlFor={id}
-        className={styles.label}
-        style={{ color: otherPublicVariables.inputLabelColor }}
-      >
+      <label htmlFor={id} className={styles.label}>
         {label}
       </label>
       <input

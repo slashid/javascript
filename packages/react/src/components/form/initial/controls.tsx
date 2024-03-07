@@ -278,10 +278,6 @@ const Submit = ({ children }: SubmitProps) => {
       className={sprinkles({
         marginTop: "6",
       })}
-      style={{
-        background: otherPublicVariables.formButtonPrimaryColor,
-        borderRadius: otherPublicVariables.formButtonBorderRadius
-      }}
       type="submit"
       variant="primary"
       testId="sid-form-initial-submit-button"
@@ -364,8 +360,7 @@ const HandleInput: React.FC<PropsInternal> = ({
           })}
           onFlagChange={setFlag}
           style={{
-            borderRadius: otherPublicVariables.inputBorderRadius,
-            borderColor: otherPublicVariables.inputBorderColor
+            borderColor: otherPublicVariables.inputBorderColor,
           }}
         />
       );
@@ -391,8 +386,7 @@ const HandleInput: React.FC<PropsInternal> = ({
           },
         })}
         style={{
-          borderRadius: otherPublicVariables.inputBorderRadius,
-          borderColor: otherPublicVariables.inputBorderColor
+          borderColor: otherPublicVariables.inputBorderColor,
         }}
       />
     );

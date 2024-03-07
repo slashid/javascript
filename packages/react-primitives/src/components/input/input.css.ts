@@ -57,12 +57,12 @@ export const countryHost = style({
 export const host = style({
   display: "flex",
   alignItems: "flex-start",
-  border: `1px solid ${publicVariables.color.subtle}`,
+  border: `1px solid ${publicVariables.input.border.color}`,
   width: "100%",
   minWidth: theme.input.minWidth,
   boxSizing: "border-box",
   fontFamily: publicVariables.font.fontFamily,
-  borderRadius: publicVariables.border.radius,
+  borderRadius: publicVariables.input.border.radius,
   height: theme.input.height,
 
   selectors: {
@@ -129,7 +129,7 @@ export const inputHost = styleVariants({
 export const label = style({
   fontSize: theme.font.size.xs,
   fontWeight: theme.font.weight.semibold,
-  color: publicVariables.color.contrast,
+  color: publicVariables.input.label.color,
   lineHeight: "118%",
 });
 
@@ -163,6 +163,6 @@ export const passwordRevealButton = style({
   ":focus-visible": {
     outline: `4px solid ${publicVariables.color.smooth}`,
     outlineOffset: "-8px",
-    borderRadius: publicVariables.border.radius,
+    borderRadius: publicVariables.input.border.radius,
   },
 });

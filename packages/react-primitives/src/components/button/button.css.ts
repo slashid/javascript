@@ -3,7 +3,7 @@ import { colors, publicVariables, theme } from "../../theme/theme.css";
 
 const base = style({
   fontFamily: publicVariables.font.fontFamily,
-  borderRadius: publicVariables.border.radius,
+  borderRadius: publicVariables.button.border.radius,
   fontWeight: theme.font.weight.medium,
   fontSize: theme.font.size.base,
   height: theme.input.height,
