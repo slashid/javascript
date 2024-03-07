@@ -10,7 +10,6 @@ import {
   Line,
   Okta,
   sprinkles,
-  otherPublicVariables,
 } from "@slashid/react-primitives";
 import clsx from "clsx";
 
@@ -140,9 +139,6 @@ export function SSOProviders({ providers, handleClick }: Props) {
         sprinkles({ marginTop: "4" }),
         styles.oidcList
       )}
-      style={{
-        marginTop: otherPublicVariables.formSsoMarginTop,
-      }}
     >
       {providers.map((p) => {
         switch (p.method) {
