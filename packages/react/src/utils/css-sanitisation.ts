@@ -2,8 +2,8 @@ export const pixelValueRegExp = /([0-9]+)px/;
 export const hexValueRegExp = /#([\da-fA-F]{2})([\da-fA-F]{2})([\da-fA-F]{2})/;
 export const fontFamilyRegExp = /(?:['"]?([\\\w\d\- ]+)['"]?(?:,\s*)?)/g;
 export const displayValues = ["flex", "none"];
-export const googleFonts = new Set(["Open Sans"])
-export const supportedFonts = ["Inter", "sans-serif", ...googleFonts];
+export const googleFonts = new Set(["Open Sans", "Inter"]);
+export const supportedFonts = ["sans-serif", ...googleFonts];
 
 export const parseAndAssertMatch = (
   input: string | number,
@@ -37,8 +37,8 @@ export const hexSanitiser = (
 };
 
 export const exactMatchSanitiser =
-  (values: any[]) =>
-  (input: string | number | (string | number)[]): string | number | null => {
+  <T extends string | number>(values: T[]) =>
+  (input: T | T[]): T | null => {
     if (Array.isArray(input)) return null;
 
     const match = values.some((value) => value === input);
@@ -50,7 +50,7 @@ export const exactMatchSanitiser =
 
 export const filterDisallowedFonts = (fonts: string[]): string[] => {
   return fonts
-    .map((font) => font.replaceAll(',', '').trim())
+    .map((font) => font.replaceAll(",", "").trim())
     .filter((font) => {
       for (const fontName of supportedFonts) {
         if (font === fontName) return true;
@@ -58,9 +58,9 @@ export const filterDisallowedFonts = (fonts: string[]): string[] => {
         if (font === `"${fontName}"`) return true;
       }
 
-    return false;
-  });
-}
+      return false;
+    });
+};
 
 export const fontFamilySanitiser = (
   input: string | number | (string | number)[]
@@ -69,7 +69,7 @@ export const fontFamilySanitiser = (
 
   if (!fonts) return null;
 
-  const allowedFonts = filterDisallowedFonts(fonts)
+  const allowedFonts = filterDisallowedFonts(fonts);
   if (!allowedFonts.length) return null;
 
   return allowedFonts.join(", ");

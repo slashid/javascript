@@ -13,7 +13,7 @@ type Props = {
   testId?: string;
   disabled?: boolean;
   loading?: boolean;
-  style?: Record<string, any>
+  style?: React.CSSProperties;
 };
 
 export const Button = forwardRef<HTMLButtonElement, Props>(
@@ -28,7 +28,7 @@ export const Button = forwardRef<HTMLButtonElement, Props>(
       icon,
       disabled,
       loading = false,
-      style
+      style,
     },
     forwardedRef
   ) => {

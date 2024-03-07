@@ -284,9 +284,9 @@ export const PasswordState = ({ flowState }: Props) => {
                   ? "new-password"
                   : "current-password"
               }
-              sidInputStyle={{
+              style={{
                 borderRadius: otherPublicVariables.inputBorderRadius,
-                borderColor: otherPublicVariables.inputBorderColor
+                borderColor: otherPublicVariables.inputBorderColor,
               }}
             />
             {formState === "setPassword" && (
@@ -299,9 +299,9 @@ export const PasswordState = ({ flowState }: Props) => {
                 onChange={handleConfirmPasswordChange}
                 error={hasError("password")}
                 className={sprinkles({ marginTop: "4" })}
-                sidInputStyle={{
+                style={{
                   borderRadius: otherPublicVariables.inputBorderRadius,
-                  borderColor: otherPublicVariables.inputBorderColor
+                  borderColor: otherPublicVariables.inputBorderColor,
                 }}
               />
             )}
@@ -317,7 +317,7 @@ export const PasswordState = ({ flowState }: Props) => {
             testId="sid-form-initial-submit-button"
             style={{
               background: otherPublicVariables.formButtonPrimaryColor,
-              borderRadius: otherPublicVariables.formButtonBorderRadius
+              borderRadius: otherPublicVariables.formButtonBorderRadius,
             }}
           >
             {text["authenticating.password.submit"]}

@@ -2,12 +2,12 @@ import { clsx } from "clsx";
 import { BaseInput, BaseInputProps } from "./input.base";
 
 import * as styles from "./input.css";
-import { otherPublicVariables, publicVariables } from "../../main";
+import { otherPublicVariables } from "../../main";
 
 export type InputProps = BaseInputProps & {
   type?: "text" | "email";
   error?: boolean;
-  style?: Record<string, any>
+  style?: React.CSSProperties;
 };
 
 export const Input: React.FC<InputProps> = ({
@@ -20,7 +20,7 @@ export const Input: React.FC<InputProps> = ({
   value,
   error,
   onChange,
-  style
+  style,
 }) => {
   return (
     <div
@@ -33,7 +33,7 @@ export const Input: React.FC<InputProps> = ({
       )}
       style={{
         borderRadius: otherPublicVariables.inputBorderRadius,
-        borderColor: otherPublicVariables.inputBorderColor
+        borderColor: otherPublicVariables.inputBorderColor,
       }}
     >
       <BaseInput

@@ -13,7 +13,7 @@ export type BaseInputProps = {
   type?: "text" | "email" | "tel" | "password";
   value: string;
   onChange: ChangeEventHandler<HTMLInputElement>;
-  style?: Record<string, any>;
+  style?: React.CSSProperties;
 };
 
 export const BaseInput: React.FC<BaseInputProps> = ({
