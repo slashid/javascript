@@ -38,7 +38,7 @@ export const hexSanitiser = (
 
 export const exactMatchSanitiser =
   <T extends string | number>(values: T[]) =>
-  (input: T | T[]): T | null => {
+  (input: T): T | null => {
     if (Array.isArray(input)) return null;
 
     const match = values.some((value) => value === input);

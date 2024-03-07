@@ -27,7 +27,9 @@ const cssVariables = [
 const permittedCssVariables = new Set(cssVariables);
 
 export type CssVariable = (typeof cssVariables)[number];
-export type CssVariableConfig = Partial<Record<CssVariable, string | number | (string | number)[]>>;
+export type CssVariableConfig = Partial<
+  Record<CssVariable, string | number | (string | number)[]>
+>;
 
 const sanitisers: Record<
   CssVariable,
@@ -41,6 +43,7 @@ const sanitisers: Record<
   "--sid-form-sso-margin-top": pxSanitiser,
   "--sid-form-font-family": fontFamilySanitiser,
   "--sid-form-color-foreground": hexSanitiser,
+  // @ts-expect-error TODO fix this as CSS vars cannot be arrays
   "--sid-form-divider-display": exactMatchSanitiser(displayValues),
   "--sid-input-border-radius": pxSanitiser,
   "--sid-input-border-color": hexSanitiser,
@@ -70,24 +73,26 @@ export const sanitiseCssVariableCustomisationConfig = (
 };
 
 export const getGoogleFontImports = (fontFamily: string) => {
-  const fonts = fontFamily.toString().match(fontFamilyRegExp)
-  
-  if (!fonts) return []
-  
-  const sanitisedFonts = fonts.map(font => font.replaceAll(',', '').replaceAll(`'`, '').replaceAll(`"`, '').trim())
+  const fonts = fontFamily.toString().match(fontFamilyRegExp);
+
+  if (!fonts) return [];
+
+  const sanitisedFonts = fonts.map((font) =>
+    font.replaceAll(",", "").replaceAll(`'`, "").replaceAll(`"`, "").trim()
+  );
 
   const googleFontUrls = sanitisedFonts
-    .filter(font => googleFonts.has(font))
+    .filter((font) => googleFonts.has(font))
     .map((font) => {
-      const urlFontName = font.replace(' ', '+')
-      return `<link href="https://fonts.googleapis.com/css2?family=${urlFontName}:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">`
-    })
+      const urlFontName = font.replace(" ", "+");
+      return `<link href="https://fonts.googleapis.com/css2?family=${urlFontName}:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">`;
+    });
 
-  if (!googleFontUrls.length) return []
+  if (!googleFontUrls.length) return [];
 
-  return  [
+  return [
     `<link rel="preconnect" href="https://fonts.googleapis.com">`,
     `<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>`,
-    ...googleFontUrls
-  ]
-}
+    ...googleFontUrls,
+  ];
+};
