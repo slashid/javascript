@@ -1,5 +1,15 @@
 # @slashid/react
 
+## 1.20.0
+
+### Minor Changes
+
+- d3b9a54: Add the `environment` prop to `<SlashIDProvider>` component
+
+### Patch Changes
+
+- fc8d2f1: Use alternative to Object.hasOwn()
+
 ## 1.19.0
 
 ### Minor Changes
