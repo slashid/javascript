@@ -77,6 +77,6 @@ export const getGoogleFontImports = (fontFamily: string) => {
   return [
     `<link rel="preconnect" href="https://fonts.googleapis.com">`,
     `<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>`,
-    ...googleFontUrls,
+    ...googleFontUrls.join("\n"),
   ];
 };
