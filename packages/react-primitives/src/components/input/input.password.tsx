@@ -7,6 +7,7 @@ import { Eye, EyeReveal } from "../icon";
 
 export type PasswordInputProps = Omit<BaseInputProps, "type"> & {
   error?: boolean;
+  style?: React.CSSProperties;
 };
 
 export const PasswordInput: React.FC<PasswordInputProps> = (props) => {
@@ -21,6 +22,7 @@ export const PasswordInput: React.FC<PasswordInputProps> = (props) => {
         props.error && styles.error,
         props.className
       )}
+      style={props.style}
     >
       <BaseInput {...props} type={showPassword ? "text" : "password"} />
       <button

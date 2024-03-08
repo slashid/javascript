@@ -11,7 +11,7 @@ export const form = style({
 
   "@media": {
     "screen and (min-width: 768px)": {
-      borderRadius: `calc(2 * ${publicVariables.border.radius})`,
+      borderRadius: `calc(2 * ${publicVariables.form.border.radius})`,
     },
   },
 });

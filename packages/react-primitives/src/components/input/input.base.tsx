@@ -12,6 +12,7 @@ export type BaseInputProps = {
   type?: "text" | "email" | "tel" | "password";
   value: string;
   onChange: ChangeEventHandler<HTMLInputElement>;
+  style?: React.CSSProperties;
 };
 
 export const BaseInput: React.FC<BaseInputProps> = ({
@@ -23,6 +24,7 @@ export const BaseInput: React.FC<BaseInputProps> = ({
   value,
   onChange,
   type = "text",
+  style,
 }) => {
   const handleChange = useCallback<ChangeEventHandler<HTMLInputElement>>(
     (e) => {
@@ -37,6 +39,7 @@ export const BaseInput: React.FC<BaseInputProps> = ({
         {label}
       </label>
       <input
+        style={style}
         type={type}
         id={id}
         name={name}

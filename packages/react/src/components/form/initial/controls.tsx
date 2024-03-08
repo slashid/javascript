@@ -274,7 +274,9 @@ const Submit = ({ children }: SubmitProps) => {
 
   return (
     <Button
-      className={sprinkles({ marginTop: "6" })}
+      className={sprinkles({
+        marginTop: "6",
+      })}
       type="submit"
       variant="primary"
       testId="sid-form-initial-submit-button"

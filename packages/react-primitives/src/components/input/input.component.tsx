@@ -6,6 +6,7 @@ import * as styles from "./input.css";
 export type InputProps = BaseInputProps & {
   type?: "text" | "email";
   error?: boolean;
+  style?: React.CSSProperties;
 };
 
 export const Input: React.FC<InputProps> = ({
@@ -18,6 +19,7 @@ export const Input: React.FC<InputProps> = ({
   value,
   error,
   onChange,
+  style,
 }) => {
   return (
     <div
@@ -30,6 +32,7 @@ export const Input: React.FC<InputProps> = ({
       )}
     >
       <BaseInput
+        style={style}
         id={id}
         name={name}
         label={label}

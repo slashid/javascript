@@ -13,8 +13,8 @@ export const trigger = style({
   padding: `${theme.input.paddingVertical} ${theme.input.paddingHorizontal}`,
   boxSizing: "border-box",
   backgroundColor: publicVariables.color.offset,
-  border: `1px solid ${publicVariables.color.subtle}`,
-  borderRadius: publicVariables.border.radius,
+  border: `1px solid ${publicVariables.input.border.color}`,
+  borderRadius: publicVariables.input.border.radius,
   fontFamily: publicVariables.font.fontFamily,
   position: "relative",
   textAlign: "left",
@@ -37,7 +37,7 @@ export const trigger = style({
 export const label = style({
   fontSize: theme.font.size.xs,
   fontWeight: theme.font.weight.semibold,
-  color: publicVariables.color.contrast,
+  color: publicVariables.input.label.color,
 });
 
 export const input = style({

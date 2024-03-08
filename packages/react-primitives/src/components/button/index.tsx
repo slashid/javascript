@@ -13,6 +13,7 @@ type Props = {
   testId?: string;
   disabled?: boolean;
   loading?: boolean;
+  style?: React.CSSProperties;
 };
 
 export const Button = forwardRef<HTMLButtonElement, Props>(
@@ -27,11 +28,13 @@ export const Button = forwardRef<HTMLButtonElement, Props>(
       icon,
       disabled,
       loading = false,
+      style,
     },
     forwardedRef
   ) => {
     return (
       <button
+        style={style}
         ref={forwardedRef}
         data-testid={testId}
         type={type}

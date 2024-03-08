@@ -277,6 +277,24 @@ const ComposedForm = () => {
   );
 };
 
+const vars = {
+  "--sid-input-border-radius": "32px",
+  "--sid-input-label-color": "yellow",
+  "--sid-button-border-radius": "32px",
+  "--sid-input-border-color": "red",
+  "--sid-color-primary": "red",
+} as React.CSSProperties;
+
+/* const checkatradeVars = {
+  "--sid-color-primary": "#0058A2",
+  "--sid-button-border-radius": "4px",
+  "--sid-input-border-radius": "4px",
+  "--sid-input-border-color": "#EDEDED",
+  "--sid-input-label-color": "#62687A",
+  "--sid-form-logo-width": "150px",
+  "--sid-form-border-radius": "0px",
+} as React.CSSProperties; */
+
 const LogOut = () => {
   const { logOut } = useSlashID();
   return (
@@ -299,7 +317,7 @@ root.render(
       <LogOut />
       <div className="layout">
         <div>
-          <div>
+          <div style={vars}>
             <h2>Basic form</h2>
             <BasicForm />
           </div>

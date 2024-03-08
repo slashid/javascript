@@ -53,10 +53,33 @@ export const publicVariables = createGlobalThemeContract(
     font: {
       fontFamily: "font-family",
     },
+    // TODO deprecate
     border: {
       radius: "button-border-radius",
       width: {
         panel: "border-width-panel",
+      },
+    },
+    input: {
+      border: {
+        radius: "input-border-radius",
+        color: "input-border-color",
+      },
+      label: {
+        color: "input-label-color",
+      },
+    },
+    button: {
+      border: {
+        radius: "button-border-radius",
+      },
+    },
+    form: {
+      border: {
+        radius: "form-border-radius",
+      },
+      logo: {
+        width: "form-logo-width",
       },
     },
   },
@@ -123,10 +146,33 @@ export const defaultVars = {
   font: {
     fontFamily: "Inter, sans-serif",
   },
+  // TODO deprecate
   border: {
     radius: "16px",
     width: {
       panel: "2px",
+    },
+  },
+  input: {
+    border: {
+      radius: "8px",
+      color: publicVariables.color.subtle,
+    },
+    label: {
+      color: publicVariables.color.contrast,
+    },
+  },
+  button: {
+    border: {
+      radius: "16px",
+    },
+  },
+  form: {
+    border: {
+      radius: "16px",
+    },
+    logo: {
+      width: "auto",
     },
   },
 };
