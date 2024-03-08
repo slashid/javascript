@@ -1,4 +1,4 @@
-import { hexValidator } from "./css-validation";
+import { hexValidator, fontFamilyValidator } from "./css-validation";
 
 describe("hexValidator", () => {
   it("should return true for valid hex values", () => {
@@ -12,5 +12,21 @@ describe("hexValidator", () => {
     expect(hexValidator("#GHIJKL")).toBe(false);
     expect(hexValidator("#123MKO")).toBe(false);
     expect(hexValidator("123456")).toBe(false);
+  });
+});
+
+describe("fontFamilyValidator", () => {
+  it("should return true for valid font families", () => {
+    expect(fontFamilyValidator("Inter")).toBe(true);
+    expect(fontFamilyValidator('"Open Sans"')).toBe(true);
+    expect(fontFamilyValidator("sans-serif")).toBe(true);
+    expect(fontFamilyValidator("Inter, sans-serif")).toBe(true);
+  });
+
+  it("should return false for invalid font families", () => {
+    expect(fontFamilyValidator("sans-seri")).toBe(false);
+    expect(fontFamilyValidator("Inter, sans-seri")).toBe(false);
+    expect(fontFamilyValidator("InvalidFont")).toBe(false);
+    expect(fontFamilyValidator("123456")).toBe(false);
   });
 });

@@ -45,7 +45,7 @@ export const fontFamilyValidator = (
   if (!fonts) return false;
 
   const allowedFonts = filterDisallowedFonts(fonts);
-  if (!allowedFonts.length) return false;
+  if (allowedFonts.length !== fonts.length) return false;
 
   return true;
 };
