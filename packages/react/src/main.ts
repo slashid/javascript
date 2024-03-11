@@ -1,3 +1,4 @@
+import "./passkey"; // start this loading ASAP
 import { DynamicFlow } from "./components/dynamic-flow";
 import { Form } from "./components/form";
 import { Slot } from "./components/slot";
