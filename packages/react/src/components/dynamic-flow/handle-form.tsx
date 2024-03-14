@@ -40,6 +40,7 @@ export const FACTOR_LABEL_MAP: Record<
   password: "factor.password",
   oidc: "",
   saml: "",
+  totp: "",
 };
 
 export type Props = {
