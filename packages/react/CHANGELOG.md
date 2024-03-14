@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 1.21.0
+
+### Minor Changes
+
+- 0c17491: Add flex wrapper around img logo element
+
 ## 1.20.0
 
 ### Minor Changes
