@@ -62,12 +62,6 @@ export const Oidc: React.FC<Props> = ({ providers, handleClick }) => {
           return null;
         }
 
-        console.log({
-          method: p.method,
-          options: p.options,
-          name: p.label || PROVIDER_TO_PRETTY_NAME[p.options?.provider],
-        });
-
         return (
           <Button
             key={p.options?.client_id}
