@@ -5,7 +5,7 @@ import { Divider } from "@slashid/react-primitives";
 import { FormProvider } from "../../context/form-context";
 import { InitialState } from "../form/flow";
 import { Logo } from "../form/initial/logo";
-import { Oidc } from "../form/initial/oidc";
+import { Oidc } from "./oidc";
 import { Text } from "../text";
 import { useConfiguration } from "../../hooks/use-configuration";
 import { ConfiguredHandleForm } from "./configured-handle-form";
