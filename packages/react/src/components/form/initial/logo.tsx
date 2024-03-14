@@ -12,11 +12,15 @@ export type Props = {
 export const Logo: React.FC<Props> = ({ logo }) => {
   if (typeof logo === "string" && logo) {
     return (
-      <img
-        className={clsx("sid-logo", "sid-logo--image", styles.logo)}
-        src={logo}
-        alt="Company logo"
-      />
+      <div className={clsx("sid-logo", "sid-logo--image", styles.logo)}>
+        <div>
+          <img
+            className={styles.logo}
+            src={logo}
+            alt="Company logo"
+          />
+        </div>
+      </div>
     );
   }
 
