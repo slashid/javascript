@@ -177,6 +177,13 @@ const BasicForm = () => {
           },
         },
         {
+          method: "oidc",
+          options: {
+            provider: "apple",
+            client_id: "test_apple_id",
+          },
+        },
+        {
           method: "saml",
           options: {
             provider_credentials_id: "test_saml",

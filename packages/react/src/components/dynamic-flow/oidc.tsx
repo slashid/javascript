@@ -12,12 +12,13 @@ import {
   Line,
   Okta,
   sprinkles,
+  Apple,
 } from "@slashid/react-primitives";
 
-import { FactorLabeledOIDC } from "../../../domain/types";
-import { useConfiguration } from "../../../hooks/use-configuration";
+import { FactorLabeledOIDC } from "../../domain/types";
+import { useConfiguration } from "../../hooks/use-configuration";
 
-import * as styles from "./initial.css";
+import * as styles from "./oidc.css";
 
 const PROVIDER_TO_ICON: Record<OAuthProvider, React.ReactNode> = {
   google: <Google />,
@@ -28,11 +29,12 @@ const PROVIDER_TO_ICON: Record<OAuthProvider, React.ReactNode> = {
   bitbucket: <Bitbucket />,
   azuread: <AzureAD />,
   okta: <Okta />,
+  apple: <Apple />,
 };
 
 const PROVIDER_TO_PRETTY_NAME: Record<OAuthProvider, string> = {
   google: "Google",
-  // apple: "Apple",
+  apple: "Apple",
   facebook: "Facebook",
   github: "GitHub",
   gitlab: "GitLab",

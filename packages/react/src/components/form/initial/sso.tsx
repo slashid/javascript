@@ -10,6 +10,7 @@ import {
   Line,
   Okta,
   sprinkles,
+  Apple,
 } from "@slashid/react-primitives";
 import clsx from "clsx";
 
@@ -30,6 +31,7 @@ const PROVIDER_TO_ICON: Record<OAuthProvider, React.ReactNode> = {
   bitbucket: <Bitbucket />,
   azuread: <AzureAD />,
   okta: <Okta />,
+  apple: <Apple />,
 };
 
 const PROVIDER_TO_PRETTY_NAME: Record<OAuthProvider, string> = {
@@ -41,6 +43,7 @@ const PROVIDER_TO_PRETTY_NAME: Record<OAuthProvider, string> = {
   bitbucket: "Bitbucket",
   azuread: "Azure AD",
   okta: "Okta",
+  apple: "Apple",
 };
 
 export type SAMLProviderProps = {
