@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 1.22.0
+
+### Minor Changes
+
+- 555d6de: Add Apple as OIDC provider
+
 ## 1.21.0
 
 ### Minor Changes
