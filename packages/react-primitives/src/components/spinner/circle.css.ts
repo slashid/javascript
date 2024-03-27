@@ -90,9 +90,10 @@ export const outerCircleVariants = styleVariants({
   blue: [
     outerCircle,
     {
-      border: "1px solid rgba(42, 106, 255, 0.02)",
+      border:
+        "1px solid rgb(from var(--sid-color-primary, #2a6aff) r g b / 0.02)",
       background:
-        "linear-gradient(311deg, rgba(42, 106, 255, 0.06) -7.54%, rgba(42, 106, 255, 0.00) 123.57%)",
+        "linear-gradient(311deg, rgb(from var(--sid-color-primary, #2a6aff) r g b / 0.06) -7.54%, rgb(from var(--sid-color-primary, #2a6aff) r g b / 0.00) 123.57%)",
     },
   ],
   red: [
@@ -125,9 +126,10 @@ export const middleCircleVariants = styleVariants({
   blue: [
     middleCircle,
     {
-      border: "1px solid rgba(42, 106, 255, 0.02)",
+      border:
+        "1px solid rgb(from var(--sid-color-primary, #2a6aff) r g b / 0.02)",
       background:
-        "linear-gradient(311deg, rgba(42, 106, 255, 0.06) -7.54%, rgba(42, 106, 255, 0.00) 123.57%)",
+        "linear-gradient(311deg, rgb(from var(--sid-color-primary, #2a6aff) r g b / 0.06) -7.54%, rgb(from var(--sid-color-primary, #2a6aff) r g b / 0.00) 123.57%)",
     },
   ],
   red: [
@@ -162,8 +164,11 @@ export const innerCircleVariants = styleVariants({
   blue: [
     innerCircle,
     {
-      background:
-        "linear-gradient(148deg, rgba(42, 106, 255, 0.86) 14.4%, rgba(42, 106, 255, 0.74) 87.37%)",
+      background: `linear-gradient(
+        148deg,
+        rgb(from var(--sid-color-primary, #2a6aff) r g b / 0.86) 14.4%, 
+        rgb(from var(--sid-color-primary, #2a6aff) r g b / 0.74) 87.37%
+        )`,
     },
   ],
   red: [
