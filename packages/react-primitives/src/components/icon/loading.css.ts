@@ -6,6 +6,8 @@ export const container = style({
   width: "fitContent",
   height: "fitContent",
   borderRadius: "50%",
+  background:
+    "linear-gradient(148.27deg, rgb(from var(--sid-color-primary, #2a6aff) r g b / .86) 14.4%, rgb(from var(--sid-color-primary, #2a6aff) r g b / .74) 87.37%)",
 });
 
 const rotate = keyframes({
