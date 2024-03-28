@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 0.4.0
+
+### Minor Changes
+
+- 4871f2b: Add primary variant of the spinner, inherit the color from CSS variables
+
 ## 0.3.0
 
 ### Minor Changes
