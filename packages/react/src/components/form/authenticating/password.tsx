@@ -1,7 +1,6 @@
 import { FormEventHandler, useCallback, useEffect, useState } from "react";
 
 import { useForm } from "../../../hooks/use-form";
-import { useSlashID } from "../../../entry.npm";
 import { Props } from "./authenticating.types";
 import { ErrorMessage } from "../error-message";
 import { Text } from "../../text";
@@ -25,6 +24,7 @@ import {
   getValidationMessageKey,
   getValidationInterpolationTokens,
 } from "./validation";
+import { useSlashID } from "../../../hooks/use-slash-id";
 
 const PasswordRecoveryPrompt = ({
   onRecoverClick,

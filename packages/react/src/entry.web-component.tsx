@@ -9,9 +9,9 @@ import {
 } from "./context/slash-id-context";
 import "./dev.css";
 import r2wc from "@r2wc/react-to-web-component";
-import { Slot } from "./entry.npm";
 import { Text } from "./components/text";
 import { Loader } from "./components/form/authenticating/icons";
+import { Slot } from "./components/slot";
 
 type SlashIDFormInternalProps = Pick<
   SlashIDProviderProps,

@@ -11,7 +11,6 @@ import { OtpInput, Delayed } from "@slashid/react-primitives";
 
 import { useConfiguration } from "../../../hooks/use-configuration";
 import { useForm } from "../../../hooks/use-form";
-import { useSlashID } from "../../../entry.npm";
 import { Props } from "./authenticating.types";
 import { getAuthenticatingMessage } from "./messages";
 import { OTP_CODE_LENGTH, isValidOTPCode } from "./validation";
@@ -22,6 +21,7 @@ import * as styles from "./authenticating.css";
 import { isFactorOTPEmail, isFactorOTPSms } from "../../../domain/handles";
 import { EmailIcon, SmsIcon, Loader } from "./icons";
 import { BackButton, RetryPrompt } from "./authenticating.components";
+import { useSlashID } from "../../../hooks/use-slash-id";
 
 const FactorIcon = ({ factor }: { factor: Factor }) => {
   if (isFactorOTPEmail(factor)) {
