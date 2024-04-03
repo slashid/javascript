@@ -10,7 +10,7 @@
   "devDependencies": {
     "@playwright/test": "^1.32.1",
     "@types/node": "18.11.9",
-    "tsconfig": "workspace:*"
+    "tsconfig": "*"
   },
   "files": [
     "playwright.config.ts"

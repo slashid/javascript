@@ -10,15 +10,15 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
-    "@slashid/react": "workspace:*",
+    "@slashid/react": "*",
     "@slashid/slashid": "3.17.1",
-    "@slashid/tests": "workspace:*",
+    "@slashid/tests": "*",
     "@types/node": "18.11.9",
     "@types/react": "18.0.25",
     "@types/react-dom": "18.0.7",
     "@typescript-eslint/eslint-plugin": "^5.27.0",
     "@typescript-eslint/parser": "^5.41.0",
-    "demo-form": "workspace:*",
+    "demo-form": "*",
     "eslint": "^7.32.0",
     "eslint-config-next": "13.0.2",
     "next": "13.0.2",

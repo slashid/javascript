@@ -14,8 +14,8 @@
     "@remix-run/react": "^1.13.0",
     "@remix-run/serve": "^1.13.0",
     "@slashid/slashid": "3.17.1",
-    "@slashid/react": "workspace:*",
-    "demo-form": "workspace:*",
+    "@slashid/react": "*",
+    "demo-form": "*",
     "isbot": "^3.6.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"

@@ -12,14 +12,14 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "@slashid/slashid": "3.17.1",
-    "@slashid/react": "workspace:*",
-    "demo-form": "workspace:*"
+    "@slashid/react": "*",
+    "demo-form": "*"
   },
   "devDependencies": {
     "@types/react": "^18.0.22",
     "@types/react-dom": "^18.0.7",
     "@vitejs/plugin-react": "^2.2.0",
     "vite": "^3.2.0",
-    "tsconfig": "workspace:*"
+    "tsconfig": "*"
   }
 }

@@ -22,7 +22,7 @@
     "@vitejs/plugin-react": "^4.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "tsconfig": "workspace:*",
+    "tsconfig": "*",
     "vite": "^5.0.7"
   },
   "peerDependencies": {

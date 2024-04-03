@@ -15,13 +15,13 @@
     "@buildo/bento-design-system": "^0.15.5",
     "@buildo/formo": "^2.0.1",
     "@fontsource/inter": "^4.5.14",
-    "@slashid/react": "workspace:*",
+    "@slashid/react": "*",
     "@slashid/slashid": "3.17.1",
     "@tanstack/react-location": "^3.7.4",
     "design-system": "*",
     "prop-types": "^15.8.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "url": "^0.11.0"
   },
   "devDependencies": {
