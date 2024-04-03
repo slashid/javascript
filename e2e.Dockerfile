@@ -1,6 +1,4 @@
 
-# filename: dockerfile
-
 # Base image
 FROM node:20
 
@@ -8,7 +6,7 @@ FROM node:20
 FROM mcr.microsoft.com/playwright:v1.42.1-jammy
 
 # Set the working directory
-WORKDIR /app
+WORKDIR /e2e
 
 # Copy package.json and package-lock.json
 COPY package*.json ./
