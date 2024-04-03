@@ -7,7 +7,7 @@ Follow these steps to generate and publish a new release:
 - Add a changeset (if the changes should result in a new version)
 
 ```bash
-pnpm changeset
+npm run changeset
 ```
 
 - Create a pull request

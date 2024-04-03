@@ -20,7 +20,7 @@
     "test:e2e": "turbo run test:e2e",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "changeset": "changeset",
-    "ci:publish": "pnpm build && changeset publish"
+    "ci:publish": "npm run build && changeset publish"
   },
   "devDependencies": {
     "@changesets/cli": "^2.25.0",

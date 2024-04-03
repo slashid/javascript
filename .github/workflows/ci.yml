@@ -24,34 +24,24 @@ jobs:
           node-version-file: ".nvmrc"
           registry-url: "https://registry.npmjs.org/"
 
-      - name: Cache Playwright browsers
-        uses: actions/cache@v3
-        id: playwright-cache
-        with:
-          path: |
-            ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-browsers-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-playwright-browsers-
-
       - name: Install dependencies
         run: npm install --force
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Check types
-        run: npm test:types
+        run: npm run test:types
 
       - name: Lint
-        run: npm lint
+        run: npm run lint
 
       - name: Build
-        run: npm build
+        run: npm run build
 
       - name: Unit tests
-        run: npm test:unit
+        run: npm run test:unit
 
       - name: Bundle size check
-        run: npm danger ci
+        run: npm run danger ci
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

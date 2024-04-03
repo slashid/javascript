@@ -47,7 +47,7 @@
     "test:types": "tsc --noEmit --emitDeclarationOnly false",
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
-    "publish:yalc": "node ./yalc.next.js && pnpm build && yalc publish"
+    "publish:yalc": "node ./yalc.next.js && npm run build && yalc publish"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.1.2",

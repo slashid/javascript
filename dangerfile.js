@@ -45,8 +45,8 @@ for (const filePath of filesToCheck) {
 // Switch to the main branch and build
 execSync("git fetch origin main:main");
 execSync("git checkout main");
-execSync("pnpm install --frozen-lockfile");
-execSync("pnpm build --filter @slashid/react");
+execSync("npm install --force");
+execSync("npm run build --filter @slashid/react");
 const mainSizes = {};
 const mainGzipSizes = {};
 for (const filePath of filesToCheck) {

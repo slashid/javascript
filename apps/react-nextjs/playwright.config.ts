@@ -5,7 +5,7 @@ const config: PlaywrightTestConfig = {
   ...base,
   testDir: "../../packages/tests/e2e",
   webServer: {
-    command: "pnpm start",
+    command: "npm run start",
     url: "http://127.0.0.1:3000",
     reuseExistingServer: !process.env.CI,
   },
