@@ -15,15 +15,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 8
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "pnpm"
+          cache: "npm"
           node-version-file: ".nvmrc"
           registry-url: "https://registry.npmjs.org/"
 
@@ -38,23 +35,23 @@ jobs:
             ${{ runner.os }}-playwright-browsers-
 
       - name: Install dependencies
-        run: pnpm install
+        run: npm install --force
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Check types
-        run: pnpm test:types
+        run: npm test:types
 
       - name: Lint
-        run: pnpm lint
+        run: npm lint
 
       - name: Build
-        run: pnpm build
+        run: npm build
 
       - name: Unit tests
-        run: pnpm test:unit
+        run: npm test:unit
 
       - name: Bundle size check
-        run: pnpm danger ci
+        run: npm danger ci
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

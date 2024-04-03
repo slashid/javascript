@@ -14,28 +14,25 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v3
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 8
+      - uses: actions/checkout@v3      
 
       - name: Use Node.js 20.9.0
         uses: actions/setup-node@v3
         with:
           node-version: 20.9.0
-          cache: "pnpm"
+          cache: "npm"
           node-version-file: ".nvmrc"
           registry-url: "https://registry.npmjs.org/"
 
       - name: Install dependencies
-        run: pnpm install
+        run: npm install --force
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: create and publish versions
         uses: changesets/action@v1
         with:
-          publish: pnpm ci:publish
+          publish: npm ci:publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
