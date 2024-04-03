@@ -8,11 +8,10 @@ FROM mcr.microsoft.com/playwright:v1.42.1-jammy
 # Set the working directory
 WORKDIR /e2e
 
-# Copy package.json and package-lock.json
-COPY package*.json ./
-
-# Copy the rest of the application files
+# Copy the application files
 COPY . .
 
+RUN npm install --force
+
 # Set the entry point for the container
-CMD ["npx", "playwright", "test"]
+CMD ["npm", "run", "build"]
