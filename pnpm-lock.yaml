@@ -296,8 +296,8 @@ importers:
         specifier: workspace:*
         version: link:../react
       '@slashid/slashid':
-        specifier: 3.17.1
-        version: 3.17.1
+        specifier: 3.22.0
+        version: 3.22.0
       next:
         specifier: 13.0.2
         version: 13.0.2(@babel/core@7.23.3)(react-dom@18.2.0)(react@18.2.0)
@@ -8696,6 +8696,23 @@ packages:
       uuid: 8.3.2
     dev: true
 
+  /@slashid/slashid@3.22.0:
+    resolution: {integrity: sha512-DVN7ciOs+RCXFpV8tIG5WFE51/O83Te3RdgmL4Zp7K9/dzGXB3f+/ps/pDjp5CseARJL5Bp7sh+HDNFtXUGm/w==}
+    dependencies:
+      '@changesets/cli': 2.26.2
+      '@types/uuid': 8.3.4
+      changeset: 0.2.6
+      compare-versions: 6.1.0
+      docdash: 1.2.0
+      jwt-decode: 3.1.2
+      qrcode: 1.5.3
+      querystring-es3: 0.2.1
+      regenerator-runtime: 0.13.11
+      ua-parser-js: 1.0.37
+      url: 0.11.3
+      uuid: 8.3.2
+    dev: false
+
   /@storybook/addon-actions@7.0.0-rc.2(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-e4VXOoeejRnz+yTtPGtenAvrMtwRWO4VRxbGBHDPyMo+FOlQPC6plOrQMZ+lSRaE20J3KfTo6wSLZgnHQUQtRw==}
     peerDependencies:
@@ -12318,7 +12335,6 @@ packages:
 
   /compare-versions@6.1.0:
     resolution: {integrity: sha512-LNZQXhqUvqUTotpZ00qLSaify3b4VFD588aRr8MKFw4CMUr98ytzCW5wDH5qx/DEY5kCDXcbcRuCqL0szEf2tg==}
-    dev: true
 
   /compress.js@1.2.2:
     resolution: {integrity: sha512-eIsMmzyBtPVDdPtpmPXTRB6uiLjgTXygYl0KCVVp0I/U/++YzZtEkhVTuWH97dzTxKvzAcZMFwYUHGC09BSUqg==}
@@ -18387,6 +18403,7 @@ packages:
   /qrcode@1.5.3:
     resolution: {integrity: sha512-puyri6ApkEHYiVl4CFzo1tDkAZ+ATcnbJrJ6RiBM1Fhctdn/ix9MTE3hRph33omisEbC/2fcfemsseiKgBPKZg==}
     engines: {node: '>=10.13.0'}
+    hasBin: true
     dependencies:
       dijkstrajs: 1.0.3
       encode-utf8: 1.0.3
@@ -20462,7 +20479,6 @@ packages:
 
   /ua-parser-js@1.0.37:
     resolution: {integrity: sha512-bhTyI94tZofjo+Dn8SN6Zv8nBDvyXTymAdM3LDI/0IboIUwTu1rEhW7v2TfiVsoYWgkQ4kOVqnI8APUFbIQIFQ==}
-    dev: true
 
   /udc@1.0.1:
     resolution: {integrity: sha512-jv+D9de1flsum5QkFtBdjyppCQAdz9kTck/0xST5Vx48T9LL2BYnw0Iw77dSKDQ9KZ/PS3qPO1vfXHDpLZlxcQ==}
