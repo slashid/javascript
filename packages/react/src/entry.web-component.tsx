@@ -19,10 +19,9 @@ type SlashIDFormInternalProps = Pick<
   | "oid"
   | "initialToken"
   | "tokenStorage"
-  | "baseApiUrl"
-  | "sdkUrl"
   | "analyticsEnabled"
   | "themeProps"
+  | "environment"
 > &
   Pick<
     IConfigurationContext,
@@ -37,8 +36,7 @@ const SlashIDFormInternal = ({
   oid,
   initialToken,
   tokenStorage,
-  baseApiUrl,
-  sdkUrl,
+  environment,
   analyticsEnabled,
   themeProps,
 
@@ -63,8 +61,7 @@ const SlashIDFormInternal = ({
         oid={oid}
         initialToken={initialToken}
         themeProps={themeProps}
-        baseApiUrl={baseApiUrl}
-        sdkUrl={sdkUrl}
+        environment={environment}
         tokenStorage={tokenStorage}
         analyticsEnabled={analyticsEnabled}
       >
@@ -106,10 +103,9 @@ const SlashIDForm = r2wc(SlashIDFormInternal, {
     oid: "string",
     initialToken: "string",
     tokenStorage: "string",
-    baseApiUrl: "string",
-    sdkUrl: "string",
     analyticsEnabled: "boolean",
     themeProps: "json",
+    environment: "string",
 
     // config provider
     logo: "string",
