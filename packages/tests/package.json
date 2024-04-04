@@ -16,5 +16,10 @@
   },
   "files": [
     "playwright.config.ts"
-  ]
+  ],
+  "dependencies": {
+    "cheerio": "1.0.0-rc.12",
+    "dotenv": "^16.4.5",
+    "mailinator-client": "^1.0.4"
+  }
 }
