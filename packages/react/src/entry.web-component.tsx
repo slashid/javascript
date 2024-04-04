@@ -12,6 +12,7 @@ import r2wc from "@r2wc/react-to-web-component";
 import { Text } from "./components/text";
 import { Loader } from "./components/form/authenticating/icons";
 import { Slot } from "./components/slot";
+import { SlashID } from "../../react-primitives/src/components/icon";
 
 type SlashIDFormInternalProps = Pick<
   SlashIDProviderProps,
@@ -42,11 +43,11 @@ const SlashIDFormInternal = ({
   themeProps,
 
   // overides
-  logo,
+  logo = <SlashID />,
   factors,
   text,
   storeLastHandle,
-  defaultCountryCode,
+  defaultCountryCode = "US",
 
   // form
   onSuccess,
@@ -75,25 +76,23 @@ const SlashIDFormInternal = ({
           defaultCountryCode={defaultCountryCode}
         >
           <Form onSuccess={onSuccess} onError={onError} middleware={middleware}>
-            <>
-              {slotSuccessIndeterminate && (
-                <Slot name="success">
-                  <article data-testid="sid-form-success-state">
-                    <Text
-                      as="h1"
-                      t="success.title"
-                      variant={{ size: "2xl-title", weight: "bold" }}
-                    />
-                    <Text
-                      as="h2"
-                      t="success.subtitle"
-                      variant={{ color: "contrast", weight: "semibold" }}
-                    />
-                    <Loader />
-                  </article>
-                </Slot>
-              )}
-            </>
+            {slotSuccessIndeterminate ? (
+              <Slot name="success">
+                <article data-testid="sid-form-success-state">
+                  <Text
+                    as="h1"
+                    t="success.title"
+                    variant={{ size: "2xl-title", weight: "bold" }}
+                  />
+                  <Text
+                    as="h2"
+                    t="success.subtitle"
+                    variant={{ color: "contrast", weight: "semibold" }}
+                  />
+                  <Loader />
+                </article>
+              </Slot>
+            ) : undefined}
           </Form>
         </ConfigurationProvider>
       </SlashIDProvider>
