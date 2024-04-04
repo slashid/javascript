@@ -1,11 +1,11 @@
 import { act, render, screen } from "@testing-library/react";
-import { SlashIDProvider } from "../main";
 import { useSlashID } from "./use-slash-id";
 import {
   TEST_ORG_ID,
   TEST_PERSON_ID,
   createTestUser,
 } from "../components/test-utils";
+import { SlashIDProvider } from "../context/slash-id-context";
 
 const TestComponent = () => {
   const { user } = useSlashID();

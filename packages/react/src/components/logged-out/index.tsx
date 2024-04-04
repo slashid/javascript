@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { useSlashID } from "../../main";
+import { useSlashID } from "../../hooks/use-slash-id";
 
 type Props = {
   children: ReactNode;

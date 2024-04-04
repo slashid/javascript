@@ -5,20 +5,18 @@ import ReactDOM from "react-dom/client";
 import { GDPRConsentDialog } from "./components/gdpr-consent-dialog";
 import "./dev.css";
 import { FactorConfiguration, Handle } from "./domain/types";
-import {
-  ConfigurationProvider,
-  DynamicFlow,
-  Form,
-  LoggedIn,
-  LoggedOut,
-  OrganizationSwitcher,
-  SlashIDLoaded,
-  SlashIDProvider,
-  useOrganizations,
-  useSlashID,
-} from "./main";
 import { defaultOrganization } from "./middleware/default-organization";
 import { Slot } from "./components/slot";
+import { ConfigurationProvider } from "./context/config-context";
+import { LoggedOut } from "./components/logged-out";
+import { Form } from "./components/form";
+import { LoggedIn } from "./components/logged-in";
+import { OrganizationSwitcher } from "./components/organization-switcher";
+import { SlashIDLoaded } from "./components/slashid-loaded";
+import { useSlashID } from "./hooks/use-slash-id";
+import { SlashIDProvider } from "./context/slash-id-context";
+import { DynamicFlow } from "./components/dynamic-flow";
+import { useOrganizations } from "./hooks/use-organizations";
 
 const rootOid = "b6f94b67-d20f-7fc3-51df-bf6e3b82683e";
 

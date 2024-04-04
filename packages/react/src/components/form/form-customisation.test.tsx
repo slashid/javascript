@@ -4,11 +4,11 @@ import { TestSlashIDProvider } from "../../context/test-providers";
 import { createTestUser, inputEmail } from "../test-utils";
 import { Slot } from "../slot";
 import userEvent from "@testing-library/user-event";
-import { ConfigurationProvider } from "../../main";
 import { useState } from "react";
 import { Factor } from "@slashid/slashid";
 import { Handle } from "../../domain/types";
 import { TEXT } from "../text/constants";
+import { ConfigurationProvider } from "../../context/config-context";
 
 describe("#Form - customisation", () => {
   test(`should not render any components that are not a <Slot name="initial | authenticating | success | error | footer">`, () => {

@@ -1,5 +1,5 @@
 import { ReactNode, useMemo } from "react";
-import { useSlashID } from "../../main";
+import { useSlashID } from "../../hooks/use-slash-id";
 
 type Props = {
   belongsTo: string | ((groups: string[]) => boolean);

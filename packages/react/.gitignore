@@ -29,3 +29,6 @@ storybook-static
 # yalc
 .yalc
 yalc.lock
+
+# vite hackery
+index.html
