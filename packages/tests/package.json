@@ -4,11 +4,13 @@
   "private": true,
   "description": "Tests setup for /id projects",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test:e2e": "playwright test"
+  },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@playwright/test": "^1.32.1",
+    "@playwright/test": "1.42.1",
     "@types/node": "18.11.9",
     "tsconfig": "workspace:*"
   },

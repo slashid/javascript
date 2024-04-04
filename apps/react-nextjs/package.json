@@ -5,9 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "test:e2e": "playwright test"
+    "serve": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
     "@slashid/react": "workspace:*",
