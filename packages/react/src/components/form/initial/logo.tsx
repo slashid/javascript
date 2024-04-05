@@ -14,11 +14,7 @@ export const Logo: React.FC<Props> = ({ logo }) => {
     return (
       <div className={clsx("sid-logo", "sid-logo--image", styles.logo)}>
         <div>
-          <img
-            className={styles.logo}
-            src={logo}
-            alt="Company logo"
-          />
+          <img className={styles.logo} src={logo} alt="Company logo" />
         </div>
       </div>
     );

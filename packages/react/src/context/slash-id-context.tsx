@@ -350,12 +350,12 @@ export const SlashIDProvider = ({
     };
 
     const tryImmediateLogin = async () => {
-      if (token && await validateToken(token)) {
-        const user = new User(token, sid)
-        
+      if (token && (await validateToken(token))) {
+        const user = new User(token, sid);
+
         if (user.anonymous && anonymousUsersEnabled) {
-          const anonUser = new AnonymousUser(token, sid)
-          storeUser(anonUser)
+          const anonUser = new AnonymousUser(token, sid);
+          storeUser(anonUser);
         } else {
           storeUser(user);
         }
