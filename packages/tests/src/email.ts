@@ -8,17 +8,22 @@ import {
 } from "mailinator-client";
 import { load } from "cheerio";
 
+export const TEAM_DOMAIN = "team336427.testinator.com";
+
+export type FetchLatestEmailInput = {
+  inbox?: string;
+};
+
 export async function fetchLatestEmail({
   inbox = "e2e",
-  domain = "team336427.testinator.com",
-}) {
+}: FetchLatestEmailInput) {
   try {
     const mailinatorClient: MailinatorClient = new MailinatorClient(
       process.env.MAILINATOR_API_KEY || ""
     );
 
     const response = await mailinatorClient.request(
-      new GetInboxRequest(domain, inbox, 0, 1, Sort.DESC, true)
+      new GetInboxRequest(TEAM_DOMAIN, inbox, 0, 1, Sort.DESC, true)
     );
 
     if (
@@ -39,21 +44,17 @@ export async function fetchLatestEmail({
 }
 
 export type GetMessageInput = {
-  domain?: string;
   messageId: string;
 };
 
-export async function getMessage({
-  domain = "team336427.testinator.com",
-  messageId,
-}: GetMessageInput) {
+export async function getMessage({ messageId }: GetMessageInput) {
   try {
     const mailinatorClient: MailinatorClient = new MailinatorClient(
       "4c39b2cfe3c746a09926ca6e0a17c779"
     );
 
     const response = await mailinatorClient.request(
-      new GetMessageRequest(domain, messageId)
+      new GetMessageRequest(TEAM_DOMAIN, messageId)
     );
 
     if (!response.result) {
@@ -75,8 +76,6 @@ export function getTextContent(message: Message) {
     return acc;
   }, "");
 
-  console.log("Message content", messageContent, message);
-
   return messageContent;
 }
 
@@ -86,13 +85,15 @@ export function getTheJumpPageURL(email: string) {
   return jumpPageLink;
 }
 
-export async function fetchLatestEmailWithRetry(): Promise<Message | null> {
+export async function fetchLatestEmailWithRetry(
+  input: FetchLatestEmailInput
+): Promise<Message | null> {
   const maxRetries = 5;
   let retries = 0;
 
   while (retries < maxRetries) {
     try {
-      const email = await fetchLatestEmail({ inbox: "e2e" });
+      const email = await fetchLatestEmail(input);
       if (email !== null) {
         return email;
       }
