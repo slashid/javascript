@@ -9,6 +9,7 @@ import {
 } from "react";
 
 import {
+  AnonymousUser,
   PersonHandleType,
   SlashID,
   SlashIDEnvironment,
@@ -23,6 +24,7 @@ import {
 import { LogIn, MFA, Recover } from "../domain/types";
 import { SDKState } from "../domain/sdk-state";
 import { applyMiddleware } from "../middleware";
+import { userIsAnonymous } from "../utils/anonymous";
 
 export type StorageOption = "memory" | "localStorage" | "cookie";
 
@@ -52,13 +54,14 @@ export interface SlashIDProviderProps {
    */
   sdkUrl?: string;
   analyticsEnabled?: boolean;
+  anonymousUsersEnabled?: boolean;
   themeProps?: ThemeProps;
   children: ReactNode;
 }
 
 export interface ISlashIDContext {
   sid: SlashID | undefined;
-  user: User | undefined;
+  user: User | AnonymousUser | undefined;
   sdkState: SDKState;
   logOut: () => undefined;
   logIn: LogIn;
@@ -107,13 +110,14 @@ export const SlashIDProvider = ({
   baseApiUrl,
   sdkUrl,
   analyticsEnabled,
+  anonymousUsersEnabled = false,
   themeProps,
   children,
 }: SlashIDProviderProps) => {
   const [oid, setOid] = useState(initialOid);
   const [token, setToken] = useState(initialToken);
   const [state, setState] = useState<SDKState>(initialContextValue.sdkState);
-  const [user, setUser] = useState<User | undefined>(undefined);
+  const [user, setUser] = useState<User | AnonymousUser | undefined>(undefined);
   const storageRef = useRef<Storage | undefined>(undefined);
   const sidRef = useRef<SlashID | undefined>(undefined);
 
@@ -135,7 +139,7 @@ export const SlashIDProvider = ({
   );
 
   const storeUser = useCallback(
-    (newUser: User) => {
+    (newUser: User | AnonymousUser) => {
       if (state === "initial") {
         return;
       }
@@ -182,7 +186,7 @@ export const SlashIDProvider = ({
     async (
       { factor, handle },
       { middleware } = {}
-    ): Promise<User | undefined> => {
+    ): Promise<User | AnonymousUser | undefined> => {
       if (state === "initial") {
         return;
       }
@@ -201,25 +205,42 @@ export const SlashIDProvider = ({
                 value: handle.value,
               };
 
-        const user = await sid
-          // @ts-expect-error TODO make the identifier optional
-          .id(oid, identifier, factor)
-          .then(async (user) => {
-            return applyMiddleware({ user, sid, middleware });
-          });
+        const newlyLoggedInUser = await (async () => {
+          if (user && userIsAnonymous(user)) {
+            // @ts-expect-error TODO make the identifier optional
+            return await user.id(oid, identifier, factor).then(async (user) => {
+              return applyMiddleware({ user, sid, middleware });
+            });
+          }
 
-        storeUser(user);
+          return await sid
+            // @ts-expect-error TODO make the identifier optional
+            .id(oid, identifier, factor)
+            .then(async (user) => {
+              return applyMiddleware({ user, sid, middleware });
+            });
+        })();
+
+        storeUser(newlyLoggedInUser);
+
         return user;
       } catch (e) {
         logOut();
         throw e;
       }
     },
-    [oid, state, storeUser, logOut]
+    [state, storeUser, user, oid, logOut]
   );
 
   const mfa = useCallback<MFA>(
     async ({ handle, factor }) => {
+      if (user && userIsAnonymous(user)) {
+        console.warn(
+          "Anonymous users cannot perform MFA, please log in first."
+        );
+        return;
+      }
+
       if (state === "initial" || !user) {
         return;
       }
@@ -244,16 +265,24 @@ export const SlashIDProvider = ({
     [state]
   );
 
-  const validateToken = useCallback(async (token: string): Promise<boolean> => {
-    const tokenUser = new User(token, sidRef.current!);
-    try {
-      const ret = await tokenUser.validateToken();
-      return ret.valid;
-    } catch (e) {
-      console.error(e);
-      return false;
-    }
-  }, []);
+  const validateToken = useCallback(
+    async (token: string): Promise<boolean> => {
+      const tokenUser = new User(token, sidRef.current!);
+
+      if (user?.anonymous && !anonymousUsersEnabled) {
+        return false;
+      }
+
+      try {
+        const ret = await tokenUser.validateToken();
+        return ret.valid;
+      } catch (e) {
+        console.error(e);
+        return false;
+      }
+    },
+    [anonymousUsersEnabled, user?.anonymous]
+  );
 
   useEffect(() => {
     if (state === "initial") {
@@ -326,7 +355,10 @@ export const SlashIDProvider = ({
       } else {
         const isDone = await loginDirectIdIfPresent();
 
-        if (!isDone) {
+        if (!isDone && anonymousUsersEnabled) {
+          const user = await sid.createAnonymousUser();
+          storeUser(user);
+        } else if (!isDone) {
           await loginStoredToken();
         }
       }
@@ -337,7 +369,7 @@ export const SlashIDProvider = ({
     setState("retrievingToken");
 
     tryImmediateLogin();
-  }, [state, token, storeUser, validateToken]);
+  }, [state, token, storeUser, validateToken, anonymousUsersEnabled]);
 
   const contextValue = useMemo(() => {
     if (state === "initial") {
