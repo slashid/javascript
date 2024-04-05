@@ -1,4 +1,3 @@
-FROM node:20-slim
 FROM mcr.microsoft.com/playwright:v1.42.1-jammy
 
 ENV PNPM_HOME="/pnpm"
