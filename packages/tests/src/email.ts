@@ -34,8 +34,6 @@ export async function fetchLatestEmail({
       return null;
     }
 
-    console.log("Emails", response.result.msgs);
-
     return response.result.msgs[0];
   } catch (e) {
     console.log("Error fetching email", e);

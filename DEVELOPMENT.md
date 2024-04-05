@@ -16,6 +16,16 @@ Our e2e test suite can be run locally (while developing) and in the CI. We recom
 
 These tests only cover the projects in the `apps` folder. Each project is expected to expose a `serve` command that serves the already built app on the predefined e2e tests port - 8084.
 
+### Verifying email
+
+Our authentiction flows require the end user to receive an email and either follow the link from the email or read a special value (OTP code).
+In order to test this end to end, we created a [Mailinator](https://www.mailinator.com/v4/private/inboxes.jsp?to=*) account for our team.
+Each email is sent to the same domain, but the local part is unique per test run, allowing us to identify email that resulted from a particular test.
+
+### WebAuthn
+
+Not supported yet - we should look into virtual authenticators.
+
 ### Running e2e tests locally
 
 Build all the projects and run the `serve` command for the project you want to test before running e2e tests:
