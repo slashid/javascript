@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        node-version: [20.9.0]
+        app-name: [react-nextjs]
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Build the e2e tests image
+        run: docker build . -t e2e-tests
+
+      - name: Run e2e tests
+        run: docker run -i -e APP_NAME=${{ matrix.app-name }} -e MAILINATOR_API_KEY=${{ secrets.MAILINATOR_API_KEY }} e2e-tests

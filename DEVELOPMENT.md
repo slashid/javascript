@@ -10,7 +10,7 @@ Check the Turborepo [docs](https://turbo.build/repo/docs/handbook/package-instal
 
 `packages/react` is published to NPM but it is also registered as an [internal package](https://turbo.build/repo/docs/handbook/sharing-code/internal-packages). Demo app in `apps/react-vite` depends on this internal package. This means that it will use the build output of `packages/react` instead of the published NPM package. If you want to test the changes you just made in `packages/react`, make sure you run `pnpm build` from the repo root so that `apps/react-vite` will read the new build.
 
-## Running e2e tests
+## E2E tests
 
 Our e2e test suite can be run locally (while developing) and in the CI. We recommend installing the Playwright browser binaries directly when working locally and only use Docker in the CI.
 
@@ -43,3 +43,7 @@ Then run it with the specified app name:
 ```
 docker run -i -e APP_NAME=react-nextjs -e MAILINATOR_API_KEY=your-api-key e2e-tests
 ```
+
+### Updating Playwright
+
+`@playwright/test` in `packages/tests/package.json` and the Playwright image in `Dockerfile` need to use the same version!

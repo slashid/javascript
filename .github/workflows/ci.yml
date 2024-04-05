@@ -27,16 +27,6 @@ jobs:
           node-version-file: ".nvmrc"
           registry-url: "https://registry.npmjs.org/"
 
-      - name: Cache Playwright browsers
-        uses: actions/cache@v3
-        id: playwright-cache
-        with:
-          path: |
-            ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-browsers-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-playwright-browsers-
-
       - name: Install dependencies
         run: pnpm install
         env:
