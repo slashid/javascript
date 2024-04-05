@@ -24,6 +24,7 @@ const FACTORS_WITH_EMAIL = [
   "otp_via_email",
   "email_link",
   "password",
+  "totp",
 ];
 const FACTORS_WITH_PHONE = ["otp_via_sms", "sms_link", "password"];
 const SSO_FACTORS = ["oidc", "saml"];

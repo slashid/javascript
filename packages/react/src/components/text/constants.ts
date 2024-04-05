@@ -109,6 +109,7 @@ export const TEXT = {
   "factor.emailLink": "Email link",
   "factor.smsLink": "SMS link",
   "factor.password": "Password",
+  "factor.totp": "TOTP (time-based OTP)",
   "validationError.otp": "Please enter the OTP code.",
   "validationError.email": "Please enter your email address.",
   "validationError.phoneNumber": "Please enter your phone number.",

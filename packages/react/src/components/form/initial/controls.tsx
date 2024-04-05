@@ -40,7 +40,7 @@ export const FACTOR_LABEL_MAP: Record<
   password: "factor.password",
   oidc: "",
   saml: "",
-  totp: "",
+  totp: "factor.totp",
 };
 
 export const TAB_NAME = {

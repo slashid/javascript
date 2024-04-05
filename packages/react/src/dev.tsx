@@ -169,6 +169,7 @@ const BasicForm = () => {
         { method: "otp_via_email" },
         { method: "otp_via_sms" },
         { method: "password" },
+        { method: "totp" },
         {
           method: "oidc",
           options: {
@@ -330,17 +331,17 @@ root.render(
           </div>
           <div>
             <h2>Composed form</h2>
-            <ComposedForm />
+            {/* <ComposedForm /> */}
           </div>
         </div>
         <div>
           <div>
             <h2>Switch to default org</h2>
-            <Config />
+            {/* <Config /> */}
           </div>
           <div>
             <h2>Dynamic flow - factor based on handle</h2>
-            <ConfiguredDynamicFlow />
+            {/* <ConfiguredDynamicFlow /> */}
           </div>
         </div>
       </div>
