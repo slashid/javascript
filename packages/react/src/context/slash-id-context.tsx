@@ -350,8 +350,15 @@ export const SlashIDProvider = ({
     };
 
     const tryImmediateLogin = async () => {
-      if (token) {
-        storeUser(new User(token, sidRef.current!));
+      if (token && await validateToken(token)) {
+        const user = new User(token, sid)
+        
+        if (user.anonymous && anonymousUsersEnabled) {
+          const anonUser = new AnonymousUser(token, sid)
+          storeUser(anonUser)
+        } else {
+          storeUser(user);
+        }
       } else {
         const isDone = await loginDirectIdIfPresent();
 
