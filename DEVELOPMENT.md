@@ -41,5 +41,5 @@ docker build . -t e2e-tests
 Then run it with the specified app name:
 
 ```
-docker run -t e2e-tests -e APP_NAME=react-nextjs
+docker run -i -e APP_NAME=react-nextjs -e MAILINATOR_API_KEY=your-api-key e2e-tests
 ```

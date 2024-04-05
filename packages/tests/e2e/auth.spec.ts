@@ -10,7 +10,7 @@ const generateRandomNumber = (): number => {
   return Math.floor(Math.random() * 9000) + 1000;
 };
 
-test.describe("MFA", () => {
+test.describe("Authentication", () => {
   test("Log in with email link", async ({ page, context }) => {
     const inbox = `e2e-${generateRandomNumber()}`;
 

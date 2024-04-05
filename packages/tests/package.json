@@ -5,7 +5,7 @@
   "description": "Tests setup for /id projects",
   "main": "index.js",
   "scripts": {
-    "test:e2e": "playwright test --debug"
+    "test:e2e": "playwright test"
   },
   "author": "",
   "license": "ISC",
