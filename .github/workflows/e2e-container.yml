@@ -1,0 +1,42 @@
+name: E2E
+'on':
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  test:
+    runs-on: ubuntu-20.04
+    container: 'mcr.microsoft.com/playwright:v1.42.1-jammy'
+    strategy:
+      matrix:
+        node-version:
+          - 20.9.0
+        app-name:
+          - react-nextjs
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - name: 'Use Node.js ${{ matrix.node-version }}'
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.9.0
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+      
+      - name: Build
+        run: pnpm build
+
+      - name: Serve app
+        run: pnpm serve --filter ${{ matrix.app-name }}
+
+      - name: Run E2E tests
+        env:
+          MAILINATOR_API_KEY: ${{ secrets.MAILINATOR_API_KEY }}
+        run: pnpm test:e2e --filter tests
