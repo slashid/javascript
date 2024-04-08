@@ -7,13 +7,12 @@ dotenv.config();
 function createPlaywrightConfig(): PlaywrightTestConfig {
   const envConfig = {
     app: process.env.APP_NAME || "",
+    CI: process.env.CI === "true",
   };
 
   if (!envConfig.app) {
     throw new Error("APP_NAME is required in .env file");
   }
-
-  console.log("Command: ", `pnpm serve --filter ${envConfig.app}`);
 
   return {
     timeout: 8 * 1000,
@@ -27,13 +26,13 @@ function createPlaywrightConfig(): PlaywrightTestConfig {
     /* Run tests in files in parallel */
     fullyParallel: true,
     /* Fail the build on CI if you accidentally left test.only in the source code. */
-    forbidOnly: !!process.env.CI,
+    forbidOnly: envConfig.CI,
     /* Retry on CI only */
-    retries: process.env.CI ? 2 : 0,
+    retries: envConfig.CI ? 2 : 0,
     /* Opt out of parallel tests on CI. */
-    workers: process.env.CI ? 1 : undefined,
+    // workers: process.env.CI ? 1 : undefined,
     /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-    reporter: "html",
+    reporter: [["html", { open: envConfig.CI ? "never" : "on-failure" }]],
     /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
     use: {
       /* Base URL to use in actions like `await page.goto('/')`. */
