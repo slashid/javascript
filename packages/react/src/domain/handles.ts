@@ -13,6 +13,7 @@ import {
   FactorPassword,
   FactorSSO,
   FactorSmsLink,
+  FactorTOTP,
   FactorWithAllowedHandleTypes,
   Handle,
   HandleType,
@@ -127,6 +128,10 @@ export function isFactorSmsLink(factor: Factor): factor is FactorSmsLink {
 
 export function isFactorNonOidc(factor: Factor): factor is FactorNonOIDC {
   return factor.method !== "oidc";
+}
+
+export function isFactorTOTP(factor: Factor): factor is FactorTOTP {
+  return factor.method === "totp";
 }
 
 export function hasOidcAndNonOidcFactors(factors: Factor[]): boolean {

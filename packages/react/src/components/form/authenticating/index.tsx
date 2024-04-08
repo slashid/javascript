@@ -1,9 +1,14 @@
-import { isFactorOTP, isFactorPassword } from "../../../domain/handles";
+import {
+  isFactorOTP,
+  isFactorPassword,
+  isFactorTOTP,
+} from "../../../domain/handles";
 import { Text } from "../../text";
 
 import { getAuthenticatingMessage } from "./messages";
 import { OTPState } from "./otp";
 import { PasswordState } from "./password";
+import { TOTPState } from "./totp";
 import { Props } from "./authenticating.types";
 import {
   BackButton,
@@ -55,6 +60,14 @@ export const Authenticating = ({ flowState }: Props) => {
     return (
       <Wrapper>
         <PasswordState flowState={flowState} />
+      </Wrapper>
+    );
+  }
+
+  if (isFactorTOTP(factor)) {
+    return (
+      <Wrapper>
+        <TOTPState flowState={flowState} />
       </Wrapper>
     );
   }

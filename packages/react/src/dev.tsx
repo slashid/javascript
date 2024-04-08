@@ -1,4 +1,8 @@
-import { type Factor } from "@slashid/slashid";
+import {
+  PRIVATE_SUBSCRIBE,
+  type Factor,
+  TotpKeyGenerated,
+} from "@slashid/slashid";
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 
@@ -169,7 +173,6 @@ const BasicForm = () => {
         { method: "otp_via_email" },
         { method: "otp_via_sms" },
         { method: "password" },
-        { method: "totp" },
         {
           method: "oidc",
           options: {
@@ -196,7 +199,10 @@ const BasicForm = () => {
     >
       <SlashIDLoaded>
         <>
-          <LoggedIn>Logged in!</LoggedIn>
+          <LoggedIn>
+            MFA
+            <Form factors={[{ method: "totp" }]} />
+          </LoggedIn>
           <LoggedOut>
             <Form
               onError={(error, context) =>
@@ -318,6 +324,10 @@ root.render(
   <React.StrictMode>
     <SlashIDProvider
       oid={import.meta.env.VITE_ORG_ID}
+      environment={{
+        baseURL: "https://api.slashid.local",
+        sdkURL: "https://api.slashid.local",
+      }}
       themeProps={{ theme: "dark" }}
       tokenStorage="memory"
       analyticsEnabled

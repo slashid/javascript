@@ -65,6 +65,13 @@ export const TEXT = {
   "authenticating.password.submit": "Continue",
   "authenticating.submitting.password.title": "Logging you in...",
   "authenticating.submitting.password.message": "This may take some time.",
+  "authenticating.initial.totp.title": "",
+  "authenticating.initial.totp.message": "",
+  "authenticating.registerAuthenticator.totp.title": "Set up One Time PAssword",
+  "authenticating.registerAuthenticator.totp.message":
+    "Scan the QR code with an authenticator app to set up your One Time Password.",
+  "authenticating.registerAuthenticator.totp.prompt": "Can't scan?",
+  "authenticating.registerAuthenticator.totp.cta": "Set up with a code",
   "authenticating.message.webauthn":
     "If you are registering for the first time, you will receive an email to verify your email address.",
   "authenticating.title.webauthn":
