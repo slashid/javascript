@@ -37,6 +37,13 @@ pnpm test:e2e
 
 Please keep in mind this will fail the first time you run the `test:e2e` command - Playwright will prompt you to install the browser binaries and give you the exact command you need to run.
 
+If you want to run tests step by step in a browser window, pass the `--debug` flag:
+
+```
+pnpm build
+pnpm test:e2e -- --debug
+```
+
 ### Updating Playwright
 
 `@playwright/test` in `packages/tests/package.json` and the Playwright image in `Dockerfile` need to use the same version!

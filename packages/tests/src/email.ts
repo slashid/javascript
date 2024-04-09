@@ -13,7 +13,17 @@ export type CreateTestInboxInput = {
   inboxName?: string;
 };
 
-export function createTestInbox({ inboxName }: CreateTestInboxInput = {}) {
+export type TestInbox = {
+  name: string;
+  email: string;
+  getLatestEmail: () => Promise<Message | null>;
+  getOTP: (email: Message) => Promise<string | null | undefined>;
+  getJumpPageURL: (email: Message) => Promise<string | null | undefined>;
+};
+
+export function createTestInbox({
+  inboxName,
+}: CreateTestInboxInput = {}): TestInbox {
   const config = {
     teamDomain: process.env.MAILINATOR_TEAM_DOMAIN || "",
     apiKey: process.env.MAILINATOR_API_KEY || "",
@@ -107,10 +117,15 @@ export function createTestInbox({ inboxName }: CreateTestInboxInput = {}) {
     return jumpPageLink;
   }
 
+  async function getOTP(email: Message) {
+    return email.subject.match(/\d{6}/)?.[0];
+  }
+
   return {
-    name: inboxName,
+    name,
     email: `${name}@${config.teamDomain}`,
     getLatestEmail: async () => fetchLatestEmailWithRetry(),
+    getOTP,
     getJumpPageURL: async (email: Message) => {
       const message = await fetchMessage({ messageId: email.id });
 
