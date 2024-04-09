@@ -403,7 +403,7 @@ export const SlashIDProvider = ({
       createAnonymousUser
     ],
     {
-      until: value => value instanceof BaseUser,
+      until: value => value !== null && value instanceof BaseUser,
       then: () => {
         setState("ready");
       }
