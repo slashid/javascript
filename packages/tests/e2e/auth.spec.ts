@@ -1,45 +1,41 @@
 import { test, expect } from "@playwright/test";
 import { createTestInbox } from "../src/email";
 import { FormPage } from "../src/pom/form";
+import { JumpPage } from "../src/pom/jump";
 
 test.describe("Authentication", () => {
   test("Log in with email link", async ({ page, context }) => {
     const testInbox = createTestInbox();
+    const formPage = new FormPage(page);
 
-    await page.goto("http://localhost:3000/form");
+    await formPage.load();
 
-    await page.locator("#sid-input-email_address").fill(testInbox.email);
+    await formPage.selectAuthMethod("email_link");
+    await formPage.enterEmail(testInbox.email);
+    await formPage.submitInitialForm();
 
-    page.getByTestId("sid-form-initial-submit-button").click();
-
-    await expect(
-      page.getByTestId("sid-form-authenticating-state")
-    ).toBeVisible();
+    await expect(formPage.authenticatingState).toBeVisible();
 
     const email = await testInbox.getLatestEmail();
-
     expect(email).toBeDefined();
+    if (!email) return;
 
-    if (email) {
-      const jumpPageURL = await testInbox.getJumpPageURL(email);
+    const jumpPageURL = await testInbox.getJumpPageURL(email);
+    expect(jumpPageURL).toBeDefined();
+    if (!jumpPageURL) return;
 
-      if (jumpPageURL) {
-        const jumpPage = await context.newPage();
-        await jumpPage.goto(jumpPageURL);
-        await jumpPage.bringToFront();
+    const jumpPage = new JumpPage(await context.newPage(), jumpPageURL);
+    await jumpPage.load();
+    await jumpPage.page.bringToFront();
+    await jumpPage.successState.waitFor({
+      state: "visible",
+      timeout: 4000,
+    });
 
-        const jumpPageSuccessState = page.getByTestId("sid-form-success-state");
-        await jumpPageSuccessState.waitFor({
-          state: "visible",
-          timeout: 4000,
-        });
+    await expect(jumpPage.successState).toBeVisible();
 
-        await expect(jumpPageSuccessState).toBeVisible();
-      }
-    }
-
-    await page.bringToFront();
-    await expect(page.getByTestId("sid-form-success-state")).toBeVisible();
+    await formPage.page.bringToFront();
+    await expect(formPage.successState).toBeVisible();
   });
 
   test("Log in with OTP via email", async ({ page }) => {

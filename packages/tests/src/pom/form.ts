@@ -16,10 +16,14 @@ function getLabelFromFactorMethod(method: FactorMethod): FactorMethodLabel {
 export class FormPage {
   readonly url: string = "http://localhost:3000/form";
   readonly page: Page;
+  readonly authenticatingState: Locator;
   readonly successState: Locator;
 
   constructor(page: Page) {
     this.page = page;
+    this.authenticatingState = this.page.getByTestId(
+      "sid-form-authenticating-state"
+    );
     this.successState = this.page.getByTestId("sid-form-success-state");
   }
 
@@ -32,7 +36,11 @@ export class FormPage {
     const label = getLabelFromFactorMethod(method);
 
     await this.page.locator(".sid-dropdown__trigger").click();
-    await this.page.getByText(label).first().click();
+    await this.page
+      .locator(".sid-dropdown__item")
+      .filter({ has: this.page.getByText(label) })
+      .first()
+      .click();
   }
 
   async enterEmail(email: string) {
