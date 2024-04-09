@@ -42,7 +42,7 @@ test.describe("Authentication", () => {
     await expect(page.getByTestId("sid-form-success-state")).toBeVisible();
   });
 
-  test.only("Log in with OTP via email", async ({ page }) => {
+  test("Log in with OTP via email", async ({ page }) => {
     const testInbox = createTestInbox();
     const formPage = new FormPage(page);
 
