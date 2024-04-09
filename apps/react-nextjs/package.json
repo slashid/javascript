@@ -5,9 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "test:e2e": "playwright test"
+    "serve": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
     "@slashid/react": "workspace:*",
@@ -25,8 +24,5 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "typescript": "^4.6.4"
-  },
-  "devDependencies": {
-    "@playwright/test": "^1.32.1"
   }
 }
