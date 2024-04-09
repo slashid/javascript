@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { createTestInbox } from "../src/email";
+import { FormPage } from "../src/pom/form";
 
 test.describe("Authentication", () => {
   test("Log in with email link", async ({ page, context }) => {
@@ -39,5 +40,28 @@ test.describe("Authentication", () => {
 
     await page.bringToFront();
     await expect(page.getByTestId("sid-form-success-state")).toBeVisible();
+  });
+
+  test.only("Log in with OTP via email", async ({ page }) => {
+    const testInbox = createTestInbox();
+    const formPage = new FormPage(page);
+
+    await formPage.load();
+
+    await formPage.selectAuthMethod("otp_via_email");
+    await formPage.enterEmail(testInbox.email);
+    await formPage.submitInitialForm();
+
+    const email = await testInbox.getLatestEmail();
+    expect(email).toBeDefined();
+    if (!email) return;
+
+    const otp = await testInbox.getOTP(email);
+    expect(otp).toBeDefined();
+    if (!otp) return;
+
+    await formPage.submitOTP(otp);
+
+    await expect(formPage.successState).toBeVisible();
   });
 });
