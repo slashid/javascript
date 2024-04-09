@@ -320,28 +320,20 @@ root.render(
       themeProps={{ theme: "dark" }}
       tokenStorage="memory"
       analyticsEnabled
+      anonymousUsersEnabled
+      environment="sandbox"
     >
       <LogOut />
       <div className="layout">
         <div>
-          <div style={vars}>
+          <div>
             <h2>Basic form</h2>
             <BasicForm />
           </div>
-          <div>
-            <h2>Composed form</h2>
-            <ComposedForm />
-          </div>
+          
         </div>
         <div>
-          <div>
-            <h2>Switch to default org</h2>
-            <Config />
-          </div>
-          <div>
-            <h2>Dynamic flow - factor based on handle</h2>
-            <ConfiguredDynamicFlow />
-          </div>
+          
         </div>
       </div>
     </SlashIDProvider>

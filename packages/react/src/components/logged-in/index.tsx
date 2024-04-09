@@ -1,4 +1,4 @@
-import type { User, FactorMethod } from "@slashid/slashid";
+import type { User, FactorMethod, AnonymousUser } from "@slashid/slashid";
 import { ReactNode, useMemo } from "react";
 import { useSlashID } from "../../hooks/use-slash-id";
 
@@ -9,7 +9,7 @@ type Props = {
     | ((userAuthenticationMethods: FactorMethod[]) => boolean);
 };
 
-const hasUserAuthenticationMethods = (user: User, methods: FactorMethod[]) => {
+const hasUserAuthenticationMethods = (user: User | AnonymousUser, methods: FactorMethod[]) => {
   for (const factorMethod of methods) {
     if (!user.authentication.includes(factorMethod)) {
       return false;
@@ -27,7 +27,7 @@ export const LoggedIn: React.FC<Props> = ({ children, withFactorMethods }) => {
 
   const shouldRender = useMemo(() => {
     // user must be logged in
-    if (!isAuthenticated || !user) {
+    if (!isAuthenticated || !user || user.anonymous) {
       return false;
     }
 

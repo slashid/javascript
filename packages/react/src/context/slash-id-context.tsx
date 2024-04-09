@@ -10,6 +10,7 @@ import {
 
 import {
   AnonymousUser,
+  BaseUser,
   PersonHandleType,
   SlashID,
   SlashIDEnvironment,
@@ -25,6 +26,7 @@ import { LogIn, MFA, Recover } from "../domain/types";
 import { SDKState } from "../domain/sdk-state";
 import { applyMiddleware } from "../middleware";
 import { userIsAnonymous } from "../utils/anonymous";
+import { sequence } from "../components/utils";
 
 export type StorageOption = "memory" | "localStorage" | "cookie";
 
@@ -318,64 +320,81 @@ export const SlashIDProvider = ({
     const sid = sidRef.current!;
     const storage = storageRef.current!;
 
-    const loginDirectIdIfPresent = async () => {
+    const loginWithInitialToken = async () => {
+      const isTokenValid = token && await validateToken(token)
+      if (!isTokenValid) return null
+    
+      const user = new User(token, sid);
+    
+      if (user.anonymous && anonymousUsersEnabled) {
+        const anonUser = new AnonymousUser(token, sid);
+        storeUser(anonUser);
+
+        return anonUser
+      }
+
+      storeUser(user);
+
+      return user
+    }
+
+    const loginWithDirectID = async () => {
       try {
-        const tempUser = await sid.getUserFromURL();
-        if (tempUser) {
-          storeUser(new User(tempUser.token, sidRef.current!));
-          return true;
-        } else {
-          return false;
-        }
+        const userFromURL = await sid.getUserFromURL();
+        if (!userFromURL) return null
+
+        const { token: tokenFromURL } = userFromURL
+        const user = new User(tokenFromURL, sidRef.current!)
+
+        storeUser(user);
+
+        return user;
       } catch (e) {
         console.error(e);
-        return false;
+        return null;
       }
-    };
+    }
 
-    const loginStoredToken = async (): Promise<boolean> => {
-      const storedToken = storage.getItem(STORAGE_TOKEN_KEY);
-      if (storedToken) {
-        const isValidToken = await validateToken(storedToken);
-        if (!isValidToken) {
-          storage.removeItem(STORAGE_TOKEN_KEY);
-          return false;
-        }
+    const loginWithTokenFromStorage = async () => {
+      const tokenFromStorage = storage.getItem(STORAGE_TOKEN_KEY);
+      const isValidToken = tokenFromStorage && await validateToken(tokenFromStorage);
 
-        storeUser(new User(storedToken, sidRef.current!));
-        return true;
-      } else {
-        return false;
-      }
-    };
+      if (!isValidToken) {
+        storage.removeItem(STORAGE_TOKEN_KEY);
 
-    const tryImmediateLogin = async () => {
-      if (token && (await validateToken(token))) {
-        const user = new User(token, sid);
-
-        if (user.anonymous && anonymousUsersEnabled) {
-          const anonUser = new AnonymousUser(token, sid);
-          storeUser(anonUser);
-        } else {
-          storeUser(user);
-        }
-      } else {
-        const isDone = await loginDirectIdIfPresent();
-
-        if (!isDone && anonymousUsersEnabled) {
-          const user = await sid.createAnonymousUser();
-          storeUser(user);
-        } else if (!isDone) {
-          await loginStoredToken();
-        }
+        return null
       }
 
-      setState("ready");
-    };
+      const userFromStorage = new User(tokenFromStorage, sidRef.current!)
+      storeUser(userFromStorage);
+
+      return userFromStorage
+    }
+
+    const createAnonymousUser = async () => {
+      if (!anonymousUsersEnabled) return null
+
+      const anonUser = await sid.createAnonymousUser();
+
+      storeUser(anonUser);
+
+      return anonUser
+    }
 
     setState("retrievingToken");
 
-    tryImmediateLogin();
+    sequence([
+      loginWithInitialToken,
+      loginWithDirectID,
+      loginWithTokenFromStorage,
+      createAnonymousUser
+    ],
+    {
+      until: value => value instanceof BaseUser,
+      then: () => {
+        setState("ready");
+      }
+    })
   }, [state, token, storeUser, validateToken, anonymousUsersEnabled]);
 
   const contextValue = useMemo(() => {

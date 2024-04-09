@@ -82,3 +82,22 @@ export const fromEntries = <
 ): { [K in T[number] as K[0]]: K[1] } => {
   return Object.fromEntries(entries) as { [K in T[number] as K[0]]: K[1] };
 };
+
+export const sequence = async<T extends () => any>(
+  operations: T[],
+  {until, then }: {
+    until?: (value: Awaited<ReturnType<T>>) => boolean,
+    then?: (value?: Awaited<ReturnType<T>>) => void
+  } = {}
+): Promise<void> => {
+  for (const operation of operations) {
+    const result = await operation()
+    const finished = until?.(result)
+    if (finished) {
+      then?.(result)
+      return
+    }
+  }
+
+  then?.()
+};
