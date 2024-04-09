@@ -56,6 +56,19 @@ export interface SlashIDProviderProps {
    */
   sdkUrl?: string;
   analyticsEnabled?: boolean;
+  /**
+   * Anonymous users allow you to perform operations
+   * on users who have not signed-up or logged-in,
+   * using the same API as regular users.
+   * 
+   * Use anonymous users to read & set user attributes, store
+   * GDPR consent, track sign-up conversions, and build a
+   * fingerprint of users who simply never sign-up.
+   * 
+   * When the anonymous users signs up, or signs in, their
+   * anonymous user is upgraded to a full user, and their
+   * pre-login data is transferred.
+   */
   anonymousUsersEnabled?: boolean;
   themeProps?: ThemeProps;
   children: ReactNode;
