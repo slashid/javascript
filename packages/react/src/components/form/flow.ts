@@ -1,4 +1,4 @@
-import { User } from "@slashid/slashid";
+import { User, SlashID, Factor, PublicReadEvents } from "@slashid/slashid";
 import {
   Cancel,
   LogIn,
@@ -9,7 +9,7 @@ import {
   Recover,
 } from "../../domain/types";
 import { ensureError } from "../../domain/errors";
-import { isFactorRecoverable } from "../../domain/handles";
+import { isFactorOTP, isFactorRecoverable } from "../../domain/handles";
 
 export interface InitialState {
   status: "initial";
@@ -22,6 +22,7 @@ export interface AuthenticatingState {
     config: LoginConfiguration;
     options?: LoginOptions;
     attempt: number;
+    formState: "initial" | "input" | "submitting";
   };
   retry: Retry;
   cancel: Cancel;
@@ -71,13 +72,18 @@ interface InitEvent {
   type: "sid_init";
 }
 
+interface UpdateContextEvent {
+  type: "sid_update_context";
+}
+
 type Event =
   | InitEvent
   | LoginEvent
   | LoginSuccessEvent
   | LoginErrorEvent
   | RetryEvent
-  | CancelEvent;
+  | CancelEvent
+  | UpdateContextEvent;
 
 type FlowActions = {
   // a function that will be called when the state is entered
@@ -99,19 +105,35 @@ const createInitialState = (send: Send): InitialState => {
   };
 };
 
+type Listener = {
+  name: keyof PublicReadEvents;
+  handler: (e: PublicReadEvents[keyof PublicReadEvents]) => void;
+};
+
+type CleanupFn = () => void;
+
+type SetupListenersFn = () => CleanupFn;
+
 const createAuthenticatingState = (
   send: Send,
   context: AuthenticatingState["context"],
   logInFn: LogIn | MFA,
-  recoverFn: Recover
+  recoverFn: Recover,
+  setupListeners: SetupListenersFn
 ): AuthenticatingState => {
   // to be called when the state is entered
   function performLogin() {
+    if (context.formState !== "initial") return;
+
+    const cleanup = setupListeners();
+
     return logInFn(context.config, context.options)
       .then((user) => {
         if (user) {
+          cleanup();
           send({ type: "sid_login.success", user });
         } else {
+          cleanup();
           send({
             type: "sid_login.error",
             error: new Error("User not returned from /id"),
@@ -146,6 +168,7 @@ const createAuthenticatingState = (
       attempt: context.attempt,
       config: context.config,
       options: context.options,
+      formState: context.formState,
     },
     retry: () => {
       send({ type: "sid_retry", context });
@@ -209,6 +232,7 @@ type HistoryEntry = {
 export function createFlow(opts: CreateFlowOptions = {}) {
   let logInFn: undefined | LogIn | MFA = undefined;
   let recoverFn: undefined | Recover = undefined;
+  let sid: undefined | SlashID = undefined;
   let observers: Observer[] = [];
   const send = (event: Event) => {
     transition(event);
@@ -235,6 +259,68 @@ export function createFlow(opts: CreateFlowOptions = {}) {
     observers.forEach((o) => o(state, changeEvent));
   }
 
+  function updateAuthenticatingStateContext(
+    state: AuthenticatingState,
+    context: AuthenticatingState["context"]
+  ) {
+    console.log("updating context", context);
+    setState(
+      {
+        ...state,
+        context,
+      },
+      { type: "sid_update_context" }
+    );
+  }
+
+  function prepareSetupListenersFn(
+    factor: Factor,
+    sid: SlashID
+  ): SetupListenersFn {
+    const listeners: Listener[] = [];
+
+    if (isFactorOTP(factor)) {
+      listeners.push(
+        {
+          name: "otpCodeSent",
+          handler: () => {
+            if (state.status !== "authenticating") return;
+            updateAuthenticatingStateContext(state, {
+              ...state.context,
+              formState: "input",
+            });
+          },
+        },
+        {
+          name: "otpIncorrectCodeSubmitted",
+          handler: () => {
+            if (state.status !== "authenticating") return;
+            updateAuthenticatingStateContext(state, {
+              ...state.context,
+              formError: "oopsie",
+            });
+          },
+        }
+      );
+    }
+
+    // TODO password
+
+    return () => {
+      console.log("setting up listeners");
+      listeners.forEach(({ name, handler }) => sid.subscribe(name, handler));
+
+      const cleanup = () => {
+        console.log("cleaning up listeners");
+        listeners.forEach(({ name, handler }) =>
+          sid.unsubscribe(name, handler)
+        );
+      };
+
+      return cleanup;
+    };
+  }
+
   async function transition(e: Event) {
     switch (e.type) {
       case "sid_login":
@@ -248,7 +334,13 @@ export function createFlow(opts: CreateFlowOptions = {}) {
         };
 
         setState(
-          createAuthenticatingState(send, loginContext, logInFn, recoverFn),
+          createAuthenticatingState(
+            send,
+            loginContext,
+            logInFn,
+            recoverFn,
+            prepareSetupListenersFn(e.config.factor, sid!)
+          ),
           e
         );
         break;
@@ -283,10 +375,17 @@ export function createFlow(opts: CreateFlowOptions = {}) {
           config: e.context.config,
           options: e.context.options,
           attempt: e.context.attempt + 1,
+          formState: "initial",
         };
 
         setState(
-          createAuthenticatingState(send, retryContext, logInFn, recoverFn),
+          createAuthenticatingState(
+            send,
+            retryContext,
+            logInFn,
+            recoverFn,
+            prepareSetupListenersFn(e.context.config.factor, sid!)
+          ),
           e
         );
         break;
@@ -313,6 +412,9 @@ export function createFlow(opts: CreateFlowOptions = {}) {
     },
     setRecover: (fn: Recover) => {
       recoverFn = fn;
+    },
+    setSlashID: (s: SlashID) => {
+      sid = s;
     },
     state,
   };

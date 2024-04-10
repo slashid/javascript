@@ -22,6 +22,7 @@ import * as styles from "./authenticating.css";
 import { isFactorOTPEmail, isFactorOTPSms } from "../../../domain/handles";
 import { EmailIcon, SmsIcon, Loader } from "./icons";
 import { BackButton, RetryPrompt } from "./authenticating.components";
+import { AuthenticatingState } from "../flow";
 
 const FactorIcon = ({ factor }: { factor: Factor }) => {
   if (isFactorOTPEmail(factor)) {
@@ -50,6 +51,9 @@ export const OTPState = ({ flowState }: Props) => {
     "initial" | "input" | "submitting"
   >("initial");
   const submitInputRef = useRef<HTMLInputElement>(null);
+  const [context, setContext] = useState<AuthenticatingState["context"]>(
+    flowState.context
+  );
 
   const factor = flowState.context.config.factor;
   const hasRetried = flowState.context.attempt > 1;
@@ -120,6 +124,16 @@ export const OTPState = ({ flowState }: Props) => {
       sid?.subscribe("otpCodeSent", onOtpCodeSent);
     }
   }, [formState, sid]);
+
+  useEffect(() => {
+    console.log("ctx effect fired");
+
+    if (flowState.context !== context) {
+      setContext(flowState.context);
+    }
+  }, [flowState.context, context]);
+
+  console.log({ context });
 
   return (
     <>

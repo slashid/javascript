@@ -328,12 +328,12 @@ root.render(
             <h2>Basic form</h2>
             <BasicForm />
           </div>
-          <div>
+          {/* <div>
             <h2>Composed form</h2>
             <ComposedForm />
-          </div>
+          </div> */}
         </div>
-        <div>
+        {/* <div>
           <div>
             <h2>Switch to default org</h2>
             <Config />
@@ -342,7 +342,7 @@ root.render(
             <h2>Dynamic flow - factor based on handle</h2>
             <ConfiguredDynamicFlow />
           </div>
-        </div>
+        </div> */}
       </div>
     </SlashIDProvider>
   </React.StrictMode>

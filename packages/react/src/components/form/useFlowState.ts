@@ -4,7 +4,7 @@ import { useSlashID } from "../../hooks/use-slash-id";
 import { Flow, createFlow, FlowState, CreateFlowOptions } from "./flow";
 
 export function useFlowState(opts: CreateFlowOptions = {}) {
-  const { logIn, mfa, recover, user, sdkState } = useSlashID();
+  const { logIn, mfa, recover, user, sdkState, sid } = useSlashID();
   const flowRef = useRef<Flow>(createFlow(opts));
   const [state, setState] = useState<FlowState>(flowRef.current.state);
 
@@ -20,6 +20,13 @@ export function useFlowState(opts: CreateFlowOptions = {}) {
 
     flowRef.current.setRecover(recover);
   }, [recover, sdkState]);
+
+  useEffect(() => {
+    if (sid) {
+      console.log("setting SID ref");
+      flowRef.current.setSlashID(sid);
+    }
+  }, [sid]);
 
   useEffect(() => {
     if (user) {
