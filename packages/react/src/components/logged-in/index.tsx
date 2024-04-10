@@ -9,7 +9,10 @@ type Props = {
     | ((userAuthenticationMethods: FactorMethod[]) => boolean);
 };
 
-const hasUserAuthenticationMethods = (user: User | AnonymousUser, methods: FactorMethod[]) => {
+const hasUserAuthenticationMethods = (
+  user: User | AnonymousUser,
+  methods: FactorMethod[]
+) => {
   for (const factorMethod of methods) {
     if (!user.authentication.includes(factorMethod)) {
       return false;

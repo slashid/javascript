@@ -87,24 +87,27 @@ export const fromEntries = <
  * Executes each operation sequentially until completion
  * or until the [until] predicate is satisfied, whichever
  * comes first.
- * 
+ *
  * Upon completion, fires [then] if provided.
  */
-export const sequence = async<T extends () => any | Promise<any>>(
+export const sequence = async <T extends () => any | Promise<any>>(
   operations: T[],
-  {until, then }: {
-    until?: (value: Awaited<ReturnType<T>>) => boolean,
-    then?: (value?: Awaited<ReturnType<T>>) => void
+  {
+    until,
+    then,
+  }: {
+    until?: (value: Awaited<ReturnType<T>>) => boolean;
+    then?: (value?: Awaited<ReturnType<T>>) => void;
   } = {}
 ): Promise<void> => {
   for (const operation of operations) {
-    const result = await operation()
-    const finished = until?.(result)
+    const result = await operation();
+    const finished = until?.(result);
     if (finished) {
-      then?.(result)
-      return
+      then?.(result);
+      return;
     }
   }
 
-  then?.()
+  then?.();
 };

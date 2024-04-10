@@ -330,11 +330,8 @@ root.render(
             <h2>Basic form</h2>
             <BasicForm />
           </div>
-          
         </div>
-        <div>
-          
-        </div>
+        <div></div>
       </div>
     </SlashIDProvider>
   </React.StrictMode>
