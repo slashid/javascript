@@ -289,7 +289,7 @@ export const SlashIDProvider = ({
     async (token: string): Promise<boolean> => {
       const tokenUser = new User(token, sidRef.current!);
 
-      if (user?.anonymous && !anonymousUsersEnabled) {
+      if (tokenUser?.anonymous && !anonymousUsersEnabled) {
         return false;
       }
 
@@ -301,7 +301,7 @@ export const SlashIDProvider = ({
         return false;
       }
     },
-    [anonymousUsersEnabled, user?.anonymous]
+    [anonymousUsersEnabled]
   );
 
   useEffect(() => {
