@@ -1,6 +1,7 @@
 import { defaultOrganization } from ".";
 import { faker } from "@faker-js/faker";
 import {
+  TEST_ORG_ID,
   createTestOrganization,
   createTestUser,
 } from "../../components/test-utils";
@@ -17,7 +18,7 @@ describe("middleware: defaultOrganization", () => {
     const user = createTestUser();
     const oid = faker.string.uuid();
     const middleware = defaultOrganization(oid);
-    const sid = {} as SlashID;
+    const sid = { oid: TEST_ORG_ID } as SlashID;
 
     user.getOrganizations = vi.fn(async () => []);
     user.getTokenForOrganization = vi.fn(
@@ -41,7 +42,7 @@ describe("middleware: defaultOrganization", () => {
     const [{ id: defaultOid }] = randomOtherOrgs;
 
     const middleware = defaultOrganization(defaultOid);
-    const sid = {} as SlashID;
+    const sid = { oid: org.id } as SlashID;
 
     user.getOrganizations = vi.fn(async () => allOrgs);
     user.getTokenForOrganization = vi.fn(
@@ -64,7 +65,7 @@ describe("middleware: defaultOrganization", () => {
     const [{ id: defaultOid }] = faker.helpers.shuffle(otherOrgs);
 
     const middleware = defaultOrganization(() => defaultOid);
-    const sid = {} as SlashID;
+    const sid = { oid: org.id } as SlashID;
 
     user.getOrganizations = vi.fn(async () => allOrgs);
     user.getTokenForOrganization = vi.fn(
@@ -87,7 +88,7 @@ describe("middleware: defaultOrganization", () => {
     const [{ id: defaultOid }] = faker.helpers.shuffle(otherOrgs);
 
     const middleware = defaultOrganization(async () => defaultOid);
-    const sid = {} as SlashID;
+    const sid = { oid: org.id } as SlashID;
 
     user.getOrganizations = vi.fn(async () => allOrgs);
     user.getTokenForOrganization = vi.fn(
@@ -111,7 +112,7 @@ describe("middleware: defaultOrganization", () => {
 
     const spy = vi.fn(() => defaultOid);
     const middleware = defaultOrganization(spy);
-    const sid = {} as SlashID;
+    const sid = { oid: org.id } as SlashID;
 
     user.getOrganizations = vi.fn(async () => allOrgs);
     user.getTokenForOrganization = vi.fn(

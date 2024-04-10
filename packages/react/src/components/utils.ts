@@ -90,7 +90,7 @@ export const fromEntries = <
  * 
  * Upon completion, fires [then] if provided.
  */
-export const sequence = async<T extends () => any>(
+export const sequence = async<T extends () => any | Promise<any>>(
   operations: T[],
   {until, then }: {
     until?: (value: Awaited<ReturnType<T>>) => boolean,

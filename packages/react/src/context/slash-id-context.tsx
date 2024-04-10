@@ -337,18 +337,18 @@ export const SlashIDProvider = ({
       const isTokenValid = token && await validateToken(token)
       if (!isTokenValid) return null
     
-      const user = new User(token, sid);
+      const userWithInitialToken = new User(token, sid);
     
-      if (user.anonymous && anonymousUsersEnabled) {
+      if (userWithInitialToken.anonymous && anonymousUsersEnabled) {
         const anonUser = new AnonymousUser(token, sid);
         storeUser(anonUser);
 
         return anonUser
       }
 
-      storeUser(user);
+      storeUser(userWithInitialToken);
 
-      return user
+      return userWithInitialToken
     }
 
     const loginWithDirectID = async () => {
@@ -357,11 +357,11 @@ export const SlashIDProvider = ({
         if (!userFromURL) return null
 
         const { token: tokenFromURL } = userFromURL
-        const user = new User(tokenFromURL, sidRef.current!)
+        const userWithTokenFromUrl = new User(tokenFromURL, sidRef.current!)
 
-        storeUser(user);
+        storeUser(userWithTokenFromUrl);
 
-        return user;
+        return userWithTokenFromUrl;
       } catch (e) {
         console.error(e);
         return null;
@@ -403,7 +403,7 @@ export const SlashIDProvider = ({
       createAnonymousUser
     ],
     {
-      until: value => value !== null && value instanceof BaseUser,
+      until: value => value !== null,
       then: () => {
         setState("ready");
       }

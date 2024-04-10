@@ -90,7 +90,7 @@ export function createTestUser({
     TEST_TOKEN_SIGNATURE,
   ].join(".");
 
-  return new User(newToken);
+  return new User(newToken, { analyticsEnabled: false });
 }
 
 const createBaseOrg = () => ({

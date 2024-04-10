@@ -6,6 +6,8 @@ import {
   TEST_PERSON_ID,
   createTestUser,
 } from "../components/test-utils";
+import { User } from '@slashid/slashid'
+import { afterEach } from "vitest";
 
 const TestComponent = () => {
   const { user } = useSlashID();
@@ -31,7 +33,14 @@ const TestEnvironmentComponent = () => {
 };
 
 describe("useSlashID", () => {
-  test("should return a user instance when a valid initial token is passed to the SlashIDProvider", async () => {
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
+  test.only("should return a user instance when a valid initial token is passed to the SlashIDProvider", async () => {
+
+    User.prototype.validateToken = vi.fn(User.prototype.validateToken).mockResolvedValue({ valid: true })
+
     render(
       <SlashIDProvider initialToken={createTestUser().token} oid={TEST_ORG_ID}>
         <TestComponent />
