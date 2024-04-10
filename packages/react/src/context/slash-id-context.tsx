@@ -330,6 +330,25 @@ export const SlashIDProvider = ({
     environment,
   ]);
 
+  const createAndStoreUserFromToken = useCallback((token: string): User | AnonymousUser | null => {
+    const sid = sidRef.current!;
+    const newUser = new User(token, sid);
+    
+    if (newUser.anonymous && !anonymousUsersEnabled) {
+      return null
+    }
+
+    if (newUser.anonymous) {
+      const anonUser = new AnonymousUser(token, sid);
+
+      storeUser(anonUser);
+      return anonUser;
+    }
+
+    storeUser(newUser);
+    return newUser;
+  }, [anonymousUsersEnabled, storeUser])
+
   useEffect(() => {
     if (state !== "loaded") {
       return;
@@ -342,18 +361,7 @@ export const SlashIDProvider = ({
       const isTokenValid = token && (await validateToken(token));
       if (!isTokenValid) return null;
 
-      const userWithInitialToken = new User(token, sid);
-
-      if (userWithInitialToken.anonymous && anonymousUsersEnabled) {
-        const anonUser = new AnonymousUser(token, sid);
-        storeUser(anonUser);
-
-        return anonUser;
-      }
-
-      storeUser(userWithInitialToken);
-
-      return userWithInitialToken;
+      return createAndStoreUserFromToken(token)
     };
 
     const loginWithDirectID = async () => {
@@ -362,11 +370,8 @@ export const SlashIDProvider = ({
         if (!userFromURL) return null;
 
         const { token: tokenFromURL } = userFromURL;
-        const userWithTokenFromUrl = new User(tokenFromURL, sidRef.current!);
-
-        storeUser(userWithTokenFromUrl);
-
-        return userWithTokenFromUrl;
+        
+        return createAndStoreUserFromToken(tokenFromURL)
       } catch (e) {
         console.error(e);
         return null;
@@ -384,10 +389,7 @@ export const SlashIDProvider = ({
         return null;
       }
 
-      const userFromStorage = new User(tokenFromStorage, sidRef.current!);
-      storeUser(userFromStorage);
-
-      return userFromStorage;
+      return createAndStoreUserFromToken(tokenFromStorage)
     };
 
     const createAnonymousUser = async () => {
@@ -416,7 +418,7 @@ export const SlashIDProvider = ({
         },
       }
     );
-  }, [state, token, storeUser, validateToken, anonymousUsersEnabled]);
+  }, [state, token, storeUser, validateToken, anonymousUsersEnabled, createAndStoreUserFromToken]);
 
   const contextValue = useMemo(() => {
     if (state === "initial") {
