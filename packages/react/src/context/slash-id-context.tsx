@@ -218,9 +218,9 @@ export const SlashIDProvider = ({
                 type: handle.type as unknown as PersonHandleType,
                 value: handle.value,
               };
-        
-        const shouldUpgradeUser = user && userIsAnonymous(user)
-        
+
+        const shouldUpgradeUser = user && userIsAnonymous(user);
+
         if (shouldUpgradeUser) {
           const upgradedUser = await user
             // @ts-expect-error TODO make the identifier optional
