@@ -109,7 +109,7 @@ export type FactorConfiguration =
 export type LogIn = (
   config: LoginConfiguration,
   options?: LoginOptions
-) => Promise<User | AnonymousUser | undefined>;
+) => Promise<User | undefined>;
 
 export type MFA = (
   config: LoginConfiguration,

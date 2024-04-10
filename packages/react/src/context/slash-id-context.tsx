@@ -200,7 +200,7 @@ export const SlashIDProvider = ({
     async (
       { factor, handle },
       { middleware } = {}
-    ): Promise<User | AnonymousUser | undefined> => {
+    ): Promise<User | undefined> => {
       if (state === "initial") {
         return;
       }
@@ -218,26 +218,32 @@ export const SlashIDProvider = ({
                 type: handle.type as unknown as PersonHandleType,
                 value: handle.value,
               };
-
-        const newlyLoggedInUser = await (async () => {
-          if (user && userIsAnonymous(user)) {
-            // @ts-expect-error TODO make the identifier optional
-            return await user.id(oid, identifier, factor).then(async (user) => {
-              return applyMiddleware({ user, sid, middleware });
-            });
-          }
-
-          return await sid
+        
+        const shouldUpgradeUser = user && userIsAnonymous(user)
+        
+        if (shouldUpgradeUser) {
+          const upgradedUser = await user
             // @ts-expect-error TODO make the identifier optional
             .id(oid, identifier, factor)
             .then(async (user) => {
               return applyMiddleware({ user, sid, middleware });
             });
-        })();
 
-        storeUser(newlyLoggedInUser);
+          storeUser(upgradedUser);
 
-        return user;
+          return upgradedUser;
+        }
+
+        const newUser = await sid
+          // @ts-expect-error TODO make the identifier optional
+          .id(oid, identifier, factor)
+          .then(async (user) => {
+            return applyMiddleware({ user, sid, middleware });
+          });
+
+        storeUser(newUser);
+
+        return newUser;
       } catch (e) {
         logOut();
         throw e;
