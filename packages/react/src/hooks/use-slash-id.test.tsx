@@ -6,8 +6,8 @@ import {
   TEST_PERSON_ID,
   createTestUser,
 } from "../components/test-utils";
-import { User } from '@slashid/slashid'
 import { afterEach } from "vitest";
+import { BASE_API_URL_CUSTOM } from "../mocks/handlers";
 
 const TestComponent = () => {
   const { user } = useSlashID();
@@ -33,14 +33,8 @@ const TestEnvironmentComponent = () => {
 };
 
 describe("useSlashID", () => {
-  afterEach(() => {
-    vi.restoreAllMocks()
-  })
 
-  test.only("should return a user instance when a valid initial token is passed to the SlashIDProvider", async () => {
-
-    User.prototype.validateToken = vi.fn(User.prototype.validateToken).mockResolvedValue({ valid: true })
-
+  test("should return a user instance when a valid initial token is passed to the SlashIDProvider", async () => {
     render(
       <SlashIDProvider initialToken={createTestUser().token} oid={TEST_ORG_ID}>
         <TestComponent />
@@ -55,7 +49,7 @@ describe("useSlashID", () => {
 
   test("should use proper custom environment", async () => {
     const customEnv = {
-      baseURL: "https://custom.base.url",
+      baseURL: BASE_API_URL_CUSTOM,
       sdkURL: "https://custom.sdk.url",
     };
 

@@ -10,7 +10,6 @@ import {
 
 import {
   AnonymousUser,
-  BaseUser,
   PersonHandleType,
   SlashID,
   SlashIDEnvironment,
