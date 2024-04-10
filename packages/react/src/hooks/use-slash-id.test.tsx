@@ -6,7 +6,6 @@ import {
   TEST_PERSON_ID,
   createTestUser,
 } from "../components/test-utils";
-import { afterEach } from "vitest";
 import { BASE_API_URL_CUSTOM } from "../mocks/handlers";
 
 const TestComponent = () => {

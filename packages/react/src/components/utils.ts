@@ -90,6 +90,7 @@ export const fromEntries = <
  *
  * Upon completion, fires [then] if provided.
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const sequence = async <T extends () => any | Promise<any>>(
   operations: T[],
   {

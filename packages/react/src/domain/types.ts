@@ -1,10 +1,4 @@
-import {
-  AnonymousUser,
-  Factor,
-  RecoverableFactor,
-  SlashID,
-  User,
-} from "@slashid/slashid";
+import { Factor, RecoverableFactor, SlashID, User } from "@slashid/slashid";
 import { ReactNode } from "react";
 
 const handleTypes = ["email_address", "phone_number"] as const;
