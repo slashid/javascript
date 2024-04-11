@@ -22,7 +22,6 @@ import * as styles from "./authenticating.css";
 import { isFactorOTPEmail, isFactorOTPSms } from "../../../domain/handles";
 import { EmailIcon, SmsIcon, Loader } from "./icons";
 import { BackButton, RetryPrompt } from "./authenticating.components";
-import { AuthenticatingState } from "../flow";
 
 const FactorIcon = ({ factor }: { factor: Factor }) => {
   if (isFactorOTPEmail(factor)) {
@@ -51,9 +50,6 @@ export const OTPState = ({ flowState }: Props) => {
     "initial" | "input" | "submitting"
   >("initial");
   const submitInputRef = useRef<HTMLInputElement>(null);
-  const [context, setContext] = useState<AuthenticatingState["context"]>(
-    flowState.context
-  );
 
   const factor = flowState.context.config.factor;
   const hasRetried = flowState.context.attempt > 1;
@@ -66,7 +62,6 @@ export const OTPState = ({ flowState }: Props) => {
     (e) => {
       e.preventDefault();
 
-      setFormState("submitting");
       sid?.publish("otpCodeSubmitted", values["otp"]);
     },
     [sid, values]
@@ -125,23 +120,13 @@ export const OTPState = ({ flowState }: Props) => {
     }
   }, [formState, sid]);
 
-  useEffect(() => {
-    console.log("ctx effect fired");
-
-    if (flowState.context !== context) {
-      setContext(flowState.context);
-    }
-  }, [flowState.context, context]);
-
-  console.log({ context });
-
   return (
     <>
       <BackButton onCancel={() => flowState.cancel()} />
       <Text as="h1" t={title} variant={{ size: "2xl-title", weight: "bold" }} />
       <Text t={message} variant={{ color: "contrast", weight: "semibold" }} />
-      {formState === "initial" && <FactorIcon factor={factor} />}
-      {formState === "input" && (
+      {flowState.hasUIState("initial") && <FactorIcon factor={factor} />}
+      {flowState.hasUIState("input") && (
         <form
           onSubmit={registerSubmit(handleSubmit)}
           className={styles.otpForm}
@@ -166,7 +151,7 @@ export const OTPState = ({ flowState }: Props) => {
           <Loader />
         )
       ) : null}
-      {formState === "input" && (
+      {flowState.hasUIState("input") && (
         // fallback to prevent layout shift
         <Delayed
           delayMs={BASE_RETRY_DELAY * flowState.context.attempt}

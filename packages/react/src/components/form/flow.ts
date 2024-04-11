@@ -1,4 +1,4 @@
-import { User, SlashID, Factor, PublicReadEvents } from "@slashid/slashid";
+import { User, SlashID } from "@slashid/slashid";
 import {
   Cancel,
   LogIn,
@@ -9,7 +9,13 @@ import {
   Recover,
 } from "../../domain/types";
 import { ensureError } from "../../domain/errors";
-import { isFactorOTP, isFactorRecoverable } from "../../domain/handles";
+import { isFactorRecoverable } from "../../domain/handles";
+import {
+  AuthenticatingUIState,
+  UIStateMachine,
+  createUIStateMachine,
+} from "./ui-state-machine";
+import type { Event } from "./flow.types";
 
 export interface InitialState {
   status: "initial";
@@ -22,12 +28,14 @@ export interface AuthenticatingState {
     config: LoginConfiguration;
     options?: LoginOptions;
     attempt: number;
-    formState: "initial" | "input" | "submitting";
   };
+  // uiStateMachine? => uiStateMachineFactory(factor) => OTP | TOTP | Password
   retry: Retry;
   cancel: Cancel;
   recover: () => void;
   entry: () => void;
+  uiStateMachine: UIStateMachine;
+  hasUIState: (state: AuthenticatingUIState) => boolean;
 }
 
 export interface SuccessState {
@@ -43,49 +51,7 @@ export interface ErrorState {
   cancel: Cancel;
 }
 
-interface LoginEvent {
-  type: "sid_login";
-  config: LoginConfiguration;
-  options?: LoginOptions;
-}
-
-interface LoginSuccessEvent {
-  type: "sid_login.success";
-  user: User;
-}
-
-interface LoginErrorEvent {
-  type: "sid_login.error";
-  error: Error;
-}
-
-interface CancelEvent {
-  type: "sid_cancel";
-}
-
-interface RetryEvent {
-  type: "sid_retry";
-  context: AuthenticatingState["context"];
-}
-
-interface InitEvent {
-  type: "sid_init";
-}
-
-interface UpdateContextEvent {
-  type: "sid_update_context";
-}
-
-type Event =
-  | InitEvent
-  | LoginEvent
-  | LoginSuccessEvent
-  | LoginErrorEvent
-  | RetryEvent
-  | CancelEvent
-  | UpdateContextEvent;
-
-type FlowActions = {
+export type FlowActions = {
   // a function that will be called when the state is entered
   entry?: () => void;
 };
@@ -93,8 +59,8 @@ type FlowActions = {
 export type FlowState = FlowActions &
   (InitialState | AuthenticatingState | SuccessState | ErrorState);
 
-type Observer = (state: FlowState, event: Event) => void;
-type Send = (e: Event) => void;
+export type Observer = (state: FlowState, event: Event) => void;
+export type Send = (e: Event) => void;
 
 const createInitialState = (send: Send): InitialState => {
   return {
@@ -105,45 +71,20 @@ const createInitialState = (send: Send): InitialState => {
   };
 };
 
-type Listener = {
-  name: keyof PublicReadEvents;
-  handler: (e: PublicReadEvents[keyof PublicReadEvents]) => void;
-};
-
-type CleanupFn = () => void;
-
-type SetupListenersFn = () => CleanupFn;
-
-const createAuthenticatingState = (
+const createInitialAuthenticatingState = (
   send: Send,
   context: AuthenticatingState["context"],
   logInFn: LogIn | MFA,
   recoverFn: Recover,
-  setupListeners: SetupListenersFn
+  sid: SlashID
 ): AuthenticatingState => {
-  // to be called when the state is entered
-  function performLogin() {
-    if (context.formState !== "initial") return;
-
-    const cleanup = setupListeners();
-
-    return logInFn(context.config, context.options)
-      .then((user) => {
-        if (user) {
-          cleanup();
-          send({ type: "sid_login.success", user });
-        } else {
-          cleanup();
-          send({
-            type: "sid_login.error",
-            error: new Error("User not returned from /id"),
-          });
-        }
-      })
-      .catch((error) => {
-        send({ type: "sid_login.error", error });
-      });
-  }
+  const uiStateMachine = createUIStateMachine({
+    send,
+    sid,
+    factor: context.config.factor,
+    context,
+    logInFn,
+  });
 
   async function recover() {
     if (!isFactorRecoverable(context.config.factor) || !context.config.handle)
@@ -168,7 +109,6 @@ const createAuthenticatingState = (
       attempt: context.attempt,
       config: context.config,
       options: context.options,
-      formState: context.formState,
     },
     retry: () => {
       send({ type: "sid_retry", context });
@@ -178,7 +118,13 @@ const createAuthenticatingState = (
       // Cancellation API needs to be exposed from the core SDK
       send({ type: "sid_cancel" });
     },
-    entry: performLogin,
+    entry: () => {
+      uiStateMachine.start();
+    },
+    uiStateMachine,
+    hasUIState: (status: AuthenticatingUIState) => {
+      return uiStateMachine.state.status === status;
+    },
   };
 };
 
@@ -259,68 +205,6 @@ export function createFlow(opts: CreateFlowOptions = {}) {
     observers.forEach((o) => o(state, changeEvent));
   }
 
-  function updateAuthenticatingStateContext(
-    state: AuthenticatingState,
-    context: AuthenticatingState["context"]
-  ) {
-    console.log("updating context", context);
-    setState(
-      {
-        ...state,
-        context,
-      },
-      { type: "sid_update_context" }
-    );
-  }
-
-  function prepareSetupListenersFn(
-    factor: Factor,
-    sid: SlashID
-  ): SetupListenersFn {
-    const listeners: Listener[] = [];
-
-    if (isFactorOTP(factor)) {
-      listeners.push(
-        {
-          name: "otpCodeSent",
-          handler: () => {
-            if (state.status !== "authenticating") return;
-            updateAuthenticatingStateContext(state, {
-              ...state.context,
-              formState: "input",
-            });
-          },
-        },
-        {
-          name: "otpIncorrectCodeSubmitted",
-          handler: () => {
-            if (state.status !== "authenticating") return;
-            updateAuthenticatingStateContext(state, {
-              ...state.context,
-              formError: "oopsie",
-            });
-          },
-        }
-      );
-    }
-
-    // TODO password
-
-    return () => {
-      console.log("setting up listeners");
-      listeners.forEach(({ name, handler }) => sid.subscribe(name, handler));
-
-      const cleanup = () => {
-        console.log("cleaning up listeners");
-        listeners.forEach(({ name, handler }) =>
-          sid.unsubscribe(name, handler)
-        );
-      };
-
-      return cleanup;
-    };
-  }
-
   async function transition(e: Event) {
     switch (e.type) {
       case "sid_login":
@@ -334,15 +218,19 @@ export function createFlow(opts: CreateFlowOptions = {}) {
         };
 
         setState(
-          createAuthenticatingState(
+          createInitialAuthenticatingState(
             send,
             loginContext,
             logInFn,
             recoverFn,
-            prepareSetupListenersFn(e.config.factor, sid!)
+            sid!
           ),
           e
         );
+        break;
+
+      case "sid_login.state_changed":
+        setState(state, e);
         break;
       case "sid_login.success":
         // call onSuccess if present
@@ -375,16 +263,15 @@ export function createFlow(opts: CreateFlowOptions = {}) {
           config: e.context.config,
           options: e.context.options,
           attempt: e.context.attempt + 1,
-          formState: "initial",
         };
 
         setState(
-          createAuthenticatingState(
+          createInitialAuthenticatingState(
             send,
             retryContext,
             logInFn,
             recoverFn,
-            prepareSetupListenersFn(e.context.config.factor, sid!)
+            sid!
           ),
           e
         );
