@@ -30,7 +30,7 @@ export const LoggedIn: React.FC<Props> = ({ children, withFactorMethods }) => {
 
   const shouldRender = useMemo(() => {
     // user must be logged in
-    if (!isAuthenticated || !user || user.anonymous) {
+    if (!isAuthenticated || !user) {
       return false;
     }
 
