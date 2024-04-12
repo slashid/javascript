@@ -220,7 +220,7 @@ export const SlashIDProvider = ({
               };
 
         const shouldUpgradeUser = user && userIsAnonymous(user);
-        
+
         if (shouldUpgradeUser) {
           const upgradedUser = await user
             // @ts-expect-error TODO make the identifier optional
@@ -330,24 +330,27 @@ export const SlashIDProvider = ({
     environment,
   ]);
 
-  const createAndStoreUserFromToken = useCallback((token: string): User | AnonymousUser | null => {
-    const sid = sidRef.current!;
-    const newUser = new User(token, sid);
-    
-    if (newUser.anonymous && !anonymousUsersEnabled) {
-      return null
-    }
+  const createAndStoreUserFromToken = useCallback(
+    (token: string): User | AnonymousUser | null => {
+      const sid = sidRef.current!;
+      const newUser = new User(token, sid);
 
-    if (newUser.anonymous) {
-      const anonUser = new AnonymousUser(token, sid);
+      if (newUser.anonymous && !anonymousUsersEnabled) {
+        return null;
+      }
 
-      storeUser(anonUser);
-      return anonUser;
-    }
+      if (newUser.anonymous) {
+        const anonUser = new AnonymousUser(token, sid);
 
-    storeUser(newUser);
-    return newUser;
-  }, [anonymousUsersEnabled, storeUser])
+        storeUser(anonUser);
+        return anonUser;
+      }
+
+      storeUser(newUser);
+      return newUser;
+    },
+    [anonymousUsersEnabled, storeUser]
+  );
 
   useEffect(() => {
     if (state !== "loaded") {
@@ -361,7 +364,7 @@ export const SlashIDProvider = ({
       const isTokenValid = token && (await validateToken(token));
       if (!isTokenValid) return null;
 
-      return createAndStoreUserFromToken(token)
+      return createAndStoreUserFromToken(token);
     };
 
     const loginWithDirectID = async () => {
@@ -371,9 +374,9 @@ export const SlashIDProvider = ({
 
         const { token: tokenFromURL } = userFromURL;
 
-        console.log('from url')
-        
-        return createAndStoreUserFromToken(tokenFromURL)
+        console.log("from url");
+
+        return createAndStoreUserFromToken(tokenFromURL);
       } catch (e) {
         console.error(e);
         return null;
@@ -391,9 +394,9 @@ export const SlashIDProvider = ({
         return null;
       }
 
-      console.log('from storage')
+      console.log("from storage");
 
-      return createAndStoreUserFromToken(tokenFromStorage)
+      return createAndStoreUserFromToken(tokenFromStorage);
     };
 
     const createAnonymousUser = async () => {
@@ -403,7 +406,7 @@ export const SlashIDProvider = ({
 
       storeUser(anonUser);
 
-      console.log('new anon user')
+      console.log("new anon user");
 
       return anonUser;
     };
@@ -424,7 +427,14 @@ export const SlashIDProvider = ({
         },
       }
     );
-  }, [state, token, storeUser, validateToken, anonymousUsersEnabled, createAndStoreUserFromToken]);
+  }, [
+    state,
+    token,
+    storeUser,
+    validateToken,
+    anonymousUsersEnabled,
+    createAndStoreUserFromToken,
+  ]);
 
   const contextValue = useMemo(() => {
     if (state === "initial") {
