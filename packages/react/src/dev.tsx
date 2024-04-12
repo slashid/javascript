@@ -1,5 +1,5 @@
-import { type Factor } from "@slashid/slashid";
-import React, { useEffect, useState } from "react";
+import { Bucket, type Factor } from "@slashid/slashid";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom/client";
 
 import { GDPRConsentDialog } from "./components/gdpr-consent-dialog";
@@ -9,6 +9,7 @@ import {
   ConfigurationProvider,
   DynamicFlow,
   Form,
+  Groups,
   LoggedIn,
   LoggedOut,
   OrganizationSwitcher,
@@ -195,7 +196,18 @@ const BasicForm = () => {
     >
       <SlashIDLoaded>
         <>
-          <LoggedIn>Logged in!</LoggedIn>
+          <LoggedIn>
+            Not anon!
+          </LoggedIn>
+          <LoggedOut>
+            Anon
+          </LoggedOut>
+          <Groups belongsTo="hello_world">
+            Does have group
+          </Groups>
+          <Groups belongsTo="hodingdfgdfg">
+            Does not have group
+          </Groups>
           <LoggedOut>
             <Form
               onError={(error, context) =>
@@ -204,6 +216,7 @@ const BasicForm = () => {
             />
           </LoggedOut>
         </>
+        <GDPRConsentDialog forceOpen />
       </SlashIDLoaded>
     </ConfigurationProvider>
   );
@@ -311,37 +324,93 @@ const LogOut = () => {
   );
 };
 
+const AnonTest = () => {
+  const { user } = useSlashID()
+
+  // useEffect(() => {
+  //   sid
+  // })
+
+  console.log('usr', user)
+  const [ready, setReady] = useState(false)
+  const [value, setValue] = useState("")
+  const bucket = useRef<Bucket | undefined>(undefined)
+
+  const save = useCallback(async () => {
+    if (!bucket.current) return
+    setReady(false)
+    await bucket.current.set({
+      "hello_world": value
+    })
+    setReady(true)
+  }, [value])
+
+  useEffect(() => {
+    if (!user) return
+
+    (async () => {
+      bucket.current = await user?.getBucket("end_user_read_write")
+      if (!bucket.current) return
+      try {
+        const hello_world = await bucket.current.get(["hello_world"])
+        console.log('hello world', hello_world)
+
+        if (hello_world && typeof hello_world.hello_world === "string") setValue(hello_world.hello_world)
+      } finally {
+        setReady(true)
+      }
+      
+    })()
+   
+  }, [user])
+
+  return  <>
+    <input disabled={!ready} value={value} onChange={e => setValue(e.target.value)} />
+    <button disabled={!ready} onClick={save}>
+      Save value
+    </button>
+    {user?.ID}<br />
+    {JSON.stringify(user?.anonymous)}
+  </>
+}
+
 const container = document.getElementById("root") as HTMLElement;
 const root = ReactDOM.createRoot(container);
 root.render(
   <React.StrictMode>
     <SlashIDProvider
       oid={import.meta.env.VITE_ORG_ID}
+      environment={{
+        baseURL: "https://api.slashid.local",
+        sdkURL: "https://cdn.slashid.com/sdk.html"
+      }}
       themeProps={{ theme: "dark" }}
-      tokenStorage="memory"
+      tokenStorage="localStorage"
       analyticsEnabled
+      // anonymousUsersEnabled
     >
       <LogOut />
       <div className="layout">
         <div>
-          <div style={vars}>
+          <div>
             <h2>Basic form</h2>
+            <AnonTest />
             <BasicForm />
           </div>
-          <div>
+          {/* <div>
             <h2>Composed form</h2>
             <ComposedForm />
-          </div>
+          </div> */}
         </div>
         <div>
-          <div>
+          {/* <div>
             <h2>Switch to default org</h2>
             <Config />
           </div>
           <div>
             <h2>Dynamic flow - factor based on handle</h2>
             <ConfiguredDynamicFlow />
-          </div>
+          </div> */}
         </div>
       </div>
     </SlashIDProvider>

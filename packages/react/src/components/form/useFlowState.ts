@@ -22,7 +22,7 @@ export function useFlowState(opts: CreateFlowOptions = {}) {
   }, [recover, sdkState]);
 
   useEffect(() => {
-    if (user) {
+    if (user && !user.anonymous) {
       flowRef.current.setLogIn(mfa);
     } else {
       flowRef.current.setLogIn(logIn);
