@@ -87,13 +87,4 @@ export type Event =
   | CancelEvent
   | UpdateContextEvent;
 
-export type FlowActions = {
-  // a function that will be called when the state is entered
-  entry?: () => void;
-};
-
-export type FlowState = FlowActions &
-  (InitialState | AuthenticatingState | SuccessState | ErrorState);
-
-export type Observer = (state: FlowState, event: Event) => void;
 export type Send = (e: Event) => void;

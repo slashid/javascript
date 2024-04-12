@@ -230,7 +230,8 @@ export function createFlow(opts: CreateFlowOptions = {}) {
         break;
 
       case "sid_login.state_changed":
-        setState(state, e);
+        // change state object reference for reactivity
+        setState({ ...state }, e);
         break;
       case "sid_login.success":
         // call onSuccess if present
