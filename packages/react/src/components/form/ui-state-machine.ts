@@ -1,36 +1,29 @@
-import type { Factor, SlashID } from "@slashid/slashid";
+import type { SlashID } from "@slashid/slashid";
 import type { AuthenticatingState, Send } from "./flow.types";
-import { isFactorOTP } from "../../domain/handles";
+import { isFactorOTP, isFactorPassword } from "../../domain/handles";
 import { LogIn, MFA } from "../../domain/types";
+import { PasswordState as PasswordStatus } from "./authenticating/password";
 
-type OTPState = "initial" | "input" | "submitting";
+type OTPStatus = "initial" | "input" | "submitting";
 
-type PasswordState =
+type PasswordStatus =
   | "initial"
   | "setPassword"
   | "verifyPassword"
   | "recoverPassword"
   | "submitting";
 
-type TOTPState =
+type TOTPStatus =
   | "initial"
   | "registerAuthenticator"
   | "input"
   | "submitting"
   | "saveRecoveryCodes";
 
-export type AuthenticatingUIState = OTPState | PasswordState | TOTPState;
+export type AuthenticatingUIStatus = OTPStatus | PasswordStatus | TOTPStatus;
 
-type UIStateMachineFactoryOptions = {
-  factor: Factor;
-  send: Send;
-  sid: SlashID;
-  context: AuthenticatingState["context"];
-  logInFn: LogIn | MFA;
-};
-
-export interface UIStateMachine {
-  state: State<AuthenticatingUIState>;
+export interface IUIStateMachine {
+  state: State<AuthenticatingUIStatus>;
   start(): void;
 }
 
@@ -40,27 +33,31 @@ export interface State<T> {
   exit?(): void;
 }
 
-export interface InputState extends State<AuthenticatingUIState> {
+export interface InputState extends State<AuthenticatingUIStatus> {
   status: "input";
   submit: (...values: unknown[]) => void;
 }
 
-class OTPUIStateMachine implements UIStateMachine {
-  state: State<OTPState>;
+type UIStateMachineOpts = {
+  send: Send;
+  sid: SlashID;
+  context: AuthenticatingState["context"];
+  logInFn: LogIn | MFA;
+};
+
+abstract class UIStateMachine<T extends AuthenticatingUIStatus>
+  implements IUIStateMachine
+{
+  state: State<T>;
   send: Send;
   sid: SlashID;
   context: AuthenticatingState["context"];
   logInFn: LogIn | MFA;
 
-  constructor(
-    send: Send,
-    sid: SlashID,
-    context: AuthenticatingState["context"],
-    logInFn: LogIn | MFA
-  ) {
+  constructor({ send, sid, context, logInFn }: UIStateMachineOpts) {
     this.send = send;
     this.sid = sid;
-    this.state = this.prepareNextState("initial");
+    this.state = { status: "NULL_STATUS" as T };
     this.context = context;
     this.logInFn = logInFn;
   }
@@ -71,7 +68,7 @@ class OTPUIStateMachine implements UIStateMachine {
     }
   }
 
-  transition(state: State<OTPState>) {
+  protected transition(state: State<T>) {
     if (this.state.exit) {
       this.state.exit();
     }
@@ -82,8 +79,15 @@ class OTPUIStateMachine implements UIStateMachine {
 
     this.send({ type: "sid_login.state_changed", state });
   }
+}
 
-  private prepareNextState(status: OTPState): State<OTPState> {
+class OTPUIStateMachine extends UIStateMachine<OTPStatus> {
+  constructor(opts: UIStateMachineOpts) {
+    super(opts);
+    this.state = this.prepareNextState("initial");
+  }
+
+  private prepareNextState(status: OTPStatus): State<OTPStatus> {
     switch (status) {
       case "initial":
         const otpCodeSentHandler = () => {
@@ -125,6 +129,7 @@ class OTPUIStateMachine implements UIStateMachine {
         } as InputState;
 
       case "submitting":
+      default:
         return {
           status,
         };
@@ -132,26 +137,43 @@ class OTPUIStateMachine implements UIStateMachine {
   }
 }
 
-// TODO PasswordUIStateMachine
+class PasswordUIStateMachine extends UIStateMachine<PasswordStatus> {
+  constructor(opts: UIStateMachineOpts) {
+    super(opts);
+    this.state = this.prepareNextState("initial");
+  }
+
+  private prepareNextState(status: OTPStatus): State<PasswordStatus> {
+    switch (status) {
+      // TODO define all the states and transitions
+      case "initial":
+        return {
+          status,
+        };
+
+      default:
+        return { status } as State<PasswordStatus>;
+    }
+  }
+}
 
 export function createUIStateMachine(
-  opts: UIStateMachineFactoryOptions
-): UIStateMachine {
-  if (isFactorOTP(opts.factor)) {
-    return new OTPUIStateMachine(
-      opts.send,
-      opts.sid,
-      opts.context,
-      opts.logInFn
-    );
+  opts: UIStateMachineOpts
+): IUIStateMachine {
+  if (isFactorOTP(opts.context.config.factor)) {
+    return new OTPUIStateMachine(opts);
+  }
+
+  if (isFactorPassword(opts.context.config.factor)) {
+    return new PasswordUIStateMachine(opts);
   }
 
   // TODO add default one
-  return new OTPUIStateMachine(opts.send, opts.sid, opts.context, opts.logInFn);
+  return new OTPUIStateMachine(opts);
 }
 
 export function isInputState(
-  state: State<AuthenticatingUIState>
+  state: State<AuthenticatingUIStatus>
 ): state is InputState {
   return (
     state.status === "input" &&

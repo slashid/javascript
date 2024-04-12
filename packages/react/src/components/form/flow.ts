@@ -11,8 +11,8 @@ import {
 import { ensureError } from "../../domain/errors";
 import { isFactorRecoverable } from "../../domain/handles";
 import {
-  AuthenticatingUIState,
-  UIStateMachine,
+  AuthenticatingUIStatus,
+  IUIStateMachine,
   createUIStateMachine,
 } from "./ui-state-machine";
 import type { Event } from "./flow.types";
@@ -29,13 +29,12 @@ export interface AuthenticatingState {
     options?: LoginOptions;
     attempt: number;
   };
-  // uiStateMachine? => uiStateMachineFactory(factor) => OTP | TOTP | Password
   retry: Retry;
   cancel: Cancel;
   recover: () => void;
   entry: () => void;
-  uiStateMachine: UIStateMachine;
-  hasUIState: (state: AuthenticatingUIState) => boolean;
+  uiStateMachine: IUIStateMachine;
+  hasUIState: (state: AuthenticatingUIStatus) => boolean;
 }
 
 export interface SuccessState {
@@ -81,7 +80,6 @@ const createInitialAuthenticatingState = (
   const uiStateMachine = createUIStateMachine({
     send,
     sid,
-    factor: context.config.factor,
     context,
     logInFn,
   });
@@ -122,7 +120,7 @@ const createInitialAuthenticatingState = (
       uiStateMachine.start();
     },
     uiStateMachine,
-    hasUIState: (status: AuthenticatingUIState) => {
+    hasUIState: (status: AuthenticatingUIStatus) => {
       return uiStateMachine.state.status === status;
     },
   };
