@@ -97,14 +97,6 @@ export const handlers = [
       return res(ctx.status(200), ctx.json({}));
     })
   ),
-  // ...[route, routeProduction, routeCustom].map((r) => {
-  //   rest.post(r("/persons/anonymous"), (req, res, ctx) => {
-  //     const oid = req.headers.get("Slashid-Orgid") as string
-  //     const user = createAnonymousTestUser({ oid })
-
-  //     return res(ctx.status(200), ctx.json({ result: user.token }))
-  //   })
-  // }),
   rest.post(routeProduction("/persons/anonymous"), (req, res, ctx) => {
     const oid = req.headers.get("Slashid-Orgid") as string;
     const user = createAnonymousTestUser({ oid });
