@@ -421,16 +421,7 @@ export const SlashIDProvider = ({
         },
       }
     );
-  }, [
-    state,
-    token,
-    storeUser,
-    validateToken,
-    anonymousUsersEnabled,
-    createAndStoreUserFromToken,
-    initialToken,
-    oid,
-  ]);
+  }, [anonymousUsersEnabled, createAndStoreUserFromToken, state, storeUser, token, validateToken]);
 
   const contextValue = useMemo(() => {
     if (state === "initial") {
