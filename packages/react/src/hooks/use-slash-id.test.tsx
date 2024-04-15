@@ -11,7 +11,7 @@ import { BASE_API_URL_CUSTOM } from "../mocks/handlers";
 const TestComponent = () => {
   const { user } = useSlashID();
 
-  if (!user) {
+  if (!user || user.anonymous) {
     return <div>Not logged in</div>;
   }
 
@@ -33,11 +33,17 @@ const TestEnvironmentComponent = () => {
 
 describe("useSlashID", () => {
   test("should return a user instance when a valid initial token is passed to the SlashIDProvider", async () => {
+    const { token } = createTestUser()
+    
     render(
-      <SlashIDProvider initialToken={createTestUser().token} oid={TEST_ORG_ID}>
+      <SlashIDProvider initialToken={token} oid={TEST_ORG_ID}>
         <TestComponent />
       </SlashIDProvider>
     );
+
+    console.log('tok', token)
+
+    screen.debug()
 
     expect.assertions(1);
     await expect(

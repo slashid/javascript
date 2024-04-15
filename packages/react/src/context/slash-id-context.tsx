@@ -374,8 +374,6 @@ export const SlashIDProvider = ({
 
         const { token: tokenFromURL } = userFromURL;
 
-        console.log("from url");
-
         return createAndStoreUserFromToken(tokenFromURL);
       } catch (e) {
         console.error(e);
@@ -394,8 +392,6 @@ export const SlashIDProvider = ({
         return null;
       }
 
-      console.log("from storage");
-
       return createAndStoreUserFromToken(tokenFromStorage);
     };
 
@@ -405,8 +401,6 @@ export const SlashIDProvider = ({
       const anonUser = await sid.createAnonymousUser();
 
       storeUser(anonUser);
-
-      console.log("new anon user");
 
       return anonUser;
     };
@@ -427,14 +421,7 @@ export const SlashIDProvider = ({
         },
       }
     );
-  }, [
-    state,
-    token,
-    storeUser,
-    validateToken,
-    anonymousUsersEnabled,
-    createAndStoreUserFromToken,
-  ]);
+  }, [state, token, storeUser, validateToken, anonymousUsersEnabled, createAndStoreUserFromToken, initialToken, oid]);
 
   const contextValue = useMemo(() => {
     if (state === "initial") {

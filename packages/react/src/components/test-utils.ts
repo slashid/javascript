@@ -1,6 +1,6 @@
 import { screen, fireEvent } from "@testing-library/react";
 import { TEXT } from "./text/constants";
-import { FactorMethod, OrganizationDetails, User } from "@slashid/slashid";
+import { AnonymousUser, BaseUser, FactorMethod, OrganizationDetails, User } from "@slashid/slashid";
 import { faker } from "@faker-js/faker";
 import { Handle } from "../domain/types";
 import {
@@ -47,7 +47,7 @@ const TEST_TOKEN_SIGNATURE =
   "tsyUk3guY29r-jb-Xw2htT0egEO3KUErDSlJu9F9Y_QQAf6Te_DmdPgnCKjR7pTGO1uKvYT6JKit7opyntOA4y_wIhymUOkW5mtX-fgyIF0Fkxx1JjGm4BcTE9rI1tH7DWG177yTzwJ2kv5OYvTknpn_QK8s6JzD1N5Yq11_VNf2dRN_NXb-0feqDGhXU7lR-oO7wqFlt37pzENQ7-tG3JDt9uCKqSbrtXqxTHGtg80ZY3FxXYYiHNC3v0nXV5aFRhxGvIIm9LgNkZwXkEtSecIqFHWJn2-ILuOFpvcmtmlZr8AxQyNMAKMt1fARf2LJy45qITI2IyVTndtDekT6HQ";
 
 type Authentication = {
-  factor: FactorMethod;
+  method: FactorMethod;
   handle: Handle;
   timestamp: string;
 };
@@ -57,6 +57,7 @@ type CreateTestUserOptions = {
   oid?: string;
   authentications?: Authentication[];
   token?: string;
+  anonymous?: boolean
 };
 
 /**
@@ -67,12 +68,13 @@ type CreateTestUserOptions = {
  * @param options CreateTestUserOptions
  * @returns User
  */
-export function createTestUser({
-  authMethods,
+function createBaseTestUser({
+  authMethods = [],
   oid,
-  authentications,
+  authentications = [],
   token,
-}: CreateTestUserOptions = {}): User {
+  anonymous = false
+}: CreateTestUserOptions = {}): User | AnonymousUser {
   const payload = token
     ? JSON.parse(atob(token.split(".")[1]))
     : TEST_TOKEN_PAYLOAD_DECODED;
@@ -85,12 +87,38 @@ export function createTestUser({
         ...(authMethods ? { authenticated_methods: authMethods } : {}),
         ...(oid ? { oid } : {}),
         ...(authentications ? { authentications } : {}),
+        ...(anonymous ? {
+          person_type: 'anonymous',
+          authenticated_methods: ["anonymous", ...authMethods],
+          authentications: [
+            {
+              method: "anonymous",
+              timestamp: new Date().toISOString()
+            },
+            ...authentications
+          ]
+        } : {})
       })
     ),
     TEST_TOKEN_SIGNATURE,
   ].join(".");
 
+  if (anonymous) {
+    const sid = new SlashID({ analyticsEnabled: false, oid })
+    return new AnonymousUser(newToken, sid)
+  }
+
   return new User(newToken, { analyticsEnabled: false });
+}
+
+export const createTestUser = (options: Omit<CreateTestUserOptions, 'anonymous'> = {}): User => {
+  return createBaseTestUser(options) as User
+}
+
+export const createAnonymousTestUser = ({
+  oid
+}: Pick<CreateTestUserOptions, 'oid'> = {}): AnonymousUser => {
+  return createBaseTestUser({ oid, anonymous: true }) as AnonymousUser
 }
 
 const createBaseOrg = () => ({
