@@ -23,7 +23,6 @@ export function useFlowState(opts: CreateFlowOptions = {}) {
 
   useEffect(() => {
     if (sid) {
-      console.log("setting SID ref");
       flowRef.current.setSlashID(sid);
     }
   }, [sid]);

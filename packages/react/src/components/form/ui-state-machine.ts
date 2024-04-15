@@ -4,6 +4,8 @@ import { isFactorOTP, isFactorPassword } from "../../domain/handles";
 import { LogIn, MFA } from "../../domain/types";
 import { PasswordState as PasswordStatus } from "./authenticating/password";
 
+type DefaultUIStatus = "initial";
+
 type OTPStatus = "initial" | "input" | "submitting";
 
 type PasswordStatus =
@@ -143,17 +145,61 @@ class PasswordUIStateMachine extends UIStateMachine<PasswordStatus> {
     this.state = this.prepareNextState("initial");
   }
 
-  private prepareNextState(status: OTPStatus): State<PasswordStatus> {
+  private prepareNextState(status: PasswordStatus): State<PasswordStatus> {
     switch (status) {
-      // TODO define all the states and transitions
       case "initial":
-        return {
-          status,
+        const onSetPassword = () => {
+          this.transition(this.prepareNextState("setPassword"));
         };
 
+        const onVerifyPassword = () => {
+          this.transition(this.prepareNextState("verifyPassword"));
+        };
+
+        return {
+          status,
+          entry: () => {
+            this.sid.subscribe("passwordSetReady", onSetPassword);
+            this.sid.subscribe("passwordVerifyReady", onVerifyPassword);
+          },
+          exit: () => {
+            this.sid.unsubscribe("passwordSetReady", onSetPassword);
+            this.sid.unsubscribe("passwordVerifyReady", onVerifyPassword);
+          },
+        };
+
+      case "setPassword":
+      case "verifyPassword":
+      case "recoverPassword":
+      case "submitting":
       default:
         return { status } as State<PasswordStatus>;
     }
+  }
+}
+
+class DefaultUIStateMachine extends UIStateMachine<DefaultUIStatus> {
+  constructor(opts: UIStateMachineOpts) {
+    super(opts);
+    this.state = {
+      status: "initial",
+      entry: () => {
+        this.logInFn(this.context.config, this.context.options)
+          .then((user) => {
+            if (user) {
+              this.send({ type: "sid_login.success", user });
+            } else {
+              this.send({
+                type: "sid_login.error",
+                error: new Error("User not returned from /id"),
+              });
+            }
+          })
+          .catch((error) => {
+            this.send({ type: "sid_login.error", error });
+          });
+      },
+    };
   }
 }
 
@@ -168,8 +214,7 @@ export function createUIStateMachine(
     return new PasswordUIStateMachine(opts);
   }
 
-  // TODO add default one
-  return new OTPUIStateMachine(opts);
+  return new DefaultUIStateMachine(opts);
 }
 
 export function isInputState(
