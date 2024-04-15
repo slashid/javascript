@@ -41,10 +41,6 @@ describe("useSlashID", () => {
       </SlashIDProvider>
     );
 
-    console.log("tok", token);
-
-    screen.debug();
-
     expect.assertions(1);
     await expect(
       screen.findByText(TEST_PERSON_ID)
