@@ -43,6 +43,7 @@ for (const filePath of filesToCheck) {
 }
 
 // Switch to the main branch and build
+execSync("git config --global --add safe.directory /__w/javascript/javascript");
 execSync("git fetch origin main:main");
 execSync("git checkout main");
 execSync("pnpm install --frozen-lockfile");
