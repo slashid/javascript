@@ -1,5 +1,8 @@
 import { rest } from "msw";
-import { createAnonymousTestUser, createTestUser } from "../components/test-utils";
+import {
+  createAnonymousTestUser,
+  createTestUser,
+} from "../components/test-utils";
 import { FactorMethod, User } from "@slashid/slashid";
 import { HandleType } from "../domain/types";
 
@@ -103,21 +106,21 @@ export const handlers = [
   //   })
   // }),
   rest.post(routeProduction("/persons/anonymous"), (req, res, ctx) => {
-    const oid = req.headers.get("Slashid-Orgid") as string
-    const user = createAnonymousTestUser({ oid })
+    const oid = req.headers.get("Slashid-Orgid") as string;
+    const user = createAnonymousTestUser({ oid });
 
-    return res(ctx.status(200), ctx.json({ result: user.token }))
+    return res(ctx.status(200), ctx.json({ result: user.token }));
   }),
   rest.post(routeCustom("/persons/anonymous"), (req, res, ctx) => {
-    const oid = req.headers.get("Slashid-Orgid") as string
-    const user = createAnonymousTestUser({ oid })
+    const oid = req.headers.get("Slashid-Orgid") as string;
+    const user = createAnonymousTestUser({ oid });
 
-    return res(ctx.status(200), ctx.json({ result: user.token }))
+    return res(ctx.status(200), ctx.json({ result: user.token }));
   }),
   rest.post(route("/persons/anonymous"), (req, res, ctx) => {
-    const oid = req.headers.get("Slashid-Orgid") as string
-    const user = createAnonymousTestUser({ oid })
+    const oid = req.headers.get("Slashid-Orgid") as string;
+    const user = createAnonymousTestUser({ oid });
 
-    return res(ctx.status(200), ctx.json({ result: user.token }))
-  })
+    return res(ctx.status(200), ctx.json({ result: user.token }));
+  }),
 ];

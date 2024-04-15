@@ -33,17 +33,17 @@ const TestEnvironmentComponent = () => {
 
 describe("useSlashID", () => {
   test("should return a user instance when a valid initial token is passed to the SlashIDProvider", async () => {
-    const { token } = createTestUser()
-    
+    const { token } = createTestUser();
+
     render(
       <SlashIDProvider initialToken={token} oid={TEST_ORG_ID}>
         <TestComponent />
       </SlashIDProvider>
     );
 
-    console.log('tok', token)
+    console.log("tok", token);
 
-    screen.debug()
+    screen.debug();
 
     expect.assertions(1);
     await expect(

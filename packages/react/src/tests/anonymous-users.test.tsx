@@ -7,8 +7,8 @@ import { SlashID } from "@slashid/slashid";
 
 describe("Anonymous users", () => {
   afterEach(() => {
-    vi.restoreAllMocks()
-  })
+    vi.restoreAllMocks();
+  });
 
   it("should be created when anonymousUsersEnabled is true", async () => {
     const TEST_ROOT_OID = "oid_1";
@@ -108,11 +108,9 @@ describe("Anonymous users", () => {
       .fn(SlashID.prototype.getUserFromURL)
       .mockResolvedValue(anonUser);
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const wrapper = ({ children }: PropsWithChildren<any>) => (
-      <SlashIDProvider
-        oid={TEST_ROOT_OID}
-        anonymousUsersEnabled
-      >
+      <SlashIDProvider oid={TEST_ROOT_OID} anonymousUsersEnabled>
         {children}
       </SlashIDProvider>
     );
@@ -127,7 +125,4 @@ describe("Anonymous users", () => {
 
     unmount();
   });
-  // it.skip("should emit PersonIdentified_v1 when identified", async () => {});
-  // it.skip("should load anonymous user from storage", async () => {})
-  // it.skip("should load anonymous user from storage", async () => {})
 });
