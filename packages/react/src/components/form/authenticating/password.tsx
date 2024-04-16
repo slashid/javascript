@@ -63,11 +63,11 @@ const ProgressIndicator = ({
   flowState: AuthenticatingState;
   handleType?: HandleType;
 }) => {
-  if (flowState.hasUIState("submitting")) {
+  if (flowState.matches("submitting")) {
     return <Loader />;
   }
 
-  if (flowState.hasUIState("recoverPassword")) {
+  if (flowState.matches("recoverPassword")) {
     if (handleType === "email_address") {
       return <EmailIcon />;
     }
@@ -139,7 +139,7 @@ export const PasswordState = ({ flowState }: Props) => {
   } = useForm();
 
   const { title, message } = getTextKeys(flowState);
-  const interpolationTokens = flowState.hasUIState("recoverPassword")
+  const interpolationTokens = flowState.matches("recoverPassword")
     ? {
         ...(flowState.context.config.handle?.type === "email_address" && {
           EMAIL_ADDRESS: flowState.context.config.handle.value,
@@ -162,7 +162,7 @@ export const PasswordState = ({ flowState }: Props) => {
       }
 
       if (
-        flowState.hasUIState("setPassword") &&
+        flowState.matches("setPassword") &&
         values["password"] !== values["passwordConfirm"]
       ) {
         setError("password", {
@@ -242,9 +242,9 @@ export const PasswordState = ({ flowState }: Props) => {
         variant={{ color: "contrast", weight: "semibold" }}
         tokens={interpolationTokens}
       />
-      {flowState.hasUIState("initial") && <Loader />}
-      {(flowState.hasUIState("setPassword") ||
-        flowState.hasUIState("verifyPassword")) && (
+      {flowState.matches("initial") && <Loader />}
+      {(flowState.matches("setPassword") ||
+        flowState.matches("verifyPassword")) && (
         <form onSubmit={registerSubmit(handleSubmit)}>
           {/* TODO support password managers by rendering a read only field */}
           <input
@@ -263,12 +263,12 @@ export const PasswordState = ({ flowState }: Props) => {
               onChange={handlePasswordChange}
               error={hasError("password")}
               autoComplete={
-                flowState.hasUIState("setPassword")
+                flowState.matches("setPassword")
                   ? "new-password"
                   : "current-password"
               }
             />
-            {flowState.hasUIState("setPassword") && (
+            {flowState.matches("setPassword") && (
               <PasswordInput
                 id="password-input-confirm"
                 label={text["authenticating.passwordConfirm.label"]}
@@ -281,7 +281,7 @@ export const PasswordState = ({ flowState }: Props) => {
               />
             )}
             <ErrorMessage name="password" />
-            {flowState.hasUIState("verifyPassword") && (
+            {flowState.matches("verifyPassword") && (
               <PasswordRecoveryPrompt onRecoverClick={handleRecovery} />
             )}
           </div>

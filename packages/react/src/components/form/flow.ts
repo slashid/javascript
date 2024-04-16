@@ -32,7 +32,7 @@ export interface AuthenticatingState {
   cancel: Cancel;
   recover: () => void;
   entry: () => void;
-  hasUIState: (state: AuthenticatingUIStatus) => boolean;
+  matches: (pattern: string) => boolean;
   getChildState: () => State<AuthenticatingUIStatus>;
 }
 
@@ -121,8 +121,8 @@ const createInitialAuthenticatingState = (
         uiStateMachine.state.entry();
       }
     },
-    hasUIState: (status: AuthenticatingUIStatus) => {
-      return uiStateMachine.state.status === status;
+    matches: (pattern: string) => {
+      return `authenticating.${uiStateMachine.state.status}`.includes(pattern);
     },
     getChildState: () => {
       return uiStateMachine.state;

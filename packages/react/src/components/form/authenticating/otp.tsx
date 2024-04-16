@@ -46,7 +46,7 @@ export const OTPState = ({ flowState }: Props) => {
   const factor = flowState.context.config.factor;
   const hasRetried = flowState.context.attempt > 1;
   const { title, message } = getAuthenticatingMessage(factor, {
-    isSubmitting: flowState.hasUIState("submitting"),
+    isSubmitting: flowState.matches("submitting"),
     hasRetried,
   });
 
@@ -112,8 +112,8 @@ export const OTPState = ({ flowState }: Props) => {
       <BackButton onCancel={() => flowState.cancel()} />
       <Text as="h1" t={title} variant={{ size: "2xl-title", weight: "bold" }} />
       <Text t={message} variant={{ color: "contrast", weight: "semibold" }} />
-      {flowState.hasUIState("initial") && <FactorIcon factor={factor} />}
-      {flowState.hasUIState("input") && (
+      {flowState.matches("initial") && <FactorIcon factor={factor} />}
+      {flowState.matches("input") && (
         <form
           onSubmit={registerSubmit(handleSubmit)}
           className={styles.otpForm}
@@ -131,14 +131,14 @@ export const OTPState = ({ flowState }: Props) => {
           </div>
         </form>
       )}
-      {flowState.hasUIState("submitting") ? (
+      {flowState.matches("submitting") ? (
         hasRetried ? (
           <EmailIcon />
         ) : (
           <Loader />
         )
       ) : null}
-      {flowState.hasUIState("input") && (
+      {flowState.matches("input") && (
         // fallback to prevent layout shift
         <Delayed
           delayMs={BASE_RETRY_DELAY * flowState.context.attempt}
