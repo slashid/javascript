@@ -45,8 +45,8 @@ export interface State<T> {
   exit?(): void;
 }
 
-interface LoginStateChangedEvent {
-  type: "sid_login.state_changed";
+interface LoginUIStateChangedEvent {
+  type: "sid_login.ui_state_changed";
   state: State<unknown>;
 }
 
@@ -80,7 +80,7 @@ interface UpdateContextEvent {
 export type Event =
   | InitEvent
   | LoginEvent
-  | LoginStateChangedEvent
+  | LoginUIStateChangedEvent
   | LoginSuccessEvent
   | LoginErrorEvent
   | RetryEvent

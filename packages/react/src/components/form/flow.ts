@@ -117,7 +117,9 @@ const createInitialAuthenticatingState = (
       send({ type: "sid_cancel" });
     },
     entry: () => {
-      uiStateMachine.start();
+      if (uiStateMachine.state.entry) {
+        uiStateMachine.state.entry();
+      }
     },
     uiStateMachine,
     hasUIState: (status: AuthenticatingUIStatus) => {
@@ -227,7 +229,7 @@ export function createFlow(opts: CreateFlowOptions = {}) {
         );
         break;
 
-      case "sid_login.state_changed":
+      case "sid_login.ui_state_changed":
         // change state object reference for reactivity
         setState({ ...state }, e);
         break;

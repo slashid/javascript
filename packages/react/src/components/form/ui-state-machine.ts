@@ -1,5 +1,9 @@
 import type { SlashID } from "@slashid/slashid";
-import type { AuthenticatingState, Send } from "./flow.types";
+import type {
+  AuthenticatingState,
+  Send,
+  Event as FlowEvent,
+} from "./flow.types";
 import { isFactorOTP, isFactorPassword } from "../../domain/handles";
 import { LogIn, MFA } from "../../domain/types";
 import { PasswordState as PasswordStatus } from "./authenticating/password";
@@ -35,9 +39,13 @@ export interface State<T> {
   exit?(): void;
 }
 
-export interface InputState extends State<AuthenticatingUIStatus> {
-  status: "input";
+export interface InputState<T> extends State<T> {
   submit: (...values: unknown[]) => void;
+}
+
+export interface VerifyPasswordState extends InputState<PasswordStatus> {
+  status: "verifyPassword";
+  recoverPassword: () => void;
 }
 
 type UIStateMachineOpts = {
@@ -50,24 +58,21 @@ type UIStateMachineOpts = {
 abstract class UIStateMachine<T extends AuthenticatingUIStatus>
   implements IUIStateMachine
 {
-  state: State<T>;
-  send: Send;
-  sid: SlashID;
-  context: AuthenticatingState["context"];
-  logInFn: LogIn | MFA;
+  public state: State<T>;
+  private _send: Send;
+  protected sid: SlashID;
+  protected context: AuthenticatingState["context"];
+  protected logInFn: LogIn | MFA;
 
-  constructor({ send, sid, context, logInFn }: UIStateMachineOpts) {
-    this.send = send;
+  constructor(
+    { send, sid, context, logInFn }: UIStateMachineOpts,
+    initialState: State<T>
+  ) {
+    this._send = send;
     this.sid = sid;
-    this.state = { status: "NULL_STATUS" as T };
+    this.state = initialState;
     this.context = context;
     this.logInFn = logInFn;
-  }
-
-  start() {
-    if (this.state.status === "initial") {
-      this.state.entry!();
-    }
   }
 
   protected transition(state: State<T>) {
@@ -79,109 +84,160 @@ abstract class UIStateMachine<T extends AuthenticatingUIStatus>
       this.state.entry();
     }
 
-    this.send({ type: "sid_login.state_changed", state });
+    this.send({ type: "sid_login.ui_state_changed", state });
+  }
+
+  protected send(e: Event) {
+    this._send(e as FlowEvent);
   }
 }
 
+type UIEvent =
+  | {
+      type: "sid_ui.otpCodeSent";
+    }
+  | {
+      type: "sid_ui.otpCodeSubmitted";
+    }
+  | {
+      type: "sid_ui.passwordSetReady";
+    }
+  | {
+      type: "sid_ui.passwordVerifyReady";
+    }
+  | {
+      type: "sid_ui.passwordRecoveryRequested";
+    }
+  | {
+      type: "sid_ui.passwordSubmitted";
+    };
+
+type Event = FlowEvent | UIEvent;
+
 class OTPUIStateMachine extends UIStateMachine<OTPStatus> {
   constructor(opts: UIStateMachineOpts) {
-    super(opts);
-    this.state = this.prepareNextState("initial");
+    const otpCodeSentHandler = () => {
+      this.send({ type: "sid_ui.otpCodeSent" });
+    };
+
+    super(opts, {
+      status: "initial",
+      entry: () => {
+        this.sid.subscribe("otpCodeSent", otpCodeSentHandler);
+
+        this.logInFn(this.context.config, this.context.options)
+          .then((user) => {
+            if (user) {
+              this.send({ type: "sid_login.success", user });
+            } else {
+              this.send({
+                type: "sid_login.error",
+                error: new Error("User not returned from /id"),
+              });
+            }
+          })
+          .catch((error) => {
+            this.send({ type: "sid_login.error", error });
+          });
+      },
+      exit: () => {
+        this.sid.unsubscribe("otpCodeSent", otpCodeSentHandler);
+      },
+    });
   }
 
-  private prepareNextState(status: OTPStatus): State<OTPStatus> {
-    switch (status) {
-      case "initial":
-        const otpCodeSentHandler = () => {
-          this.transition(this.prepareNextState("input"));
-        };
-
-        return {
-          status,
-          entry: () => {
-            this.sid.subscribe("otpCodeSent", otpCodeSentHandler);
-
-            this.logInFn(this.context.config, this.context.options)
-              .then((user) => {
-                if (user) {
-                  this.send({ type: "sid_login.success", user });
-                } else {
-                  this.send({
-                    type: "sid_login.error",
-                    error: new Error("User not returned from /id"),
-                  });
-                }
-              })
-              .catch((error) => {
-                this.send({ type: "sid_login.error", error });
-              });
-          },
-          exit: () => {
-            this.sid.unsubscribe("otpCodeSent", otpCodeSentHandler);
-          },
-        };
-
-      case "input":
-        return {
-          status,
+  send(e: Event) {
+    switch (e.type) {
+      case "sid_ui.otpCodeSent":
+        this.transition({
+          status: "input",
           submit: (otp: string) => {
             this.sid.publish("otpCodeSubmitted", otp);
-            this.transition(this.prepareNextState("submitting"));
+            this.send({ type: "sid_ui.otpCodeSubmitted" });
           },
-        } as InputState;
+        } as InputState<OTPStatus>);
+        break;
 
-      case "submitting":
+      case "sid_ui.otpCodeSubmitted":
+        this.transition({
+          status: "submitting",
+        });
+        break;
+
       default:
-        return {
-          status,
-        };
+        super.send(e);
     }
   }
 }
 
 class PasswordUIStateMachine extends UIStateMachine<PasswordStatus> {
   constructor(opts: UIStateMachineOpts) {
-    super(opts);
-    this.state = this.prepareNextState("initial");
+    const onSetPassword = () => {
+      this.send({ type: "sid_ui.passwordSetReady" });
+    };
+
+    const onVerifyPassword = () => {
+      this.send({ type: "sid_ui.passwordSetReady" });
+    };
+
+    super(opts, {
+      status: "initial",
+      entry: () => {
+        this.sid.subscribe("passwordSetReady", onSetPassword);
+        this.sid.subscribe("passwordVerifyReady", onVerifyPassword);
+      },
+      exit: () => {
+        this.sid.unsubscribe("passwordSetReady", onSetPassword);
+        this.sid.unsubscribe("passwordVerifyReady", onVerifyPassword);
+      },
+    });
   }
-
-  private prepareNextState(status: PasswordStatus): State<PasswordStatus> {
-    switch (status) {
-      case "initial":
-        const onSetPassword = () => {
-          this.transition(this.prepareNextState("setPassword"));
-        };
-
-        const onVerifyPassword = () => {
-          this.transition(this.prepareNextState("verifyPassword"));
-        };
-
-        return {
-          status,
-          entry: () => {
-            this.sid.subscribe("passwordSetReady", onSetPassword);
-            this.sid.subscribe("passwordVerifyReady", onVerifyPassword);
+  send(e: Event) {
+    switch ((e as UIEvent).type) {
+      case "sid_ui.passwordSetReady":
+        this.transition({
+          status: "setPassword",
+          submit: (password: string) => {
+            this.sid.publish("passwordSubmitted", password);
+            this.send({ type: "sid_ui.passwordSubmitted" });
           },
-          exit: () => {
-            this.sid.unsubscribe("passwordSetReady", onSetPassword);
-            this.sid.unsubscribe("passwordVerifyReady", onVerifyPassword);
-          },
-        };
+        } as InputState<PasswordStatus>);
+        break;
 
-      case "setPassword":
-      case "verifyPassword":
-      case "recoverPassword":
-      case "submitting":
+      case "sid_ui.passwordVerifyReady":
+        this.transition({
+          status: "verifyPassword",
+          submit: (password: string) => {
+            this.sid.publish("passwordSubmitted", password);
+            this.send({ type: "sid_ui.passwordSubmitted" });
+          },
+          recoverPassword: () => {
+            this.send({ type: "sid_ui.passwordRecoveryRequested" });
+          },
+        } as VerifyPasswordState);
+        break;
+
+      case "sid_ui.passwordRecoveryRequested":
+        this.transition({
+          status: "recoverPassword",
+        });
+        break;
+
+      case "sid_ui.passwordSubmitted":
+        this.transition({
+          status: "submitting",
+        });
+        break;
+
       default:
-        return { status } as State<PasswordStatus>;
+        super.send(e);
     }
   }
 }
 
 class DefaultUIStateMachine extends UIStateMachine<DefaultUIStatus> {
   constructor(opts: UIStateMachineOpts) {
-    super(opts);
-    this.state = {
+    super(opts, {
       status: "initial",
       entry: () => {
         this.logInFn(this.context.config, this.context.options)
@@ -199,7 +255,7 @@ class DefaultUIStateMachine extends UIStateMachine<DefaultUIStatus> {
             this.send({ type: "sid_login.error", error });
           });
       },
-    };
+    });
   }
 }
 
@@ -219,9 +275,8 @@ export function createUIStateMachine(
 
 export function isInputState(
   state: State<AuthenticatingUIStatus>
-): state is InputState {
+): state is InputState<AuthenticatingUIStatus> {
   return (
-    state.status === "input" &&
-    typeof (state as InputState).submit === "function"
+    typeof (state as InputState<AuthenticatingUIStatus>).submit === "function"
   );
 }
