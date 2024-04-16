@@ -119,7 +119,7 @@ function getTextKeys(flowState: AuthenticatingState): {
     },
   };
 
-  return TEXT_KEYS[flowState.getUiState().status as PasswordStatus];
+  return TEXT_KEYS[flowState.getChildState().status as PasswordStatus];
 }
 
 /**
@@ -171,7 +171,7 @@ export const PasswordState = ({ flowState }: Props) => {
         return;
       }
 
-      const uiState = flowState.getUiState();
+      const uiState = flowState.getChildState();
       if (isInputState(uiState)) {
         uiState.submit(values["password"]);
       }
@@ -200,7 +200,7 @@ export const PasswordState = ({ flowState }: Props) => {
   );
 
   const handleRecovery = useCallback(async () => {
-    const uiState = flowState.getUiState();
+    const uiState = flowState.getChildState();
     if (!isVerifyPasswordState(uiState)) return;
 
     uiState.recoverPassword();

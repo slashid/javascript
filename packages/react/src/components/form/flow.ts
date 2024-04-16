@@ -33,7 +33,7 @@ export interface AuthenticatingState {
   recover: () => void;
   entry: () => void;
   hasUIState: (state: AuthenticatingUIStatus) => boolean;
-  getUiState: () => State<AuthenticatingUIStatus>;
+  getChildState: () => State<AuthenticatingUIStatus>;
 }
 
 export interface SuccessState {
@@ -124,7 +124,7 @@ const createInitialAuthenticatingState = (
     hasUIState: (status: AuthenticatingUIStatus) => {
       return uiStateMachine.state.status === status;
     },
-    getUiState: () => {
+    getChildState: () => {
       return uiStateMachine.state;
     },
   };

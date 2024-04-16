@@ -53,7 +53,7 @@ export const OTPState = ({ flowState }: Props) => {
   const handleSubmit: FormEventHandler<HTMLFormElement> = useCallback(
     (e) => {
       e.preventDefault();
-      const uiState = flowState.getUiState();
+      const uiState = flowState.getChildState();
       if (!isInputState(uiState)) return;
 
       uiState.submit(values["otp"]);
