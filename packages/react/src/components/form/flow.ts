@@ -12,10 +12,9 @@ import { ensureError } from "../../domain/errors";
 import { isFactorRecoverable } from "../../domain/handles";
 import {
   AuthenticatingUIStatus,
-  IUIStateMachine,
   createUIStateMachine,
 } from "./ui-state-machine";
-import type { Event } from "./flow.types";
+import type { Event, State } from "./flow.types";
 
 export interface InitialState {
   status: "initial";
@@ -33,8 +32,8 @@ export interface AuthenticatingState {
   cancel: Cancel;
   recover: () => void;
   entry: () => void;
-  uiStateMachine: IUIStateMachine;
   hasUIState: (state: AuthenticatingUIStatus) => boolean;
+  getUiState: () => State<AuthenticatingUIStatus>;
 }
 
 export interface SuccessState {
@@ -77,13 +76,6 @@ const createInitialAuthenticatingState = (
   recoverFn: Recover,
   sid: SlashID
 ): AuthenticatingState => {
-  const uiStateMachine = createUIStateMachine({
-    send,
-    sid,
-    context,
-    logInFn,
-  });
-
   async function recover() {
     if (!isFactorRecoverable(context.config.factor) || !context.config.handle)
       return;
@@ -100,6 +92,14 @@ const createInitialAuthenticatingState = (
       send({ type: "sid_login.error", error: ensureError(error) });
     }
   }
+
+  const uiStateMachine = createUIStateMachine({
+    send,
+    sid,
+    context,
+    logInFn,
+    recover,
+  });
 
   return {
     status: "authenticating",
@@ -121,9 +121,11 @@ const createInitialAuthenticatingState = (
         uiStateMachine.state.entry();
       }
     },
-    uiStateMachine,
     hasUIState: (status: AuthenticatingUIStatus) => {
       return uiStateMachine.state.status === status;
+    },
+    getUiState: () => {
+      return uiStateMachine.state;
     },
   };
 };

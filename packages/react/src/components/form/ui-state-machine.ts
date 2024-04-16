@@ -6,13 +6,12 @@ import type {
 } from "./flow.types";
 import { isFactorOTP, isFactorPassword } from "../../domain/handles";
 import { LogIn, MFA } from "../../domain/types";
-import { PasswordState as PasswordStatus } from "./authenticating/password";
 
 type DefaultUIStatus = "initial";
 
 type OTPStatus = "initial" | "input" | "submitting";
 
-type PasswordStatus =
+export type PasswordStatus =
   | "initial"
   | "setPassword"
   | "verifyPassword"
@@ -30,7 +29,6 @@ export type AuthenticatingUIStatus = OTPStatus | PasswordStatus | TOTPStatus;
 
 export interface IUIStateMachine {
   state: State<AuthenticatingUIStatus>;
-  start(): void;
 }
 
 export interface State<T> {
@@ -48,11 +46,14 @@ export interface VerifyPasswordState extends InputState<PasswordStatus> {
   recoverPassword: () => void;
 }
 
+type Recover = () => Promise<void>;
+
 type UIStateMachineOpts = {
   send: Send;
   sid: SlashID;
   context: AuthenticatingState["context"];
   logInFn: LogIn | MFA;
+  recover: Recover;
 };
 
 abstract class UIStateMachine<T extends AuthenticatingUIStatus>
@@ -63,9 +64,10 @@ abstract class UIStateMachine<T extends AuthenticatingUIStatus>
   protected sid: SlashID;
   protected context: AuthenticatingState["context"];
   protected logInFn: LogIn | MFA;
+  protected recover: Recover;
 
   constructor(
-    { send, sid, context, logInFn }: UIStateMachineOpts,
+    { send, sid, context, logInFn, recover }: UIStateMachineOpts,
     initialState: State<T>
   ) {
     this._send = send;
@@ -73,6 +75,7 @@ abstract class UIStateMachine<T extends AuthenticatingUIStatus>
     this.state = initialState;
     this.context = context;
     this.logInFn = logInFn;
+    this.recover = recover;
   }
 
   protected transition(state: State<T>) {
@@ -110,6 +113,9 @@ type UIEvent =
     }
   | {
       type: "sid_ui.passwordSubmitted";
+    }
+  | {
+      type: "sid_ui.passwordRecovered";
     };
 
 type Event = FlowEvent | UIEvent;
@@ -177,7 +183,7 @@ class PasswordUIStateMachine extends UIStateMachine<PasswordStatus> {
     };
 
     const onVerifyPassword = () => {
-      this.send({ type: "sid_ui.passwordSetReady" });
+      this.send({ type: "sid_ui.passwordVerifyReady" });
     };
 
     super(opts, {
@@ -185,6 +191,21 @@ class PasswordUIStateMachine extends UIStateMachine<PasswordStatus> {
       entry: () => {
         this.sid.subscribe("passwordSetReady", onSetPassword);
         this.sid.subscribe("passwordVerifyReady", onVerifyPassword);
+
+        this.logInFn(this.context.config, this.context.options)
+          .then((user) => {
+            if (user) {
+              this.send({ type: "sid_login.success", user });
+            } else {
+              this.send({
+                type: "sid_login.error",
+                error: new Error("User not returned from /id"),
+              });
+            }
+          })
+          .catch((error) => {
+            this.send({ type: "sid_login.error", error });
+          });
       },
       exit: () => {
         this.sid.unsubscribe("passwordSetReady", onSetPassword);
@@ -205,6 +226,7 @@ class PasswordUIStateMachine extends UIStateMachine<PasswordStatus> {
         break;
 
       case "sid_ui.passwordVerifyReady":
+      case "sid_ui.passwordRecovered":
         this.transition({
           status: "verifyPassword",
           submit: (password: string) => {
@@ -220,6 +242,14 @@ class PasswordUIStateMachine extends UIStateMachine<PasswordStatus> {
       case "sid_ui.passwordRecoveryRequested":
         this.transition({
           status: "recoverPassword",
+          entry: async () => {
+            try {
+              await this.recover();
+              this.send({ type: "sid_ui.passwordRecovered" });
+            } catch (e) {
+              // ignored
+            }
+          },
         });
         break;
 
@@ -278,5 +308,15 @@ export function isInputState(
 ): state is InputState<AuthenticatingUIStatus> {
   return (
     typeof (state as InputState<AuthenticatingUIStatus>).submit === "function"
+  );
+}
+
+export function isVerifyPasswordState(
+  state: State<AuthenticatingUIStatus>
+): state is VerifyPasswordState {
+  return (
+    state.status === "verifyPassword" &&
+    typeof (state as VerifyPasswordState).submit === "function" &&
+    typeof (state as VerifyPasswordState).recoverPassword === "function"
   );
 }
