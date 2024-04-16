@@ -38,7 +38,7 @@ export interface State<T> {
 }
 
 export interface InputState<T> extends State<T> {
-  submit: (...values: unknown[]) => void;
+  submit: (...values: string[]) => void;
 }
 
 export interface VerifyPasswordState extends InputState<PasswordStatus> {
@@ -155,13 +155,12 @@ class OTPUIStateMachine extends UIStateMachine<OTPStatus> {
   send(e: Event) {
     switch (e.type) {
       case "sid_ui.otpCodeSent":
-        this.transition({
-          status: "input",
-          submit: (otp: string) => {
+        this.transition(
+          createInputState("input", (otp) => {
             this.sid.publish("otpCodeSubmitted", otp);
             this.send({ type: "sid_ui.otpCodeSubmitted" });
-          },
-        } as InputState<OTPStatus>);
+          })
+        );
         break;
 
       case "sid_ui.otpCodeSubmitted":
@@ -216,27 +215,28 @@ class PasswordUIStateMachine extends UIStateMachine<PasswordStatus> {
   send(e: Event) {
     switch ((e as UIEvent).type) {
       case "sid_ui.passwordSetReady":
-        this.transition({
-          status: "setPassword",
-          submit: (password: string) => {
+        this.transition(
+          createInputState("setPassword", (password) => {
             this.sid.publish("passwordSubmitted", password);
             this.send({ type: "sid_ui.passwordSubmitted" });
-          },
-        } as InputState<PasswordStatus>);
+          })
+        );
         break;
 
       case "sid_ui.passwordVerifyReady":
       case "sid_ui.passwordRecovered":
-        this.transition({
-          status: "verifyPassword",
-          submit: (password: string) => {
-            this.sid.publish("passwordSubmitted", password);
-            this.send({ type: "sid_ui.passwordSubmitted" });
-          },
-          recoverPassword: () => {
-            this.send({ type: "sid_ui.passwordRecoveryRequested" });
-          },
-        } as VerifyPasswordState);
+        this.transition(
+          createVerifyPasswordState(
+            (password) => {
+              this.sid.publish("passwordSubmitted", password);
+              this.send({ type: "sid_ui.passwordSubmitted" });
+            },
+            () => {
+              this.send({ type: "sid_ui.passwordRecoveryRequested" });
+            }
+          )
+        );
+
         break;
 
       case "sid_ui.passwordRecoveryRequested":
@@ -301,6 +301,27 @@ export function createUIStateMachine(
   }
 
   return new DefaultUIStateMachine(opts);
+}
+
+function createInputState<T = AuthenticatingUIStatus>(
+  status: T,
+  submit: (...values: string[]) => void
+): InputState<T> {
+  return {
+    status,
+    submit,
+  };
+}
+
+function createVerifyPasswordState(
+  submit: (...values: string[]) => void,
+  recoverPassword: () => void
+): VerifyPasswordState {
+  return {
+    status: "verifyPassword",
+    submit,
+    recoverPassword,
+  };
 }
 
 export function isInputState(
