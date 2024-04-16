@@ -4,6 +4,7 @@ import userEvent from "@testing-library/user-event";
 import { render, screen, waitFor } from "@testing-library/react";
 import { TestSlashIDProvider } from "../../context/test-providers";
 import { createTestUser, inputEmail, inputPhone } from "../test-utils";
+import { SlashID } from "@slashid/slashid";
 
 describe("#MultiFactorAuth", () => {
   test("MFA flow", async () => {
@@ -39,6 +40,7 @@ describe("#MultiFactorAuth", () => {
     // update user instance for correct <LoggedIn /> <LoggedOut /> behaviour
     rerender(
       <TestSlashIDProvider
+        sid={new SlashID({ analyticsEnabled: false })}
         sdkState="ready"
         logIn={logInMock}
         user={testUser}
