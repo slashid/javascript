@@ -1,4 +1,4 @@
-import { User } from "@slashid/slashid";
+import { User, SlashID } from "@slashid/slashid";
 import {
   Cancel,
   LogIn,
@@ -10,6 +10,11 @@ import {
 } from "../../domain/types";
 import { ensureError } from "../../domain/errors";
 import { isFactorRecoverable } from "../../domain/handles";
+import {
+  AuthenticatingUIStatus,
+  createUIStateMachine,
+} from "./ui-state-machine";
+import type { Event, State } from "./flow.types";
 
 export interface InitialState {
   status: "initial";
@@ -27,6 +32,8 @@ export interface AuthenticatingState {
   cancel: Cancel;
   recover: () => void;
   entry: () => void;
+  matches: (pattern: string) => boolean;
+  getChildState: () => State<AuthenticatingUIStatus>;
 }
 
 export interface SuccessState {
@@ -42,44 +49,7 @@ export interface ErrorState {
   cancel: Cancel;
 }
 
-interface LoginEvent {
-  type: "sid_login";
-  config: LoginConfiguration;
-  options?: LoginOptions;
-}
-
-interface LoginSuccessEvent {
-  type: "sid_login.success";
-  user: User;
-}
-
-interface LoginErrorEvent {
-  type: "sid_login.error";
-  error: Error;
-}
-
-interface CancelEvent {
-  type: "sid_cancel";
-}
-
-interface RetryEvent {
-  type: "sid_retry";
-  context: AuthenticatingState["context"];
-}
-
-interface InitEvent {
-  type: "sid_init";
-}
-
-type Event =
-  | InitEvent
-  | LoginEvent
-  | LoginSuccessEvent
-  | LoginErrorEvent
-  | RetryEvent
-  | CancelEvent;
-
-type FlowActions = {
+export type FlowActions = {
   // a function that will be called when the state is entered
   entry?: () => void;
 };
@@ -87,8 +57,8 @@ type FlowActions = {
 export type FlowState = FlowActions &
   (InitialState | AuthenticatingState | SuccessState | ErrorState);
 
-type Observer = (state: FlowState, event: Event) => void;
-type Send = (e: Event) => void;
+export type Observer = (state: FlowState, event: Event) => void;
+export type Send = (e: Event) => void;
 
 const createInitialState = (send: Send): InitialState => {
   return {
@@ -99,30 +69,13 @@ const createInitialState = (send: Send): InitialState => {
   };
 };
 
-const createAuthenticatingState = (
+const createInitialAuthenticatingState = (
   send: Send,
   context: AuthenticatingState["context"],
   logInFn: LogIn | MFA,
-  recoverFn: Recover
+  recoverFn: Recover,
+  sid: SlashID
 ): AuthenticatingState => {
-  // to be called when the state is entered
-  function performLogin() {
-    return logInFn(context.config, context.options)
-      .then((user) => {
-        if (user) {
-          send({ type: "sid_login.success", user });
-        } else {
-          send({
-            type: "sid_login.error",
-            error: new Error("User not returned from /id"),
-          });
-        }
-      })
-      .catch((error) => {
-        send({ type: "sid_login.error", error });
-      });
-  }
-
   async function recover() {
     if (!isFactorRecoverable(context.config.factor) || !context.config.handle)
       return;
@@ -140,6 +93,14 @@ const createAuthenticatingState = (
     }
   }
 
+  const uiStateMachine = createUIStateMachine({
+    send,
+    sid,
+    context,
+    logInFn,
+    recover,
+  });
+
   return {
     status: "authenticating",
     context: {
@@ -155,7 +116,17 @@ const createAuthenticatingState = (
       // Cancellation API needs to be exposed from the core SDK
       send({ type: "sid_cancel" });
     },
-    entry: performLogin,
+    entry: () => {
+      if (uiStateMachine.state.entry) {
+        uiStateMachine.state.entry();
+      }
+    },
+    matches: (pattern: string) => {
+      return `authenticating.${uiStateMachine.state.status}`.includes(pattern);
+    },
+    getChildState: () => {
+      return uiStateMachine.state;
+    },
   };
 };
 
@@ -209,6 +180,7 @@ type HistoryEntry = {
 export function createFlow(opts: CreateFlowOptions = {}) {
   let logInFn: undefined | LogIn | MFA = undefined;
   let recoverFn: undefined | Recover = undefined;
+  let sid: undefined | SlashID = undefined;
   let observers: Observer[] = [];
   const send = (event: Event) => {
     transition(event);
@@ -248,9 +220,20 @@ export function createFlow(opts: CreateFlowOptions = {}) {
         };
 
         setState(
-          createAuthenticatingState(send, loginContext, logInFn, recoverFn),
+          createInitialAuthenticatingState(
+            send,
+            loginContext,
+            logInFn,
+            recoverFn,
+            sid!
+          ),
           e
         );
+        break;
+
+      case "sid_login.ui_state_changed":
+        // change state object reference for reactivity
+        setState({ ...state }, e);
         break;
       case "sid_login.success":
         // call onSuccess if present
@@ -286,7 +269,13 @@ export function createFlow(opts: CreateFlowOptions = {}) {
         };
 
         setState(
-          createAuthenticatingState(send, retryContext, logInFn, recoverFn),
+          createInitialAuthenticatingState(
+            send,
+            retryContext,
+            logInFn,
+            recoverFn,
+            sid!
+          ),
           e
         );
         break;
@@ -313,6 +302,9 @@ export function createFlow(opts: CreateFlowOptions = {}) {
     },
     setRecover: (fn: Recover) => {
       recoverFn = fn;
+    },
+    setSlashID: (s: SlashID) => {
+      sid = s;
     },
     state,
   };

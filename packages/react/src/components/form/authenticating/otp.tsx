@@ -1,10 +1,4 @@
-import {
-  FormEventHandler,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { FormEventHandler, useCallback, useEffect, useRef } from "react";
 
 import { Factor } from "@slashid/slashid";
 import { OtpInput, Delayed } from "@slashid/react-primitives";
@@ -22,6 +16,7 @@ import * as styles from "./authenticating.css";
 import { isFactorOTPEmail, isFactorOTPSms } from "../../../domain/handles";
 import { EmailIcon, SmsIcon, Loader } from "./icons";
 import { BackButton, RetryPrompt } from "./authenticating.components";
+import { isInputState } from "../ui-state-machine";
 
 const FactorIcon = ({ factor }: { factor: Factor }) => {
   if (isFactorOTPEmail(factor)) {
@@ -46,26 +41,24 @@ export const OTPState = ({ flowState }: Props) => {
   const { sid } = useSlashID();
   const { values, registerField, registerSubmit, setError, clearError } =
     useForm();
-  const [formState, setFormState] = useState<
-    "initial" | "input" | "submitting"
-  >("initial");
   const submitInputRef = useRef<HTMLInputElement>(null);
 
   const factor = flowState.context.config.factor;
   const hasRetried = flowState.context.attempt > 1;
   const { title, message } = getAuthenticatingMessage(factor, {
-    isSubmitting: formState === "submitting",
+    isSubmitting: flowState.matches("submitting"),
     hasRetried,
   });
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = useCallback(
     (e) => {
       e.preventDefault();
+      const uiState = flowState.getChildState();
+      if (!isInputState(uiState)) return;
 
-      setFormState("submitting");
-      sid?.publish("otpCodeSubmitted", values["otp"]);
+      uiState.submit(values["otp"]);
     },
-    [sid, values]
+    [values, flowState]
   );
 
   useEffect(() => {
@@ -104,7 +97,7 @@ export const OTPState = ({ flowState }: Props) => {
   const handleRetry = () => {
     flowState.retry();
     clearError("otp");
-    setFormState("submitting");
+    // setFormState("submitting");
   };
 
   useEffect(() => {
@@ -114,20 +107,13 @@ export const OTPState = ({ flowState }: Props) => {
     }
   }, [values]);
 
-  useEffect(() => {
-    const onOtpCodeSent = () => setFormState("input");
-    if (formState === "initial") {
-      sid?.subscribe("otpCodeSent", onOtpCodeSent);
-    }
-  }, [formState, sid]);
-
   return (
     <>
       <BackButton onCancel={() => flowState.cancel()} />
       <Text as="h1" t={title} variant={{ size: "2xl-title", weight: "bold" }} />
       <Text t={message} variant={{ color: "contrast", weight: "semibold" }} />
-      {formState === "initial" && <FactorIcon factor={factor} />}
-      {formState === "input" && (
+      {flowState.matches("initial") && <FactorIcon factor={factor} />}
+      {flowState.matches("input") && (
         <form
           onSubmit={registerSubmit(handleSubmit)}
           className={styles.otpForm}
@@ -145,14 +131,14 @@ export const OTPState = ({ flowState }: Props) => {
           </div>
         </form>
       )}
-      {formState === "submitting" ? (
+      {flowState.matches("submitting") ? (
         hasRetried ? (
           <EmailIcon />
         ) : (
           <Loader />
         )
       ) : null}
-      {formState === "input" && (
+      {flowState.matches("input") && (
         // fallback to prevent layout shift
         <Delayed
           delayMs={BASE_RETRY_DELAY * flowState.context.attempt}
