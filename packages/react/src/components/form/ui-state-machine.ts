@@ -22,7 +22,7 @@ export type PasswordStatus =
   | "recoverPassword"
   | "submitting";
 
-type TOTPStatus =
+export type TOTPStatus =
   | "initial"
   | "registerAuthenticator"
   | "input"
@@ -374,6 +374,7 @@ class TOTPUIStateMachine extends UIStateMachine<TOTPStatus> {
         this.transition(
           createInputState("input", (totp: string) => {
             this.sid.publish("otpCodeSubmitted", totp);
+            this.send({ type: "sid_ui.otpCodeSubmitted" });
           })
         );
         break;
