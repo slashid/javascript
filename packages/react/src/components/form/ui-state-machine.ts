@@ -1,10 +1,14 @@
-import type { SlashID } from "@slashid/slashid";
+import type { SlashID, TotpKeyGenerated, User } from "@slashid/slashid";
 import type {
   AuthenticatingState,
   Send,
   Event as FlowEvent,
 } from "./flow.types";
-import { isFactorOTP, isFactorPassword } from "../../domain/handles";
+import {
+  isFactorOTP,
+  isFactorPassword,
+  isFactorTOTP,
+} from "../../domain/handles";
 import { LogIn, MFA } from "../../domain/types";
 
 type DefaultUIStatus = "initial";
@@ -44,6 +48,19 @@ export interface InputState<T> extends State<T> {
 export interface VerifyPasswordState extends InputState<PasswordStatus> {
   status: "verifyPassword";
   recoverPassword: () => void;
+}
+
+export interface RegisterTotpAuthenticatorState extends State<TOTPStatus> {
+  status: "registerAuthenticator";
+  confirm: () => void;
+  qrCode: string;
+  uri: string;
+}
+
+export interface SaveRecoveryCodesState extends State<TOTPStatus> {
+  status: "saveRecoveryCodes";
+  recoveryCodes: string[];
+  confirm: () => void;
 }
 
 type Recover = () => Promise<void>;
@@ -116,6 +133,21 @@ type UIEvent =
     }
   | {
       type: "sid_ui.passwordRecovered";
+    }
+  | {
+      type: "sid_ui.totpKeyGenerated";
+      qrCode: string;
+      uri: string;
+    }
+  | {
+      type: "sid_ui.totpCodeRequested";
+    }
+  | {
+      type: "sid_ui.totpAuthenticatorRegisterConfirmed";
+    }
+  | {
+      type: "sid_ui.userAuthenticated";
+      user: User;
     };
 
 type Event = FlowEvent | UIEvent;
@@ -152,7 +184,7 @@ class OTPUIStateMachine extends UIStateMachine<OTPStatus> {
     });
   }
 
-  send(e: Event) {
+  protected send(e: Event) {
     switch (e.type) {
       case "sid_ui.otpCodeSent":
         this.transition(
@@ -212,7 +244,7 @@ class PasswordUIStateMachine extends UIStateMachine<PasswordStatus> {
       },
     });
   }
-  send(e: Event) {
+  protected send(e: Event) {
     switch ((e as UIEvent).type) {
       case "sid_ui.passwordSetReady":
         this.transition(
@@ -265,6 +297,110 @@ class PasswordUIStateMachine extends UIStateMachine<PasswordStatus> {
   }
 }
 
+class TOTPUIStateMachine extends UIStateMachine<TOTPStatus> {
+  private recoveryCodes: string[] | null;
+  private isRegisterFlow: boolean;
+
+  constructor(opts: UIStateMachineOpts) {
+    const totpKeyGeneratedHandler = ({
+      qrCode,
+      recoveryCodes,
+      uri,
+    }: TotpKeyGenerated) => {
+      this.recoveryCodes = recoveryCodes;
+      this.isRegisterFlow = true;
+
+      this.send({
+        type: "sid_ui.totpKeyGenerated",
+        qrCode,
+        uri,
+      });
+    };
+    const totpCodeRequestedHandker = () => {
+      this.send({ type: "sid_ui.totpCodeRequested" });
+    };
+
+    super(opts, {
+      status: "initial",
+      entry: () => {
+        this.sid.subscribe("totpKeyGenerated", totpKeyGeneratedHandler);
+        this.sid.subscribe("totpCodeRequested", totpCodeRequestedHandker);
+
+        this.logInFn(this.context.config, this.context.options)
+          .then((user) => {
+            if (user) {
+              if (this.isRegisterFlow) {
+                this.send({ type: "sid_ui.userAuthenticated", user });
+              } else {
+                this.send({ type: "sid_login.success", user });
+              }
+            } else {
+              this.send({
+                type: "sid_login.error",
+                error: new Error("User not returned from /id"),
+              });
+            }
+          })
+          .catch((error) => {
+            this.send({ type: "sid_login.error", error });
+          });
+      },
+      exit: () => {
+        this.sid.unsubscribe("totpKeyGenerated", totpKeyGeneratedHandler);
+        this.sid.unsubscribe("totpCodeRequested", totpCodeRequestedHandker);
+      },
+    });
+
+    this.recoveryCodes = null;
+    this.isRegisterFlow = false;
+  }
+
+  protected send(e: Event): void {
+    switch (e.type) {
+      case "sid_ui.totpKeyGenerated":
+        this.transition(
+          createRegisterTotpAuthenticatorState({
+            qrCode: e.qrCode,
+            uri: e.uri,
+            confirm: () => {
+              this.send({ type: "sid_ui.totpAuthenticatorRegisterConfirmed" });
+            },
+          })
+        );
+        break;
+
+      case "sid_ui.totpCodeRequested":
+      case "sid_ui.totpAuthenticatorRegisterConfirmed":
+        this.transition(
+          createInputState("input", (totp: string) => {
+            this.sid.publish("otpCodeSubmitted", totp);
+          })
+        );
+        break;
+
+      case "sid_ui.otpCodeSubmitted":
+        this.transition({ status: "submitting" });
+        break;
+
+      case "sid_ui.userAuthenticated":
+        if (!Array.isArray(this.recoveryCodes)) return;
+
+        this.transition(
+          createSaveRecoveryCodesState({
+            recoveryCodes: this.recoveryCodes,
+            confirm: () => {
+              this.send({ type: "sid_login.success", user: e.user });
+            },
+          })
+        );
+        break;
+
+      default:
+        super.send(e);
+    }
+  }
+}
+
 class DefaultUIStateMachine extends UIStateMachine<DefaultUIStatus> {
   constructor(opts: UIStateMachineOpts) {
     super(opts, {
@@ -300,6 +436,10 @@ export function createUIStateMachine(
     return new PasswordUIStateMachine(opts);
   }
 
+  if (isFactorTOTP(opts.context.config.factor)) {
+    return new TOTPUIStateMachine(opts);
+  }
+
   return new DefaultUIStateMachine(opts);
 }
 
@@ -324,6 +464,33 @@ function createVerifyPasswordState(
   };
 }
 
+function createRegisterTotpAuthenticatorState({
+  confirm,
+  qrCode,
+  uri,
+}: Omit<
+  RegisterTotpAuthenticatorState,
+  "status"
+>): RegisterTotpAuthenticatorState {
+  return {
+    status: "registerAuthenticator",
+    qrCode,
+    uri,
+    confirm,
+  };
+}
+
+function createSaveRecoveryCodesState({
+  recoveryCodes,
+  confirm,
+}: Omit<SaveRecoveryCodesState, "status">): SaveRecoveryCodesState {
+  return {
+    status: "saveRecoveryCodes",
+    recoveryCodes,
+    confirm,
+  };
+}
+
 export function isInputState(
   state: State<AuthenticatingUIStatus>
 ): state is InputState<AuthenticatingUIStatus> {
@@ -339,5 +506,26 @@ export function isVerifyPasswordState(
     state.status === "verifyPassword" &&
     typeof (state as VerifyPasswordState).submit === "function" &&
     typeof (state as VerifyPasswordState).recoverPassword === "function"
+  );
+}
+
+export function isRegisterTotpAuthenticatorState(
+  state: State<AuthenticatingUIStatus>
+): state is RegisterTotpAuthenticatorState {
+  return (
+    state.status === "registerAuthenticator" &&
+    typeof (state as RegisterTotpAuthenticatorState).confirm === "function" &&
+    typeof (state as RegisterTotpAuthenticatorState).qrCode === "string" &&
+    typeof (state as RegisterTotpAuthenticatorState).uri === "string"
+  );
+}
+
+export function isSaveRecoveryCodesState(
+  state: State<AuthenticatingUIStatus>
+): state is SaveRecoveryCodesState {
+  return (
+    state.status === "saveRecoveryCodes" &&
+    Array.isArray((state as SaveRecoveryCodesState).recoveryCodes) &&
+    typeof (state as SaveRecoveryCodesState).confirm === "function"
   );
 }
