@@ -1,5 +1,9 @@
 import { cssBundleHref } from "@remix-run/css-bundle";
-import type { LinksFunction, LoaderFunction } from "@remix-run/node";
+import type {
+  LinksFunction,
+  LoaderFunction,
+  LoaderFunctionArgs,
+} from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -9,25 +13,34 @@ import {
   ScrollRestoration,
   useLoaderData,
 } from "@remix-run/react";
-import { SlashIDApp, slashIDRootLoader } from "./slashid";
+import { getConfigFromEnv } from "./config";
+import { createSlashIDApp, getUser } from "@slashid/remix";
+import { useMemo } from "react";
 
 export const links: LinksFunction = () => [
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
 ];
 
-export const loader: LoaderFunction = slashIDRootLoader();
-// (args: LoaderFunctionArgs) => {
-//   console.log('root loader', args)
+export const loader: LoaderFunction = (args: LoaderFunctionArgs) => {
+  const user = getUser(args);
 
-//   const user = getUser(args)
-
-//   return {
-//     hello: "world" + " (" + (user ? "logged in" : "logged out") + ")"
-//   }
-// });
+  return {
+    user,
+    config: getConfigFromEnv(),
+  };
+};
 
 export default function App() {
-  const { hello } = useLoaderData<{ hello: string }>();
+  const data = useLoaderData<typeof loader>();
+  const SlashIDApp = useMemo(() => {
+    const { SlashIDApp } = createSlashIDApp({
+      oid: data.config.oid,
+      baseApiUrl: data.config.baseApiUrl,
+      sdkUrl: data.config.sdkUrl,
+    });
+
+    return SlashIDApp;
+  }, [data.config.baseApiUrl, data.config.oid, data.config.sdkUrl]);
 
   return (
     <html lang="en">
@@ -38,10 +51,14 @@ export default function App() {
         <Links />
       </head>
       <body>
-        hello: {hello}
         <SlashIDApp>
           <Outlet />
           <ScrollRestoration />
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `window.env = ${JSON.stringify(data.config)}`,
+            }}
+          />
           <Scripts />
           <LiveReload />
         </SlashIDApp>

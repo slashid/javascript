@@ -1,18 +1,20 @@
-import { redirect, type MetaFunction } from "@remix-run/node";
-import { Link } from "@remix-run/react";
+import {
+  type LoaderFunction,
+  redirect,
+  type MetaFunction,
+} from "@remix-run/node";
 import {
   ConfigurationProvider,
   Form,
   type Factor,
   getUser,
 } from "@slashid/remix";
-import { slashIDLoader } from "~/slashid";
 
 export const meta: MetaFunction = () => {
   return [{ title: "Login" }, { name: "description", content: "Login" }];
 };
 
-export const loader = slashIDLoader(async (args) => {
+export const loader: LoaderFunction = (args) => {
   const user = getUser(args);
 
   if (user) {
@@ -20,7 +22,7 @@ export const loader = slashIDLoader(async (args) => {
   }
 
   return {};
-});
+};
 
 const factors: Factor[] = [{ method: "email_link" }];
 

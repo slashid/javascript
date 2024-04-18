@@ -1,6 +1,5 @@
-import { redirect, type MetaFunction } from "@remix-run/node";
+import { LoaderFunction, redirect, type MetaFunction } from "@remix-run/node";
 import { getUser, useSlashID } from "@slashid/remix";
-import { slashIDLoader } from "../slashid";
 
 export const meta: MetaFunction = () => {
   return [
@@ -9,7 +8,7 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export const loader = slashIDLoader(async (args) => {
+export const loader: LoaderFunction = (args) => {
   const user = getUser(args);
 
   if (!user) {
@@ -17,7 +16,7 @@ export const loader = slashIDLoader(async (args) => {
   }
 
   return {};
-});
+};
 
 export default function Protected() {
   const { logOut } = useSlashID();
