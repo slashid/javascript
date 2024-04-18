@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 1.22.1
+
+### Patch Changes
+
+- 4258c45: Use the primary color variable for Form loading states
+
 ## 1.22.0
 
 ### Minor Changes
