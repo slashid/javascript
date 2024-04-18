@@ -1,4 +1,4 @@
-import { ConfigurationProvider, Factor, Form } from "@slashid/remix";
+import { ConfigurationProvider, type Factor, Form } from "@slashid/remix";
 
 const factors: Factor[] = [
   { method: "email_link" },
@@ -12,7 +12,7 @@ export default function FormPage() {
   return (
     <div style={{ width: 390 }}>
       <ConfigurationProvider factors={factors}>
-        <Form />
+        <Form onSuccess={() => console.log("Logged in!")} />
       </ConfigurationProvider>
     </div>
   );

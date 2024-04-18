@@ -8,6 +8,7 @@
     "build": "remix build",
     "dev": "remix dev --manual",
     "start": "remix-serve ./build/index.js",
+    "serve": "remix dev --manual",
     "typecheck": "tsc"
   },
   "dependencies": {
