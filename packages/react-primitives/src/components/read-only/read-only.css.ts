@@ -20,7 +20,7 @@ export const field = style({
   fontWeight: theme.font.weight.semibold,
   color: publicVariables.color.foreground,
   backgroundColor: publicVariables.color.offset,
-  lineHeight: "122%",
+  lineHeight: "150%",
   overflow: "hidden",
   whiteSpace: "pre-line",
   textOverflow: "ellipsis",

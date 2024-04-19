@@ -65,13 +65,20 @@ export const TEXT = {
   "authenticating.password.submit": "Continue",
   "authenticating.submitting.password.title": "Logging you in...",
   "authenticating.submitting.password.message": "This may take some time.",
-  "authenticating.initial.totp.title": "",
-  "authenticating.initial.totp.message": "",
-  "authenticating.registerAuthenticator.totp.title": "Set up One Time PAssword",
+  "authenticating.initial.totp.title": "Log in with TOTP",
+  "authenticating.initial.totp.message":
+    "If this is your first time logging with TOTP, we will generate a secret for your Authenticator app.",
+  "authenticating.registerAuthenticator.totp.title": "Set up One Time Password",
   "authenticating.registerAuthenticator.totp.message":
     "Scan the QR code with an authenticator app to set up your One Time Password.",
   "authenticating.registerAuthenticator.totp.prompt": "Can't scan?",
   "authenticating.registerAuthenticator.totp.cta": "Set up with a code",
+  "authenticating.input.totp.title": "Enter authentication code",
+  "authenticating.input.totp.message":
+    "Enter the 6-digit code displayed in your authenticator app.",
+  "authenticating.saveRecoveryCodes.totp.title": "Save your recovery codes",
+  "authenticating.saveRecoveryCodes.totp.message":
+    "Use these codes to authenticate if you lose access to your device. Store them somewhere safe.",
   "authenticating.message.webauthn":
     "If you are registering for the first time, you will receive an email to verify your email address.",
   "authenticating.title.webauthn":
@@ -104,6 +111,7 @@ export const TEXT = {
   "authenticating.otpInput.submit.error": "Please enter a valid code",
   "authenticating.continue": "Continue",
   "authenticating.confirm": "Confirm",
+  "authenticating.downloadCodes": "Download codes",
   "success.title": "You are now authenticated!",
   "success.subtitle": "You can now close this page.",
   "error.title": "Something went wrong...",

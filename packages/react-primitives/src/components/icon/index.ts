@@ -23,6 +23,8 @@ import { Loading } from "./loading";
 import { Logo } from "./logo";
 import { Lock } from "./lock";
 import { SlashID } from "./slashid";
+import { Copy } from "./copy";
+import { Download } from "./download";
 
 export {
   Apple,
@@ -49,4 +51,6 @@ export {
   Lock,
   SlashID,
   Logo,
+  Copy,
+  Download,
 };

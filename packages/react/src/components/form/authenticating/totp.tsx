@@ -17,6 +17,7 @@ import {
   OtpInput,
   sprinkles,
   ReadOnly,
+  Download,
 } from "@slashid/react-primitives";
 import { useSlashID } from "../../../main";
 import { OTP_CODE_LENGTH, isValidOTPCode } from "./validation";
@@ -30,8 +31,8 @@ function getTextKeys(flowState: Props["flowState"]) {
     Record<"title" | "message" | "submit", TextConfigKey>
   > = {
     initial: {
-      title: "",
-      message: "",
+      title: "authenticating.initial.totp.title",
+      message: "authenticating.initial.totp.message",
       submit: "",
     },
     registerAuthenticator: {
@@ -40,19 +41,19 @@ function getTextKeys(flowState: Props["flowState"]) {
       submit: "authenticating.continue",
     },
     input: {
-      title: "",
-      message: "",
-      submit: "",
+      title: "authenticating.input.totp.title",
+      message: "authenticating.input.totp.message",
+      submit: "authenticating.confirm",
     },
     submitting: {
-      title: "",
-      message: "",
-      submit: "",
+      title: "authenticating.input.totp.title",
+      message: "authenticating.input.totp.message",
+      submit: "authenticating.confirm",
     },
     saveRecoveryCodes: {
-      title: "",
-      message: "",
-      submit: "",
+      title: "authenticating.saveRecoveryCodes.totp.title",
+      message: "authenticating.saveRecoveryCodes.totp.message",
+      submit: "authenticating.continue",
     },
   };
 
@@ -184,6 +185,7 @@ export function TOTPState({ flowState }: Props) {
             copy
             className={styles.readOnly}
           />
+          <DownloadCodes codes={uiState.recoveryCodes} />
           <Submit textKey={submit} />
         </form>
       )}
@@ -210,6 +212,38 @@ function Submit({ textKey, disabled }: SubmitProps) {
       disabled={disabled}
     >
       {text[textKey]}
+    </Button>
+  );
+}
+
+function DownloadCodes({ codes }: { codes: string[] }) {
+  const { text } = useConfiguration();
+
+  const handleDownloadCodes = () => {
+    const download = document.createElement("a");
+    download.setAttribute(
+      "href",
+      `data:text/plain;charset=utf8,${encodeURIComponent(codes.join("\n"))}`
+    );
+    download.setAttribute("download", "recovery-codes.txt");
+
+    document.body.appendChild(download);
+    download.click();
+    document.body.removeChild(download);
+  };
+
+  return (
+    <Button
+      className={sprinkles({
+        marginTop: "6",
+      })}
+      type="button"
+      variant="secondary"
+      testId="sid-form-authenticating-download-codes-button"
+      onClick={handleDownloadCodes}
+      icon={<Download />}
+    >
+      {text["authenticating.downloadCodes"]}
     </Button>
   );
 }
