@@ -1,8 +1,4 @@
-import {
-  PRIVATE_SUBSCRIBE,
-  type Factor,
-  TotpKeyGenerated,
-} from "@slashid/slashid";
+import { type Factor } from "@slashid/slashid";
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 
@@ -339,19 +335,19 @@ root.render(
             <h2>Basic form</h2>
             <BasicForm />
           </div>
-          <div>
+          <div style={vars}>
             <h2>Composed form</h2>
-            {/* <ComposedForm /> */}
+            <ComposedForm />
           </div>
         </div>
         <div>
           <div>
             <h2>Switch to default org</h2>
-            {/* <Config /> */}
+            <Config />
           </div>
           <div>
             <h2>Dynamic flow - factor based on handle</h2>
-            {/* <ConfiguredDynamicFlow /> */}
+            <ConfiguredDynamicFlow />
           </div>
         </div>
       </div>
