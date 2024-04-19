@@ -18,6 +18,8 @@ import {
   sprinkles,
   ReadOnly,
   Download,
+  Input,
+  LinkButton,
 } from "@slashid/react-primitives";
 import { useSlashID } from "../../../main";
 import { OTP_CODE_LENGTH, isValidOTPCode } from "./validation";
@@ -70,6 +72,7 @@ export function TOTPState({ flowState }: Props) {
   const { title, message, submit } = getTextKeys(flowState);
   const uiState = flowState.getChildState();
   const [showUri, setShowUri] = useState(false);
+  const [useRecoveryCode, setUseRecoveryCode] = useState(false);
   const submitInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -88,7 +91,7 @@ export function TOTPState({ flowState }: Props) {
     (otp: string) => {
       const onChange = registerField("totp", {
         validator: (value) => {
-          if (!isValidOTPCode(value)) {
+          if (!useRecoveryCode && !isValidOTPCode(value)) {
             return { message: text["validationError.otp"] };
           }
         },
@@ -102,7 +105,7 @@ export function TOTPState({ flowState }: Props) {
       clearError("totp");
       onChange(event as never);
     },
-    [clearError, registerField, text]
+    [clearError, registerField, text, useRecoveryCode]
   );
 
   useEffect(() => {
@@ -157,15 +160,46 @@ export function TOTPState({ flowState }: Props) {
           className={styles.otpForm}
         >
           <div className={styles.formInner}>
-            <OtpInput
-              shouldAutoFocus
-              inputType="number"
-              value={values["totp"] ?? ""}
-              onChange={handleChange}
-              numInputs={OTP_CODE_LENGTH}
-            />
+            {useRecoveryCode ? (
+              <Input
+                id="totp"
+                name="totp"
+                label="Recovery code"
+                placeholder="Log in with recovery code"
+                type="text"
+                value={values["totp"] ?? ""}
+                onChange={registerField("totp", {})}
+              />
+            ) : (
+              <div
+                className={sprinkles({
+                  gap: "12",
+                })}
+              >
+                <OtpInput
+                  shouldAutoFocus
+                  inputType="number"
+                  value={values["totp"] ?? ""}
+                  onChange={handleChange}
+                  numInputs={OTP_CODE_LENGTH}
+                />
+                <div className={styles.prompt}>
+                  <LinkButton
+                    className={sprinkles({
+                      marginTop: "4",
+                    })}
+                    type="button"
+                    onClick={() => setUseRecoveryCode(true)}
+                  >
+                    {text["authenticating.input.totp.cta"]}
+                  </LinkButton>
+                </div>
+              </div>
+            )}
+
             <input hidden type="submit" ref={submitInputRef} />
             <ErrorMessage name="totp" />
+            <Submit textKey={submit} />
           </div>
         </form>
       )}

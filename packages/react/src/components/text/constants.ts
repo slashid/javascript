@@ -73,6 +73,7 @@ export const TEXT = {
     "Scan the QR code with an authenticator app to set up your One Time Password.",
   "authenticating.registerAuthenticator.totp.prompt": "Can't scan?",
   "authenticating.registerAuthenticator.totp.cta": "Set up with a code",
+  "authenticating.input.totp.cta": "Use recovery code",
   "authenticating.input.totp.title": "Enter authentication code",
   "authenticating.input.totp.message":
     "Enter the 6-digit code displayed in your authenticator app.",
