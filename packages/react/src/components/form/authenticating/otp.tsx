@@ -97,7 +97,6 @@ export const OTPState = ({ flowState }: Props) => {
   const handleRetry = () => {
     flowState.retry();
     clearError("otp");
-    // setFormState("submitting");
   };
 
   useEffect(() => {

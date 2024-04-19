@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useConfiguration } from "../../../hooks/use-configuration";
 import { useForm } from "../../../hooks/use-form";
 import { Props } from "./authenticating.types";
-import { BackButton, Prompt, RetryPrompt } from "./authenticating.components";
+import { BackButton, Prompt } from "./authenticating.components";
 import { Text } from "../../text";
 import { TextConfigKey } from "../../text/constants";
 import { Loader } from "./icons";
@@ -12,12 +12,7 @@ import {
   isRegisterTotpAuthenticatorState,
   isSaveRecoveryCodesState,
 } from "../ui-state-machine";
-import {
-  Button,
-  Delayed,
-  OtpInput,
-  sprinkles,
-} from "@slashid/react-primitives";
+import { Button, OtpInput, sprinkles } from "@slashid/react-primitives";
 import { useSlashID } from "../../../main";
 import { OTP_CODE_LENGTH, isValidOTPCode } from "./validation";
 import { ErrorMessage } from "../error-message";
@@ -61,8 +56,6 @@ function getTextKeys(flowState: Props["flowState"]) {
   return TEXT_KEYS[status];
 }
 
-const BASE_RETRY_DELAY = 2000;
-
 export function TOTPState({ flowState }: Props) {
   const { sid } = useSlashID();
   const { text } = useConfiguration();
@@ -90,7 +83,7 @@ export function TOTPState({ flowState }: Props) {
       const onChange = registerField("totp", {
         validator: (value) => {
           if (!isValidOTPCode(value)) {
-            return { message: text["validationError.totp"] };
+            return { message: text["validationError.otp"] };
           }
         },
       });
@@ -106,15 +99,9 @@ export function TOTPState({ flowState }: Props) {
     [clearError, registerField, text]
   );
 
-  const handleRetry = () => {
-    flowState.retry();
-    clearError("totp");
-    // setFormState("submitting");
-  };
-
   useEffect(() => {
     if (isValidOTPCode(values["totp"])) {
-      // Automatically submit the form when the OTP code is valid
+      // Automatically submit the form when the TOTP code is valid
       submitInputRef.current?.click();
     }
   }, [values]);
@@ -176,17 +163,6 @@ export function TOTPState({ flowState }: Props) {
           ))}
           <Submit textKey={submit} />
         </form>
-      )}
-      {flowState.matches("input") && (
-        // fallback to prevent layout shift
-        <Delayed
-          delayMs={BASE_RETRY_DELAY * flowState.context.attempt}
-          fallback={<div style={{ height: 16 }} />}
-        >
-          <div className={styles.wrapper}>
-            <RetryPrompt onRetry={handleRetry} />
-          </div>
-        </Delayed>
       )}
     </>
   );
