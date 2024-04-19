@@ -45,3 +45,18 @@ const fadeIn = keyframes({
 export const wrapper = style({
   animation: `${fadeIn} 0.3s`,
 });
+
+export const registerAuthenticatorForm = style({
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+});
+
+export const qrCode = style({
+  margin: "24px auto",
+  borderRadius: 16,
+});
+
+export const readOnly = style({
+  marginTop: 12,
+});

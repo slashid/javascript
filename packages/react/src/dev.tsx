@@ -329,13 +329,13 @@ root.render(
         sdkURL: "https://api.slashid.local",
       }}
       themeProps={{ theme: "dark" }}
-      tokenStorage="memory"
+      tokenStorage="localStorage"
       analyticsEnabled
     >
       <LogOut />
       <div className="layout">
         <div>
-          <div style={vars}>
+          <div>
             <h2>Basic form</h2>
             <BasicForm />
           </div>

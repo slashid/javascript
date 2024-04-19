@@ -12,7 +12,12 @@ import {
   isRegisterTotpAuthenticatorState,
   isSaveRecoveryCodesState,
 } from "../ui-state-machine";
-import { Button, OtpInput, sprinkles } from "@slashid/react-primitives";
+import {
+  Button,
+  OtpInput,
+  sprinkles,
+  ReadOnly,
+} from "@slashid/react-primitives";
 import { useSlashID } from "../../../main";
 import { OTP_CODE_LENGTH, isValidOTPCode } from "./validation";
 import { ErrorMessage } from "../error-message";
@@ -118,14 +123,27 @@ export function TOTPState({ flowState }: Props) {
             e.preventDefault();
             uiState.confirm();
           })}
+          className={styles.registerAuthenticatorForm}
         >
-          <img src={`data:image/png;base64, ${uiState.qrCode}`} alt="QR Code" />
+          <img
+            src={`data:image/png;base64, ${uiState.qrCode}`}
+            alt="QR Code"
+            className={styles.qrCode}
+          />
           <Prompt
             prompt="authenticating.registerAuthenticator.totp.prompt"
             cta="authenticating.registerAuthenticator.totp.cta"
             onClick={() => setShowUri(true)}
           />
-          {showUri && uiState.uri}
+          {showUri && (
+            <ReadOnly
+              id="uri"
+              value={uiState.uri}
+              label="Set up URI"
+              copy
+              className={styles.readOnly}
+            />
+          )}
           <Submit textKey={submit} />
         </form>
       )}
