@@ -67,7 +67,9 @@ export function ReadOnly({
         <button
           type="button"
           onClick={copyToClipBoard}
-          className={styles.copyButton}
+          className={clsx(styles.copyButton, {
+            [styles.copyButtonWithLabel]: Boolean(label),
+          })}
         >
           <Copy />
         </button>

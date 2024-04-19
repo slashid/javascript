@@ -22,7 +22,7 @@ export const field = style({
   backgroundColor: publicVariables.color.offset,
   lineHeight: "122%",
   overflow: "hidden",
-  whiteSpace: "nowrap",
+  whiteSpace: "pre-line",
   textOverflow: "ellipsis",
   touchAction: "none",
 });
@@ -49,9 +49,13 @@ export const copyButton = style({
   all: "unset",
   position: "absolute",
   right: 0,
-  top: 6,
+  top: 0,
   padding: 16,
   ":hover": {
     cursor: "pointer",
   },
+});
+
+export const copyButtonWithLabel = style({
+  top: 6,
 });

@@ -176,9 +176,14 @@ export function TOTPState({ flowState }: Props) {
             uiState.confirm();
           })}
         >
-          {uiState.recoveryCodes.map((code) => (
-            <p key={code}>{code}</p>
-          ))}
+          <ReadOnly
+            id="recoveryCodes"
+            as="textarea"
+            value={uiState.recoveryCodes.join(String.fromCharCode(13, 10))}
+            rows={8}
+            copy
+            className={styles.readOnly}
+          />
           <Submit textKey={submit} />
         </form>
       )}
