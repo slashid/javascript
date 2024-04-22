@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         node-version: [20.9.0]
-        app-name: [react-nextjs, slashid-remix-impl]
+        app-name: [slashid-remix-impl]
 
     steps:
       - uses: actions/checkout@v3
