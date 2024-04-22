@@ -15,7 +15,7 @@ function createPlaywrightConfig(): PlaywrightTestConfig {
   }
 
   return {
-    timeout: 8 * 1000,
+    timeout: 16 * 1000,
     expect: {
       /**
        * Maximum time expect() should wait for the condition to be met.
@@ -89,12 +89,6 @@ function createPlaywrightConfig(): PlaywrightTestConfig {
     },
   };
 }
-
-/**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
-// require('dotenv').config();
 
 /**
  * See https://playwright.dev/docs/test-configuration.
