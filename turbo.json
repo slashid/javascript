@@ -25,6 +25,8 @@
     "dev": {
       "cache": false
     },
-    "serve": {}
+    "serve": {
+      "persistent": true
+    }
   }
 }
