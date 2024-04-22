@@ -14,6 +14,8 @@ function createPlaywrightConfig(): PlaywrightTestConfig {
     throw new Error("APP_NAME is required in .env file");
   }
 
+  console.log("*** Playwright config: ", envConfig);
+
   return {
     timeout: 16 * 1000,
     expect: {
