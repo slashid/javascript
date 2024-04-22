@@ -83,7 +83,7 @@ function createPlaywrightConfig(): PlaywrightTestConfig {
       command: `pnpm serve --filter ${envConfig.app}`,
       cwd: `${path.resolve(__dirname, "../../")}`,
       url: "http://localhost:3000",
-      reuseExistingServer: true,
+      reuseExistingServer: !envConfig.CI,
       stdout: "ignore",
       stderr: "pipe",
     },
