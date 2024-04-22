@@ -83,18 +83,12 @@ function createPlaywrightConfig(): PlaywrightTestConfig {
       command: `pnpm serve --filter ${envConfig.app}`,
       cwd: `${path.resolve(__dirname, "../../")}`,
       url: "http://localhost:3000",
-      reuseExistingServer: true,
+      reuseExistingServer: !envConfig.CI,
       stdout: "ignore",
       stderr: "pipe",
     },
   };
 }
-
-/**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
-// require('dotenv').config();
 
 /**
  * See https://playwright.dev/docs/test-configuration.
