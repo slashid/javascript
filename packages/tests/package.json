@@ -1,6 +1,6 @@
 {
   "name": "@slashid/tests",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "private": true,
   "description": "Tests setup for /id projects",
   "main": "index.js",
