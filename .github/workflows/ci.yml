@@ -58,7 +58,7 @@ jobs:
           MAILINATOR_TEAM_DOMAIN: ${{ secrets.MAILINATOR_TEAM_DOMAIN }}
           APP_NAME: ${{ matrix.app-name }}
           DEBUG: pw:webserver
-        run: pnpm test:e2e --filter tests
+        run: pnpm test:e2e
 
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}

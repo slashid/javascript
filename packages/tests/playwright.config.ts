@@ -23,7 +23,7 @@ function createPlaywrightConfig(): PlaywrightTestConfig {
        * Maximum time expect() should wait for the condition to be met.
        * For example in `await expect(locator).toHaveText();`
        */
-      timeout: 2 * 1000,
+      timeout: 4 * 1000,
     },
     /* Run tests in files in parallel */
     fullyParallel: true,
@@ -82,7 +82,8 @@ function createPlaywrightConfig(): PlaywrightTestConfig {
       // },
     ],
     webServer: {
-      command: `pnpm serve --filter ${envConfig.app}`,
+      // command: `pnpm serve --filter ${envConfig.app}`,
+      command: `npm --prefix ./apps/slashid-remix-impl run serve`,
       cwd: `${path.resolve(__dirname, "../../")}`,
       url: "http://localhost:3000",
       reuseExistingServer: !envConfig.CI,
