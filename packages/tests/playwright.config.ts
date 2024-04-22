@@ -84,7 +84,7 @@ function createPlaywrightConfig(): PlaywrightTestConfig {
       cwd: `${path.resolve(__dirname, "../../")}`,
       url: "http://localhost:3000",
       reuseExistingServer: !envConfig.CI,
-      stdout: "ignore",
+      stdout: "pipe",
       stderr: "pipe",
     },
   };
