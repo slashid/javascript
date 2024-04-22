@@ -46,11 +46,6 @@ jobs:
       - name: Unit tests
         run: pnpm test:unit
 
-      - name: Bundle size check
-        run: pnpm danger ci
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Run E2E tests
         env:
           CI: true
@@ -66,3 +61,8 @@ jobs:
           name: playwright-report
           path: packages/tests/playwright-report/
           retention-days: 10
+
+      - name: Bundle size check
+        run: pnpm danger ci
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
