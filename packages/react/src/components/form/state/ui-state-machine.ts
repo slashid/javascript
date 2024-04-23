@@ -118,14 +118,16 @@ class OTPUIStateMachine extends UIStateMachine<OTPStatus> {
 
         this.logInFn(this.context.config, this.context.options)
           .then((user) => {
-            if (user) {
-              this.send({ type: "sid_login.success", user });
-            } else {
+            if (!user) {
               this.send({
                 type: "sid_login.error",
                 error: new Error("User not returned from /id"),
               });
+
+              return;
             }
+
+            this.send({ type: "sid_login.success", user });
           })
           .catch((error) => {
             this.send({ type: "sid_login.error", error });
@@ -178,14 +180,16 @@ class PasswordUIStateMachine extends UIStateMachine<PasswordStatus> {
 
         this.logInFn(this.context.config, this.context.options)
           .then((user) => {
-            if (user) {
-              this.send({ type: "sid_login.success", user });
-            } else {
+            if (!user) {
               this.send({
                 type: "sid_login.error",
                 error: new Error("User not returned from /id"),
               });
+
+              return;
             }
+
+            this.send({ type: "sid_login.success", user });
           })
           .catch((error) => {
             this.send({ type: "sid_login.error", error });
@@ -281,17 +285,19 @@ class TOTPUIStateMachine extends UIStateMachine<TOTPStatus> {
 
         this.logInFn(this.context.config, this.context.options)
           .then((user) => {
-            if (user) {
-              if (this.isRegisterFlow) {
-                this.send({ type: "sid_ui.userAuthenticated", user });
-              } else {
-                this.send({ type: "sid_login.success", user });
-              }
-            } else {
+            if (!user) {
               this.send({
                 type: "sid_login.error",
                 error: new Error("User not returned from /id"),
               });
+
+              return;
+            }
+
+            if (this.isRegisterFlow) {
+              this.send({ type: "sid_ui.userAuthenticated", user });
+            } else {
+              this.send({ type: "sid_login.success", user });
             }
           })
           .catch((error) => {
@@ -362,14 +368,16 @@ class DefaultUIStateMachine extends UIStateMachine<DefaultUIStatus> {
       entry: () => {
         this.logInFn(this.context.config, this.context.options)
           .then((user) => {
-            if (user) {
-              this.send({ type: "sid_login.success", user });
-            } else {
+            if (!user) {
               this.send({
                 type: "sid_login.error",
                 error: new Error("User not returned from /id"),
               });
+
+              return;
             }
+
+            this.send({ type: "sid_login.success", user });
           })
           .catch((error) => {
             this.send({ type: "sid_login.error", error });
