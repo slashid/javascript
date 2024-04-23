@@ -179,10 +179,11 @@ export const SlashIDProvider = ({
       return;
     }
 
-    storageRef.current?.removeItem(STORAGE_TOKEN_KEY);
-    if (!user) {
+    if (!user || userIsAnonymous(user)) {
       return;
     }
+
+    storageRef.current?.removeItem(STORAGE_TOKEN_KEY);
 
     try {
       sidRef.current?.getAnalytics().logout();
@@ -224,7 +225,7 @@ export const SlashIDProvider = ({
         if (shouldUpgradeUser) {
           const upgradedUser = await user
             // @ts-expect-error TODO make the identifier optional
-            .id(oid, identifier, factor)
+            .id(identifier, factor)
             .then(async (user) => {
               return applyMiddleware({ user, sid, middleware });
             });
@@ -421,7 +422,14 @@ export const SlashIDProvider = ({
         },
       }
     );
-  }, [anonymousUsersEnabled, createAndStoreUserFromToken, state, storeUser, token, validateToken]);
+  }, [
+    anonymousUsersEnabled,
+    createAndStoreUserFromToken,
+    state,
+    storeUser,
+    token,
+    validateToken,
+  ]);
 
   const contextValue = useMemo(() => {
     if (state === "initial") {
