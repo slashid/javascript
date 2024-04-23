@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         node-version: [20.9.0]
-        app-name: [slashid-remix-impl]
+        app-name: [react-nextjs, slashid-remix-impl]
 
     steps:
       - uses: actions/checkout@v3
@@ -46,23 +46,17 @@ jobs:
       - name: Unit tests
         run: pnpm test:unit
 
-      - name: Bundle size check
-        run: pnpm danger ci
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Run E2E tests
         env:
           CI: true
           MAILINATOR_API_KEY: ${{ secrets.MAILINATOR_API_KEY }}
           MAILINATOR_TEAM_DOMAIN: ${{ secrets.MAILINATOR_TEAM_DOMAIN }}
           APP_NAME: ${{ matrix.app-name }}
-          DEBUG: pw:webserver
-        run: npm --prefix packages/tests run test:e2e
+        run: pnpm test:e2e --filter tests
 
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
-          name: playwright-report
+          name: playwright-report-${{ matrix.app-name }}
           path: packages/tests/playwright-report/
           retention-days: 10

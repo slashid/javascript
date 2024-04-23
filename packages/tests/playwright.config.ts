@@ -14,8 +14,6 @@ function createPlaywrightConfig(): PlaywrightTestConfig {
     throw new Error("APP_NAME is required in .env file");
   }
 
-  console.log("*** Playwright config: ", envConfig);
-
   return {
     timeout: 16 * 1000,
     expect: {
@@ -82,12 +80,11 @@ function createPlaywrightConfig(): PlaywrightTestConfig {
       // },
     ],
     webServer: {
-      // command: `pnpm serve --filter ${envConfig.app}`,
-      command: `npm --prefix ./apps/slashid-remix-impl run serve`,
+      command: `pnpm serve --filter ${envConfig.app}`,
       cwd: `${path.resolve(__dirname, "../../")}`,
       url: "http://localhost:3000",
       reuseExistingServer: !envConfig.CI,
-      stdout: "pipe",
+      stdout: envConfig.CI ? "pipe" : "ignore",
       stderr: "pipe",
     },
   };
