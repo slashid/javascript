@@ -17,6 +17,7 @@ export class FormPage {
   readonly page: Page;
   readonly authenticatingState: Locator;
   readonly successState: Locator;
+  readonly errorMessage: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -24,6 +25,7 @@ export class FormPage {
       "sid-form-authenticating-state"
     );
     this.successState = this.page.getByTestId("sid-form-success-state");
+    this.errorMessage = this.page.getByTestId("sid-form-error-message");
   }
 
   async load() {
