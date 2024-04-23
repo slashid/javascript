@@ -1,5 +1,17 @@
 # @slashid/react
 
+## 1.22.2
+
+### Patch Changes
+
+- 5044585: Fix the versioning issue
+
+## 1.22.1
+
+### Patch Changes
+
+- 4258c45: Use the primary color variable for Form loading states
+
 ## 1.22.0
 
 ### Minor Changes

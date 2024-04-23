@@ -4,15 +4,24 @@
   "private": true,
   "description": "Tests setup for /id projects",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test:e2e": "playwright test"
+  },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@playwright/test": "^1.32.1",
+    "@playwright/test": "1.42.1",
     "@types/node": "18.11.9",
     "tsconfig": "workspace:*"
   },
   "files": [
     "playwright.config.ts"
-  ]
+  ],
+  "dependencies": {
+    "@slashid/slashid": "^3.22.0",
+    "cheerio": "1.0.0-rc.12",
+    "dotenv": "^16.4.5",
+    "mailinator-client": "^1.0.4",
+    "uuid": "^9.0.1"
+  }
 }
