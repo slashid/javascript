@@ -15,7 +15,7 @@ import { Text } from "../../text";
 import * as styles from "./authenticating.css";
 import { isFactorOTPEmail, isFactorOTPSms } from "../../../domain/handles";
 import { EmailIcon, SmsIcon, Loader } from "./icons";
-import { BackButton, RetryPrompt } from "./authenticating.components";
+import { BackButton, Prompt } from "./authenticating.components";
 import { isInputState } from "../state/ui-state-machine.types";
 
 const FactorIcon = ({ factor }: { factor: Factor }) => {
@@ -144,7 +144,11 @@ export const OTPState = ({ flowState }: Props) => {
           fallback={<div style={{ height: 16 }} />}
         >
           <div className={styles.wrapper}>
-            <RetryPrompt onRetry={handleRetry} />
+            <Prompt
+              prompt="authenticating.retryPrompt"
+              cta="authenticating.retry"
+              onClick={handleRetry}
+            />
           </div>
         </Delayed>
       )}

@@ -1,12 +1,5 @@
 import { keyframes, style } from "@vanilla-extract/css";
 
-// TODO swap with a generic one
-export const retryPrompt = style({
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "baseline",
-});
-
 export const prompt = style({
   display: "flex",
   justifyContent: "center",

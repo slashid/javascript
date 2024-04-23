@@ -10,11 +10,7 @@ import { OTPState } from "./otp";
 import { PasswordState } from "./password";
 import { TOTPState } from "./totp";
 import { Props } from "./authenticating.types";
-import {
-  BackButton,
-  FactorIcon,
-  RetryPrompt,
-} from "./authenticating.components";
+import { BackButton, FactorIcon, Prompt } from "./authenticating.components";
 
 import * as styles from "./authenticating.css";
 
@@ -34,7 +30,11 @@ const LoadingState = ({ flowState }: Props) => {
       </Text>
       <Text t={message} variant={{ color: "contrast", weight: "semibold" }} />
       <FactorIcon factor={factor} />
-      <RetryPrompt onRetry={() => flowState.retry()} />
+      <Prompt
+        prompt="authenticating.retryPrompt"
+        cta="authenticating.retry"
+        onClick={() => flowState.retry()}
+      />
     </>
   );
 };

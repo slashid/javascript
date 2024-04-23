@@ -23,27 +23,6 @@ export const BackButton = ({ onCancel }: { onCancel: () => void }) => {
   );
 };
 
-// TODO swap with a generic one
-export const RetryPrompt = ({ onRetry }: { onRetry: () => void }) => {
-  const { text } = useConfiguration();
-  return (
-    <div className={styles.retryPrompt}>
-      <Text
-        variant={{ size: "sm", color: "tertiary", weight: "semibold" }}
-        t="authenticating.retryPrompt"
-      />
-      <LinkButton
-        className={sprinkles({ marginLeft: "1" })}
-        type="button"
-        testId="sid-form-authenticating-retry-button"
-        onClick={onRetry}
-      >
-        {text["authenticating.retry"]}
-      </LinkButton>
-    </div>
-  );
-};
-
 type PromptProps = {
   onClick: () => void;
   prompt: TextConfigKey;
