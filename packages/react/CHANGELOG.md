@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 1.23.0
+
+### Minor Changes
+
+- 6738884: Add support for anonymous users
+
 ## 1.22.2
 
 ### Patch Changes
