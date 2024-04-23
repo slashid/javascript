@@ -305,7 +305,7 @@ export const PasswordState = ({ flowState }: Props) => {
           <Button
             type="submit"
             variant="primary"
-            testId="sid-form-initial-submit-button"
+            testId="sid-form-authenticating-submit-button"
           >
             {text["authenticating.password.submit"]}
           </Button>

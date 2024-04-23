@@ -8,7 +8,8 @@
     "resolveJsonModule": true,
     "declaration": true,
     "emitDeclarationOnly": true,
-    "declarationDir": "./dist"
+    "declarationDir": "./dist",
+    "jsx": "react-jsx"
   },
   "include": ["src"]
 }

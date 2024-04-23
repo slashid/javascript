@@ -1,13 +1,12 @@
 import { Locator, type Page } from "@playwright/test";
 import type { FactorMethod } from "@slashid/slashid";
 
-type FactorMethodLabel = "OTP via email" | "Email link";
-
-function getLabelFromFactorMethod(method: FactorMethod): FactorMethodLabel {
+function getLabelFromFactorMethod(method: FactorMethod): string {
   // @ts-expect-error add missing labels when needed
   const methodToLabel: Record<FactorMethod, FactorMethodLabel> = {
     otp_via_email: "OTP via email",
     email_link: "Email link",
+    password: "Password",
   };
 
   return methodToLabel[method];
@@ -47,8 +46,22 @@ export class FormPage {
     await this.page.locator("#sid-input-email_address").fill(email);
   }
 
+  async enterPassword(password: string) {
+    await this.page.locator("#password-input").fill(password);
+  }
+
+  async enterPasswordConfirm(password: string) {
+    await this.page.locator("#password-input-confirm").fill(password);
+  }
+
   async submitInitialForm() {
     await this.page.getByTestId("sid-form-initial-submit-button").click();
+  }
+
+  async submitAuthenticatingForm() {
+    await this.page
+      .getByTestId("sid-form-authenticating-submit-button")
+      .click();
   }
 
   async submitOTP(otp: string) {

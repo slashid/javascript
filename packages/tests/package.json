@@ -12,6 +12,7 @@
   "devDependencies": {
     "@playwright/test": "1.42.1",
     "@types/node": "18.11.9",
+    "@types/uuid": "^9.0.8",
     "tsconfig": "workspace:*"
   },
   "files": [

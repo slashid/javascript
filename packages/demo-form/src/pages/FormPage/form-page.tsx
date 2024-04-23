@@ -1,5 +1,5 @@
 import type { Factor } from "@slashid/slashid";
-import { Form, ConfigurationProvider } from "@slashid/react";
+import { Form, ConfigurationProvider, LoggedIn } from "@slashid/react";
 import { PageLayout } from "../../components/PageLayout";
 
 import "@slashid/react/style.css";
@@ -7,6 +7,7 @@ import "@slashid/react/style.css";
 const factors: Factor[] = [
   { method: "email_link" },
   { method: "otp_via_email" },
+  { method: "password" },
 ];
 
 export function FormPage() {
@@ -20,6 +21,9 @@ export function FormPage() {
         <ConfigurationProvider factors={factors}>
           <Form />
         </ConfigurationProvider>
+        <LoggedIn>
+          <button data-testid="logout-btn">Log out</button>
+        </LoggedIn>
       </div>
     </PageLayout>
   );
