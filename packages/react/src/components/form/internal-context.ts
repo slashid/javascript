@@ -1,7 +1,7 @@
 import { Factor } from "@slashid/slashid";
 import React from "react";
 import { Handle } from "../../domain/types";
-import { useFlowState } from "./useFlowState";
+import { useFlowState } from "./use-flow-state";
 import { PayloadOptions } from "./types";
 
 export type InternalFormContextType = {
