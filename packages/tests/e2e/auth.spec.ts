@@ -100,13 +100,46 @@ test.describe("Authentication", () => {
 
     // log out
 
-    // login with password
+    await formPage.logout();
+    await formPage.load();
+
+    // try login with password
+    await formPage.selectAuthMethod("password");
+    await formPage.enterEmail(testInbox.email);
+    await formPage.submitInitialForm();
+
     // reset password
+    await formPage.retry();
     // check email
+
+    const resetEmail = await testInbox.getEmailBySubject("Reset your password");
+    expect(resetEmail).toBeDefined();
+    if (!resetEmail) return;
+    const jumpPageResetURL = await testInbox.getJumpPageURL(resetEmail);
+    expect(jumpPageResetURL).toBeDefined();
+    if (!jumpPageResetURL) return;
+
     // change password on jump page
-    // confirm
+    const jumpPageReset = new JumpPage(
+      await context.newPage(),
+      jumpPageResetURL
+    );
+    await jumpPageReset.load();
+    await jumpPageReset.page.bringToFront();
+    await jumpPageReset.enterPassword("T3stPWD!2");
+    await jumpPageReset.enterPasswordConfirm("T3stPWD!2");
+    await jumpPageReset.submitInitialForm();
+
+    await jumpPageReset.successState.waitFor({
+      state: "visible",
+      timeout: 8000,
+    });
 
     // log in
+    await formPage.enterPassword("T3stPWD!2");
+    await formPage.submitAuthenticatingForm();
+
     // success
+    await expect(formPage.successState).toBeVisible();
   });
 });

@@ -1,5 +1,10 @@
 import type { Factor } from "@slashid/slashid";
-import { Form, ConfigurationProvider, LoggedIn } from "@slashid/react";
+import {
+  Form,
+  ConfigurationProvider,
+  LoggedIn,
+  useSlashID,
+} from "@slashid/react";
 import { PageLayout } from "../../components/PageLayout";
 
 import "@slashid/react/style.css";
@@ -11,6 +16,7 @@ const factors: Factor[] = [
 ];
 
 export function FormPage() {
+  const { logOut } = useSlashID();
   return (
     <PageLayout
       title="<Form>"
@@ -22,7 +28,9 @@ export function FormPage() {
           <Form />
         </ConfigurationProvider>
         <LoggedIn>
-          <button data-testid="logout-btn">Log out</button>
+          <button data-testid="logout-btn" onClick={logOut}>
+            Log out
+          </button>
         </LoggedIn>
       </div>
     </PageLayout>

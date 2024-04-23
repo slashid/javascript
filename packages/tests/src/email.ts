@@ -19,6 +19,7 @@ export type TestInbox = {
   getLatestEmail: () => Promise<Message | null>;
   getOTP: (email: Message) => Promise<string | null | undefined>;
   getJumpPageURL: (email: Message) => Promise<string | null | undefined>;
+  getEmailBySubject: (subject: string) => Promise<Message | null>;
 };
 
 export function createTestInbox({
@@ -65,6 +66,28 @@ export function createTestInbox({
       try {
         const email = await fetchLatestEmail();
         if (email !== null) {
+          return email;
+        }
+      } catch (error) {
+        console.error("Error fetching latest email:", error);
+      }
+
+      retries++;
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait for 1 second before retrying
+    }
+
+    console.error("Failed to fetch latest email after multiple retries");
+    return null;
+  }
+
+  async function fetchEmailBySubject(subject: string) {
+    const maxRetries = 10;
+    let retries = 0;
+
+    while (retries < maxRetries) {
+      try {
+        const email = await fetchLatestEmail();
+        if (email !== null && email.subject.includes(subject)) {
           return email;
         }
       } catch (error) {
@@ -136,5 +159,6 @@ export function createTestInbox({
       const messageContent = getTextContent(message);
       return getTheJumpPageURL(messageContent);
     },
+    getEmailBySubject: async (subject) => fetchEmailBySubject(subject),
   };
 }

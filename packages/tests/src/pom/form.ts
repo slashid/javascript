@@ -74,4 +74,12 @@ export class FormPage {
       index++;
     }
   }
+
+  async logout() {
+    await this.page.getByTestId("logout-btn").click();
+  }
+
+  async retry() {
+    await this.page.getByTestId("sid-form-authenticating-retry-button").click();
+  }
 }
