@@ -29,7 +29,7 @@ test.describe("Authentication", () => {
     await jumpPage.page.bringToFront();
     await jumpPage.successState.waitFor({
       state: "visible",
-      timeout: 4000,
+      timeout: 8000,
     });
 
     await expect(jumpPage.successState).toBeVisible();

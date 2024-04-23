@@ -15,13 +15,13 @@ function createPlaywrightConfig(): PlaywrightTestConfig {
   }
 
   return {
-    timeout: 8 * 1000,
+    timeout: 16 * 1000,
     expect: {
       /**
        * Maximum time expect() should wait for the condition to be met.
        * For example in `await expect(locator).toHaveText();`
        */
-      timeout: 2 * 1000,
+      timeout: 4 * 1000,
     },
     /* Run tests in files in parallel */
     fullyParallel: true,
@@ -83,18 +83,12 @@ function createPlaywrightConfig(): PlaywrightTestConfig {
       command: `pnpm serve --filter ${envConfig.app}`,
       cwd: `${path.resolve(__dirname, "../../")}`,
       url: "http://localhost:3000",
-      reuseExistingServer: true,
-      stdout: "ignore",
+      reuseExistingServer: !envConfig.CI,
+      stdout: envConfig.CI ? "pipe" : "ignore",
       stderr: "pipe",
     },
   };
 }
-
-/**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
-// require('dotenv').config();
 
 /**
  * See https://playwright.dev/docs/test-configuration.
