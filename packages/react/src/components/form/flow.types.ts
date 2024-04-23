@@ -5,20 +5,7 @@ import {
   Retry,
   LoginOptions,
 } from "../../domain/types";
-
-export interface AuthenticatingState {
-  status: "authenticating";
-  context: {
-    config: LoginConfiguration;
-    options?: LoginOptions;
-    attempt: number;
-  };
-  // uiStateMachine? => uiStateMachineFactory(factor) => OTP | TOTP | Password
-  retry: Retry;
-  cancel: Cancel;
-  recover: () => void;
-  entry: () => void;
-}
+import type { State } from "./state/ui-state-machine.types";
 
 export interface SuccessState {
   status: "success";
@@ -39,11 +26,49 @@ interface LoginEvent {
   options?: LoginOptions;
 }
 
-export interface State<T> {
-  status: T;
-  entry?(): void;
-  exit?(): void;
+export interface InitialState {
+  status: "initial";
+  logIn: (config: LoginConfiguration, options?: LoginOptions) => void;
 }
+
+export interface AuthenticatingState {
+  status: "authenticating";
+  context: {
+    config: LoginConfiguration;
+    options?: LoginOptions;
+    attempt: number;
+  };
+  retry: Retry;
+  cancel: Cancel;
+  recover: () => void;
+  entry: () => void;
+  matches: (pattern: string) => boolean;
+  getChildState: () => State;
+}
+
+export interface SuccessState {
+  status: "success";
+}
+
+export interface ErrorState {
+  status: "error";
+  context: AuthenticatingState["context"] & {
+    error: Error;
+  };
+  retry: Retry;
+  cancel: Cancel;
+}
+
+export type FlowActions = {
+  // a function that will be called when the state is entered
+  entry?: () => void;
+};
+
+export type FlowState = FlowActions &
+  (InitialState | AuthenticatingState | SuccessState | ErrorState);
+
+export type Observer = (state: FlowState, event: Event) => void;
+export type Send = (e: Event) => void;
 
 interface LoginUIStateChangedEvent {
   type: "sid_login.ui_state_changed";
@@ -87,4 +112,12 @@ export type Event =
   | CancelEvent
   | UpdateContextEvent;
 
-export type Send = (e: Event) => void;
+export type CreateFlowOptions = {
+  onSuccess?: (user: User) => void;
+  onError?: (error: Error, context: ErrorState["context"]) => void;
+};
+
+export type HistoryEntry = {
+  state: FlowState;
+  event: Event;
+};

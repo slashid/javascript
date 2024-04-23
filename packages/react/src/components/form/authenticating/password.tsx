@@ -18,7 +18,7 @@ import {
 } from "@slashid/react-primitives";
 import { TextConfigKey } from "../../text/constants";
 import { useConfiguration } from "../../../hooks/use-configuration";
-import { AuthenticatingState } from "../flow";
+import { AuthenticatingState } from "../flow.types";
 import { HandleType } from "../../../domain/types";
 import { InvalidPasswordSubmittedEvent } from "@slashid/slashid";
 import {
@@ -29,7 +29,7 @@ import {
   PasswordStatus,
   isInputState,
   isVerifyPasswordState,
-} from "../ui-state-machine";
+} from "../state/ui-state-machine.types";
 
 const PasswordRecoveryPrompt = ({
   onRecoverClick,

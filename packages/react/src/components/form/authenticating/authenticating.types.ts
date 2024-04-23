@@ -1,4 +1,4 @@
-import { AuthenticatingState } from "../flow";
+import { AuthenticatingState } from "../flow.types";
 
 export type Props = {
   flowState: AuthenticatingState;

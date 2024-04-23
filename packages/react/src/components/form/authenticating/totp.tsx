@@ -11,7 +11,7 @@ import {
   isInputState,
   isRegisterTotpAuthenticatorState,
   isSaveRecoveryCodesState,
-} from "../ui-state-machine";
+} from "../state/ui-state-machine.types";
 import {
   Button,
   OtpInput,

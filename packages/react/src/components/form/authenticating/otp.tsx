@@ -16,7 +16,7 @@ import * as styles from "./authenticating.css";
 import { isFactorOTPEmail, isFactorOTPSms } from "../../../domain/handles";
 import { EmailIcon, SmsIcon, Loader } from "./icons";
 import { BackButton, RetryPrompt } from "./authenticating.components";
-import { isInputState } from "../ui-state-machine";
+import { isInputState } from "../state/ui-state-machine";
 
 const FactorIcon = ({ factor }: { factor: Factor }) => {
   if (isFactorOTPEmail(factor)) {

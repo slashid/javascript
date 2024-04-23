@@ -3,75 +3,28 @@ import type {
   AuthenticatingState,
   Send,
   Event as FlowEvent,
-} from "./flow.types";
+} from "../flow.types";
 import {
   isFactorOTP,
   isFactorPassword,
   isFactorTOTP,
-} from "../../domain/handles";
-import { LogIn, MFA } from "../../domain/types";
-
-type DefaultUIStatus = "initial";
-
-type OTPStatus = "initial" | "input" | "submitting";
-
-export type PasswordStatus =
-  | "initial"
-  | "setPassword"
-  | "verifyPassword"
-  | "recoverPassword"
-  | "submitting";
-
-export type TOTPStatus =
-  | "initial"
-  | "registerAuthenticator"
-  | "input"
-  | "submitting"
-  | "saveRecoveryCodes";
-
-export type AuthenticatingUIStatus = OTPStatus | PasswordStatus | TOTPStatus;
-
-export interface IUIStateMachine {
-  state: State<AuthenticatingUIStatus>;
-}
-
-export interface State<T> {
-  status: T;
-  entry?(): void;
-  exit?(): void;
-}
-
-export interface InputState<T> extends State<T> {
-  submit: (...values: string[]) => void;
-}
-
-export interface VerifyPasswordState extends InputState<PasswordStatus> {
-  status: "verifyPassword";
-  recoverPassword: () => void;
-}
-
-export interface RegisterTotpAuthenticatorState extends State<TOTPStatus> {
-  status: "registerAuthenticator";
-  confirm: () => void;
-  qrCode: string;
-  uri: string;
-}
-
-export interface SaveRecoveryCodesState extends State<TOTPStatus> {
-  status: "saveRecoveryCodes";
-  recoveryCodes: string[];
-  confirm: () => void;
-}
-
-type Recover = () => Promise<void>;
-
-type UIStateMachineOpts = {
-  send: Send;
-  sid: SlashID;
-  context: AuthenticatingState["context"];
-  logInFn: LogIn | MFA;
-  recover: Recover;
-};
+} from "../../../domain/handles";
+import { LogIn, MFA } from "../../../domain/types";
+import {
+  AuthenticatingUIStatus,
+  DefaultUIStatus,
+  IUIStateMachine,
+  InputState,
+  OTPStatus,
+  PasswordStatus,
+  RegisterTotpAuthenticatorState,
+  SaveRecoveryCodesState,
+  State,
+  TOTPStatus,
+  UIStateMachineOpts,
+  VerifyPasswordState,
+  Recover
+} from "./ui-state-machine.types";
 
 abstract class UIStateMachine<T extends AuthenticatingUIStatus>
   implements IUIStateMachine
@@ -490,43 +443,4 @@ function createSaveRecoveryCodesState({
     recoveryCodes,
     confirm,
   };
-}
-
-export function isInputState(
-  state: State<AuthenticatingUIStatus>
-): state is InputState<AuthenticatingUIStatus> {
-  return (
-    typeof (state as InputState<AuthenticatingUIStatus>).submit === "function"
-  );
-}
-
-export function isVerifyPasswordState(
-  state: State<AuthenticatingUIStatus>
-): state is VerifyPasswordState {
-  return (
-    state.status === "verifyPassword" &&
-    typeof (state as VerifyPasswordState).submit === "function" &&
-    typeof (state as VerifyPasswordState).recoverPassword === "function"
-  );
-}
-
-export function isRegisterTotpAuthenticatorState(
-  state: State<AuthenticatingUIStatus>
-): state is RegisterTotpAuthenticatorState {
-  return (
-    state.status === "registerAuthenticator" &&
-    typeof (state as RegisterTotpAuthenticatorState).confirm === "function" &&
-    typeof (state as RegisterTotpAuthenticatorState).qrCode === "string" &&
-    typeof (state as RegisterTotpAuthenticatorState).uri === "string"
-  );
-}
-
-export function isSaveRecoveryCodesState(
-  state: State<AuthenticatingUIStatus>
-): state is SaveRecoveryCodesState {
-  return (
-    state.status === "saveRecoveryCodes" &&
-    Array.isArray((state as SaveRecoveryCodesState).recoveryCodes) &&
-    typeof (state as SaveRecoveryCodesState).confirm === "function"
-  );
 }

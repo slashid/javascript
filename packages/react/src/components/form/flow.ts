@@ -1,64 +1,20 @@
-import { User, SlashID } from "@slashid/slashid";
-import {
-  Cancel,
-  LogIn,
-  LoginConfiguration,
-  Retry,
-  MFA,
-  LoginOptions,
-  Recover,
-} from "../../domain/types";
+import { SlashID } from "@slashid/slashid";
+import { LogIn, MFA, Recover } from "../../domain/types";
 import { ensureError } from "../../domain/errors";
 import { isFactorRecoverable } from "../../domain/handles";
-import {
-  AuthenticatingUIStatus,
-  createUIStateMachine,
-} from "./ui-state-machine";
-import type { Event, State } from "./flow.types";
-
-export interface InitialState {
-  status: "initial";
-  logIn: (config: LoginConfiguration, options?: LoginOptions) => void;
-}
-
-export interface AuthenticatingState {
-  status: "authenticating";
-  context: {
-    config: LoginConfiguration;
-    options?: LoginOptions;
-    attempt: number;
-  };
-  retry: Retry;
-  cancel: Cancel;
-  recover: () => void;
-  entry: () => void;
-  matches: (pattern: string) => boolean;
-  getChildState: () => State<AuthenticatingUIStatus>;
-}
-
-export interface SuccessState {
-  status: "success";
-}
-
-export interface ErrorState {
-  status: "error";
-  context: AuthenticatingState["context"] & {
-    error: Error;
-  };
-  retry: Retry;
-  cancel: Cancel;
-}
-
-export type FlowActions = {
-  // a function that will be called when the state is entered
-  entry?: () => void;
-};
-
-export type FlowState = FlowActions &
-  (InitialState | AuthenticatingState | SuccessState | ErrorState);
-
-export type Observer = (state: FlowState, event: Event) => void;
-export type Send = (e: Event) => void;
+import { createUIStateMachine } from "./state/ui-state-machine";
+import type {
+  Event,
+  Send,
+  InitialState,
+  AuthenticatingState,
+  SuccessState,
+  ErrorState,
+  CreateFlowOptions,
+  FlowState,
+  HistoryEntry,
+  Observer,
+} from "./flow.types";
 
 const createInitialState = (send: Send): InitialState => {
   return {
@@ -150,16 +106,6 @@ const createErrorState = (
       send({ type: "sid_cancel" });
     },
   };
-};
-
-export type CreateFlowOptions = {
-  onSuccess?: (user: User) => void;
-  onError?: (error: Error, context: ErrorState["context"]) => void;
-};
-
-type HistoryEntry = {
-  state: FlowState;
-  event: Event;
 };
 
 /**
@@ -309,5 +255,3 @@ export function createFlow(opts: CreateFlowOptions = {}) {
     state,
   };
 }
-
-export type Flow = ReturnType<typeof createFlow>;

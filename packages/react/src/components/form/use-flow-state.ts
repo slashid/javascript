@@ -1,7 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 
 import { useSlashID } from "../../hooks/use-slash-id";
-import { Flow, createFlow, FlowState, CreateFlowOptions } from "./flow";
+import { createFlow } from "./flow";
+import type { FlowState, CreateFlowOptions } from "./flow.types";
+
+type Flow = ReturnType<typeof createFlow>;
 
 export function useFlowState(opts: CreateFlowOptions = {}) {
   const { logIn, mfa, recover, user, sdkState, sid } = useSlashID();
