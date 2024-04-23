@@ -23,7 +23,7 @@ import {
   TOTPStatus,
   UIStateMachineOpts,
   VerifyPasswordState,
-  Recover
+  Recover,
 } from "./ui-state-machine.types";
 
 abstract class UIStateMachine<T extends AuthenticatingUIStatus>
@@ -269,7 +269,7 @@ class TOTPUIStateMachine extends UIStateMachine<TOTPStatus> {
         uri,
       });
     };
-    const totpCodeRequestedHandker = () => {
+    const totpCodeRequestedHandler = () => {
       this.send({ type: "sid_ui.totpCodeRequested" });
     };
 
@@ -277,7 +277,7 @@ class TOTPUIStateMachine extends UIStateMachine<TOTPStatus> {
       status: "initial",
       entry: () => {
         this.sid.subscribe("totpKeyGenerated", totpKeyGeneratedHandler);
-        this.sid.subscribe("totpCodeRequested", totpCodeRequestedHandker);
+        this.sid.subscribe("totpCodeRequested", totpCodeRequestedHandler);
 
         this.logInFn(this.context.config, this.context.options)
           .then((user) => {
@@ -300,7 +300,7 @@ class TOTPUIStateMachine extends UIStateMachine<TOTPStatus> {
       },
       exit: () => {
         this.sid.unsubscribe("totpKeyGenerated", totpKeyGeneratedHandler);
-        this.sid.unsubscribe("totpCodeRequested", totpCodeRequestedHandker);
+        this.sid.unsubscribe("totpCodeRequested", totpCodeRequestedHandler);
       },
     });
 
