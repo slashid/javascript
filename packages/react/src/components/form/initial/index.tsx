@@ -1,10 +1,7 @@
 import React, { ReactNode } from "react";
 import { Factor } from "@slashid/slashid";
 
-import {
-  isFactorOidc,
-  isFactorSSO,
-} from "../../../domain/handles";
+import { isFactorOidc, isFactorSSO } from "../../../domain/handles";
 import {
   FactorCustomizableSAML,
   FactorLabeledOIDC,
@@ -13,7 +10,7 @@ import {
   LoginOptions,
 } from "../../../domain/types";
 import { useConfiguration } from "../../../hooks/use-configuration";
-import { InitialState } from "../flow";
+import { InitialState } from "../flow.types";
 
 import { Controls } from "./controls";
 import { LogoSlot } from "./logo";
@@ -107,7 +104,7 @@ const Initial = () => {
 Initial.Logo = LogoSlot;
 Initial.Header = HeaderSlot;
 Initial.Controls = Controls;
-Initial.Divider = Divider
+Initial.Divider = Divider;
 /** @deprecated Use `Initial.SSO` instead. */
 Initial.OIDC = OIDCSlot;
 Initial.SSO = SSOSlot;

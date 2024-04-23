@@ -11,7 +11,7 @@ import {
 import { useConfiguration } from "../../hooks/use-configuration";
 import { Text } from "../text";
 import { TextConfigKey } from "../text/constants";
-import { ErrorState } from "./flow";
+import { ErrorState } from "./flow.types";
 import { useInternalFormContext } from "./internal-context";
 
 const ErrorIcon = () => (
