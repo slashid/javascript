@@ -3,7 +3,7 @@ import clsx from "clsx";
 import * as styles from "./read-only.css";
 import { useEffect, useRef } from "react";
 
-type ReadOnlyProps = {
+type ReadOnlyPropsField = {
   value: string;
   id: string;
   label?: string;
@@ -13,7 +13,10 @@ type ReadOnlyProps = {
   className?: string;
 };
 
-export function ReadOnly({
+/**
+ *  A component used to display read-only values in forms, with optional right accessory to copy the value to clipboard.
+ */
+export function ReadOnlyField({
   id,
   value,
   label,
@@ -21,7 +24,7 @@ export function ReadOnly({
   rows,
   copy,
   className,
-}: ReadOnlyProps) {
+}: ReadOnlyPropsField) {
   const Component = as;
   const inputRef = useRef<HTMLElement>(null);
 

@@ -16,7 +16,7 @@ import {
   Button,
   OtpInput,
   sprinkles,
-  ReadOnly,
+  ReadOnlyField,
   Download,
   Input,
   LinkButton,
@@ -140,7 +140,7 @@ export function TOTPState({ flowState }: Props) {
             onClick={() => setShowUri(true)}
           />
           {showUri && (
-            <ReadOnly
+            <ReadOnlyField
               id="uri"
               value={uiState.uri}
               label="Set up URI"
@@ -211,7 +211,7 @@ export function TOTPState({ flowState }: Props) {
             uiState.confirm();
           })}
         >
-          <ReadOnly
+          <ReadOnlyField
             id="recoveryCodes"
             as="textarea"
             value={uiState.recoveryCodes.join(String.fromCharCode(13, 10))}

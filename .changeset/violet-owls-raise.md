@@ -4,7 +4,7 @@
 
 Add components:
 
-- ReadOnly
+- ReadOnlyField
 
 Add icons:
 
