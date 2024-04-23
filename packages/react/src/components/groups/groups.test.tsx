@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 
 import { Groups } from ".";
 import { TestSlashIDProvider } from "../../context/test-providers";
-import { createTestUser } from "../test-utils";
+import { createAnonymousTestUser, createTestUser } from "../test-utils";
 import { faker } from "@faker-js/faker";
 
 const TestComponent = () => <h1>Test</h1>;
@@ -32,6 +32,40 @@ describe("Groups", () => {
 
     render(
       <TestSlashIDProvider sdkState="ready" user={userWithGroups}>
+        <Groups belongsTo={belongsTo}>
+          <TestComponent />
+        </Groups>
+      </TestSlashIDProvider>
+    );
+
+    expect(belongsTo).toHaveBeenCalledWith(["groupb"]);
+    expect(screen.queryByText("Test")).not.toBeInTheDocument();
+  });
+
+  test("should render children when the SDK is ready and the anonymous user belongs to the specified groups", () => {
+    const anonUserWithGroups = createAnonymousTestUser();
+    anonUserWithGroups.getGroups = vi.fn(() => ["groupa"]);
+    const belongsTo = vi.fn((groups: string[]) => groups.includes("groupa"));
+
+    render(
+      <TestSlashIDProvider sdkState="ready" user={anonUserWithGroups}>
+        <Groups belongsTo={belongsTo}>
+          <TestComponent />
+        </Groups>
+      </TestSlashIDProvider>
+    );
+
+    expect(belongsTo).toHaveBeenCalledWith(["groupa"]);
+    expect(screen.getByText("Test")).toBeInTheDocument();
+  });
+
+  test("should not render children when the SDK is ready and the anonymous user does not belong to the specified groups", () => {
+    const anonUserWithGroups = createAnonymousTestUser();
+    anonUserWithGroups.getGroups = vi.fn(() => ["groupb"]);
+    const belongsTo = vi.fn((groups: string[]) => groups.includes("groupa"));
+
+    render(
+      <TestSlashIDProvider sdkState="ready" user={anonUserWithGroups}>
         <Groups belongsTo={belongsTo}>
           <TestComponent />
         </Groups>

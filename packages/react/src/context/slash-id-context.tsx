@@ -9,6 +9,7 @@ import {
 } from "react";
 
 import {
+  AnonymousUser,
   PersonHandleType,
   SlashID,
   SlashIDEnvironment,
@@ -23,6 +24,8 @@ import {
 import { LogIn, MFA, Recover } from "../domain/types";
 import { SDKState } from "../domain/sdk-state";
 import { applyMiddleware } from "../middleware";
+import { userIsAnonymous } from "../utils/anonymous";
+import { sequence } from "../components/utils";
 
 export type StorageOption = "memory" | "localStorage" | "cookie";
 
@@ -52,13 +55,27 @@ export interface SlashIDProviderProps {
    */
   sdkUrl?: string;
   analyticsEnabled?: boolean;
+  /**
+   * Anonymous users allow you to perform operations
+   * on users who have not signed-up or logged-in,
+   * using the same API as regular users.
+   *
+   * Use anonymous users to read & set user attributes, store
+   * GDPR consent, track sign-up conversions, and build a
+   * fingerprint of users who simply never sign-up.
+   *
+   * When the anonymous users signs up, or signs in, their
+   * anonymous user is upgraded to a full user, and their
+   * pre-login data is transferred.
+   */
+  anonymousUsersEnabled?: boolean;
   themeProps?: ThemeProps;
   children: ReactNode;
 }
 
 export interface ISlashIDContext {
   sid: SlashID | undefined;
-  user: User | undefined;
+  user: User | AnonymousUser | undefined;
   sdkState: SDKState;
   logOut: () => undefined;
   logIn: LogIn;
@@ -107,13 +124,14 @@ export const SlashIDProvider = ({
   baseApiUrl,
   sdkUrl,
   analyticsEnabled,
+  anonymousUsersEnabled = false,
   themeProps,
   children,
 }: SlashIDProviderProps) => {
   const [oid, setOid] = useState(initialOid);
   const [token, setToken] = useState(initialToken);
   const [state, setState] = useState<SDKState>(initialContextValue.sdkState);
-  const [user, setUser] = useState<User | undefined>(undefined);
+  const [user, setUser] = useState<User | AnonymousUser | undefined>(undefined);
   const storageRef = useRef<Storage | undefined>(undefined);
   const sidRef = useRef<SlashID | undefined>(undefined);
 
@@ -135,7 +153,7 @@ export const SlashIDProvider = ({
   );
 
   const storeUser = useCallback(
-    (newUser: User) => {
+    (newUser: User | AnonymousUser) => {
       if (state === "initial") {
         return;
       }
@@ -161,10 +179,11 @@ export const SlashIDProvider = ({
       return;
     }
 
-    storageRef.current?.removeItem(STORAGE_TOKEN_KEY);
-    if (!user) {
+    if (!user || userIsAnonymous(user)) {
       return;
     }
+
+    storageRef.current?.removeItem(STORAGE_TOKEN_KEY);
 
     try {
       sidRef.current?.getAnalytics().logout();
@@ -201,25 +220,48 @@ export const SlashIDProvider = ({
                 value: handle.value,
               };
 
-        const user = await sid
+        const shouldUpgradeUser = user && userIsAnonymous(user);
+
+        if (shouldUpgradeUser) {
+          const upgradedUser = await user
+            // @ts-expect-error TODO make the identifier optional
+            .id(identifier, factor)
+            .then(async (user) => {
+              return applyMiddleware({ user, sid, middleware });
+            });
+
+          storeUser(upgradedUser);
+
+          return upgradedUser;
+        }
+
+        const newUser = await sid
           // @ts-expect-error TODO make the identifier optional
           .id(oid, identifier, factor)
           .then(async (user) => {
             return applyMiddleware({ user, sid, middleware });
           });
 
-        storeUser(user);
-        return user;
+        storeUser(newUser);
+
+        return newUser;
       } catch (e) {
         logOut();
         throw e;
       }
     },
-    [oid, state, storeUser, logOut]
+    [state, storeUser, user, oid, logOut]
   );
 
   const mfa = useCallback<MFA>(
     async ({ handle, factor }) => {
+      if (user && userIsAnonymous(user)) {
+        console.warn(
+          "Anonymous users cannot perform MFA, please log in first."
+        );
+        return;
+      }
+
       if (state === "initial" || !user) {
         return;
       }
@@ -244,16 +286,24 @@ export const SlashIDProvider = ({
     [state]
   );
 
-  const validateToken = useCallback(async (token: string): Promise<boolean> => {
-    const tokenUser = new User(token, sidRef.current!);
-    try {
-      const ret = await tokenUser.validateToken();
-      return ret.valid;
-    } catch (e) {
-      console.error(e);
-      return false;
-    }
-  }, []);
+  const validateToken = useCallback(
+    async (token: string): Promise<boolean> => {
+      const tokenUser = new User(token, sidRef.current!);
+
+      if (tokenUser?.anonymous && !anonymousUsersEnabled) {
+        return false;
+      }
+
+      try {
+        const ret = await tokenUser.validateToken();
+        return ret.valid;
+      } catch (e) {
+        console.error(e);
+        return false;
+      }
+    },
+    [anonymousUsersEnabled]
+  );
 
   useEffect(() => {
     if (state === "initial") {
@@ -281,6 +331,28 @@ export const SlashIDProvider = ({
     environment,
   ]);
 
+  const createAndStoreUserFromToken = useCallback(
+    (token: string): User | AnonymousUser | null => {
+      const sid = sidRef.current!;
+      const newUser = new User(token, sid);
+
+      if (newUser.anonymous && !anonymousUsersEnabled) {
+        return null;
+      }
+
+      if (newUser.anonymous) {
+        const anonUser = new AnonymousUser(token, sid);
+
+        storeUser(anonUser);
+        return anonUser;
+      }
+
+      storeUser(newUser);
+      return newUser;
+    },
+    [anonymousUsersEnabled, storeUser]
+  );
+
   useEffect(() => {
     if (state !== "loaded") {
       return;
@@ -289,55 +361,75 @@ export const SlashIDProvider = ({
     const sid = sidRef.current!;
     const storage = storageRef.current!;
 
-    const loginDirectIdIfPresent = async () => {
+    const loginWithInitialToken = async () => {
+      const isTokenValid = token && (await validateToken(token));
+      if (!isTokenValid) return null;
+
+      return createAndStoreUserFromToken(token);
+    };
+
+    const loginWithDirectID = async () => {
       try {
-        const tempUser = await sid.getUserFromURL();
-        if (tempUser) {
-          storeUser(new User(tempUser.token, sidRef.current!));
-          return true;
-        } else {
-          return false;
-        }
+        const userFromURL = await sid.getUserFromURL();
+        if (!userFromURL) return null;
+
+        const { token: tokenFromURL } = userFromURL;
+
+        return createAndStoreUserFromToken(tokenFromURL);
       } catch (e) {
         console.error(e);
-        return false;
+        return null;
       }
     };
 
-    const loginStoredToken = async (): Promise<boolean> => {
-      const storedToken = storage.getItem(STORAGE_TOKEN_KEY);
-      if (storedToken) {
-        const isValidToken = await validateToken(storedToken);
-        if (!isValidToken) {
-          storage.removeItem(STORAGE_TOKEN_KEY);
-          return false;
-        }
+    const loginWithTokenFromStorage = async () => {
+      const tokenFromStorage = storage.getItem(STORAGE_TOKEN_KEY);
+      const isValidToken =
+        tokenFromStorage && (await validateToken(tokenFromStorage));
 
-        storeUser(new User(storedToken, sidRef.current!));
-        return true;
-      } else {
-        return false;
+      if (!isValidToken) {
+        storage.removeItem(STORAGE_TOKEN_KEY);
+
+        return null;
       }
+
+      return createAndStoreUserFromToken(tokenFromStorage);
     };
 
-    const tryImmediateLogin = async () => {
-      if (token) {
-        storeUser(new User(token, sidRef.current!));
-      } else {
-        const isDone = await loginDirectIdIfPresent();
+    const createAnonymousUser = async () => {
+      if (!anonymousUsersEnabled) return null;
 
-        if (!isDone) {
-          await loginStoredToken();
-        }
-      }
+      const anonUser = await sid.createAnonymousUser();
 
-      setState("ready");
+      storeUser(anonUser);
+
+      return anonUser;
     };
 
     setState("retrievingToken");
 
-    tryImmediateLogin();
-  }, [state, token, storeUser, validateToken]);
+    sequence(
+      [
+        loginWithInitialToken,
+        loginWithDirectID,
+        loginWithTokenFromStorage,
+        createAnonymousUser,
+      ],
+      {
+        until: (value) => value !== null,
+        then: () => {
+          setState("ready");
+        },
+      }
+    );
+  }, [
+    anonymousUsersEnabled,
+    createAndStoreUserFromToken,
+    state,
+    storeUser,
+    token,
+    validateToken,
+  ]);
 
   const contextValue = useMemo(() => {
     if (state === "initial") {

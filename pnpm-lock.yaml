@@ -363,8 +363,8 @@ importers:
         specifier: ^8.0.2
         version: 8.3.1
       '@slashid/slashid':
-        specifier: 3.20.0
-        version: 3.20.0
+        specifier: ^3.23.0
+        version: 3.23.0
       '@storybook/addon-essentials':
         specifier: 7.0.0-rc.2
         version: 7.0.0-rc.2(react-dom@18.2.0)(react@18.2.0)
@@ -8574,23 +8574,6 @@ packages:
       uuid: 8.3.2
     dev: false
 
-  /@slashid/slashid@3.20.0:
-    resolution: {integrity: sha512-JOeG2GtoIX81cd154ac4FEqWtVmw0LfMBK9hJSj6v/kXPNOa+FJKj0LRfH7OjkstmchAGLcSty72TzC8BSpC6w==}
-    dependencies:
-      '@changesets/cli': 2.26.2
-      '@types/uuid': 8.3.4
-      changeset: 0.2.6
-      compare-versions: 6.1.0
-      docdash: 1.2.0
-      jwt-decode: 3.1.2
-      qrcode: 1.5.3
-      querystring-es3: 0.2.1
-      regenerator-runtime: 0.13.11
-      ua-parser-js: 1.0.37
-      url: 0.11.3
-      uuid: 8.3.2
-    dev: true
-
   /@slashid/slashid@3.22.0:
     resolution: {integrity: sha512-DVN7ciOs+RCXFpV8tIG5WFE51/O83Te3RdgmL4Zp7K9/dzGXB3f+/ps/pDjp5CseARJL5Bp7sh+HDNFtXUGm/w==}
     dependencies:
@@ -8607,6 +8590,23 @@ packages:
       url: 0.11.3
       uuid: 8.3.2
     dev: false
+
+  /@slashid/slashid@3.23.0:
+    resolution: {integrity: sha512-jEDiDSaQg8HjMzCC6ejq9ZDYpoA6boHrL9vMnNB0G1eeu/guu8JKDUmXJX8W1fnN7vTfKt1aBM0gXRrc2i3WIg==}
+    dependencies:
+      '@changesets/cli': 2.26.2
+      '@types/uuid': 8.3.4
+      changeset: 0.2.6
+      compare-versions: 6.1.0
+      docdash: 1.2.0
+      jwt-decode: 3.1.2
+      qrcode: 1.5.3
+      querystring-es3: 0.2.1
+      regenerator-runtime: 0.13.11
+      ua-parser-js: 1.0.37
+      url: 0.11.3
+      uuid: 8.3.2
+    dev: true
 
   /@storybook/addon-actions@7.0.0-rc.2(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-e4VXOoeejRnz+yTtPGtenAvrMtwRWO4VRxbGBHDPyMo+FOlQPC6plOrQMZ+lSRaE20J3KfTo6wSLZgnHQUQtRw==}
@@ -18362,6 +18362,7 @@ packages:
   /qrcode@1.5.3:
     resolution: {integrity: sha512-puyri6ApkEHYiVl4CFzo1tDkAZ+ATcnbJrJ6RiBM1Fhctdn/ix9MTE3hRph33omisEbC/2fcfemsseiKgBPKZg==}
     engines: {node: '>=10.13.0'}
+    hasBin: true
     dependencies:
       dijkstrajs: 1.0.3
       encode-utf8: 1.0.3

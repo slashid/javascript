@@ -320,6 +320,7 @@ root.render(
       themeProps={{ theme: "dark" }}
       tokenStorage="memory"
       analyticsEnabled
+      anonymousUsersEnabled
     >
       <LogOut />
       <div className="layout">

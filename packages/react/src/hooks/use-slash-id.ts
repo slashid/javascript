@@ -13,7 +13,7 @@ export function useSlashID(): UseSlashID {
     [contextValue.sdkState]
   );
   const isAuthenticated = useMemo(
-    () => contextValue.user !== undefined,
+    () => contextValue.user !== undefined && !contextValue.user.anonymous,
     [contextValue.user]
   );
 
