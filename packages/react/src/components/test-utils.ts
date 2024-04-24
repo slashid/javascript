@@ -23,6 +23,14 @@ export const inputEmail = (
   fireEvent.change(input, { target: { value } });
 };
 
+export const inputUsername = (
+  value: string,
+  inputPlaceholder: string = TEXT["initial.handle.username.placeholder"]
+) => {
+  const input = screen.getByPlaceholderText(inputPlaceholder);
+  fireEvent.change(input, { target: { value } });
+};
+
 export const inputPhone = (
   value: string,
   inputPlaceholder: string = TEXT["initial.handle.phone.placeholder"]
