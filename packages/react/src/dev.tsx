@@ -168,7 +168,7 @@ const BasicForm = () => {
         { method: "email_link" },
         { method: "otp_via_email" },
         { method: "otp_via_sms" },
-        { method: "password" },
+        { method: "password", allowedHandleTypes: ["username"] },
         {
           method: "oidc",
           options: {

@@ -15,11 +15,13 @@ import {
 export const TAB_NAME = {
   email: "email",
   phone: "phone",
+  username: "username",
 };
 
 export const tabIDByHandle: Record<HandleType, string> = {
   phone_number: TAB_NAME.phone,
   email_address: TAB_NAME.email,
+  username: TAB_NAME.username,
 };
 
 type Props = {
@@ -70,36 +72,64 @@ export const ConfiguredHandleForm = ({ handleSubmit, lastHandle }: Props) => {
         className={sprinkles({ marginY: "6" })}
         defaultValue={tabIDByHandle[lastHandle?.type ?? "email_address"]}
         tabs={[
-          {
-            id: TAB_NAME.email,
-            title: text["initial.handle.email"],
-            content: (
-              <HandleForm
-                handleSubmit={handleSubmit}
-                factors={factors}
-                handleType="email_address"
-                defaultValue={resolveLastHandleValue(
-                  lastHandle,
-                  "email_address"
-                )}
-              />
-            ),
-          },
-          {
-            id: TAB_NAME.phone,
-            title: text["initial.handle.phone"],
-            content: (
-              <HandleForm
-                handleSubmit={handleSubmit}
-                factors={factors}
-                handleType="phone_number"
-                defaultValue={resolveLastHandleValue(
-                  lastHandle,
-                  "phone_number"
-                )}
-              />
-            ),
-          },
+          ...(handleTypes.includes("email_address")
+            ? [
+                {
+                  id: TAB_NAME.email,
+                  title: text["initial.handle.email"],
+                  content: (
+                    <HandleForm
+                      handleSubmit={handleSubmit}
+                      factors={factors}
+                      handleType="email_address"
+                      defaultValue={resolveLastHandleValue(
+                        lastHandle,
+                        "email_address"
+                      )}
+                    />
+                  ),
+                },
+              ]
+            : []),
+          ...(handleTypes.includes("phone_number")
+            ? [
+                {
+                  id: TAB_NAME.phone,
+                  title: text["initial.handle.phone"],
+                  content: (
+                    <HandleForm
+                      handleSubmit={handleSubmit}
+                      factors={factors}
+                      handleType="phone_number"
+                      defaultValue={resolveLastHandleValue(
+                        lastHandle,
+                        "phone_number"
+                      )}
+                    />
+                  ),
+                },
+              ]
+            : []),
+
+          ...(handleTypes.includes("username")
+            ? [
+                {
+                  id: TAB_NAME.username,
+                  title: text["initial.handle.username"],
+                  content: (
+                    <HandleForm
+                      handleSubmit={handleSubmit}
+                      factors={factors}
+                      handleType="username"
+                      defaultValue={resolveLastHandleValue(
+                        lastHandle,
+                        "username"
+                      )}
+                    />
+                  ),
+                },
+              ]
+            : []),
         ]}
       />
       {shouldRenderDivider ? (

@@ -11,8 +11,10 @@ export const TEXT = {
   "initial.authenticationMethod": "Authentication method",
   "initial.handle.email": "Email address",
   "initial.handle.phone": "Phone number",
+  "initial.handle.username": "Username",
   "initial.handle.email.placeholder": "Type your email",
   "initial.handle.phone.placeholder": "Type your phone number",
+  "initial.handle.username.placeholder": "Type your username",
   "initial.submit": "Continue",
   "initial.divider": "or",
   "authenticating.password.label": "Password",
@@ -112,6 +114,7 @@ export const TEXT = {
   "validationError.otp": "Please enter the OTP code.",
   "validationError.email": "Please enter your email address.",
   "validationError.phoneNumber": "Please enter your phone number.",
+  "validationError.username": "Please enter a valid username.",
   // KYC
   "kyc.mobile.end.title": "Upload was successful.",
   "kyc.mobile.end.description": "Please return to desktop.",

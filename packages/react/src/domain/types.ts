@@ -1,7 +1,7 @@
 import { Factor, RecoverableFactor, SlashID, User } from "@slashid/slashid";
 import { ReactNode } from "react";
 
-const handleTypes = ["email_address", "phone_number"] as const;
+const handleTypes = ["email_address", "phone_number", "username"] as const;
 export type HandleType = (typeof handleTypes)[number];
 
 export interface Handle {

@@ -23,7 +23,11 @@ import { useConfiguration } from "../../../hooks/use-configuration";
 import { useForm } from "../../../hooks/use-form";
 import { TextConfig, TextConfigKey } from "../../text/constants";
 import { ErrorMessage } from "../error-message";
-import { isValidEmail, isValidPhoneNumber } from "../authenticating/validation";
+import {
+  isValidEmail,
+  isValidPhoneNumber,
+  isValidUsername,
+} from "../authenticating/validation";
 
 import * as styles from "./initial.css";
 import { useInternalFormContext } from "../internal-context";
@@ -46,11 +50,13 @@ export const FACTOR_LABEL_MAP: Record<
 export const TAB_NAME = {
   email: "email",
   phone: "phone",
+  username: "username",
 };
 
 export const tabIDByHandle: Record<HandleType, string> = {
   phone_number: TAB_NAME.phone,
   email_address: TAB_NAME.email,
+  username: TAB_NAME.username,
 };
 
 type ControlsProps = {
@@ -208,34 +214,61 @@ const FormInput = ({ children }: FormInputProps) => {
         className={sprinkles({ marginY: "6" })}
         defaultValue={tabIDByHandle[lastHandle?.type ?? "email_address"]}
         tabs={[
-          {
-            id: TAB_NAME.email,
-            title: text["initial.handle.email"],
-            content: (
-              <HandleInput
-                factors={nonOidcFactors}
-                handleType="email_address"
-                defaultValue={resolveLastHandleValue(
-                  lastHandle,
-                  "email_address"
-                )}
-              />
-            ),
-          },
-          {
-            id: TAB_NAME.phone,
-            title: text["initial.handle.phone"],
-            content: (
-              <HandleInput
-                factors={nonOidcFactors}
-                handleType="phone_number"
-                defaultValue={resolveLastHandleValue(
-                  lastHandle,
-                  "phone_number"
-                )}
-              />
-            ),
-          },
+          ...(handleTypes.includes("email_address")
+            ? [
+                {
+                  id: TAB_NAME.email,
+                  title: text["initial.handle.email"],
+                  content: (
+                    <HandleInput
+                      factors={nonOidcFactors}
+                      handleType="email_address"
+                      defaultValue={resolveLastHandleValue(
+                        lastHandle,
+                        "email_address"
+                      )}
+                    />
+                  ),
+                },
+              ]
+            : []),
+          ...(handleTypes.includes("phone_number")
+            ? [
+                {
+                  id: TAB_NAME.phone,
+                  title: text["initial.handle.phone"],
+                  content: (
+                    <HandleInput
+                      factors={nonOidcFactors}
+                      handleType="phone_number"
+                      defaultValue={resolveLastHandleValue(
+                        lastHandle,
+                        "phone_number"
+                      )}
+                    />
+                  ),
+                },
+              ]
+            : []),
+
+          ...(handleTypes.includes("username")
+            ? [
+                {
+                  id: TAB_NAME.username,
+                  title: text["initial.handle.username"],
+                  content: (
+                    <HandleInput
+                      factors={nonOidcFactors}
+                      handleType="username"
+                      defaultValue={resolveLastHandleValue(
+                        lastHandle,
+                        "username"
+                      )}
+                    />
+                  ),
+                },
+              ]
+            : []),
         ]}
       />
     );
@@ -359,6 +392,27 @@ const HandleInput: React.FC<PropsInternal> = ({
             },
           })}
           onFlagChange={setFlag}
+        />
+      );
+    }
+
+    if (handleType === "username") {
+      return (
+        <Input
+          className={sprinkles({ marginTop: "4" })}
+          id={`sid-input-${handleType}`}
+          name={handleType}
+          label={text["initial.handle.username"]}
+          placeholder={text["initial.handle.username.placeholder"]}
+          value={values[handleType] ?? ""}
+          onChange={registerField(handleType, {
+            defaultValue,
+            validator: (value) => {
+              if (!isValidUsername(value)) {
+                return { message: text["validationError.email"] };
+              }
+            },
+          })}
         />
       );
     }

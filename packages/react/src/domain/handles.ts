@@ -26,6 +26,8 @@ const FACTORS_WITH_EMAIL = [
   "password",
 ];
 const FACTORS_WITH_PHONE = ["otp_via_sms", "sms_link", "password"];
+// TODO: add TOTP later when available
+const FACTORS_WITH_USERNAME = ["password"];
 const SSO_FACTORS = ["oidc", "saml"];
 
 function isHandleTypeAllowed(
@@ -33,7 +35,8 @@ function isHandleTypeAllowed(
   handleType: HandleType
 ): boolean {
   if (!isFactorWithAllowedHandleTypes(factor)) {
-    return true;
+    // usernames are opt in so no allowed handle types means it's not allowed, eg email and phone handles are allowed
+    return handleType !== "username";
   }
 
   return factor.allowedHandleTypes!.includes(handleType);
@@ -56,6 +59,13 @@ function getPossibleHandleTypes(
     isHandleTypeAllowed(factor, "phone_number")
   ) {
     handleTypes.add("phone_number");
+  }
+
+  if (
+    FACTORS_WITH_USERNAME.includes(factor.method) &&
+    isHandleTypeAllowed(factor, "username")
+  ) {
+    handleTypes.add("username");
   }
 
   return handleTypes;

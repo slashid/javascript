@@ -23,6 +23,7 @@ import { ErrorMessage } from "../form/error-message";
 import {
   isValidEmail,
   isValidPhoneNumber,
+  isValidUsername,
 } from "../form/authenticating/validation";
 import { TextConfigKey } from "../text/constants";
 
@@ -101,6 +102,27 @@ export const HandleForm: React.FC<Props> = ({
             },
           })}
           onFlagChange={setFlag}
+        />
+      );
+    }
+
+    if (handleType === "username") {
+      return (
+        <Input
+          className={sprinkles({ marginTop: "4" })}
+          id={`sid-input-${handleType}`}
+          name={handleType}
+          label={text["initial.handle.username"]}
+          placeholder={text["initial.handle.username.placeholder"]}
+          value={values[handleType] ?? ""}
+          onChange={registerField(handleType, {
+            defaultValue,
+            validator: (value) => {
+              if (!isValidUsername(value)) {
+                return { message: text["validationError.email"] };
+              }
+            },
+          })}
         />
       );
     }
