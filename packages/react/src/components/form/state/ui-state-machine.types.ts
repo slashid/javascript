@@ -34,6 +34,7 @@ export interface State<T = AuthenticatingUIStatus> {
 
 export interface InputState<T> extends State<T> {
   submit: (...values: string[]) => void;
+  error?: string;
 }
 
 export interface VerifyPasswordState extends InputState<PasswordStatus> {

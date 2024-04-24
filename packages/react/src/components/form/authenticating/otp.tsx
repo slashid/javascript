@@ -1,11 +1,16 @@
-import { FormEventHandler, useCallback, useEffect, useRef } from "react";
+import {
+  FormEventHandler,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 import { Factor } from "@slashid/slashid";
 import { OtpInput, Delayed } from "@slashid/react-primitives";
 
 import { useConfiguration } from "../../../hooks/use-configuration";
 import { useForm } from "../../../hooks/use-form";
-import { useSlashID } from "../../../main";
 import { Props } from "./authenticating.types";
 import { getAuthenticatingMessage } from "./messages";
 import { OTP_CODE_LENGTH, isValidOTPCode } from "./validation";
@@ -38,7 +43,6 @@ const BASE_RETRY_DELAY = 2000;
  */
 export const OTPState = ({ flowState }: Props) => {
   const { text } = useConfiguration();
-  const { sid } = useSlashID();
   const { values, registerField, registerSubmit, setError, clearError } =
     useForm();
   const submitInputRef = useRef<HTMLInputElement>(null);
@@ -50,28 +54,30 @@ export const OTPState = ({ flowState }: Props) => {
     hasRetried,
   });
 
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+
   const handleSubmit: FormEventHandler<HTMLFormElement> = useCallback(
     (e) => {
       e.preventDefault();
       const uiState = flowState.getChildState();
       if (!isInputState(uiState)) return;
-
       uiState.submit(values["otp"]);
+      setHasSubmitted(true);
     },
     [values, flowState]
   );
 
   useEffect(() => {
-    const handler = () => {
+    const uiState = flowState.getChildState();
+
+    if (isInputState(uiState) && uiState.error && hasSubmitted) {
+      setHasSubmitted(false);
       setError("otp", {
         message: text["authenticating.otpInput.submit.error"],
       });
       values["otp"] = "";
-    };
-    sid?.subscribe("otpIncorrectCodeSubmitted", handler);
-
-    return () => sid?.unsubscribe("otpIncorrectCodeSubmitted", handler);
-  }, [setError, sid, text, values]);
+    }
+  }, [flowState, setError, values, text, hasSubmitted]);
 
   const handleChange = useCallback(
     (otp: string) => {

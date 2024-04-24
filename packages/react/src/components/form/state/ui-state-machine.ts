@@ -101,11 +101,22 @@ type UIEvent =
   | {
       type: "sid_ui.userAuthenticated";
       user: User;
+    }
+  | {
+      type: "sid_ui.recoverableError";
+      error: string;
     };
 
 type Event = FlowEvent | UIEvent;
 
 class OTPUIStateMachine extends UIStateMachine<OTPStatus> {
+  private incorrectOTPCodeSubmittedHandler = () => {
+    this.send({
+      type: "sid_ui.recoverableError",
+      error: "otpIncorrectCodeSubmitted",
+    });
+  };
+
   constructor(opts: UIStateMachineOpts) {
     const otpCodeSentHandler = () => {
       this.send({ type: "sid_ui.otpCodeSent" });
@@ -115,9 +126,17 @@ class OTPUIStateMachine extends UIStateMachine<OTPStatus> {
       status: "initial",
       entry: () => {
         this.sid.subscribe("otpCodeSent", otpCodeSentHandler);
+        this.sid.subscribe(
+          "otpIncorrectCodeSubmitted",
+          this.incorrectOTPCodeSubmittedHandler
+        );
 
         this.logInFn(this.context.config, this.context.options)
           .then((user) => {
+            this.sid.unsubscribe(
+              "otpIncorrectCodeSubmitted",
+              this.incorrectOTPCodeSubmittedHandler
+            );
             if (!user) {
               this.send({
                 type: "sid_login.error",
@@ -154,6 +173,19 @@ class OTPUIStateMachine extends UIStateMachine<OTPStatus> {
         this.transition({
           status: "submitting",
         });
+        break;
+
+      case "sid_ui.recoverableError":
+        this.transition(
+          createInputState(
+            "input",
+            (otp) => {
+              this.sid.publish("otpCodeSubmitted", otp);
+              this.send({ type: "sid_ui.otpCodeSubmitted" });
+            },
+            e.error
+          )
+        );
         break;
 
       default:
@@ -407,11 +439,13 @@ export function createUIStateMachine(
 
 function createInputState<T = AuthenticatingUIStatus>(
   status: T,
-  submit: (...values: string[]) => void
+  submit: (...values: string[]) => void,
+  error?: string
 ): InputState<T> {
   return {
     status,
     submit,
+    error,
   };
 }
 
