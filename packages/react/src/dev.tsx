@@ -317,10 +317,6 @@ root.render(
   <React.StrictMode>
     <SlashIDProvider
       oid={import.meta.env.VITE_ORG_ID}
-      environment={{
-        baseURL: "https://api.slashid.local",
-        sdkURL: "https://cdn.slashid.local",
-      }}
       themeProps={{ theme: "dark" }}
       tokenStorage="memory"
       analyticsEnabled

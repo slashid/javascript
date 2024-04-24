@@ -18,6 +18,7 @@ export class FormPage {
   readonly authenticatingState: Locator;
   readonly successState: Locator;
   readonly errorMessage: Locator;
+  readonly emailIcon: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -26,6 +27,7 @@ export class FormPage {
     );
     this.successState = this.page.getByTestId("sid-form-success-state");
     this.errorMessage = this.page.getByTestId("sid-form-error-message");
+    this.emailIcon = this.page.getByTestId("sid-email-icon");
   }
 
   async load() {

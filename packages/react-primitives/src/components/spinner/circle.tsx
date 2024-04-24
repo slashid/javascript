@@ -9,6 +9,7 @@ type Props = {
   variant?: Variant;
   shouldAnimate?: boolean;
   children: ReactNode;
+  testId?: string;
 };
 
 export const Circle: React.FC<Props> = ({
@@ -16,8 +17,9 @@ export const Circle: React.FC<Props> = ({
   className,
   variant = "blue",
   shouldAnimate = true,
+  testId,
 }) => (
-  <div className={clsx(styles.background, className)}>
+  <div className={clsx(styles.background, className)} data-testid={testId}>
     <div
       className={clsx(styles.outerCircleVariants[variant], {
         [styles.outerCircleWithAnimation]: shouldAnimate,
