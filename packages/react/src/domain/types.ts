@@ -62,6 +62,8 @@ export type FactorEmailLink = Extract<Factor, { method: "email_link" }>;
 
 export type FactorSmsLink = Extract<Factor, { method: "sms_link" }>;
 
+export type FactorTOTP = Extract<Factor, { method: "totp" }>;
+
 /**
  * Utility type to specify allowed handle types in case given factor supports more than one.
  */

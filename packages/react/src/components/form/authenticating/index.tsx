@@ -1,4 +1,8 @@
-import { isFactorOTP, isFactorPassword } from "../../../domain/handles";
+import {
+  isFactorOTP,
+  isFactorPassword,
+  isFactorTOTP,
+} from "../../../domain/handles";
 import { Text } from "../../text";
 
 import { getAuthenticatingMessage } from "./messages";
@@ -13,6 +17,7 @@ import {
 
 import * as styles from "./authenticating.css";
 import { useEffect, useRef } from "react";
+import { TOTPState } from "./totp";
 
 const LoadingState = ({ flowState, performLogin }: Props) => {
   const factor = flowState.context.config.factor;
@@ -68,6 +73,14 @@ export const Authenticating = ({ flowState }: Props) => {
     return (
       <Wrapper>
         <PasswordState flowState={flowState} performLogin={performLogin} />
+      </Wrapper>
+    );
+  }
+
+  if (isFactorTOTP(factor)) {
+    return (
+      <Wrapper>
+        <TOTPState flowState={flowState} performLogin={performLogin} />
       </Wrapper>
     );
   }

@@ -7,6 +7,7 @@ import { isFactorEmailLink, isFactorSmsLink } from "../../../domain/handles";
 import { EmailIcon, SmsIcon, Loader } from "./icons";
 
 import * as styles from "./authenticating.css";
+import { TextConfigKey } from "../../text/constants";
 
 export const BackButton = ({ onCancel }: { onCancel: () => void }) => {
   const { text } = useConfiguration();
@@ -19,6 +20,32 @@ export const BackButton = ({ onCancel }: { onCancel: () => void }) => {
     >
       {text["authenticating.back"]}
     </LinkButton>
+  );
+};
+
+type PromptProps = {
+  onClick: () => void;
+  prompt: TextConfigKey;
+  cta: TextConfigKey;
+};
+
+export const Prompt = ({ onClick, prompt, cta }: PromptProps) => {
+  const { text } = useConfiguration();
+  return (
+    <div className={styles.prompt}>
+      <Text
+        variant={{ size: "sm", color: "tertiary", weight: "semibold" }}
+        t={prompt}
+      />
+      <LinkButton
+        className={sprinkles({ marginLeft: "1" })}
+        type="button"
+        testId="sid-form-prompt-cta"
+        onClick={onClick}
+      >
+        {text[cta]}
+      </LinkButton>
+    </div>
   );
 };
 
