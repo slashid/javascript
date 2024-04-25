@@ -50,7 +50,7 @@ export function StoreRecoveryCodes({ flowState }: Props) {
         <DownloadCodes codes={flowState.context.recoveryCodes} />
         <Button
           className={sprinkles({
-            marginTop: "6",
+            marginTop: "2",
           })}
           type="submit"
           variant="primary"
