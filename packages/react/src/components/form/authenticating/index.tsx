@@ -12,7 +12,7 @@ import { Props } from "./authenticating.types";
 import { BackButton, FactorIcon, Prompt } from "./authenticating.components";
 
 import * as styles from "./authenticating.css";
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { TOTPState } from "./totp";
 
 const LoadingState = ({ flowState, performLogin }: Props) => {
@@ -54,12 +54,12 @@ export const Authenticating = ({ flowState }: Pick<Props, "flowState">) => {
   const factor = flowState.context.config.factor;
   const isLoggingIn = useRef(false);
 
-  const performLogin = () => {
+  const performLogin = useCallback(() => {
     if (isLoggingIn.current) return;
 
     flowState.logIn();
     isLoggingIn.current = true;
-  };
+  }, [flowState]);
 
   if (isFactorOTP(factor)) {
     return (
