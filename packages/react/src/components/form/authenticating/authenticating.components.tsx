@@ -49,26 +49,6 @@ export const Prompt = ({ onClick, prompt, cta }: PromptProps) => {
   );
 };
 
-export const RetryPrompt = ({ onRetry }: { onRetry: () => void }) => {
-  const { text } = useConfiguration();
-  return (
-    <div className={styles.retryPrompt}>
-      <Text
-        variant={{ size: "sm", color: "tertiary", weight: "semibold" }}
-        t="authenticating.retryPrompt"
-      />
-      <LinkButton
-        className={sprinkles({ marginLeft: "1" })}
-        type="button"
-        testId="sid-form-authenticating-retry-button"
-        onClick={onRetry}
-      >
-        {text["authenticating.retry"]}
-      </LinkButton>
-    </div>
-  );
-};
-
 export const FactorIcon = ({ factor }: { factor: Factor }) => {
   if (isFactorEmailLink(factor)) {
     return <EmailIcon />;
