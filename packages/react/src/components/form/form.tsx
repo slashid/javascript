@@ -112,9 +112,7 @@ export const Form = ({
             <FormProvider>{slots.authenticating}</FormProvider>
           )}
           {flowState.status === "storeRecoveryCodes" && (
-            <FormProvider>
-              <StoreRecoveryCodes flowState={flowState} />
-            </FormProvider>
+            <StoreRecoveryCodes flowState={flowState} />
           )}
           {flowState.status === "success" && slots.success}
           {flowState.status === "error" && slots.error}
