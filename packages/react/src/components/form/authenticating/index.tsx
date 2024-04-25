@@ -12,10 +12,15 @@ import {
 } from "./authenticating.components";
 
 import * as styles from "./authenticating.css";
+import { useEffect, useRef } from "react";
 
-const LoadingState = ({ flowState }: Props) => {
+const LoadingState = ({ flowState, performLogin }: Props) => {
   const factor = flowState.context.config.factor;
   const { title, message } = getAuthenticatingMessage(factor);
+
+  useEffect(() => {
+    performLogin();
+  }, [performLogin]);
 
   return (
     <>
@@ -42,11 +47,19 @@ function Wrapper({ children }: { children: React.ReactNode }) {
 
 export const Authenticating = ({ flowState }: Props) => {
   const factor = flowState.context.config.factor;
+  const isLoggingIn = useRef(false);
+
+  const performLogin = () => {
+    if (isLoggingIn.current) return;
+    console.log("logging in!");
+    flowState.logIn();
+    isLoggingIn.current = true;
+  };
 
   if (isFactorOTP(factor)) {
     return (
       <Wrapper>
-        <OTPState flowState={flowState} />
+        <OTPState flowState={flowState} performLogin={performLogin} />
       </Wrapper>
     );
   }
@@ -54,14 +67,14 @@ export const Authenticating = ({ flowState }: Props) => {
   if (isFactorPassword(factor)) {
     return (
       <Wrapper>
-        <PasswordState flowState={flowState} />
+        <PasswordState flowState={flowState} performLogin={performLogin} />
       </Wrapper>
     );
   }
 
   return (
     <Wrapper>
-      <LoadingState flowState={flowState} />
+      <LoadingState flowState={flowState} performLogin={performLogin} />
     </Wrapper>
   );
 };

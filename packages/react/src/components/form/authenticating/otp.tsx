@@ -41,7 +41,7 @@ const BASE_RETRY_DELAY = 2000;
  * Presents the user with a form to enter an OTP code.
  * Handles retries in case of submitting an incorrect OTP code.
  */
-export const OTPState = ({ flowState }: Props) => {
+export const OTPState = ({ flowState, performLogin }: Props) => {
   const { text } = useConfiguration();
   const { sid } = useSlashID();
   const { values, registerField, registerSubmit, setError, clearError } =
@@ -58,6 +58,29 @@ export const OTPState = ({ flowState }: Props) => {
     hasRetried,
   });
 
+  useEffect(() => {
+    const onOtpCodeSent = () => setFormState("input");
+    const onOtpIncorrectCodeSubmitted = () => {
+      setError("otp", {
+        message: text["authenticating.otpInput.submit.error"],
+      });
+      values["otp"] = "";
+    };
+    if (formState === "initial") {
+      sid?.subscribe("otpCodeSent", onOtpCodeSent);
+      sid?.subscribe("otpIncorrectCodeSubmitted", onOtpIncorrectCodeSubmitted);
+      performLogin();
+    }
+
+    return () => {
+      sid?.unsubscribe("otpCodeSent", onOtpCodeSent);
+      sid?.unsubscribe(
+        "otpIncorrectCodeSubmitted",
+        onOtpIncorrectCodeSubmitted
+      );
+    };
+  }, [formState, performLogin, setError, sid, text, values]);
+
   const handleSubmit: FormEventHandler<HTMLFormElement> = useCallback(
     (e) => {
       e.preventDefault();
@@ -67,18 +90,6 @@ export const OTPState = ({ flowState }: Props) => {
     },
     [sid, values]
   );
-
-  useEffect(() => {
-    const handler = () => {
-      setError("otp", {
-        message: text["authenticating.otpInput.submit.error"],
-      });
-      values["otp"] = "";
-    };
-    sid?.subscribe("otpIncorrectCodeSubmitted", handler);
-
-    return () => sid?.unsubscribe("otpIncorrectCodeSubmitted", handler);
-  }, [setError, sid, text, values]);
 
   const handleChange = useCallback(
     (otp: string) => {
@@ -113,13 +124,6 @@ export const OTPState = ({ flowState }: Props) => {
       submitInputRef.current?.click();
     }
   }, [values]);
-
-  useEffect(() => {
-    const onOtpCodeSent = () => setFormState("input");
-    if (formState === "initial") {
-      sid?.subscribe("otpCodeSent", onOtpCodeSent);
-    }
-  }, [formState, sid]);
 
   return (
     <>

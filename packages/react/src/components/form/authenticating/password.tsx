@@ -131,7 +131,7 @@ function getTextKeys(
  * Renders a form that enables authentication via a password.
  * Handles retries in case of submitting an invalid/incorrect password.
  */
-export const PasswordState = ({ flowState }: Props) => {
+export const PasswordState = ({ flowState, performLogin }: Props) => {
   const { sid } = useSlashID();
   const { text } = useConfiguration();
   const {
@@ -237,10 +237,14 @@ export const PasswordState = ({ flowState }: Props) => {
         ),
       });
 
-    sid?.subscribe("passwordSetReady", onSetPassword);
-    sid?.subscribe("passwordVerifyReady", onVerifyPassword);
-    sid?.subscribe("incorrectPasswordSubmitted", onIncorrectPassword);
-    sid?.subscribe("invalidPasswordSubmitted", onInvalidPassword);
+    if (formState === "initial") {
+      sid?.subscribe("passwordSetReady", onSetPassword);
+      sid?.subscribe("passwordVerifyReady", onVerifyPassword);
+      sid?.subscribe("incorrectPasswordSubmitted", onIncorrectPassword);
+      sid?.subscribe("invalidPasswordSubmitted", onInvalidPassword);
+
+      performLogin();
+    }
 
     return () => {
       sid?.unsubscribe("passwordSetReady", onSetPassword);
@@ -248,7 +252,7 @@ export const PasswordState = ({ flowState }: Props) => {
       sid?.unsubscribe("incorrectPasswordSubmitted", onIncorrectPassword);
       sid?.unsubscribe("invalidPasswordSubmitted", onInvalidPassword);
     };
-  }, [setError, sid, text, values]);
+  }, [formState, performLogin, setError, sid, text, values]);
 
   return (
     <>

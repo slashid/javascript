@@ -26,7 +26,7 @@ export interface AuthenticatingState {
   retry: Retry;
   cancel: Cancel;
   recover: () => void;
-  entry: () => void;
+  logIn: () => void;
 }
 
 export interface SuccessState {
@@ -155,7 +155,7 @@ const createAuthenticatingState = (
       // Cancellation API needs to be exposed from the core SDK
       send({ type: "sid_cancel" });
     },
-    entry: performLogin,
+    logIn: performLogin,
   };
 };
 
@@ -226,11 +226,6 @@ export function createFlow(opts: CreateFlowOptions = {}) {
 
     // keep a history of state transitions for debugging purposes
     history.push({ state, event: changeEvent });
-
-    // trigger the state entry function if present
-    if (typeof state.entry === "function") {
-      state.entry();
-    }
 
     observers.forEach((o) => o(state, changeEvent));
   }
