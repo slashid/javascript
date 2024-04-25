@@ -49,8 +49,8 @@ jobs:
       - name: Run E2E tests
         env:
           CI: true
-          MAILINATOR_API_KEY: ${{ secrets.MAILINATOR_API_KEY }}
-          MAILINATOR_TEAM_DOMAIN: ${{ secrets.MAILINATOR_TEAM_DOMAIN }}
+          MAILOSAUR_API_KEY: ${{ secrets.MAILOSAUR_API_KEY }}
+          MAILOSAUR_SERVER_ID: ${{ secrets.MAILOSAUR_SERVER_ID }}
           APP_NAME: ${{ matrix.app-name }}
         run: pnpm test:e2e --filter tests
 
