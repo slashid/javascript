@@ -84,11 +84,13 @@ export function TOTPState({ flowState, performLogin }: Props) {
     };
 
     const totpKeyGeneratedHandler = (e: TotpKeyGenerated) => {
-      setQrCode(e.qrCode);
-      setUri(e.uri);
-      flowState.setRecoveryCodes(e.recoveryCodes);
-      setIsRegisterFlow(true);
-      setFormState("registerAuthenticator");
+      if (!isRegisterFlow) {
+        setQrCode(e.qrCode);
+        setUri(e.uri);
+        flowState.setRecoveryCodes(e.recoveryCodes);
+        setIsRegisterFlow(true);
+        setFormState("registerAuthenticator");
+      }
     };
 
     const totpCodeRequestedHandler = () => {
@@ -112,7 +114,16 @@ export function TOTPState({ flowState, performLogin }: Props) {
       sid?.unsubscribe("totpCodeRequested", totpCodeRequestedHandler);
       sid?.unsubscribe("totpKeyGenerated", totpKeyGeneratedHandler);
     };
-  }, [formState, setError, sid, text, values, performLogin, flowState]);
+  }, [
+    formState,
+    setError,
+    sid,
+    text,
+    values,
+    performLogin,
+    flowState,
+    isRegisterFlow,
+  ]);
 
   const handleChange = useCallback(
     (otp: string) => {

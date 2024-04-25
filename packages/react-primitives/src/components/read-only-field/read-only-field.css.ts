@@ -17,7 +17,7 @@ export const field = style({
   border: "none",
   outline: "none",
   fontSize: theme.font.size.base,
-  fontWeight: theme.font.weight.semibold,
+  fontWeight: theme.font.weight.medium,
   color: publicVariables.color.foreground,
   backgroundColor: publicVariables.color.offset,
   lineHeight: "150%",

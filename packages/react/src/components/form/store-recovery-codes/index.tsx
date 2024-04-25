@@ -2,6 +2,7 @@ import { Button, sprinkles, ReadOnlyField } from "@slashid/react-primitives";
 import { DownloadCodes } from "./download-codes";
 import { useConfiguration } from "../../../hooks/use-configuration";
 import { Text } from "@slashid/react-primitives";
+import * as styles from "./store-recovery-codes.css";
 
 export interface StoreRecoveryCodesState {
   status: "storeRecoveryCodes";
@@ -43,9 +44,7 @@ export function StoreRecoveryCodes({ flowState }: Props) {
           )}
           rows={8}
           copy
-          className={sprinkles({
-            marginTop: "12",
-          })}
+          className={styles.recoveryCodes}
         />
         <DownloadCodes codes={flowState.context.recoveryCodes} />
         <Button
