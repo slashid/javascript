@@ -65,12 +65,12 @@ export const OTPState = ({ flowState, performLogin }: Props) => {
         message: text["authenticating.otpInput.submit.error"],
       });
       values["otp"] = "";
+      setFormState("input");
     };
-    if (formState === "initial") {
-      sid?.subscribe("otpCodeSent", onOtpCodeSent);
-      sid?.subscribe("otpIncorrectCodeSubmitted", onOtpIncorrectCodeSubmitted);
-      performLogin();
-    }
+
+    sid?.subscribe("otpCodeSent", onOtpCodeSent);
+    sid?.subscribe("otpIncorrectCodeSubmitted", onOtpIncorrectCodeSubmitted);
+    performLogin();
 
     return () => {
       sid?.unsubscribe("otpCodeSent", onOtpCodeSent);

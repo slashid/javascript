@@ -237,14 +237,12 @@ export const PasswordState = ({ flowState, performLogin }: Props) => {
         ),
       });
 
-    if (formState === "initial") {
-      sid?.subscribe("passwordSetReady", onSetPassword);
-      sid?.subscribe("passwordVerifyReady", onVerifyPassword);
-      sid?.subscribe("incorrectPasswordSubmitted", onIncorrectPassword);
-      sid?.subscribe("invalidPasswordSubmitted", onInvalidPassword);
+    sid?.subscribe("passwordSetReady", onSetPassword);
+    sid?.subscribe("passwordVerifyReady", onVerifyPassword);
+    sid?.subscribe("incorrectPasswordSubmitted", onIncorrectPassword);
+    sid?.subscribe("invalidPasswordSubmitted", onInvalidPassword);
 
-      performLogin();
-    }
+    performLogin();
 
     return () => {
       sid?.unsubscribe("passwordSetReady", onSetPassword);
