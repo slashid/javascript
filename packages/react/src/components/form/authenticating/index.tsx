@@ -51,7 +51,7 @@ export const Authenticating = ({ flowState }: Props) => {
 
   const performLogin = () => {
     if (isLoggingIn.current) return;
-    console.log("logging in!");
+
     flowState.logIn();
     isLoggingIn.current = true;
   };
