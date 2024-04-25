@@ -10,6 +10,7 @@ import {
 } from "../../domain/types";
 import { ensureError } from "../../domain/errors";
 import { isFactorRecoverable } from "../../domain/handles";
+import { StoreRecoveryCodesState } from "./store-recovery-codes";
 
 export interface InitialState {
   status: "initial";
@@ -27,6 +28,7 @@ export interface AuthenticatingState {
   cancel: Cancel;
   recover: () => void;
   logIn: () => void;
+  setRecoveryCodes: (codes: string[]) => void;
 }
 
 export interface SuccessState {
@@ -71,13 +73,19 @@ interface InitEvent {
   type: "sid_init";
 }
 
+interface StoreRecoveryCodesEvent {
+  type: "sid_storeRecoveryCodes";
+  user: User;
+}
+
 type Event =
   | InitEvent
   | LoginEvent
   | LoginSuccessEvent
   | LoginErrorEvent
   | RetryEvent
-  | CancelEvent;
+  | CancelEvent
+  | StoreRecoveryCodesEvent;
 
 type FlowActions = {
   // a function that will be called when the state is entered
@@ -85,7 +93,13 @@ type FlowActions = {
 };
 
 export type FlowState = FlowActions &
-  (InitialState | AuthenticatingState | SuccessState | ErrorState);
+  (
+    | InitialState
+    | AuthenticatingState
+    | SuccessState
+    | ErrorState
+    | StoreRecoveryCodesState
+  );
 
 type Observer = (state: FlowState, event: Event) => void;
 type Send = (e: Event) => void;
@@ -103,20 +117,28 @@ const createAuthenticatingState = (
   send: Send,
   context: AuthenticatingState["context"],
   logInFn: LogIn | MFA,
-  recoverFn: Recover
+  recoverFn: Recover,
+  setRecoveryCodes: (codes: string[]) => void
 ): AuthenticatingState => {
-  // to be called when the state is entered
   function performLogin() {
     return logInFn(context.config, context.options)
       .then((user) => {
-        if (user) {
-          send({ type: "sid_login.success", user });
-        } else {
+        if (!user) {
           send({
             type: "sid_login.error",
             error: new Error("User not returned from /id"),
           });
+          return;
         }
+
+        if (context.config.factor.method === "totp") {
+          send({
+            type: "sid_storeRecoveryCodes",
+            user,
+          });
+          return;
+        }
+        send({ type: "sid_login.success", user });
       })
       .catch((error) => {
         send({ type: "sid_login.error", error });
@@ -156,6 +178,7 @@ const createAuthenticatingState = (
       send({ type: "sid_cancel" });
     },
     logIn: performLogin,
+    setRecoveryCodes,
   };
 };
 
@@ -177,6 +200,22 @@ const createErrorState = (
     },
     cancel: () => {
       send({ type: "sid_cancel" });
+    },
+  };
+};
+
+const createStoreRecoveryCodesState = (
+  send: Send,
+  recoveryCodes: string[],
+  user: User
+): StoreRecoveryCodesState => {
+  return {
+    status: "storeRecoveryCodes",
+    context: {
+      recoveryCodes,
+    },
+    confirm: () => {
+      send({ type: "sid_login.success", user });
     },
   };
 };
@@ -209,6 +248,7 @@ type HistoryEntry = {
 export function createFlow(opts: CreateFlowOptions = {}) {
   let logInFn: undefined | LogIn | MFA = undefined;
   let recoverFn: undefined | Recover = undefined;
+  let recoveryCodes: undefined | string[] = undefined;
   let observers: Observer[] = [];
   const send = (event: Event) => {
     transition(event);
@@ -230,6 +270,10 @@ export function createFlow(opts: CreateFlowOptions = {}) {
     observers.forEach((o) => o(state, changeEvent));
   }
 
+  const setRecoveryCodes = (codes: string[]) => {
+    recoveryCodes = codes;
+  };
+
   async function transition(e: Event) {
     switch (e.type) {
       case "sid_login":
@@ -243,7 +287,19 @@ export function createFlow(opts: CreateFlowOptions = {}) {
         };
 
         setState(
-          createAuthenticatingState(send, loginContext, logInFn, recoverFn),
+          createAuthenticatingState(
+            send,
+            loginContext,
+            logInFn,
+            recoverFn,
+            setRecoveryCodes
+          ),
+          e
+        );
+        break;
+      case "sid_storeRecoveryCodes":
+        setState(
+          createStoreRecoveryCodesState(send, recoveryCodes!, e.user),
           e
         );
         break;
@@ -281,7 +337,13 @@ export function createFlow(opts: CreateFlowOptions = {}) {
         };
 
         setState(
-          createAuthenticatingState(send, retryContext, logInFn, recoverFn),
+          createAuthenticatingState(
+            send,
+            retryContext,
+            logInFn,
+            recoverFn,
+            setRecoveryCodes
+          ),
           e
         );
         break;

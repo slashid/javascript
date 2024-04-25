@@ -50,7 +50,7 @@ function Wrapper({ children }: { children: React.ReactNode }) {
   );
 }
 
-export const Authenticating = ({ flowState }: Props) => {
+export const Authenticating = ({ flowState }: Pick<Props, "flowState">) => {
   const factor = flowState.context.config.factor;
   const isLoggingIn = useRef(false);
 

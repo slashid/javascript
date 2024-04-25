@@ -17,7 +17,6 @@ import {
   OtpInput,
   sprinkles,
   ReadOnlyField,
-  Download,
   Input,
   LinkButton,
 } from "@slashid/react-primitives";
@@ -95,7 +94,7 @@ export function TOTPState({ flowState, performLogin }: Props) {
     const totpKeyGeneratedHandler = (e: TotpKeyGenerated) => {
       setQrCode(e.qrCode);
       setUri(e.uri);
-      // TODO pass recovery codes to ctx
+      flowState.setRecoveryCodes(e.recoveryCodes);
       setFormState("registerAuthenticator");
     };
 
@@ -122,7 +121,7 @@ export function TOTPState({ flowState, performLogin }: Props) {
       sid?.unsubscribe("totpCodeRequested", totpCodeRequestedHandler);
       sid?.unsubscribe("totpKeyGenerated", totpKeyGeneratedHandler);
     };
-  }, [formState, setError, sid, text, values, performLogin]);
+  }, [formState, setError, sid, text, values, performLogin, flowState]);
 
   const handleChange = useCallback(
     (otp: string) => {
@@ -291,38 +290,6 @@ function Submit({ textKey, disabled }: SubmitProps) {
       disabled={disabled}
     >
       {text[textKey]}
-    </Button>
-  );
-}
-// TODO move this
-export function DownloadCodes({ codes }: { codes: string[] }) {
-  const { text } = useConfiguration();
-
-  const handleDownloadCodes = () => {
-    const download = document.createElement("a");
-    download.setAttribute(
-      "href",
-      `data:text/plain;charset=utf8,${encodeURIComponent(codes.join("\n"))}`
-    );
-    download.setAttribute("download", "recovery-codes.txt");
-
-    document.body.appendChild(download);
-    download.click();
-    document.body.removeChild(download);
-  };
-
-  return (
-    <Button
-      className={sprinkles({
-        marginTop: "6",
-      })}
-      type="button"
-      variant="secondary"
-      testId="sid-form-authenticating-download-codes-button"
-      onClick={handleDownloadCodes}
-      icon={<Download />}
-    >
-      {text["authenticating.downloadCodes"]}
     </Button>
   );
 }
