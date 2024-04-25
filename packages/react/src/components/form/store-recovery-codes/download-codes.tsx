@@ -1,7 +1,6 @@
 import { sprinkles, Button, Download } from "@slashid/react-primitives";
 import { useConfiguration } from "../../../hooks/use-configuration";
 
-// TODO move this
 export function DownloadCodes({ codes }: { codes: string[] }) {
   const { text } = useConfiguration();
 

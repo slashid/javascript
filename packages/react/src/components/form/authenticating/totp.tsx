@@ -27,14 +27,9 @@ import { ErrorMessage } from "../error-message";
 import * as styles from "./authenticating.css";
 import { TotpKeyGenerated } from "@slashid/slashid";
 
-type FormState =
-  | "initial"
-  | "registerAuthenticator"
-  | "input"
-  | "submitting"
-  | "saveRecoveryCodes";
+type FormState = "initial" | "registerAuthenticator" | "input" | "submitting";
 
-function getTextKeys(flowState: Props["flowState"], formState: FormState) {
+function getTextKeys(formState: FormState) {
   const TEXT_KEYS: Record<
     FormState,
     Record<"title" | "message" | "submit", TextConfigKey>
@@ -59,11 +54,6 @@ function getTextKeys(flowState: Props["flowState"], formState: FormState) {
       message: "authenticating.input.totp.message",
       submit: "authenticating.confirm",
     },
-    saveRecoveryCodes: {
-      title: "authenticating.saveRecoveryCodes.totp.title",
-      message: "authenticating.saveRecoveryCodes.totp.message",
-      submit: "authenticating.continue",
-    },
   };
 
   return TEXT_KEYS[formState];
@@ -75,9 +65,10 @@ export function TOTPState({ flowState, performLogin }: Props) {
   const { values, registerField, registerSubmit, setError, clearError } =
     useForm();
   const [formState, setFormState] = useState<FormState>("initial");
-  const { title, message, submit } = getTextKeys(flowState, formState);
+  const { title, message, submit } = getTextKeys(formState);
   const [showUri, setShowUri] = useState(false);
   const [useRecoveryCode, setUseRecoveryCode] = useState(false);
+  const [isRegisterFlow, setIsRegisterFlow] = useState(false);
   const submitInputRef = useRef<HTMLInputElement>(null);
 
   const [qrCode, setQrCode] = useState("");
@@ -89,12 +80,14 @@ export function TOTPState({ flowState, performLogin }: Props) {
         message: text["authenticating.otpInput.submit.error"],
       });
       values["totp"] = "";
+      setFormState("input");
     };
 
     const totpKeyGeneratedHandler = (e: TotpKeyGenerated) => {
       setQrCode(e.qrCode);
       setUri(e.uri);
       flowState.setRecoveryCodes(e.recoveryCodes);
+      setIsRegisterFlow(true);
       setFormState("registerAuthenticator");
     };
 
@@ -102,16 +95,14 @@ export function TOTPState({ flowState, performLogin }: Props) {
       setFormState("input");
     };
 
-    if (formState === "initial") {
-      sid?.subscribe(
-        "otpIncorrectCodeSubmitted",
-        otpIncorrectCodeSubmittedHandler
-      );
-      sid?.subscribe("totpCodeRequested", totpCodeRequestedHandler);
-      sid?.subscribe("totpKeyGenerated", totpKeyGeneratedHandler);
+    sid?.subscribe(
+      "otpIncorrectCodeSubmitted",
+      otpIncorrectCodeSubmittedHandler
+    );
+    sid?.subscribe("totpCodeRequested", totpCodeRequestedHandler);
+    sid?.subscribe("totpKeyGenerated", totpKeyGeneratedHandler);
 
-      performLogin();
-    }
+    performLogin();
 
     return () => {
       sid?.unsubscribe(
@@ -127,11 +118,13 @@ export function TOTPState({ flowState, performLogin }: Props) {
     (otp: string) => {
       const onChange = registerField("totp", {
         validator: (value) => {
+          if (useRecoveryCode) return;
           if (!useRecoveryCode && !isValidOTPCode(value)) {
             return { message: text["validationError.otp"] };
           }
         },
       });
+
       const event = {
         target: {
           value: otp,
@@ -211,7 +204,7 @@ export function TOTPState({ flowState, performLogin }: Props) {
                 placeholder="Log in with recovery code"
                 type="text"
                 value={values["totp"] ?? ""}
-                onChange={registerField("totp", {})}
+                onChange={(e) => handleChange(e.target.value)}
               />
             ) : (
               <div
@@ -226,17 +219,22 @@ export function TOTPState({ flowState, performLogin }: Props) {
                   onChange={handleChange}
                   numInputs={OTP_CODE_LENGTH}
                 />
-                <div className={styles.prompt}>
-                  <LinkButton
-                    className={sprinkles({
-                      marginTop: "4",
-                    })}
-                    type="button"
-                    onClick={() => setUseRecoveryCode(true)}
-                  >
-                    {text["authenticating.input.totp.cta"]}
-                  </LinkButton>
-                </div>
+                {!isRegisterFlow && (
+                  <div className={styles.prompt}>
+                    <LinkButton
+                      className={sprinkles({
+                        marginTop: "4",
+                      })}
+                      type="button"
+                      onClick={() => {
+                        clearError("totp");
+                        setUseRecoveryCode(true);
+                      }}
+                    >
+                      {text["authenticating.input.totp.cta"]}
+                    </LinkButton>
+                  </div>
+                )}
               </div>
             )}
 
@@ -247,26 +245,6 @@ export function TOTPState({ flowState, performLogin }: Props) {
         </form>
       )}
       {formState === "submitting" ? <Loader /> : null}
-      {/* TODO move this to a separate state  */}
-      {/* {isSaveRecoveryCodesState(uiState) && (
-        <form
-          onSubmit={registerSubmit((e) => {
-            e.preventDefault();
-            uiState.confirm();
-          })}
-        >
-          <ReadOnlyField
-            id="recoveryCodes"
-            as="textarea"
-            value={uiState.recoveryCodes.join(String.fromCharCode(13, 10))}
-            rows={8}
-            copy
-            className={styles.readOnly}
-          />
-          <DownloadCodes codes={uiState.recoveryCodes} />
-          <Submit textKey={submit} />
-        </form>
-      )} */}
     </>
   );
 }

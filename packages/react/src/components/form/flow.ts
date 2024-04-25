@@ -298,6 +298,12 @@ export function createFlow(opts: CreateFlowOptions = {}) {
         );
         break;
       case "sid_storeRecoveryCodes":
+        // recovery codes are only stored on register authenticator
+        if (!recoveryCodes) {
+          send({ type: "sid_login.success", user: e.user });
+          break;
+        }
+
         setState(
           createStoreRecoveryCodesState(send, recoveryCodes!, e.user),
           e

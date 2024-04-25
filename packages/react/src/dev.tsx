@@ -195,7 +195,10 @@ const BasicForm = () => {
     >
       <SlashIDLoaded>
         <>
-          <LoggedIn>Logged in!</LoggedIn>
+          <LoggedIn>
+            MFA
+            <Form factors={[{ method: "totp" }]} />
+          </LoggedIn>
           <LoggedOut>
             <Form
               onError={(error, context) =>
@@ -317,19 +320,23 @@ root.render(
   <React.StrictMode>
     <SlashIDProvider
       oid={import.meta.env.VITE_ORG_ID}
+      environment={{
+        baseURL: "https://api.slashid.local",
+        sdkURL: "https://cdn.slashid.local/sdk.html",
+      }}
       themeProps={{ theme: "dark" }}
-      tokenStorage="memory"
+      tokenStorage="localStorage"
       analyticsEnabled
       anonymousUsersEnabled
     >
       <LogOut />
       <div className="layout">
         <div>
-          <div style={vars}>
+          <div>
             <h2>Basic form</h2>
             <BasicForm />
           </div>
-          <div>
+          <div style={vars}>
             <h2>Composed form</h2>
             <ComposedForm />
           </div>
