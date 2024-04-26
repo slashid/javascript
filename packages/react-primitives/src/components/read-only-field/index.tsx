@@ -1,7 +1,8 @@
 import { Copy } from "../icon/copy";
 import clsx from "clsx";
 import * as styles from "./read-only-field.css";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Check } from "../icon";
 
 type ReadOnlyPropsField = {
   value: string;
@@ -29,10 +30,12 @@ export function ReadOnlyField({
 }: ReadOnlyPropsField) {
   const Component = as;
   const inputRef = useRef<HTMLElement>(null);
+  const [hasCopied, setHasCopied] = useState(false);
 
   const copyToClipBoard = () => {
     if (typeof window !== "undefined") {
       navigator.clipboard.writeText(value);
+      setHasCopied(true);
     }
   };
 
@@ -46,6 +49,14 @@ export function ReadOnlyField({
       { passive: false }
     );
   }, []);
+
+  useEffect(() => {
+    if (hasCopied) {
+      setTimeout(() => {
+        setHasCopied(false);
+      }, 2000);
+    }
+  }, [hasCopied]);
 
   return (
     <div className={clsx(styles.wrapper, className)}>
@@ -99,7 +110,7 @@ export function ReadOnlyField({
             [styles.copyButtonWithLabel]: Boolean(label),
           })}
         >
-          <Copy />
+          {hasCopied ? <Check /> : <Copy />}
         </button>
       )}
     </div>
