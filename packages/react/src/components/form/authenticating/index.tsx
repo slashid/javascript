@@ -52,11 +52,18 @@ function Wrapper({ children }: { children: React.ReactNode }) {
 
 export const Authenticating = ({ flowState }: Pick<Props, "flowState">) => {
   const factor = flowState.context.config.factor;
+  const attempt = useRef(1);
   const isLoggingIn = useRef(false);
 
   const performLogin = useCallback(() => {
+    if (flowState.context.attempt > attempt.current) {
+      attempt.current = flowState.context.attempt;
+      isLoggingIn.current = false;
+    }
+
     if (isLoggingIn.current) return;
 
+    console.log("LOGIN FLOW");
     flowState.logIn();
     isLoggingIn.current = true;
   }, [flowState]);
