@@ -22,6 +22,7 @@ import * as styles from "./authenticating.css";
 import { isFactorOTPEmail, isFactorOTPSms } from "../../../domain/handles";
 import { EmailIcon, SmsIcon, Loader } from "./icons";
 import { BackButton, Prompt } from "./authenticating.components";
+import { BASE_RETRY_DELAY_MS } from "./authenticating.constants";
 
 const FactorIcon = ({ factor }: { factor: Factor }) => {
   if (isFactorOTPEmail(factor)) {
@@ -34,8 +35,6 @@ const FactorIcon = ({ factor }: { factor: Factor }) => {
 
   return <Loader />;
 };
-
-const BASE_RETRY_DELAY = 2000;
 
 /**
  * Presents the user with a form to enter an OTP code.
@@ -159,7 +158,7 @@ export const OTPState = ({ flowState, performLogin }: Props) => {
       {formState === "input" && (
         // fallback to prevent layout shift
         <Delayed
-          delayMs={BASE_RETRY_DELAY * flowState.context.attempt}
+          delayMs={BASE_RETRY_DELAY_MS * flowState.context.attempt}
           fallback={<div style={{ height: 16 }} />}
         >
           <div className={styles.wrapper}>
