@@ -18,7 +18,7 @@ export const TEXT = {
   "authenticating.password.label": "Password",
   "authenticating.password.placeholder": "Type your password",
   "authenticating.passwordConfirm.label": "Confirm password",
-  "authenticating.retryPrompt": "Didn’t receive the code?",
+  "authenticating.retryPrompt": "Didn’t receive the message?",
   "authenticating.retry": "Resend",
   "authenticating.back": "Back",
   "authenticating.initial.password.title": "Log in with a password.",
