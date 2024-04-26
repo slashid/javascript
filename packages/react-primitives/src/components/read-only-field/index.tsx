@@ -11,6 +11,7 @@ type ReadOnlyPropsField = {
   rows?: number;
   copy?: boolean;
   className?: string;
+  fieldClassName?: string;
 };
 
 /**
@@ -24,6 +25,7 @@ export function ReadOnlyField({
   rows,
   copy,
   className,
+  fieldClassName,
 }: ReadOnlyPropsField) {
   const Component = as;
   const inputRef = useRef<HTMLElement>(null);
@@ -55,10 +57,14 @@ export function ReadOnlyField({
       {as === "div" ? (
         <Component
           id="id"
-          className={clsx(styles.field, {
-            [styles.fieldWithLabel]: Boolean(label),
-            [styles.fieldWithCopy]: copy,
-          })}
+          className={clsx(
+            styles.field,
+            {
+              [styles.fieldWithLabel]: Boolean(label),
+              [styles.fieldWithCopy]: copy,
+            },
+            fieldClassName
+          )}
         >
           {value.split("\n").map((v) => (
             <span key={v}>{v}</span>
@@ -70,10 +76,14 @@ export function ReadOnlyField({
           type="text"
           value={value}
           rows={rows}
-          className={clsx(styles.field, {
-            [styles.fieldWithLabel]: Boolean(label),
-            [styles.fieldWithCopy]: copy,
-          })}
+          className={clsx(
+            styles.field,
+            {
+              [styles.fieldWithLabel]: Boolean(label),
+              [styles.fieldWithCopy]: copy,
+            },
+            fieldClassName
+          )}
           readOnly
           disabled
           // @ts-ignore

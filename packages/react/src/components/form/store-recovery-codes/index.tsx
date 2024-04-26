@@ -16,6 +16,12 @@ type Props = {
   flowState: StoreRecoveryCodesState;
 };
 
+function getFieldValueFromCodes(codes: string[]): string {
+  const newLine = String.fromCharCode(13, 10);
+
+  return codes.join(newLine);
+}
+
 export function StoreRecoveryCodes({ flowState }: Props) {
   const { text } = useConfiguration();
 
@@ -39,11 +45,10 @@ export function StoreRecoveryCodes({ flowState }: Props) {
         <ReadOnlyField
           id="recoveryCodes"
           as="div"
-          value={flowState.context.recoveryCodes.join(
-            String.fromCharCode(13, 10)
-          )}
+          value={getFieldValueFromCodes(flowState.context.recoveryCodes)}
           copy
           className={styles.recoveryCodes}
+          fieldClassName={styles.recoveryCodesField}
         />
         <DownloadCodes codes={flowState.context.recoveryCodes} />
         <Button
@@ -52,7 +57,7 @@ export function StoreRecoveryCodes({ flowState }: Props) {
           })}
           type="submit"
           variant="primary"
-          testId="sid-form-authenticating-submit-button"
+          testId="sid-form-recovery-codes-submit-button"
         >
           {text["authenticating.continue"]}
         </Button>
