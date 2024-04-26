@@ -38,11 +38,10 @@ export function StoreRecoveryCodes({ flowState }: Props) {
       >
         <ReadOnlyField
           id="recoveryCodes"
-          as="textarea"
+          as="div"
           value={flowState.context.recoveryCodes.join(
             String.fromCharCode(13, 10)
           )}
-          rows={8}
           copy
           className={styles.recoveryCodes}
         />

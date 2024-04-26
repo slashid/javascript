@@ -7,7 +7,7 @@ type ReadOnlyPropsField = {
   value: string;
   id: string;
   label?: string;
-  as?: "input" | "textarea";
+  as?: "input" | "textarea" | "div";
   rows?: number;
   copy?: boolean;
   className?: string;
@@ -52,20 +52,35 @@ export function ReadOnlyField({
           {label}
         </label>
       )}
-      <Component
-        id={id}
-        type="text"
-        value={value}
-        rows={rows}
-        className={clsx(styles.field, {
-          [styles.fieldWithLabel]: Boolean(label),
-          [styles.fieldWithCopy]: copy,
-        })}
-        readOnly
-        disabled
-        // @ts-ignore
-        ref={inputRef}
-      />
+      {as === "div" ? (
+        <Component
+          id="id"
+          className={clsx(styles.field, {
+            [styles.fieldWithLabel]: Boolean(label),
+            [styles.fieldWithCopy]: copy,
+          })}
+        >
+          {value.split("\n").map((v) => (
+            <span key={v}>{v}</span>
+          ))}
+        </Component>
+      ) : (
+        <Component
+          id={id}
+          type="text"
+          value={value}
+          rows={rows}
+          className={clsx(styles.field, {
+            [styles.fieldWithLabel]: Boolean(label),
+            [styles.fieldWithCopy]: copy,
+          })}
+          readOnly
+          disabled
+          // @ts-ignore
+          ref={inputRef}
+        />
+      )}
+
       {copy && (
         <button
           type="button"
