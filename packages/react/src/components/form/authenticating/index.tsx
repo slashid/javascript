@@ -63,7 +63,6 @@ export const Authenticating = ({ flowState }: Pick<Props, "flowState">) => {
 
     if (isLoggingIn.current) return;
 
-    console.log("LOGIN FLOW");
     flowState.logIn();
     isLoggingIn.current = true;
   }, [flowState]);
