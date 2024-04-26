@@ -20,6 +20,7 @@ import { Slots, useSlots } from "../slot";
 import { Factor } from "@slashid/slashid";
 import { PayloadOptions } from "./types";
 import { InternalFormContext } from "./internal-context";
+import { StoreRecoveryCodes } from "./store-recovery-codes";
 
 export type Props = ConfigurationOverridesProps & {
   className?: string;
@@ -109,6 +110,9 @@ export const Form = ({
           )}
           {flowState.status === "authenticating" && (
             <FormProvider>{slots.authenticating}</FormProvider>
+          )}
+          {flowState.status === "storeRecoveryCodes" && (
+            <StoreRecoveryCodes flowState={flowState} />
           )}
           {flowState.status === "success" && slots.success}
           {flowState.status === "error" && slots.error}

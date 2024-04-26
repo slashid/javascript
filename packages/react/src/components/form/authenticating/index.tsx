@@ -1,21 +1,36 @@
-import { isFactorOTP, isFactorPassword } from "../../../domain/handles";
+import {
+  isFactorOTP,
+  isFactorPassword,
+  isFactorTOTP,
+} from "../../../domain/handles";
 import { Text } from "../../text";
 
 import { getAuthenticatingMessage } from "./messages";
 import { OTPState } from "./otp";
 import { PasswordState } from "./password";
 import { Props } from "./authenticating.types";
-import {
-  BackButton,
-  FactorIcon,
-  RetryPrompt,
-} from "./authenticating.components";
+import { BackButton, FactorIcon, Prompt } from "./authenticating.components";
 
 import * as styles from "./authenticating.css";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { TOTPState } from "./totp";
+import { Delayed } from "@slashid/react-primitives";
+import { BASE_RETRY_DELAY_MS } from "./authenticating.constants";
 
-const LoadingState = ({ flowState }: Props) => {
+const LoadingState = ({ flowState, performLogin }: Props) => {
   const factor = flowState.context.config.factor;
   const { title, message } = getAuthenticatingMessage(factor);
+  const [showPrompt, setShowPrompt] = useState(true);
+
+  useEffect(() => {
+    if (!showPrompt) {
+      setShowPrompt(true);
+    }
+  }, [showPrompt]);
+
+  useEffect(() => {
+    performLogin();
+  }, [performLogin]);
 
   return (
     <>
@@ -29,7 +44,23 @@ const LoadingState = ({ flowState }: Props) => {
       </Text>
       <Text t={message} variant={{ color: "contrast", weight: "semibold" }} />
       <FactorIcon factor={factor} />
-      <RetryPrompt onRetry={() => flowState.retry()} />
+      {showPrompt && (
+        <Delayed
+          delayMs={BASE_RETRY_DELAY_MS * flowState.context.attempt}
+          fallback={<div style={{ height: 16 }} />}
+        >
+          <div className={styles.wrapper}>
+            <Prompt
+              prompt="authenticating.retryPrompt"
+              cta="authenticating.retry"
+              onClick={() => {
+                flowState.retry();
+                setShowPrompt(false);
+              }}
+            />
+          </div>
+        </Delayed>
+      )}
     </>
   );
 };
@@ -40,13 +71,27 @@ function Wrapper({ children }: { children: React.ReactNode }) {
   );
 }
 
-export const Authenticating = ({ flowState }: Props) => {
+export const Authenticating = ({ flowState }: Pick<Props, "flowState">) => {
   const factor = flowState.context.config.factor;
+  const attempt = useRef(1);
+  const isLoggingIn = useRef(false);
+
+  const performLogin = useCallback(() => {
+    if (flowState.context.attempt > attempt.current) {
+      attempt.current = flowState.context.attempt;
+      isLoggingIn.current = false;
+    }
+
+    if (isLoggingIn.current) return;
+
+    flowState.logIn();
+    isLoggingIn.current = true;
+  }, [flowState]);
 
   if (isFactorOTP(factor)) {
     return (
       <Wrapper>
-        <OTPState flowState={flowState} />
+        <OTPState flowState={flowState} performLogin={performLogin} />
       </Wrapper>
     );
   }
@@ -54,14 +99,22 @@ export const Authenticating = ({ flowState }: Props) => {
   if (isFactorPassword(factor)) {
     return (
       <Wrapper>
-        <PasswordState flowState={flowState} />
+        <PasswordState flowState={flowState} performLogin={performLogin} />
+      </Wrapper>
+    );
+  }
+
+  if (isFactorTOTP(factor)) {
+    return (
+      <Wrapper>
+        <TOTPState flowState={flowState} performLogin={performLogin} />
       </Wrapper>
     );
   }
 
   return (
     <Wrapper>
-      <LoadingState flowState={flowState} />
+      <LoadingState flowState={flowState} performLogin={performLogin} />
     </Wrapper>
   );
 };
