@@ -655,6 +655,9 @@ importers:
       '@slashid/slashid':
         specifier: ^3.22.0
         version: 3.22.0
+      '@types/uuid':
+        specifier: ^9.0.8
+        version: 9.0.8
       cheerio:
         specifier: 1.0.0-rc.12
         version: 1.0.0-rc.12
@@ -664,6 +667,9 @@ importers:
       mailinator-client:
         specifier: ^1.0.4
         version: 1.0.4
+      mailosaur:
+        specifier: ^8.6.1
+        version: 8.6.1
       uuid:
         specifier: ^9.0.1
         version: 9.0.1
@@ -10526,6 +10532,10 @@ packages:
   /@types/uuid@8.3.4:
     resolution: {integrity: sha512-c/I8ZRb51j+pYGAu5CrFMRxqZ2ke4y2grEBO5AUjgSkSk+qT2Ea+OdWElz/OiMf5MNpn2b17kuVBwZLQJXzihw==}
 
+  /@types/uuid@9.0.8:
+    resolution: {integrity: sha512-jg+97EGIcY9AGHJJRaaPVgetKDsrTgbRjQ5Msgjh/DQKEFl0DtyRr/VCOyD1T2R1MNeWPK/u7JoGhlDZnKBAfA==}
+    dev: false
+
   /@types/yargs-parser@21.0.3:
     resolution: {integrity: sha512-I4q9QU9MQv4oEOz4tAHJtNz1cwuLxn2F3xcc2iV5WdqLPpUnj30aUuxt1mAxYTG+oe8CZMV/+6rU4S4gRDzqtQ==}
     dev: true
@@ -11244,7 +11254,6 @@ packages:
       debug: 4.3.4
     transitivePeerDependencies:
       - supports-color
-    dev: true
 
   /agent-base@7.1.0:
     resolution: {integrity: sha512-o/zjMZRhJxny7OyEF+Op8X+efiELC7k7yOjMzgfzVqOzXqkBkWI79YoTdOtsuWd5BWhAGAuOY/Xa6xpiaWXiNg==}
@@ -15311,7 +15320,6 @@ packages:
       debug: 4.3.4
     transitivePeerDependencies:
       - supports-color
-    dev: true
 
   /https-proxy-agent@7.0.2:
     resolution: {integrity: sha512-NmLNjm6ucYwtcUmL7JQC1ZQ57LmHP4lT15FQ8D61nak1rO6DH+fz5qNK2Ap5UN4ZapYICE3/0KodcLYSPsPbaA==}
@@ -16502,6 +16510,15 @@ packages:
       create-index: 2.6.0
       fs: 0.0.1-security
       typed-rest-client: 1.8.11
+    dev: false
+
+  /mailosaur@8.6.1:
+    resolution: {integrity: sha512-e41UXlwBDKFICK1jmovoKM3cJIfvW2wAUPwlok/zM0RL0tP+gpbFdFKWDaIZh85nMM/PFBsJQJT+CJ+o2Q/9cA==}
+    engines: {node: '>= v6.0.0'}
+    dependencies:
+      https-proxy-agent: 5.0.1
+    transitivePeerDependencies:
+      - supports-color
     dev: false
 
   /make-dir@2.1.0:
