@@ -1,5 +1,12 @@
 # @slashid/react
 
+## 1.24.0
+
+### Minor Changes
+
+- 689a2cd: Introduce the anonymousUser property
+- b1a394c: Support login with TOTP as an additional auth factor
+
 ## 1.23.0
 
 ### Minor Changes
