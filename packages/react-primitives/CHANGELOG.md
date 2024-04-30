@@ -1,5 +1,18 @@
 # @slashid/react
 
+## 0.5.0
+
+### Minor Changes
+
+- b1a394c: Add components:
+
+  - ReadOnlyField
+
+  Add icons:
+
+  - Copy
+  - Download
+
 ## 0.4.0
 
 ### Minor Changes
