@@ -39,7 +39,7 @@ describe("LoggedOut", () => {
     const text = faker.lorem.sentence();
 
     render(
-      <TestSlashIDProvider user={createAnonymousTestUser()} sdkState="ready">
+      <TestSlashIDProvider anonymousUser={createAnonymousTestUser()} sdkState="ready">
         <LoggedOut>
           <TestComponent text={text} />
         </LoggedOut>

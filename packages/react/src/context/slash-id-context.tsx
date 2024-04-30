@@ -24,7 +24,7 @@ import {
 import { LogIn, MFA, Recover } from "../domain/types";
 import { SDKState } from "../domain/sdk-state";
 import { applyMiddleware } from "../middleware";
-import { userIsAnonymous } from "../utils/anonymous";
+import { isAnonymous } from "../domain/user";
 import { sequence } from "../components/utils";
 
 export type StorageOption = "memory" | "localStorage" | "cookie";
@@ -75,7 +75,8 @@ export interface SlashIDProviderProps {
 
 export interface ISlashIDContext {
   sid: SlashID | undefined;
-  user: User | AnonymousUser | undefined;
+  user: User | undefined;
+  anonymousUser: AnonymousUser | undefined;
   sdkState: SDKState;
   logOut: () => undefined;
   logIn: LogIn;
@@ -88,6 +89,7 @@ export interface ISlashIDContext {
 export const initialContextValue = {
   sid: undefined,
   user: undefined,
+  anonymousUser: undefined,
   sdkState: "initial" as const,
   logOut: () => undefined,
   logIn: () => Promise.reject("NYI"),
@@ -131,7 +133,10 @@ export const SlashIDProvider = ({
   const [oid, setOid] = useState(initialOid);
   const [token, setToken] = useState(initialToken);
   const [state, setState] = useState<SDKState>(initialContextValue.sdkState);
-  const [user, setUser] = useState<User | AnonymousUser | undefined>(undefined);
+  const [user, setUser] = useState<User | undefined>(undefined);
+  const [anonymousUser, setAnonymousUser] = useState<AnonymousUser | undefined>(
+    undefined
+  );
   const storageRef = useRef<Storage | undefined>(undefined);
   const sidRef = useRef<SlashID | undefined>(undefined);
 
@@ -153,7 +158,7 @@ export const SlashIDProvider = ({
   );
 
   const storeUser = useCallback(
-    (newUser: User | AnonymousUser) => {
+    (newUser: User) => {
       if (state === "initial") {
         return;
       }
@@ -174,12 +179,40 @@ export const SlashIDProvider = ({
     [state, __switchOrganizationInContext, oid]
   );
 
+  const storeAnonymousUser = useCallback(
+    (anonUser: AnonymousUser) => {
+      if (!anonymousUsersEnabled || state === "initial") {
+        return;
+      }
+
+      setAnonymousUser(anonUser);
+      storageRef.current?.setItem(STORAGE_TOKEN_KEY, anonUser.token);
+
+      try {
+        sidRef.current?.getAnalytics().identify(anonUser);
+      } catch {
+        // fail silently
+      }
+    },
+    [anonymousUsersEnabled, state]
+  );
+
+  const clearAnonymousUser = useCallback(() => {
+    if (!anonymousUsersEnabled || state === "initial") {
+      return;
+    }
+
+    storageRef.current?.removeItem(STORAGE_TOKEN_KEY);
+
+    setAnonymousUser(undefined);
+  }, [anonymousUsersEnabled, state]);
+
   const logOut = useCallback((): undefined => {
     if (state === "initial") {
       return;
     }
 
-    if (!user || userIsAnonymous(user)) {
+    if (!user || isAnonymous(user)) {
       return;
     }
 
@@ -220,10 +253,10 @@ export const SlashIDProvider = ({
                 value: handle.value,
               };
 
-        const shouldUpgradeUser = user && userIsAnonymous(user);
+        const shouldUpgradeUser = anonymousUsersEnabled && anonymousUser;
 
         if (shouldUpgradeUser) {
-          const upgradedUser = await user
+          const upgradedUser = await anonymousUser
             // @ts-expect-error TODO make the identifier optional
             .id(identifier, factor)
             .then(async (user) => {
@@ -242,6 +275,10 @@ export const SlashIDProvider = ({
             return applyMiddleware({ user, sid, middleware });
           });
 
+        if (anonymousUsersEnabled && shouldUpgradeUser) {
+          clearAnonymousUser();
+        }
+
         storeUser(newUser);
 
         return newUser;
@@ -250,12 +287,20 @@ export const SlashIDProvider = ({
         throw e;
       }
     },
-    [state, storeUser, user, oid, logOut]
+    [
+      state,
+      anonymousUsersEnabled,
+      anonymousUser,
+      oid,
+      storeUser,
+      clearAnonymousUser,
+      logOut,
+    ]
   );
 
   const mfa = useCallback<MFA>(
     async ({ handle, factor }) => {
-      if (user && userIsAnonymous(user)) {
+      if (anonymousUsersEnabled && anonymousUser) {
         console.warn(
           "Anonymous users cannot perform MFA, please log in first."
         );
@@ -271,7 +316,7 @@ export const SlashIDProvider = ({
       storeUser(userAfterMfa);
       return userAfterMfa;
     },
-    [state, user, storeUser]
+    [anonymousUsersEnabled, anonymousUser, state, user, storeUser]
   );
 
   /**
@@ -343,14 +388,14 @@ export const SlashIDProvider = ({
       if (newUser.anonymous) {
         const anonUser = new AnonymousUser(token, sid);
 
-        storeUser(anonUser);
+        storeAnonymousUser(anonUser);
         return anonUser;
       }
 
       storeUser(newUser);
       return newUser;
     },
-    [anonymousUsersEnabled, storeUser]
+    [anonymousUsersEnabled, storeAnonymousUser, storeUser]
   );
 
   useEffect(() => {
@@ -384,6 +429,7 @@ export const SlashIDProvider = ({
 
     const loginWithTokenFromStorage = async () => {
       const tokenFromStorage = storage.getItem(STORAGE_TOKEN_KEY);
+
       const isValidToken =
         tokenFromStorage && (await validateToken(tokenFromStorage));
 
@@ -401,7 +447,7 @@ export const SlashIDProvider = ({
 
       const anonUser = await sid.createAnonymousUser();
 
-      storeUser(anonUser);
+      storeAnonymousUser(anonUser);
 
       return anonUser;
     };
@@ -426,6 +472,7 @@ export const SlashIDProvider = ({
     anonymousUsersEnabled,
     createAndStoreUserFromToken,
     state,
+    storeAnonymousUser,
     storeUser,
     token,
     validateToken,
@@ -436,6 +483,7 @@ export const SlashIDProvider = ({
       return {
         sid: undefined,
         user,
+        anonymousUser,
         sdkState: state,
         logOut,
         logIn,
@@ -449,6 +497,7 @@ export const SlashIDProvider = ({
     return {
       sid: sidRef.current!,
       user,
+      anonymousUser,
       sdkState: state,
       logOut,
       logIn,
@@ -460,6 +509,7 @@ export const SlashIDProvider = ({
   }, [
     state,
     user,
+    anonymousUser,
     logOut,
     logIn,
     mfa,

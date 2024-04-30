@@ -90,19 +90,20 @@ type UseGDPRConsent = () => {
  * @returns {UseGDPRConsent} an object with the current consent levels and methods to update it
  */
 export const useGDPRConsent: UseGDPRConsent = () => {
-  const { user, sdkState, sid } = useSlashID();
+  const { user, anonymousUser, sdkState, sid } = useSlashID();
   const [consents, setConsents] = useState<GDPRConsent[]>([]);
   const [consentState, setConsentState] = useState<ConsentState>("initial");
 
   const storage = useMemo(() => {
-    if (user) {
-      return createApiGDPRConsentStorage(user);
+    const currentUser = user || anonymousUser;
+    if (currentUser) {
+      return createApiGDPRConsentStorage(currentUser);
     }
     if (!isBrowser()) {
       return;
     }
     return createLocalGDPRConsentStorage();
-  }, [user]);
+  }, [anonymousUser, user]);
 
   const fetchAndSyncGDPRConsent = useCallback(async () => {
     if (!storage || sdkState !== "ready") {
