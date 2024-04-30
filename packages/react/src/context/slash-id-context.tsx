@@ -166,12 +166,6 @@ export const SlashIDProvider = ({
       setUser(newUser);
       storageRef.current?.setItem(STORAGE_TOKEN_KEY, newUser.token);
 
-      try {
-        sidRef.current?.getAnalytics().identify(newUser);
-      } catch {
-        // fail silently
-      }
-
       if (newUser.oid !== oid) {
         __switchOrganizationInContext({ oid: newUser.oid });
       }
@@ -189,6 +183,7 @@ export const SlashIDProvider = ({
       storageRef.current?.setItem(STORAGE_TOKEN_KEY, anonUser.token);
 
       try {
+        // core SDK does not track anon users automatically
         sidRef.current?.getAnalytics().identify(anonUser);
       } catch {
         // fail silently
@@ -439,7 +434,20 @@ export const SlashIDProvider = ({
         return null;
       }
 
-      return createAndStoreUserFromToken(tokenFromStorage);
+      const user = createAndStoreUserFromToken(tokenFromStorage);
+
+      if (user) {
+        try {
+          // in all other cases the core SDK will handle this
+          // here we just recreate the user object based on the preexisting token
+          // no event is emitted on the SDK side because of that
+          sidRef.current?.getAnalytics().identify(user);
+        } catch {
+          // fail silently
+        }
+      }
+
+      return user;
     };
 
     const createAnonymousUser = async () => {
