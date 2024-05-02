@@ -149,7 +149,7 @@ export const buttonDisabled = style({
 });
 
 export const icon = style({
-  marginRight: "22px",
+  marginRight: "12px",
   display: "flex",
   alignItems: "center",
 });

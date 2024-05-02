@@ -32,7 +32,7 @@ describe("LoggedIn", () => {
 
   test("should not render children when an anonymous user exists", () => {
     render(
-      <TestSlashIDProvider user={createAnonymousTestUser()}>
+      <TestSlashIDProvider anonymousUser={createAnonymousTestUser()}>
         <LoggedIn>
           <TestComponent />
         </LoggedIn>

@@ -24,8 +24,9 @@ describe("Anonymous users", () => {
 
     await waitFor(() => expect(result.current.sdkState).toBe("ready"));
 
-    expect(result.current.user).toBeDefined();
-    expect(result.current.user?.anonymous).toBe(true);
+    expect(result.current.user).not.toBeDefined();
+    expect(result.current.anonymousUser).toBeDefined();
+    expect(result.current.anonymousUser?.anonymous).toBe(true);
 
     unmount();
   });
@@ -45,6 +46,7 @@ describe("Anonymous users", () => {
     await waitFor(() => expect(result.current.sdkState).toBe("ready"));
 
     expect(result.current.user).toBeUndefined();
+    expect(result.current.anonymousUser).toBeUndefined();
 
     unmount();
   });
@@ -66,8 +68,9 @@ describe("Anonymous users", () => {
 
     await waitFor(() => expect(result.current.sdkState).toBe("ready"));
 
-    expect(result.current.user).toBeDefined();
-    expect(result.current.user?.ID).toBe(anonUser.ID);
+    expect(result.current.user).not.toBeDefined();
+    expect(result.current.anonymousUser).toBeDefined();
+    expect(result.current.anonymousUser?.ID).toBe(anonUser.ID);
 
     unmount();
     localStorage.clear();
@@ -93,8 +96,9 @@ describe("Anonymous users", () => {
 
     await waitFor(() => expect(result.current.sdkState).toBe("ready"));
 
-    expect(result.current.user).toBeDefined();
-    expect(result.current.user?.ID).toBe(anonUser.ID);
+    expect(result.current.user).not.toBeDefined();
+    expect(result.current.anonymousUser).toBeDefined();
+    expect(result.current.anonymousUser?.ID).toBe(anonUser.ID);
 
     unmount();
   });
@@ -120,8 +124,9 @@ describe("Anonymous users", () => {
 
     await waitFor(() => expect(result.current.sdkState).toBe("ready"));
 
-    expect(result.current.user).toBeDefined();
-    expect(result.current.user?.ID).toBe(anonUser.ID);
+    expect(result.current.user).not.toBeDefined();
+    expect(result.current.anonymousUser).toBeDefined();
+    expect(result.current.anonymousUser?.ID).toBe(anonUser.ID);
 
     unmount();
   });

@@ -44,18 +44,20 @@ type Props = {
  * ```
  */
 export const Groups = ({ belongsTo, children }: Props) => {
-  const { user } = useSlashID();
+  const { user, anonymousUser } = useSlashID();
 
   const shouldRender = useMemo(() => {
-    if (!user) {
+    const currentUser = user || anonymousUser;
+
+    if (!currentUser) {
       return false;
     }
-    const groups = user.getGroups();
+    const groups = currentUser.getGroups();
 
     return typeof belongsTo === "string"
       ? groups.includes(belongsTo)
       : belongsTo(groups);
-  }, [user, belongsTo]);
+  }, [user, anonymousUser, belongsTo]);
 
   if (!shouldRender) {
     return null;
