@@ -125,7 +125,9 @@ export const TEXT = {
     "Your request has been rate limited. Please try again later.",
   "error.title.recoverNonReachableHandleType": "Cannot recover account",
   "error.subtitle.recoverNonReachableHandleType":
-    "Please use an email address or a phone number to recover your account.",
+  "Please use an email address or a phone number to recover your account.",
+  "error.title.noPasswordSet": "No password set",
+  "error.subtitle.noPasswordSet": "Please contact support to set a password",
   "error.retry": "Try again",
   "error.contactSupport.prompt": "Need help?",
   "error.contactSupport.cta": "Contact support",
