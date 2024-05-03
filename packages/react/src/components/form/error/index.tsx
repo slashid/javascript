@@ -70,9 +70,9 @@ function mapErrorTypeToText(errorType: ErrorType): {
 }
 
 function ContactSupportPrompt() {
-  const { text, supportUrl } = useConfiguration();
+  const { text, supportURL } = useConfiguration();
 
-  if (!supportUrl) {
+  if (!supportURL) {
     return null;
   }
 
@@ -85,7 +85,7 @@ function ContactSupportPrompt() {
       <a
         className={styles.supportCta}
         target="_blank"
-        href={supportUrl}
+        href={supportURL}
         rel="noreferrer"
       >
         {text["error.contactSupport.cta"]}

@@ -13,7 +13,7 @@ export interface IConfigurationContext {
   showBanner: boolean;
   defaultCountryCode: string;
   /** If defined the form in the error state will render a CTA with this link */
-  supportUrl: undefined | string;
+  supportURL: undefined | string;
 }
 
 export const initialContextValue: IConfigurationContext = {
@@ -23,7 +23,7 @@ export const initialContextValue: IConfigurationContext = {
   storeLastHandle: false,
   showBanner: true,
   defaultCountryCode: "US",
-  supportUrl: undefined,
+  supportURL: undefined,
 };
 
 export const ConfigurationContext =
@@ -37,7 +37,7 @@ type Props = {
   storeLastHandle?: boolean;
   showBanner?: boolean;
   defaultCountryCode?: string;
-  supportUrl?: string;
+  supportURL?: string;
   children: ReactNode;
 };
 
