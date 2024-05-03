@@ -4,6 +4,8 @@ import { TestSlashIDProvider } from "../../context/test-providers";
 import { Form } from "./form";
 import { createTestUser, inputEmail } from "../test-utils";
 import { ConfigurationProvider } from "../../main";
+import { Errors } from "@slashid/slashid";
+import { ERROR_NAMES } from "../../domain/errors";
 
 describe("#Form -> Error state", () => {
   test("should show the error state if login fails", async () => {
@@ -144,5 +146,69 @@ describe("#Form -> Error state -> Contact support", () => {
     expect(
       screen.getByTestId("sid-form-error-support-prompt")
     ).toBeInTheDocument();
+  });
+
+  test("should render the noPasswordSet error state", async () => {
+    const logInMock = vi.fn(() =>
+      Promise.reject(
+        new Errors.SlashIDError({
+          name: Errors.ERROR_NAMES.noPasswordSet,
+          message: "no password set",
+        })
+      )
+    );
+    const user = userEvent.setup();
+    const testTitle = "No Password Set";
+
+    render(
+      <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+        <ConfigurationProvider
+          text={{ "error.title.noPasswordSet": testTitle }}
+        >
+          <Form />
+        </ConfigurationProvider>
+      </TestSlashIDProvider>
+    );
+
+    inputEmail("valid@email.com");
+
+    user.click(screen.getByTestId("sid-form-initial-submit-button"));
+
+    await expect(
+      screen.findByTestId("sid-form-error-state")
+    ).resolves.toBeInTheDocument();
+    expect(screen.getByText(testTitle)).toBeInTheDocument();
+  });
+
+  test("should render the recoverNonReachableHandleType error state", async () => {
+    const logInMock = vi.fn(() =>
+      Promise.reject(
+        new Errors.SlashIDError({
+          name: ERROR_NAMES.recoverNonReachableHandleType,
+          message: "cannot recover handle",
+        })
+      )
+    );
+    const user = userEvent.setup();
+    const testTitle = "Recover non reachable handle";
+
+    render(
+      <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+        <ConfigurationProvider
+          text={{ "error.title.recoverNonReachableHandleType": testTitle }}
+        >
+          <Form />
+        </ConfigurationProvider>
+      </TestSlashIDProvider>
+    );
+
+    inputEmail("valid@email.com");
+
+    user.click(screen.getByTestId("sid-form-initial-submit-button"));
+
+    await expect(
+      screen.findByTestId("sid-form-error-state")
+    ).resolves.toBeInTheDocument();
+    expect(screen.getByText(testTitle)).toBeInTheDocument();
   });
 });
