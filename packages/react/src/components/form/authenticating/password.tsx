@@ -26,16 +26,6 @@ import {
   getValidationInterpolationTokens,
 } from "./validation";
 
-// do not show the recovery prompt until we have a way to recover usernames
-function showRecoveryPrompt(flowState: AuthenticatingState): boolean {
-  if (flowState.context.config.handle?.type === "username") {
-    // TODO change this when recovery is in
-    return false;
-  }
-
-  return true;
-}
-
 const PasswordRecoveryPrompt = ({
   onRecoverClick,
 }: {
@@ -309,10 +299,9 @@ export const PasswordState = ({ flowState, performLogin }: Props) => {
               />
             )}
             <ErrorMessage name="password" />
-            {formState === "verifyPassword" &&
-              showRecoveryPrompt(flowState) && (
-                <PasswordRecoveryPrompt onRecoverClick={handleRecovery} />
-              )}
+            {formState === "verifyPassword" && (
+              <PasswordRecoveryPrompt onRecoverClick={handleRecovery} />
+            )}
           </div>
 
           <Button

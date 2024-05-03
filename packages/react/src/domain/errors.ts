@@ -1,4 +1,4 @@
-import { SlashIDError } from "@slashid/slashid";
+import { Errors } from "@slashid/slashid";
 
 /**
  * Ensure that a valid Error instance is returned, since in JS you can throw anything.
@@ -20,10 +20,10 @@ export function ensureError(value: unknown): Error {
 }
 
 export const ERROR_NAMES = {
-  nonReachableHandleType: "NonReachableHandleType",
+  recoverNonReachableHandleType: "recoverNonReachableHandleType",
 };
 
-type NonReachableHandleTypeError = SlashIDError & {
+type NonReachableHandleTypeError = Error & typeof Errors.SlashIDError & {
   name: "NonReachableHandleType";
 };
 
@@ -31,7 +31,7 @@ export function isNonReachableHandleTypeError(
   error: Error
 ): error is NonReachableHandleTypeError {
   return (
-    error instanceof SlashIDError &&
-    error.name === ERROR_NAMES.nonReachableHandleType
+    error instanceof Errors.SlashIDError &&
+    error.name === ERROR_NAMES.recoverNonReachableHandleType
   );
 }

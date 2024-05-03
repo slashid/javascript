@@ -1,4 +1,4 @@
-import { Utils, Errors, User } from "@slashid/slashid";
+import { Utils, Errors, User, ReachablePersonHandle } from "@slashid/slashid";
 import {
   Cancel,
   LogIn,
@@ -153,8 +153,8 @@ const createAuthenticatingState = (
       send({
         type: "sid_login.error",
         error: new Errors.SlashIDError({
-          name: ERROR_NAMES.nonReachableHandleType,
-          message: "Action requires a reachable handle type.",
+          name: ERROR_NAMES.recoverNonReachableHandleType,
+          message: "Recovery requires a reachable handle type.",
           context,
         }),
       });
@@ -167,7 +167,7 @@ const createAuthenticatingState = (
     try {
       return await recoverFn({
         factor: context.config.factor,
-        handle: context.config.handle,
+        handle: context.config.handle as ReachablePersonHandle,
       });
 
       // recover does not authenticate on its own

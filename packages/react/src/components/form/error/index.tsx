@@ -7,12 +7,16 @@ import {
   Exclamation,
   sprinkles,
 } from "@slashid/react-primitives";
+import { clsx } from "clsx";
 
-import { useConfiguration } from "../../hooks/use-configuration";
-import { Text } from "../text";
-import { TextConfigKey } from "../text/constants";
-import { ErrorState } from "./flow";
-import { useInternalFormContext } from "./internal-context";
+import { useConfiguration } from "../../../hooks/use-configuration";
+import { Text } from "../../text";
+import { TextConfigKey } from "../../text/constants";
+import { ErrorState } from "../flow";
+import { useInternalFormContext } from "../internal-context";
+import { isNonReachableHandleTypeError } from "../../../domain/errors";
+
+import * as styles from "./error.css";
 
 const ErrorIcon = () => (
   <Circle variant="red" shouldAnimate={false}>
@@ -20,7 +24,11 @@ const ErrorIcon = () => (
   </Circle>
 );
 
-type ErrorType = "response" | "rateLimit" | "unknown";
+type ErrorType =
+  | "response"
+  | "rateLimit"
+  | "recoverNonReachableHandleType"
+  | "unknown";
 
 function getErrorType(error: Error): ErrorType {
   if (Errors.isResponseError(error)) {
@@ -31,6 +39,10 @@ function getErrorType(error: Error): ErrorType {
     return "rateLimit";
   }
 
+  if (isNonReachableHandleTypeError(error)) {
+    return "recoverNonReachableHandleType";
+  }
+
   return "unknown";
 }
 
@@ -38,9 +50,32 @@ function mapErrorTypeToText(errorType: ErrorType): TextConfigKey {
   switch (errorType) {
     case "rateLimit":
       return "error.subtitle.rateLimit";
+    case "recoverNonReachableHandleType":
+      return "error.subtitle.recoverNonReachableHandleType";
     default:
       return "error.subtitle";
   }
+}
+
+function ContactSupportPrompt() {
+  const { text } = useConfiguration();
+
+  return (
+    <div
+      className={clsx("sid-form-error-contact-support", styles.supportPrompt)}
+      data-testid="sid-form-error-support-prompt"
+    >
+      <span>{text["error.contactSupport.prompt"]}</span>
+      <a
+        className={styles.supportCta}
+        target="_blank"
+        href="https://www.google.com"
+        rel="noreferrer"
+      >
+        {text["error.contactSupport.cta"]}
+      </a>
+    </div>
+  );
 }
 
 type Props = {
@@ -116,6 +151,7 @@ const ErrorImplementation: React.FC<Props> = ({ flowState }) => {
       >
         {text["error.retry"]}
       </Button>
+      <ContactSupportPrompt />
     </article>
   );
 };

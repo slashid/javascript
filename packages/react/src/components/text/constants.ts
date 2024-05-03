@@ -122,7 +122,11 @@ export const TEXT = {
     "There has been an error while submitting your form. Please try again.",
   "error.subtitle.rateLimit":
     "Your request has been rate limited. Please try again later.",
+  "error.subtitle.recoverNonReachableHandleType":
+    "Please use an email address or a phone number to recover your account.",
   "error.retry": "Try again",
+  "error.contactSupport.prompt": "Need help?",
+  "error.contactSupport.cta": "Contact support",
   "factor.webauthn": "Passkeys",
   "factor.otpViaSms": "OTP via SMS",
   "factor.otpViaEmail": "OTP via email",

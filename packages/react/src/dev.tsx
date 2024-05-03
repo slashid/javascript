@@ -324,6 +324,10 @@ root.render(
       tokenStorage="localStorage"
       analyticsEnabled
       anonymousUsersEnabled
+      environment={{
+        baseURL: "https://api.slashid.local",
+        sdkURL: "https://jump.slashid.local/sdk.html"
+      }}
     >
       <LogOut />
       <div className="layout">
