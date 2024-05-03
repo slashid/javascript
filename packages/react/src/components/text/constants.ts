@@ -120,8 +120,10 @@ export const TEXT = {
   "error.title": "Something went wrong...",
   "error.subtitle":
     "There has been an error while submitting your form. Please try again.",
+  "error.title.rateLimit": "Too many attempts...",
   "error.subtitle.rateLimit":
     "Your request has been rate limited. Please try again later.",
+  "error.title.recoverNonReachableHandleType": "Cannot recover account",
   "error.subtitle.recoverNonReachableHandleType":
     "Please use an email address or a phone number to recover your account.",
   "error.retry": "Try again",

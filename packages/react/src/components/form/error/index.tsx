@@ -46,19 +46,35 @@ function getErrorType(error: Error): ErrorType {
   return "unknown";
 }
 
-function mapErrorTypeToText(errorType: ErrorType): TextConfigKey {
+function mapErrorTypeToText(errorType: ErrorType): {
+  title: TextConfigKey;
+  description: TextConfigKey;
+} {
   switch (errorType) {
     case "rateLimit":
-      return "error.subtitle.rateLimit";
+      return {
+        title: "error.title.rateLimit",
+        description: "error.subtitle.rateLimit",
+      };
     case "recoverNonReachableHandleType":
-      return "error.subtitle.recoverNonReachableHandleType";
+      return {
+        title: "error.title.recoverNonReachableHandleType",
+        description: "error.subtitle.recoverNonReachableHandleType",
+      };
     default:
-      return "error.subtitle";
+      return {
+        title: "error.title",
+        description: "error.subtitle",
+      };
   }
 }
 
 function ContactSupportPrompt() {
-  const { text } = useConfiguration();
+  const { text, supportUrl } = useConfiguration();
+
+  if (!supportUrl) {
+    return null;
+  }
 
   return (
     <div
@@ -69,7 +85,7 @@ function ContactSupportPrompt() {
       <a
         className={styles.supportCta}
         target="_blank"
-        href="https://www.google.com"
+        href={supportUrl}
         rel="noreferrer"
       >
         {text["error.contactSupport.cta"]}
@@ -121,6 +137,7 @@ const ErrorImplementation: React.FC<Props> = ({ flowState }) => {
   const { text } = useConfiguration();
 
   const errorType = getErrorType(flowState.context.error);
+  const { title, description } = mapErrorTypeToText(errorType);
 
   return (
     <article data-testid="sid-form-error-state">
@@ -132,14 +149,10 @@ const ErrorImplementation: React.FC<Props> = ({ flowState }) => {
       >
         {text["authenticating.back"]}
       </LinkButton>
-      <Text
-        as="h1"
-        t="error.title"
-        variant={{ size: "2xl-title", weight: "bold" }}
-      />
+      <Text as="h1" t={title} variant={{ size: "2xl-title", weight: "bold" }} />
       <Text
         as="h2"
-        t={mapErrorTypeToText(errorType)}
+        t={description}
         variant={{ color: "contrast", weight: "semibold" }}
       />
       <ErrorIcon />
