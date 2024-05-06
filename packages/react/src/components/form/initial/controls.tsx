@@ -409,7 +409,7 @@ const HandleInput: React.FC<PropsInternal> = ({
             defaultValue,
             validator: (value) => {
               if (!isValidUsername(value)) {
-                return { message: text["validationError.email"] };
+                return { message: text["validationError.username"] };
               }
             },
           })}

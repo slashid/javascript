@@ -32,7 +32,7 @@ describe("#Form - username handle type", () => {
     ).not.toBeInTheDocument();
   });
 
-  test("username tab should not render unless explicitly configured using allowedHandleTypes", () => {
+  test("username tab should render when usernames are enabled using allowedHandleTypes", () => {
     const logInMock = vi.fn(async () => createTestUser());
     const factors: FactorConfiguration[] = [
       { method: "email_link" },

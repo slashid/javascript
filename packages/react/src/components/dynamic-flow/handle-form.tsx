@@ -119,7 +119,7 @@ export const HandleForm: React.FC<Props> = ({
             defaultValue,
             validator: (value) => {
               if (!isValidUsername(value)) {
-                return { message: text["validationError.email"] };
+                return { message: text["validationError.username"] };
               }
             },
           })}
