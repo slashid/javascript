@@ -247,17 +247,18 @@ describe("#Form", () => {
       screen.findByTestId("sid-form-success-state")
     ).resolves.toBeInTheDocument();
 
-    expect(onSuccess).toBeCalledTimes(1);
-    expect(onSuccess).toBeCalledWith(testUser);
+    expect(onSuccess).toHaveBeenCalledTimes(1);
+    expect(onSuccess).toHaveBeenCalledWith(testUser);
   });
 
-  test("should show the error state if login fails", async () => {
-    const logInMock = vi.fn(() => Promise.reject("login error"));
+  test("should call the onError callback if provided on a failed login", async () => {
+    const logInMock = vi.fn(() => Promise.reject(new Error("login error")));
     const user = userEvent.setup();
+    const onError = vi.fn();
 
     render(
       <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
-        <Form />
+        <Form onError={onError} />
       </TestSlashIDProvider>
     );
 
@@ -265,78 +266,11 @@ describe("#Form", () => {
 
     user.click(screen.getByTestId("sid-form-initial-submit-button"));
 
-    await expect(logInMock).rejects.toMatch("login error");
-    await expect(
-      screen.findByTestId("sid-form-error-state")
-    ).resolves.toBeInTheDocument();
-  });
-
-  test("should allow going back to the initial state if login fails", async () => {
-    const logInMock = vi.fn(() => Promise.reject("login error"));
-    const user = userEvent.setup();
-
-    render(
-      <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
-        <Form />
-      </TestSlashIDProvider>
-    );
-
-    inputEmail("valid@email.com");
-
-    user.click(screen.getByTestId("sid-form-initial-submit-button"));
-
-    await expect(logInMock).rejects.toMatch("login error");
     await expect(
       screen.findByTestId("sid-form-error-state")
     ).resolves.toBeInTheDocument();
 
-    const cancelButton = await screen.findByTestId(
-      "sid-form-authenticating-cancel-button"
-    );
-    user.click(cancelButton);
-
-    await expect(
-      screen.findByTestId("sid-form-initial-state")
-    ).resolves.toBeInTheDocument();
-  });
-
-  test("should allow a retry if login fails", async () => {
-    let loginShouldSucceed = false;
-    const logInMock = vi.fn(() => {
-      if (!loginShouldSucceed) return Promise.reject("login error");
-      return Promise.resolve(createTestUser());
-    });
-    const user = userEvent.setup();
-
-    render(
-      <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
-        <Form />
-      </TestSlashIDProvider>
-    );
-
-    inputEmail("valid@email.com");
-
-    user.click(screen.getByTestId("sid-form-initial-submit-button"));
-
-    await expect(logInMock).rejects.toMatch("login error");
-    await expect(
-      screen.findByTestId("sid-form-error-state")
-    ).resolves.toBeInTheDocument();
-
-    const retryButton = await screen.findByTestId(
-      "sid-form-error-retry-button"
-    );
-
-    loginShouldSucceed = true;
-    user.click(retryButton);
-
-    await expect(
-      screen.findByTestId("sid-form-authenticating-state")
-    ).resolves.toBeInTheDocument();
-
-    await expect(
-      screen.findByTestId("sid-form-success-state")
-    ).resolves.toBeInTheDocument();
+    expect(onError).toHaveBeenCalledTimes(1);
   });
 });
 

@@ -26,16 +26,6 @@ import {
   getValidationInterpolationTokens,
 } from "./validation";
 
-// do not show the recovery prompt until we have a way to recover usernames
-function showRecoveryPrompt(flowState: AuthenticatingState): boolean {
-  if (flowState.context.config.handle?.type === "username") {
-    // TODO change this when recovery is in
-    return false;
-  }
-
-  return true;
-}
-
 const PasswordRecoveryPrompt = ({
   onRecoverClick,
 }: {
@@ -44,7 +34,10 @@ const PasswordRecoveryPrompt = ({
   const { text } = useConfiguration();
 
   return (
-    <div className={styles.passwordRecoveryPrompt}>
+    <div
+      data-testid="sid-form-authenticating-recover-prompt"
+      className={styles.passwordRecoveryPrompt}
+    >
       <Text
         variant={{ size: "sm", color: "tertiary", weight: "semibold" }}
         t="authenticating.verifyPassword.recover.prompt"
@@ -52,7 +45,7 @@ const PasswordRecoveryPrompt = ({
       <LinkButton
         className={sprinkles({ marginLeft: "1" })}
         type="button"
-        testId="sid-form-authenticating-retry-button"
+        testId="sid-form-authenticating-recover-button"
         onClick={onRecoverClick}
       >
         {text["authenticating.verifyPassword.recover.cta"]}
@@ -309,10 +302,9 @@ export const PasswordState = ({ flowState, performLogin }: Props) => {
               />
             )}
             <ErrorMessage name="password" />
-            {formState === "verifyPassword" &&
-              showRecoveryPrompt(flowState) && (
-                <PasswordRecoveryPrompt onRecoverClick={handleRecovery} />
-              )}
+            {formState === "verifyPassword" && (
+              <PasswordRecoveryPrompt onRecoverClick={handleRecovery} />
+            )}
           </div>
 
           <Button

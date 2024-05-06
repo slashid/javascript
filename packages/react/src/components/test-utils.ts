@@ -226,3 +226,42 @@ export class MockSlashID extends SlashID {
 }
 
 type GenericHandler = Handler<PublicReadEvents[keyof PublicReadEvents]>;
+
+type Resolver<T> = (value: T | PromiseLike<T>) => void;
+type Rejecter = (reason?: unknown) => void;
+
+/**
+ * A Promise that can be resolved or rejected from the outside.
+ * Useful in tests when you want to wait for a condition to be met.
+ */
+export default class Deferred<T> extends Promise<T> {
+  private readonly resolver: Resolver<T>;
+  private readonly rejecter: Rejecter;
+
+  public constructor(
+    executor?: (resolve: Resolver<T>, reject: Rejecter) => void
+  ) {
+    let resolver: Resolver<T>;
+    let rejecter: Rejecter;
+
+    super((resolve, reject) => {
+      resolver = resolve;
+      rejecter = reject;
+
+      if (executor) {
+        executor(resolve, reject);
+      }
+    });
+
+    this.resolver = resolver!;
+    this.rejecter = rejecter!;
+  }
+
+  public resolve(value: T): void {
+    this.resolver(value);
+  }
+
+  public reject(reason?: unknown): void {
+    this.rejecter(reason);
+  }
+}

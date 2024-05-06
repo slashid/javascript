@@ -7,12 +7,19 @@ import {
   Exclamation,
   sprinkles,
 } from "@slashid/react-primitives";
+import { clsx } from "clsx";
 
-import { useConfiguration } from "../../hooks/use-configuration";
-import { Text } from "../text";
-import { TextConfigKey } from "../text/constants";
-import { ErrorState } from "./flow";
-import { useInternalFormContext } from "./internal-context";
+import { useConfiguration } from "../../../hooks/use-configuration";
+import { Text } from "../../text";
+import { TextConfigKey } from "../../text/constants";
+import { ErrorState } from "../flow";
+import { useInternalFormContext } from "../internal-context";
+import {
+  isNoPasswordSetError,
+  isNonReachableHandleTypeError,
+} from "../../../domain/errors";
+
+import * as styles from "./error.css";
 
 const ErrorIcon = () => (
   <Circle variant="red" shouldAnimate={false}>
@@ -20,7 +27,12 @@ const ErrorIcon = () => (
   </Circle>
 );
 
-type ErrorType = "response" | "rateLimit" | "unknown";
+type ErrorType =
+  | "response"
+  | "rateLimit"
+  | "recoverNonReachableHandleType"
+  | "noPasswordSet"
+  | "unknown";
 
 function getErrorType(error: Error): ErrorType {
   if (Errors.isResponseError(error)) {
@@ -31,16 +43,68 @@ function getErrorType(error: Error): ErrorType {
     return "rateLimit";
   }
 
+  if (isNonReachableHandleTypeError(error)) {
+    return "recoverNonReachableHandleType";
+  }
+
+  if (isNoPasswordSetError(error)) {
+    return "noPasswordSet";
+  }
+
   return "unknown";
 }
 
-function mapErrorTypeToText(errorType: ErrorType): TextConfigKey {
+function mapErrorTypeToText(errorType: ErrorType): {
+  title: TextConfigKey;
+  description: TextConfigKey;
+} {
   switch (errorType) {
     case "rateLimit":
-      return "error.subtitle.rateLimit";
+      return {
+        title: "error.title.rateLimit",
+        description: "error.subtitle.rateLimit",
+      };
+    case "recoverNonReachableHandleType":
+      return {
+        title: "error.title.recoverNonReachableHandleType",
+        description: "error.subtitle.recoverNonReachableHandleType",
+      };
+    case "noPasswordSet":
+      return {
+        title: "error.title.noPasswordSet",
+        description: "error.subtitle.noPasswordSet",
+      };
     default:
-      return "error.subtitle";
+      return {
+        title: "error.title",
+        description: "error.subtitle",
+      };
   }
+}
+
+function ContactSupportPrompt() {
+  const { text, supportURL } = useConfiguration();
+
+  if (!supportURL) {
+    return null;
+  }
+
+  return (
+    <div
+      className={clsx("sid-form-error-contact-support", styles.supportPrompt)}
+      data-testid="sid-form-error-support-prompt"
+    >
+      <span>{text["error.contactSupport.prompt"]}</span>
+      <a
+        className={styles.supportCta}
+        target="_blank"
+        href={supportURL}
+        rel="noreferrer"
+      >
+        {text["error.contactSupport.cta"]}
+      </a>
+    </div>
+  );
 }
 
 type Props = {
@@ -86,6 +150,7 @@ const ErrorImplementation: React.FC<Props> = ({ flowState }) => {
   const { text } = useConfiguration();
 
   const errorType = getErrorType(flowState.context.error);
+  const { title, description } = mapErrorTypeToText(errorType);
 
   return (
     <article data-testid="sid-form-error-state">
@@ -97,14 +162,10 @@ const ErrorImplementation: React.FC<Props> = ({ flowState }) => {
       >
         {text["authenticating.back"]}
       </LinkButton>
-      <Text
-        as="h1"
-        t="error.title"
-        variant={{ size: "2xl-title", weight: "bold" }}
-      />
+      <Text as="h1" t={title} variant={{ size: "2xl-title", weight: "bold" }} />
       <Text
         as="h2"
-        t={mapErrorTypeToText(errorType)}
+        t={description}
         variant={{ color: "contrast", weight: "semibold" }}
       />
       <ErrorIcon />
@@ -116,6 +177,7 @@ const ErrorImplementation: React.FC<Props> = ({ flowState }) => {
       >
         {text["error.retry"]}
       </Button>
+      <ContactSupportPrompt />
     </article>
   );
 };

@@ -1,4 +1,4 @@
-import { User } from "@slashid/slashid";
+import { Utils, Errors, User, ReachablePersonHandle } from "@slashid/slashid";
 import {
   Cancel,
   LogIn,
@@ -8,7 +8,7 @@ import {
   LoginOptions,
   Recover,
 } from "../../domain/types";
-import { ensureError } from "../../domain/errors";
+import { ERROR_NAMES, ensureError } from "../../domain/errors";
 import { isFactorRecoverable } from "../../domain/handles";
 import { StoreRecoveryCodesState } from "./store-recovery-codes";
 
@@ -146,13 +146,28 @@ const createAuthenticatingState = (
   }
 
   async function recover() {
-    if (!isFactorRecoverable(context.config.factor) || !context.config.handle)
+    if (
+      !context.config.handle?.type ||
+      !Utils.isReachablePersonHandleType(context.config.handle.type)
+    ) {
+      send({
+        type: "sid_login.error",
+        error: new Errors.SlashIDError({
+          name: ERROR_NAMES.recoverNonReachableHandleType,
+          message: "Recovery requires a reachable handle type.",
+          context,
+        }),
+      });
       return;
+    }
+
+    // not possible at the moment
+    if (!isFactorRecoverable(context.config.factor)) return;
 
     try {
       return await recoverFn({
         factor: context.config.factor,
-        handle: context.config.handle,
+        handle: context.config.handle as ReachablePersonHandle,
       });
 
       // recover does not authenticate on its own
