@@ -1,11 +1,15 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { TestSlashIDProvider } from "../../context/test-providers";
-import { Form } from "./form";
-import { createTestUser, inputEmail } from "../test-utils";
-import { ConfigurationProvider } from "../../main";
-import { Errors } from "@slashid/slashid";
-import { ERROR_NAMES } from "../../domain/errors";
+import { TestSlashIDProvider } from "../../../context/test-providers";
+import { Form } from "../form";
+import Deferred, {
+  MockSlashID,
+  createTestUser,
+  inputEmail,
+  inputUsername,
+} from "../../test-utils";
+import { ConfigurationProvider } from "../../../main";
+import { Errors, User } from "@slashid/slashid";
 
 describe("#Form -> Error state", () => {
   test("should show the error state if login fails", async () => {
@@ -164,6 +168,7 @@ describe("#Form -> Error state -> Contact support", () => {
       <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
         <ConfigurationProvider
           text={{ "error.title.noPasswordSet": testTitle }}
+          factors={[{ method: "password" }]}
         >
           <Form />
         </ConfigurationProvider>
@@ -181,34 +186,56 @@ describe("#Form -> Error state -> Contact support", () => {
   });
 
   test("should render the recoverNonReachableHandleType error state", async () => {
-    const logInMock = vi.fn(() =>
-      Promise.reject(
-        new Errors.SlashIDError({
-          name: ERROR_NAMES.recoverNonReachableHandleType,
-          message: "cannot recover handle",
-        })
-      )
-    );
+    const mockSlashID = new MockSlashID({
+      oid: "oid",
+      analyticsEnabled: false,
+    });
+    const logInPromise = new Deferred<User>();
+    const logInMock = vi.fn(() => logInPromise);
     const user = userEvent.setup();
     const testTitle = "Recover non reachable handle";
 
     render(
-      <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+      <TestSlashIDProvider sid={mockSlashID} sdkState="ready" logIn={logInMock}>
         <ConfigurationProvider
           text={{ "error.title.recoverNonReachableHandleType": testTitle }}
+          factors={[
+            {
+              method: "password",
+              allowedHandleTypes: ["username"],
+            },
+          ]}
         >
           <Form />
         </ConfigurationProvider>
       </TestSlashIDProvider>
     );
 
-    inputEmail("valid@email.com");
+    inputUsername("non-reachable");
 
     user.click(screen.getByTestId("sid-form-initial-submit-button"));
+
+    // go to authenticating state
+    await expect(
+      screen.findByTestId("sid-form-authenticating-state")
+    ).resolves.toBeInTheDocument();
+
+    // enable the password input
+    mockSlashID.mockPublish("passwordVerifyReady", undefined);
+
+    // find the recover button and click it
+    const recoverButton = await screen.findByTestId(
+      "sid-form-authenticating-recover-button"
+    );
+
+    user.click(recoverButton);
 
     await expect(
       screen.findByTestId("sid-form-error-state")
     ).resolves.toBeInTheDocument();
     expect(screen.getByText(testTitle)).toBeInTheDocument();
+
+    // cleanup
+    logInPromise.reject();
   });
 });
