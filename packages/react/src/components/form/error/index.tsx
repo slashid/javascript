@@ -14,7 +14,10 @@ import { Text } from "../../text";
 import { TextConfigKey } from "../../text/constants";
 import { ErrorState } from "../flow";
 import { useInternalFormContext } from "../internal-context";
-import { isNonReachableHandleTypeError } from "../../../domain/errors";
+import {
+  isNoPasswordSetError,
+  isNonReachableHandleTypeError,
+} from "../../../domain/errors";
 
 import * as styles from "./error.css";
 
@@ -28,6 +31,7 @@ type ErrorType =
   | "response"
   | "rateLimit"
   | "recoverNonReachableHandleType"
+  | "noPasswordSet"
   | "unknown";
 
 function getErrorType(error: Error): ErrorType {
@@ -41,6 +45,10 @@ function getErrorType(error: Error): ErrorType {
 
   if (isNonReachableHandleTypeError(error)) {
     return "recoverNonReachableHandleType";
+  }
+
+  if (isNoPasswordSetError(error)) {
+    return "noPasswordSet";
   }
 
   return "unknown";
@@ -60,6 +68,11 @@ function mapErrorTypeToText(errorType: ErrorType): {
       return {
         title: "error.title.recoverNonReachableHandleType",
         description: "error.subtitle.recoverNonReachableHandleType",
+      };
+    case "noPasswordSet":
+      return {
+        title: "error.title.noPasswordSet",
+        description: "error.subtitle.noPasswordSet",
       };
     default:
       return {

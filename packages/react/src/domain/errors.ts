@@ -21,17 +21,32 @@ export function ensureError(value: unknown): Error {
 
 export const ERROR_NAMES = {
   recoverNonReachableHandleType: "recoverNonReachableHandleType",
-};
+} as const;
 
-type NonReachableHandleTypeError = Error & typeof Errors.SlashIDError & {
-  name: "NonReachableHandleType";
-};
+type NonReachableHandleTypeError = Error &
+  typeof Errors.SlashIDError & {
+    name: typeof ERROR_NAMES.recoverNonReachableHandleType;
+  };
 
 export function isNonReachableHandleTypeError(
   error: Error
 ): error is NonReachableHandleTypeError {
   return (
-    error instanceof Errors.SlashIDError &&
+    Errors.isSlashIDError(error) &&
     error.name === ERROR_NAMES.recoverNonReachableHandleType
+  );
+}
+
+type NoPasswordSetError = Error &
+  typeof Errors.SlashIDError & {
+    name: typeof Errors.ERROR_NAMES.noPasswordSet;
+  };
+
+export function isNoPasswordSetError(
+  error: Error
+): error is NoPasswordSetError {
+  return (
+    Errors.isSlashIDError(error) &&
+    error.name === Errors.ERROR_NAMES.noPasswordSet
   );
 }

@@ -2,6 +2,7 @@ import { createContext, ReactNode, useMemo } from "react";
 import { SlashID, TextProvider } from "@slashid/react-primitives";
 import { TEXT, TextConfig } from "../components/text/constants";
 import { FactorConfiguration } from "../domain/types";
+import { urlValidator } from "../utils/css-validation";
 
 export type Logo = string | React.ReactNode;
 
@@ -43,6 +44,7 @@ type Props = {
 
 export const ConfigurationProvider: React.FC<Props> = ({
   text,
+  supportURL,
   children,
   ...props
 }) => {
@@ -51,8 +53,12 @@ export const ConfigurationProvider: React.FC<Props> = ({
       ...initialContextValue,
       ...props,
       text: text ? { ...TEXT, ...text } : initialContextValue.text,
+      supportURL:
+        supportURL && urlValidator(supportURL)
+          ? supportURL
+          : initialContextValue.supportURL,
     };
-  }, [props, text]);
+  }, [props, supportURL, text]);
 
   return (
     <ConfigurationContext.Provider value={contextValue}>

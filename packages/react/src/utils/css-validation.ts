@@ -49,3 +49,12 @@ export const fontFamilyValidator = (
 
   return true;
 };
+
+export const urlValidator = (input: string): boolean => {
+  try {
+    new URL(input);
+    return true;
+  } catch {
+    return false;
+  }
+};
