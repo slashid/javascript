@@ -239,7 +239,7 @@ export default class Deferred<T> extends Promise<T> {
   private readonly rejecter: Rejecter;
 
   public constructor(
-    executor: (resolve: Resolver<T>, reject: Rejecter) => void
+    executor?: (resolve: Resolver<T>, reject: Rejecter) => void
   ) {
     let resolver: Resolver<T>;
     let rejecter: Rejecter;
@@ -248,7 +248,9 @@ export default class Deferred<T> extends Promise<T> {
       resolver = resolve;
       rejecter = reject;
 
-      executor(resolve, reject);
+      if (executor) {
+        executor(resolve, reject);
+      }
     });
 
     this.resolver = resolver!;
