@@ -20,6 +20,7 @@ import {
 } from "../../../domain/errors";
 
 import * as styles from "./error.css";
+import { Retry, RetryPolicy } from "../../../domain/types";
 
 const ErrorIcon = () => (
   <Circle variant="red" shouldAnimate={false}>
@@ -57,28 +58,46 @@ function getErrorType(error: Error): ErrorType {
 function mapErrorTypeToText(errorType: ErrorType): {
   title: TextConfigKey;
   description: TextConfigKey;
+  retry: TextConfigKey;
 } {
   switch (errorType) {
     case "rateLimit":
       return {
         title: "error.title.rateLimit",
         description: "error.subtitle.rateLimit",
+        retry: "error.retry.rateLimit",
       };
     case "recoverNonReachableHandleType":
       return {
         title: "error.title.recoverNonReachableHandleType",
         description: "error.subtitle.recoverNonReachableHandleType",
+        retry: "error.retry.recoverNonReachableHandleType",
       };
     case "noPasswordSet":
       return {
         title: "error.title.noPasswordSet",
         description: "error.subtitle.noPasswordSet",
+        retry: "error.retry.noPasswordSet",
       };
     default:
       return {
         title: "error.title",
         description: "error.subtitle",
+        retry: "error.retry",
       };
+  }
+}
+
+function mapErrorTypeToRetryPolicy(errorType: ErrorType): RetryPolicy {
+  switch (errorType) {
+    case "rateLimit":
+      return "retry";
+    case "recoverNonReachableHandleType":
+      return "reset";
+    case "noPasswordSet":
+      return "reset";
+    default:
+      return "retry";
   }
 }
 
@@ -113,7 +132,7 @@ type Props = {
 
 type ErrorProps = {
   context: ErrorState["context"];
-  retry: () => void;
+  retry: Retry;
   cancel: () => void;
 };
 
@@ -151,6 +170,7 @@ const ErrorImplementation: React.FC<Props> = ({ flowState }) => {
 
   const errorType = getErrorType(flowState.context.error);
   const { title, description } = mapErrorTypeToText(errorType);
+  const retryPolicy = mapErrorTypeToRetryPolicy(errorType);
 
   return (
     <article data-testid="sid-form-error-state">
@@ -173,7 +193,7 @@ const ErrorImplementation: React.FC<Props> = ({ flowState }) => {
         type="submit"
         variant="primary"
         testId="sid-form-error-retry-button"
-        onClick={() => flowState.retry()}
+        onClick={() => flowState.retry(retryPolicy)}
       >
         {text["error.retry"]}
       </Button>

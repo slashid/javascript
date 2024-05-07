@@ -1,4 +1,10 @@
-import { Factor, ReachablePersonHandle, RecoverableFactor, SlashID, User } from "@slashid/slashid";
+import {
+  Factor,
+  ReachablePersonHandle,
+  RecoverableFactor,
+  SlashID,
+  User,
+} from "@slashid/slashid";
 import { ReactNode } from "react";
 
 const handleTypes = ["email_address", "phone_number", "username"] as const;
@@ -117,7 +123,13 @@ export type Recover = (config: {
   factor: RecoverableFactor;
 }) => Promise<void>;
 
-export type Retry = () => void;
+/** Try again using the same factor & handle */
+export type TryAgainPolicy = "retry";
+/** Go back to the initial state of the form */
+export type ResetPolicy = "reset";
+
+export type RetryPolicy = TryAgainPolicy | ResetPolicy;
+export type Retry = (policy?: RetryPolicy) => void;
 export type Cancel = () => void;
 
 export type ValidationError = {

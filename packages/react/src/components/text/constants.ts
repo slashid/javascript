@@ -130,6 +130,9 @@ export const TEXT = {
   "error.subtitle.noPasswordSet":
     "Please contact support to set a password or log in with a phone number or an email address.",
   "error.retry": "Try again",
+  "error.retry.rateLimit": "Try again",
+  "error.retry.noPasswordSet": "Go back to login",
+  "error.retry.recoverNonReachableHandleType": "Go back to login",
   "error.contactSupport.prompt": "Need help?",
   "error.contactSupport.cta": "Contact support",
   "factor.webauthn": "Passkeys",
