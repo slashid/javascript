@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 0.5.1
+
+### Patch Changes
+
+- 9355f3a: Fix the circular dependency in the read only field CSS file
+
 ## 0.5.0
 
 ### Minor Changes
