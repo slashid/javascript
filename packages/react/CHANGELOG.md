@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 1.24.1
+
+### Patch Changes
+
+- 25960c7: Prevent the person identified being fired twice
+
 ## 1.24.0
 
 ### Minor Changes
