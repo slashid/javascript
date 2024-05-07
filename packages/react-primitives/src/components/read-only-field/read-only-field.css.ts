@@ -1,5 +1,5 @@
 import { style } from "@vanilla-extract/css";
-import { theme, publicVariables } from "../../main";
+import { theme, publicVariables } from "../../theme/theme.css";
 
 export const wrapper = style({
   position: "relative",
