@@ -98,7 +98,7 @@ describe("#Form - customisation", () => {
               {({ context, retry, cancel }) => (
                 <div data-testid="custom-error-function">
                   <h1>{context.error.message}</h1>
-                  <button onClick={retry}>Retry</button>
+                  <button onClick={() => retry("retry")}>Retry</button>
                   <button onClick={cancel}>Cancel</button>
                 </div>
               )}
