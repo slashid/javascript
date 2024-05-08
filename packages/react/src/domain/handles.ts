@@ -15,9 +15,9 @@ import {
   FactorSmsLink,
   FactorTOTP,
   FactorWithAllowedHandleTypes,
+  HANDLE_TYPES,
   Handle,
   HandleType,
-  isFactorWithAllowedHandleTypes,
 } from "./types";
 
 const FACTORS_WITH_EMAIL = [
@@ -31,6 +31,24 @@ const FACTORS_WITH_PHONE = ["otp_via_sms", "sms_link", "password"];
 // TODO: add TOTP later when available
 const FACTORS_WITH_USERNAME = ["password"];
 const SSO_FACTORS = ["oidc", "saml"];
+
+function isFactorWithAllowedHandleTypes(
+  factor: Factor
+): factor is FactorWithAllowedHandleTypes {
+  // check if factor has `allowedHandleTypes` property
+  if (!("allowedHandleTypes" in factor)) {
+    return false;
+  }
+
+  // check if the values in `allowedHandleTypes` array are correct
+  return (factor as FactorWithAllowedHandleTypes).allowedHandleTypes!.every(
+    (handleType) => {
+      return HANDLE_TYPES.includes(handleType);
+    }
+  );
+
+  return true;
+}
 
 function isHandleTypeAllowed(
   factor: Factor | FactorWithAllowedHandleTypes,
