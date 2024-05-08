@@ -3,12 +3,12 @@ import { render, screen } from "@testing-library/react";
 
 import { LoggedIn } from ".";
 import { TestSlashIDProvider } from "../../context/test-providers";
-import { createTestUser } from "../test-utils";
+import { createAnonymousTestUser, createTestUser } from "../test-utils";
 
 const TestComponent = () => <h1>Test</h1>;
 
 describe("LoggedIn", () => {
-  test("should render children when a user is logged in", () => {
+  test("should render children when a user exists", () => {
     render(
       <TestSlashIDProvider user={createTestUser()}>
         <LoggedIn>
@@ -19,9 +19,20 @@ describe("LoggedIn", () => {
     expect(screen.getByText("Test")).toBeInTheDocument();
   });
 
-  test("should not render children when a user not is logged in", () => {
+  test("should not render children when a user does not exist", () => {
     render(
       <TestSlashIDProvider user={undefined}>
+        <LoggedIn>
+          <TestComponent />
+        </LoggedIn>
+      </TestSlashIDProvider>
+    );
+    expect(screen.queryByText("Test")).not.toBeInTheDocument();
+  });
+
+  test("should not render children when an anonymous user exists", () => {
+    render(
+      <TestSlashIDProvider anonymousUser={createAnonymousTestUser()}>
         <LoggedIn>
           <TestComponent />
         </LoggedIn>

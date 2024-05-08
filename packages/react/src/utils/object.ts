@@ -5,7 +5,9 @@ export const toEntries = <T extends object>(obj: T): Entries<T> => {
   return Object.entries(obj) as Entries<T>;
 };
 
-export type Entries<T extends object> = { [K in keyof T]-?: [K, T[K]] }[keyof T][];
+export type Entries<T extends object> = {
+  [K in keyof T]-?: [K, T[K]];
+}[keyof T][];
 
 /**
  * Object.keys(...) with type information

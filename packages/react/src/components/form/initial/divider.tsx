@@ -13,7 +13,9 @@ export const Divider = () => {
 
   return (
     <>
-      {shouldRenderDivider && <PrimitiveDivider>{text["initial.divider"]}</PrimitiveDivider>}
+      {shouldRenderDivider && (
+        <PrimitiveDivider>{text["initial.divider"]}</PrimitiveDivider>
+      )}
     </>
   );
 };

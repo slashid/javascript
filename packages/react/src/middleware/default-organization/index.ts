@@ -56,12 +56,12 @@ export const defaultOrganization =
           user: User;
         }) => string | Promise<string>)
   ): LoginMiddleware =>
-  async ({ user }) => {
+  async ({ user, sid }) => {
     const organizations = await user.getOrganizations();
     const organizationId =
       typeof oid === "string" ? oid : await oid({ organizations, user });
 
     const token = await user.getTokenForOrganization(organizationId);
 
-    return new User(token);
+    return new User(token, sid);
   };

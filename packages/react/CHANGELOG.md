@@ -1,5 +1,24 @@
 # @slashid/react
 
+## 1.24.1
+
+### Patch Changes
+
+- 25960c7: Prevent the person identified being fired twice
+
+## 1.24.0
+
+### Minor Changes
+
+- 689a2cd: Introduce the anonymousUser property
+- b1a394c: Support login with TOTP as an additional auth factor
+
+## 1.23.0
+
+### Minor Changes
+
+- 6738884: Add support for anonymous users
+
 ## 1.22.2
 
 ### Patch Changes

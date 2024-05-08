@@ -1,11 +1,18 @@
 import { rest } from "msw";
-import { createTestUser } from "../components/test-utils";
+import {
+  createAnonymousTestUser,
+  createTestUser,
+} from "../components/test-utils";
 import { FactorMethod, User } from "@slashid/slashid";
 import { HandleType } from "../domain/types";
 
-const BASE_API_URL = "https://api.sandbox.slashid.com";
+const BASE_API_URL_SANDBOX = "https://api.sandbox.slashid.com";
+const BASE_API_URL_PRODUCTION = "https://api.slashid.com";
+export const BASE_API_URL_CUSTOM = "https://custom.base.url";
 
-const route = (path: string) => `${BASE_API_URL}${path}`;
+const route = (path: string) => `${BASE_API_URL_SANDBOX}${path}`;
+const routeProduction = (path: string) => `${BASE_API_URL_PRODUCTION}${path}`;
+const routeCustom = (path: string) => `${BASE_API_URL_CUSTOM}${path}`;
 
 const challenges: Record<string, User> = {};
 
@@ -32,7 +39,7 @@ export const handlers = [
       authentications: [
         {
           handle: req.body?.handle,
-          factor: req.body?.factor.method,
+          method: req.body?.factor.method,
           timestamp: new Date().toISOString(),
         },
       ],
@@ -79,5 +86,33 @@ export const handlers = [
         result: createTestUser({ token, oid }).token,
       })
     );
+  }),
+  ...[route, routeProduction, routeCustom].map((r) =>
+    rest.post(r("/token/validate"), (_, res, ctx) => {
+      return res(ctx.status(200), ctx.json({ result: { valid: true } }));
+    })
+  ),
+  ...[route, routeProduction, routeCustom].map((r) =>
+    rest.post(r("/actions/sdk"), (_, res, ctx) => {
+      return res(ctx.status(200), ctx.json({}));
+    })
+  ),
+  rest.post(routeProduction("/persons/anonymous"), (req, res, ctx) => {
+    const oid = req.headers.get("Slashid-Orgid") as string;
+    const user = createAnonymousTestUser({ oid });
+
+    return res(ctx.status(200), ctx.json({ result: user.token }));
+  }),
+  rest.post(routeCustom("/persons/anonymous"), (req, res, ctx) => {
+    const oid = req.headers.get("Slashid-Orgid") as string;
+    const user = createAnonymousTestUser({ oid });
+
+    return res(ctx.status(200), ctx.json({ result: user.token }));
+  }),
+  rest.post(route("/persons/anonymous"), (req, res, ctx) => {
+    const oid = req.headers.get("Slashid-Orgid") as string;
+    const user = createAnonymousTestUser({ oid });
+
+    return res(ctx.status(200), ctx.json({ result: user.token }));
   }),
 ];

@@ -1,5 +1,24 @@
 # @slashid/react
 
+## 0.5.1
+
+### Patch Changes
+
+- 9355f3a: Fix the circular dependency in the read only field CSS file
+
+## 0.5.0
+
+### Minor Changes
+
+- b1a394c: Add components:
+
+  - ReadOnlyField
+
+  Add icons:
+
+  - Copy
+  - Download
+
 ## 0.4.0
 
 ### Minor Changes

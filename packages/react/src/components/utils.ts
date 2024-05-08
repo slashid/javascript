@@ -82,3 +82,32 @@ export const fromEntries = <
 ): { [K in T[number] as K[0]]: K[1] } => {
   return Object.fromEntries(entries) as { [K in T[number] as K[0]]: K[1] };
 };
+
+/**
+ * Executes each operation sequentially until completion
+ * or until the [until] predicate is satisfied, whichever
+ * comes first.
+ *
+ * Upon completion, fires [then] if provided.
+ */
+export const sequence = async <R>(
+  operations: Array<() => R | Promise<R>>,
+  {
+    until,
+    then,
+  }: {
+    until?: (value: R) => boolean;
+    then?: (value?: R) => void;
+  } = {}
+): Promise<void> => {
+  for (const operation of operations) {
+    const result = await operation();
+    const finished = until?.(result);
+    if (finished) {
+      then?.(result);
+      return;
+    }
+  }
+
+  then?.();
+};

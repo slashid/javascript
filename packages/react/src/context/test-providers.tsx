@@ -15,6 +15,7 @@ export const TestSlashIDProvider: React.FC<TestProviderProps> = ({
   sid,
   sdkState,
   user,
+  anonymousUser,
   children,
   logIn,
   mfa,
@@ -27,12 +28,22 @@ export const TestSlashIDProvider: React.FC<TestProviderProps> = ({
       sid,
       sdkState: sdkState || "initial",
       user,
+      anonymousUser,
       recover: recover || (async () => undefined),
       ...(logIn ? { logIn } : {}),
       ...(mfa ? { mfa } : {}),
       __switchOrganizationInContext,
     }),
-    [sid, sdkState, user, logIn, mfa, recover, __switchOrganizationInContext]
+    [
+      sid,
+      sdkState,
+      user,
+      anonymousUser,
+      recover,
+      logIn,
+      mfa,
+      __switchOrganizationInContext,
+    ]
   );
 
   return (
