@@ -65,12 +65,19 @@ export function createTestInbox({
     return message.subject.match(/\d{6}/)?.[0];
   }
 
+  async function getEmailBySubject(subject: string) {
+    return mailosaurClient.messages.get(config.serverId, {
+      sentTo: name,
+      subject
+    })
+  }
+
   return {
     name,
     email,
     getLatestEmail,
     getOTP,
     getJumpPageURL,
-    getEmailBySubject: async (subject) => fetchEmailBySubject(subject),
+    getEmailBySubject,
   };
 }
