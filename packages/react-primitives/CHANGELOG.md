@@ -1,5 +1,12 @@
 # @slashid/react
 
+## 0.5.2
+
+### Patch Changes
+
+- 4e41b68: Add support for username handle type
+- 4e41b68: Introduce the supportUrl config prop
+
 ## 0.5.1
 
 ### Patch Changes
