@@ -1,8 +1,18 @@
-import { Factor, RecoverableFactor, SlashID, User } from "@slashid/slashid";
+import {
+  Factor,
+  ReachablePersonHandle,
+  RecoverableFactor,
+  SlashID,
+  User,
+} from "@slashid/slashid";
 import { ReactNode } from "react";
 
-const handleTypes = ["email_address", "phone_number"] as const;
-export type HandleType = (typeof handleTypes)[number];
+export const HANDLE_TYPES = [
+  "email_address",
+  "phone_number",
+  "username",
+] as const;
+export type HandleType = (typeof HANDLE_TYPES)[number];
 
 export interface Handle {
   type: HandleType;
@@ -15,7 +25,7 @@ export const isHandle = (obj: unknown): obj is Handle => {
   if (typeof obj !== "object") return false;
 
   const { type, value } = obj as Handle;
-  if (!handleTypes.includes(type)) return false;
+  if (!HANDLE_TYPES.includes(type)) return false;
 
   return typeof value === "string";
 };
@@ -37,6 +47,8 @@ export type LoginMiddleware = (
 export interface LoginOptions {
   middleware?: LoginMiddleware | LoginMiddleware[];
 }
+
+export type FactorWebauthn = Extract<Factor, { method: "webauthn" }>;
 
 export type FactorOIDC = Extract<Factor, { method: "oidc" }>;
 
@@ -67,7 +79,7 @@ export type FactorTOTP = Extract<Factor, { method: "totp" }>;
 /**
  * Utility type to specify allowed handle types in case given factor supports more than one.
  */
-export type FactorWithAllowedHandleTypes = Factor & {
+export type FactorWithAllowedHandleTypes<TF extends Factor = Factor> = TF & {
   /**
    * Limits the allowed handle types for given factor method to the ones specified in the array.
    * When this option is not specified, all supported handle types are allowed.
@@ -90,9 +102,6 @@ export type FactorCustomizableSAML = FactorSAML & {
   logo?: string | ReactNode;
 };
 
-export type FactorCustomizablePassword = FactorPassword &
-  FactorWithAllowedHandleTypes;
-
 /**
  * All factors that can be configured for usage in our UI components.
  */
@@ -100,7 +109,9 @@ export type FactorConfiguration =
   | Exclude<Factor, FactorOIDC | FactorSAML | FactorPassword>
   | FactorLabeledOIDC
   | FactorCustomizableSAML
-  | FactorCustomizablePassword;
+  | FactorWithAllowedHandleTypes<FactorPassword>
+  | FactorWithAllowedHandleTypes<FactorWebauthn>
+  | FactorWithAllowedHandleTypes<FactorTOTP>;
 
 export type LogIn = (
   config: LoginConfiguration,
@@ -113,11 +124,17 @@ export type MFA = (
 ) => Promise<User | undefined>;
 
 export type Recover = (config: {
-  handle: Handle;
+  handle: ReachablePersonHandle;
   factor: RecoverableFactor;
 }) => Promise<void>;
 
-export type Retry = () => void;
+/** Try again using the same factor & handle */
+export type TryAgainPolicy = "retry";
+/** Go back to the initial state of the form */
+export type ResetPolicy = "reset";
+
+export type RetryPolicy = TryAgainPolicy | ResetPolicy;
+export type Retry = (policy?: RetryPolicy) => void;
 export type Cancel = () => void;
 
 export type ValidationError = {
@@ -127,23 +144,5 @@ export type ValidationError = {
 export type Validator<T = unknown> = (value: T) => ValidationError | undefined;
 
 export type MaybeArray<T> = T | T[];
-
-export function isFactorWithAllowedHandleTypes(
-  factor: Factor
-): factor is FactorWithAllowedHandleTypes {
-  // check if factor has `allowedHandleTypes` property
-  if (!("allowedHandleTypes" in factor)) {
-    return false;
-  }
-
-  // check if the values in `allowedHandleTypes` array are correct
-  return (factor as FactorWithAllowedHandleTypes).allowedHandleTypes!.every(
-    (handleType) => {
-      return handleTypes.includes(handleType);
-    }
-  );
-
-  return true;
-}
 
 export type NonEmptyArray<T> = [T, ...T[]];

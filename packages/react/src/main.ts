@@ -35,6 +35,8 @@ import {
 } from "./utils/customisation";
 import * as validation from "./utils/css-validation";
 
+import type { LoginConfiguration } from "./domain/types";
+
 const Customisation = {
   sanitiseCssVariableCustomisationConfig,
   getGoogleFontImports,
@@ -74,6 +76,7 @@ export {
   type LoginMiddleware,
   type LoginMiddlewareContext,
   type SlashIDProviderProps,
+  type LoginConfiguration,
 };
 
 export { ServerThemeRoot } from "@slashid/react-primitives";

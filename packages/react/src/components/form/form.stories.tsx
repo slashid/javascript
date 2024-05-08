@@ -178,7 +178,7 @@ export const WithCompositionAndCustomisation: Story = {
               {({ context, retry, cancel }) => (
                 <div>
                   <h1>{context.error.message}</h1>
-                  <button onClick={retry}>Retry</button>
+                  <button onClick={() => retry("retry")}>Retry</button>
                   <button onClick={cancel}>Cancel</button>
                 </div>
               )}
