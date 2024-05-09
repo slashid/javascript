@@ -102,6 +102,7 @@ test.describe("Authentication", () => {
     });
 
     // log in
+    await formPage.page.bringToFront();
     await formPage.enterPassword("T3stPWD!2");
     await formPage.submitAuthenticatingForm();
 

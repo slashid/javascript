@@ -6,11 +6,11 @@ import {
 } from "../slashid";
 import { hash } from "bcryptjs";
 
-const oid = process.env.SLASHID_ORG_ID!;
+const oid = process.env.E2E_SID_ORG_ID!;
 
-OpenAPI.BASE = process.env.SLASHID_API_URL!;
+OpenAPI.BASE = process.env.E2E_SID_API_URL!;
 OpenAPI.HEADERS = {
-  "SlashID-API-Key": process.env.SLASHID_API_KEY!,
+  "SlashID-API-Key": process.env.E2E_SID_API_KEY!,
 };
 
 export async function createUserWithPassword(email: string, password: string) {

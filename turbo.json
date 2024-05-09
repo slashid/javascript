@@ -15,7 +15,7 @@
       "dependsOn": ["@slashid/tests#openapi"]
     },
     "openapi": {
-      "outputs": []
+      "outputs": ["slashid/**"]
     },
     "build": {
       "dependsOn": ["^build", "test:types", "lint"],

@@ -51,6 +51,9 @@ jobs:
           CI: true
           MAILOSAUR_API_KEY: ${{ secrets.MAILOSAUR_API_KEY }}
           MAILOSAUR_SERVER_ID: ${{ secrets.MAILOSAUR_SERVER_ID }}
+          E2E_SID_API_URL: ${{ secrets.E2E_SID_API_URL }}
+          E2E_SID_API_KEY: ${{ secrets.E2E_SID_API_KEY }}
+          E2E_SID_ORG_ID: ${{ secrets.E2E_SID_ORG_ID }}
           APP_NAME: ${{ matrix.app-name }}
         run: pnpm test:e2e --filter tests
 
