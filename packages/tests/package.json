@@ -5,14 +5,17 @@
   "description": "Tests setup for /id projects",
   "main": "index.js",
   "scripts": {
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "openapi": "openapi --input https://cdn.slashid.com/slashid-openapi-latest.yaml --output ./slashid --client axios"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@playwright/test": "1.42.1",
+    "@types/bcryptjs": "^2.4.6",
     "@types/node": "18.11.9",
     "@types/uuid": "^9.0.8",
+    "openapi-typescript-codegen": "^0.29.0",
     "tsconfig": "workspace:*"
   },
   "files": [
@@ -21,6 +24,8 @@
   "dependencies": {
     "@slashid/slashid": "^3.22.0",
     "@types/uuid": "^9.0.8",
+    "axios": "^1.6.8",
+    "bcryptjs": "^2.4.3",
     "cheerio": "1.0.0-rc.12",
     "dotenv": "^16.4.5",
     "mailinator-client": "^1.0.4",
