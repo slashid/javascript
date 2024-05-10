@@ -168,7 +168,7 @@ const BasicForm = () => {
         { method: "email_link" },
         { method: "otp_via_email" },
         { method: "otp_via_sms" },
-        { method: "password" },
+        { method: "password", allowedHandleTypes: ["username"] },
         {
           method: "oidc",
           options: {
@@ -261,7 +261,7 @@ const ComposedForm = () => {
                   {({ context, retry, cancel }) => (
                     <div>
                       <h1>{context.error.message}</h1>
-                      <button onClick={retry}>Retry</button>
+                      <button onClick={() => retry()}>Retry</button>
                       <button onClick={cancel}>Cancel</button>
                     </div>
                   )}
@@ -324,6 +324,10 @@ root.render(
       tokenStorage="localStorage"
       analyticsEnabled
       anonymousUsersEnabled
+      environment={{
+        baseURL: "https://api.slashid.local",
+        sdkURL: "https://jump.slashid.local/sdk.html"
+      }}
     >
       <LogOut />
       <div className="layout">

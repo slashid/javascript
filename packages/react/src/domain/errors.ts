@@ -1,3 +1,5 @@
+import { Errors } from "@slashid/slashid";
+
 /**
  * Ensure that a valid Error instance is returned, since in JS you can throw anything.
  */
@@ -15,4 +17,36 @@ export function ensureError(value: unknown): Error {
     `This value was thrown as is, not through an Error: ${stringified}`
   );
   return error;
+}
+
+export const ERROR_NAMES = {
+  recoverNonReachableHandleType: "recoverNonReachableHandleType",
+} as const;
+
+type NonReachableHandleTypeError = Error &
+  typeof Errors.SlashIDError & {
+    name: typeof ERROR_NAMES.recoverNonReachableHandleType;
+  };
+
+export function isNonReachableHandleTypeError(
+  error: Error
+): error is NonReachableHandleTypeError {
+  return (
+    Errors.isSlashIDError(error) &&
+    error.name === ERROR_NAMES.recoverNonReachableHandleType
+  );
+}
+
+type NoPasswordSetError = Error &
+  typeof Errors.SlashIDError & {
+    name: typeof Errors.ERROR_NAMES.noPasswordSet;
+  };
+
+export function isNoPasswordSetError(
+  error: Error
+): error is NoPasswordSetError {
+  return (
+    Errors.isSlashIDError(error) &&
+    error.name === Errors.ERROR_NAMES.noPasswordSet
+  );
 }

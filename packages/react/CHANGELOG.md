@@ -1,5 +1,13 @@
 # @slashid/react
 
+## 1.24.2
+
+### Patch Changes
+
+- 4e41b68: Add support for username handle type
+- 4e41b68: Introduce the supportUrl config prop
+- 4e41b68: Add special handling for the no password set error
+
 ## 1.24.1
 
 ### Patch Changes

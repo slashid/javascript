@@ -3,7 +3,7 @@ import { Text } from "../text";
 import { SuccessState } from "./flow";
 
 const CheckIcon = () => (
-  <Circle>
+  <Circle variant="primary">
     <svg
       width="21"
       height="18"

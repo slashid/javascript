@@ -25,6 +25,15 @@ export const isValidEmail: ValidatorFn<string> = (value) => {
   return EMAIL_REGEX.test(value);
 };
 
+export const isValidUsername: ValidatorFn<string> = (value) => {
+  if (typeof value !== "string" || value === "") {
+    return false;
+  }
+
+  // TODO get this in sync with the BE
+  return value.length <= 128;
+};
+
 export const isValidOTPCode: ValidatorFn<string> = (value) => {
   if (Number.isNaN(Number(value)) || value.length !== OTP_CODE_LENGTH) {
     return false;

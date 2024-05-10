@@ -33,7 +33,12 @@ export const Tabs: React.FC<Props> = ({
     >
       <RadixTabs.List className={styles.list} aria-label="SlashID Tabs">
         {tabs.map(({ id, title }) => (
-          <RadixTabs.Trigger key={id} className={styles.trigger} value={id}>
+          <RadixTabs.Trigger
+            data-testid={`sid-tabs-trigger-${id}`}
+            key={id}
+            className={styles.trigger}
+            value={id}
+          >
             {title}
           </RadixTabs.Trigger>
         ))}

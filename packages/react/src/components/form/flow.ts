@@ -1,4 +1,4 @@
-import { User } from "@slashid/slashid";
+import { Utils, Errors, User, ReachablePersonHandle } from "@slashid/slashid";
 import {
   Cancel,
   LogIn,
@@ -7,8 +7,9 @@ import {
   MFA,
   LoginOptions,
   Recover,
+  RetryPolicy,
 } from "../../domain/types";
-import { ensureError } from "../../domain/errors";
+import { ERROR_NAMES, ensureError } from "../../domain/errors";
 import { isFactorRecoverable } from "../../domain/handles";
 import { StoreRecoveryCodesState } from "./store-recovery-codes";
 
@@ -67,6 +68,7 @@ interface CancelEvent {
 interface RetryEvent {
   type: "sid_retry";
   context: AuthenticatingState["context"];
+  policy: RetryPolicy;
 }
 
 interface InitEvent {
@@ -146,13 +148,28 @@ const createAuthenticatingState = (
   }
 
   async function recover() {
-    if (!isFactorRecoverable(context.config.factor) || !context.config.handle)
+    if (
+      !context.config.handle?.type ||
+      !Utils.isReachablePersonHandleType(context.config.handle.type)
+    ) {
+      send({
+        type: "sid_login.error",
+        error: new Errors.SlashIDError({
+          name: ERROR_NAMES.recoverNonReachableHandleType,
+          message: "Recovery requires a reachable handle type.",
+          context,
+        }),
+      });
       return;
+    }
+
+    // not possible at the moment
+    if (!isFactorRecoverable(context.config.factor)) return;
 
     try {
       return await recoverFn({
         factor: context.config.factor,
-        handle: context.config.handle,
+        handle: context.config.handle as ReachablePersonHandle,
       });
 
       // recover does not authenticate on its own
@@ -169,8 +186,8 @@ const createAuthenticatingState = (
       config: context.config,
       options: context.options,
     },
-    retry: () => {
-      send({ type: "sid_retry", context });
+    retry: (policy = "retry") => {
+      send({ type: "sid_retry", context, policy });
     },
     recover,
     cancel: () => {
@@ -195,8 +212,8 @@ const createErrorState = (
   return {
     status: "error",
     context,
-    retry: () => {
-      send({ type: "sid_retry", context });
+    retry: (policy = "retry") => {
+      send({ type: "sid_retry", context, policy });
     },
     cancel: () => {
       send({ type: "sid_cancel" });
@@ -335,6 +352,11 @@ export function createFlow(opts: CreateFlowOptions = {}) {
       case "sid_retry":
         // TODO replace with a check for ready state
         if (!logInFn || !recoverFn) break;
+
+        if (e.policy === "reset") {
+          setState(createInitialState(send), e);
+          break;
+        }
 
         const retryContext: AuthenticatingState["context"] = {
           config: e.context.config,
