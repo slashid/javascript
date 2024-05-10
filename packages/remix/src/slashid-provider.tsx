@@ -6,7 +6,7 @@ import {
   useSlashID,
   ServerThemeRoot,
 } from "@slashid/react";
-import { SSR, SlashIDOptions, User } from "@slashid/slashid";
+import { AnonymousUser, SSR, SlashIDOptions, User } from "@slashid/slashid";
 import { useEffect, useMemo, useState } from "react";
 
 export type RemixSlashIDProviderOptions = Omit<
@@ -38,8 +38,8 @@ function SlashIDProviderSSR({
 
     return {
       sid: undefined,
-      user: user as unknown as User,
-      anonymousUser: undefined,
+      user: user?.anonymous ? undefined : (user as User),
+      anonymousUser: user?.anonymous ? (user as AnonymousUser) : undefined,
       sdkState: user ? ("ready" as const) : ("initial" as const),
       logOut: () => {
         throw new Error("Operation not possible in this state");
