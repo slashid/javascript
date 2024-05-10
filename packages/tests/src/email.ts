@@ -1,7 +1,7 @@
 import MailosaurClient from "mailosaur";
-
 import { load } from "cheerio";
 import { v4 as generateUUID } from "uuid";
+import { config } from "../config";
 
 type Message = Awaited<ReturnType<MailosaurClient["messages"]["get"]>>;
 
@@ -21,22 +21,13 @@ export type TestInbox = {
 export function createTestInbox({
   inboxName,
 }: CreateTestInboxInput = {}): TestInbox {
-  const config = {
-    serverId: process.env.MAILOSAUR_SERVER_ID || "",
-    apiKey: process.env.MAILOSAUR_API_KEY || "",
-  };
-
-  if (!config.serverId || !config.apiKey) {
-    throw new Error("Mailosaur configuration is missing");
-  }
-
   const name = inboxName || `e2e-${generateUUID()}`;
-  const email = `${name}@${config.serverId}.mailosaur.net`;
-  const mailosaurClient = new MailosaurClient(config.apiKey);
+  const email = `${name}@${config.mailServerId}.mailosaur.net`;
+  const mailosaurClient = new MailosaurClient(config.mailApiKey);
 
   async function getLatestEmail(): Promise<Message | null> {
     try {
-      const message = await mailosaurClient.messages.get(config.serverId, {
+      const message = await mailosaurClient.messages.get(config.mailServerId, {
         sentTo: name,
       });
 
@@ -66,10 +57,10 @@ export function createTestInbox({
   }
 
   async function getEmailBySubject(subject: string) {
-    return mailosaurClient.messages.get(config.serverId, {
+    return mailosaurClient.messages.get(config.mailServerId, {
       sentTo: name,
-      subject
-    })
+      subject,
+    });
   }
 
   return {

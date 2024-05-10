@@ -7,13 +7,13 @@ import {
 import { config } from "../config";
 import { hash } from "bcryptjs";
 
-OpenAPI.BASE = config.apiURL;
+OpenAPI.BASE = config.sidApiUrl;
 OpenAPI.HEADERS = {
-  "SlashID-API-Key": config.apiKey,
+  "SlashID-API-Key": config.sidApiKey,
 };
 
 export async function createUserWithPassword(email: string, password: string) {
-  const { result: user } = await PersonsService.postPersons(config.oid, {
+  const { result: user } = await PersonsService.postPersons(config.sidOid, {
     handles: [
       {
         type: PersonHandleType.EMAIL_ADDRESS,
@@ -26,7 +26,7 @@ export async function createUserWithPassword(email: string, password: string) {
 
   await PersonCredentialsService.postPersonsPersonIdCredentials(
     user.person_id,
-    config.oid,
+    config.sidOid,
     {
       type: "password",
       params: {
