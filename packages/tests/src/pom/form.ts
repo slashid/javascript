@@ -79,11 +79,11 @@ export class FormPage {
     }
   }
 
-  async logout() {
-    await this.page.getByTestId("logout-btn").click();
+  async promptCTA() {
+    await this.page.getByTestId("sid-form-prompt-cta").click();
   }
 
-  async retry() {
+  async resetPassword() {
     await this.page.getByTestId("sid-form-authenticating-retry-button").click();
   }
 }
