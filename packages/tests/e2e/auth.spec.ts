@@ -74,8 +74,7 @@ test.describe("Authentication", () => {
     await formPage.enterEmail(testInbox.email);
     await formPage.submitInitialForm();
 
-    // reset password
-    await formPage.retry();
+    await formPage.resetPassword();
     // check email
 
     const resetEmail = await testInbox.getEmailBySubject("Reset your password");
@@ -94,6 +93,8 @@ test.describe("Authentication", () => {
     await jumpPageReset.page.bringToFront();
     await jumpPageReset.enterPassword("T3stPWD!2");
     await jumpPageReset.enterPasswordConfirm("T3stPWD!2");
+
+    await page.waitForTimeout(1000);
     await jumpPageReset.submitInitialForm();
 
     await jumpPageReset.successState.waitFor({
@@ -145,7 +146,7 @@ test.describe("Authentication", () => {
     expect(email).toBeDefined();
     if (!email) return;
 
-    await formPage.retry();
+    await formPage.promptCTA(); // resend OTP
     await expect(formPage.emailIcon).toBeVisible();
   });
 });
