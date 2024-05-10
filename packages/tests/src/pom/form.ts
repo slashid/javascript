@@ -84,6 +84,8 @@ export class FormPage {
   }
 
   async resetPassword() {
-    await this.page.getByTestId("sid-form-authenticating-retry-button").click();
+    await this.page
+      .getByTestId("sid-form-authenticating-recover-prompt")
+      .click();
   }
 }
