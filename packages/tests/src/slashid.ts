@@ -4,7 +4,7 @@ import {
   PersonHandleType,
   PersonCredentialsService,
 } from "../slashid";
-import { config } from "./config";
+import { config } from "../config";
 import { hash } from "bcryptjs";
 
 OpenAPI.BASE = config.apiURL;
