@@ -39,6 +39,7 @@ function SlashIDProviderSSR({
     return {
       sid: undefined,
       user: user as unknown as User,
+      anonymousUser: undefined,
       sdkState: user ? ("ready" as const) : ("initial" as const),
       logOut: () => {
         throw new Error("Operation not possible in this state");

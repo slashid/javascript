@@ -3,6 +3,7 @@ import { ConfigurationProvider, type Factor, Form } from "@slashid/remix";
 const factors: Factor[] = [
   { method: "email_link" },
   { method: "otp_via_email" },
+  { method: "password" },
 ];
 
 /**
