@@ -4,17 +4,16 @@ import {
   PersonHandleType,
   PersonCredentialsService,
 } from "../slashid";
+import { config } from "./config";
 import { hash } from "bcryptjs";
 
-const oid = process.env.E2E_SID_ORG_ID!;
-
-OpenAPI.BASE = process.env.E2E_SID_API_URL!;
+OpenAPI.BASE = config.apiURL;
 OpenAPI.HEADERS = {
-  "SlashID-API-Key": process.env.E2E_SID_API_KEY!,
+  "SlashID-API-Key": config.apiKey,
 };
 
 export async function createUserWithPassword(email: string, password: string) {
-  const { result: user } = await PersonsService.postPersons(oid, {
+  const { result: user } = await PersonsService.postPersons(config.oid, {
     handles: [
       {
         type: PersonHandleType.EMAIL_ADDRESS,
@@ -27,7 +26,7 @@ export async function createUserWithPassword(email: string, password: string) {
 
   await PersonCredentialsService.postPersonsPersonIdCredentials(
     user.person_id,
-    oid,
+    config.oid,
     {
       type: "password",
       params: {
