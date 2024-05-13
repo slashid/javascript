@@ -89,7 +89,6 @@ test.describe("Authentication", () => {
     await formPage.submitOTP(otp);
     await expect(formPage.errorMessage).not.toBeVisible();
 
-
     await expect(formPage.successState).toBeVisible();
   });
 
@@ -107,8 +106,47 @@ test.describe("Authentication", () => {
     expect(email).toBeDefined();
     if (!email) return;
 
+    const initialOtp = await testInbox.getOTP(email);
+    expect(initialOtp).toBeDefined();
+    if (!initialOtp) return;
+
+    const beforeResend = new Date(Date.now());
     await formPage.resendOTPCode();
     await expect(formPage.emailIcon).toBeVisible();
+
+    const maxRetries = 4;
+    let retries = 0;
+    let newOtp = "";
+
+    while (retries < maxRetries) {
+      await page.waitForTimeout(1000);
+
+      const newEmail = await testInbox.getLatestEmail({
+        receivedAfter: beforeResend,
+      });
+      expect(newEmail).toBeDefined();
+      if (!newEmail) continue;
+
+      const initialOtp = await testInbox.getOTP(email);
+      expect(initialOtp).toBeDefined();
+      if (!initialOtp) continue;
+
+      const otp = await testInbox.getOTP(newEmail);
+      expect(otp).toBeDefined();
+      if (!otp) continue;
+
+      if (otp !== initialOtp) {
+        newOtp = otp;
+        break;
+      }
+
+      retries++;
+    }
+
+    expect(newOtp).toHaveLength(6);
+
+    await formPage.submitOTP(newOtp);
+    await expect(formPage.successState).toBeVisible();
   });
 });
 
