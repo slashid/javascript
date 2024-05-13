@@ -80,6 +80,11 @@ export class FormPage {
   }
 
   async resendOTPCode() {
+    await this.page
+      .getByText("Didn’t receive the message?")
+      .waitFor({ state: "visible" });
+    await this.page.getByText("Resend").waitFor({ state: "visible" });
+
     await this.clickCTALink();
   }
 
