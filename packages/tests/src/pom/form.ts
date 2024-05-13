@@ -79,13 +79,17 @@ export class FormPage {
     }
   }
 
-  async promptCTA() {
-    await this.page.getByTestId("sid-form-prompt-cta").click();
+  async resendOTPCode() {
+    await this.clickCTALink();
   }
 
   async resetPassword() {
     await this.page
       .getByTestId("sid-form-authenticating-recover-prompt")
       .click();
+  }
+
+  private async clickCTALink() {
+    await this.page.getByTestId("sid-form-prompt-cta").click();
   }
 }

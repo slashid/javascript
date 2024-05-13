@@ -146,7 +146,7 @@ test.describe("Authentication", () => {
     expect(email).toBeDefined();
     if (!email) return;
 
-    await formPage.promptCTA(); // resend OTP
+    await formPage.resendOTPCode();
     await expect(formPage.emailIcon).toBeVisible();
   });
 });
