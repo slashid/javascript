@@ -44,6 +44,16 @@ pnpm build
 pnpm test:e2e -- --debug
 ```
 
+#### OpenAPI Client
+
+The above paragraph assumes that you run the E2E tests from the root of the project. This ensures the OpenAPI TypeScript client to be generated before the tests are run (see [Turbo config](./turbo.json#L14)). The client is used to pre-configure the required SlashID entities, so that actual test cases can be more isolated and concise.
+
+If you run the E2E tests from the nested `packages/tests` directory, make sure to generate the OpenAPI client manually:
+
+```
+pnpm openapi
+```
+
 ### Updating Playwright
 
 `@playwright/test` in `packages/tests/package.json` and the Playwright image in `Dockerfile` need to use the same version!
