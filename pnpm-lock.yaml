@@ -3072,11 +3072,11 @@ packages:
     peerDependencies:
       '@babel/core': ^7.0.0-0
     dependencies:
-      '@babel/compat-data': 7.23.5
+      '@babel/compat-data': 7.23.3
       '@babel/core': 7.24.5
-      '@babel/helper-compilation-targets': 7.23.6
+      '@babel/helper-compilation-targets': 7.22.15
       '@babel/helper-plugin-utils': 7.22.5
-      '@babel/helper-validator-option': 7.23.5
+      '@babel/helper-validator-option': 7.22.15
       '@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression': 7.23.3(@babel/core@7.24.5)
       '@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining': 7.23.3(@babel/core@7.24.5)
       '@babel/plugin-bugfix-v8-static-class-fields-redefine-readonly': 7.23.3(@babel/core@7.24.5)
@@ -4918,6 +4918,10 @@ packages:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.1
       '@jridgewell/sourcemap-codec': 1.4.15
+
+  /@jsdevtools/ono@7.1.3:
+    resolution: {integrity: sha512-4JQNk+3mVzK3xh2rqd6RB4J46qUR19azEHBneZyTZM+c456qOrbbM/5xcR8huNCCcbVt7+UmizG6GuUvPvKUYg==}
+    dev: true
 
   /@jspm/core@2.0.1:
     resolution: {integrity: sha512-Lg3PnLp0QXpxwLIAuuJboLeRaIhrgJjeuh797QADg3xz8wGLugQOS5DpsE8A6i6Adgzf+bacllkKZG3J0tGfDw==}
@@ -8113,34 +8117,6 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /@slashid/react@1.18.1-beta.0(@slashid/slashid@3.18.2)(@types/react-dom@18.2.18)(@types/react@18.2.46)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-slfnxOCAe/3mysev1pTEQyE7CR/06jvhKwdPonF3lceQANMj3XsuINxxXk1dZtTGS8ro6fkgaYo4397Q4BFFTg==}
-    peerDependencies:
-      '@slashid/slashid': '>= 3.18.2'
-      react: '>=16'
-      react-dom: '>=16'
-    dependencies:
-      '@radix-ui/react-accordion': 1.1.2(@types/react-dom@18.2.18)(@types/react@18.2.46)(react-dom@18.2.0)(react@18.2.0)
-      '@radix-ui/react-dialog': 1.0.5(@types/react-dom@18.2.18)(@types/react@18.2.46)(react-dom@18.2.0)(react@18.2.0)
-      '@radix-ui/react-select': 1.2.2(@types/react-dom@18.2.18)(@types/react@18.2.46)(react-dom@18.2.0)(react@18.2.0)
-      '@radix-ui/react-switch': 1.0.3(@types/react-dom@18.2.18)(@types/react@18.2.46)(react-dom@18.2.0)(react@18.2.0)
-      '@radix-ui/react-tabs': 1.0.4(@types/react-dom@18.2.18)(@types/react@18.2.46)(react-dom@18.2.0)(react@18.2.0)
-      '@slashid/slashid': 3.18.2
-      '@vanilla-extract/css': 1.15.1
-      '@vanilla-extract/dynamic': 2.1.0
-      '@vanilla-extract/recipes': 0.3.0(@vanilla-extract/css@1.15.1)
-      '@vanilla-extract/sprinkles': 1.6.1(@vanilla-extract/css@1.15.1)
-      compress.js: 1.2.2
-      country-flag-emoji-polyfill: 0.1.4
-      country-list-with-dial-code-and-flag: 3.0.3
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-    transitivePeerDependencies:
-      - '@types/react'
-      - '@types/react-dom'
-      - babel-plugin-macros
-    dev: false
-
   /@slashid/slashid@3.17.1:
     resolution: {integrity: sha512-hlWvLRPK/XlE5V9QraYA+g4UkNqwVkMRIOtsxHYLC0TyMWRq9zpjGNGgavkPgDpLCjomg7KvMO5FVm5pu0LKMg==}
     dependencies:
@@ -10565,6 +10541,7 @@ packages:
       picocolors: 1.0.0
     transitivePeerDependencies:
       - babel-plugin-macros
+    dev: true
 
   /@vanilla-extract/css@1.7.2:
     resolution: {integrity: sha512-wRsV9sSD4qN6+dbS1ywExw5kEU4Fk/UipNKFsGwwUsHLyuPKK8BaZUmzfyAQex6POHYQboYv6Ajbqpvhx2KhfQ==}
@@ -10655,6 +10632,7 @@ packages:
 
   /@vanilla-extract/private@1.0.4:
     resolution: {integrity: sha512-8FGD6AejeC/nXcblgNCM5rnZb9KXa4WNkR03HCWtdJBpANjTgjHEglNLFnhuvdQ78tC6afaxBPI+g7F2NX3tgg==}
+    dev: true
 
   /@vanilla-extract/recipes@0.2.5(@vanilla-extract/css@1.7.2):
     resolution: {integrity: sha512-OWXUUiFJdswD3+Xg8f8avuw/vAHZRFS4oHqFeoV1TcO8cfbDQ0zmkreBHvyspoJU+qsyWK48yPHKSptqNRPy9Q==}
@@ -10672,14 +10650,6 @@ packages:
       '@vanilla-extract/css': 1.14.0
     dev: false
 
-  /@vanilla-extract/recipes@0.3.0(@vanilla-extract/css@1.15.1):
-    resolution: {integrity: sha512-7wXrgfq1oldKdBfCKen4XmSlDmQR+4o0CQ3WnnLfhQaEtI65xJ774yyQF6dD2CC+hHdW2LFKVXgH5NZRbMQ8Sg==}
-    peerDependencies:
-      '@vanilla-extract/css': ^1.0.0
-    dependencies:
-      '@vanilla-extract/css': 1.15.1
-    dev: false
-
   /@vanilla-extract/sprinkles@1.5.1(@vanilla-extract/css@1.7.2):
     resolution: {integrity: sha512-xPYpeEZEC1mhiPqWCBPGdIHkpFaaQIbaAfG9W2JyIW0byqTP7CoaxdYNMPjhZuoV5lkTI14SJg8Bt+fZqmV5yQ==}
     peerDependencies:
@@ -10694,14 +10664,6 @@ packages:
       '@vanilla-extract/css': ^1.0.0
     dependencies:
       '@vanilla-extract/css': 1.14.0
-    dev: false
-
-  /@vanilla-extract/sprinkles@1.6.1(@vanilla-extract/css@1.15.1):
-    resolution: {integrity: sha512-N/RGKwGAAidBupZ436RpuweRQHEFGU+mvAqBo8PRMAjJEmHoPDttV8RObaMLrJHWLqvX+XUMinHUnD0hFRQISw==}
-    peerDependencies:
-      '@vanilla-extract/css': ^1.0.0
-    dependencies:
-      '@vanilla-extract/css': 1.15.1
     dev: false
 
   /@vanilla-extract/vite-plugin@4.0.9(vite@5.2.11):
@@ -12418,6 +12380,7 @@ packages:
     peerDependenciesMeta:
       babel-plugin-macros:
         optional: true
+    dev: true
 
   /deep-eql@4.1.3:
     resolution: {integrity: sha512-WaEtAOpRA1MQ0eohqZjpGD8zdI0Ovsm8mmFhaDN8dvDZzyoUMcYDnf5Y6iu7HTXxf8JDS23qWa4a+hKCDyOPzw==}
@@ -12534,7 +12497,6 @@ packages:
   /delayed-stream@1.0.0:
     resolution: {integrity: sha512-ZySD7Nf91aLB0RxL4KGrKHBXl7Eds1DAmEdcoVawXnLD7SDhpNgtuII2aAkg7a7QS41jxPSZ17p4VdGnMHk3MQ==}
     engines: {node: '>=0.4.0'}
-    dev: true
 
   /depd@2.0.0:
     resolution: {integrity: sha512-g7nH6P6dyDioJogAAGprGpCtVImJhpPk/roCzdb3fIh61/s/nPsfR6onyMwkCAR/OlC3yBC0lESvUoQEAssIrw==}
