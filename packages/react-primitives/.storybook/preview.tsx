@@ -1,5 +1,4 @@
 import React from "react";
-import { SlashIDProvider } from "../src/main";
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
@@ -11,16 +10,4 @@ export const parameters = {
   },
 };
 
-export const decorators = [
-  (Story) => (
-    <SlashIDProvider
-      // @ts-ignore
-      oid={import.meta.env.VITE_ORG_ID}
-      themeProps={{ theme: "auto" }}
-      tokenStorage="localStorage"
-      environment="sandbox"
-    >
-      <Story />
-    </SlashIDProvider>
-  ),
-];
+export const decorators = [(Story) => <Story />];
