@@ -62,6 +62,47 @@ test.describe("Authentication", () => {
     await expect(formPage.successState).toBeVisible();
   });
 
+  test("Submit incorrect OTP", async ({ page }) => {
+    const testInbox = createTestInbox();
+    const formPage = new FormPage(page);
+
+    await formPage.load();
+
+    await formPage.selectAuthMethod("otp_via_email");
+    await formPage.enterEmail(testInbox.email);
+    await formPage.submitInitialForm();
+
+    const email = await testInbox.getLatestEmail();
+    expect(email).toBeDefined();
+    if (!email) return;
+
+    const otp = "000000";
+
+    await formPage.submitOTP(otp);
+
+    await expect(formPage.errorMessage).toBeVisible();
+  });
+
+  test("Resend OTP code", async ({ page }) => {
+    const testInbox = createTestInbox();
+    const formPage = new FormPage(page);
+
+    await formPage.load();
+
+    await formPage.selectAuthMethod("otp_via_email");
+    await formPage.enterEmail(testInbox.email);
+    await formPage.submitInitialForm();
+
+    const email = await testInbox.getLatestEmail();
+    expect(email).toBeDefined();
+    if (!email) return;
+
+    await formPage.resendOTPCode();
+    await expect(formPage.emailIcon).toBeVisible();
+  });
+});
+
+test.describe("Recovery", () => {
   test("Reset password flow", async ({ page, context }) => {
     const testInbox = createTestInbox();
     const formPage = new FormPage(page);
@@ -109,44 +150,5 @@ test.describe("Authentication", () => {
 
     // success
     await expect(formPage.successState).toBeVisible();
-  });
-
-  test("Submit incorrect OTP", async ({ page }) => {
-    const testInbox = createTestInbox();
-    const formPage = new FormPage(page);
-
-    await formPage.load();
-
-    await formPage.selectAuthMethod("otp_via_email");
-    await formPage.enterEmail(testInbox.email);
-    await formPage.submitInitialForm();
-
-    const email = await testInbox.getLatestEmail();
-    expect(email).toBeDefined();
-    if (!email) return;
-
-    const otp = "000000";
-
-    await formPage.submitOTP(otp);
-
-    await expect(formPage.errorMessage).toBeVisible();
-  });
-
-  test("Resend OTP code", async ({ page }) => {
-    const testInbox = createTestInbox();
-    const formPage = new FormPage(page);
-
-    await formPage.load();
-
-    await formPage.selectAuthMethod("otp_via_email");
-    await formPage.enterEmail(testInbox.email);
-    await formPage.submitInitialForm();
-
-    const email = await testInbox.getLatestEmail();
-    expect(email).toBeDefined();
-    if (!email) return;
-
-    await formPage.resendOTPCode();
-    await expect(formPage.emailIcon).toBeVisible();
   });
 });
