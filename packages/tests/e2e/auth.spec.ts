@@ -76,11 +76,21 @@ test.describe("Authentication", () => {
     expect(email).toBeDefined();
     if (!email) return;
 
-    const otp = "000000";
+    const incorrectOtp = "000000";
 
-    await formPage.submitOTP(otp);
+    await formPage.submitOTP(incorrectOtp);
 
     await expect(formPage.errorMessage).toBeVisible();
+
+    const otp = await testInbox.getOTP(email);
+    expect(otp).toBeDefined();
+    if (!otp) return;
+
+    await formPage.submitOTP(otp);
+    await expect(formPage.errorMessage).not.toBeVisible();
+
+
+    await expect(formPage.successState).toBeVisible();
   });
 
   test("Resend OTP code", async ({ page }) => {
