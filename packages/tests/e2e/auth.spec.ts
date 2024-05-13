@@ -1,10 +1,44 @@
-import { test, expect } from "@playwright/test";
-import { createTestInbox } from "../src/email";
+import { test, expect, Page } from "@playwright/test";
+import { TestInbox, createTestInbox } from "../src/email";
 import { FormPage } from "../src/pom/form";
 import { JumpPage } from "../src/pom/jump";
 import { createUserWithPassword } from "../src/slashid";
 
 test.describe("Authentication", () => {
+  async function fetchNewOTP(
+    page: Page,
+    testInbox: TestInbox,
+    initialOtp: string,
+    beforeResendTime: Date
+  ) {
+    const maxRetries = 4;
+    let retries = 0;
+    let newOtp = "";
+
+    while (retries < maxRetries) {
+      await page.waitForTimeout(1000);
+
+      const newEmail = await testInbox.getLatestEmail({
+        receivedAfter: beforeResendTime,
+      });
+      expect(newEmail).toBeDefined();
+      if (!newEmail) continue;
+
+      const otp = await testInbox.getOTP(newEmail);
+      expect(otp).toBeDefined();
+      if (!otp) continue;
+
+      if (otp !== initialOtp) {
+        newOtp = otp;
+        break;
+      }
+
+      retries++;
+    }
+
+    return newOtp;
+  }
+
   test("Log in with email link", async ({ page, context }) => {
     const testInbox = createTestInbox();
     const formPage = new FormPage(page);
@@ -114,35 +148,7 @@ test.describe("Authentication", () => {
     await formPage.resendOTPCode();
     await expect(formPage.emailIcon).toBeVisible();
 
-    const maxRetries = 4;
-    let retries = 0;
-    let newOtp = "";
-
-    while (retries < maxRetries) {
-      await page.waitForTimeout(1000);
-
-      const newEmail = await testInbox.getLatestEmail({
-        receivedAfter: beforeResend,
-      });
-      expect(newEmail).toBeDefined();
-      if (!newEmail) continue;
-
-      const initialOtp = await testInbox.getOTP(email);
-      expect(initialOtp).toBeDefined();
-      if (!initialOtp) continue;
-
-      const otp = await testInbox.getOTP(newEmail);
-      expect(otp).toBeDefined();
-      if (!otp) continue;
-
-      if (otp !== initialOtp) {
-        newOtp = otp;
-        break;
-      }
-
-      retries++;
-    }
-
+    const newOtp = await fetchNewOTP(page, testInbox, initialOtp, beforeResend);
     expect(newOtp).toHaveLength(6);
 
     await formPage.submitOTP(newOtp);
