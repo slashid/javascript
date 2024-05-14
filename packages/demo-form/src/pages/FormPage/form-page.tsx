@@ -7,6 +7,7 @@ import "@slashid/react/style.css";
 const factors: Factor[] = [
   { method: "email_link" },
   { method: "otp_via_email" },
+  { method: "password" },
 ];
 
 export function FormPage() {

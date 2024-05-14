@@ -150,7 +150,7 @@ export const OTPState = ({ flowState, performLogin }: Props) => {
       )}
       {formState === "submitting" ? (
         hasRetried ? (
-          <EmailIcon />
+          <FactorIcon factor={factor} />
         ) : (
           <Loader />
         )

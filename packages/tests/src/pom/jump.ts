@@ -14,4 +14,16 @@ export class JumpPage {
   async load() {
     await this.page.goto(this.url);
   }
+
+  async enterPassword(password: string) {
+    await this.page.locator("#password-input").fill(password);
+  }
+
+  async enterPasswordConfirm(password: string) {
+    await this.page.locator("#password-input-confirm").fill(password);
+  }
+
+  async submitInitialForm() {
+    await this.page.getByTestId("sid-form-initial-submit-button").click();
+  }
 }

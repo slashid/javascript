@@ -44,6 +44,30 @@ pnpm build
 pnpm test:e2e -- --debug
 ```
 
+#### OpenAPI Client
+
+The above paragraph assumes that you run the E2E tests from the root of the project. This ensures the OpenAPI TypeScript client to be generated before the tests are run (see [Turbo config](./turbo.json#L14)). The client is used to pre-configure the required SlashID entities, so that actual test cases can be more isolated and concise.
+
+If you run the E2E tests from the nested `packages/tests` directory, make sure to generate the OpenAPI client manually:
+
+```
+pnpm openapi
+```
+
+#### Known issues
+
+When running E2E tests locally against the `react-nextjs` app, sometimes the web server doesn't terminate. This can cause the tests to fail randomly, especially upon rebuilding the project. When this happens, you need to manually kill the process running on port 3000 before executing E2E tests. On MacOS you can run the following command to get the PID of the process:
+
+```
+lsof -i tcp:3000
+```
+
+Then you can take the PID and use it to kill the process:
+
+```
+kill -9 {PID}
+```
+
 ### Updating Playwright
 
 `@playwright/test` in `packages/tests/package.json` and the Playwright image in `Dockerfile` need to use the same version!

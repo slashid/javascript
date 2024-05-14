@@ -1,19 +1,8 @@
 import { PlaywrightTestConfig, defineConfig, devices } from "@playwright/test";
-import dotenv from "dotenv";
 import path from "path";
-
-dotenv.config();
+import { config as envConfig } from "./config";
 
 function createPlaywrightConfig(): PlaywrightTestConfig {
-  const envConfig = {
-    app: process.env.APP_NAME || "",
-    CI: process.env.CI === "true",
-  };
-
-  if (!envConfig.app) {
-    throw new Error("APP_NAME is required in .env file");
-  }
-
   return {
     timeout: 16 * 1000,
     expect: {
@@ -39,7 +28,7 @@ function createPlaywrightConfig(): PlaywrightTestConfig {
       // baseURL: 'http://127.0.0.1:3000',
 
       /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-      trace: "on-first-retry",
+      trace: envConfig.CI ? "on-first-retry" : "on",
     },
 
     /* Configure projects for major browsers */

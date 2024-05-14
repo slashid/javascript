@@ -1,7 +1,8 @@
 import MailosaurClient from "mailosaur";
-
 import { load } from "cheerio";
 import { v4 as generateUUID } from "uuid";
+import { config } from "../config";
+import type { SearchOptions } from "mailosaur/lib/models";
 
 type Message = Awaited<ReturnType<MailosaurClient["messages"]["get"]>>;
 
@@ -12,32 +13,30 @@ export type CreateTestInboxInput = {
 export type TestInbox = {
   name: string;
   email: string;
-  getLatestEmail: () => Promise<Message | null>;
+  getLatestEmail: (options?: SearchOptions) => Promise<Message | null>;
   getOTP: (email: Message) => Promise<string | null | undefined>;
   getJumpPageURL: (email: Message) => Promise<string | null | undefined>;
+  getEmailBySubject: (subject: string) => Promise<Message | null>;
 };
 
 export function createTestInbox({
   inboxName,
 }: CreateTestInboxInput = {}): TestInbox {
-  const config = {
-    serverId: process.env.MAILOSAUR_SERVER_ID || "",
-    apiKey: process.env.MAILOSAUR_API_KEY || "",
-  };
-
-  if (!config.serverId || !config.apiKey) {
-    throw new Error("Mailosaur configuration is missing");
-  }
-
   const name = inboxName || `e2e-${generateUUID()}`;
-  const email = `${name}@${config.serverId}.mailosaur.net`;
-  const mailosaurClient = new MailosaurClient(config.apiKey);
+  const email = `${name}@${config.mailServerId}.mailosaur.net`;
+  const mailosaurClient = new MailosaurClient(config.mailApiKey);
 
-  async function getLatestEmail(): Promise<Message | null> {
+  async function getLatestEmail(
+    options?: SearchOptions
+  ): Promise<Message | null> {
     try {
-      const message = await mailosaurClient.messages.get(config.serverId, {
-        sentTo: name,
-      });
+      const message = await mailosaurClient.messages.get(
+        config.mailServerId,
+        {
+          sentTo: name,
+        },
+        options
+      );
 
       return message;
     } catch (e) {
@@ -64,11 +63,19 @@ export function createTestInbox({
     return message.subject.match(/\d{6}/)?.[0];
   }
 
+  async function getEmailBySubject(subject: string) {
+    return mailosaurClient.messages.get(config.mailServerId, {
+      sentTo: name,
+      subject,
+    });
+  }
+
   return {
     name,
     email,
     getLatestEmail,
     getOTP,
     getJumpPageURL,
+    getEmailBySubject,
   };
 }

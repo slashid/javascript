@@ -1,13 +1,12 @@
 import { Locator, type Page } from "@playwright/test";
 import type { FactorMethod } from "@slashid/slashid";
 
-type FactorMethodLabel = "OTP via email" | "Email link";
-
-function getLabelFromFactorMethod(method: FactorMethod): FactorMethodLabel {
+function getLabelFromFactorMethod(method: FactorMethod): string {
   // @ts-expect-error add missing labels when needed
   const methodToLabel: Record<FactorMethod, FactorMethodLabel> = {
     otp_via_email: "OTP via email",
     email_link: "Email link",
+    password: "Password",
   };
 
   return methodToLabel[method];
@@ -18,6 +17,8 @@ export class FormPage {
   readonly page: Page;
   readonly authenticatingState: Locator;
   readonly successState: Locator;
+  readonly errorMessage: Locator;
+  readonly emailIcon: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -25,6 +26,8 @@ export class FormPage {
       "sid-form-authenticating-state"
     );
     this.successState = this.page.getByTestId("sid-form-success-state");
+    this.errorMessage = this.page.getByTestId("sid-form-error-message");
+    this.emailIcon = this.page.getByTestId("sid-email-icon");
   }
 
   async load() {
@@ -47,8 +50,22 @@ export class FormPage {
     await this.page.locator("#sid-input-email_address").fill(email);
   }
 
+  async enterPassword(password: string) {
+    await this.page.locator("#password-input").fill(password);
+  }
+
+  async enterPasswordConfirm(password: string) {
+    await this.page.locator("#password-input-confirm").fill(password);
+  }
+
   async submitInitialForm() {
     await this.page.getByTestId("sid-form-initial-submit-button").click();
+  }
+
+  async submitAuthenticatingForm() {
+    await this.page
+      .getByTestId("sid-form-authenticating-submit-button")
+      .click();
   }
 
   async submitOTP(otp: string) {
@@ -60,5 +77,24 @@ export class FormPage {
       await otpCodeInput.fill(otp.charAt(index));
       index++;
     }
+  }
+
+  async resendOTPCode() {
+    await this.page
+      .getByText("Didn’t receive the message?")
+      .waitFor({ state: "visible" });
+    await this.page.getByText("Resend").waitFor({ state: "visible" });
+
+    await this.clickCTALink();
+  }
+
+  async resetPassword() {
+    await this.page
+      .getByTestId("sid-form-authenticating-recover-prompt")
+      .click();
+  }
+
+  private async clickCTALink() {
+    await this.page.getByTestId("sid-form-prompt-cta").click();
   }
 }
