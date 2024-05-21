@@ -23,7 +23,7 @@ import * as styles from "./error.css";
 import { Retry, RetryPolicy } from "../../../domain/types";
 
 const ErrorIcon = () => (
-  <Circle variant="red" shouldAnimate={false}>
+  <Circle variant="red" shouldAnimate={false} className="sid-form-error-icon">
     <Exclamation />
   </Circle>
 );
