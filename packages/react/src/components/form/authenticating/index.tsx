@@ -5,7 +5,7 @@ import {
 } from "../../../domain/handles";
 import { Text } from "../../text";
 
-import { getAuthenticatingMessage, getTokensFromHandle } from "./messages";
+import { getAuthenticatingMessage } from "./messages";
 import { OTPState } from "./otp";
 import { PasswordState } from "./password";
 import { Props } from "./authenticating.types";
@@ -19,8 +19,7 @@ import { BASE_RETRY_DELAY_MS } from "./authenticating.constants";
 
 const LoadingState = ({ flowState, performLogin }: Props) => {
   const { factor, handle } = flowState.context.config;
-  const { title, message } = getAuthenticatingMessage(factor);
-  const tokens = getTokensFromHandle(handle);
+  const { title, message, tokens } = getAuthenticatingMessage(factor, handle);
   const [showPrompt, setShowPrompt] = useState(true);
 
   useEffect(() => {

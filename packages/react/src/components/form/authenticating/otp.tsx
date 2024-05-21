@@ -13,7 +13,7 @@ import { useConfiguration } from "../../../hooks/use-configuration";
 import { useForm } from "../../../hooks/use-form";
 import { useSlashID } from "../../../main";
 import { Props } from "./authenticating.types";
-import { getAuthenticatingMessage, getTokensFromHandle } from "./messages";
+import { getAuthenticatingMessage } from "./messages";
 import { OTP_CODE_LENGTH, isValidOTPCode } from "./validation";
 import { ErrorMessage } from "../error-message";
 import { Text } from "../../text";
@@ -52,11 +52,10 @@ export const OTPState = ({ flowState, performLogin }: Props) => {
 
   const { factor, handle } = flowState.context.config;
   const hasRetried = flowState.context.attempt > 1;
-  const { title, message } = getAuthenticatingMessage(factor, {
+  const { title, message, tokens } = getAuthenticatingMessage(factor, handle, {
     isSubmitting: formState === "submitting",
     hasRetried,
   });
-  const tokens = getTokensFromHandle(handle);
 
   useEffect(() => {
     const onOtpCodeSent = () => setFormState("input");
