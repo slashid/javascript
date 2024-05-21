@@ -1,6 +1,9 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { TestSlashIDProvider } from "../../../context/test-providers";
+import {
+  TestSlashIDProvider,
+  TestTextProvider,
+} from "../../../context/test-providers";
 import { Form } from "../form";
 import Deferred, {
   MockSlashID,
@@ -10,6 +13,7 @@ import Deferred, {
 } from "../../test-utils";
 import { ConfigurationProvider } from "../../../main";
 import { Errors, User } from "@slashid/slashid";
+import { TEXT } from "../../text/constants";
 
 describe("#Form -> Error state", () => {
   test("should show the error state if login fails", async () => {
@@ -18,7 +22,9 @@ describe("#Form -> Error state", () => {
 
     render(
       <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
-        <Form />
+        <TestTextProvider text={TEXT}>
+          <Form />
+        </TestTextProvider>
       </TestSlashIDProvider>
     );
 
@@ -38,7 +44,9 @@ describe("#Form -> Error state", () => {
 
     render(
       <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
-        <Form />
+        <TestTextProvider text={TEXT}>
+          <Form />
+        </TestTextProvider>
       </TestSlashIDProvider>
     );
 
@@ -71,7 +79,9 @@ describe("#Form -> Error state", () => {
 
     render(
       <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
-        <Form />
+        <TestTextProvider text={TEXT}>
+          <Form />
+        </TestTextProvider>
       </TestSlashIDProvider>
     );
 
