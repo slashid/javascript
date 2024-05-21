@@ -86,7 +86,7 @@ export const TEXT = {
   "authenticating.confirm": "Confirm",
   "authenticating.downloadCodes": "Download codes",
   "authenticating.message.webauthn":
-    "If you are registering for the first time, you will receive an email to verify your email address {{EMAIL_ADDRESS}}.",
+    "If you are registering for the first time, you will receive an email at {{EMAIL_ADDRESS}} to verify your email address.",
   "authenticating.title.webauthn":
     "You'll be prompted to validate your login via your device",
   "authenticating.message.emailLink":
