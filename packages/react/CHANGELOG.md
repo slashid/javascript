@@ -1,5 +1,12 @@
 # @slashid/react
 
+## 1.24.3
+
+### Patch Changes
+
+- 8efe835: Display handles in authenticating state messages
+- 8efe835: Add stable CSS class names to form icons
+
 ## 1.24.2
 
 ### Patch Changes
