@@ -1,6 +1,9 @@
 import { render, screen, act } from "@testing-library/react";
 import { Form } from ".";
-import { TestSlashIDProvider } from "../../context/test-providers";
+import {
+  TestSlashIDProvider,
+  TestTextProvider,
+} from "../../context/test-providers";
 import { createTestUser, inputEmail } from "../test-utils";
 import { Slot } from "../slot";
 import userEvent from "@testing-library/user-event";
@@ -92,19 +95,21 @@ describe("#Form - customisation", () => {
 
     render(
       <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
-        <Form>
-          <Slot name="error">
-            <Form.Error key="error slot child">
-              {({ context, retry, cancel }) => (
-                <div data-testid="custom-error-function">
-                  <h1>{context.error.message}</h1>
-                  <button onClick={() => retry("retry")}>Retry</button>
-                  <button onClick={cancel}>Cancel</button>
-                </div>
-              )}
-            </Form.Error>
-          </Slot>
-        </Form>
+        <TestTextProvider text={TEXT}>
+          <Form>
+            <Slot name="error">
+              <Form.Error key="error slot child">
+                {({ context, retry, cancel }) => (
+                  <div data-testid="custom-error-function">
+                    <h1>{context.error.message}</h1>
+                    <button onClick={() => retry("retry")}>Retry</button>
+                    <button onClick={cancel}>Cancel</button>
+                  </div>
+                )}
+              </Form.Error>
+            </Slot>
+          </Form>
+        </TestTextProvider>
       </TestSlashIDProvider>
     );
 

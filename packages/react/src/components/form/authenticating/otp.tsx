@@ -50,9 +50,9 @@ export const OTPState = ({ flowState, performLogin }: Props) => {
   >("initial");
   const submitInputRef = useRef<HTMLInputElement>(null);
 
-  const factor = flowState.context.config.factor;
+  const { factor, handle } = flowState.context.config;
   const hasRetried = flowState.context.attempt > 1;
-  const { title, message } = getAuthenticatingMessage(factor, {
+  const { title, message, tokens } = getAuthenticatingMessage(factor, handle, {
     isSubmitting: formState === "submitting",
     hasRetried,
   });
@@ -128,7 +128,11 @@ export const OTPState = ({ flowState, performLogin }: Props) => {
     <>
       <BackButton onCancel={() => flowState.cancel()} />
       <Text as="h1" t={title} variant={{ size: "2xl-title", weight: "bold" }} />
-      <Text t={message} variant={{ color: "contrast", weight: "semibold" }} />
+      <Text
+        t={message}
+        variant={{ color: "contrast", weight: "semibold" }}
+        tokens={tokens}
+      />
       {formState === "initial" && <FactorIcon factor={factor} />}
       {formState === "input" && (
         <form

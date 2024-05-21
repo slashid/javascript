@@ -7,7 +7,10 @@ import { TEXT } from "../text/constants";
 import { STORAGE_LAST_HANDLE_KEY } from "../../hooks/use-last-handle";
 import { createTestUser, inputEmail, MockSlashID } from "../test-utils";
 
-import { TestSlashIDProvider } from "../../context/test-providers";
+import {
+  TestSlashIDProvider,
+  TestTextProvider,
+} from "../../context/test-providers";
 import { ConfigurationProvider } from "../../context/config-context";
 
 describe("#Form", () => {
@@ -159,7 +162,9 @@ describe("#Form", () => {
 
     render(
       <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
-        <Form />
+        <TestTextProvider text={TEXT}>
+          <Form />
+        </TestTextProvider>
       </TestSlashIDProvider>
     );
 
@@ -186,7 +191,9 @@ describe("#Form", () => {
 
     render(
       <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
-        <Form />
+        <TestTextProvider text={TEXT}>
+          <Form />
+        </TestTextProvider>
       </TestSlashIDProvider>
     );
 
@@ -214,7 +221,9 @@ describe("#Form", () => {
 
     render(
       <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
-        <Form />
+        <TestTextProvider text={TEXT}>
+          <Form />
+        </TestTextProvider>
       </TestSlashIDProvider>
     );
 
@@ -235,7 +244,9 @@ describe("#Form", () => {
 
     render(
       <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
-        <Form onSuccess={onSuccess} />
+        <TestTextProvider text={TEXT}>
+          <Form onSuccess={onSuccess} />
+        </TestTextProvider>
       </TestSlashIDProvider>
     );
 
@@ -258,7 +269,9 @@ describe("#Form", () => {
 
     render(
       <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
-        <Form onError={onError} />
+        <TestTextProvider text={TEXT}>
+          <Form onError={onError} />
+        </TestTextProvider>
       </TestSlashIDProvider>
     );
 
