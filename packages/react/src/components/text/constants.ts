@@ -86,28 +86,30 @@ export const TEXT = {
   "authenticating.confirm": "Confirm",
   "authenticating.downloadCodes": "Download codes",
   "authenticating.message.webauthn":
-    "If you are registering for the first time, you will receive an email to verify your email address.",
+    "If you are registering for the first time, you will receive an email to verify your email address {{EMAIL_ADDRESS}}.",
   "authenticating.title.webauthn":
     "You'll be prompted to validate your login via your device",
   "authenticating.message.emailLink":
-    "We have sent you a link via email. Follow the link provided to complete your registration.",
+    "We have sent you a link via email to {{EMAIL_ADDRESS}}. Follow the link provided to complete your registration.",
   "authenticating.title.emailLink": "Check your email",
   "authenticating.message.smsLink":
-    "We have sent you a link via text. Follow the link provided to complete your registration.",
+    "We have sent you a link via text to {{PHONE_NUMBER}}. Follow the link provided to complete your registration.",
   "authenticating.title.smsLink": "Check your phone",
   "authenticating.message.emailOtp":
-    "We have sent you a code via email. Please insert it here.",
+    "We have sent you a code via email to {{EMAIL_ADDRESS}}. Please insert it here.",
   "authenticating.title.emailOtp": "Check your email",
   "authenticating.submitting.message.emailOtp": "We are verifying the code.",
   "authenticating.submitting.title.emailOtp": "Please wait",
-  "authenticating.retry.message.emailOtp": "We are resending the OTP code...",
+  "authenticating.retry.message.emailOtp":
+    "We are resending the OTP code to {{EMAIL_ADDRESS}}...",
   "authenticating.retry.title.emailOtp": "Please wait",
   "authenticating.message.smsOtp":
-    "We have sent you a code via text. Please insert it here.",
+    "We have sent you a code via text to {{PHONE_NUMBER}}. Please insert it here.",
   "authenticating.title.smsOtp": "Check your phone",
   "authenticating.submitting.message.smsOtp": "We are verifying the code.",
   "authenticating.submitting.title.smsOtp": "Please wait",
-  "authenticating.retry.message.smsOtp": "We are resending the OTP code...",
+  "authenticating.retry.message.smsOtp":
+    "We are resending the OTP code to {{PHONE_NUMBER}}...",
   "authenticating.retry.title.smsOtp": "Please wait",
   "authenticating.message.oidc":
     "Please follow the instructions in the login screen from your SSO provider.",

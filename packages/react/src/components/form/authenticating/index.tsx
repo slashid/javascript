@@ -5,7 +5,7 @@ import {
 } from "../../../domain/handles";
 import { Text } from "../../text";
 
-import { getAuthenticatingMessage } from "./messages";
+import { getAuthenticatingMessage, getTokensFromHandle } from "./messages";
 import { OTPState } from "./otp";
 import { PasswordState } from "./password";
 import { Props } from "./authenticating.types";
@@ -18,8 +18,9 @@ import { Delayed } from "@slashid/react-primitives";
 import { BASE_RETRY_DELAY_MS } from "./authenticating.constants";
 
 const LoadingState = ({ flowState, performLogin }: Props) => {
-  const factor = flowState.context.config.factor;
+  const { factor, handle } = flowState.context.config;
   const { title, message } = getAuthenticatingMessage(factor);
+  const tokens = getTokensFromHandle(handle);
   const [showPrompt, setShowPrompt] = useState(true);
 
   useEffect(() => {
@@ -42,7 +43,11 @@ const LoadingState = ({ flowState, performLogin }: Props) => {
           </span>
         ) : undefined}
       </Text>
-      <Text t={message} variant={{ color: "contrast", weight: "semibold" }} />
+      <Text
+        t={message}
+        variant={{ color: "contrast", weight: "semibold" }}
+        tokens={tokens}
+      />
       <FactorIcon factor={factor} />
       {showPrompt && (
         <Delayed

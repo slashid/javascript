@@ -13,7 +13,7 @@ import { useConfiguration } from "../../../hooks/use-configuration";
 import { useForm } from "../../../hooks/use-form";
 import { useSlashID } from "../../../main";
 import { Props } from "./authenticating.types";
-import { getAuthenticatingMessage } from "./messages";
+import { getAuthenticatingMessage, getTokensFromHandle } from "./messages";
 import { OTP_CODE_LENGTH, isValidOTPCode } from "./validation";
 import { ErrorMessage } from "../error-message";
 import { Text } from "../../text";
@@ -50,12 +50,13 @@ export const OTPState = ({ flowState, performLogin }: Props) => {
   >("initial");
   const submitInputRef = useRef<HTMLInputElement>(null);
 
-  const factor = flowState.context.config.factor;
+  const { factor, handle } = flowState.context.config;
   const hasRetried = flowState.context.attempt > 1;
   const { title, message } = getAuthenticatingMessage(factor, {
     isSubmitting: formState === "submitting",
     hasRetried,
   });
+  const tokens = getTokensFromHandle(handle);
 
   useEffect(() => {
     const onOtpCodeSent = () => setFormState("input");
@@ -128,7 +129,11 @@ export const OTPState = ({ flowState, performLogin }: Props) => {
     <>
       <BackButton onCancel={() => flowState.cancel()} />
       <Text as="h1" t={title} variant={{ size: "2xl-title", weight: "bold" }} />
-      <Text t={message} variant={{ color: "contrast", weight: "semibold" }} />
+      <Text
+        t={message}
+        variant={{ color: "contrast", weight: "semibold" }}
+        tokens={tokens}
+      />
       {formState === "initial" && <FactorIcon factor={factor} />}
       {formState === "input" && (
         <form

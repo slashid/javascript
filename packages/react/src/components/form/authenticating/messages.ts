@@ -1,10 +1,36 @@
 import { Factor } from "@slashid/slashid";
 import { TextConfigKey } from "../../text/constants";
+import { Handle } from "../../../domain/types";
 
 type AuthenticatingMessageOptions = {
   isSubmitting: boolean;
   hasRetried: boolean;
 };
+
+/**
+ *  Helper function to extract phone number or email address if either is present in the handle.
+ *
+ * @param {Handle | undefined} handle Handle used for authentication. Can be undefined (e.g. when
+ * authenticating with OIDC).
+ * @returns {Record<string,string> | undefined} tokens map or undefined
+ */
+export function getTokensFromHandle(
+  handle: Handle | undefined
+): Record<string, string> | undefined {
+  if (handle && handle.type === "email_address") {
+    return {
+      EMAIL_ADDRESS: handle.value,
+    };
+  }
+
+  if (handle && handle.type === "phone_number") {
+    return {
+      PHONE_NUMBER: handle.value,
+    };
+  }
+
+  return undefined;
+}
 
 // TODO add case for password
 export function getAuthenticatingMessage(
@@ -13,7 +39,10 @@ export function getAuthenticatingMessage(
     isSubmitting: false,
     hasRetried: false,
   }
-): { title: TextConfigKey; message: TextConfigKey } {
+): {
+  title: TextConfigKey;
+  message: TextConfigKey;
+} {
   switch (factor.method) {
     case "oidc":
       return {
