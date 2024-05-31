@@ -363,8 +363,8 @@ importers:
         specifier: ^8.0.2
         version: 8.3.1
       '@slashid/slashid':
-        specifier: 3.26.1
-        version: 3.26.1
+        specifier: 3.27.0-next.1
+        version: 3.27.0-next.1
       '@storybook/addon-essentials':
         specifier: 7.6.19
         version: 7.6.19(@types/react-dom@18.2.15)(@types/react@18.2.37)(react-dom@18.2.0)(react@18.2.0)
@@ -8166,8 +8166,8 @@ packages:
       uuid: 8.3.2
     dev: false
 
-  /@slashid/slashid@3.26.1:
-    resolution: {integrity: sha512-T3MFhqg+NXoJp+53Lr8X9l3wOGcoqw2ivf8+/qHv+P9OLs0EEfkphLLT4zvb6Y8TPVAWDmtQN2fBbvzaRtpUqg==}
+  /@slashid/slashid@3.27.0-next.1:
+    resolution: {integrity: sha512-DnCOOgsrGP7hQ9bsQN5iMiyVV2rUazeieEntaNIDqnuVKXBKyxgAEGnaP3ZUoYAZLdxFguQG4tdtUJ4MYnAIWQ==}
     dependencies:
       '@changesets/cli': 2.26.2
       '@types/uuid': 8.3.4
@@ -8181,6 +8181,7 @@ packages:
       ua-parser-js: 1.0.37
       url: 0.11.3
       uuid: 8.3.2
+    dev: true
 
   /@storybook/addon-actions@7.6.19:
     resolution: {integrity: sha512-ATLrA5QKFJt7tIAScRHz5T3eBQ+RG3jaZk08L7gChvyQZhei8knWwePElZ7GaWbCr9BgznQp1lQUUXq/UUblAQ==}
@@ -8503,7 +8504,7 @@ packages:
       esbuild-plugin-alias: 0.2.1
       express: 4.18.2
       find-cache-dir: 3.3.2
-      fs-extra: 11.1.1
+      fs-extra: 11.2.0
       process: 0.11.10
       util: 0.12.5
     transitivePeerDependencies:
@@ -8970,7 +8971,7 @@ packages:
       '@babel/types': 7.23.3
       '@storybook/csf': 0.1.7
       '@storybook/types': 7.4.0
-      fs-extra: 11.1.1
+      fs-extra: 11.2.0
       recast: 0.23.4
       ts-dedent: 2.2.0
     transitivePeerDependencies:
