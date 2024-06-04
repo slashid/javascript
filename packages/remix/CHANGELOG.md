@@ -1,5 +1,13 @@
 # @slashid/remix
 
+## 0.2.2
+
+### Patch Changes
+
+- 46a3934: Update the Core SDK to match React SDK dependency
+- Updated dependencies [46a3934]
+  - @slashid/react@1.24.4
+
 ## 0.2.1
 
 ### Patch Changes

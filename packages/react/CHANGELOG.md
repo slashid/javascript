@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 1.24.4
+
+### Patch Changes
+
+- 46a3934: Fix the issue with polling going on after flow cancellation
+
 ## 1.24.3
 
 ### Patch Changes
