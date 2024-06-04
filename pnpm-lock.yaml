@@ -363,8 +363,8 @@ importers:
         specifier: ^8.0.2
         version: 8.3.1
       '@slashid/slashid':
-        specifier: 3.25.0
-        version: 3.25.0
+        specifier: 3.26.1-cancel-flow.2
+        version: 3.26.1-cancel-flow.2
       '@storybook/addon-essentials':
         specifier: 7.6.19
         version: 7.6.19(@types/react-dom@18.2.15)(@types/react@18.2.37)(react-dom@18.2.0)(react@18.2.0)
@@ -8164,6 +8164,24 @@ packages:
       ua-parser-js: 1.0.37
       url: 0.11.3
       uuid: 8.3.2
+    dev: false
+
+  /@slashid/slashid@3.26.1-cancel-flow.2:
+    resolution: {integrity: sha512-XStZ8r6CWmo6O3mz2GBlia0DbHg2Nk/POilUgh/vzB+aFK05slTyu0XFTDg7jD7Om4B976UZKt0Ku9tDaYUt5w==}
+    dependencies:
+      '@changesets/cli': 2.26.2
+      '@types/uuid': 8.3.4
+      changeset: 0.2.6
+      compare-versions: 6.1.0
+      docdash: 1.2.0
+      jwt-decode: 3.1.2
+      qrcode: 1.5.3
+      querystring-es3: 0.2.1
+      regenerator-runtime: 0.13.11
+      ua-parser-js: 1.0.37
+      url: 0.11.3
+      uuid: 8.3.2
+    dev: true
 
   /@storybook/addon-actions@7.6.19:
     resolution: {integrity: sha512-ATLrA5QKFJt7tIAScRHz5T3eBQ+RG3jaZk08L7gChvyQZhei8knWwePElZ7GaWbCr9BgznQp1lQUUXq/UUblAQ==}

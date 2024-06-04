@@ -65,7 +65,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^8.0.2",
-    "@slashid/slashid": "3.25.0",
+    "@slashid/slashid": "3.26.1-cancel-flow.2",
     "@storybook/addon-essentials": "7.6.19",
     "@storybook/addon-interactions": "7.4.0",
     "@storybook/addon-links": "7.4.0",
