@@ -4,7 +4,7 @@ import { useSlashID } from "../../hooks/use-slash-id";
 import { Flow, createFlow, FlowState, CreateFlowOptions } from "./flow";
 
 export function useFlowState(opts: CreateFlowOptions = {}) {
-  const { logIn, mfa, recover, user, sdkState } = useSlashID();
+  const { logIn, mfa, recover, user, sdkState, sid } = useSlashID();
   const flowRef = useRef<Flow>(createFlow(opts));
   const [state, setState] = useState<FlowState>(flowRef.current.state);
 
@@ -19,7 +19,10 @@ export function useFlowState(opts: CreateFlowOptions = {}) {
     if (sdkState !== "ready") return;
 
     flowRef.current.setRecover(recover);
-  }, [recover, sdkState]);
+    flowRef.current.setCancel(() => {
+      sid?.publish("flowCancelled", undefined);
+    });
+  }, [recover, sdkState, sid]);
 
   useEffect(() => {
     if (user && !user.anonymous) {

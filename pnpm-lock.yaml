@@ -363,8 +363,8 @@ importers:
         specifier: ^8.0.2
         version: 8.3.1
       '@slashid/slashid':
-        specifier: 3.25.0
-        version: 3.25.0
+        specifier: 3.26.1
+        version: 3.26.1
       '@storybook/addon-essentials':
         specifier: 7.6.19
         version: 7.6.19(@types/react-dom@18.2.15)(@types/react@18.2.37)(react-dom@18.2.0)(react@18.2.0)
@@ -613,8 +613,8 @@ importers:
         specifier: workspace:*
         version: link:../react
       '@slashid/slashid':
-        specifier: 3.25.0
-        version: 3.25.0
+        specifier: 3.26.1
+        version: 3.26.1
       jose:
         specifier: ^5.2.0
         version: 5.2.0
@@ -8151,6 +8151,23 @@ packages:
 
   /@slashid/slashid@3.25.0:
     resolution: {integrity: sha512-fjqHL0Kx6JKWSCnekYx4vD8Mw7DY46+lcTDdRcoMDugx433pJ89VtmsWFW1U9XPV/R/9kK18rrideNAO3iN4fw==}
+    dependencies:
+      '@changesets/cli': 2.26.2
+      '@types/uuid': 8.3.4
+      changeset: 0.2.6
+      compare-versions: 6.1.0
+      docdash: 1.2.0
+      jwt-decode: 3.1.2
+      qrcode: 1.5.3
+      querystring-es3: 0.2.1
+      regenerator-runtime: 0.13.11
+      ua-parser-js: 1.0.37
+      url: 0.11.3
+      uuid: 8.3.2
+    dev: false
+
+  /@slashid/slashid@3.26.1:
+    resolution: {integrity: sha512-T3MFhqg+NXoJp+53Lr8X9l3wOGcoqw2ivf8+/qHv+P9OLs0EEfkphLLT4zvb6Y8TPVAWDmtQN2fBbvzaRtpUqg==}
     dependencies:
       '@changesets/cli': 2.26.2
       '@types/uuid': 8.3.4

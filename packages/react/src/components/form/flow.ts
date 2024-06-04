@@ -265,6 +265,7 @@ type HistoryEntry = {
 export function createFlow(opts: CreateFlowOptions = {}) {
   let logInFn: undefined | LogIn | MFA = undefined;
   let recoverFn: undefined | Recover = undefined;
+  let cancelFn: undefined | Cancel = undefined;
   let recoveryCodes: undefined | string[] = undefined;
   let observers: Observer[] = [];
   const send = (event: Event) => {
@@ -376,6 +377,10 @@ export function createFlow(opts: CreateFlowOptions = {}) {
         );
         break;
       case "sid_cancel":
+        if (typeof cancelFn === "function") {
+          cancelFn();
+        }
+
         setState(createInitialState(send), e);
         break;
       default:
@@ -398,6 +403,9 @@ export function createFlow(opts: CreateFlowOptions = {}) {
     },
     setRecover: (fn: Recover) => {
       recoverFn = fn;
+    },
+    setCancel: (fn: Cancel) => {
+      cancelFn = fn;
     },
     state,
   };
