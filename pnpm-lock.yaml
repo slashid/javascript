@@ -363,8 +363,8 @@ importers:
         specifier: ^8.0.2
         version: 8.3.1
       '@slashid/slashid':
-        specifier: 3.26.1-cancel-flow.2
-        version: 3.26.1-cancel-flow.2
+        specifier: 3.26.1
+        version: 3.26.1
       '@storybook/addon-essentials':
         specifier: 7.6.19
         version: 7.6.19(@types/react-dom@18.2.15)(@types/react@18.2.37)(react-dom@18.2.0)(react@18.2.0)
@@ -8166,8 +8166,8 @@ packages:
       uuid: 8.3.2
     dev: false
 
-  /@slashid/slashid@3.26.1-cancel-flow.2:
-    resolution: {integrity: sha512-XStZ8r6CWmo6O3mz2GBlia0DbHg2Nk/POilUgh/vzB+aFK05slTyu0XFTDg7jD7Om4B976UZKt0Ku9tDaYUt5w==}
+  /@slashid/slashid@3.26.1:
+    resolution: {integrity: sha512-T3MFhqg+NXoJp+53Lr8X9l3wOGcoqw2ivf8+/qHv+P9OLs0EEfkphLLT4zvb6Y8TPVAWDmtQN2fBbvzaRtpUqg==}
     dependencies:
       '@changesets/cli': 2.26.2
       '@types/uuid': 8.3.4
