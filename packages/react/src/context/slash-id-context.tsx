@@ -182,14 +182,16 @@ export const SlashIDProvider = ({
       setAnonymousUser(anonUser);
       storageRef.current?.setItem(STORAGE_TOKEN_KEY, anonUser.token);
 
-      try {
-        // core SDK does not track anon users automatically
-        sidRef.current?.getAnalytics().identify(anonUser);
-      } catch {
-        // fail silently
+      if (analyticsEnabled) {
+        try {
+          // core SDK does not track anon users automatically
+          sidRef.current?.getAnalytics().identify(anonUser);
+        } catch {
+          // fail silently
+        }
       }
     },
-    [anonymousUsersEnabled, state]
+    [analyticsEnabled, anonymousUsersEnabled, state]
   );
 
   const clearAnonymousUser = useCallback(() => {
@@ -213,17 +215,19 @@ export const SlashIDProvider = ({
 
     storageRef.current?.removeItem(STORAGE_TOKEN_KEY);
 
-    try {
-      sidRef.current?.getAnalytics().logout();
-    } catch {
-      // fail silently
+    if (analyticsEnabled) {
+      try {
+        sidRef.current?.getAnalytics().logout();
+      } catch {
+        // fail silently
+      }
     }
 
     user.logout();
     setUser(undefined);
     // we need to set the oid back to the root on log out
     setOid(initialOid);
-  }, [state, user, initialOid]);
+  }, [state, user, analyticsEnabled, initialOid]);
 
   const logIn = useCallback<LogIn>(
     async (
@@ -352,7 +356,7 @@ export const SlashIDProvider = ({
         ...(environment && { environment }),
         ...(baseApiUrl && { baseURL: baseApiUrl }),
         ...(sdkUrl && { sdkURL: sdkUrl }),
-        ...(analyticsEnabled && { analyticsEnabled }),
+        ...(typeof analyticsEnabled === "boolean" && { analyticsEnabled }),
       });
       const storage = createStorage(tokenStorage);
 
@@ -436,7 +440,7 @@ export const SlashIDProvider = ({
 
       const user = createAndStoreUserFromToken(tokenFromStorage);
 
-      if (user) {
+      if (user && analyticsEnabled) {
         try {
           // in all other cases the core SDK will handle this
           // here we just recreate the user object based on the preexisting token
@@ -477,6 +481,7 @@ export const SlashIDProvider = ({
       }
     );
   }, [
+    analyticsEnabled,
     anonymousUsersEnabled,
     createAndStoreUserFromToken,
     state,
