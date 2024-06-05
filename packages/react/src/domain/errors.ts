@@ -50,3 +50,15 @@ export function isNoPasswordSetError(
     error.name === Errors.ERROR_NAMES.noPasswordSet
   );
 }
+
+type FlowCancelledError = Error &
+  typeof Errors.SlashIDError & {
+    // TODO this should probably be exported from the SDK - we should establish a naming convention.
+    name: "FlowCancelledError";
+  };
+
+export function isFlowCancelledError(
+  error: Error
+): error is FlowCancelledError {
+  return Errors.isSlashIDError(error) && error.name == "FlowCancelledError";
+}

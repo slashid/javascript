@@ -9,7 +9,11 @@ import {
   Recover,
   RetryPolicy,
 } from "../../domain/types";
-import { ERROR_NAMES, ensureError } from "../../domain/errors";
+import {
+  ERROR_NAMES,
+  ensureError,
+  isFlowCancelledError,
+} from "../../domain/errors";
 import { isFactorRecoverable } from "../../domain/handles";
 import { StoreRecoveryCodesState } from "./store-recovery-codes";
 
@@ -143,6 +147,9 @@ const createAuthenticatingState = (
         send({ type: "sid_login.success", user });
       })
       .catch((error) => {
+        if (isFlowCancelledError(error)) {
+          return;
+        }
         send({ type: "sid_login.error", error });
       });
   }
@@ -353,6 +360,10 @@ export function createFlow(opts: CreateFlowOptions = {}) {
       case "sid_retry":
         // TODO replace with a check for ready state
         if (!logInFn || !recoverFn) break;
+
+        if (typeof cancelFn === "function") {
+          cancelFn();
+        }
 
         if (e.policy === "reset") {
           setState(createInitialState(send), e);
