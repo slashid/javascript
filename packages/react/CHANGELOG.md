@@ -1,5 +1,12 @@
 # @slashid/react
 
+## 1.24.5
+
+### Patch Changes
+
+- c587340: Cancel previous flow on retry
+- 9c3cd06: Correctly pass the analyticsEnabled flag to the core SDK
+
 ## 1.24.4
 
 ### Patch Changes
