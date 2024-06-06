@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 1.24.6
+
+### Patch Changes
+
+- 23ca920: Update authenticating state copy to make it less confusing
+
 ## 1.24.5
 
 ### Patch Changes
