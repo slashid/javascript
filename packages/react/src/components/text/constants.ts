@@ -90,10 +90,10 @@ export const TEXT = {
   "authenticating.title.webauthn":
     "You'll be prompted to validate your login via your device",
   "authenticating.message.emailLink":
-    "We have sent you a link via email to {{EMAIL_ADDRESS}}. Follow the link provided to complete your registration.",
+    "We have sent you a link via email to {{EMAIL_ADDRESS}}. Follow the link provided to complete your authentication.",
   "authenticating.title.emailLink": "Check your email",
   "authenticating.message.smsLink":
-    "We have sent you a link via text to {{PHONE_NUMBER}}. Follow the link provided to complete your registration.",
+    "We have sent you a link via text to {{PHONE_NUMBER}}. Follow the link provided to complete your authentication.",
   "authenticating.title.smsLink": "Check your phone",
   "authenticating.message.emailOtp":
     "We have sent you a code via email to {{EMAIL_ADDRESS}}. Please insert it here.",
