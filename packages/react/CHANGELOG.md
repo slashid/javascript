@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 1.25.0
+
+### Minor Changes
+
+- 421d0ac: Add error state for expired authentication attempts
+
 ## 1.24.6
 
 ### Patch Changes
