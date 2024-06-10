@@ -1,6 +1,6 @@
 {
   "name": "@slashid/remix",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "private": false,
   "publishConfig": {
     "access": "public"
