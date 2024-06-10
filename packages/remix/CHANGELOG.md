@@ -1,5 +1,13 @@
 # @slashid/remix
 
+## 0.2.6
+
+### Patch Changes
+
+- 0e79901: Update deps
+- Updated dependencies [0e79901]
+  - @slashid/react@1.25.1
+
 ## 0.2.5
 
 ### Patch Changes

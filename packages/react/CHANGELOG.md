@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 1.25.1
+
+### Patch Changes
+
+- 0e79901: Update the Core SDK
+
 ## 1.25.0
 
 ### Minor Changes
