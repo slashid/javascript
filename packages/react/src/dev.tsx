@@ -15,7 +15,7 @@ import {
   SlashIDLoaded,
   SlashIDProvider,
   useOrganizations,
-  useSlashID
+  useSlashID,
 } from "./main";
 import { defaultOrganization } from "./middleware/default-organization";
 import { Slot } from "./components/slot";
@@ -363,27 +363,28 @@ root.render(
               config: {
                 handle: {
                   type: "email_address",
-                  value: "foo@world.com"
+                  value: "foo@world.com",
                 },
-                factor:  {
-                  method: "email_link"
-                }
+                factor: {
+                  method: "email_link",
+                },
               },
-              attempt: 1
+              attempt: 1,
             },
             retry: () => {},
             cancel: () => {},
             recover: () => {},
             logIn: () => {},
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            setRecoveryCodes: (_code: string[]) => {}
-          }
+            setRecoveryCodes: (_code: string[]) => {},
+          };
 
           return (
-            <Authenticating flowState={forcedEmailMagicLinkLoadingState} />
-          )
+            <ConfigurationProvider>
+              <Authenticating flowState={forcedEmailMagicLinkLoadingState} />
+            </ConfigurationProvider>
+          );
         })()}
-        
       </div>
     </SlashIDProvider>
   </React.StrictMode>
