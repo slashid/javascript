@@ -1,5 +1,5 @@
 import { DynamicFlow } from "./components/dynamic-flow";
-import { Form } from "./components/form";
+import { Authenticating, Form } from "./components/form";
 import { Slot } from "./components/slot";
 import { GDPRConsentDialog } from "./components/gdpr-consent-dialog";
 import { Groups } from "./components/groups";
@@ -43,6 +43,10 @@ const Customisation = {
   ...validation,
 };
 
+const FormState = {
+  Authenticating
+}
+
 /**
  * TODO: think about code splitting
  */
@@ -70,6 +74,9 @@ export {
   type CssVariable,
   type CssVariableConfig,
   Customisation,
+
+  // raw states
+  FormState,
 
   // middleware
   defaultOrganization,

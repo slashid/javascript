@@ -19,6 +19,8 @@ import {
 } from "./main";
 import { defaultOrganization } from "./middleware/default-organization";
 import { Slot } from "./components/slot";
+import { AuthenticatingState } from "./components/form/flow";
+import { Authenticating } from "./components/form";
 
 const rootOid = "b6f94b67-d20f-7fc3-51df-bf6e3b82683e";
 
@@ -351,6 +353,38 @@ root.render(
             <ConfiguredDynamicFlow />
           </div>
         </div>
+      </div>
+
+      <div className="states">
+        {(() => {
+          const forcedEmailMagicLinkLoadingState: AuthenticatingState = {
+            status: "authenticating",
+            context: {
+              config: {
+                handle: {
+                  type: "email_address",
+                  value: "foo@world.com",
+                },
+                factor: {
+                  method: "email_link",
+                },
+              },
+              attempt: 1,
+            },
+            retry: () => {},
+            cancel: () => {},
+            recover: () => {},
+            logIn: () => {},
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            setRecoveryCodes: (_code: string[]) => {},
+          };
+
+          return (
+            <ConfigurationProvider>
+              <Authenticating flowState={forcedEmailMagicLinkLoadingState} />
+            </ConfigurationProvider>
+          );
+        })()}
       </div>
     </SlashIDProvider>
   </React.StrictMode>
