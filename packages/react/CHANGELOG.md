@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 1.25.2
+
+### Patch Changes
+
+- a3477fd: Export Authenticating form state for internal use
+
 ## 1.25.1
 
 ### Patch Changes
