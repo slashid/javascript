@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 1.25.4
+
+### Patch Changes
+
+- 83c7460: Improve misbehaving linebreak behaviour
+
 ## 1.25.3
 
 ### Patch Changes
