@@ -75,7 +75,7 @@ function Wrapper({ children }: { children: React.ReactNode }) {
   );
 }
 
-export type AuthenticatingProps = Pick<Props, "flowState">
+export type AuthenticatingProps = Pick<Props, "flowState">;
 
 export const Authenticating = ({ flowState }: AuthenticatingProps) => {
   const factor = flowState.context.config.factor;

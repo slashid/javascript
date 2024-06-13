@@ -132,7 +132,8 @@ export const TEXT = {
   "error.subtitle.noPasswordSet":
     "Contact support to set a password or log in with your email or phone number.",
   "error.title.authenticationExpired": "Log in expired",
-  "error.subtitle.authenticationExpired": "Your attempt to login took too long, try again to continue.",
+  "error.subtitle.authenticationExpired":
+    "Your attempt to login took too long, try again to continue.",
   "error.retry": "Try again",
   "error.retry.rateLimit": "Try again",
   "error.retry.noPasswordSet": "Go back to login",

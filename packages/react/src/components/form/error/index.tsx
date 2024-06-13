@@ -38,7 +38,7 @@ type ErrorType =
 
 async function getErrorType(error: Error): Promise<ErrorType> {
   if (await Errors.isTimeoutError(error)) {
-    return "timeout"
+    return "timeout";
   }
 
   if (Errors.isResponseError(error)) {
@@ -67,11 +67,11 @@ function mapErrorTypeToText(errorType: ErrorType): {
 } {
   switch (errorType) {
     case "timeout":
-        return {
-          title: 'error.title.authenticationExpired',
-          description: 'error.subtitle.authenticationExpired',
-          retry: 'error.retry.authenticationExpired'
-        }
+      return {
+        title: "error.title.authenticationExpired",
+        description: "error.subtitle.authenticationExpired",
+        retry: "error.retry.authenticationExpired",
+      };
     case "rateLimit":
       return {
         title: "error.title.rateLimit",
@@ -102,7 +102,7 @@ function mapErrorTypeToText(errorType: ErrorType): {
 function mapErrorTypeToRetryPolicy(errorType: ErrorType): RetryPolicy {
   switch (errorType) {
     case "timeout":
-      return "retry"
+      return "retry";
     case "rateLimit":
       return "retry";
     case "recoverNonReachableHandleType":
@@ -180,18 +180,17 @@ Error.displayName = "Form.Error";
 
 const ErrorImplementation: React.FC<Props> = ({ flowState }) => {
   const { text } = useConfiguration();
-  const [errorType, setErrorType] = useState<ErrorType | null>(null)
+  const [errorType, setErrorType] = useState<ErrorType | null>(null);
 
   useEffect(() => {
-    setErrorType(null)
-
-    ;(async () => {
+    setErrorType(null);
+    (async () => {
       const type = await getErrorType(flowState.context.error);
-      setErrorType(type)
-    })()
-  }, [flowState.context.error])
+      setErrorType(type);
+    })();
+  }, [flowState.context.error]);
 
-  if (!errorType) return <></>
+  if (!errorType) return <></>;
 
   const { title, description } = mapErrorTypeToText(errorType);
   const retryPolicy = mapErrorTypeToRetryPolicy(errorType);
