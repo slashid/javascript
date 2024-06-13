@@ -35,6 +35,14 @@ export const Text: React.FC<InternalProps> = ({
 }) => {
   const text = useText();
   const Component = as ? as : "p";
+  const raw = (tokens ? interpolate(text[t], tokens) : text[t]) ?? ""
+  const rawWithLineBreaks = raw
+    .replace(/\r/g, "")
+    .split(/\n/)
+    .map((txt) => {
+      if (txt === "") return <br />;
+      return txt;
+    });
 
   return (
     <Component
@@ -45,7 +53,7 @@ export const Text: React.FC<InternalProps> = ({
         className
       )}
     >
-      {tokens ? interpolate(text[t], tokens) : text[t]}
+      {rawWithLineBreaks}
       {children ? children : null}
     </Component>
   );

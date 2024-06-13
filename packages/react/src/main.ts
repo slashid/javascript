@@ -44,8 +44,8 @@ const Customisation = {
 };
 
 const FormState = {
-  Authenticating
-}
+  Authenticating,
+};
 
 /**
  * TODO: think about code splitting
