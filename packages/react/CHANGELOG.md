@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 1.25.3
+
+### Patch Changes
+
+- 6c1e40f: Allow linebreaks in text config
+
 ## 1.25.2
 
 ### Patch Changes
