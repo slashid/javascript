@@ -17,6 +17,8 @@ export const TEXT = {
   "initial.handle.username.placeholder": "Type your username",
   "initial.submit": "Continue",
   "initial.divider": "or",
+  // rendered between the form title and the UI message only if the value is not empty, regardless of the nested authentication state
+  "authenticating.subtitle": "",
   "authenticating.password.label": "Password",
   "authenticating.password.placeholder": "Type your password",
   "authenticating.passwordConfirm.label": "Confirm password",

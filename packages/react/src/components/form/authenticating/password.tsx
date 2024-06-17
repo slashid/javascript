@@ -8,7 +8,7 @@ import { Text } from "../../text";
 
 import * as styles from "./authenticating.css";
 import { EmailIcon, Loader, SmsIcon } from "./icons";
-import { BackButton } from "./authenticating.components";
+import { AuthenticatingSubtitle, BackButton } from "./authenticating.components";
 import {
   Button,
   LinkButton,
@@ -259,6 +259,7 @@ export const PasswordState = ({ flowState, performLogin }: Props) => {
     <>
       <BackButton onCancel={() => flowState.cancel()} />
       <Text as="h1" t={title} variant={{ size: "2xl-title", weight: "bold" }} />
+      <AuthenticatingSubtitle />
       <Text
         t={message}
         variant={{ color: "contrast", weight: "semibold" }}

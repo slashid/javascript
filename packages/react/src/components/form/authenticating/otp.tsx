@@ -21,7 +21,11 @@ import { Text } from "../../text";
 import * as styles from "./authenticating.css";
 import { isFactorOTPEmail, isFactorOTPSms } from "../../../domain/handles";
 import { EmailIcon, SmsIcon, Loader } from "./icons";
-import { BackButton, Prompt } from "./authenticating.components";
+import {
+  AuthenticatingSubtitle,
+  BackButton,
+  Prompt,
+} from "./authenticating.components";
 import { BASE_RETRY_DELAY_MS } from "./authenticating.constants";
 
 const FactorIcon = ({ factor }: { factor: Factor }) => {
@@ -128,6 +132,7 @@ export const OTPState = ({ flowState, performLogin }: Props) => {
     <>
       <BackButton onCancel={() => flowState.cancel()} />
       <Text as="h1" t={title} variant={{ size: "2xl-title", weight: "bold" }} />
+      <AuthenticatingSubtitle />
       <Text
         t={message}
         variant={{ color: "contrast", weight: "semibold" }}

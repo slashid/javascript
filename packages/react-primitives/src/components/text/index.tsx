@@ -34,7 +34,7 @@ export const Text: React.FC<InternalProps> = ({
   children,
 }) => {
   const text = useText();
-  const Component = as ? as : "p";
+  const Component = as ?? "p";
 
   return (
     <Component

@@ -9,7 +9,12 @@ import { getAuthenticatingMessage } from "./messages";
 import { OTPState } from "./otp";
 import { PasswordState } from "./password";
 import { Props } from "./authenticating.types";
-import { BackButton, FactorIcon, Prompt } from "./authenticating.components";
+import {
+  AuthenticatingSubtitle,
+  BackButton,
+  FactorIcon,
+  Prompt,
+} from "./authenticating.components";
 
 import * as styles from "./authenticating.css";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -42,6 +47,7 @@ const LoadingState = ({ flowState, performLogin }: Props) => {
           </span>
         ) : undefined}
       </Text>
+      <AuthenticatingSubtitle />
       <Text
         t={message}
         variant={{ color: "contrast", weight: "semibold" }}
