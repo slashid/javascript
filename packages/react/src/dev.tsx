@@ -217,6 +217,7 @@ const BasicForm = () => {
 const ComposedForm = () => {
   return (
     <ConfigurationProvider
+      text={{ "authenticating.subtitle": "Optional subtitle" }}
       factors={[
         { method: "webauthn" },
         { method: "email_link" },
