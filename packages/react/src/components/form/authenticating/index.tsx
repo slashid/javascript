@@ -120,7 +120,7 @@ export function Authenticating({ children }: AuthenticatingTemplateProps) {
 
 export type AuthenticatingProps = Pick<Props, "flowState">;
 
-const AuthenticatingImplementation = ({ flowState }: AuthenticatingProps) => {
+export const AuthenticatingImplementation = ({ flowState }: AuthenticatingProps) => {
   const factor = flowState.context.config.factor;
   const attempt = useRef(1);
   const isLoggingIn = useRef(false);

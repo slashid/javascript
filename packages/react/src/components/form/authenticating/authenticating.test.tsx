@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { Authenticating } from "./index";
+import { AuthenticatingImplementation as Authenticating } from "./index";
 import { AuthenticatingState } from "../flow";
 import { TestTextProvider } from "../../../context/test-providers";
 import { TEXT } from "../../text/constants";
