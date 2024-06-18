@@ -40,7 +40,7 @@ export const Text: React.FC<InternalProps> = ({
     <Component
       className={clsx(
         "sid-text",
-        `sid-text--${as}`,
+        `sid-text--${Component}`,
         styles.text(variant),
         className
       )}

@@ -5,7 +5,7 @@ import { useCallback } from "react";
 import { Handle, LoginOptions } from "../../domain/types";
 import { CreateFlowOptions } from "../form/flow";
 import { useFlowState } from "../form/useFlowState";
-import { Authenticating } from "../form/authenticating";
+import { AuthenticatingImplementation as Authenticating } from "../form/authenticating";
 import { Success } from "../form/success";
 import { Error } from "../form/error";
 

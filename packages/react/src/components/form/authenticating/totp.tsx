@@ -8,7 +8,11 @@ import {
 import { useConfiguration } from "../../../hooks/use-configuration";
 import { useForm } from "../../../hooks/use-form";
 import { Props } from "./authenticating.types";
-import { BackButton, Prompt } from "./authenticating.components";
+import {
+  AuthenticatingSubtitle,
+  BackButton,
+  Prompt,
+} from "./authenticating.components";
 import { Text } from "../../text";
 import { TextConfigKey } from "../../text/constants";
 import { Loader } from "./icons";
@@ -168,7 +172,13 @@ export function TOTPState({ flowState, performLogin }: Props) {
   return (
     <>
       <BackButton onCancel={() => flowState.cancel()} />
-      <Text as="h1" t={title} variant={{ size: "2xl-title", weight: "bold" }} />
+      <Text
+        as="h1"
+        className="sid-form-authenticating-title sid-form-authenticating-title-totp"
+        t={title}
+        variant={{ size: "2xl-title", weight: "bold" }}
+      />
+      <AuthenticatingSubtitle />
       <Text t={message} variant={{ color: "contrast", weight: "semibold" }} />
       {formState === "initial" && <Loader />}
       {formState === "registerAuthenticator" && (

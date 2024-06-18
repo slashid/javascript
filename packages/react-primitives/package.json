@@ -55,6 +55,8 @@
     "build:storybook": "storybook build",
     "lint": "eslint ./src",
     "test:types": "tsc --noEmit --emitDeclarationOnly false",
+    "test:unit": "vitest run",
+    "test:unit:watch": "vitest",
     "publish:yalc": "node ./yalc.next.js && pnpm build && yalc publish"
   },
   "dependencies": {

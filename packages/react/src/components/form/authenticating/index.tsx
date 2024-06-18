@@ -9,13 +9,20 @@ import { getAuthenticatingMessage } from "./messages";
 import { OTPState } from "./otp";
 import { PasswordState } from "./password";
 import { Props } from "./authenticating.types";
-import { BackButton, FactorIcon, Prompt } from "./authenticating.components";
+import {
+  AuthenticatingSubtitle,
+  BackButton,
+  FactorIcon,
+  Prompt,
+} from "./authenticating.components";
 
 import * as styles from "./authenticating.css";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { Children, useCallback, useEffect, useRef, useState } from "react";
 import { TOTPState } from "./totp";
 import { Delayed } from "@slashid/react-primitives";
 import { BASE_RETRY_DELAY_MS } from "./authenticating.constants";
+import { useInternalFormContext } from "../internal-context";
+import { AuthenticatingState } from "../flow";
 
 const LoadingState = ({ flowState, performLogin }: Props) => {
   const { factor, handle } = flowState.context.config;
@@ -35,13 +42,19 @@ const LoadingState = ({ flowState, performLogin }: Props) => {
   return (
     <>
       <BackButton onCancel={() => flowState.cancel()} />
-      <Text as="h1" t={title} variant={{ size: "2xl-title", weight: "bold" }}>
+      <Text
+        className="sid-form-authenticating-title sid-form-authenticating-title-loading"
+        as="h1"
+        t={title}
+        variant={{ size: "2xl-title", weight: "bold" }}
+      >
         {factor.method === "oidc" ? (
           <span className={styles.oidcTitle}>
             {factor.options?.provider as unknown as string}
           </span>
         ) : undefined}
       </Text>
+      <AuthenticatingSubtitle />
       <Text
         t={message}
         variant={{ color: "contrast", weight: "semibold" }}
@@ -75,9 +88,39 @@ function Wrapper({ children }: { children: React.ReactNode }) {
   );
 }
 
+export type AuthenticatingAsAFunctionProps = Omit<
+  AuthenticatingState,
+  "status"
+>;
+
+type AuthenticatingTemplateProps = {
+  children?:
+    | React.ReactNode
+    | ((renderProps: AuthenticatingAsAFunctionProps) => React.ReactNode);
+};
+
+export function Authenticating({ children }: AuthenticatingTemplateProps) {
+  const { flowState } = useInternalFormContext();
+
+  if (flowState?.status !== "authenticating") return null;
+
+  if (typeof children === "function") {
+    return (
+      <div data-testid="sid-form-authenticating-function">
+        {children(flowState)}
+      </div>
+    );
+  }
+
+  if (Children.count(children) > 0)
+    return <div data-testid="sid-form-authenticating-children">{children}</div>;
+
+  return <AuthenticatingImplementation flowState={flowState} />;
+}
+
 export type AuthenticatingProps = Pick<Props, "flowState">;
 
-export const Authenticating = ({ flowState }: AuthenticatingProps) => {
+export const AuthenticatingImplementation = ({ flowState }: AuthenticatingProps) => {
   const factor = flowState.context.config.factor;
   const attempt = useRef(1);
   const isLoggingIn = useRef(false);
@@ -90,6 +133,13 @@ export const Authenticating = ({ flowState }: AuthenticatingProps) => {
 
     if (isLoggingIn.current) return;
 
+    /**
+     * We used to call logIn immediately upon transitioning to Authenticating state.
+     * That caused a race condition because the HTTP response could have potentially
+     * been received before the components attached the required event listeners.
+     *
+     * This allows the UI components to do their setup and then notify the flowState it is ok to log in.
+     */
     flowState.logIn();
     isLoggingIn.current = true;
   }, [flowState]);
