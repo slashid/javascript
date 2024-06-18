@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 0.5.3
+
+### Patch Changes
+
+- bdfca2b: Add stable class names to form title and subtitle in authenticating state.
+
 ## 0.5.2
 
 ### Patch Changes
