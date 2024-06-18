@@ -24,7 +24,7 @@ export const AuthenticatingSubtitle = () => {
   return (
     <Text
       as="p"
-      className="sid-text-authenticating-subtitle"
+      className="sid-form-authenticating-subtitle"
       t="authenticating.subtitle"
     />
   );

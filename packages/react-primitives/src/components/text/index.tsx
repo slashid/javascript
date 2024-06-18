@@ -34,13 +34,13 @@ export const Text: React.FC<InternalProps> = ({
   children,
 }) => {
   const text = useText();
-  const Component = as ?? "p";
+  const Component = as ? as : "p";
 
   return (
     <Component
       className={clsx(
         "sid-text",
-        `sid-text--${as}`,
+        `sid-text--${Component}`,
         styles.text(variant),
         className
       )}
