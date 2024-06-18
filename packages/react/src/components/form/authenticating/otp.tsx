@@ -131,7 +131,12 @@ export const OTPState = ({ flowState, performLogin }: Props) => {
   return (
     <>
       <BackButton onCancel={() => flowState.cancel()} />
-      <Text as="h1" t={title} variant={{ size: "2xl-title", weight: "bold" }} />
+      <Text
+        as="h1"
+        className="sid-form-authenticating-title sid-form-authenticating-title-otp"
+        t={title}
+        variant={{ size: "2xl-title", weight: "bold" }}
+      />
       <AuthenticatingSubtitle />
       <Text
         t={message}

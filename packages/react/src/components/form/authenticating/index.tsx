@@ -40,7 +40,12 @@ const LoadingState = ({ flowState, performLogin }: Props) => {
   return (
     <>
       <BackButton onCancel={() => flowState.cancel()} />
-      <Text as="h1" t={title} variant={{ size: "2xl-title", weight: "bold" }}>
+      <Text
+        className="sid-form-authenticating-title sid-form-authenticating-title-loading"
+        as="h1"
+        t={title}
+        variant={{ size: "2xl-title", weight: "bold" }}
+      >
         {factor.method === "oidc" ? (
           <span className={styles.oidcTitle}>
             {factor.options?.provider as unknown as string}
