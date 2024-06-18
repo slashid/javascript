@@ -55,7 +55,7 @@ export const DynamicFlow = ({
       )}
       {flowState.status === "authenticating" && (
         <FormProvider>
-          <Authenticating flowState={flowState} />
+          <Authenticating />
         </FormProvider>
       )}
       {flowState.status === "error" && <Error />}
