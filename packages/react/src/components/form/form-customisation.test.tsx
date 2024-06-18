@@ -1,4 +1,4 @@
-import { render, screen, act } from "@testing-library/react";
+import { render, screen, act, waitFor } from "@testing-library/react";
 import { Form } from ".";
 import {
   TestSlashIDProvider,
@@ -8,10 +8,11 @@ import { createTestUser, inputEmail } from "../test-utils";
 import { Slot } from "../slot";
 import userEvent from "@testing-library/user-event";
 import { ConfigurationProvider } from "../../main";
-import { useState } from "react";
-import { Factor } from "@slashid/slashid";
+import { useEffect, useState } from "react";
+import { Factor, User } from "@slashid/slashid";
 import { Handle } from "../../domain/types";
 import { TEXT } from "../text/constants";
+import { AuthenticatingAsAFunctionProps } from "./authenticating";
 
 describe("#Form - customisation", () => {
   test(`should not render any components that are not a <Slot name="initial | authenticating | success | error | footer">`, () => {
@@ -87,6 +88,56 @@ describe("#Form - customisation", () => {
       screen.findByTestId("custom-authenticating")
     ).resolves.toBeInTheDocument();
     expect(screen.queryByTestId("sid-form-authenticating-state")).toBeFalsy();
+  });
+
+  test("should render the authenticating slot using children as a function", async () => {
+    let resolve: ((user: User) => void) | undefined;
+    const pendingPromise = new Promise<User>((r) => {
+      resolve = r;
+    });
+    const logInMock = vi.fn(async () => pendingPromise);
+    const user = userEvent.setup();
+    const AuthenticatingFunction = ({
+      context,
+      logIn,
+    }: AuthenticatingAsAFunctionProps) => {
+      useEffect(() => {
+        // when overriding the Authenticating component, you must call logIn after the component is set up
+        // this can include various event listeners
+        logIn();
+      }, [logIn]);
+
+      return (
+        <div data-testid="authenticating-slot-function">
+          {context.config.handle?.value}
+        </div>
+      );
+    };
+
+    render(
+      <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+        <Form>
+          <Slot name="authenticating">
+            <Form.Authenticating>
+              {(props) => <AuthenticatingFunction {...props} />}
+            </Form.Authenticating>
+          </Slot>
+        </Form>
+      </TestSlashIDProvider>
+    );
+
+    inputEmail("valid@email.com");
+    user.click(screen.getByTestId("sid-form-initial-submit-button"));
+
+    await expect(
+      screen.findByTestId("authenticating-slot-function")
+    ).resolves.toBeInTheDocument();
+    await expect(
+      screen.findByTestId("sid-form-authenticating-function")
+    ).resolves.toBeInTheDocument();
+    await waitFor(() => expect(logInMock).toHaveBeenCalledTimes(1));
+    // clear test state
+    if (resolve) resolve(createTestUser());
   });
 
   test("should render the error slot with children as a function", async () => {

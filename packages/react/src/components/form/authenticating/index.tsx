@@ -17,10 +17,12 @@ import {
 } from "./authenticating.components";
 
 import * as styles from "./authenticating.css";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { Children, useCallback, useEffect, useRef, useState } from "react";
 import { TOTPState } from "./totp";
 import { Delayed } from "@slashid/react-primitives";
 import { BASE_RETRY_DELAY_MS } from "./authenticating.constants";
+import { useInternalFormContext } from "../internal-context";
+import { AuthenticatingState } from "../flow";
 
 const LoadingState = ({ flowState, performLogin }: Props) => {
   const { factor, handle } = flowState.context.config;
@@ -86,9 +88,39 @@ function Wrapper({ children }: { children: React.ReactNode }) {
   );
 }
 
+export type AuthenticatingAsAFunctionProps = Omit<
+  AuthenticatingState,
+  "status"
+>;
+
+type AuthenticatingTemplateProps = {
+  children?:
+    | React.ReactNode
+    | ((renderProps: AuthenticatingAsAFunctionProps) => React.ReactNode);
+};
+
+export function Authenticating({ children }: AuthenticatingTemplateProps) {
+  const { flowState } = useInternalFormContext();
+
+  if (flowState?.status !== "authenticating") return null;
+
+  if (typeof children === "function") {
+    return (
+      <div data-testid="sid-form-authenticating-function">
+        {children(flowState)}
+      </div>
+    );
+  }
+
+  if (Children.count(children) > 0)
+    return <div data-testid="sid-form-authenticating-children">{children}</div>;
+
+  return <AuthenticatingImplementation flowState={flowState} />;
+}
+
 export type AuthenticatingProps = Pick<Props, "flowState">;
 
-export const Authenticating = ({ flowState }: AuthenticatingProps) => {
+const AuthenticatingImplementation = ({ flowState }: AuthenticatingProps) => {
   const factor = flowState.context.config.factor;
   const attempt = useRef(1);
   const isLoggingIn = useRef(false);
@@ -101,6 +133,13 @@ export const Authenticating = ({ flowState }: AuthenticatingProps) => {
 
     if (isLoggingIn.current) return;
 
+    /**
+     * We used to call logIn immediately upon transitioning to Authenticating state.
+     * That caused a race condition because the HTTP response could have potentially
+     * been received before the components attached the required event listeners.
+     *
+     * This allows the UI components to do their setup and then notify the flowState it is ok to log in.
+     */
     flowState.logIn();
     isLoggingIn.current = true;
   }, [flowState]);

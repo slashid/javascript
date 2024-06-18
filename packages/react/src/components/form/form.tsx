@@ -64,9 +64,7 @@ export const Form = ({
       footer: showBanner ? <Footer /> : null,
       initial: status === "initial" ? <Initial /> : undefined,
       authenticating:
-        status === "authenticating" ? (
-          <Authenticating flowState={flowState} />
-        ) : undefined,
+        status === "authenticating" ? <Authenticating /> : undefined,
       success:
         status === "success" ? <Success flowState={flowState} /> : undefined,
       error: status === "error" ? <Error /> : undefined,
@@ -125,3 +123,4 @@ export const Form = ({
 
 Form.Initial = Initial;
 Form.Error = Error;
+Form.Authenticating = Authenticating;
