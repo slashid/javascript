@@ -50,6 +50,7 @@ export type Props = {
   handleSubmit: (factor: Factor, handle: Handle) => void;
   validate?: Validator<string>;
   defaultValue?: string;
+  showFactorsOnly?: boolean;
 };
 
 export const HandleForm: React.FC<Props> = ({
@@ -57,6 +58,7 @@ export const HandleForm: React.FC<Props> = ({
   factors,
   handleSubmit,
   defaultValue,
+  showFactorsOnly,
 }) => {
   const filteredFactors = useMemo(
     () => filterFactors(factors, handleType).filter((f) => !isFactorOidc(f)),
@@ -83,6 +85,7 @@ export const HandleForm: React.FC<Props> = ({
   }, [resetForm]);
 
   const input = useMemo(() => {
+    if (showFactorsOnly) return null;
     if (handleType === "phone_number") {
       return (
         <PhoneInput
@@ -156,6 +159,7 @@ export const HandleForm: React.FC<Props> = ({
     values,
     defaultValue,
     parsedPhoneNumber,
+    showFactorsOnly
   ]);
 
   const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {

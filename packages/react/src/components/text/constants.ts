@@ -17,6 +17,11 @@ export const TEXT = {
   "initial.handle.username.placeholder": "Type your username",
   "initial.submit": "Continue",
   "initial.divider": "or",
+  "resolving_factors.title": "Loading configuration...",
+  "resolving_factors.subtitle":
+    "We're fetching authentication methods for your account, it may take a while",
+  "resolved_factors.title": "Sign in",
+  "resolved_factors.subtitle": "Choose one of the authentication methods below",
   // rendered between the form title and the UI message only if the value is not empty, regardless of the nested authentication state
   "authenticating.subtitle": "",
   "authenticating.password.label": "Password",

@@ -15,7 +15,7 @@ import { Initial } from "./initial";
 type Props = {
   className?: string;
   onSuccess?: CreateFlowOptions["onSuccess"];
-  getFactor: (handle?: Handle) => Factor;
+  getFactors: (handle?: Handle) => Promise<Factor[]> | Factor[];
   middleware?: LoginOptions["middleware"];
 };
 
@@ -25,7 +25,7 @@ type Props = {
  * This behaviour is controlled by the `getFactor` prop - it receives the handle that was entered and should return the factor that should be used.
  */
 export const DynamicFlow = ({
-  getFactor,
+  getFactors,
   className,
   onSuccess,
   middleware,
@@ -33,9 +33,8 @@ export const DynamicFlow = ({
   const flowState = useFlowState({ onSuccess });
 
   const handleSubmit = useCallback(
-    (_: Factor, handle?: Handle) => {
+    (factor: Factor, handle?: Handle) => {
       if (flowState.status === "initial") {
-        const factor = getFactor(handle);
         flowState.logIn(
           {
             factor,
@@ -45,13 +44,17 @@ export const DynamicFlow = ({
         );
       }
     },
-    [getFactor, flowState, middleware]
+    [flowState, middleware]
   );
 
   return (
     <div className={clsx("sid-dynamic-flow", styles.form, className)}>
       {flowState.status === "initial" && (
-        <Initial handleSubmit={handleSubmit} flowState={flowState} />
+        <Initial
+          handleSubmit={handleSubmit}
+          flowState={flowState}
+          getFactors={getFactors}
+        />
       )}
       {flowState.status === "authenticating" && (
         <FormProvider>

@@ -15,7 +15,7 @@ describe("#DynamicFlow", () => {
     render(
       <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
         <ConfigurationProvider factors={[{ method: "webauthn" }]}>
-          <DynamicFlow getFactor={() => ({ method: "email_link" })} />
+          <DynamicFlow getFactors={async () => [{ method: "email_link" }]} />
         </ConfigurationProvider>
       </TestSlashIDProvider>
     );
@@ -27,13 +27,13 @@ describe("#DynamicFlow", () => {
 
   test("should use the factor from the provided getFactor callback to perform authentication", async () => {
     const logInMock = vi.fn(() => Promise.resolve(createTestUser()));
-    const getFactorMock = vi.fn(() => ({ method: "email_link" } as Factor));
+    const getFactorMock = vi.fn(() => [{ method: "email_link" }] as Factor[]);
     const user = userEvent.setup();
 
     render(
       <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
         <ConfigurationProvider factors={[{ method: "webauthn" }]}>
-          <DynamicFlow getFactor={getFactorMock} />
+          <DynamicFlow getFactors={getFactorMock} />
         </ConfigurationProvider>
       </TestSlashIDProvider>
     );
@@ -68,7 +68,7 @@ describe("#DynamicFlow", () => {
     const TEST_USER = createTestUser();
     const TEST_MAPPED_USER = createTestUser({ oid: TEST_OID });
     const logInMock = vi.fn((_, { middleware }) => middleware(TEST_USER));
-    const getFactorMock = vi.fn(() => ({ method: "email_link" } as Factor));
+    const getFactorMock = vi.fn(() => [{ method: "email_link" }] as Factor[]);
     const middlewareMock = vi.fn(() => Promise.resolve(TEST_MAPPED_USER));
     const onSuccessMock = vi.fn();
 
@@ -78,7 +78,7 @@ describe("#DynamicFlow", () => {
       <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
         <ConfigurationProvider factors={[{ method: "webauthn" }]}>
           <DynamicFlow
-            getFactor={getFactorMock}
+            getFactors={getFactorMock}
             onSuccess={onSuccessMock}
             middleware={middlewareMock}
           />
