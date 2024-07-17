@@ -89,6 +89,7 @@ export const HandleForm: React.FC<Props> = ({
           className={sprinkles({ marginTop: "4" })}
           id={`sid-input-${handleType}`}
           name={handleType}
+          type="tel"
           label={text["initial.handle.phone"]}
           placeholder={text["initial.handle.phone.placeholder"]}
           value={values[handleType] ?? ""}
@@ -132,6 +133,7 @@ export const HandleForm: React.FC<Props> = ({
         className={sprinkles({ marginTop: "4" })}
         id={`sid-input-${handleType}`}
         name={handleType}
+        type="email"
         label={text["initial.handle.email"]}
         placeholder={
           text["initial.handle.phone.email"] ||
