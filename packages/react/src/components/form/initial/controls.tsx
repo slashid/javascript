@@ -142,6 +142,7 @@ export const Controls = ({ children }: Props) => {
       <form
         data-testid="sid-form-initial-children"
         onSubmit={registerSubmit(onSubmit)}
+        noValidate
       >
         {children}
       </form>
@@ -151,6 +152,7 @@ export const Controls = ({ children }: Props) => {
     <form
       data-testid="sid-form-initial-default"
       onSubmit={registerSubmit(onSubmit)}
+      noValidate
     >
       <FormInput />
       <Submit />
@@ -379,6 +381,7 @@ const HandleInput: React.FC<PropsInternal> = ({
           className={sprinkles({ marginTop: "4" })}
           id={`sid-input-${handleType}`}
           name={handleType}
+          type="tel"
           label={text["initial.handle.phone"]}
           placeholder={text["initial.handle.phone.placeholder"]}
           value={values[handleType] ?? ""}
@@ -402,6 +405,7 @@ const HandleInput: React.FC<PropsInternal> = ({
           className={sprinkles({ marginTop: "4" })}
           id={`sid-input-${handleType}`}
           name={handleType}
+          type="text"
           label={text["initial.handle.username"]}
           placeholder={text["initial.handle.username.placeholder"]}
           value={values[handleType] ?? ""}
@@ -422,6 +426,7 @@ const HandleInput: React.FC<PropsInternal> = ({
         className={sprinkles({ marginTop: "4" })}
         id={`sid-input-${handleType}`}
         name={handleType}
+        type="email"
         label={text["initial.handle.email"]}
         placeholder={
           text["initial.handle.phone.email"] ||
