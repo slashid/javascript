@@ -1,7 +1,7 @@
 import { Factor } from "@slashid/slashid";
 import { clsx } from "clsx";
 import { FormProvider } from "../../context/form-context";
-import { useCallback } from "react";
+import { useCallback, useRef } from "react";
 import { Handle, LoginOptions } from "../../domain/types";
 import { CreateFlowOptions } from "../form/flow";
 import { useFlowState } from "../form/useFlowState";
@@ -11,6 +11,8 @@ import { Error } from "../form/error";
 
 import * as styles from "./dynamic-flow.css";
 import { Initial } from "./initial";
+import { InternalFormContext } from "../form/internal-context";
+import { PayloadOptions } from "../form/types";
 
 type Props = {
   className?: string;
@@ -31,7 +33,11 @@ export const DynamicFlow = ({
   middleware,
 }: Props) => {
   const flowState = useFlowState({ onSuccess });
-
+  const submitPayloadRef = useRef<PayloadOptions>({
+    handleType: undefined,
+    handleValue: undefined,
+    flag: undefined,
+  });
   const handleSubmit = useCallback(
     (factor: Factor, handle?: Handle) => {
       if (flowState.status === "initial") {
@@ -48,21 +54,30 @@ export const DynamicFlow = ({
   );
 
   return (
-    <div className={clsx("sid-dynamic-flow", styles.form, className)}>
-      {flowState.status === "initial" && (
-        <Initial
-          handleSubmit={handleSubmit}
-          flowState={flowState}
-          getFactors={getFactors}
-        />
-      )}
-      {flowState.status === "authenticating" && (
-        <FormProvider>
-          <Authenticating flowState={flowState} />
-        </FormProvider>
-      )}
-      {flowState.status === "error" && <Error />}
-      {flowState.status === "success" && <Success flowState={flowState} />}
-    </div>
+    <InternalFormContext.Provider
+      value={{
+        flowState,
+        handleSubmit,
+        submitPayloadRef,
+        setSelectedFactor: () => {},
+      }}
+    >
+      <div className={clsx("sid-dynamic-flow", styles.form, className)}>
+        {flowState.status === "initial" && (
+          <Initial
+            handleSubmit={handleSubmit}
+            flowState={flowState}
+            getFactors={getFactors}
+          />
+        )}
+        {flowState.status === "authenticating" && (
+          <FormProvider>
+            <Authenticating flowState={flowState} />
+          </FormProvider>
+        )}
+        {flowState.status === "error" && <Error />}
+        {flowState.status === "success" && <Success flowState={flowState} />}
+      </div>
+    </InternalFormContext.Provider>
   );
 };
