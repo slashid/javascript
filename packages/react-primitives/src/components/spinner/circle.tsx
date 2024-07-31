@@ -2,7 +2,7 @@ import { clsx } from "clsx";
 import { ReactNode } from "react";
 import * as styles from "./circle.css";
 
-type Variant = "blue" | "red" | "primary";
+type Variant = "blue" | "red" | "primary" | "grey";
 
 type Props = {
   className?: string;
