@@ -117,9 +117,9 @@ export const outerCircleVariants = styleVariants({
   grey: [
     outerCircle,
     {
-      border: "1px solid rgba(255, 0, 68, 0.02)",
+      border: "1px solid rgba(88, 94, 116, 0.02)",
       background:
-        "linear-gradient(311deg, rgba(88, 94, 116, 0.24) -7.54%, rgba(88, 94, 116, 0) 123.57%)",
+        "linear-gradient(311deg, rgba(88, 94, 116, 0.06) -7.54%, rgba(88, 94, 116, 0.00) 123.57%)",
     },
   ],
 });
@@ -171,9 +171,9 @@ export const middleCircleVariants = styleVariants({
   grey: [
     middleCircle,
     {
-      border: "1px solid rgba(255, 0, 68, 0.02)",
+      border: "1px solid rgba(88, 94, 116, 0.02)",
       background:
-        "linear-gradient(311deg, rgba(88, 94, 116, 0.32) -7.54%, rgba(88, 94, 116, 0) 123.57%)",
+        "linear-gradient(311deg, rgba(88, 94, 116, 0.06) -7.54%, rgba(88, 94, 116, 0.00) 123.57%)",
     },
   ],
 });
@@ -225,7 +225,7 @@ export const innerCircleVariants = styleVariants({
     innerCircle,
     {
       background:
-        "linear-gradient(148deg, rgba(220, 221, 229, 0.08) 14.4%, rgba(220, 222, 229, 0.22) 87.37%)",
+        "linear-gradient(148deg, rgba(226, 227, 233, 1) 14.4%, rgba(220, 221, 229, 0.3) 87.37%)",
     },
   ],
 });

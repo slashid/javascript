@@ -11,11 +11,11 @@ export function Exclamation() {
         fillRule="evenodd"
         clipRule="evenodd"
         d="M2.5 0C3.32843 1.19209e-07 4 0.671573 4 1.5L4 11.5C4 12.3284 3.32843 13 2.5 13C1.67157 13 1 12.3284 1 11.5L1 1.5C1 0.671573 1.67157 -1.19209e-07 2.5 0Z"
-        fill="white"
+        fill="var(--sid-color-foreground)"
       />
       <path
         d="M4.5 18C4.5 19.1046 3.60457 20 2.5 20C1.39543 20 0.5 19.1046 0.5 18C0.5 16.8954 1.39543 16 2.5 16C3.60457 16 4.5 16.8954 4.5 18Z"
-        fill="white"
+        fill="var(--sid-color-foreground)"
       />
     </svg>
   );

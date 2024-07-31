@@ -1,6 +1,6 @@
 {
   "name": "@slashid/react",
-  "version": "1.27.0-home-realm-discovery.1",
+  "version": "1.27.0-home-realm-discovery.2",
   "private": false,
   "publishConfig": {
     "access": "public"
