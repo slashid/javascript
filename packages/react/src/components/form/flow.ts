@@ -9,11 +9,7 @@ import {
   Recover,
   RetryPolicy,
 } from "../../domain/types";
-import {
-  ERROR_NAMES,
-  ensureError,
-  isFlowCancelledError,
-} from "../../domain/errors";
+import { ERROR_NAMES, ensureError } from "../../domain/errors";
 import { isFactorRecoverable } from "../../domain/handles";
 import { StoreRecoveryCodesState } from "./store-recovery-codes";
 
@@ -147,7 +143,7 @@ const createAuthenticatingState = (
         send({ type: "sid_login.success", user });
       })
       .catch((error) => {
-        if (isFlowCancelledError(error)) {
+        if (Errors.isFlowCancelledError(error)) {
           return;
         }
         send({ type: "sid_login.error", error });

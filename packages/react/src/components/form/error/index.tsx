@@ -34,6 +34,9 @@ type ErrorType =
   | "recoverNonReachableHandleType"
   | "noPasswordSet"
   | "timeout"
+  | "selfRegistrationNotAllowed"
+  | "signUpAwaitingApproval"
+  | "signInAwaitingApproval"
   | "unknown";
 
 async function getErrorType(error: Error): Promise<ErrorType> {
@@ -55,6 +58,18 @@ async function getErrorType(error: Error): Promise<ErrorType> {
 
   if (isNoPasswordSetError(error)) {
     return "noPasswordSet";
+  }
+
+  if (Errors.isSelfRegistrationNotAllowedError(error)) {
+    return "selfRegistrationNotAllowed";
+  }
+
+  if (Errors.isSignUpAwaitingApprovalError(error)) {
+    return "signUpAwaitingApproval";
+  }
+
+  if (Errors.isSignInAwaitingApprovalError(error)) {
+    return "signInAwaitingApproval";
   }
 
   return "unknown";
@@ -90,6 +105,24 @@ function mapErrorTypeToText(errorType: ErrorType): {
         description: "error.subtitle.noPasswordSet",
         retry: "error.retry.noPasswordSet",
       };
+    case "selfRegistrationNotAllowed":
+      return {
+        title: "error.title.selfRegistrationNotAllowed",
+        description: "error.subtitle.selfRegistrationNotAllowed",
+        retry: "error.retry.selfRegistrationNotAllowed",
+      };
+    case "signUpAwaitingApproval":
+      return {
+        title: "error.title.signUpAwaitingApproval",
+        description: "error.subtitle.signUpAwaitingApproval",
+        retry: "error.retry.signUpAwaitingApproval",
+      };
+    case "signInAwaitingApproval":
+      return {
+        title: "error.title.signInAwaitingApproval",
+        description: "error.subtitle.signInAwaitingApproval",
+        retry: "error.retry.signInAwaitingApproval",
+      };
     default:
       return {
         title: "error.title",
@@ -101,14 +134,14 @@ function mapErrorTypeToText(errorType: ErrorType): {
 
 function mapErrorTypeToRetryPolicy(errorType: ErrorType): RetryPolicy {
   switch (errorType) {
-    case "timeout":
-      return "retry";
-    case "rateLimit":
-      return "retry";
     case "recoverNonReachableHandleType":
-      return "reset";
     case "noPasswordSet":
+    case "selfRegistrationNotAllowed":
+    case "signUpAwaitingApproval":
+    case "signInAwaitingApproval":
       return "reset";
+    case "timeout":
+    case "rateLimit":
     default:
       return "retry";
   }
@@ -192,7 +225,7 @@ const ErrorImplementation: React.FC<Props> = ({ flowState }) => {
 
   if (!errorType) return <></>;
 
-  const { title, description } = mapErrorTypeToText(errorType);
+  const { title, description, retry } = mapErrorTypeToText(errorType);
   const retryPolicy = mapErrorTypeToRetryPolicy(errorType);
 
   return (
@@ -218,7 +251,7 @@ const ErrorImplementation: React.FC<Props> = ({ flowState }) => {
         testId="sid-form-error-retry-button"
         onClick={() => flowState.retry(retryPolicy)}
       >
-        {text["error.retry"]}
+        {text[retry]}
       </Button>
       <ContactSupportPrompt />
     </article>
