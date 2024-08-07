@@ -1,6 +1,6 @@
 {
   "name": "@slashid/react",
-  "version": "1.27.1-errors-beta.0",
+  "version": "1.27.1-errors-beta.1",
   "private": false,
   "publishConfig": {
     "access": "public"
@@ -65,7 +65,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^8.0.2",
-    "@slashid/slashid": "3.27.0-errors.3",
+    "@slashid/slashid": "3.27.0-errors.6",
     "@storybook/addon-essentials": "7.6.19",
     "@storybook/addon-interactions": "7.4.0",
     "@storybook/addon-links": "7.4.0",

@@ -363,8 +363,8 @@ importers:
         specifier: ^8.0.2
         version: 8.3.1
       '@slashid/slashid':
-        specifier: 3.27.0-errors.3
-        version: 3.27.0-errors.3
+        specifier: 3.27.0-errors.6
+        version: 3.27.0-errors.6
       '@storybook/addon-essentials':
         specifier: 7.6.19
         version: 7.6.19(@types/react-dom@18.2.15)(@types/react@18.2.37)(react-dom@18.2.0)(react@18.2.0)
@@ -8372,8 +8372,8 @@ packages:
       uuid: 8.3.2
     dev: false
 
-  /@slashid/slashid@3.27.0-errors.3:
-    resolution: {integrity: sha512-Q6PxvG4OLLO8XAb2PiZXW2K8YhygpsPd8wEAam7cVM4LlTIsCLatO7TKer1eZ74rbcyN8v0NS3wtCcqagvbMCQ==}
+  /@slashid/slashid@3.27.0-errors.6:
+    resolution: {integrity: sha512-AmJVATTCflvnImwcnv5ZRp1ukLYAmy3fejTqj7ptzxPutYZkUmJl8AmbrDTK3xnt28zm1hNZ7tjpLY/eKVTNDQ==}
     dependencies:
       '@changesets/cli': 2.27.7
       '@types/uuid': 8.3.4

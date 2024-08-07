@@ -33,7 +33,7 @@ type ErrorType =
   | "unknown";
 
 async function getErrorType(error: Error): Promise<ErrorType> {
-  if (await Errors.isTimeoutError(error)) {
+  if (Errors.isTimeoutError(error)) {
     return "timeout";
   }
 
