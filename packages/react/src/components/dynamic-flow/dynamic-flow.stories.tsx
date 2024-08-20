@@ -17,7 +17,7 @@ export const Default: Story = {
   render: () => (
     <div style={{ maxWidth: 450, margin: "auto" }}>
       <ConfigurationProvider>
-        <DynamicFlow getFactor={() => ({ method: "email_link" })} />
+        <DynamicFlow getFactors={() => [{ method: "email_link" }]} />
       </ConfigurationProvider>
     </div>
   ),
@@ -29,7 +29,7 @@ export const WithClassName: Story = {
     <div style={{ maxWidth: 450, margin: "auto" }}>
       <ConfigurationProvider>
         <DynamicFlow
-          getFactor={() => ({ method: "email_link" })}
+          getFactors={() => [{ method: "email_link" }]}
           className="my-class"
         />
       </ConfigurationProvider>
@@ -43,7 +43,7 @@ export const WithSuccessCallback: Story = {
     <div style={{ maxWidth: 450, margin: "auto" }}>
       <ConfigurationProvider>
         <DynamicFlow
-          getFactor={() => ({ method: "email_link" })}
+          getFactors={() => [{ method: "email_link" }]}
           onSuccess={(user) => {
             console.log("onSuccess - user: ", user);
           }}
@@ -58,7 +58,7 @@ export const WithTextOverride: Story = {
   render: () => (
     <div style={{ maxWidth: 450, margin: "auto" }}>
       <ConfigurationProvider text={{ "initial.oidc": "Continue with" }}>
-        <DynamicFlow getFactor={() => ({ method: "email_link" })} />
+        <DynamicFlow getFactors={() => [{ method: "email_link" }]} />
       </ConfigurationProvider>
     </div>
   ),
@@ -70,7 +70,7 @@ export const WithMiddleware: Story = {
     <div style={{ maxWidth: 450, margin: "auto" }}>
       <ConfigurationProvider>
         <DynamicFlow
-          getFactor={() => ({ method: "email_link" })}
+          getFactors={() => [{ method: "email_link" }]}
           middleware={[
             defaultOrganization(({ organizations }) => {
               const preferred = organizations.find(

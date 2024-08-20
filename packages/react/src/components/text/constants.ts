@@ -17,6 +17,11 @@ export const TEXT = {
   "initial.handle.username.placeholder": "Type your username",
   "initial.submit": "Continue",
   "initial.divider": "or",
+  "resolving_factors.title": "Loading configuration...",
+  "resolving_factors.subtitle":
+    "We're fetching authentication methods for your account, it may take a while",
+  "resolved_factors.title": "Sign in",
+  "resolved_factors.subtitle": "Choose one of the authentication methods below",
   // rendered between the form title and the UI message only if the value is not empty, regardless of the nested authentication state
   "authenticating.subtitle": "",
   "authenticating.password.label": "Password",
@@ -134,6 +139,15 @@ export const TEXT = {
   "error.subtitle.noPasswordSet":
     "Contact support to set a password or log in with your email or phone number.",
   "error.title.authenticationExpired": "Log in expired",
+  "error.title.selfRegistrationNotAllowed": "Cannot register",
+  "error.title.signUpAwaitingApproval": "Awaiting approval",
+  "error.title.signInAwaitingApproval": "Awaiting approval",
+  "error.subtitle.selfRegistrationNotAllowed":
+    "Self-registration is disabled for this organization. Please reach out to the organization admin in order to create your account.",
+  "error.subtitle.signUpAwaitingApproval":
+    "Your account has been created. The organization administrator needs to approve your registration before you can sign in.",
+  "error.subtitle.signInAwaitingApproval":
+    "The organization administrator needs to approve your registration before you can sign in.",
   "error.subtitle.authenticationExpired":
     "Your attempt to login took too long, try again to continue.",
   "error.retry": "Try again",
@@ -141,6 +155,9 @@ export const TEXT = {
   "error.retry.noPasswordSet": "Go back to login",
   "error.retry.recoverNonReachableHandleType": "Go back to login",
   "error.retry.authenticationExpired": "Try again",
+  "error.retry.selfRegistrationNotAllowed": "Go back to login",
+  "error.retry.signUpAwaitingApproval": "Go back to login",
+  "error.retry.signInAwaitingApproval": "Go back to login",
   "error.contactSupport.prompt": "Need help?",
   "error.contactSupport.cta": "Contact support",
   "factor.webauthn": "Passkeys",

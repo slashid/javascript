@@ -114,6 +114,14 @@ export const outerCircleVariants = styleVariants({
         "linear-gradient(311deg, rgb(from var(--sid-color-primary, #2a6aff) r g b / 0.06) -7.54%, rgb(from var(--sid-color-primary, #2a6aff) r g b / 0.00) 123.57%)",
     },
   ],
+  grey: [
+    outerCircle,
+    {
+      border: "1px solid rgba(88, 94, 116, 0.02)",
+      background:
+        "linear-gradient(311deg, rgba(88, 94, 116, 0.06) -7.54%, rgba(88, 94, 116, 0.00) 123.57%)",
+    },
+  ],
 });
 
 const middleCircle = style({
@@ -160,6 +168,14 @@ export const middleCircleVariants = styleVariants({
         "linear-gradient(311deg, rgb(from var(--sid-color-primary, #2a6aff) r g b / 0.06) -7.54%, rgb(from var(--sid-color-primary, #2a6aff) r g b / 0.00) 123.57%)",
     },
   ],
+  grey: [
+    middleCircle,
+    {
+      border: "1px solid rgba(88, 94, 116, 0.02)",
+      background:
+        "linear-gradient(311deg, rgba(88, 94, 116, 0.06) -7.54%, rgba(88, 94, 116, 0.00) 123.57%)",
+    },
+  ],
 });
 
 const innerCircle = style({
@@ -203,6 +219,13 @@ export const innerCircleVariants = styleVariants({
         rgb(from var(--sid-color-primary, #2a6aff) r g b / 0.86) 14.4%, 
         rgb(from var(--sid-color-primary, #2a6aff) r g b / 0.74) 87.37%
         )`,
+    },
+  ],
+  grey: [
+    innerCircle,
+    {
+      background:
+        "linear-gradient(148deg, rgba(226, 227, 233, 1) 14.4%, rgba(220, 221, 229, 0.3) 87.37%)",
     },
   ],
 });

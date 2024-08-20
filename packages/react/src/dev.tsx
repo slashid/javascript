@@ -4,7 +4,7 @@ import ReactDOM from "react-dom/client";
 
 import { GDPRConsentDialog } from "./components/gdpr-consent-dialog";
 import "./dev.css";
-import { FactorConfiguration, Handle } from "./domain/types";
+import { FactorConfiguration } from "./domain/types";
 import {
   ConfigurationProvider,
   DynamicFlow,
@@ -131,33 +131,41 @@ function Config() {
   );
 }
 
-const getFactor = (handle?: Handle) => {
-  if (!handle || handle.type !== "email_address") {
-    throw new Error("Only use email for demo!");
-  }
-
-  const email = handle?.value;
-  const domain = email.split("@")[1];
-
-  if (domain === "slashid.dev") {
-    const oidcFactor: Factor = {
-      method: "oidc",
-      options: {
-        provider: "google",
-        client_id: import.meta.env.VITE_GOOGLE_SSO_CLIENT_ID ?? "test_oidc",
-      },
-    };
-    return oidcFactor;
-  } else {
-    const emailLinkFactor: Factor = { method: "email_link" };
-    return emailLinkFactor;
-  }
-};
-
 const ConfiguredDynamicFlow = () => {
   return (
     <ConfigurationProvider text={{ "initial.oidc": "Continue with" }}>
-      <DynamicFlow className="formWrapper" getFactor={getFactor} />
+      <DynamicFlow
+        className="formWrapper"
+        getFactors={async (handle) => {
+          if (!handle || handle.type !== "email_address") {
+            throw new Error("Unsupported handle type");
+          }
+
+          const domain = handle.value.split("@")[1];
+          if (domain === "slashid.dev") {
+            return [
+              {
+                method: "oidc",
+                options: {
+                  provider: "google",
+                  client_id:
+                    import.meta.env.VITE_GOOGLE_SSO_CLIENT_ID ?? "test_oidc",
+                },
+              },
+              {
+                method: "oidc",
+                label: "Google SSO - label test",
+                options: {
+                  provider: "google",
+                  client_id: "test_oidc_2",
+                },
+              },
+            ];
+          }
+
+          return [{ method: "email_link" }];
+        }}
+      />
     </ConfigurationProvider>
   );
 };
@@ -326,6 +334,7 @@ root.render(
       themeProps={{ theme: "dark" }}
       tokenStorage="localStorage"
       analyticsEnabled
+      environment="sandbox"
       // anonymousUsersEnabled
       // environment={{
       //   baseURL: "https://api.slashid.local",
