@@ -92,6 +92,7 @@ export const HandleForm: React.FC<Props> = ({
           className={sprinkles({ marginTop: "4" })}
           id={`sid-input-${handleType}`}
           name={handleType}
+          type="tel"
           label={text["initial.handle.phone"]}
           placeholder={text["initial.handle.phone.placeholder"]}
           value={values[handleType] ?? ""}
@@ -115,6 +116,7 @@ export const HandleForm: React.FC<Props> = ({
           className={sprinkles({ marginTop: "4" })}
           id={`sid-input-${handleType}`}
           name={handleType}
+          type="text"
           label={text["initial.handle.username"]}
           placeholder={text["initial.handle.username.placeholder"]}
           value={values[handleType] ?? ""}
@@ -135,6 +137,7 @@ export const HandleForm: React.FC<Props> = ({
         className={sprinkles({ marginTop: "4" })}
         id={`sid-input-${handleType}`}
         name={handleType}
+        type="email"
         label={text["initial.handle.email"]}
         placeholder={
           text["initial.handle.phone.email"] ||
@@ -175,7 +178,7 @@ export const HandleForm: React.FC<Props> = ({
   };
 
   return (
-    <form onSubmit={registerSubmit(onSubmit)}>
+    <form onSubmit={registerSubmit(onSubmit)} noValidate>
       {shouldRenderFactorDropdown && (
         <Dropdown
           defaultValue={filteredFactors[0].method}

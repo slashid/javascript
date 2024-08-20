@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 1.27.0
+
+### Minor Changes
+
+- 87ab664: Set input="email" for email handle input
+
 ## 1.26.0
 
 ### Minor Changes
