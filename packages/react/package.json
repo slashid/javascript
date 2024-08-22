@@ -100,7 +100,7 @@
     "yalc": "1.0.0-pre.53"
   },
   "peerDependencies": {
-    "@slashid/slashid": ">= 3.26.2",
+    "@slashid/slashid": ">= 3.26.3",
     "react": ">=16",
     "react-dom": ">=16"
   }

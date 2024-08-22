@@ -24,7 +24,7 @@
     "react-phone-input-2": "^2.15.1"
   },
   "devDependencies": {
-    "@types/react": "18.0.25",
+    "@types/react": "18.3.3",
     "@vitejs/plugin-react": "^4.2.1",
     "tsconfig": "workspace:*",
     "vite": "^5.2.11",
