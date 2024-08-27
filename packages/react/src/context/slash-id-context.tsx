@@ -73,6 +73,11 @@ export interface SlashIDProviderProps {
   children: ReactNode;
 }
 
+/**
+ * Used to sync the React SDK internal state to external orgID/token.
+ */
+type ExternalStateParams = Pick<SlashIDProviderProps, "oid" | "initialToken">;
+
 export interface ISlashIDContext {
   sid: SlashID | undefined;
   user: User | undefined;
@@ -84,6 +89,7 @@ export interface ISlashIDContext {
   recover: Recover;
   validateToken: (token: string) => Promise<boolean>;
   __switchOrganizationInContext: ({ oid }: { oid: string }) => Promise<void>;
+  __syncExternalState: (state: ExternalStateParams) => Promise<void>;
 }
 
 export const initialContextValue = {
@@ -97,6 +103,7 @@ export const initialContextValue = {
   recover: () => Promise.reject("NYI"),
   validateToken: async () => false,
   __switchOrganizationInContext: async () => undefined,
+  __syncExternalState: async () => undefined,
 };
 
 export const SlashIDContext =
@@ -142,6 +149,19 @@ export const SlashIDProvider = ({
 
   /**
    * Restarts the React SDK lifecycle with a new
+   * configuration, potentially for a different organization.
+   */
+  const __syncExternalState = useCallback(
+    async ({ oid: newOid, initialToken: newToken }: ExternalStateParams) => {
+      setToken(newToken);
+      setOid(newOid);
+      setState("initial");
+    },
+    []
+  );
+
+  /**
+   * Restarts the React SDK lifecycle with a new
    * organizational context
    */
   const __switchOrganizationInContext = useCallback(
@@ -150,11 +170,9 @@ export const SlashIDProvider = ({
 
       const newToken = await user.getTokenForOrganization(newOid);
 
-      setToken(newToken);
-      setOid(newOid);
-      setState("initial");
+      __syncExternalState({ oid: newOid, initialToken: newToken });
     },
-    [user]
+    [__syncExternalState, user]
   );
 
   const storeUser = useCallback(
@@ -504,6 +522,7 @@ export const SlashIDProvider = ({
         recover,
         validateToken,
         __switchOrganizationInContext,
+        __syncExternalState,
       };
     }
 
@@ -518,6 +537,7 @@ export const SlashIDProvider = ({
       recover,
       validateToken,
       __switchOrganizationInContext,
+      __syncExternalState,
     };
   }, [
     state,
@@ -529,6 +549,7 @@ export const SlashIDProvider = ({
     recover,
     validateToken,
     __switchOrganizationInContext,
+    __syncExternalState,
   ]);
 
   return (
