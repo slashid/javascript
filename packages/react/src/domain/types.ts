@@ -6,6 +6,7 @@ import {
   User,
 } from "@slashid/slashid";
 import { ReactNode } from "react";
+import { FactorMethod } from "@slashid/slashid";
 
 export const HANDLE_TYPES = [
   "email_address",
@@ -13,6 +14,18 @@ export const HANDLE_TYPES = [
   "username",
 ] as const;
 export type HandleType = (typeof HANDLE_TYPES)[number];
+
+const FACTOR_METHODS: FactorMethod[] = [
+  "email_link",
+  "oidc",
+  "otp_via_email",
+  "otp_via_sms",
+  "password",
+  "webauthn",
+  "totp",
+  "saml",
+  "sms_link",
+];
 
 export interface Handle {
   type: HandleType;
@@ -28,6 +41,16 @@ export const isHandle = (obj: unknown): obj is Handle => {
   if (!HANDLE_TYPES.includes(type)) return false;
 
   return typeof value === "string";
+};
+
+export const isFactor = (obj: unknown): obj is Factor => {
+  if (!obj) return false;
+  if (Array.isArray(obj)) return false;
+  if (typeof obj !== "object") return false;
+
+  const { method } = obj as Factor;
+  if (!FACTOR_METHODS.includes(method)) return false;
+  return typeof method === "string";
 };
 
 export interface LoginConfiguration {

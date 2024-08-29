@@ -11,6 +11,7 @@ export interface IConfigurationContext {
   factors: FactorConfiguration[];
   logo: Logo;
   storeLastHandle: boolean;
+  storeLastFactor: boolean;
   showBanner: boolean;
   defaultCountryCode: string;
   /** If defined the form in the error state will render a CTA with this link */
@@ -22,6 +23,7 @@ export const initialContextValue: IConfigurationContext = {
   factors: [{ method: "webauthn" }, { method: "email_link" }],
   logo: <SlashID />,
   storeLastHandle: false,
+  storeLastFactor: false,
   showBanner: true,
   defaultCountryCode: "US",
   supportURL: undefined,
@@ -36,6 +38,7 @@ type Props = {
   factors?: FactorConfiguration[];
   logo?: Logo;
   storeLastHandle?: boolean;
+  storeLastFactor?: boolean;
   showBanner?: boolean;
   defaultCountryCode?: string;
   supportURL?: string;
