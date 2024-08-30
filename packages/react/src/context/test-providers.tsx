@@ -21,6 +21,7 @@ export const TestSlashIDProvider: React.FC<TestProviderProps> = ({
   mfa,
   recover,
   __switchOrganizationInContext = async () => undefined,
+  __syncExternalState = async () => undefined,
 }) => {
   const value = useMemo(
     () => ({
@@ -33,6 +34,7 @@ export const TestSlashIDProvider: React.FC<TestProviderProps> = ({
       ...(logIn ? { logIn } : {}),
       ...(mfa ? { mfa } : {}),
       __switchOrganizationInContext,
+      __syncExternalState,
     }),
     [
       sid,
@@ -43,6 +45,7 @@ export const TestSlashIDProvider: React.FC<TestProviderProps> = ({
       logIn,
       mfa,
       __switchOrganizationInContext,
+      __syncExternalState,
     ]
   );
 

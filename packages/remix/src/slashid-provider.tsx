@@ -49,6 +49,9 @@ function SlashIDProviderSSR({
       recover: () => Promise.reject("Operation not possible in this state"),
       validateToken: async () => false,
       __switchOrganizationInContext: async () => undefined,
+      __syncExternalState() {
+        throw new Error("Operation not possible in this state");
+      },
     };
   }, [
     props.analyticsEnabled,
