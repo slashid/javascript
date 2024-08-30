@@ -279,16 +279,7 @@ export function createFlow(opts: CreateFlowOptions = {}) {
     transition(event);
   };
 
-  // let state: FlowState = createInitialState(send);
-  let state: FlowState = createErrorState(send, {
-    error: new Error(),
-    config: {
-      factor: {
-        method: "email_link",
-      },
-    },
-    attempt: 1,
-  });
+  let state: FlowState = createInitialState(send);
   // each history entry contains a state and the event that triggered the transition to that state
   const history: HistoryEntry[] = [{ state, event: { type: "sid_init" } }];
 
