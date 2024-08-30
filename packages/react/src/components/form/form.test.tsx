@@ -421,7 +421,7 @@ describe("<Form /> configuration", () => {
       token: testUser.token,
     });
     expect(setItemSpy).toHaveBeenCalledWith(
-      STORAGE_LAST_FACTOR_KEY,
+      STORAGE_LAST_FACTOR_KEY("test-oid"),
       JSON.stringify({ method: "email_link" })
     );
   });
