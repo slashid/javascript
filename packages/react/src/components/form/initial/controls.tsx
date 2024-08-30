@@ -339,7 +339,8 @@ const HandleInput: React.FC<PropsInternal> = ({
   factors,
   defaultValue,
 }) => {
-  const { setSelectedFactor, submitPayloadRef } = useInternalFormContext();
+  const { setSelectedFactor, submitPayloadRef, lastFactor } =
+    useInternalFormContext();
   const filteredFactors = useMemo(
     () => filterFactors(factors, handleType).filter((f) => !isFactorOidc(f)),
     [factors, handleType]
@@ -353,9 +354,21 @@ const HandleInput: React.FC<PropsInternal> = ({
     findFlag(parsedPhoneNumber?.countryCode ?? defaultCountryCode)!
   );
 
+  const defaultFactor = useMemo(() => {
+    if (
+      lastFactor &&
+      isFactorNonOidc(lastFactor) &&
+      filteredFactors.find(({ method }) => lastFactor.method === method)
+    ) {
+      return lastFactor;
+    }
+
+    return filteredFactors[0];
+  }, [filteredFactors, lastFactor]);
+
   useEffect(() => {
-    setSelectedFactor(filteredFactors[0]);
-  }, [filteredFactors, setSelectedFactor]);
+    setSelectedFactor(defaultFactor);
+  }, [defaultFactor, setSelectedFactor]);
 
   useEffect(() => {
     return resetForm;
@@ -457,7 +470,7 @@ const HandleInput: React.FC<PropsInternal> = ({
     <>
       {shouldRenderFactorDropdown && (
         <Dropdown
-          defaultValue={filteredFactors[0].method}
+          defaultValue={defaultFactor.method}
           className={sprinkles({ marginBottom: "3", marginTop: "6" })}
           label={text["initial.authenticationMethod"]}
           items={filteredFactors.map((f) => ({

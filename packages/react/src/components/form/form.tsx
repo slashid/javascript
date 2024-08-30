@@ -21,6 +21,7 @@ import { Factor } from "@slashid/slashid";
 import { PayloadOptions } from "./types";
 import { InternalFormContext } from "./internal-context";
 import { StoreRecoveryCodes } from "./store-recovery-codes";
+import { useLastFactor } from "../../hooks/use-last-factor";
 
 export type Props = ConfigurationOverridesProps & {
   className?: string;
@@ -49,6 +50,7 @@ export const Form = ({
   const flowState = useFlowState({ onSuccess, onError });
   const { showBanner } = useConfiguration();
   const { lastHandle } = useLastHandle();
+  const { lastFactor } = useLastFactor();
   const submitPayloadRef = React.useRef<PayloadOptions>({
     handleType: undefined,
     handleValue: undefined,
@@ -95,6 +97,7 @@ export const Form = ({
       value={{
         flowState,
         lastHandle,
+        lastFactor,
         handleSubmit,
         submitPayloadRef,
         selectedFactor,

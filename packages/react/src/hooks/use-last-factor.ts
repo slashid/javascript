@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useCallback } from "react";
 import { isBrowser } from "@slashid/react-primitives";
-import { Handle, isHandle } from "../domain/types";
+import { Handle, isFactor } from "../domain/types";
 import { useConfiguration } from "./use-configuration";
 import { useSlashID } from "./use-slash-id";
 import { Factor } from "@slashid/slashid";
@@ -12,7 +12,7 @@ type UseLastFactor = () => {
 };
 
 type SuccessEvent = {
-  factor: Handle | undefined;
+  authenticationFactor: Handle | undefined;
 };
 
 export const useLastFactor: UseLastFactor = () => {
@@ -36,19 +36,19 @@ export const useLastFactor: UseLastFactor = () => {
     }
   }, [storeLastFactor]);
 
-  const handler = useCallback(({ factor }: SuccessEvent) => {
+  const handler = useCallback(({ authenticationFactor }: SuccessEvent) => {
     if (!isBrowser()) {
       return;
     }
 
-    if (!isHandle(factor)) {
+    if (!isFactor(authenticationFactor)) {
       return;
     }
 
     try {
       window.localStorage.setItem(
         STORAGE_LAST_FACTOR_KEY,
-        JSON.stringify(factor)
+        JSON.stringify(authenticationFactor)
       );
     } catch {
       // do nothing
