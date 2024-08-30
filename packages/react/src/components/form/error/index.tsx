@@ -6,6 +6,7 @@ import {
   Circle,
   Exclamation,
   sprinkles,
+  Divider,
 } from "@slashid/react-primitives";
 import { clsx } from "clsx";
 
@@ -173,20 +174,24 @@ function ContactSupportPrompt() {
   }
 
   return (
-    <div
-      className={clsx("sid-form-error-contact-support", styles.supportPrompt)}
-      data-testid="sid-form-error-support-prompt"
-    >
-      <span>{text["error.contactSupport.prompt"]}</span>
-      <a
-        className={styles.supportCta}
-        target="_blank"
-        href={supportURL}
-        rel="noreferrer"
+    <>
+      <Divider>{text["initial.divider"]}</Divider>
+      <div
+        className={clsx("sid-form-error-contact-support", styles.supportPrompt)}
+        data-testid="sid-form-error-support-prompt"
       >
-        {text["error.contactSupport.cta"]}
-      </a>
-    </div>
+        <a
+          className={styles.supportCta}
+          target="_blank"
+          href={supportURL}
+          rel="noreferrer"
+        >
+          <Button variant="secondary">
+            {text["error.contactSupport.cta"]}
+          </Button>
+        </a>
+      </div>
+    </>
   );
 }
 

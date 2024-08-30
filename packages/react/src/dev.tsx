@@ -173,6 +173,7 @@ const ConfiguredDynamicFlow = () => {
 const BasicForm = () => {
   return (
     <ConfigurationProvider
+      supportURL="https://google.com"
       factors={[
         { method: "webauthn" },
         { method: "email_link" },
@@ -331,7 +332,7 @@ root.render(
   <React.StrictMode>
     <SlashIDProvider
       oid={import.meta.env.VITE_ORG_ID}
-      themeProps={{ theme: "dark" }}
+      themeProps={{ theme: "light" }}
       tokenStorage="localStorage"
       analyticsEnabled
       environment="sandbox"
