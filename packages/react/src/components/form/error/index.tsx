@@ -1,5 +1,5 @@
 import { Children, ComponentProps, useEffect, useState } from "react";
-import { _APIResponseError1, Errors } from "@slashid/slashid";
+import { Errors } from "@slashid/slashid";
 import {
   Button,
   LinkButton,
@@ -17,33 +17,6 @@ import { useInternalFormContext } from "../internal-context";
 
 import * as styles from "./error.css";
 import { Retry, RetryPolicy } from "../../../domain/types";
-
-function getErrorTypeFromResponseError(error: _APIResponseError1): ErrorType {
-  try {
-    const response = JSON.parse(error.context.response?.body);
-
-    if (response.errors && response.errors.length > 0) {
-      const firstError = response.errors[0];
-      if (
-        firstError.httpcode === 400 &&
-        firstError.message.startsWith("malformed e-mail address")
-      ) {
-        return "invalidEmailAddressFormat";
-      }
-
-      if (
-        firstError.httpcode === 400 &&
-        firstError.message.startsWith("malformed phone number")
-      ) {
-        return "invalidPhoneNumberFormat";
-      }
-    }
-  } catch (_) {
-    return "response";
-  }
-
-  return "response";
-}
 
 type TextTokens =
   | {
@@ -108,10 +81,13 @@ async function getErrorType(error: Error): Promise<ErrorType> {
     return "timeout";
   }
 
-  if (Errors.isAPIResponseError(error)) {
-    // @ts-expect-error for some reason TS maps to the wrong type, using APIResponseError from the generated client code
-    return getErrorTypeFromResponseError(error);
-  }
+  if (Errors.isInvalidEmailAddressFormatError(error))
+    return "invalidEmailAddressFormat";
+
+  if (Errors.isInvalidPhoneNumberFormatError(error))
+    return "invalidPhoneNumberFormat";
+
+  if (Errors.isAPIResponseError(error)) return "response";
 
   if (Errors.isRateLimitError(error)) {
     return "rateLimit";
