@@ -160,6 +160,7 @@ export const TEXT = {
   "error.retry.signInAwaitingApproval": "Go back to login",
   "error.contactSupport.prompt": "Need help?",
   "error.contactSupport.cta": "Contact support",
+  "error.divider": "or",
   "factor.webauthn": "Passkeys",
   "factor.otpViaSms": "OTP via SMS",
   "factor.otpViaEmail": "OTP via email",
