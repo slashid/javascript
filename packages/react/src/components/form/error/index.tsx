@@ -1,5 +1,5 @@
 import { Children, ComponentProps, useEffect, useState } from "react";
-import { Errors } from "@slashid/slashid";
+import { _APIResponseError1, Errors } from "@slashid/slashid";
 import {
   Button,
   LinkButton,
@@ -17,6 +17,54 @@ import { useInternalFormContext } from "../internal-context";
 
 import * as styles from "./error.css";
 import { Retry, RetryPolicy } from "../../../domain/types";
+
+function getErrorTypeFromResponseError(error: _APIResponseError1): ErrorType {
+  try {
+    const response = JSON.parse(error.context.response?.body);
+
+    if (response.errors && response.errors.length > 0) {
+      const firstError = response.errors[0];
+      if (
+        firstError.httpcode === 400 &&
+        firstError.message.startsWith("malformed e-mail address")
+      ) {
+        return "invalidEmailAddressFormat";
+      }
+
+      if (
+        firstError.httpcode === 400 &&
+        firstError.message.startsWith("malformed phone number")
+      ) {
+        return "invalidPhoneNumberFormat";
+      }
+    }
+  } catch (_) {
+    return "response";
+  }
+
+  return "response";
+}
+
+type TextTokens =
+  | {
+      EMAIL_ADDRESS: string;
+    }
+  | {
+      PHONE_NUMBER: string;
+    };
+function getTextTokensFromFlowState(
+  flowState: ErrorState
+): TextTokens | undefined {
+  if (flowState.context.config.handle?.type === "email_address") {
+    return { EMAIL_ADDRESS: flowState.context.config.handle.value };
+  }
+
+  if (flowState.context.config.handle?.type === "phone_number") {
+    return { PHONE_NUMBER: flowState.context.config.handle.value };
+  }
+
+  return undefined;
+}
 
 type ErrorIconProps = {
   variant?: ComponentProps<typeof Circle>["variant"];
@@ -41,6 +89,8 @@ type ErrorType =
   | "selfRegistrationNotAllowed"
   | "signUpAwaitingApproval"
   | "signInAwaitingApproval"
+  | "invalidEmailAddressFormat"
+  | "invalidPhoneNumberFormat"
   | "unknown";
 
 /**
@@ -59,7 +109,8 @@ async function getErrorType(error: Error): Promise<ErrorType> {
   }
 
   if (Errors.isAPIResponseError(error)) {
-    return "response";
+    // @ts-expect-error for some reason TS maps to the wrong type, using APIResponseError from the generated client code
+    return getErrorTypeFromResponseError(error);
   }
 
   if (Errors.isRateLimitError(error)) {
@@ -137,6 +188,18 @@ function mapErrorTypeToText(errorType: ErrorType): {
         description: "error.subtitle.signInAwaitingApproval",
         retry: "error.retry.signInAwaitingApproval",
       };
+    case "invalidEmailAddressFormat":
+      return {
+        title: "error.title.invalidEmailAddressFormat",
+        description: "error.subtitle.invalidEmailAddressFormat",
+        retry: "error.retry.invalidEmailAddressFormat",
+      };
+    case "invalidPhoneNumberFormat":
+      return {
+        title: "error.title.invalidPhoneNumberFormat",
+        description: "error.subtitle.invalidPhoneNumberFormat",
+        retry: "error.retry.invalidPhoneNumberFormat",
+      };
     default:
       return {
         title: "error.title",
@@ -153,6 +216,8 @@ function mapErrorTypeToRetryPolicy(errorType: ErrorType): RetryPolicy {
     case "selfRegistrationNotAllowed":
     case "signUpAwaitingApproval":
     case "signInAwaitingApproval":
+    case "invalidEmailAddressFormat":
+    case "invalidPhoneNumberFormat":
       return "reset";
     case "timeout":
     case "rateLimit":
@@ -257,6 +322,7 @@ const ErrorImplementation: React.FC<Props> = ({ flowState }) => {
       <Text
         as="h2"
         t={description}
+        tokens={getTextTokensFromFlowState(flowState)}
         variant={{ color: "contrast", weight: "semibold" }}
       />
       <ErrorIcon variant={isNeutralError ? "grey" : "red"} />
