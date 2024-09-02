@@ -43,16 +43,6 @@ export const isHandle = (obj: unknown): obj is Handle => {
   return typeof value === "string";
 };
 
-export const isFactor = (obj: unknown): obj is Factor => {
-  if (!obj) return false;
-  if (Array.isArray(obj)) return false;
-  if (typeof obj !== "object") return false;
-
-  const { method } = obj as Factor;
-  if (!FACTOR_METHODS.includes(method)) return false;
-  return typeof method === "string";
-};
-
 export interface LoginConfiguration {
   handle?: Handle;
   factor: Factor;

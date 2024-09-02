@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useCallback } from "react";
 import { isBrowser } from "@slashid/react-primitives";
-import { Handle, isFactor } from "../domain/types";
+import { Handle } from "../domain/types";
 import { useConfiguration } from "./use-configuration";
 import { useSlashID } from "./use-slash-id";
 import { Factor } from "@slashid/slashid";
@@ -8,7 +8,7 @@ import { Factor } from "@slashid/slashid";
 export const STORAGE_LAST_FACTOR_KEY = (oid: string) =>
   `@slashid/LAST_FACTOR/${oid}`;
 
-type UseLastFactor = () => {
+type UseLastFactorValue = {
   lastFactor: Factor | undefined;
 };
 
@@ -16,7 +16,7 @@ type SuccessEvent = {
   authenticationFactor: Handle | undefined;
 };
 
-export const useLastFactor: UseLastFactor = () => {
+export const useLastFactor = (): UseLastFactorValue => {
   const { storeLastFactor } = useConfiguration();
   const { sid } = useSlashID();
 
@@ -42,10 +42,6 @@ export const useLastFactor: UseLastFactor = () => {
   const handler = useCallback(
     ({ authenticationFactor }: SuccessEvent) => {
       if (!isBrowser()) {
-        return;
-      }
-
-      if (!isFactor(authenticationFactor)) {
         return;
       }
 
