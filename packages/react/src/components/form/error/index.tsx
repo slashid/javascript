@@ -175,7 +175,7 @@ function ContactSupportPrompt() {
 
   return (
     <>
-      <Divider>{text["initial.divider"]}</Divider>
+      <Divider>{text["error.divider"]}</Divider>
       <div
         className={clsx("sid-form-error-contact-support", styles.supportPrompt)}
         data-testid="sid-form-error-support-prompt"
