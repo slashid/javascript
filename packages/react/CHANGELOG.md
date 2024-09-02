@@ -1,5 +1,16 @@
 # @slashid/react
 
+## 1.28.0
+
+### Minor Changes
+
+- 763bfe8: Implement a beta version of `<DynamicFlow>` component
+
+### Patch Changes
+
+- 85b8d6f: Add a private method to sync the SDK with external state (oid, token)
+- d6a1841: Update the internal dependency to the @slashid/@slashid SDK
+
 ## 1.27.0
 
 ### Minor Changes
