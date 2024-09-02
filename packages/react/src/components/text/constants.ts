@@ -150,6 +150,14 @@ export const TEXT = {
     "The organization administrator needs to approve your registration before you can sign in.",
   "error.subtitle.authenticationExpired":
     "Your attempt to login took too long, try again to continue.",
+  "error.title.invalidEmailAddressFormat": "Invalid email format",
+  "error.subtitle.invalidEmailAddressFormat":
+    "{{EMAIL_ADDRESS}} is not a valid email address. Please go back to login and check the address for errors.",
+  "error.retry.invalidEmailAddressFormat": "Go back to login",
+  "error.title.invalidPhoneNumberFormat": "Invalid phone number format",
+  "error.subtitle.invalidPhoneNumberFormat":
+    "{{PHONE_NUMBER}} is not a valid phone number. Please go back to login and check the number for errors.",
+  "error.retry.invalidPhoneNumberFormat": "Go back to login",
   "error.retry": "Try again",
   "error.retry.rateLimit": "Try again",
   "error.retry.noPasswordSet": "Go back to login",

@@ -19,6 +19,27 @@ import { useInternalFormContext } from "../internal-context";
 import * as styles from "./error.css";
 import { Retry, RetryPolicy } from "../../../domain/types";
 
+type TextTokens =
+  | {
+      EMAIL_ADDRESS: string;
+    }
+  | {
+      PHONE_NUMBER: string;
+    };
+function getTextTokensFromFlowState(
+  flowState: ErrorState
+): TextTokens | undefined {
+  if (flowState.context.config.handle?.type === "email_address") {
+    return { EMAIL_ADDRESS: flowState.context.config.handle.value };
+  }
+
+  if (flowState.context.config.handle?.type === "phone_number") {
+    return { PHONE_NUMBER: flowState.context.config.handle.value };
+  }
+
+  return undefined;
+}
+
 type ErrorIconProps = {
   variant?: ComponentProps<typeof Circle>["variant"];
 };
@@ -42,6 +63,8 @@ type ErrorType =
   | "selfRegistrationNotAllowed"
   | "signUpAwaitingApproval"
   | "signInAwaitingApproval"
+  | "invalidEmailAddressFormat"
+  | "invalidPhoneNumberFormat"
   | "unknown";
 
 /**
@@ -59,9 +82,13 @@ async function getErrorType(error: Error): Promise<ErrorType> {
     return "timeout";
   }
 
-  if (Errors.isAPIResponseError(error)) {
-    return "response";
-  }
+  if (Errors.isInvalidEmailAddressFormatError(error))
+    return "invalidEmailAddressFormat";
+
+  if (Errors.isInvalidPhoneNumberFormatError(error))
+    return "invalidPhoneNumberFormat";
+
+  if (Errors.isAPIResponseError(error)) return "response";
 
   if (Errors.isRateLimitError(error)) {
     return "rateLimit";
@@ -138,6 +165,18 @@ function mapErrorTypeToText(errorType: ErrorType): {
         description: "error.subtitle.signInAwaitingApproval",
         retry: "error.retry.signInAwaitingApproval",
       };
+    case "invalidEmailAddressFormat":
+      return {
+        title: "error.title.invalidEmailAddressFormat",
+        description: "error.subtitle.invalidEmailAddressFormat",
+        retry: "error.retry.invalidEmailAddressFormat",
+      };
+    case "invalidPhoneNumberFormat":
+      return {
+        title: "error.title.invalidPhoneNumberFormat",
+        description: "error.subtitle.invalidPhoneNumberFormat",
+        retry: "error.retry.invalidPhoneNumberFormat",
+      };
     default:
       return {
         title: "error.title",
@@ -154,6 +193,8 @@ function mapErrorTypeToRetryPolicy(errorType: ErrorType): RetryPolicy {
     case "selfRegistrationNotAllowed":
     case "signUpAwaitingApproval":
     case "signInAwaitingApproval":
+    case "invalidEmailAddressFormat":
+    case "invalidPhoneNumberFormat":
       return "reset";
     case "timeout":
     case "rateLimit":
@@ -262,6 +303,7 @@ const ErrorImplementation: React.FC<Props> = ({ flowState }) => {
       <Text
         as="h2"
         t={description}
+        tokens={getTextTokensFromFlowState(flowState)}
         variant={{ color: "contrast", weight: "semibold" }}
       />
       <ErrorIcon variant={isNeutralError ? "grey" : "red"} />
