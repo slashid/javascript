@@ -12,6 +12,7 @@ import {
   TestTextProvider,
 } from "../../context/test-providers";
 import { ConfigurationProvider } from "../../context/config-context";
+import { STORAGE_LAST_FACTOR_KEY } from "../../hooks/use-last-factor";
 
 describe("#Form", () => {
   test("should render in the initial state", () => {
@@ -386,6 +387,42 @@ describe("<Form /> configuration", () => {
     expect(setItemSpy).toHaveBeenCalledWith(
       STORAGE_LAST_HANDLE_KEY,
       JSON.stringify(TEST_HANDLE)
+    );
+  });
+
+  test("should store last factor on successful login", async () => {
+    const TEST_HANDLE: PersonHandle = {
+      type: "email_address",
+      value: "test@email.com",
+    };
+    const sid = new MockSlashID({ oid: "test-oid" });
+    const user = userEvent.setup();
+    const testUser = createTestUser();
+    const logInMock = vi.fn(async () => testUser);
+
+    render(
+      <TestSlashIDProvider sdkState="ready" logIn={logInMock} sid={sid}>
+        <ConfigurationProvider storeLastFactor={true}>
+          <Form />
+        </ConfigurationProvider>
+      </TestSlashIDProvider>
+    );
+
+    inputEmail(TEST_HANDLE.value);
+
+    user.click(screen.getByTestId("sid-form-initial-submit-button"));
+
+    await expect(
+      screen.findByTestId("sid-form-success-state")
+    ).resolves.toBeInTheDocument();
+
+    sid.mockPublish("idFlowSucceeded", {
+      authenticationFactor: { method: "email_link" },
+      token: testUser.token,
+    });
+    expect(setItemSpy).toHaveBeenCalledWith(
+      STORAGE_LAST_FACTOR_KEY("test-oid"),
+      JSON.stringify({ method: "email_link" })
     );
   });
 

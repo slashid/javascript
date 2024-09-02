@@ -7,6 +7,7 @@ import { PayloadOptions } from "./types";
 export type InternalFormContextType = {
   flowState: ReturnType<typeof useFlowState> | null;
   lastHandle?: Handle;
+  lastFactor?: Factor;
   submitPayloadRef: React.MutableRefObject<PayloadOptions>;
   handleSubmit: (factor: Factor, handle?: Handle) => void;
   selectedFactor?: Factor;
@@ -17,6 +18,7 @@ export const InternalFormContext = React.createContext<InternalFormContextType>(
   {
     flowState: null,
     lastHandle: undefined,
+    lastFactor: undefined,
     submitPayloadRef: { current: {} },
     handleSubmit: () => null,
     selectedFactor: undefined,
