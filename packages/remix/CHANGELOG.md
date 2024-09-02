@@ -1,5 +1,16 @@
 # @slashid/remix
 
+## 0.2.13
+
+### Patch Changes
+
+- dbb28b1: Upgrade the core SDK dependency
+- Updated dependencies [d8c30fb]
+- Updated dependencies [ab03648]
+- Updated dependencies [dbb28b1]
+- Updated dependencies [5c0b951]
+  - @slashid/react@1.29.0
+
 ## 0.2.12
 
 ### Patch Changes

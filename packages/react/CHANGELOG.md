@@ -1,5 +1,17 @@
 # @slashid/react
 
+## 1.29.0
+
+### Minor Changes
+
+- d8c30fb: Add possibility to store last used authentication factor and pre-select it on next login
+
+### Patch Changes
+
+- ab03648: Display Contact support CTA as secondary button
+- dbb28b1: Add dedicated error states for invalid phone and email formats
+- 5c0b951: Add sanitizer for primary hover color customization
+
 ## 1.28.0
 
 ### Minor Changes
