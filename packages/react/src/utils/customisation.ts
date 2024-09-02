@@ -25,6 +25,7 @@ const sanitisers: Partial<
   >
 > = {
   "--sid-color-primary": hexSanitiser,
+  "--sid-color-primary-hover": hexSanitiser,
   "--sid-font-family": fontFamilySanitiser,
   "--sid-form-logo-width": pxSanitiser,
   "--sid-form-border-radius": pxSanitiser,
