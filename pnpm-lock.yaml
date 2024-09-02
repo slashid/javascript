@@ -613,8 +613,8 @@ importers:
         specifier: workspace:*
         version: link:../react
       '@slashid/slashid':
-        specifier: 3.27.0
-        version: 3.27.0
+        specifier: 3.27.1
+        version: 3.27.1
       jose:
         specifier: ^5.2.0
         version: 5.2.0
@@ -8338,22 +8338,6 @@ packages:
       uuid: 8.3.2
     dev: false
 
-  /@slashid/slashid@3.27.0:
-    resolution: {integrity: sha512-uNHItaHp4Hd2qbP9gjMoUZKDOhQpK+mrVwQ4kU4dOxGazcwszv/Uc0wVaDiNoRCCz7vsMeBeqQjmdvkcgQnibQ==}
-    dependencies:
-      '@changesets/cli': 2.27.7
-      '@types/uuid': 8.3.4
-      compare-versions: 6.1.0
-      docdash: 1.2.0
-      jwt-decode: 3.1.2
-      qrcode: 1.5.3
-      querystring-es3: 0.2.1
-      regenerator-runtime: 0.13.11
-      ua-parser-js: 1.0.37
-      url: 0.11.3
-      uuid: 8.3.2
-    dev: false
-
   /@slashid/slashid@3.27.1:
     resolution: {integrity: sha512-b7t+S55w8nw2oIpBZn2V22alpuVoy/Tn4febzqN4kWkbBqsMN89ype40n1Xb7e0PWwS+oNdIG79fGdO8IYOKLQ==}
     dependencies:
@@ -8368,7 +8352,6 @@ packages:
       ua-parser-js: 1.0.37
       url: 0.11.3
       uuid: 8.3.2
-    dev: true
 
   /@storybook/addon-actions@7.6.19:
     resolution: {integrity: sha512-ATLrA5QKFJt7tIAScRHz5T3eBQ+RG3jaZk08L7gChvyQZhei8knWwePElZ7GaWbCr9BgznQp1lQUUXq/UUblAQ==}
