@@ -1,3 +1,4 @@
+import { Errors, User } from "@slashid/slashid";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import {
@@ -12,7 +13,6 @@ import Deferred, {
   inputUsername,
 } from "../../test-utils";
 import { ConfigurationProvider } from "../../../main";
-import { Errors, User } from "@slashid/slashid";
 import { TEXT } from "../../text/constants";
 
 describe("#Form -> Error state", () => {
@@ -167,7 +167,7 @@ describe("#Form -> Error state -> Special error cases", () => {
   test("should render the noPasswordSet error state", async () => {
     const logInMock = vi.fn(() =>
       Promise.reject(
-        new Errors.SlashIDError({
+        Errors.createSlashIDError({
           name: Errors.ERROR_NAMES.noPasswordSet,
           message: "no password set",
         })
@@ -200,7 +200,7 @@ describe("#Form -> Error state -> Special error cases", () => {
   test("should go back to the initial state as the primary action in noPasswordSet state", async () => {
     const logInMock = vi.fn(() =>
       Promise.reject(
-        new Errors.SlashIDError({
+        Errors.createSlashIDError({
           name: Errors.ERROR_NAMES.noPasswordSet,
           message: "no password set",
         })

@@ -14,10 +14,6 @@ import { Text } from "../../text";
 import { TextConfigKey } from "../../text/constants";
 import { ErrorState } from "../flow";
 import { useInternalFormContext } from "../internal-context";
-import {
-  isNoPasswordSetError,
-  isNonReachableHandleTypeError,
-} from "../../../domain/errors";
 
 import * as styles from "./error.css";
 import { Retry, RetryPolicy } from "../../../domain/types";
@@ -58,11 +54,11 @@ const NEUTRAL_ERRORS: ErrorType[] = [
 ];
 
 async function getErrorType(error: Error): Promise<ErrorType> {
-  if (await Errors.isTimeoutError(error)) {
+  if (Errors.isTimeoutError(error)) {
     return "timeout";
   }
 
-  if (Errors.isResponseError(error)) {
+  if (Errors.isAPIResponseError(error)) {
     return "response";
   }
 
@@ -70,11 +66,11 @@ async function getErrorType(error: Error): Promise<ErrorType> {
     return "rateLimit";
   }
 
-  if (isNonReachableHandleTypeError(error)) {
+  if (Errors.isNonReachableHandleTypeError(error)) {
     return "recoverNonReachableHandleType";
   }
 
-  if (isNoPasswordSetError(error)) {
+  if (Errors.isNoPasswordSetError(error)) {
     return "noPasswordSet";
   }
 

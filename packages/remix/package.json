@@ -10,7 +10,7 @@
   "module": "dist/main.js",
   "dependencies": {
     "@slashid/react": "workspace:*",
-    "@slashid/slashid": "3.26.3",
+    "@slashid/slashid": "3.27.0",
     "jose": "^5.2.0",
     "url-join": "^5.0.0"
   },
