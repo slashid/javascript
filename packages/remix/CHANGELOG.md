@@ -1,5 +1,15 @@
 # @slashid/remix
 
+## 0.2.12
+
+### Patch Changes
+
+- d6a1841: Update the internal dependency to the @slashid/@slashid SDK
+- Updated dependencies [85b8d6f]
+- Updated dependencies [763bfe8]
+- Updated dependencies [d6a1841]
+  - @slashid/react@1.28.0
+
 ## 0.2.11
 
 ### Patch Changes

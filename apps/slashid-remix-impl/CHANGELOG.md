@@ -1,5 +1,12 @@
 # my-remix-app
 
+## 0.0.16
+
+### Patch Changes
+
+- Updated dependencies [d6a1841]
+  - @slashid/remix@0.2.12
+
 ## 0.0.15
 
 ### Patch Changes
