@@ -2,9 +2,8 @@ import { Factor } from "@slashid/slashid";
 import { TextConfigKey } from "../../text/constants";
 import { Handle } from "../../../domain/types";
 
-type AuthenticatingMessageOptions = {
-  isSubmitting: boolean;
-  hasRetried: boolean;
+export type AuthenticatingMessageOptions = {
+  state?: "submitting" | "retrying";
 };
 
 type HandleTextTokens = Partial<
@@ -40,10 +39,7 @@ export function getTextTokensFromHandle(
 export function getAuthenticatingMessage(
   factor: Factor,
   handle: Handle | undefined,
-  { isSubmitting, hasRetried }: AuthenticatingMessageOptions = {
-    isSubmitting: false,
-    hasRetried: false,
-  }
+  { state }: AuthenticatingMessageOptions = {}
 ): {
   title: TextConfigKey;
   message: TextConfigKey;
@@ -69,14 +65,14 @@ export function getAuthenticatingMessage(
         tokens: getTextTokensFromHandle(handle),
       };
     case "otp_via_sms": {
-      if (isSubmitting && hasRetried) {
+      if (state === "retrying") {
         return {
           message: "authenticating.retry.message.smsOtp",
           title: "authenticating.retry.title.smsOtp",
           tokens: getTextTokensFromHandle(handle),
         };
       }
-      if (isSubmitting) {
+      if (state === "submitting") {
         return {
           message: "authenticating.submitting.message.smsOtp",
           title: "authenticating.submitting.title.smsOtp",
@@ -90,14 +86,14 @@ export function getAuthenticatingMessage(
       };
     }
     case "otp_via_email":
-      if (isSubmitting && hasRetried) {
+      if (state === "retrying") {
         return {
           message: "authenticating.retry.message.emailOtp",
           title: "authenticating.retry.title.emailOtp",
           tokens: getTextTokensFromHandle(handle),
         };
       }
-      if (isSubmitting) {
+      if (state === "submitting") {
         return {
           message: "authenticating.submitting.message.emailOtp",
           title: "authenticating.submitting.title.emailOtp",

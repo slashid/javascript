@@ -2,6 +2,7 @@ import {
   FormEventHandler,
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -13,7 +14,10 @@ import { useConfiguration } from "../../../hooks/use-configuration";
 import { useForm } from "../../../hooks/use-form";
 import { useSlashID } from "../../../main";
 import { Props } from "./authenticating.types";
-import { getAuthenticatingMessage } from "./messages";
+import {
+  AuthenticatingMessageOptions,
+  getAuthenticatingMessage,
+} from "./messages";
 import { OTP_CODE_LENGTH, isValidOTPCode } from "./validation";
 import { ErrorMessage } from "../error-message";
 import { Text } from "../../text";
@@ -40,6 +44,21 @@ const FactorIcon = ({ factor }: { factor: Factor }) => {
   return <Loader />;
 };
 
+type FormState = "initial" | "input" | "submitting" | "retrying";
+
+function mapFormStateToMessageState(
+  formState: FormState
+): AuthenticatingMessageOptions["state"] {
+  switch (formState) {
+    case "submitting":
+      return "submitting";
+    case "retrying":
+      return "retrying";
+    default:
+      return undefined;
+  }
+}
+
 /**
  * Presents the user with a form to enter an OTP code.
  * Handles retries in case of submitting an incorrect OTP code.
@@ -49,17 +68,15 @@ export const OTPState = ({ flowState, performLogin }: Props) => {
   const { sid } = useSlashID();
   const { values, registerField, registerSubmit, setError, clearError } =
     useForm();
-  const [formState, setFormState] = useState<
-    "initial" | "input" | "submitting"
-  >("initial");
+  const [formState, setFormState] = useState<FormState>("initial");
   const submitInputRef = useRef<HTMLInputElement>(null);
 
   const { factor, handle } = flowState.context.config;
-  const hasRetried = flowState.context.attempt > 1;
-  const { title, message, tokens } = getAuthenticatingMessage(factor, handle, {
-    isSubmitting: formState === "submitting",
-    hasRetried,
-  });
+  const { title, message, tokens } = useMemo(() => {
+    return getAuthenticatingMessage(factor, handle, {
+      state: mapFormStateToMessageState(formState),
+    });
+  }, [factor, formState, handle]);
 
   useEffect(() => {
     const onOtpCodeSent = () => setFormState("input");
@@ -118,7 +135,7 @@ export const OTPState = ({ flowState, performLogin }: Props) => {
   const handleRetry = () => {
     flowState.retry();
     clearError("otp");
-    setFormState("submitting");
+    setFormState("retrying");
   };
 
   useEffect(() => {
@@ -162,13 +179,8 @@ export const OTPState = ({ flowState, performLogin }: Props) => {
           </div>
         </form>
       )}
-      {formState === "submitting" ? (
-        hasRetried ? (
-          <FactorIcon factor={factor} />
-        ) : (
-          <Loader />
-        )
-      ) : null}
+      {formState === "submitting" ? <Loader /> : null}
+      {formState === "retrying" ? <FactorIcon factor={factor} /> : null}
       {formState === "input" && (
         // fallback to prevent layout shift
         <Delayed
