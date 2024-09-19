@@ -12,6 +12,7 @@ import { Props } from "./authenticating.types";
 import {
   AuthenticatingSubtitle,
   BackButton,
+  DelayedPrompt,
   FactorIcon,
   Prompt,
 } from "./authenticating.components";
@@ -20,9 +21,11 @@ import * as styles from "./authenticating.css";
 import { Children, useCallback, useEffect, useRef, useState } from "react";
 import { TOTPState } from "./totp";
 import { Delayed } from "@slashid/react-primitives";
-import { BASE_RETRY_DELAY_MS } from "./authenticating.constants";
 import { useInternalFormContext } from "../internal-context";
 import { AuthenticatingState } from "../flow";
+import { TIME_MS } from "../types";
+
+const DELAY_BEFORE_RETRY = TIME_MS.second * 30;
 
 const LoadingState = ({ flowState, performLogin }: Props) => {
   const { factor, handle } = flowState.context.config;
@@ -63,8 +66,16 @@ const LoadingState = ({ flowState, performLogin }: Props) => {
       <FactorIcon factor={factor} />
       {showPrompt && (
         <Delayed
-          delayMs={BASE_RETRY_DELAY_MS * flowState.context.attempt}
-          fallback={<div style={{ height: 16 }} />}
+          delayMs={DELAY_BEFORE_RETRY}
+          fallback={({ secondsRemaining }) => (
+            <div className={styles.wrapper}>
+              <DelayedPrompt
+                prompt="authenticating.retryPrompt"
+                cta="authenticating.retry"
+                secondsRemaining={secondsRemaining}
+              />
+            </div>
+          )}
         >
           <div className={styles.wrapper}>
             <Prompt
@@ -120,7 +131,9 @@ export function Authenticating({ children }: AuthenticatingTemplateProps) {
 
 export type AuthenticatingProps = Pick<Props, "flowState">;
 
-export const AuthenticatingImplementation = ({ flowState }: AuthenticatingProps) => {
+export const AuthenticatingImplementation = ({
+  flowState,
+}: AuthenticatingProps) => {
   const factor = flowState.context.config.factor;
   const attempt = useRef(1);
   const isLoggingIn = useRef(false);

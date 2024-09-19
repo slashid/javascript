@@ -268,6 +268,8 @@ export const TEXT = {
     "Cookies that track your online behaviour, such as clicks, preferences, device specifications, location, and search history. This data helps in targeted advertising and gathering website analytics.",
   "gdpr.dialog.error.title": "Oops!",
   "gdpr.dialog.error.subtitle": "Looks like something went wrong...",
+  "delayedPrompt.timeRemaining.singular": "in {{TIME_REMAINING}} second",
+  "delayedPrompt.timeRemaining.plural": "in {{TIME_REMAINING}} seconds",
   // deprecated keys
   /**
    * @deprecated Use 'initial.handle.email.placeholder' instead

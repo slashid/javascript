@@ -58,14 +58,46 @@ export const Prompt = ({ onClick, prompt, cta }: PromptProps) => {
         variant={{ size: "sm", color: "tertiary", weight: "semibold" }}
         t={prompt}
       />
-      <LinkButton
-        className={sprinkles({ marginLeft: "1" })}
-        type="button"
-        testId="sid-form-prompt-cta"
-        onClick={onClick}
-      >
+      <LinkButton type="button" testId="sid-form-prompt-cta" onClick={onClick}>
         {text[cta]}
       </LinkButton>
+    </div>
+  );
+};
+
+export type DelayedPromptProps = {
+  secondsRemaining: number;
+} & Pick<PromptProps, "cta" | "prompt">;
+
+/**
+ * This version of the Prompt displays a counter that shows time remaining before you can do the action.
+ * This should be used in Conjunction with the Delayed component, so that we replace the prompt with the counter until it runs out.
+ */
+export const DelayedPrompt = ({
+  secondsRemaining,
+  prompt,
+  cta,
+}: DelayedPromptProps) => {
+  const ctaTextKey =
+    secondsRemaining === 1
+      ? "delayedPrompt.timeRemaining.singular"
+      : "delayedPrompt.timeRemaining.plural";
+
+  return (
+    <div className={styles.prompt} data-testid="sid-delayedprompt">
+      <Text
+        variant={{ size: "sm", color: "tertiary", weight: "semibold" }}
+        t={prompt}
+      />
+      <Text
+        variant={{ size: "sm", color: "tertiary", weight: "semibold" }}
+        t={cta}
+      />
+      <Text
+        variant={{ size: "sm", color: "tertiary", weight: "semibold" }}
+        t={ctaTextKey}
+        tokens={{ TIME_REMAINING: secondsRemaining.toString() }}
+      />
     </div>
   );
 };

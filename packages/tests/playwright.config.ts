@@ -4,7 +4,7 @@ import { config as envConfig } from "./config";
 
 function createPlaywrightConfig(): PlaywrightTestConfig {
   return {
-    timeout: 16 * 1000,
+    timeout: 45 * 1000,
     expect: {
       /**
        * Maximum time expect() should wait for the condition to be met.
