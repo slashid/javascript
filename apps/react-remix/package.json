@@ -1,6 +1,6 @@
 {
   "name": "react-remix",
-  "version": "0.1.60",
+  "version": "0.1.61",
   "private": true,
   "sideEffects": false,
   "scripts": {
