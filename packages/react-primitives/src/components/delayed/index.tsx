@@ -1,5 +1,5 @@
 import { useCallback, type ReactNode } from "react";
-import { useCounter } from "../../hooks";
+import { TIME_MS, useCounter } from "../../hooks";
 
 type Props = {
   /** Period of time, after which the component will render its children */
@@ -11,10 +11,6 @@ type Props = {
     | (({ secondsRemaining }: { secondsRemaining: number }) => ReactNode);
   /** Optional CSS class name for the wrapper */
   className?: string;
-};
-
-const TIME_MS = {
-  second: 1000,
 };
 
 /**
