@@ -1,30 +1,41 @@
-import { useState, useEffect, type ReactNode } from "react";
+import { useCallback, type ReactNode } from "react";
+import { useCounter } from "../../hooks";
 
 type Props = {
   /** Period of time, after which the component will render its children */
   delayMs: number;
   children: ReactNode;
   /** Optional fallback component rendered initially, replaced by children after the delay */
-  fallback?: ReactNode;
+  fallback?:
+    | ReactNode
+    | (({ secondsRemaining }: { secondsRemaining: number }) => ReactNode);
   /** Optional CSS class name for the wrapper */
   className?: string;
+};
+
+const TIME_MS = {
+  second: 1000,
 };
 
 /**
  * Utility component used to render its children after specified period of time
  */
 export function Delayed({ delayMs, children, fallback, className }: Props) {
-  const [render, setRender] = useState(false);
+  const counter = useCounter({ timeoutMs: delayMs, tickMs: TIME_MS.second });
+  const secondsRemaining = Math.ceil(counter / TIME_MS.second);
+  const render = secondsRemaining < 1;
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setRender(true);
-    }, delayMs);
+  const renderFallback = useCallback(() => {
+    if (!fallback) return null;
 
-    return () => clearTimeout(timeout);
-  }, [delayMs]);
+    if (typeof fallback === "function") {
+      return fallback({ secondsRemaining });
+    }
+
+    return fallback;
+  }, [fallback, secondsRemaining]);
 
   return (
-    <div className={className}>{render ? children : fallback ?? null}</div>
+    <div className={className}>{render ? children : renderFallback()}</div>
   );
 }

@@ -74,5 +74,8 @@ export * from "./components/icon";
 // utils
 export { isBrowser, interpolate, MemoryStorage, CookieStorage };
 
+// hooks
+export * from "./hooks";
+
 // types
 export type { ThemeProps, DialogProps, TextProps, Flag };

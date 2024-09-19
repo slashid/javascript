@@ -23,7 +23,7 @@ import { TOTPState } from "./totp";
 import { Delayed } from "@slashid/react-primitives";
 import { useInternalFormContext } from "../internal-context";
 import { AuthenticatingState } from "../flow";
-import { TIME_MS } from "./use-counter.hook";
+import { TIME_MS } from "../types";
 
 const DELAY_BEFORE_RETRY = TIME_MS.second * 30;
 
@@ -67,15 +67,15 @@ const LoadingState = ({ flowState, performLogin }: Props) => {
       {showPrompt && (
         <Delayed
           delayMs={DELAY_BEFORE_RETRY}
-          fallback={
+          fallback={({ secondsRemaining }) => (
             <div className={styles.wrapper}>
               <DelayedPrompt
                 prompt="authenticating.retryPrompt"
                 cta="authenticating.retry"
-                delayMs={DELAY_BEFORE_RETRY}
+                secondsRemaining={secondsRemaining}
               />
             </div>
-          }
+          )}
         >
           <div className={styles.wrapper}>
             <Prompt

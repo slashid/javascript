@@ -9,7 +9,6 @@ import { EmailIcon, SmsIcon, Loader } from "./icons";
 import * as styles from "./authenticating.css";
 import { TextConfigKey } from "../../text/constants";
 import { useContext } from "react";
-import { TIME_MS, useCounter } from "./use-counter.hook";
 
 /**
  * This must be present in all authenticating states.
@@ -67,16 +66,18 @@ export const Prompt = ({ onClick, prompt, cta }: PromptProps) => {
 };
 
 export type DelayedPromptProps = {
-  delayMs: number;
+  secondsRemaining: number;
 } & Pick<PromptProps, "cta" | "prompt">;
 
 /**
  * This version of the Prompt displays a counter that shows time remaining before you can do the action.
  * This should be used in Conjunction with the Delayed component, so that we replace the prompt with the counter until it runs out.
  */
-export const DelayedPrompt = ({ delayMs, prompt, cta }: DelayedPromptProps) => {
-  const counter = useCounter({ timeoutMs: delayMs, tickMs: TIME_MS.second });
-  const secondsRemaining = Math.ceil(counter / TIME_MS.second);
+export const DelayedPrompt = ({
+  secondsRemaining,
+  prompt,
+  cta,
+}: DelayedPromptProps) => {
   const ctaTextKey =
     secondsRemaining === 1
       ? "delayedPrompt.timeRemaining.singular"

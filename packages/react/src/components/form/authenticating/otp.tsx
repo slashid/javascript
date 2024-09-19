@@ -31,7 +31,7 @@ import {
   DelayedPrompt,
   Prompt,
 } from "./authenticating.components";
-import { TIME_MS } from "./use-counter.hook";
+import { TIME_MS } from "../types";
 
 const DELAY_BEFORE_RESEND = TIME_MS.second * 30;
 
@@ -188,15 +188,15 @@ export const OTPState = ({ flowState, performLogin }: Props) => {
         // fallback to prevent layout shift
         <Delayed
           delayMs={DELAY_BEFORE_RESEND}
-          fallback={
+          fallback={({ secondsRemaining }) => (
             <div className={styles.wrapper}>
               <DelayedPrompt
                 prompt="authenticating.retryPrompt"
                 cta="authenticating.retry"
-                delayMs={DELAY_BEFORE_RESEND}
+                secondsRemaining={secondsRemaining}
               />
             </div>
-          }
+          )}
         >
           <div className={styles.wrapper}>
             <Prompt
