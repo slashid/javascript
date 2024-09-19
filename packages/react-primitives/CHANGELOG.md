@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 0.5.4
+
+### Patch Changes
+
+- 02f47ea: Allow functions as fallback prop in the Delayed component so they can receive the time remaining as a prop
+
 ## 0.5.3
 
 ### Patch Changes

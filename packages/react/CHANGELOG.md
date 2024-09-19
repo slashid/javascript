@@ -1,5 +1,13 @@
 # @slashid/react
 
+## 1.29.1
+
+### Patch Changes
+
+- 02f47ea: Render the resend prompt immediately, but block the action with a counter
+- 970247a: Fix the incorrect submit state after resending an OTP code
+- 02f47ea: Allow functions as fallback prop in the Delayed component so they can receive the time remaining as a prop
+
 ## 1.29.0
 
 ### Minor Changes
