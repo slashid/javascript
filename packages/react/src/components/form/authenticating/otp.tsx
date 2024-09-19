@@ -28,9 +28,12 @@ import { EmailIcon, SmsIcon, Loader } from "./icons";
 import {
   AuthenticatingSubtitle,
   BackButton,
+  DelayedPrompt,
   Prompt,
 } from "./authenticating.components";
-import { BASE_RETRY_DELAY_MS } from "./authenticating.constants";
+import { TIME_MS } from "./use-counter.hook";
+
+const DELAY_BEFORE_RESEND = TIME_MS.second * 30;
 
 const FactorIcon = ({ factor }: { factor: Factor }) => {
   if (isFactorOTPEmail(factor)) {
@@ -184,8 +187,16 @@ export const OTPState = ({ flowState, performLogin }: Props) => {
       {formState === "input" && (
         // fallback to prevent layout shift
         <Delayed
-          delayMs={BASE_RETRY_DELAY_MS * flowState.context.attempt}
-          fallback={<div style={{ height: 16 }} />}
+          delayMs={DELAY_BEFORE_RESEND}
+          fallback={
+            <div className={styles.wrapper}>
+              <DelayedPrompt
+                prompt="authenticating.retryPrompt"
+                cta="authenticating.retry"
+                delayMs={DELAY_BEFORE_RESEND}
+              />
+            </div>
+          }
         >
           <div className={styles.wrapper}>
             <Prompt

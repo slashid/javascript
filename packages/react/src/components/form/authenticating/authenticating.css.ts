@@ -4,6 +4,7 @@ export const prompt = style({
   display: "flex",
   justifyContent: "center",
   alignItems: "baseline",
+  gap: "4px",
 });
 
 export const oidcTitle = style({
