@@ -202,6 +202,8 @@ const BasicForm = () => {
           logo: "https://www.oasis-open.org/committees/download.php/29723/draft-saml-logo-03.png",
         },
       ]}
+      supportURL="https://www.google.com"
+      alternativeAuthURL="https://www.google.com"
     >
       <SlashIDLoaded>
         <>
