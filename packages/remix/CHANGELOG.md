@@ -1,5 +1,12 @@
 # @slashid/remix
 
+## 0.2.15
+
+### Patch Changes
+
+- Updated dependencies [9211fe9]
+  - @slashid/react@1.29.2
+
 ## 0.2.14
 
 ### Patch Changes
