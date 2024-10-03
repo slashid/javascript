@@ -117,11 +117,35 @@ async function getErrorType(error: Error): Promise<ErrorType> {
   return "unknown";
 }
 
-function mapErrorTypeToText(errorType: ErrorType): {
+/**
+ * Text overrides config for the view that allows users to authenticate in another way, by following a link.
+ */
+type AlternativeAuth = {
+  promptKey: TextConfigKey;
+  ctaKey: TextConfigKey;
+};
+
+function mapErrorTypeToAlternativeAuth(
+  errorType: ErrorType
+): AlternativeAuth | undefined {
+  switch (errorType) {
+    case "selfRegistrationNotAllowed":
+      return {
+        promptKey: "error.selfRegistrationNotAllowed.alternativeAuth.prompt",
+        ctaKey: "error.selfRegistrationNotAllowed.alternativeAuth.cta",
+      };
+    default:
+      return undefined;
+  }
+}
+
+type TextOverrides = {
   title: TextConfigKey;
   description: TextConfigKey;
   retry: TextConfigKey;
-} {
+};
+
+function mapErrorTypeToText(errorType: ErrorType): TextOverrides {
   switch (errorType) {
     case "timeout":
       return {
@@ -232,6 +256,41 @@ function ContactSupportPrompt() {
   );
 }
 
+/**
+ * Renders a prompt to authenticate in another way, by following a link.
+ */
+function UseAlternativeAuthPrompt({
+  textKeys,
+}: {
+  textKeys?: AlternativeAuth;
+}) {
+  const { text, alternativeAuthURL } = useConfiguration();
+
+  if (!alternativeAuthURL || !textKeys) {
+    return null;
+  }
+
+  return (
+    <div
+      className={clsx(
+        "sid-form-error-alternative-auth-prompt",
+        styles.alternativeAuthPrompt
+      )}
+      data-testid="sid-form-error-alternative-auth-prompt"
+    >
+      <span>{text[textKeys.promptKey]}</span>
+      <a
+        className={styles.alternativeAuthCta}
+        target="_blank"
+        href={alternativeAuthURL}
+        rel="noreferrer"
+      >
+        {text[textKeys.ctaKey]}
+      </a>
+    </div>
+  );
+}
+
 type Props = {
   flowState: ErrorState;
 };
@@ -287,6 +346,7 @@ const ErrorImplementation: React.FC<Props> = ({ flowState }) => {
 
   const { title, description, retry } = mapErrorTypeToText(errorType);
   const retryPolicy = mapErrorTypeToRetryPolicy(errorType);
+  const alternativeAuth = mapErrorTypeToAlternativeAuth(errorType);
   const isNeutralError = NEUTRAL_ERRORS.includes(errorType);
 
   return (
@@ -316,6 +376,7 @@ const ErrorImplementation: React.FC<Props> = ({ flowState }) => {
         {text[retry]}
       </Button>
       <ContactSupportPrompt />
+      <UseAlternativeAuthPrompt textKeys={alternativeAuth} />
     </article>
   );
 };

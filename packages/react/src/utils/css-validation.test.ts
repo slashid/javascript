@@ -1,4 +1,8 @@
-import { hexValidator, fontFamilyValidator } from "./css-validation";
+import {
+  hexValidator,
+  fontFamilyValidator,
+  rgbaValidator,
+} from "./css-validation";
 
 describe("hexValidator", () => {
   it("should return true for valid hex values", () => {
@@ -12,6 +16,29 @@ describe("hexValidator", () => {
     expect(hexValidator("#GHIJKL")).toBe(false);
     expect(hexValidator("#123MKO")).toBe(false);
     expect(hexValidator("123456")).toBe(false);
+  });
+});
+
+describe("rgbaValidator", () => {
+  it.each([
+    "rgba(0, 0, 0, 0)",
+    "rgba(255, 255, 255, 1)",
+    "rgba(255, 255, 255, 0.5)",
+    "rgba(255, 255, 255, 0.1)",
+  ])("should return true for valid rgba value: %s", (rgbaValue) => {
+    expect(rgbaValidator(rgbaValue)).toBe(true);
+  });
+
+  it.each([
+    "rgba(0, 0, 0, 1.1)",
+    "rgba(0, 0, 0, -0.1)",
+    "rgba(0, 0, 0, 2)",
+    "rgba(0, 0, 0, 0.0.1)",
+    "rgba(0, 0, 0, 0.1.0)",
+    "rgba(0, 0, 0, 0.1.1)",
+    "rgba(0, 0, 0,",
+  ])("should return false for invalid rgba value: %s", (rgbaValue) => {
+    expect(rgbaValidator(rgbaValue)).toBe(false);
   });
 });
 

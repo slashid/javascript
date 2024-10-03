@@ -14,8 +14,8 @@ export interface IConfigurationContext {
   storeLastFactor: boolean;
   showBanner: boolean;
   defaultCountryCode: string;
-  /** If defined the form in the error state will render a CTA with this link */
   supportURL: undefined | string;
+  alternativeAuthURL: undefined | string;
 }
 
 export const initialContextValue: IConfigurationContext = {
@@ -27,6 +27,7 @@ export const initialContextValue: IConfigurationContext = {
   showBanner: true,
   defaultCountryCode: "US",
   supportURL: undefined,
+  alternativeAuthURL: undefined,
 };
 
 export const ConfigurationContext =
@@ -41,13 +42,17 @@ type Props = {
   storeLastFactor?: boolean;
   showBanner?: boolean;
   defaultCountryCode?: string;
+  /** If defined the form in the error state will render a CTA with this link */
   supportURL?: string;
+  /** If defined an extra prompt & CTA will be rendered in "SelfRegistrationNotAllowed" error state to let end users navigate to another page */
+  alternativeAuthURL?: string;
   children: ReactNode;
 };
 
 export const ConfigurationProvider: React.FC<Props> = ({
   text,
   supportURL,
+  alternativeAuthURL,
   children,
   ...props
 }) => {
@@ -60,8 +65,12 @@ export const ConfigurationProvider: React.FC<Props> = ({
         supportURL && urlValidator(supportURL)
           ? supportURL
           : initialContextValue.supportURL,
+      alternativeAuthURL:
+        alternativeAuthURL && urlValidator(alternativeAuthURL)
+          ? alternativeAuthURL
+          : initialContextValue.alternativeAuthURL,
     };
-  }, [props, supportURL, text]);
+  }, [props, supportURL, alternativeAuthURL, text]);
 
   return (
     <ConfigurationContext.Provider value={contextValue}>

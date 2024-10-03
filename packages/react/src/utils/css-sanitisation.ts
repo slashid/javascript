@@ -1,5 +1,7 @@
 export const pixelValueRegExp = /([0-9]+)px$/;
 export const hexValueRegExp = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
+export const rgbaValueRegExp =
+  /^rgba\(\s*(25[0-5]|2[0-4]\d|1\d\d|\d{1,2})\s*,\s*(25[0-5]|2[0-4]\d|1\d\d|\d{1,2})\s*,\s*(25[0-5]|2[0-4]\d|1\d\d|\d{1,2})\s*,\s*(0(\.\d+)?|1(\.0)?)\s*\)$/;
 export const fontFamilyRegExp = /(?:['"]?([\\\w\d\- ]+)['"]?(?:,\s*)?)/g;
 export const displayValues = ["flex", "none"];
 export const googleFonts = new Set(["Open Sans", "Inter"]);
@@ -34,6 +36,14 @@ export const hexSanitiser = (
   if (Array.isArray(input)) return null;
 
   return parseAndAssertMatch(input, hexValueRegExp);
+};
+
+export const rgbaSanitiser = (
+  input: string | number | (string | number)[]
+): string | number | null => {
+  if (Array.isArray(input)) return null;
+
+  return parseAndAssertMatch(input, rgbaValueRegExp);
 };
 
 export const exactMatchSanitiser =

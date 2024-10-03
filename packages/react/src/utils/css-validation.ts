@@ -3,6 +3,7 @@ import {
   fontFamilyRegExp,
   hexValueRegExp,
   pixelValueRegExp,
+  rgbaValueRegExp,
   supportedFonts,
 } from "./css-sanitisation";
 
@@ -10,6 +11,7 @@ export { fontFamilyRegExp, hexValueRegExp, pixelValueRegExp, supportedFonts };
 
 export const validate = (input: string | number, regexp: RegExp): boolean => {
   const parsed = input.toString().match(regexp);
+
   if (!parsed) return false;
 
   const [match] = parsed;
@@ -25,6 +27,9 @@ export const pxValidator = (input: string | number): boolean =>
 
 export const hexValidator = (input: string | number): boolean =>
   validate(input, hexValueRegExp);
+
+export const rgbaValidator = (input: string | number): boolean =>
+  validate(input, rgbaValueRegExp);
 
 export const exactValidator =
   <T extends string | number>(values: T[]) =>

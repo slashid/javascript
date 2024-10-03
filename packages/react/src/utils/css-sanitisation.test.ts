@@ -2,6 +2,7 @@ import {
   pxSanitiser,
   hexSanitiser,
   fontFamilySanitiser,
+  rgbaSanitiser,
 } from "./css-sanitisation";
 
 describe("pxSanitiser", () => {
@@ -56,6 +57,25 @@ describe("hexSanitiser", () => {
     const input = "#1234567";
     const result = hexSanitiser(input);
     expect(result).toBeNull();
+  });
+});
+
+describe("rgbaSanitiser", () => {
+  it.each([
+    ["rgba(0, 0, 0, 0.5)"],
+    ["rgba(255, 255, 255, 0.5)"],
+    ["rgba(123, 123, 123, 0.5)"],
+    ["rgba(255, 255, 255, 1)"],
+  ])("should return %s if it matches the rgba value regex", (validRgba) => {
+    expect(rgbaSanitiser(validRgba)).toBe(validRgba);
+  });
+
+  it.each([
+    [["rgba(0, 0, 0, 1)", "rgba(255, 255, 255, 1)"]],
+    ["rgba(0, 0, 0)"],
+    ["rgba(300, 500, 100, 0.5)"],
+  ])("should return null if for invalid input: %s", (invalidRgba) => {
+    expect(rgbaSanitiser(invalidRgba)).toBeNull();
   });
 });
 

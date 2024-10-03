@@ -270,6 +270,10 @@ export const TEXT = {
   "gdpr.dialog.error.subtitle": "Looks like something went wrong...",
   "delayedPrompt.timeRemaining.singular": "in {{TIME_REMAINING}} second",
   "delayedPrompt.timeRemaining.plural": "in {{TIME_REMAINING}} seconds",
+  "error.selfRegistrationNotAllowed.alternativeAuth.prompt":
+    "Don't have an account?",
+  "error.selfRegistrationNotAllowed.alternativeAuth.cta":
+    "Go to the sign-up page.",
   // deprecated keys
   /**
    * @deprecated Use 'initial.handle.email.placeholder' instead

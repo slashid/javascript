@@ -4,7 +4,9 @@ import {
   fontFamilySanitiser,
   fontFamilyRegExp,
   googleFonts,
+  rgbaSanitiser,
 } from "./css-sanitisation";
+import { or } from "./function";
 import { toEntries } from "./object";
 
 import { ThemePublicVars, themeVarNames } from "@slashid/react-primitives";
@@ -24,13 +26,15 @@ const sanitisers: Partial<
     (input: string | number | (string | number)[]) => string | number | null
   >
 > = {
-  "--sid-color-primary": hexSanitiser,
-  "--sid-color-primary-hover": hexSanitiser,
+  "--sid-color-primary": or(hexSanitiser, rgbaSanitiser),
+  "--sid-color-primary-hover": or(hexSanitiser, rgbaSanitiser),
+  "--sid-color-secondary": or(hexSanitiser, rgbaSanitiser),
+  "--sid-color-tertiary": or(hexSanitiser, rgbaSanitiser),
+  "--sid-color-foreground": or(hexSanitiser, rgbaSanitiser),
   "--sid-font-family": fontFamilySanitiser,
   "--sid-form-logo-width": pxSanitiser,
   "--sid-form-border-radius": pxSanitiser,
   "--sid-button-border-radius": pxSanitiser,
-  "--sid-color-foreground": hexSanitiser,
   "--sid-input-border-radius": pxSanitiser,
   "--sid-input-border-color": hexSanitiser,
   "--sid-input-label-color": hexSanitiser,
