@@ -351,4 +351,44 @@ describe("#Form -> Error state -> Special error cases", () => {
     // cleanup
     logInPromise.reject();
   });
+
+  it("should render the UseAlternativeAuthPrompt in selfRegistrationNotAllowed state with alternativeAuthURL option set in the Provider", async () => {
+    const logInMock = vi.fn(() =>
+      Promise.reject(
+        Errors.createSlashIDError({
+          name: Errors.ERROR_NAMES.selfRegistrationNotAllowed,
+          message: "self registration not allowed",
+        })
+      )
+    );
+    const user = userEvent.setup();
+    const prompt = "Use alternative auth";
+    const cta = "Alternative auth link";
+
+    render(
+      <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+        <ConfigurationProvider
+          text={{
+            "error.selfRegistrationNotAllowed.alternativeAuth.prompt": prompt,
+            "error.selfRegistrationNotAllowed.alternativeAuth.cta": cta,
+          }}
+          alternativeAuthURL="https://www.test.com"
+        >
+          <Form />
+        </ConfigurationProvider>
+      </TestSlashIDProvider>
+    );
+
+    inputEmail("test@mail.com");
+    user.click(screen.getByTestId("sid-form-initial-submit-button"));
+
+    await expect(
+      screen.findByTestId("sid-form-error-state")
+    ).resolves.toBeInTheDocument();
+    expect(screen.getByText(prompt)).toBeInTheDocument();
+    expect(screen.getByText(cta)).toBeInTheDocument();
+    expect(
+      screen.getByTestId("sid-form-error-alternative-auth-prompt")
+    ).toBeInTheDocument();
+  });
 });
