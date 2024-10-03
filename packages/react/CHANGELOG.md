@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 1.29.2
+
+### Patch Changes
+
+- 9211fe9: Add the alternative auth option to allow links to other auth pages from SelftRegistrationNotAllowed error
+
 ## 1.29.1
 
 ### Patch Changes
