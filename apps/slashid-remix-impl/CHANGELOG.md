@@ -1,5 +1,11 @@
 # my-remix-app
 
+## 0.0.20
+
+### Patch Changes
+
+- @slashid/remix@0.2.16
+
 ## 0.0.19
 
 ### Patch Changes
