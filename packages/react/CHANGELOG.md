@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 1.29.3
+
+### Patch Changes
+
+- fb412b4: The Resend prompt/CTA will appear in the expected state when using OTPs
+
 ## 1.29.2
 
 ### Patch Changes
