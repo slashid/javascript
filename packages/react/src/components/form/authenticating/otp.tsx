@@ -184,7 +184,7 @@ export const OTPState = ({ flowState, performLogin }: Props) => {
       )}
       {formState === "submitting" ? <Loader /> : null}
       {formState === "retrying" ? <FactorIcon factor={factor} /> : null}
-      {formState === "input" && (
+      {["input", "initial"].includes(formState) && (
         // fallback to prevent layout shift
         <Delayed
           delayMs={DELAY_BEFORE_RESEND}
