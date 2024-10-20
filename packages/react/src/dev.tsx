@@ -21,6 +21,8 @@ import { defaultOrganization } from "./middleware/default-organization";
 import { Slot } from "./components/slot";
 import { AuthenticatingState } from "./components/form/flow";
 import { Authenticating } from "./components/form";
+import { Onboarding, OnboardingStep } from "./components/onboarding";
+import { OnboardingActions } from "./components/onboarding/onboarding-actions.component";
 
 const rootOid = "b6f94b67-d20f-7fc3-51df-bf6e3b82683e";
 
@@ -335,7 +337,7 @@ root.render(
       oid={import.meta.env.VITE_ORG_ID}
       themeProps={{ theme: "dark" }}
       tokenStorage="localStorage"
-      analyticsEnabled
+      analyticsEnabled={false}
       environment="sandbox"
       // anonymousUsersEnabled
       // environment={{
@@ -397,6 +399,25 @@ root.render(
             </ConfigurationProvider>
           );
         })()}
+      </div>
+      <div>
+        <h1>Onboarding</h1>
+        <Onboarding>
+          <OnboardingStep id="test1">
+            <h2>Step 1</h2>
+            <p>Step 1 content</p>
+            <OnboardingActions />
+          </OnboardingStep>
+          <OnboardingStep id="test2">
+            <h2>Step 2</h2>
+            <p>Step 3 content</p>
+            <OnboardingActions />
+          </OnboardingStep>
+          <OnboardingStep id="test3">
+            <h2>Step 3</h2>
+            <p>Step 3 content</p>
+          </OnboardingStep>
+        </Onboarding>
       </div>
     </SlashIDProvider>
   </React.StrictMode>
