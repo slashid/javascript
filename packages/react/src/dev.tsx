@@ -27,6 +27,8 @@ import {
   useOnboarding,
 } from "./components/onboarding";
 import { OnboardingActions } from "./components/onboarding/onboarding-actions.component";
+import { OnboardingSuccess } from "./components/onboarding/onboarding-success.component";
+import { OnboardingForm } from "./components/onboarding/onboarding-form.component";
 
 const rootOid = "b6f94b67-d20f-7fc3-51df-bf6e3b82683e";
 
@@ -389,12 +391,52 @@ function OnboardingSecondStep() {
   );
 }
 
+function OnboardingDone() {
+  const { user, anonymousUser } = useSlashID();
+  const [attributes, setAttributes] = useState<JsonObject>({});
+  const [anonAttributes, setAnonAttributes] = useState<JsonObject>({});
+
+  useEffect(() => {
+    if (!user || !anonymousUser) return;
+
+    user
+      .getBucket()
+      .get()
+      .then((attrs) => {
+        setAttributes(attrs);
+      });
+
+    anonymousUser
+      .getBucket()
+      .get()
+      .then((attrs) => {
+        setAnonAttributes(attrs);
+      });
+  }, [anonymousUser, user]);
+
+  return (
+    <div>
+      <h1>Success!</h1>
+      <h2>User attributes</h2>
+      <pre>{JSON.stringify(attributes, null, 2)}</pre>
+      <h2>Anon attributes</h2>
+      <pre>{JSON.stringify(anonAttributes, null, 2)}</pre>
+    </div>
+  );
+}
+
 function OnboardingDemo() {
   return (
-    <Onboarding>
-      <OnboardingFirstStep />
-      <OnboardingSecondStep />
-    </Onboarding>
+    <ConfigurationProvider>
+      <Onboarding>
+        <OnboardingFirstStep />
+        <OnboardingForm />
+        <OnboardingSecondStep />
+        <OnboardingSuccess>
+          <OnboardingDone />
+        </OnboardingSuccess>
+      </Onboarding>
+    </ConfigurationProvider>
   );
 }
 

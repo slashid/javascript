@@ -7,6 +7,7 @@ import { ensureError } from "../../domain/errors";
 const initialOnboardingState: OnboardingState = {
   currentStepId: "",
   attributes: {},
+  completionState: "incomplete",
 };
 
 const initialOnboardingContext: OnboardingContextType = {
@@ -79,13 +80,23 @@ async function updateAttributes({
   }
 }
 
+function getSetItemByIndex<T>(set: Set<T>, index: number): T | undefined {
+  if (index < 0 || index >= set.size) {
+    return undefined;
+  }
+  return Array.from(set)[index];
+}
+
 // anonymous users API must be enabled
 export function Onboarding({ children }: OnboardingProps) {
   const { anonymousUser } = useSlashID();
-  const [steps, setSteps] = useState<string[]>([]);
+  const [steps, setSteps] = useState<Set<string>>(new Set());
   const [stepIndex, setStepIndex] = useState<number>(0);
   const [attributes, setAttributes] = useState<JsonObject>({});
   const [uiState, setUiState] = useState<UiState>("initial");
+  const [completionState, setCompletionState] = useState<
+    "incomplete" | "complete"
+  >("incomplete");
 
   useEffect(() => {
     async function loadAttributes(user: AnonymousUser) {
@@ -109,21 +120,28 @@ export function Onboarding({ children }: OnboardingProps) {
   // be smarter about the final step, either render nothing or a special step like Onboarding.Complete
   const contextValue = useMemo(() => {
     const state: OnboardingState = {
-      currentStepId: steps.length > 0 ? steps[stepIndex] : "",
+      currentStepId:
+        steps.size > 0 ? getSetItemByIndex(steps, stepIndex) || "" : "",
       attributes,
+      completionState,
     };
 
     const api: OnboardingAPI = {
       // naive API
       nextStep: () => {
-        setStepIndex((index) => index + 1);
+        console.log("nextStep", { stepIndex, stepsLength: steps.size });
+        if (stepIndex + 1 >= steps.size) {
+          setCompletionState("complete");
+        } else {
+          setStepIndex((index) => index + 1);
+        }
       },
       // naive API
       previousStep: () => {
         setStepIndex((index) => index - 1);
       },
       registerStep: (stepId: string) => {
-        setSteps((steps) => [...steps, stepId]);
+        setSteps((steps) => new Set(steps).add(stepId));
       },
       updateAttributes: async (newAttributes: JsonObject) => {
         if (!anonymousUser) {
@@ -149,7 +167,7 @@ export function Onboarding({ children }: OnboardingProps) {
       state,
       api,
     };
-  }, [anonymousUser, attributes, stepIndex, steps]);
+  }, [anonymousUser, attributes, completionState, stepIndex, steps]);
 
   console.log({ uiState });
 

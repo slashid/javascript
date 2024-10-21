@@ -3,12 +3,10 @@
 // we could also infer the order from the children, have the wrapper self register
 // keeps track of being registered or not
 
-import { useCallback, useContext, useEffect, useState } from "react";
-import { OnboardingContext } from "./onboarding.component";
+import { useCallback, useEffect, useState } from "react";
 import { ensureError } from "../../domain/errors";
 import { JsonObject } from "@slashid/slashid";
-
-type UiState = "initial" | "submitting";
+import { useOnboarding } from "./onboarding-context.hook";
 
 export type OnboardingStepProps = {
   id: string;
@@ -21,9 +19,8 @@ export function OnboardingStep({
   children,
   beforeNext,
 }: OnboardingStepProps) {
-  const { state, api } = useContext(OnboardingContext);
+  const { state, api } = useOnboarding();
   const [registered, setRegistered] = useState(false);
-  const [uiState, setUiState] = useState<UiState>("initial");
 
   const onSubmit = useCallback(
     async (event: React.FormEvent<HTMLFormElement>) => {
@@ -38,13 +35,10 @@ export function OnboardingStep({
       });
 
       try {
-        setUiState("submitting");
         await beforeNext(formValues);
         api.nextStep();
       } catch (e) {
         console.log(ensureError(e));
-      } finally {
-        setUiState("initial");
       }
     },
     [api, beforeNext]
@@ -57,9 +51,7 @@ export function OnboardingStep({
     }
   }, [api, id, registered]);
 
-  console.log({ uiState, state });
-
-  if (!registered) {
+  if (!registered || state.completionState === "complete") {
     return null;
   }
 
