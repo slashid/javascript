@@ -1,4 +1,4 @@
-import { type Factor } from "@slashid/slashid";
+import { JsonObject, type Factor } from "@slashid/slashid";
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 
@@ -21,7 +21,11 @@ import { defaultOrganization } from "./middleware/default-organization";
 import { Slot } from "./components/slot";
 import { AuthenticatingState } from "./components/form/flow";
 import { Authenticating } from "./components/form";
-import { Onboarding, OnboardingStep } from "./components/onboarding";
+import {
+  Onboarding,
+  OnboardingStep,
+  useOnboarding,
+} from "./components/onboarding";
 import { OnboardingActions } from "./components/onboarding/onboarding-actions.component";
 
 const rootOid = "b6f94b67-d20f-7fc3-51df-bf6e3b82683e";
@@ -329,6 +333,71 @@ const LogOut = () => {
   );
 };
 
+function OnboardingFirstStep() {
+  const { state, api } = useOnboarding();
+
+  const handleSubmit = async (formValues: JsonObject) => {
+    // store object as attributes
+    return api.updateAttributes(formValues);
+  };
+
+  return (
+    <OnboardingStep id="test1" beforeNext={handleSubmit}>
+      <h1>First step</h1>
+      <label htmlFor="sid-input--onboarding-first_name">First name</label>
+      <input
+        id="sid-input--onboarding-first_name"
+        name="first_name"
+        type="text"
+        /* @ts-expect-error */
+        defaultValue={state.attributes?.first_name}
+      />
+      <label htmlFor="sid-input--onboarding-last_name">Last name</label>
+      <input
+        id="sid-input--onboarding-last_name"
+        name="last_name"
+        type="text"
+        /* @ts-expect-error */
+        defaultValue={state.attributes?.last_name}
+      />
+      <OnboardingActions />
+    </OnboardingStep>
+  );
+}
+
+function OnboardingSecondStep() {
+  const { state, api } = useOnboarding();
+
+  const handleSubmit = async (formValues: JsonObject) => {
+    // store object as attributes
+    return api.updateAttributes(formValues);
+  };
+
+  return (
+    <OnboardingStep id="test2" beforeNext={handleSubmit}>
+      <h1>Second step</h1>
+      <label htmlFor="sid-input--onboarding-ssn">SSN</label>
+      <input
+        type="text"
+        id="sid-input--onboarding-ssn"
+        name="ssn"
+        /* @ts-expect-error */
+        defaultValue={state.attributes?.ssn}
+      />
+      <OnboardingActions />
+    </OnboardingStep>
+  );
+}
+
+function OnboardingDemo() {
+  return (
+    <Onboarding>
+      <OnboardingFirstStep />
+      <OnboardingSecondStep />
+    </Onboarding>
+  );
+}
+
 const container = document.getElementById("root") as HTMLElement;
 const root = ReactDOM.createRoot(container);
 root.render(
@@ -339,14 +408,14 @@ root.render(
       tokenStorage="localStorage"
       analyticsEnabled={false}
       environment="sandbox"
-      // anonymousUsersEnabled
+      anonymousUsersEnabled
       // environment={{
       //   baseURL: "https://api.slashid.local",
       //   sdkURL: "https://jump.slashid.local/sdk.html"
       // }}
     >
       <LogOut />
-      <div className="layout">
+      <div className="layout" style={{ display: "none" }}>
         <div>
           <div>
             <h2>Basic form</h2>
@@ -369,7 +438,12 @@ root.render(
         </div>
       </div>
 
-      <div className="states">
+      <div>
+        <h1>Onboarding</h1>
+        <OnboardingDemo />
+      </div>
+
+      <div className="states" style={{ display: "none" }}>
         {(() => {
           const forcedEmailMagicLinkLoadingState: AuthenticatingState = {
             status: "authenticating",
@@ -399,25 +473,6 @@ root.render(
             </ConfigurationProvider>
           );
         })()}
-      </div>
-      <div>
-        <h1>Onboarding</h1>
-        <Onboarding>
-          <OnboardingStep id="test1">
-            <h2>Step 1</h2>
-            <p>Step 1 content</p>
-            <OnboardingActions />
-          </OnboardingStep>
-          <OnboardingStep id="test2">
-            <h2>Step 2</h2>
-            <p>Step 3 content</p>
-            <OnboardingActions />
-          </OnboardingStep>
-          <OnboardingStep id="test3">
-            <h2>Step 3</h2>
-            <p>Step 3 content</p>
-          </OnboardingStep>
-        </Onboarding>
       </div>
     </SlashIDProvider>
   </React.StrictMode>

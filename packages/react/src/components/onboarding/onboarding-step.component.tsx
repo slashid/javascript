@@ -3,17 +3,52 @@
 // we could also infer the order from the children, have the wrapper self register
 // keeps track of being registered or not
 
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { OnboardingContext } from "./onboarding.component";
+import { ensureError } from "../../domain/errors";
+import { JsonObject } from "@slashid/slashid";
+
+type UiState = "initial" | "submitting";
 
 export type OnboardingStepProps = {
   id: string;
   children: React.ReactNode;
+  beforeNext: (formValues: JsonObject) => Promise<void>;
 };
 
-export function OnboardingStep({ id, children }: OnboardingStepProps) {
+export function OnboardingStep({
+  id,
+  children,
+  beforeNext,
+}: OnboardingStepProps) {
   const { state, api } = useContext(OnboardingContext);
   const [registered, setRegistered] = useState(false);
+  const [uiState, setUiState] = useState<UiState>("initial");
+
+  const onSubmit = useCallback(
+    async (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+
+      const formData = new FormData(event.currentTarget);
+      const formValues: JsonObject = {};
+      formData.forEach((value, key) => {
+        if (!(value instanceof File)) {
+          formValues[key] = value;
+        }
+      });
+
+      try {
+        setUiState("submitting");
+        await beforeNext(formValues);
+        api.nextStep();
+      } catch (e) {
+        console.log(ensureError(e));
+      } finally {
+        setUiState("initial");
+      }
+    },
+    [api, beforeNext]
+  );
 
   useEffect(() => {
     if (!registered) {
@@ -21,6 +56,8 @@ export function OnboardingStep({ id, children }: OnboardingStepProps) {
       setRegistered(true);
     }
   }, [api, id, registered]);
+
+  console.log({ uiState, state });
 
   if (!registered) {
     return null;
@@ -30,5 +67,5 @@ export function OnboardingStep({ id, children }: OnboardingStepProps) {
     return null;
   }
 
-  return children;
+  return <form onSubmit={onSubmit}>{children}</form>;
 }
