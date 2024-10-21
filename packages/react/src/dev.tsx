@@ -392,12 +392,11 @@ function OnboardingSecondStep() {
 }
 
 function OnboardingDone() {
-  const { user, anonymousUser } = useSlashID();
+  const { user } = useSlashID();
   const [attributes, setAttributes] = useState<JsonObject>({});
-  const [anonAttributes, setAnonAttributes] = useState<JsonObject>({});
 
   useEffect(() => {
-    if (!user || !anonymousUser) return;
+    if (!user) return;
 
     user
       .getBucket()
@@ -405,22 +404,13 @@ function OnboardingDone() {
       .then((attrs) => {
         setAttributes(attrs);
       });
-
-    anonymousUser
-      .getBucket()
-      .get()
-      .then((attrs) => {
-        setAnonAttributes(attrs);
-      });
-  }, [anonymousUser, user]);
+  }, [user]);
 
   return (
     <div>
       <h1>Success!</h1>
       <h2>User attributes</h2>
       <pre>{JSON.stringify(attributes, null, 2)}</pre>
-      <h2>Anon attributes</h2>
-      <pre>{JSON.stringify(anonAttributes, null, 2)}</pre>
     </div>
   );
 }
