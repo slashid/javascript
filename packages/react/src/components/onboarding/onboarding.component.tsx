@@ -3,6 +3,7 @@ import { OnboardingAPI, OnboardingState } from "./onboarding.types";
 import { AnonymousUser, Errors, JsonObject } from "@slashid/slashid";
 import { useSlashID } from "../../main";
 import { ensureError } from "../../domain/errors";
+import { Card } from "@slashid/react-primitives";
 
 const initialOnboardingState: OnboardingState = {
   currentStepId: "",
@@ -173,9 +174,11 @@ export function Onboarding({ children }: OnboardingProps) {
 
   return (
     <OnboardingContext.Provider value={contextValue}>
-      {uiState === "error" && <div>ERROR</div>}
-      {uiState === "loadingAttributes" && <div>LOADING ATTRIBUTES</div>}
-      {uiState === "ready" && children}
+      <Card className="sid-onboarding">
+        {uiState === "error" && <div>ERROR</div>}
+        {uiState === "loadingAttributes" && <div>LOADING ATTRIBUTES</div>}
+        {uiState === "ready" && children}
+      </Card>
     </OnboardingContext.Provider>
   );
 }

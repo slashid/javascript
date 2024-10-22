@@ -13,6 +13,7 @@ import {
   OtpInput,
 } from "./components/input";
 import { Divider } from "./components/divider";
+import { Card, CardProps } from "./components/card";
 import { Accordion } from "./components/accordion";
 import { Dialog, DialogProps } from "./components/dialog";
 import { Switch } from "./components/switch";
@@ -49,6 +50,7 @@ export {
   OtpInput,
   PasswordInput,
   Divider,
+  Card,
   Accordion,
   Dialog,
   Switch,
@@ -78,4 +80,4 @@ export { isBrowser, interpolate, MemoryStorage, CookieStorage };
 export * from "./hooks";
 
 // types
-export type { ThemeProps, DialogProps, TextProps, Flag };
+export type { ThemeProps, DialogProps, TextProps, Flag, CardProps };
