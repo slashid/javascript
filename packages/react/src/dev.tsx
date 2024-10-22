@@ -21,6 +21,7 @@ import { defaultOrganization } from "./middleware/default-organization";
 import { Slot } from "./components/slot";
 import { AuthenticatingState } from "./components/form/flow";
 import { Authenticating } from "./components/form";
+import { Text } from "./components/text";
 import {
   Onboarding,
   OnboardingStep,
@@ -29,6 +30,8 @@ import {
 import { OnboardingActions } from "./components/onboarding/onboarding-actions.component";
 import { OnboardingSuccess } from "./components/onboarding/onboarding-success.component";
 import { OnboardingForm } from "./components/onboarding/onboarding-form.component";
+import { LogoSlot } from "./components/form/initial/logo";
+import { Input } from "@slashid/react-primitives";
 
 const rootOid = "b6f94b67-d20f-7fc3-51df-bf6e3b82683e";
 
@@ -345,20 +348,24 @@ function OnboardingFirstStep() {
 
   return (
     <OnboardingStep id="test1" beforeNext={handleSubmit}>
-      <h1>First step</h1>
-      <label htmlFor="sid-input--onboarding-first_name">First name</label>
-      <input
+      <LogoSlot />
+      <Text variant={{ size: "2xl-title" }} t="onboarding.firstStep.title" />
+      <Text variant={{ size: "base" }} t="onboarding.firstStep.subtitle" />
+      <Text variant={{ size: "xl" }} t="onboarding.firstStep.prompt" />
+      <Text variant={{ size: "base" }} t="onboarding.firstStep.explanation" />
+      <Input
         id="sid-input--onboarding-first_name"
         name="first_name"
         type="text"
+        label="First name"
         /* @ts-expect-error */
         defaultValue={state.attributes?.first_name}
       />
-      <label htmlFor="sid-input--onboarding-last_name">Last name</label>
-      <input
+      <Input
         id="sid-input--onboarding-last_name"
         name="last_name"
         type="text"
+        label="Last name"
         /* @ts-expect-error */
         defaultValue={state.attributes?.last_name}
       />
@@ -377,6 +384,7 @@ function OnboardingSecondStep() {
 
   return (
     <OnboardingStep id="test2" beforeNext={handleSubmit}>
+      <LogoSlot />
       <h1>Second step</h1>
       <label htmlFor="sid-input--onboarding-ssn">SSN</label>
       <input

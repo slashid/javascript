@@ -2,6 +2,7 @@ import { JsonObject } from "@slashid/slashid";
 
 export type OnboardingState = {
   currentStepId: string;
+  stepIndex: number;
   attributes: JsonObject;
   completionState: "incomplete" | "complete";
 };

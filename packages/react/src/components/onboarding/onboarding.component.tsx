@@ -8,6 +8,7 @@ import { Card } from "@slashid/react-primitives";
 const initialOnboardingState: OnboardingState = {
   currentStepId: "",
   attributes: {},
+  stepIndex: 0,
   completionState: "incomplete",
 };
 
@@ -118,19 +119,18 @@ export function Onboarding({ children }: OnboardingProps) {
     }
   }, [anonymousUser, uiState]);
 
-  // be smarter about the final step, either render nothing or a special step like Onboarding.Complete
   const contextValue = useMemo(() => {
     const state: OnboardingState = {
       currentStepId:
         steps.size > 0 ? getSetItemByIndex(steps, stepIndex) || "" : "",
       attributes,
       completionState,
+      stepIndex,
     };
 
     const api: OnboardingAPI = {
       // naive API
       nextStep: () => {
-        console.log("nextStep", { stepIndex, stepsLength: steps.size });
         if (stepIndex + 1 >= steps.size) {
           setCompletionState("complete");
         } else {
@@ -169,8 +169,6 @@ export function Onboarding({ children }: OnboardingProps) {
       api,
     };
   }, [anonymousUser, attributes, completionState, stepIndex, steps]);
-
-  console.log({ uiState });
 
   return (
     <OnboardingContext.Provider value={contextValue}>

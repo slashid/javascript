@@ -8,6 +8,8 @@ import { ensureError } from "../../domain/errors";
 import { JsonObject } from "@slashid/slashid";
 import { useOnboarding } from "./onboarding-context.hook";
 
+import * as styles from "./onboarding.css";
+
 export type OnboardingStepProps = {
   id: string;
   children: React.ReactNode;
@@ -59,5 +61,9 @@ export function OnboardingStep({
     return null;
   }
 
-  return <form onSubmit={onSubmit}>{children}</form>;
+  return (
+    <form className={styles.stack} onSubmit={onSubmit}>
+      {children}
+    </form>
+  );
 }
