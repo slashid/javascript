@@ -31,7 +31,7 @@ import { OnboardingActions } from "./components/onboarding/onboarding-actions.co
 import { OnboardingSuccess } from "./components/onboarding/onboarding-success.component";
 import { OnboardingForm } from "./components/onboarding/onboarding-form.component";
 import { LogoSlot } from "./components/form/initial/logo";
-import { Input } from "@slashid/react-primitives";
+import { UncontrolledInput } from "@slashid/react-primitives";
 
 const rootOid = "b6f94b67-d20f-7fc3-51df-bf6e3b82683e";
 
@@ -353,7 +353,7 @@ function OnboardingFirstStep() {
       <Text variant={{ size: "base" }} t="onboarding.firstStep.subtitle" />
       <Text variant={{ size: "xl" }} t="onboarding.firstStep.prompt" />
       <Text variant={{ size: "base" }} t="onboarding.firstStep.explanation" />
-      <Input
+      <UncontrolledInput
         id="sid-input--onboarding-first_name"
         name="first_name"
         type="text"
@@ -361,7 +361,7 @@ function OnboardingFirstStep() {
         /* @ts-expect-error */
         defaultValue={state.attributes?.first_name}
       />
-      <Input
+      <UncontrolledInput
         id="sid-input--onboarding-last_name"
         name="last_name"
         type="text"
@@ -385,14 +385,15 @@ function OnboardingSecondStep() {
   return (
     <OnboardingStep id="test2" beforeNext={handleSubmit}>
       <LogoSlot />
-      <h1>Second step</h1>
-      <label htmlFor="sid-input--onboarding-ssn">SSN</label>
-      <input
+      <Text variant={{ size: "xl" }} t="onboarding.secondStep.title" />
+      <Text variant={{ size: "base" }} t="onboarding.secondStep.subtitle" />
+      <UncontrolledInput
         type="text"
         id="sid-input--onboarding-ssn"
         name="ssn"
         /* @ts-expect-error */
         defaultValue={state.attributes?.ssn}
+        label="SSN"
       />
       <OnboardingActions />
     </OnboardingStep>
