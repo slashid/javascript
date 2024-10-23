@@ -480,7 +480,6 @@ root.render(
       </div>
 
       <div>
-        <h1>Onboarding</h1>
         <OnboardingDemo />
       </div>
 
