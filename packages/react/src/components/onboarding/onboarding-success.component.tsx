@@ -1,3 +1,4 @@
+import { Card } from "@slashid/react-primitives";
 import { useOnboarding } from "./onboarding-context.hook";
 
 export type OnboardingSuccessProps = {
@@ -11,5 +12,7 @@ export function OnboardingSuccess({ children }: OnboardingSuccessProps) {
     return null;
   }
 
-  return children;
+  return (
+    <Card className="sid-onboarding sid-onboarding--success">{children}</Card>
+  );
 }

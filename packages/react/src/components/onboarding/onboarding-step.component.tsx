@@ -9,6 +9,7 @@ import { JsonObject } from "@slashid/slashid";
 import { useOnboarding } from "./onboarding-context.hook";
 
 import * as styles from "./onboarding.css";
+import { Card } from "@slashid/react-primitives";
 
 export type OnboardingStepProps = {
   id: string;
@@ -62,8 +63,10 @@ export function OnboardingStep({
   }
 
   return (
-    <form className={styles.stack} onSubmit={onSubmit}>
-      {children}
-    </form>
+    <Card className="sid-onboarding">
+      <form className={styles.stack} onSubmit={onSubmit}>
+        {children}
+      </form>
+    </Card>
   );
 }

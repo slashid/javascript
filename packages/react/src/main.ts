@@ -1,4 +1,16 @@
 import { DynamicFlow } from "./components/dynamic-flow";
+import {
+  Onboarding,
+  OnboardingProps,
+  OnboardingStep,
+  OnboardingStepProps,
+  useOnboarding,
+  OnboardingActions,
+  OnboardingForm,
+  OnboardingSuccess,
+} from "./components/onboarding";
+import { UncontrolledInput } from "@slashid/react-primitives";
+import { Text } from "./components/text";
 import { Authenticating, Form } from "./components/form";
 import { Slot } from "./components/slot";
 import { GDPRConsentDialog } from "./components/gdpr-consent-dialog";
@@ -54,6 +66,18 @@ export {
   ConfigurationContext,
   ConfigurationProvider,
   DynamicFlow,
+  // TODO remove - Unum demo
+  Onboarding,
+  type OnboardingProps,
+  OnboardingStep,
+  type OnboardingStepProps,
+  useOnboarding,
+  OnboardingActions,
+  OnboardingForm,
+  OnboardingSuccess,
+  UncontrolledInput,
+  Text,
+  // end Unum demo
   Form,
   GDPRConsentDialog,
   Groups,
