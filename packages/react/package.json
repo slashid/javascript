@@ -1,6 +1,6 @@
 {
   "name": "@slashid/react",
-  "version": "1.30.0-onboarding-beta.4",
+  "version": "1.30.0-onboarding-beta.5",
   "private": false,
   "publishConfig": {
     "access": "public"

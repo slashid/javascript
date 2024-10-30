@@ -1,6 +1,6 @@
 {
   "name": "@slashid/react-primitives",
-  "version": "0.5.4",
+  "version": "0.5.5-onboarding-beta.0",
   "private": false,
   "publishConfig": {
     "access": "public"

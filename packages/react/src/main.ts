@@ -9,8 +9,7 @@ import {
   OnboardingForm,
   OnboardingSuccess,
 } from "./components/onboarding";
-import { UncontrolledInput } from "@slashid/react-primitives";
-import { Text } from "./components/text";
+
 import { Authenticating, Form } from "./components/form";
 import { Slot } from "./components/slot";
 import { GDPRConsentDialog } from "./components/gdpr-consent-dialog";
@@ -75,9 +74,6 @@ export {
   OnboardingActions,
   OnboardingForm,
   OnboardingSuccess,
-  UncontrolledInput,
-  Text,
-  // end Unum demo
   Form,
   GDPRConsentDialog,
   Groups,
