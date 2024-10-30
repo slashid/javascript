@@ -1,8 +1,3 @@
-// are onboarding steps self registering?
-// it would be easier to pass a config which specifies the order exactly
-// we could also infer the order from the children, have the wrapper self register
-// keeps track of being registered or not
-
 import { useCallback, useEffect, useState } from "react";
 import { ensureError } from "../../domain/errors";
 import { JsonObject } from "@slashid/slashid";
@@ -17,6 +12,21 @@ export type OnboardingStepProps = {
   beforeNext: (formValues: JsonObject) => Promise<void>;
 };
 
+/**
+ * Wrap any onboarding step with this component. It needs to have an ID.
+ * The order the steps are rendered is the order they will be displayed.
+ * Use OnboardingActions to render the controls that allow navigating the flow back and forth.
+ * If you want to store attributes as part of onboarding, follow this example:
+ * 
+ * const { state, api } = useOnboarding();
+
+  const handleSubmit = async (formValues: JsonObject) => {
+    // store object as attributes
+    return api.updateAttributes(formValues);
+  };
+
+  Then pass this function as the beforeNext prop to the OnboardingStep component.
+ */
 export function OnboardingStep({
   id,
   children,

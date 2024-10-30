@@ -3,6 +3,7 @@ import { OnboardingAPI, OnboardingState } from "./onboarding.types";
 import { AnonymousUser, Errors, JsonObject } from "@slashid/slashid";
 import { useSlashID } from "../../main";
 import { ensureError } from "../../domain/errors";
+import { Loading } from "@slashid/react-primitives";
 
 const initialOnboardingState: OnboardingState = {
   currentStepId: "",
@@ -32,6 +33,7 @@ export const OnboardingContext = createContext<OnboardingContextType>(
 
 export type OnboardingProps = {
   children: React.ReactNode;
+  onError?: () => void;
 };
 
 type Result<T> =
@@ -88,8 +90,12 @@ function getSetItemByIndex<T>(set: Set<T>, index: number): T | undefined {
   return Array.from(set)[index];
 }
 
-// anonymous users API must be enabled
-export function Onboarding({ children }: OnboardingProps) {
+/**
+ * Renders the onboarding flow based on the children provided.
+ * Wrap any step you want to render in the <OnboardgingStep> component.
+ * They will be rendered in the order they are provided.
+ */
+export function Onboarding({ children, onError }: OnboardingProps) {
   const { anonymousUser } = useSlashID();
   const [steps, setSteps] = useState<Set<string>>(new Set());
   const [stepIndex, setStepIndex] = useState<number>(0);
@@ -118,6 +124,12 @@ export function Onboarding({ children }: OnboardingProps) {
     }
   }, [anonymousUser, uiState]);
 
+  useEffect(() => {
+    if (uiState === "error" && typeof onError === "function") {
+      onError();
+    }
+  }, [onError, uiState]);
+
   const contextValue = useMemo(() => {
     const state: OnboardingState = {
       currentStepId:
@@ -128,7 +140,6 @@ export function Onboarding({ children }: OnboardingProps) {
     };
 
     const api: OnboardingAPI = {
-      // naive API
       nextStep: () => {
         if (stepIndex + 1 >= steps.size) {
           setCompletionState("complete");
@@ -136,7 +147,6 @@ export function Onboarding({ children }: OnboardingProps) {
           setStepIndex((index) => index + 1);
         }
       },
-      // naive API
       previousStep: () => {
         setStepIndex((index) => index - 1);
       },
@@ -171,8 +181,11 @@ export function Onboarding({ children }: OnboardingProps) {
 
   return (
     <OnboardingContext.Provider value={contextValue}>
-      {uiState === "error" && <div>ERROR</div>}
-      {uiState === "loadingAttributes" && <div>LOADING ATTRIBUTES</div>}
+      {uiState === "loadingAttributes" && (
+        <div className="sid-onboarding--loading">
+          <Loading />
+        </div>
+      )}
       {uiState === "ready" && children}
     </OnboardingContext.Provider>
   );

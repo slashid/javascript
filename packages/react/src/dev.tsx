@@ -1,4 +1,4 @@
-import { JsonObject, type Factor } from "@slashid/slashid";
+import { type Factor } from "@slashid/slashid";
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 
@@ -21,17 +21,6 @@ import { defaultOrganization } from "./middleware/default-organization";
 import { Slot } from "./components/slot";
 import { AuthenticatingState } from "./components/form/flow";
 import { Authenticating } from "./components/form";
-import { Text } from "./components/text";
-import {
-  Onboarding,
-  OnboardingStep,
-  useOnboarding,
-} from "./components/onboarding";
-import { OnboardingActions } from "./components/onboarding/onboarding-actions.component";
-import { OnboardingSuccess } from "./components/onboarding/onboarding-success.component";
-import { OnboardingForm } from "./components/onboarding/onboarding-form.component";
-import { LogoSlot } from "./components/form/initial/logo";
-import { UncontrolledInput } from "@slashid/react-primitives";
 
 const rootOid = "b6f94b67-d20f-7fc3-51df-bf6e3b82683e";
 
@@ -338,107 +327,6 @@ const LogOut = () => {
   );
 };
 
-function OnboardingFirstStep() {
-  const { state, api } = useOnboarding();
-
-  const handleSubmit = async (formValues: JsonObject) => {
-    // store object as attributes
-    return api.updateAttributes(formValues);
-  };
-
-  return (
-    <OnboardingStep id="test1" beforeNext={handleSubmit}>
-      <LogoSlot />
-      <Text variant={{ size: "2xl-title" }} t="onboarding.firstStep.title" />
-      <Text variant={{ size: "base" }} t="onboarding.firstStep.subtitle" />
-      <Text variant={{ size: "xl" }} t="onboarding.firstStep.prompt" />
-      <Text variant={{ size: "base" }} t="onboarding.firstStep.explanation" />
-      <UncontrolledInput
-        id="sid-input--onboarding-first_name"
-        name="first_name"
-        type="text"
-        label="First name"
-        /* @ts-expect-error */
-        defaultValue={state.attributes?.first_name}
-      />
-      <UncontrolledInput
-        id="sid-input--onboarding-last_name"
-        name="last_name"
-        type="text"
-        label="Last name"
-        /* @ts-expect-error */
-        defaultValue={state.attributes?.last_name}
-      />
-      <OnboardingActions />
-    </OnboardingStep>
-  );
-}
-
-function OnboardingSecondStep() {
-  const { state, api } = useOnboarding();
-
-  const handleSubmit = async (formValues: JsonObject) => {
-    // store object as attributes
-    return api.updateAttributes(formValues);
-  };
-
-  return (
-    <OnboardingStep id="test2" beforeNext={handleSubmit}>
-      <LogoSlot />
-      <Text variant={{ size: "xl" }} t="onboarding.secondStep.title" />
-      <Text variant={{ size: "base" }} t="onboarding.secondStep.subtitle" />
-      <UncontrolledInput
-        type="text"
-        id="sid-input--onboarding-ssn"
-        name="ssn"
-        /* @ts-expect-error */
-        defaultValue={state.attributes?.ssn}
-        label="SSN"
-      />
-      <OnboardingActions />
-    </OnboardingStep>
-  );
-}
-
-function OnboardingDone() {
-  const { user } = useSlashID();
-  const [attributes, setAttributes] = useState<JsonObject>({});
-
-  useEffect(() => {
-    if (!user) return;
-
-    user
-      .getBucket()
-      .get()
-      .then((attrs) => {
-        setAttributes(attrs);
-      });
-  }, [user]);
-
-  return (
-    <div>
-      <h1>Success!</h1>
-      <h2>User attributes</h2>
-      <pre>{JSON.stringify(attributes, null, 2)}</pre>
-    </div>
-  );
-}
-
-function OnboardingDemo() {
-  return (
-    <ConfigurationProvider>
-      <Onboarding>
-        <OnboardingFirstStep />
-        <OnboardingForm />
-        <OnboardingSecondStep />
-        <OnboardingSuccess>
-          <OnboardingDone />
-        </OnboardingSuccess>
-      </Onboarding>
-    </ConfigurationProvider>
-  );
-}
-
 const container = document.getElementById("root") as HTMLElement;
 const root = ReactDOM.createRoot(container);
 root.render(
@@ -456,7 +344,7 @@ root.render(
       // }}
     >
       <LogOut />
-      <div className="layout" style={{ display: "none" }}>
+      <div className="layout">
         <div>
           <div>
             <h2>Basic form</h2>
@@ -479,11 +367,7 @@ root.render(
         </div>
       </div>
 
-      <div>
-        <OnboardingDemo />
-      </div>
-
-      <div className="states" style={{ display: "none" }}>
+      <div className="states">
         {(() => {
           const forcedEmailMagicLinkLoadingState: AuthenticatingState = {
             status: "authenticating",

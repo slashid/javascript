@@ -5,6 +5,10 @@ export type OnboardingSuccessProps = {
   children: React.ReactNode;
 };
 
+/**
+ *
+ * Children of this component render only when the onboarding flow is complete.
+ */
 export function OnboardingSuccess({ children }: OnboardingSuccessProps) {
   const { state } = useOnboarding();
 

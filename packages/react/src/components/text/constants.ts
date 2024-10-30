@@ -274,19 +274,11 @@ export const TEXT = {
     "Don't have an account?",
   "error.selfRegistrationNotAllowed.alternativeAuth.cta":
     "Go to the sign-up page.",
+  "onboarding.actions.previous": "Previous",
+  "onboarding.actions.continue": "Continue",
   // deprecated keys
   /**
    * @deprecated Use 'initial.handle.email.placeholder' instead
    */
   "initial.handle.phone.email": "",
-  // beta - Unum demo
-  "onboarding.firstStep.title": "Welcome, policyholders",
-  "onboarding.firstStep.subtitle":
-    "If you’re a policyholder or an employee that does business with Unum and need to register then you’ve come to the right place!",
-  "onboarding.firstStep.prompt": "First, please tell us your name",
-  "onboarding.firstStep.explanation":
-    "This way we’ll know how to address you. It should be your legal first and last name.",
-  "onboarding.secondStep.title": "Please verify your identity",
-  "onboarding.secondStep.subtitle":
-    "Your answers to these questions make sure your account is securely linked to you and not confused with someone else who may have the same name.",
 };
