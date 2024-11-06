@@ -3,9 +3,10 @@ import * as styles from "./text.css";
 import { useText } from "./use-text";
 import { TextConfig } from "./types";
 import { interpolate } from "./interpolation";
+import { useMemo } from "react";
 
 export type Props<TC extends TextConfig> = {
-  t: keyof TC;
+  t?: keyof TC;
   children?: React.ReactNode;
   tokens?: Record<string, string>;
   as?: "h1" | "h2" | "h3" | "p";
@@ -36,6 +37,16 @@ export const Text: React.FC<InternalProps> = ({
   const text = useText();
   const Component = as ? as : "p";
 
+  const value = useMemo(() => {
+    if (!t) return null;
+
+    if (tokens) {
+      return interpolate(text[t], tokens);
+    }
+
+    return text[t];
+  }, [t, text, tokens]);
+
   return (
     <Component
       className={clsx(
@@ -45,7 +56,7 @@ export const Text: React.FC<InternalProps> = ({
         className
       )}
     >
-      {tokens ? interpolate(text[t], tokens) : text[t]}
+      {value}
       {children ? children : null}
     </Component>
   );

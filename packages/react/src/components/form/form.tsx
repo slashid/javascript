@@ -5,7 +5,6 @@ import { Initial } from "./initial";
 import { Authenticating } from "./authenticating";
 import { Error } from "./error";
 import { Success } from "./success";
-import * as styles from "./form.css";
 import { Footer } from "./footer";
 import { useConfiguration } from "../../hooks/use-configuration";
 import { FormProvider } from "../../context/form-context";
@@ -22,6 +21,7 @@ import { PayloadOptions } from "./types";
 import { InternalFormContext } from "./internal-context";
 import { StoreRecoveryCodes } from "./store-recovery-codes";
 import { useLastFactor } from "../../hooks/use-last-factor";
+import { Card } from "@slashid/react-primitives";
 
 export type Props = ConfigurationOverridesProps & {
   className?: string;
@@ -104,7 +104,7 @@ export const Form = ({
         setSelectedFactor,
       }}
     >
-      <div className={clsx("sid-form", styles.form, className)}>
+      <Card className={clsx("sid-form", className)}>
         <ConfigurationOverrides text={text} factors={factors}>
           {flowState.status === "initial" && (
             <FormProvider>{slots.initial}</FormProvider>
@@ -119,7 +119,7 @@ export const Form = ({
           {flowState.status === "error" && slots.error}
           {slots.footer}
         </ConfigurationOverrides>
-      </div>
+      </Card>
     </InternalFormContext.Provider>
   );
 };

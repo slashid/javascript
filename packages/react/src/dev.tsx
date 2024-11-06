@@ -335,9 +335,9 @@ root.render(
       oid={import.meta.env.VITE_ORG_ID}
       themeProps={{ theme: "dark" }}
       tokenStorage="localStorage"
-      analyticsEnabled
+      analyticsEnabled={false}
       environment="sandbox"
-      // anonymousUsersEnabled
+      anonymousUsersEnabled
       // environment={{
       //   baseURL: "https://api.slashid.local",
       //   sdkURL: "https://jump.slashid.local/sdk.html"

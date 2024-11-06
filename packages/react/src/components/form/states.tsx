@@ -6,17 +6,16 @@
  * editor, for example - without needing to interact with the form state in the regular way.
  */
 
-import clsx from "clsx";
-import * as styles from "./form.css";
 import {
   AuthenticatingImplementation,
   AuthenticatingProps,
 } from "./authenticating";
+import { Card } from "@slashid/react-primitives";
 
 export const Authenticating = (props: AuthenticatingProps) => {
   return (
-    <div className={clsx("sid-form", styles.form)}>
+    <Card className="sid-form">
       <AuthenticatingImplementation flowState={props.flowState} />
-    </div>
+    </Card>
   );
 };

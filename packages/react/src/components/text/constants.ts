@@ -274,6 +274,8 @@ export const TEXT = {
     "Don't have an account?",
   "error.selfRegistrationNotAllowed.alternativeAuth.cta":
     "Go to the sign-up page.",
+  "onboarding.actions.previous": "Previous",
+  "onboarding.actions.continue": "Continue",
   // deprecated keys
   /**
    * @deprecated Use 'initial.handle.email.placeholder' instead
