@@ -89,15 +89,17 @@ export const DelayedPrompt = ({
         variant={{ size: "sm", color: "tertiary", weight: "semibold" }}
         t={prompt}
       />
-      <Text
-        variant={{ size: "sm", color: "tertiary", weight: "semibold" }}
-        t={cta}
-      />
-      <Text
-        variant={{ size: "sm", color: "tertiary", weight: "semibold" }}
-        t={ctaTextKey}
-        tokens={{ TIME_REMAINING: secondsRemaining.toString() }}
-      />
+      <span className={styles.promptResend}>
+        <Text
+          variant={{ size: "sm", color: "tertiary", weight: "semibold" }}
+          t={cta}
+        />
+        <Text
+          variant={{ size: "sm", color: "tertiary", weight: "semibold" }}
+          t={ctaTextKey}
+          tokens={{ TIME_REMAINING: secondsRemaining.toString() }}
+        />
+      </span>
     </div>
   );
 };

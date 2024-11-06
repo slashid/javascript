@@ -5,6 +5,16 @@ export const prompt = style({
   justifyContent: "center",
   alignItems: "baseline",
   gap: "4px",
+  "@media": {
+    "(max-width: 480px)": {
+      flexDirection: "column",
+    },
+  },
+});
+
+export const promptResend = style({
+  display: "flex",
+  gap: "4px",
 });
 
 export const oidcTitle = style({
