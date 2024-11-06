@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 1.30.0
+
+### Minor Changes
+
+- 5fd3d15: Added the Onboarding component
+
 ## 1.29.4
 
 ### Patch Changes
