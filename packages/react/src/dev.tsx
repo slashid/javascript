@@ -336,12 +336,12 @@ root.render(
       themeProps={{ theme: "dark" }}
       tokenStorage="localStorage"
       analyticsEnabled
-      environment="sandbox"
+      // environment="sandbox"
       // anonymousUsersEnabled
-      // environment={{
-      //   baseURL: "https://api.slashid.local",
-      //   sdkURL: "https://jump.slashid.local/sdk.html"
-      // }}
+      environment={{
+        baseURL: "https://api.slashid.local",
+        sdkURL: "https://jump.slashid.local/sdk.html",
+      }}
     >
       <LogOut />
       <div className="layout">

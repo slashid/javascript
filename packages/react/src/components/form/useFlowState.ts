@@ -16,8 +16,9 @@ export function useFlowState(opts: CreateFlowOptions = {}) {
   }, []);
 
   useEffect(() => {
-    if (sdkState !== "ready") return;
+    if (sdkState !== "ready" || !sid) return;
 
+    flowRef.current.setSdk(sid);
     flowRef.current.setRecover(recover);
     flowRef.current.setCancel(() => {
       sid?.publish("flowCancelled", undefined);

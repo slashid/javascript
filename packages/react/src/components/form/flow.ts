@@ -1,4 +1,10 @@
-import { Utils, Errors, User, ReachablePersonHandle } from "@slashid/slashid";
+import {
+  Utils,
+  Errors,
+  User,
+  ReachablePersonHandle,
+  SlashID,
+} from "@slashid/slashid";
 import {
   Cancel,
   LogIn,
@@ -12,6 +18,7 @@ import {
 import { ensureError } from "../../domain/errors";
 import { isFactorRecoverable } from "../../domain/handles";
 import { StoreRecoveryCodesState } from "./store-recovery-codes";
+import { OrgRetargetChallengeReceivedEvent } from "@slashid/slashid";
 
 export interface InitialState {
   status: "initial";
@@ -51,6 +58,12 @@ interface LoginEvent {
   options?: LoginOptions;
 }
 
+interface LoginRetargetEvent {
+  type: "sid_login.retarget";
+  config: LoginConfiguration;
+  options?: LoginOptions;
+}
+
 interface LoginSuccessEvent {
   type: "sid_login.success";
   user: User;
@@ -83,6 +96,7 @@ interface StoreRecoveryCodesEvent {
 type Event =
   | InitEvent
   | LoginEvent
+  | LoginRetargetEvent
   | LoginSuccessEvent
   | LoginErrorEvent
   | RetryEvent
@@ -118,13 +132,33 @@ const createInitialState = (send: Send): InitialState => {
 const createAuthenticatingState = (
   send: Send,
   context: AuthenticatingState["context"],
+  sdk: SlashID,
   logInFn: LogIn | MFA,
   recoverFn: Recover,
   setRecoveryCodes: (codes: string[]) => void
 ): AuthenticatingState => {
   function performLogin() {
-    return logInFn(context.config, context.options)
+    const loginPromise = logInFn(context.config, context.options);
+
+    // immediately subscribe to SDK retarget event which changes context
+    const handleRetargetEvent = (event: OrgRetargetChallengeReceivedEvent) => {
+      // update context and force a re-render
+      if (!event.factor || !event?.factor?.method) {
+        return;
+      }
+      send({
+        type: "sid_login.retarget",
+        // @ts-expect-error TODO @ivan figure out how to assert this
+        config: { factor: event.factor },
+        options: context.options,
+      });
+    };
+
+    sdk.subscribe("orgRetargetChallengeReceived", handleRetargetEvent);
+
+    return loginPromise
       .then((user) => {
+        sdk.unsubscribe("orgRetargetChallengeReceived", handleRetargetEvent);
         if (!user) {
           send({
             type: "sid_login.error",
@@ -143,6 +177,7 @@ const createAuthenticatingState = (
         send({ type: "sid_login.success", user });
       })
       .catch((error) => {
+        sdk.unsubscribe("orgRetargetChallengeReceived", handleRetargetEvent);
         if (Errors.isFlowCancelledError(error)) {
           return;
         }
@@ -269,6 +304,7 @@ export function createFlow(opts: CreateFlowOptions = {}) {
   let logInFn: undefined | LogIn | MFA = undefined;
   let recoverFn: undefined | Recover = undefined;
   let cancelFn: undefined | Cancel = undefined;
+  let sid: undefined | SlashID = undefined;
   let recoveryCodes: undefined | string[] = undefined;
   let observers: Observer[] = [];
   const send = (event: Event) => {
@@ -299,7 +335,7 @@ export function createFlow(opts: CreateFlowOptions = {}) {
     switch (e.type) {
       case "sid_login":
         // TODO replace with a check for ready state
-        if (!logInFn || !recoverFn) break;
+        if (!logInFn || !recoverFn || !sid) break;
 
         const loginContext: AuthenticatingState["context"] = {
           config: e.config,
@@ -311,6 +347,7 @@ export function createFlow(opts: CreateFlowOptions = {}) {
           createAuthenticatingState(
             send,
             loginContext,
+            sid,
             logInFn,
             recoverFn,
             setRecoveryCodes
@@ -330,6 +367,30 @@ export function createFlow(opts: CreateFlowOptions = {}) {
           e
         );
         break;
+      case "sid_login.retarget":
+        {
+          if (!logInFn || !recoverFn || !sid) break;
+
+          const loginContext: AuthenticatingState["context"] = {
+            config: e.config,
+            options: e.options,
+            attempt: 1,
+          };
+
+          setState(
+            createAuthenticatingState(
+              send,
+              loginContext,
+              sid,
+              logInFn,
+              recoverFn,
+              setRecoveryCodes
+            ),
+            e
+          );
+        }
+        break;
+
       case "sid_login.success":
         // call onSuccess if present
         if (typeof onSuccess === "function") {
@@ -355,7 +416,7 @@ export function createFlow(opts: CreateFlowOptions = {}) {
         break;
       case "sid_retry":
         // TODO replace with a check for ready state
-        if (!logInFn || !recoverFn) break;
+        if (!logInFn || !recoverFn || !sid) break;
 
         if (typeof cancelFn === "function") {
           cancelFn();
@@ -376,6 +437,7 @@ export function createFlow(opts: CreateFlowOptions = {}) {
           createAuthenticatingState(
             send,
             retryContext,
+            sid,
             logInFn,
             recoverFn,
             setRecoveryCodes
@@ -413,6 +475,9 @@ export function createFlow(opts: CreateFlowOptions = {}) {
     },
     setCancel: (fn: Cancel) => {
       cancelFn = fn;
+    },
+    setSdk: (sdk: SlashID) => {
+      sid = sdk;
     },
     state,
   };
