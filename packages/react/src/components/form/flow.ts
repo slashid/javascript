@@ -30,6 +30,7 @@ export interface AuthenticatingState {
   recover: () => void;
   logIn: () => void;
   setRecoveryCodes: (codes: string[]) => void;
+  updateContext: (context: AuthenticatingState["context"]) => void;
 }
 
 export interface SuccessState {
@@ -49,6 +50,11 @@ interface LoginEvent {
   type: "sid_login";
   config: LoginConfiguration;
   options?: LoginOptions;
+}
+
+interface AuthnContextUpdateEvent {
+  type: "sid_login.context_update";
+  context: AuthenticatingState["context"];
 }
 
 interface LoginSuccessEvent {
@@ -83,6 +89,7 @@ interface StoreRecoveryCodesEvent {
 type Event =
   | InitEvent
   | LoginEvent
+  | AuthnContextUpdateEvent
   | LoginSuccessEvent
   | LoginErrorEvent
   | RetryEvent
@@ -199,6 +206,9 @@ const createAuthenticatingState = (
     },
     logIn: performLogin,
     setRecoveryCodes,
+    updateContext: (context) => {
+      send({ type: "sid_login.context_update", context });
+    },
   };
 };
 
@@ -317,6 +327,26 @@ export function createFlow(opts: CreateFlowOptions = {}) {
           ),
           e
         );
+        break;
+      case "sid_login.context_update":
+        {
+          // TODO replace with a check for ready state
+          if (!logInFn || !recoverFn) break;
+
+          const loginContext: AuthenticatingState["context"] = e.context;
+
+          setState(
+            createAuthenticatingState(
+              send,
+              loginContext,
+              logInFn,
+              recoverFn,
+              setRecoveryCodes
+            ),
+            e
+          );
+        }
+
         break;
       case "sid_storeRecoveryCodes":
         // recovery codes are only stored on register authenticator

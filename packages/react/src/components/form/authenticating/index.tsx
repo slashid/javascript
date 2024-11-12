@@ -24,6 +24,9 @@ import { Delayed } from "@slashid/react-primitives";
 import { useInternalFormContext } from "../internal-context";
 import { AuthenticatingState } from "../flow";
 import { TIME_MS } from "../types";
+import { Loader } from "./icons";
+import { useSlashID } from "../../../main";
+import { AuthnContextUpdateChallengeReceivedEvent } from "@slashid/slashid";
 
 const DELAY_BEFORE_RETRY = TIME_MS.second * 30;
 
@@ -131,14 +134,21 @@ export function Authenticating({ children }: AuthenticatingTemplateProps) {
 
 export type AuthenticatingProps = Pick<Props, "flowState">;
 
+export type AuthnContextUpdateStatus = "loading" | "received" | "acknowledged";
+
 export const AuthenticatingImplementation = ({
   flowState,
 }: AuthenticatingProps) => {
   const factor = flowState.context.config.factor;
   const attempt = useRef(1);
   const isLoggingIn = useRef(false);
+  const { sid } = useSlashID();
+  const [authnContextUpdateStatus, setAuthnContextUpdateStatus] =
+    useState<AuthnContextUpdateStatus>("loading");
 
   const performLogin = useCallback(() => {
+    if (!sid) return;
+
     if (flowState.context.attempt > attempt.current) {
       attempt.current = flowState.context.attempt;
       isLoggingIn.current = false;
@@ -155,12 +165,66 @@ export const AuthenticatingImplementation = ({
      */
     flowState.logIn();
     isLoggingIn.current = true;
-  }, [flowState]);
+  }, [flowState, sid]);
+
+  const acknowledgeReady = useCallback(() => {
+    if (!sid) return;
+
+    console.log("Acknowledging authn context update");
+
+    sid.publish("authnContextUpdateAcknowledged", undefined);
+    setAuthnContextUpdateStatus("acknowledged");
+  }, [sid]);
+
+  useEffect(() => {
+    // subscribe to the authn context update event
+    if (!sid) return;
+
+    const onAuthnContextUpdateChallengeReceived = (
+      event: AuthnContextUpdateChallengeReceivedEvent
+    ) => {
+      console.log("Received authn context update challenge", event);
+      // update the authentication context in flow state
+      flowState.updateContext({
+        attempt: flowState.context.attempt,
+        config: {
+          // @ts-expect-error TODO @ivan fix this, a new Factor type is generated
+          factor: event.factor,
+          handle: flowState.context.config.handle,
+        },
+      });
+
+      // handle the challenge
+      setAuthnContextUpdateStatus("received");
+    };
+
+    sid.subscribe(
+      "authnContextUpdateChallengeReceivedEvent",
+      onAuthnContextUpdateChallengeReceived
+    );
+
+    // trigger login
+    performLogin();
+
+    return () => {
+      sid.unsubscribe(
+        "authnContextUpdateChallengeReceivedEvent",
+        onAuthnContextUpdateChallengeReceived
+      );
+    };
+    // unsubscribe from the authn context update event on cleanup
+  }, [flowState, performLogin, sid]);
+
+  if (authnContextUpdateStatus === "loading") {
+    <Wrapper>
+      <Loader />
+    </Wrapper>;
+  }
 
   if (isFactorOTP(factor)) {
     return (
       <Wrapper>
-        <OTPState flowState={flowState} performLogin={performLogin} />
+        <OTPState flowState={flowState} performLogin={acknowledgeReady} />
       </Wrapper>
     );
   }
@@ -168,7 +232,7 @@ export const AuthenticatingImplementation = ({
   if (isFactorPassword(factor)) {
     return (
       <Wrapper>
-        <PasswordState flowState={flowState} performLogin={performLogin} />
+        <PasswordState flowState={flowState} performLogin={acknowledgeReady} />
       </Wrapper>
     );
   }
@@ -176,14 +240,14 @@ export const AuthenticatingImplementation = ({
   if (isFactorTOTP(factor)) {
     return (
       <Wrapper>
-        <TOTPState flowState={flowState} performLogin={performLogin} />
+        <TOTPState flowState={flowState} performLogin={acknowledgeReady} />
       </Wrapper>
     );
   }
 
   return (
     <Wrapper>
-      <LoadingState flowState={flowState} performLogin={performLogin} />
+      <LoadingState flowState={flowState} performLogin={acknowledgeReady} />
     </Wrapper>
   );
 };
