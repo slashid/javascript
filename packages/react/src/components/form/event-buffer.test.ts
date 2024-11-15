@@ -84,4 +84,32 @@ describe("createEventBuffer", () => {
     });
     expect(callback).toHaveBeenCalledTimes(1);
   });
+
+  it("should only let the first subscriber consume the buffered events", () => {
+    const sdk = new MockSlashID({ analyticsEnabled: false, oid: "test" });
+    const eventBuffer = createEventBuffer({ sdk });
+    const firstCallback = vi.fn();
+    const secondCallback = vi.fn();
+
+    const testEvent = {
+      targetOrgId: "test org ID",
+    };
+
+    // Event before first subscription
+    sdk.mockPublish("authnContextUpdateChallengeReceivedEvent", testEvent);
+
+    // Subscribe to the event
+    eventBuffer.subscribe(
+      "authnContextUpdateChallengeReceivedEvent",
+      firstCallback
+    );
+    eventBuffer.subscribe(
+      "authnContextUpdateChallengeReceivedEvent",
+      secondCallback
+    );
+
+    expect(firstCallback).toHaveBeenCalledTimes(1);
+    expect(firstCallback).toHaveBeenCalledWith(testEvent);
+    expect(secondCallback).not.toHaveBeenCalled();
+  });
 });
