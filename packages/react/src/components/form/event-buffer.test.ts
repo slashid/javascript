@@ -12,14 +12,11 @@ describe("createEventBuffer", () => {
       targetOrgId: "test org ID",
     };
 
-    // Simulate event emissions
     sdk.mockPublish("authnContextUpdateChallengeReceivedEvent", testEvent);
     sdk.mockPublish("authnContextUpdateChallengeReceivedEvent", testEvent);
 
-    // Subscribe to the event
     eventBuffer.subscribe("authnContextUpdateChallengeReceivedEvent", callback);
 
-    // Verify that the callback is called with the buffered event
     expect(callback).toHaveBeenCalledWith(testEvent);
     expect(callback).toHaveBeenCalledTimes(2);
   });
@@ -58,7 +55,6 @@ describe("createEventBuffer", () => {
       targetOrgId: "orgId3",
     });
 
-    // Verify that the callback is called with the buffered event
     expect(firstCallback).toHaveBeenCalledTimes(3);
     expect(secondCallback).toHaveBeenCalledTimes(1);
     expect(secondCallback).toHaveBeenCalledWith(finalTestEvent);
@@ -83,9 +79,6 @@ describe("createEventBuffer", () => {
       targetOrgId: "2",
     });
 
-    // Subscribe to the event
-
-    // Verify that the callback is called with the buffered event
     expect(callback).toHaveBeenLastCalledWith({
       targetOrgId: "1",
     });
