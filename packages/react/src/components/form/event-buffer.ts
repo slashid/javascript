@@ -94,17 +94,20 @@ export function createEventBuffer({ sdk }: CreateEventBufferArgs): EventBuffer {
   }
 
   function destroy() {
+    console.log({ internalHandlers });
     // unsubscribe
-    internalHandlers.entries().forEach(([name, handler]) => {
+    internalHandlers.forEach((handler, name) => {
       sdk.unsubscribe(name, handler);
     });
 
     // clear
-    internalHandlers.keys().forEach((name) => {
+    internalHandlers.forEach((_, name) => {
       internalHandlers.delete(name);
     });
 
-    subscribers.keys().forEach((name) => {
+    subscribers.forEach((callbacks, name) => {
+      // clear all subscriptions from the SDK
+      callbacks.forEach((cb) => sdk.unsubscribe(name, cb));
       subscribers.delete(name);
     });
   }
