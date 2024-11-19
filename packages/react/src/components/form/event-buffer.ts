@@ -94,7 +94,6 @@ export function createEventBuffer({ sdk }: CreateEventBufferArgs): EventBuffer {
   }
 
   function destroy() {
-    console.log({ internalHandlers });
     // unsubscribe
     internalHandlers.forEach((handler, name) => {
       sdk.unsubscribe(name, handler);
