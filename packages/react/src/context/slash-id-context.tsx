@@ -82,8 +82,8 @@ export interface SlashIDProviderProps {
  */
 type ExternalStateParams = Pick<SlashIDProviderProps, "oid" | "initialToken">;
 
-type Subscribe = SlashID["subscribe"];
-type Unsubscribe = SlashID["unsubscribe"];
+export type Subscribe = SlashID["subscribe"];
+export type Unsubscribe = SlashID["unsubscribe"];
 
 export interface ISlashIDContext {
   sid: SlashID | undefined;
@@ -381,7 +381,7 @@ export const SlashIDProvider = ({
     [state]
   );
 
-  const unsubscribe = useCallback<Subscribe>(
+  const unsubscribe = useCallback<Unsubscribe>(
     (event, handler) => {
       if (state === "initial") {
         return;

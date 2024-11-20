@@ -181,17 +181,24 @@ describe("#Form", () => {
   test("should transition from authenticating to initial state on the back button click", async () => {
     // used to store the resolve callback
     let r: undefined | ((u: User) => void);
-    const logInMock = vi.fn(
-      () =>
-        new Promise<User>((resolve) => {
-          // keep a reference to resolve so we can resolve the promise to prevent memory leaks after the test is done
-          r = resolve;
-        })
-    );
+    const mockSlashID = new MockSlashID({
+      oid: "oid",
+      analyticsEnabled: false,
+    });
+    const logInMock = vi.fn(() => {
+      mockSlashID.mockPublish("authnContextUpdateChallengeReceivedEvent", {
+        targetOrgId: "oid",
+        factor: { method: "password" },
+      });
+      return new Promise<User>((resolve) => {
+        // keep a reference to resolve so we can resolve the promise to prevent memory leaks after the test is done
+        r = resolve;
+      });
+    });
     const user = userEvent.setup();
 
     render(
-      <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+      <TestSlashIDProvider sid={mockSlashID} sdkState="ready" logIn={logInMock}>
         <TestTextProvider text={TEXT}>
           <Form />
         </TestTextProvider>

@@ -243,7 +243,13 @@ describe("#Form -> Error state -> Special error cases", () => {
       analyticsEnabled: false,
     });
     const logInPromise = new Deferred<User>();
-    const logInMock = vi.fn(() => logInPromise);
+    const logInMock = vi.fn(() => {
+      mockSlashID.mockPublish("authnContextUpdateChallengeReceivedEvent", {
+        targetOrgId: "oid",
+        factor: { method: "password" },
+      });
+      return logInPromise;
+    });
     const user = userEvent.setup();
     const testTitle = "Recover non reachable handle";
 
@@ -297,7 +303,13 @@ describe("#Form -> Error state -> Special error cases", () => {
       analyticsEnabled: false,
     });
     const logInPromise = new Deferred<User>();
-    const logInMock = vi.fn(() => logInPromise);
+    const logInMock = vi.fn(() => {
+      mockSlashID.mockPublish("authnContextUpdateChallengeReceivedEvent", {
+        targetOrgId: "oid",
+        factor: { method: "password" },
+      });
+      return logInPromise;
+    });
     const user = userEvent.setup();
     const testTitle = "Recover non reachable handle";
 
@@ -320,6 +332,7 @@ describe("#Form -> Error state -> Special error cases", () => {
     inputUsername("non-reachable");
 
     user.click(screen.getByTestId("sid-form-initial-submit-button"));
+    console.log("clicked");
 
     // go to authenticating state
     await expect(
