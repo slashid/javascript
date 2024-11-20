@@ -332,7 +332,6 @@ describe("#Form -> Error state -> Special error cases", () => {
     inputUsername("non-reachable");
 
     user.click(screen.getByTestId("sid-form-initial-submit-button"));
-    console.log("clicked");
 
     // go to authenticating state
     await expect(
