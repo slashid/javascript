@@ -299,7 +299,7 @@ export const SlashIDProvider = ({
 
         const newUser = await sid
           // @ts-expect-error TODO make the identifier optional
-          .idV2(oid, identifier, factor)
+          .id(oid, identifier, factor)
           .then(async (user) => {
             return applyMiddleware({ user, sid, middleware });
           });

@@ -11,6 +11,11 @@ function decodeToken(token: string): string {
 
 export const User = () => {
   const { user } = useSlashID();
+
+  if (!user) {
+    return null;
+  }
+
   return (
     <>
       <h3>User token</h3>

@@ -363,8 +363,8 @@ importers:
         specifier: ^8.0.2
         version: 8.3.1
       '@slashid/slashid':
-        specifier: 3.27.4-org-retarget-beta.8
-        version: 3.27.4-org-retarget-beta.8
+        specifier: 3.27.4-org-retarget-beta.9
+        version: 3.27.4-org-retarget-beta.9
       '@storybook/addon-essentials':
         specifier: 7.6.19
         version: 7.6.19(@types/react-dom@18.2.15)(@types/react@18.2.37)(react-dom@18.2.0)(react@18.2.0)
@@ -8354,8 +8354,8 @@ packages:
       uuid: 8.3.2
     dev: false
 
-  /@slashid/slashid@3.27.4-org-retarget-beta.8:
-    resolution: {integrity: sha512-IPW57L3cA49lJkByHyzdPUsa1pKz6tPJQQ3fjwzySqLBla90DXzg38jJ6uXyS3pEo+hVrIE7HUZ8lMXTYB0T5A==}
+  /@slashid/slashid@3.27.4-org-retarget-beta.9:
+    resolution: {integrity: sha512-tFeBDgww/lCWgk1YL7aYX99qKaZxYHwUPJigzdw9HQtlSiUsiBsTl+Y+cVeZJmqBD2us/NUraCMhVd5otse5Zw==}
     dependencies:
       '@changesets/cli': 2.27.7
       '@types/uuid': 8.3.4

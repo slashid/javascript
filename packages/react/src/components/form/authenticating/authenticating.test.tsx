@@ -27,6 +27,7 @@ function createTestAuhenticatingState({
     retry: jest.fn(),
     cancel: jest.fn(),
     recover: jest.fn(),
+    updateContext: jest.fn(),
     setRecoveryCodes: jest.fn(),
   };
 }
