@@ -3,8 +3,8 @@ import { Form, Slot, ConfigurationProvider } from "@slashid/react";
 import { PageLayout } from "../../components/PageLayout";
 
 import "@slashid/react/style.css";
-import { Handle } from "@slashid/react/dist/domain/types";
 import { useState } from "react";
+import { Handle } from "@slashid/react/dist/react/src/domain/types";
 
 const factors: Factor[] = [{ method: "email_link" }];
 

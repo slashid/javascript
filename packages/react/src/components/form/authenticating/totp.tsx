@@ -63,8 +63,8 @@ function getTextKeys(formState: FormState) {
   return TEXT_KEYS[formState];
 }
 
-export function TOTPState({ flowState, performLogin }: Props) {
-  const { sid } = useSlashID();
+export function TOTPState({ flowState }: Props) {
+  const { sid, subscribe, unsubscribe } = useSlashID();
   const { text } = useConfiguration();
   const { values, registerField, registerSubmit, setError, clearError } =
     useForm();
@@ -101,22 +101,17 @@ export function TOTPState({ flowState, performLogin }: Props) {
       setFormState("input");
     };
 
-    sid?.subscribe(
-      "otpIncorrectCodeSubmitted",
-      otpIncorrectCodeSubmittedHandler
-    );
-    sid?.subscribe("totpCodeRequested", totpCodeRequestedHandler);
-    sid?.subscribe("totpKeyGenerated", totpKeyGeneratedHandler);
-
-    performLogin();
+    subscribe("otpIncorrectCodeSubmitted", otpIncorrectCodeSubmittedHandler);
+    subscribe("totpCodeRequested", totpCodeRequestedHandler);
+    subscribe("totpKeyGenerated", totpKeyGeneratedHandler);
 
     return () => {
-      sid?.unsubscribe(
+      unsubscribe(
         "otpIncorrectCodeSubmitted",
         otpIncorrectCodeSubmittedHandler
       );
-      sid?.unsubscribe("totpCodeRequested", totpCodeRequestedHandler);
-      sid?.unsubscribe("totpKeyGenerated", totpKeyGeneratedHandler);
+      unsubscribe("totpCodeRequested", totpCodeRequestedHandler);
+      unsubscribe("totpKeyGenerated", totpKeyGeneratedHandler);
     };
   }, [
     formState,
@@ -124,9 +119,10 @@ export function TOTPState({ flowState, performLogin }: Props) {
     sid,
     text,
     values,
-    performLogin,
     flowState,
     isRegisterFlow,
+    subscribe,
+    unsubscribe,
   ]);
 
   const handleChange = useCallback(

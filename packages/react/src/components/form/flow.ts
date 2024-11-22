@@ -13,6 +13,11 @@ import { ensureError } from "../../domain/errors";
 import { isFactorRecoverable } from "../../domain/handles";
 import { StoreRecoveryCodesState } from "./store-recovery-codes";
 
+export type AuthnContext = {
+  config: LoginConfiguration;
+  options?: LoginOptions;
+  attempt: number;
+};
 export interface InitialState {
   status: "initial";
   logIn: (config: LoginConfiguration, options?: LoginOptions) => void;
@@ -20,13 +25,10 @@ export interface InitialState {
 
 export interface AuthenticatingState {
   status: "authenticating";
-  context: {
-    config: LoginConfiguration;
-    options?: LoginOptions;
-    attempt: number;
-  };
+  context: AuthnContext;
   retry: Retry;
   cancel: Cancel;
+  updateContext: (context: AuthnContext) => void;
   recover: () => void;
   logIn: () => void;
   setRecoveryCodes: (codes: string[]) => void;
@@ -49,6 +51,11 @@ interface LoginEvent {
   type: "sid_login";
   config: LoginConfiguration;
   options?: LoginOptions;
+}
+
+interface UpdateAuthnContextEvent {
+  type: "sid_login.update_context";
+  context: AuthnContext;
 }
 
 interface LoginSuccessEvent {
@@ -83,6 +90,7 @@ interface StoreRecoveryCodesEvent {
 type Event =
   | InitEvent
   | LoginEvent
+  | UpdateAuthnContextEvent
   | LoginSuccessEvent
   | LoginErrorEvent
   | RetryEvent
@@ -199,6 +207,12 @@ const createAuthenticatingState = (
     },
     logIn: performLogin,
     setRecoveryCodes,
+    updateContext: (newContext: AuthnContext) => {
+      send({
+        type: "sid_login.update_context",
+        context: newContext,
+      });
+    },
   };
 };
 
@@ -327,6 +341,27 @@ export function createFlow(opts: CreateFlowOptions = {}) {
 
         setState(
           createStoreRecoveryCodesState(send, recoveryCodes!, e.user),
+          e
+        );
+        break;
+      case "sid_login.update_context":
+        // TODO replace with a check for ready state
+        if (!logInFn || !recoverFn) break;
+
+        const updatedContext: AuthnContext = {
+          config: e.context.config,
+          options: e.context.options,
+          attempt: e.context.attempt,
+        };
+
+        setState(
+          createAuthenticatingState(
+            send,
+            updatedContext,
+            logInFn,
+            recoverFn,
+            setRecoveryCodes
+          ),
           e
         );
         break;

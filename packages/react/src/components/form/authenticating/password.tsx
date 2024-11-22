@@ -137,8 +137,8 @@ function getTextKeys(
  * Renders a form that enables authentication via a password.
  * Handles retries in case of submitting an invalid/incorrect password.
  */
-export const PasswordState = ({ flowState, performLogin }: Props) => {
-  const { sid } = useSlashID();
+export const PasswordState = ({ flowState }: Props) => {
+  const { sid, subscribe, unsubscribe } = useSlashID();
   const { text } = useConfiguration();
   const {
     values,
@@ -243,20 +243,18 @@ export const PasswordState = ({ flowState, performLogin }: Props) => {
         ),
       });
 
-    sid?.subscribe("passwordSetReady", onSetPassword);
-    sid?.subscribe("passwordVerifyReady", onVerifyPassword);
-    sid?.subscribe("incorrectPasswordSubmitted", onIncorrectPassword);
-    sid?.subscribe("invalidPasswordSubmitted", onInvalidPassword);
-
-    performLogin();
+    subscribe("passwordSetReady", onSetPassword);
+    subscribe("passwordVerifyReady", onVerifyPassword);
+    subscribe("incorrectPasswordSubmitted", onIncorrectPassword);
+    subscribe("invalidPasswordSubmitted", onInvalidPassword);
 
     return () => {
-      sid?.unsubscribe("passwordSetReady", onSetPassword);
-      sid?.unsubscribe("passwordVerifyReady", onVerifyPassword);
-      sid?.unsubscribe("incorrectPasswordSubmitted", onIncorrectPassword);
-      sid?.unsubscribe("invalidPasswordSubmitted", onInvalidPassword);
+      unsubscribe("passwordSetReady", onSetPassword);
+      unsubscribe("passwordVerifyReady", onVerifyPassword);
+      unsubscribe("incorrectPasswordSubmitted", onIncorrectPassword);
+      unsubscribe("invalidPasswordSubmitted", onInvalidPassword);
     };
-  }, [formState, performLogin, setError, sid, text, values]);
+  }, [formState, setError, sid, subscribe, text, unsubscribe, values]);
 
   return (
     <>

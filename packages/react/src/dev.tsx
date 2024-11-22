@@ -387,6 +387,7 @@ root.render(
             cancel: () => {},
             recover: () => {},
             logIn: () => {},
+            updateContext: () => {},
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             setRecoveryCodes: (_code: string[]) => {},
           };

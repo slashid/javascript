@@ -243,7 +243,13 @@ describe("#Form -> Error state -> Special error cases", () => {
       analyticsEnabled: false,
     });
     const logInPromise = new Deferred<User>();
-    const logInMock = vi.fn(() => logInPromise);
+    const logInMock = vi.fn(() => {
+      mockSlashID.mockPublish("authnContextUpdateChallengeReceivedEvent", {
+        targetOrgId: "oid",
+        factor: { method: "password" },
+      });
+      return logInPromise;
+    });
     const user = userEvent.setup();
     const testTitle = "Recover non reachable handle";
 
@@ -297,7 +303,13 @@ describe("#Form -> Error state -> Special error cases", () => {
       analyticsEnabled: false,
     });
     const logInPromise = new Deferred<User>();
-    const logInMock = vi.fn(() => logInPromise);
+    const logInMock = vi.fn(() => {
+      mockSlashID.mockPublish("authnContextUpdateChallengeReceivedEvent", {
+        targetOrgId: "oid",
+        factor: { method: "password" },
+      });
+      return logInPromise;
+    });
     const user = userEvent.setup();
     const testTitle = "Recover non reachable handle";
 
