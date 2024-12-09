@@ -48,6 +48,8 @@ function SlashIDProviderSSR({
       mfa: () => Promise.reject("Operation not possible in this state"),
       recover: () => Promise.reject("Operation not possible in this state"),
       validateToken: async () => false,
+      subscribe: () => undefined,
+      unsubscribe: () => undefined,
       __switchOrganizationInContext: async () => undefined,
       __syncExternalState() {
         throw new Error("Operation not possible in this state");

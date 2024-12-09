@@ -26,6 +26,10 @@ import { SDKState } from "../domain/sdk-state";
 import { applyMiddleware } from "../middleware";
 import { isAnonymous } from "../domain/user";
 import { sequence } from "../components/utils";
+import {
+  createEventBuffer,
+  EventBuffer,
+} from "../components/form/event-buffer";
 
 export type StorageOption = "memory" | "localStorage" | "cookie";
 
@@ -78,6 +82,9 @@ export interface SlashIDProviderProps {
  */
 type ExternalStateParams = Pick<SlashIDProviderProps, "oid" | "initialToken">;
 
+export type Subscribe = SlashID["subscribe"];
+export type Unsubscribe = SlashID["unsubscribe"];
+
 export interface ISlashIDContext {
   sid: SlashID | undefined;
   user: User | undefined;
@@ -85,6 +92,8 @@ export interface ISlashIDContext {
   sdkState: SDKState;
   logOut: () => undefined;
   logIn: LogIn;
+  subscribe: Subscribe;
+  unsubscribe: Unsubscribe;
   mfa: MFA;
   recover: Recover;
   validateToken: (token: string) => Promise<boolean>;
@@ -101,6 +110,8 @@ export const initialContextValue = {
   logIn: () => Promise.reject("NYI"),
   mfa: () => Promise.reject("NYI"),
   recover: () => Promise.reject("NYI"),
+  subscribe: () => undefined,
+  unsubscribe: () => undefined,
   validateToken: async () => false,
   __switchOrganizationInContext: async () => undefined,
   __syncExternalState: async () => undefined,
@@ -146,6 +157,7 @@ export const SlashIDProvider = ({
   );
   const storageRef = useRef<Storage | undefined>(undefined);
   const sidRef = useRef<SlashID | undefined>(undefined);
+  const eventBufferRef = useRef<EventBuffer | undefined>();
 
   /**
    * Restarts the React SDK lifecycle with a new
@@ -348,6 +360,48 @@ export const SlashIDProvider = ({
     [state]
   );
 
+  const subscribe = useCallback<Subscribe>(
+    (event, handler) => {
+      if (state === "initial") {
+        return;
+      }
+
+      const sid = sidRef.current;
+      if (!sid) {
+        return;
+      }
+
+      if (!eventBufferRef.current) {
+        eventBufferRef.current = createEventBuffer({ sdk: sid });
+      }
+
+      // @ts-expect-error no idea why it complains
+      eventBufferRef.current.subscribe(event, handler);
+    },
+    [state]
+  );
+
+  const unsubscribe = useCallback<Unsubscribe>(
+    (event, handler) => {
+      if (state === "initial") {
+        return;
+      }
+
+      const sid = sidRef.current;
+      if (!sid) {
+        return;
+      }
+
+      if (!eventBufferRef.current) {
+        return;
+      }
+
+      // @ts-expect-error no idea why it complains
+      eventBufferRef.current.unsubscribe(event, handler);
+    },
+    [state]
+  );
+
   const validateToken = useCallback(
     async (token: string): Promise<boolean> => {
       const tokenUser = new User(token, sidRef.current!);
@@ -521,6 +575,8 @@ export const SlashIDProvider = ({
         mfa,
         recover,
         validateToken,
+        subscribe,
+        unsubscribe,
         __switchOrganizationInContext,
         __syncExternalState,
       };
@@ -535,6 +591,8 @@ export const SlashIDProvider = ({
       logIn,
       mfa,
       recover,
+      subscribe,
+      unsubscribe,
       validateToken,
       __switchOrganizationInContext,
       __syncExternalState,
@@ -547,6 +605,8 @@ export const SlashIDProvider = ({
     logIn,
     mfa,
     recover,
+    subscribe,
+    unsubscribe,
     validateToken,
     __switchOrganizationInContext,
     __syncExternalState,

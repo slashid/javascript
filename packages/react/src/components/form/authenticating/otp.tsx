@@ -66,9 +66,9 @@ function mapFormStateToMessageState(
  * Presents the user with a form to enter an OTP code.
  * Handles retries in case of submitting an incorrect OTP code.
  */
-export const OTPState = ({ flowState, performLogin }: Props) => {
+export const OTPState = ({ flowState }: Props) => {
   const { text } = useConfiguration();
-  const { sid } = useSlashID();
+  const { sid, subscribe, unsubscribe } = useSlashID();
   const { values, registerField, registerSubmit, setError, clearError } =
     useForm();
   const [formState, setFormState] = useState<FormState>("initial");
@@ -91,18 +91,14 @@ export const OTPState = ({ flowState, performLogin }: Props) => {
       setFormState("input");
     };
 
-    sid?.subscribe("otpCodeSent", onOtpCodeSent);
-    sid?.subscribe("otpIncorrectCodeSubmitted", onOtpIncorrectCodeSubmitted);
-    performLogin();
+    subscribe("otpCodeSent", onOtpCodeSent);
+    subscribe("otpIncorrectCodeSubmitted", onOtpIncorrectCodeSubmitted);
 
     return () => {
-      sid?.unsubscribe("otpCodeSent", onOtpCodeSent);
-      sid?.unsubscribe(
-        "otpIncorrectCodeSubmitted",
-        onOtpIncorrectCodeSubmitted
-      );
+      unsubscribe("otpCodeSent", onOtpCodeSent);
+      unsubscribe("otpIncorrectCodeSubmitted", onOtpIncorrectCodeSubmitted);
     };
-  }, [formState, performLogin, setError, sid, text, values]);
+  }, [formState, setError, sid, subscribe, text, unsubscribe, values]);
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = useCallback(
     (e) => {
