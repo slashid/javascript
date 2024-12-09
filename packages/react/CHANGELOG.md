@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 1.31.0
+
+### Minor Changes
+
+- d0ae84d: Add a buffered event subscription mechanism. Wait for the core SDK to establish the authentication context.
+
 ## 1.30.0
 
 ### Minor Changes
