@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 1.31.1
+
+### Patch Changes
+
+- 505bfc6: Fix factor select bug in Safari
+
 ## 1.31.0
 
 ### Minor Changes
