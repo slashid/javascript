@@ -24,6 +24,7 @@ type Props = {
   type?: "text" | "email" | "tel";
   items: Item[];
   defaultValue?: string;
+  placeholder?: string;
   onChange: (value: string) => void;
   disabled?: boolean;
   contentProps?: Select.SelectContentProps;
@@ -33,6 +34,7 @@ export const Dropdown: React.FC<Props> = ({
   label,
   items,
   defaultValue,
+  placeholder,
   onChange,
   className,
   contentProps,
@@ -61,7 +63,7 @@ export const Dropdown: React.FC<Props> = ({
             {label}
           </label>
           <div className={clsx("sid-dropdown__trigger__input", styles.input)}>
-            <Select.Value />
+            <Select.Value placeholder={placeholder}/>
           </div>
           <ChevronDown
             className={clsx("sid-dropdown__trigger__icon", styles.icon)}
