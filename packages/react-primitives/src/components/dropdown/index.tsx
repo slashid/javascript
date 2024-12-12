@@ -50,7 +50,10 @@ export const Dropdown: React.FC<Props> = ({
   );
 
   return (
-    <div className="sid-dropdown">
+    <div className={clsx("sid-dropdown beta", styles.wrapper)}>
+      <label className={clsx("sid-dropdown__trigger__label", styles.label)}>
+        {label}
+      </label>
       <Select.Root
         disabled={disabled}
         onValueChange={onSelectCallback}
@@ -59,15 +62,14 @@ export const Dropdown: React.FC<Props> = ({
         <Select.Trigger
           className={clsx("sid-dropdown__trigger", styles.trigger, className)}
         >
-          <label className={clsx("sid-dropdown__trigger__label", styles.label)}>
-            {label}
-          </label>
           <div className={clsx("sid-dropdown__trigger__input", styles.input)}>
-            <Select.Value placeholder={placeholder}/>
+            <Select.Value placeholder={placeholder} />
           </div>
-          <ChevronDown
+          <Select.Icon
             className={clsx("sid-dropdown__trigger__icon", styles.icon)}
-          />
+          >
+            <ChevronDown />
+          </Select.Icon>
         </Select.Trigger>
 
         <Select.Content

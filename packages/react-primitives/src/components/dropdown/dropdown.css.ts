@@ -3,9 +3,8 @@ import { publicVariables, theme } from "../../theme/theme.css";
 
 export const trigger = style({
   display: "flex",
-  alignItems: "flex-start",
-  justifyContent: "center",
-  flexDirection: "column",
+  alignItems: "end",
+  justifyContent: "space-between",
   width: "100%",
   minWidth: theme.input.minWidth,
   height: theme.input.height,
@@ -38,6 +37,9 @@ export const label = style({
   fontSize: theme.font.size.xs,
   fontWeight: theme.font.weight.semibold,
   color: publicVariables.input.label.color,
+  position: "absolute",
+  top: 12,
+  left: 16,
 });
 
 export const input = style({
@@ -86,7 +88,7 @@ export const item = style({
 export const icon = style({
   position: "absolute",
   right: "16px",
-  zIndex: 0,
+  top: "22px",
 
   selectors: {
     [`${trigger}[data-state='open'] > &`]: {
@@ -99,4 +101,8 @@ export const selectedIcon = style({
   height: "16px",
   marginLeft: "auto",
   justifySelf: "flex-end",
+});
+
+export const wrapper = style({
+  position: "relative",
 });
