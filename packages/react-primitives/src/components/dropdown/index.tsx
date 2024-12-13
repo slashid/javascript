@@ -50,7 +50,7 @@ export const Dropdown: React.FC<Props> = ({
   );
 
   return (
-    <div className={clsx("sid-dropdown beta", styles.wrapper)}>
+    <div className={clsx("sid-dropdown", styles.wrapper)}>
       <label className={clsx("sid-dropdown__trigger__label", styles.label)}>
         {label}
       </label>
