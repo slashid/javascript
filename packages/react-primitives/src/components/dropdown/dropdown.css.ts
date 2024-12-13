@@ -85,13 +85,15 @@ export const item = style({
   },
 });
 
-export const icon = style({
+export const iconWrapper = style({
   position: "absolute",
   right: "16px",
   top: "22px",
+});
 
+export const icon = style({
   selectors: {
-    [`${trigger}[data-state='open'] > &`]: {
+    [`${trigger}[data-state='open']  &`]: {
       transform: "rotate(180deg)",
     },
   },

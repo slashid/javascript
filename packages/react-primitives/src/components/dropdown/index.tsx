@@ -53,7 +53,7 @@ export const Dropdown: React.FC<Props> = ({
     <div className={clsx("sid-dropdown", styles.wrapper)}>
       {/**
        * The label needs to live outside of the Select.Root, this ensures
-       * correct Select behaviour in Safari (iOS). It's still positioned absolutely, 
+       * correct Select behaviour in Safari (iOS). It's still positioned absolutely,
        * so it appears as part of the Select in the UI.
        */}
       <label className={clsx("sid-dropdown__trigger__label", styles.label)}>
@@ -70,10 +70,10 @@ export const Dropdown: React.FC<Props> = ({
           <div className={clsx("sid-dropdown__trigger__input", styles.input)}>
             <Select.Value placeholder={placeholder} />
           </div>
-          <Select.Icon
-            className={clsx("sid-dropdown__trigger__icon", styles.icon)}
-          >
-            <ChevronDown />
+          <Select.Icon className={styles.iconWrapper}>
+            <ChevronDown
+              className={clsx("sid-dropdown__trigger__icon", styles.icon)}
+            />
           </Select.Icon>
         </Select.Trigger>
 
