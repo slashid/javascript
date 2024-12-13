@@ -39,7 +39,7 @@ export const label = style({
   color: publicVariables.input.label.color,
   position: "absolute",
   top: 12,
-  left: 16,
+  left: 17,
 });
 
 export const input = style({
