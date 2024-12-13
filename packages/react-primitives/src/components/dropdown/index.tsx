@@ -24,6 +24,7 @@ type Props = {
   type?: "text" | "email" | "tel";
   items: Item[];
   defaultValue?: string;
+  placeholder?: string;
   onChange: (value: string) => void;
   disabled?: boolean;
   contentProps?: Select.SelectContentProps;
@@ -33,6 +34,7 @@ export const Dropdown: React.FC<Props> = ({
   label,
   items,
   defaultValue,
+  placeholder,
   onChange,
   className,
   contentProps,
@@ -48,7 +50,15 @@ export const Dropdown: React.FC<Props> = ({
   );
 
   return (
-    <div className="sid-dropdown">
+    <div className={clsx("sid-dropdown", styles.wrapper)}>
+      {/**
+       * The label needs to live outside of the Select.Root, this ensures
+       * correct Select behaviour in Safari (iOS). It's still positioned absolutely,
+       * so it appears as part of the Select in the UI.
+       */}
+      <label className={clsx("sid-dropdown__trigger__label", styles.label)}>
+        {label}
+      </label>
       <Select.Root
         disabled={disabled}
         onValueChange={onSelectCallback}
@@ -57,15 +67,14 @@ export const Dropdown: React.FC<Props> = ({
         <Select.Trigger
           className={clsx("sid-dropdown__trigger", styles.trigger, className)}
         >
-          <label className={clsx("sid-dropdown__trigger__label", styles.label)}>
-            {label}
-          </label>
           <div className={clsx("sid-dropdown__trigger__input", styles.input)}>
-            <Select.Value />
+            <Select.Value placeholder={placeholder} />
           </div>
-          <ChevronDown
-            className={clsx("sid-dropdown__trigger__icon", styles.icon)}
-          />
+          <Select.Icon className={styles.iconWrapper}>
+            <ChevronDown
+              className={clsx("sid-dropdown__trigger__icon", styles.icon)}
+            />
+          </Select.Icon>
         </Select.Trigger>
 
         <Select.Content
