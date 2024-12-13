@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 0.6.1
+
+### Patch Changes
+
+- 40cfeaf: Cleanup Radix dependencies
+
 ## 0.6.0
 
 ### Minor Changes
