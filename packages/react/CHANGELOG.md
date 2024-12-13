@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 1.31.2
+
+### Patch Changes
+
+- 40cfeaf: Cleanup Radix dependencies
+
 ## 1.31.1
 
 ### Patch Changes
