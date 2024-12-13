@@ -20,10 +20,10 @@ const DefaultFallback = () => {
 
   return (
     <Dropdown
-      defaultValue={""}
+      defaultValue={"-"}
       disabled={true}
       className={className}
-      items={[{ label: "-", value: "" }]}
+      items={[{ label: "-", value: "-" }]}
       onChange={noop}
       label={text["org.switcher.label"]}
     />
