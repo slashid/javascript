@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 0.6.2
+
+### Patch Changes
+
+- 2279d6b: Fix the line-height of select label for CSS reset
+
 ## 0.6.1
 
 ### Patch Changes
