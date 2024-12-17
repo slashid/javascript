@@ -36,6 +36,7 @@ export const trigger = style({
 export const label = style({
   fontSize: theme.font.size.xs,
   fontWeight: theme.font.weight.semibold,
+  lineHeight: "118%",
   color: publicVariables.input.label.color,
   position: "absolute",
   top: 12,

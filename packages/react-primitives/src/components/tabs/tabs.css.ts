@@ -18,6 +18,7 @@ export const trigger = style({
   justifyContent: "center",
   flex: "1",
   textAlign: "center",
+  lineHeight: "118%",
 
   selectors: {
     '&[data-state="active"]': {
