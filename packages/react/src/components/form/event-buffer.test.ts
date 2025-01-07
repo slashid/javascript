@@ -85,7 +85,7 @@ describe("createEventBuffer", () => {
     expect(callback).toHaveBeenCalledTimes(1);
   });
 
-  it.only("should buffer events after all subscribers unsubscribe from an event and replay them to the first subscriber", () => {
+  it("should buffer events after all subscribers unsubscribe from an event and replay them to the first subscriber", () => {
     const sdk = new MockSlashID({ analyticsEnabled: false, oid: "test" });
     const eventBuffer = createEventBuffer({ sdk });
     const callback = vi.fn();
