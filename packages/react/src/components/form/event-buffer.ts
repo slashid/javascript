@@ -26,7 +26,10 @@ export function createEventBuffer({ sdk }: CreateEventBufferArgs): EventBuffer {
   Utils.PUBLIC_READ_EVENTS.forEach((publicReadEventName: EventNames) => {
     // create an event handler
     const handler = (event: Event) => {
-      if (subscribers.has(publicReadEventName)) {
+      if (
+        subscribers.has(publicReadEventName) &&
+        subscribers.get(publicReadEventName)?.length
+      ) {
         // if there is a subscriber for this event type just ignore
         return;
       }
@@ -79,7 +82,7 @@ export function createEventBuffer({ sdk }: CreateEventBufferArgs): EventBuffer {
   function unsubscribe(eventType: EventNames, callback: EventCallback) {
     sdk.unsubscribe(eventType, callback);
 
-    if (!subscribers.has(eventType)) {
+    if (!subscribers.has(eventType) || !subscribers.get(eventType)?.length) {
       return;
     }
 
