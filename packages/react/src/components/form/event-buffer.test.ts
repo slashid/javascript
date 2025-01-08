@@ -85,6 +85,44 @@ describe("createEventBuffer", () => {
     expect(callback).toHaveBeenCalledTimes(1);
   });
 
+  it("should buffer events after all subscribers unsubscribe from an event and replay them to the first subscriber", () => {
+    const sdk = new MockSlashID({ analyticsEnabled: false, oid: "test" });
+    const eventBuffer = createEventBuffer({ sdk });
+    const callback = vi.fn();
+
+    // subscribe
+    eventBuffer.subscribe("authnContextUpdateChallengeReceivedEvent", callback);
+
+    sdk.mockPublish("authnContextUpdateChallengeReceivedEvent", {
+      targetOrgId: "1",
+    });
+
+    // unsubscribe
+    eventBuffer.unsubscribe(
+      "authnContextUpdateChallengeReceivedEvent",
+      callback
+    );
+    sdk.mockPublish("authnContextUpdateChallengeReceivedEvent", {
+      targetOrgId: "2",
+    });
+
+    expect(callback).toHaveBeenLastCalledWith({
+      targetOrgId: "1",
+    });
+    expect(callback).toHaveBeenCalledTimes(1);
+
+    // subscribe again
+    // there was a bug where we incorrectly managed internal state and didn't buffer events after the last subscriber unsubscribed
+    eventBuffer.subscribe("authnContextUpdateChallengeReceivedEvent", callback);
+
+    // this should replay the event that was missed
+
+    expect(callback).toHaveBeenLastCalledWith({
+      targetOrgId: "2",
+    });
+    expect(callback).toHaveBeenCalledTimes(2);
+  });
+
   it("should only let the first subscriber consume the buffered events", () => {
     const sdk = new MockSlashID({ analyticsEnabled: false, oid: "test" });
     const eventBuffer = createEventBuffer({ sdk });
