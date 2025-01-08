@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 1.31.4
+
+### Patch Changes
+
+- 9554f25: Fixed: event buffer wasn't buffering events after all subscribers stopped listening for a particular event
+
 ## 1.31.3
 
 ### Patch Changes
