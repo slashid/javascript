@@ -1,5 +1,12 @@
 # kyc-demo
 
+## 0.1.70
+
+### Patch Changes
+
+- Updated dependencies [9554f25]
+  - @slashid/react@1.31.4
+
 ## 0.1.69
 
 ### Patch Changes
