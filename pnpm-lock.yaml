@@ -348,8 +348,8 @@ importers:
         specifier: ^8.0.2
         version: 8.3.1
       '@slashid/slashid':
-        specifier: 3.28.0
-        version: 3.28.0
+        specifier: 3.28.1-hrd-console.0
+        version: 3.28.1-hrd-console.0
       '@storybook/addon-essentials':
         specifier: 7.6.19
         version: 7.6.19(@types/react-dom@18.2.15)(@types/react@18.2.37)(react-dom@18.2.0)(react@18.2.0)
@@ -8753,6 +8753,23 @@ packages:
       ua-parser-js: 1.0.37
       url: 0.11.3
       uuid: 8.3.2
+    dev: false
+
+  /@slashid/slashid@3.28.1-hrd-console.0:
+    resolution: {integrity: sha512-PSYLsagPeAYjbmfmpcTmjFL08GsY+bBHPtfREoyO/bpTeT3UHBlaGbIN69Ma5U0iDLX0cn7k5uxVILl5BkmiAw==}
+    dependencies:
+      '@changesets/cli': 2.27.7
+      '@types/uuid': 8.3.4
+      compare-versions: 6.1.0
+      docdash: 1.2.0
+      jwt-decode: 3.1.2
+      qrcode: 1.5.3
+      querystring-es3: 0.2.1
+      regenerator-runtime: 0.13.11
+      ua-parser-js: 1.0.37
+      url: 0.11.3
+      uuid: 8.3.2
+    dev: true
 
   /@storybook/addon-actions@7.6.19:
     resolution: {integrity: sha512-ATLrA5QKFJt7tIAScRHz5T3eBQ+RG3jaZk08L7gChvyQZhei8knWwePElZ7GaWbCr9BgznQp1lQUUXq/UUblAQ==}
@@ -19491,6 +19508,7 @@ packages:
 
   /semver@5.7.2:
     resolution: {integrity: sha512-cBznnQ9KjJqU67B52RMC65CMarK2600WFnbkcaiwWq3xy/5haFJlshgnpjovMVJ+Hff49d8GEn0b87C5pDQ10g==}
+    hasBin: true
 
   /semver@6.3.1:
     resolution: {integrity: sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==}

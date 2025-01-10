@@ -171,6 +171,7 @@ const ConfiguredDynamicFlow = () => {
 };
 
 const BasicForm = () => {
+  const { user } = useSlashID();
   return (
     <ConfigurationProvider
       factors={[
@@ -205,21 +206,26 @@ const BasicForm = () => {
       supportURL="https://www.google.com"
       alternativeAuthURL="https://www.google.com"
     >
-      <SlashIDLoaded>
-        <>
-          <LoggedIn>
-            MFA
-            <Form factors={[{ method: "totp" }]} />
-          </LoggedIn>
-          <LoggedOut>
-            <Form
-              onError={(error, context) =>
-                console.log("onError", { error, context })
-              }
-            />
-          </LoggedOut>
-        </>
-      </SlashIDLoaded>
+      <>
+        <LoggedIn>
+          <button
+            onClick={() =>
+              user?.getTokenForOrganization(
+                "971dd52c-c5a5-2260-aa01-71b2c3d9fcb3"
+              )
+            }
+          >
+            Switch org
+          </button>
+        </LoggedIn>
+        <LoggedOut>
+          <Form
+            onError={(error, context) =>
+              console.log("onError", { error, context })
+            }
+          />
+        </LoggedOut>
+      </>
     </ConfigurationProvider>
   );
 };
@@ -336,12 +342,12 @@ root.render(
       themeProps={{ theme: "dark" }}
       tokenStorage="localStorage"
       analyticsEnabled={false}
-      environment="sandbox"
-      anonymousUsersEnabled
-      // environment={{
-      //   baseURL: "https://api.slashid.local",
-      //   sdkURL: "https://jump.slashid.local/sdk.html"
-      // }}
+      // environment="sandbox"
+      // anonymousUsersEnabled
+      environment={{
+        baseURL: "https://api.slashid.local",
+        sdkURL: "https://jump.slashid.local/sdk.html",
+      }}
     >
       <LogOut />
       <div className="layout">
@@ -350,24 +356,24 @@ root.render(
             <h2>Basic form</h2>
             <BasicForm />
           </div>
-          <div style={vars}>
+          {/* <div style={vars}>
             <h2>Composed form</h2>
             <ComposedForm />
-          </div>
+          </div> */}
         </div>
         <div>
-          <div>
+          {/* <div>
             <h2>Switch to default org</h2>
             <Config />
           </div>
           <div>
             <h2>Dynamic flow - factor based on handle</h2>
             <ConfiguredDynamicFlow />
-          </div>
+          </div> */}
         </div>
       </div>
 
-      <div className="states">
+      {/* <div className="states">
         {(() => {
           const forcedEmailMagicLinkLoadingState: AuthenticatingState = {
             status: "authenticating",
@@ -398,7 +404,7 @@ root.render(
             </ConfigurationProvider>
           );
         })()}
-      </div>
+      </div> */}
     </SlashIDProvider>
   </React.StrictMode>
 );
