@@ -8,9 +8,10 @@ import {
   CreateFlowOptions,
 } from "./org-switching-flow";
 import { useOrgSwitchingContext } from "./useOrgSwitchingContext";
+import { User } from "@slashid/slashid";
 
 export function useFlowState(opts: CreateFlowOptions = {}) {
-  const { logIn, mfa, recover, user, sdkState, sid } = useSlashID();
+  const { recover, user, sdkState, sid } = useSlashID();
   const orgSwitchingCtx = useOrgSwitchingContext();
   const flowRef = useRef<Flow>(createFlow(opts));
   const [state, setState] = useState<FlowState>(flowRef.current.state);
@@ -32,12 +33,14 @@ export function useFlowState(opts: CreateFlowOptions = {}) {
   }, [recover, sdkState, sid]);
 
   useEffect(() => {
-    if (user && !user.anonymous) {
-      flowRef.current.setLogIn(mfa);
-    } else {
-      flowRef.current.setLogIn(logIn);
+    if (user && orgSwitchingCtx?.state === "switching") {
+      flowRef.current.setLogIn = async () => {
+        const token = await user.getTokenForOrganization(orgSwitchingCtx.oid);
+
+        return new User(token);
+      };
     }
-  }, [logIn, mfa, user]);
+  }, [orgSwitchingCtx, user]);
 
   return state;
 }

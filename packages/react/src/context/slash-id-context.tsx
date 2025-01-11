@@ -108,7 +108,7 @@ export interface ISlashIDContext {
   validateToken: (token: string) => Promise<boolean>;
   __switchOrganizationInContext: ({ oid }: { oid: string }) => Promise<void>;
   __syncExternalState: (state: ExternalStateParams) => Promise<void>;
-  __orgSwitchingContext: OrgSwitchingContext | null;
+  __orgSwitchingContext: OrgSwitchingContext;
 }
 
 export const initialContextValue: ISlashIDContext = {
