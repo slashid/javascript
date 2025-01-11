@@ -131,6 +131,7 @@ const createAuthenticatingState = (
   setRecoveryCodes: (codes: string[]) => void
 ): AuthenticatingState => {
   function performLogin() {
+    if (!logInFn) return;
     return logInFn(context.config, context.options)
       .then((user) => {
         if (!user) {

@@ -21,6 +21,8 @@ import { defaultOrganization } from "./middleware/default-organization";
 import { Slot } from "./components/slot";
 import { AuthenticatingState } from "./components/form/flow";
 import { Authenticating } from "./components/form";
+import { OrgSwitchingProvider } from "./components/form/org-switching/org-switching-provider";
+import { OrgSwitchingForm } from "./components/form/org-switching/org-switching-form";
 
 const rootOid = "b6f94b67-d20f-7fc3-51df-bf6e3b82683e";
 
@@ -171,7 +173,8 @@ const ConfiguredDynamicFlow = () => {
 };
 
 const BasicForm = () => {
-  const { user } = useSlashID();
+  const { __switchOrganizationInContext } = useSlashID();
+
   return (
     <ConfigurationProvider
       factors={[
@@ -208,15 +211,17 @@ const BasicForm = () => {
     >
       <>
         <LoggedIn>
-          <button
-            onClick={() =>
-              user?.getTokenForOrganization(
-                "971dd52c-c5a5-2260-aa01-71b2c3d9fcb3"
-              )
-            }
-          >
-            Switch org
-          </button>
+          <OrgSwitchingProvider authUI={<OrgSwitchingForm />}>
+            <button
+              onClick={() =>
+                __switchOrganizationInContext({
+                  oid: "8e669bb5-f4a7-2a3f-fec6-3d6f96f6dd26",
+                })
+              }
+            >
+              Switch org
+            </button>
+          </OrgSwitchingProvider>
         </LoggedIn>
         <LoggedOut>
           <Form

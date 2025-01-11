@@ -7,14 +7,13 @@ import {
   FlowState,
   CreateFlowOptions,
 } from "./org-switching-flow";
-import { useOrgSwitchingContext } from "./useOrgSwitchingContext";
-import { User } from "@slashid/slashid";
 
 export function useFlowState(opts: CreateFlowOptions = {}) {
-  const { recover, user, sdkState, sid } = useSlashID();
-  const orgSwitchingCtx = useOrgSwitchingContext();
+  const { recover, sdkState, sid, user } = useSlashID();
   const flowRef = useRef<Flow>(createFlow(opts));
   const [state, setState] = useState<FlowState>(flowRef.current.state);
+
+  console.log({ flowState: flowRef.current.state });
 
   useEffect(() => {
     const flow = flowRef.current;
@@ -33,14 +32,10 @@ export function useFlowState(opts: CreateFlowOptions = {}) {
   }, [recover, sdkState, sid]);
 
   useEffect(() => {
-    if (user && orgSwitchingCtx?.state === "switching") {
-      flowRef.current.setLogIn = async () => {
-        const token = await user.getTokenForOrganization(orgSwitchingCtx.oid);
+    if (!user) return;
 
-        return new User(token);
-      };
-    }
-  }, [orgSwitchingCtx, user]);
+    flowRef.current.setLogIn(async () => user);
+  }, [user]);
 
   return state;
 }
