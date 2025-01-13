@@ -327,27 +327,6 @@ export function createFlow(opts: CreateFlowOptions = {}) {
 
   async function transition(e: Event) {
     switch (e.type) {
-      // case "sid_login":
-      //   // TODO replace with a check for ready state
-      //   if (!logInFn || !recoverFn) break;
-
-      //   const loginContext: AuthenticatingState["context"] = {
-      //     config: e.config,
-      //     options: e.options,
-      //     attempt: 1,
-      //   };
-
-      //   setState(
-      //     createAuthenticatingState(
-      //       send,
-      //       loginContext,
-      //       logInFn,
-      //       recoverFn,
-      //       setRecoveryCodes
-      //     ),
-      //     e
-      //   );
-      //   break;
       case "sid_storeRecoveryCodes":
         // recovery codes are only stored on register authenticator
         if (!recoveryCodes) {
