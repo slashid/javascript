@@ -21,7 +21,6 @@ import { defaultOrganization } from "./middleware/default-organization";
 import { Slot } from "./components/slot";
 import { AuthenticatingState } from "./components/form/flow";
 import { Authenticating } from "./components/form";
-import { OrgSwitchingProvider } from "./components/form/org-switching/org-switching-provider";
 import { OrgSwitchingForm } from "./components/form/org-switching/org-switching-form";
 
 const rootOid = "b6f94b67-d20f-7fc3-51df-bf6e3b82683e";
@@ -173,7 +172,7 @@ const ConfiguredDynamicFlow = () => {
 };
 
 const BasicForm = () => {
-  const { __switchOrganizationInContext } = useSlashID();
+  const { __switchOrganizationInContext, __orgSwitchingState } = useSlashID();
 
   return (
     <ConfigurationProvider
@@ -211,7 +210,7 @@ const BasicForm = () => {
     >
       <>
         <LoggedIn>
-          <OrgSwitchingProvider authUI={<OrgSwitchingForm />}>
+          {__orgSwitchingState.state === "idle" && (
             <button
               onClick={() =>
                 __switchOrganizationInContext({
@@ -221,7 +220,8 @@ const BasicForm = () => {
             >
               Switch org
             </button>
-          </OrgSwitchingProvider>
+          )}
+          {__orgSwitchingState.state === "switching" && <OrgSwitchingForm />}
         </LoggedIn>
         <LoggedOut>
           <Form
@@ -361,24 +361,24 @@ root.render(
             <h2>Basic form</h2>
             <BasicForm />
           </div>
-          {/* <div style={vars}>
+          <div style={vars}>
             <h2>Composed form</h2>
             <ComposedForm />
-          </div> */}
+          </div>
         </div>
         <div>
-          {/* <div>
+          <div>
             <h2>Switch to default org</h2>
             <Config />
           </div>
           <div>
             <h2>Dynamic flow - factor based on handle</h2>
             <ConfiguredDynamicFlow />
-          </div> */}
+          </div>
         </div>
       </div>
 
-      {/* <div className="states">
+      <div className="states">
         {(() => {
           const forcedEmailMagicLinkLoadingState: AuthenticatingState = {
             status: "authenticating",
@@ -409,7 +409,7 @@ root.render(
             </ConfigurationProvider>
           );
         })()}
-      </div> */}
+      </div>
     </SlashIDProvider>
   </React.StrictMode>
 );

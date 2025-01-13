@@ -85,7 +85,7 @@ type ExternalStateParams = Pick<SlashIDProviderProps, "oid" | "initialToken">;
 export type Subscribe = SlashID["subscribe"];
 export type Unsubscribe = SlashID["unsubscribe"];
 
-type OrgSwitchingContext =
+type OrgSwitchingState =
   | {
       state: "idle";
     }
@@ -108,7 +108,7 @@ export interface ISlashIDContext {
   validateToken: (token: string) => Promise<boolean>;
   __switchOrganizationInContext: ({ oid }: { oid: string }) => Promise<void>;
   __syncExternalState: (state: ExternalStateParams) => Promise<void>;
-  __orgSwitchingContext: OrgSwitchingContext;
+  __orgSwitchingState: OrgSwitchingState;
 }
 
 export const initialContextValue: ISlashIDContext = {
@@ -125,7 +125,7 @@ export const initialContextValue: ISlashIDContext = {
   validateToken: async () => false,
   __switchOrganizationInContext: async () => undefined,
   __syncExternalState: async () => undefined,
-  __orgSwitchingContext: { state: "idle" },
+  __orgSwitchingState: { state: "idle" },
 };
 
 export const SlashIDContext =
@@ -169,9 +169,11 @@ export const SlashIDProvider = ({
   const storageRef = useRef<Storage | undefined>(undefined);
   const sidRef = useRef<SlashID | undefined>(undefined);
   const eventBufferRef = useRef<EventBuffer | undefined>();
-  const [orgSwitchingCtx, setOrgSwitchingCtx] = useState<OrgSwitchingContext>({
-    state: "idle",
-  });
+  const [orgSwitchingState, setOrgSwitchingState] = useState<OrgSwitchingState>(
+    {
+      state: "idle",
+    }
+  );
 
   /**
    * Restarts the React SDK lifecycle with a new
@@ -194,7 +196,7 @@ export const SlashIDProvider = ({
     async ({ oid: newOid }: { oid: string }) => {
       if (!user) return;
 
-      setOrgSwitchingCtx({
+      setOrgSwitchingState({
         state: "switching",
         oid,
       });
@@ -203,7 +205,7 @@ export const SlashIDProvider = ({
 
       await __syncExternalState({ oid: newOid, initialToken: newToken });
 
-      setOrgSwitchingCtx({ state: "idle" });
+      setOrgSwitchingState({ state: "idle" });
     },
     [__syncExternalState, oid, user]
   );
@@ -600,7 +602,7 @@ export const SlashIDProvider = ({
         unsubscribe,
         __switchOrganizationInContext,
         __syncExternalState,
-        __orgSwitchingContext: orgSwitchingCtx,
+        __orgSwitchingState: orgSwitchingState,
       };
     }
 
@@ -618,7 +620,7 @@ export const SlashIDProvider = ({
       validateToken,
       __switchOrganizationInContext,
       __syncExternalState,
-      __orgSwitchingContext: orgSwitchingCtx,
+      __orgSwitchingState: orgSwitchingState,
     };
   }, [
     state,
@@ -633,7 +635,7 @@ export const SlashIDProvider = ({
     validateToken,
     __switchOrganizationInContext,
     __syncExternalState,
-    orgSwitchingCtx,
+    orgSwitchingState,
   ]);
 
   return (
