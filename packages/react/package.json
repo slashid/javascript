@@ -1,6 +1,6 @@
 {
   "name": "@slashid/react",
-  "version": "1.31.5-org-switching-flow.0",
+  "version": "1.31.4",
   "private": false,
   "publishConfig": {
     "access": "public"
