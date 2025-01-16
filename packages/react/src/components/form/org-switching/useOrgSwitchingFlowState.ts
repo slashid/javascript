@@ -13,8 +13,6 @@ export function useFlowState(opts: CreateFlowOptions = {}) {
   const flowRef = useRef<Flow>(createFlow(opts));
   const [state, setState] = useState<FlowState>(flowRef.current.state);
 
-  console.log({ flowState: flowRef.current.state });
-
   useEffect(() => {
     const flow = flowRef.current;
     flow.subscribe(setState);
