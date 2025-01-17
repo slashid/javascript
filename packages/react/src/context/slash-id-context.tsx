@@ -106,7 +106,11 @@ export interface ISlashIDContext {
   mfa: MFA;
   recover: Recover;
   validateToken: (token: string) => Promise<boolean>;
-  __switchOrganizationInContext: ({ oid }: { oid: string }) => Promise<void>;
+  __switchOrganizationInContext: ({
+    oid,
+  }: {
+    oid: string;
+  }) => Promise<User | undefined>;
   __syncExternalState: (state: ExternalStateParams) => Promise<void>;
   __orgSwitchingState: OrgSwitchingState;
 }
@@ -206,6 +210,8 @@ export const SlashIDProvider = ({
       await __syncExternalState({ oid: newOid, initialToken: newToken });
 
       setOrgSwitchingState({ state: "idle" });
+
+      return new User(newToken, sidRef.current);
     },
     [__syncExternalState, oid, user]
   );

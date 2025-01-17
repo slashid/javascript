@@ -172,8 +172,6 @@ const ConfiguredDynamicFlow = () => {
 };
 
 const BasicForm = () => {
-  const { __switchOrganizationInContext, __orgSwitchingState } = useSlashID();
-
   return (
     <ConfigurationProvider
       factors={[
@@ -210,18 +208,7 @@ const BasicForm = () => {
     >
       <>
         <LoggedIn>
-          {__orgSwitchingState.state === "idle" && (
-            <button
-              onClick={() =>
-                __switchOrganizationInContext({
-                  oid: "8e669bb5-f4a7-2a3f-fec6-3d6f96f6dd26",
-                })
-              }
-            >
-              Switch org
-            </button>
-          )}
-          {__orgSwitchingState.state === "switching" && <OrgSwitchingForm />}
+          <OrgSwitchingForm oid="16b38ec1-5b48-046c-ebbb-cc15e439481" />
         </LoggedIn>
         <LoggedOut>
           <Form

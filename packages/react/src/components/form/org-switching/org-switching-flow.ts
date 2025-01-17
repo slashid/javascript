@@ -256,8 +256,12 @@ const createStoreRecoveryCodesState = (
 };
 
 export type CreateFlowOptions = {
+  oid: string;
   onSuccess?: (user: User) => void;
   onError?: (error: Error, context: ErrorState["context"]) => void;
+  logInFn?: LogIn | MFA;
+  recover?: Recover;
+  cancelFn?: Cancel;
 };
 
 type HistoryEntry = {
@@ -280,10 +284,10 @@ type HistoryEntry = {
  * @param opts
  * @returns
  */
-export function createFlow(opts: CreateFlowOptions = {}) {
-  let logInFn: undefined | LogIn | MFA = undefined;
-  let recoverFn: undefined | Recover = undefined;
-  let cancelFn: undefined | Cancel = undefined;
+export function createFlow(opts: CreateFlowOptions) {
+  let logInFn: undefined | LogIn | MFA = opts.logInFn;
+  let recoverFn: undefined | Recover = opts.recover;
+  let cancelFn: undefined | Cancel = opts.cancelFn;
   let recoveryCodes: undefined | string[] = undefined;
   let observers: Observer[] = [];
   const send = (event: Event) => {

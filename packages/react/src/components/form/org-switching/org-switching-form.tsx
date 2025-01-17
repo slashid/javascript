@@ -20,6 +20,7 @@ import { StoreRecoveryCodes } from "../store-recovery-codes";
 import { Card } from "@slashid/react-primitives";
 
 export type Props = ConfigurationOverridesProps & {
+  oid: string;
   className?: string;
   onSuccess?: CreateFlowOptions["onSuccess"];
   onError?: CreateFlowOptions["onError"];
@@ -33,6 +34,7 @@ export type Props = ConfigurationOverridesProps & {
  * Check the documentation for more information.
  */
 export const OrgSwitchingForm = ({
+  oid,
   className,
   onSuccess,
   onError,
@@ -40,7 +42,7 @@ export const OrgSwitchingForm = ({
   text,
   children,
 }: Props) => {
-  const flowState = useOrgSwitchingFlowState({ onSuccess, onError });
+  const flowState = useOrgSwitchingFlowState({ onSuccess, onError, oid });
   const { showBanner } = useConfiguration();
 
   const submitPayloadRef = useRef<PayloadOptions>({

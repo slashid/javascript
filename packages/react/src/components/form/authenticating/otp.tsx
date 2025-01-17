@@ -165,7 +165,10 @@ export const OTPState = ({ flowState }: Props) => {
           onSubmit={registerSubmit(handleSubmit)}
           className={styles.otpForm}
         >
-          <div className={styles.formInner}>
+          <div
+            className={styles.formInner}
+            data-testid="sid-form-authenticating-otp"
+          >
             <OtpInput
               shouldAutoFocus
               inputType="number"
