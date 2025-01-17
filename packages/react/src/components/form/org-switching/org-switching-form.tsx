@@ -1,5 +1,5 @@
 import { clsx } from "clsx";
-import { useFlowState } from "./useOrgSwitchingFlowState";
+import { useOrgSwitchingFlowState } from "./useOrgSwitchingFlowState";
 import { CreateFlowOptions } from "./org-switching-flow";
 import { Authenticating } from "../authenticating";
 import { Error } from "../error";
@@ -12,7 +12,7 @@ import {
   ConfigurationOverridesProps,
 } from "../../configuration-overrides";
 import { LoginOptions } from "../../../domain/types";
-import { useRef, useMemo } from "react";
+import { useRef, useMemo, useCallback } from "react";
 import { Slots, useSlots } from "../../slot";
 import { PayloadOptions } from "../types";
 import { InternalFormContext } from "../internal-context";
@@ -28,7 +28,7 @@ export type Props = ConfigurationOverridesProps & {
 };
 
 /**
- * Render a form that can be used to sign in or sign up a user.
+ * Render a form that can be used to complete the challenges for organization switching .
  * The form can be customized significantly using the built-in slots and CSS custom properties.
  * Check the documentation for more information.
  */
@@ -40,7 +40,7 @@ export const OrgSwitchingForm = ({
   text,
   children,
 }: Props) => {
-  const flowState = useFlowState({ onSuccess, onError });
+  const flowState = useOrgSwitchingFlowState({ onSuccess, onError });
   const { showBanner } = useConfiguration();
 
   const submitPayloadRef = useRef<PayloadOptions>({
@@ -54,7 +54,6 @@ export const OrgSwitchingForm = ({
   const defaultSlots = useMemo(() => {
     const slots = {
       footer: showBanner ? <Footer /> : null,
-      // initial: status === "initial" ? <Initial /> : undefined,
       authenticating:
         status === "authenticating" ? <Authenticating /> : undefined,
       success:
@@ -67,13 +66,15 @@ export const OrgSwitchingForm = ({
 
   const slots = useSlots({ children, defaultSlots });
 
+  const _ = useCallback(() => {}, []);
+
   return (
     <InternalFormContext.Provider
       value={{
         flowState,
         submitPayloadRef,
-        handleSubmit: () => {},
-        setSelectedFactor: () => {},
+        handleSubmit: _,
+        setSelectedFactor: _,
       }}
     >
       <Card className={clsx("sid-form", className)}>
@@ -93,6 +94,5 @@ export const OrgSwitchingForm = ({
   );
 };
 
-// Form.Initial = Initial;
 OrgSwitchingForm.Error = Error;
 OrgSwitchingForm.Authenticating = Authenticating;

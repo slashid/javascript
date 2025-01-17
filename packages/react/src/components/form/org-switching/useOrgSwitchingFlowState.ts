@@ -8,7 +8,7 @@ import {
   CreateFlowOptions,
 } from "./org-switching-flow";
 
-export function useFlowState(opts: CreateFlowOptions = {}) {
+export function useOrgSwitchingFlowState(opts: CreateFlowOptions = {}) {
   const { recover, sdkState, sid, user } = useSlashID();
   const flowRef = useRef<Flow>(createFlow(opts));
   const [state, setState] = useState<FlowState>(flowRef.current.state);
