@@ -48,6 +48,8 @@ import * as validation from "./utils/css-validation";
 
 import type { LoginConfiguration } from "./domain/types";
 
+import { OrgSwitchingForm } from "./components/form/org-switching/org-switching-form";
+
 const Customisation = {
   sanitiseCssVariableCustomisationConfig,
   getGoogleFontImports,
@@ -57,6 +59,13 @@ const Customisation = {
 const FormState = {
   Authenticating,
 };
+
+/**
+ * Components for SlashID internal use
+ */
+const Internal = {
+  OrgSwitchingForm,
+}
 
 /**
  * TODO: think about code splitting
@@ -93,7 +102,8 @@ export {
   type CssVariable,
   type CssVariableConfig,
   Customisation,
-
+  Internal,
+  
   // raw states
   FormState,
 

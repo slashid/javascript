@@ -85,6 +85,15 @@ type ExternalStateParams = Pick<SlashIDProviderProps, "oid" | "initialToken">;
 export type Subscribe = SlashID["subscribe"];
 export type Unsubscribe = SlashID["unsubscribe"];
 
+type OrgSwitchingState =
+  | {
+      state: "idle";
+    }
+  | {
+      state: "switching";
+      oid: string;
+    };
+
 export interface ISlashIDContext {
   sid: SlashID | undefined;
   user: User | undefined;
@@ -97,11 +106,16 @@ export interface ISlashIDContext {
   mfa: MFA;
   recover: Recover;
   validateToken: (token: string) => Promise<boolean>;
-  __switchOrganizationInContext: ({ oid }: { oid: string }) => Promise<void>;
+  __switchOrganizationInContext: ({
+    oid,
+  }: {
+    oid: string;
+  }) => Promise<User | undefined>;
   __syncExternalState: (state: ExternalStateParams) => Promise<void>;
+  __orgSwitchingState: OrgSwitchingState;
 }
 
-export const initialContextValue = {
+export const initialContextValue: ISlashIDContext = {
   sid: undefined,
   user: undefined,
   anonymousUser: undefined,
@@ -115,6 +129,7 @@ export const initialContextValue = {
   validateToken: async () => false,
   __switchOrganizationInContext: async () => undefined,
   __syncExternalState: async () => undefined,
+  __orgSwitchingState: { state: "idle" },
 };
 
 export const SlashIDContext =
@@ -158,6 +173,11 @@ export const SlashIDProvider = ({
   const storageRef = useRef<Storage | undefined>(undefined);
   const sidRef = useRef<SlashID | undefined>(undefined);
   const eventBufferRef = useRef<EventBuffer | undefined>();
+  const [orgSwitchingState, setOrgSwitchingState] = useState<OrgSwitchingState>(
+    {
+      state: "idle",
+    }
+  );
 
   /**
    * Restarts the React SDK lifecycle with a new
@@ -180,11 +200,20 @@ export const SlashIDProvider = ({
     async ({ oid: newOid }: { oid: string }) => {
       if (!user) return;
 
+      setOrgSwitchingState({
+        state: "switching",
+        oid,
+      });
+
       const newToken = await user.getTokenForOrganization(newOid);
 
-      __syncExternalState({ oid: newOid, initialToken: newToken });
+      await __syncExternalState({ oid: newOid, initialToken: newToken });
+
+      setOrgSwitchingState({ state: "idle" });
+
+      return new User(newToken, sidRef.current);
     },
-    [__syncExternalState, user]
+    [__syncExternalState, oid, user]
   );
 
   const storeUser = useCallback(
@@ -563,7 +592,7 @@ export const SlashIDProvider = ({
     validateToken,
   ]);
 
-  const contextValue = useMemo(() => {
+  const contextValue = useMemo<ISlashIDContext>(() => {
     if (state === "initial") {
       return {
         sid: undefined,
@@ -579,6 +608,7 @@ export const SlashIDProvider = ({
         unsubscribe,
         __switchOrganizationInContext,
         __syncExternalState,
+        __orgSwitchingState: orgSwitchingState,
       };
     }
 
@@ -596,6 +626,7 @@ export const SlashIDProvider = ({
       validateToken,
       __switchOrganizationInContext,
       __syncExternalState,
+      __orgSwitchingState: orgSwitchingState,
     };
   }, [
     state,
@@ -610,6 +641,7 @@ export const SlashIDProvider = ({
     validateToken,
     __switchOrganizationInContext,
     __syncExternalState,
+    orgSwitchingState,
   ]);
 
   return (

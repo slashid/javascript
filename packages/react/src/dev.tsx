@@ -21,6 +21,7 @@ import { defaultOrganization } from "./middleware/default-organization";
 import { Slot } from "./components/slot";
 import { AuthenticatingState } from "./components/form/flow";
 import { Authenticating } from "./components/form";
+import { OrgSwitchingForm } from "./components/form/org-switching/org-switching-form";
 
 const rootOid = "b6f94b67-d20f-7fc3-51df-bf6e3b82683e";
 
@@ -205,21 +206,18 @@ const BasicForm = () => {
       supportURL="https://www.google.com"
       alternativeAuthURL="https://www.google.com"
     >
-      <SlashIDLoaded>
-        <>
-          <LoggedIn>
-            MFA
-            <Form factors={[{ method: "totp" }]} />
-          </LoggedIn>
-          <LoggedOut>
-            <Form
-              onError={(error, context) =>
-                console.log("onError", { error, context })
-              }
-            />
-          </LoggedOut>
-        </>
-      </SlashIDLoaded>
+      <>
+        <LoggedIn>
+          <OrgSwitchingForm oid="758e443e-d2c1-2fcc-28b5-0b94c33b5a7c" />
+        </LoggedIn>
+        <LoggedOut>
+          <Form
+            onError={(error, context) =>
+              console.log("onError", { error, context })
+            }
+          />
+        </LoggedOut>
+      </>
     </ConfigurationProvider>
   );
 };
@@ -340,7 +338,7 @@ root.render(
       anonymousUsersEnabled
       // environment={{
       //   baseURL: "https://api.slashid.local",
-      //   sdkURL: "https://jump.slashid.local/sdk.html"
+      //   sdkURL: "https://jump.slashid.local/sdk.html",
       // }}
     >
       <LogOut />
