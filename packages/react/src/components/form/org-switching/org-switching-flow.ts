@@ -153,7 +153,8 @@ const createAuthenticatingState = (
       })
       .catch((error) => {
         if (Errors.isFlowCancelledError(error)) {
-          return;
+          // propagate error when the flow is cancelled
+          throw error;
         }
         send({ type: "sid_login.error", error });
       });
@@ -422,7 +423,6 @@ export function createFlow(opts: CreateFlowOptions) {
           cancelFn();
         }
 
-        // setState(createInitialState(send), e);
         break;
       default:
         break;
