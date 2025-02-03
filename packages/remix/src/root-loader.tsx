@@ -25,7 +25,7 @@ export const rootLoader =
   (context: RootLoaderSlashIDContext) =>
   <T extends RootAuthLoaderCallback>(callback: T = defaultCallback) =>
   async (args: LoaderFunctionArgs): Promise<ReturnType<T>> => {
-    const token = getUserTokenFromCookies(args.request.headers.get("cookie"));
+    const token = getUserTokenFromCookies(args.request.headers.get("cookie"), context.oid);
 
     const verified = await verifyToken({
       token,
