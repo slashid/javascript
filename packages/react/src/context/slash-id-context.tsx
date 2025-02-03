@@ -136,7 +136,7 @@ export const SlashIDContext =
   createContext<ISlashIDContext>(initialContextValue);
 SlashIDContext.displayName = "SlashIDContext";
 
-const STORAGE_TOKEN_KEY = "@slashid/USER_TOKEN";
+const LEGACY_STORAGE_TOKEN_KEY = "@slashid/USER_TOKEN";
 
 const createStorage = (storageType: StorageOption) => {
   switch (storageType) {
@@ -180,6 +180,10 @@ export const SlashIDProvider = ({
   );
 
   /**
+   * Storage key for the User token (current organization).
+   */
+  const STORAGE_TOKEN_KEY = useMemo(() => `@slashid/USER_TOKEN/${oid}`, [oid]);
+  /**
    * Restarts the React SDK lifecycle with a new
    * configuration, potentially for a different organization.
    */
@@ -190,6 +194,25 @@ export const SlashIDProvider = ({
       setState("initial");
     },
     []
+  );
+
+  const validateToken = useCallback(
+    async (token: string): Promise<boolean> => {
+      const tokenUser = new User(token, sidRef.current!);
+
+      if (tokenUser?.anonymous && !anonymousUsersEnabled) {
+        return false;
+      }
+
+      try {
+        const ret = await tokenUser.validateToken();
+        return ret.valid;
+      } catch (e) {
+        console.error(e);
+        return false;
+      }
+    },
+    [anonymousUsersEnabled]
   );
 
   /**
@@ -205,7 +228,19 @@ export const SlashIDProvider = ({
         oid,
       });
 
-      const newToken = await user.getTokenForOrganization(newOid);
+      let newToken: string;
+
+      // check if a valid token for new org is in storage
+      const newOidToken = storageRef.current?.getItem(
+        `@slashid/USER_TOKEN/${newOid}`
+      );
+      const isNewOidTokenValid =
+        newOidToken && (await validateToken(newOidToken));
+      if (isNewOidTokenValid) {
+        newToken = newOidToken;
+      } else {
+        newToken = await user.getTokenForOrganization(newOid);
+      }
 
       await __syncExternalState({ oid: newOid, initialToken: newToken });
 
@@ -213,7 +248,7 @@ export const SlashIDProvider = ({
 
       return new User(newToken, sidRef.current);
     },
-    [__syncExternalState, oid, user]
+    [__syncExternalState, oid, user, validateToken]
   );
 
   const storeUser = useCallback(
@@ -229,7 +264,7 @@ export const SlashIDProvider = ({
         __switchOrganizationInContext({ oid: newUser.oid });
       }
     },
-    [state, __switchOrganizationInContext, oid]
+    [state, __switchOrganizationInContext, oid, STORAGE_TOKEN_KEY]
   );
 
   const storeAnonymousUser = useCallback(
@@ -250,7 +285,7 @@ export const SlashIDProvider = ({
         }
       }
     },
-    [analyticsEnabled, anonymousUsersEnabled, state]
+    [STORAGE_TOKEN_KEY, analyticsEnabled, anonymousUsersEnabled, state]
   );
 
   const clearAnonymousUser = useCallback(() => {
@@ -261,7 +296,7 @@ export const SlashIDProvider = ({
     storageRef.current?.removeItem(STORAGE_TOKEN_KEY);
 
     setAnonymousUser(undefined);
-  }, [anonymousUsersEnabled, state]);
+  }, [STORAGE_TOKEN_KEY, anonymousUsersEnabled, state]);
 
   const logOut = useCallback((): undefined => {
     if (state === "initial") {
@@ -286,7 +321,7 @@ export const SlashIDProvider = ({
     setUser(undefined);
     // we need to set the oid back to the root on log out
     setOid(initialOid);
-  }, [state, user, analyticsEnabled, initialOid]);
+  }, [state, user, STORAGE_TOKEN_KEY, analyticsEnabled, initialOid]);
 
   const logIn = useCallback<LogIn>(
     async (
@@ -431,25 +466,6 @@ export const SlashIDProvider = ({
     [state]
   );
 
-  const validateToken = useCallback(
-    async (token: string): Promise<boolean> => {
-      const tokenUser = new User(token, sidRef.current!);
-
-      if (tokenUser?.anonymous && !anonymousUsersEnabled) {
-        return false;
-      }
-
-      try {
-        const ret = await tokenUser.validateToken();
-        return ret.valid;
-      } catch (e) {
-        console.error(e);
-        return false;
-      }
-    },
-    [anonymousUsersEnabled]
-  );
-
   useEffect(() => {
     if (state === "initial") {
       const slashId = new SlashID({
@@ -555,6 +571,22 @@ export const SlashIDProvider = ({
       return user;
     };
 
+    const loginWithTokenFromStorageLegacyKey = async () => {
+      const tokenFromStorage = storage.getItem(LEGACY_STORAGE_TOKEN_KEY);
+      if (!tokenFromStorage) {
+        return null;
+      }
+
+      // always clean up the storage if the token is present
+      storage.removeItem(LEGACY_STORAGE_TOKEN_KEY);
+      const isValidToken = await validateToken(tokenFromStorage);
+      if (!isValidToken) {
+        return null;
+      }
+
+      return createAndStoreUserFromToken(tokenFromStorage);
+    };
+
     const createAnonymousUser = async () => {
       if (!anonymousUsersEnabled) return null;
 
@@ -571,6 +603,7 @@ export const SlashIDProvider = ({
       [
         loginWithInitialToken,
         loginWithDirectID,
+        loginWithTokenFromStorageLegacyKey,
         loginWithTokenFromStorage,
         createAnonymousUser,
       ],
@@ -582,6 +615,7 @@ export const SlashIDProvider = ({
       }
     );
   }, [
+    STORAGE_TOKEN_KEY,
     analyticsEnabled,
     anonymousUsersEnabled,
     createAndStoreUserFromToken,
