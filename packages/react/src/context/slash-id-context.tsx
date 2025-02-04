@@ -136,7 +136,10 @@ export const SlashIDContext =
   createContext<ISlashIDContext>(initialContextValue);
 SlashIDContext.displayName = "SlashIDContext";
 
-const LEGACY_STORAGE_TOKEN_KEY = "@slashid/USER_TOKEN";
+export const LEGACY_STORAGE_TOKEN_KEY = "@slashid/USER_TOKEN";
+
+export const NEW_STORAGE_TOKEN_KEY = (oid: string) =>
+  `${LEGACY_STORAGE_TOKEN_KEY}/${oid}`;
 
 const createStorage = (storageType: StorageOption) => {
   switch (storageType) {
@@ -182,7 +185,7 @@ export const SlashIDProvider = ({
   /**
    * Storage key for the User token (current organization).
    */
-  const STORAGE_TOKEN_KEY = useMemo(() => `@slashid/USER_TOKEN/${oid}`, [oid]);
+  const STORAGE_TOKEN_KEY = useMemo(() => NEW_STORAGE_TOKEN_KEY(oid), [oid]);
   /**
    * Restarts the React SDK lifecycle with a new
    * configuration, potentially for a different organization.
