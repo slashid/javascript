@@ -24,7 +24,7 @@ export function createEventBuffer({ sdk }: CreateEventBufferArgs): EventBuffer {
 
   // listen to all the SDK events on init
   Utils.PUBLIC_READ_EVENTS.forEach((publicReadEventName: EventNames) => {
-    // create an event handler 
+    // create an event handler
     const handler = (event: Event) => {
       if (
         subscribers.has(publicReadEventName) &&
