@@ -206,18 +206,34 @@ const BasicForm = () => {
       supportURL="https://www.google.com"
       alternativeAuthURL="https://www.google.com"
     >
-      <>
-        <LoggedIn>
-          <OrgSwitchingForm oid="758e443e-d2c1-2fcc-28b5-0b94c33b5a7c" />
-        </LoggedIn>
-        <LoggedOut>
-          <Form
-            onError={(error, context) =>
-              console.log("onError", { error, context })
-            }
-          />
-        </LoggedOut>
-      </>
+      <SlashIDLoaded>
+        <>
+          <LoggedIn>
+            MFA
+            <Form factors={[{ method: "totp" }]} />
+          </LoggedIn>
+          <LoggedOut>
+            <Form
+              onError={(error, context) =>
+                console.log("onError", { error, context })
+              }
+            />
+          </LoggedOut>
+        </>
+      </SlashIDLoaded>
+    </ConfigurationProvider>
+  );
+};
+
+const ImmediateOrgSwitchForm = () => {
+  return (
+    <ConfigurationProvider>
+      <LoggedIn>
+        <OrgSwitchingForm oid={import.meta.env.VITE_ORG_SWITCHING_ORG_ID} />
+      </LoggedIn>
+      <LoggedOut>
+        <Form />
+      </LoggedOut>
     </ConfigurationProvider>
   );
 };
@@ -361,6 +377,12 @@ root.render(
           <div>
             <h2>Dynamic flow - factor based on handle</h2>
             <ConfiguredDynamicFlow />
+          </div>
+        </div>
+        <div>
+          <div>
+            <h2>Immediate org switch</h2>
+            <ImmediateOrgSwitchForm />
           </div>
         </div>
       </div>
