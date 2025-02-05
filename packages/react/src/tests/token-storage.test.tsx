@@ -3,7 +3,7 @@ import { Form, SlashIDProvider } from "../main";
 import { createTestUser, TEST_ORG_ID } from "../components/test-utils";
 import {
   LEGACY_STORAGE_TOKEN_KEY,
-  NEW_STORAGE_TOKEN_KEY,
+  STORAGE_TOKEN_KEY,
 } from "../context/slash-id-context";
 
 describe("token storage key with org id suffix", () => {
@@ -20,7 +20,7 @@ describe("token storage key with org id suffix", () => {
 
   it("should use the token from localStorage", async () => {
     const testUser = createTestUser({ oid: TEST_ORG_ID });
-    localStorage.setItem(NEW_STORAGE_TOKEN_KEY(TEST_ORG_ID), testUser.token);
+    localStorage.setItem(STORAGE_TOKEN_KEY(TEST_ORG_ID), testUser.token);
 
     render(
       <SlashIDProvider
@@ -33,9 +33,7 @@ describe("token storage key with org id suffix", () => {
     );
 
     await waitFor(() =>
-      expect(getItemSpy).toHaveBeenCalledWith(
-        NEW_STORAGE_TOKEN_KEY(TEST_ORG_ID)
-      )
+      expect(getItemSpy).toHaveBeenCalledWith(STORAGE_TOKEN_KEY(TEST_ORG_ID))
     );
   });
 
@@ -59,7 +57,7 @@ describe("token storage key with org id suffix", () => {
 
     await waitFor(() =>
       expect(setItemSpy).toHaveBeenCalledWith(
-        NEW_STORAGE_TOKEN_KEY(TEST_ORG_ID),
+        STORAGE_TOKEN_KEY(TEST_ORG_ID),
         testUser.token
       )
     );
