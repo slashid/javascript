@@ -18,7 +18,6 @@ export type EventBuffer = {
 };
 
 export function createEventBuffer({ sdk }: CreateEventBufferArgs): EventBuffer {
-  console.log("createEventBuffer");
   const buffer: Map<EventNames, Event[]> = new Map();
   const internalHandlers: Map<EventNames, EventCallback> = new Map();
   const subscribers: Map<EventNames, EventCallback[]> = new Map();
@@ -58,7 +57,6 @@ export function createEventBuffer({ sdk }: CreateEventBufferArgs): EventBuffer {
    * Event will be consumed and removed from the buffer.
    */
   function subscribe(eventType: EventNames, callback: EventCallback) {
-    console.log("buffer subscribe", eventType);
     sdk.subscribe(eventType, callback);
 
     // add to our list of subscribers
@@ -82,7 +80,6 @@ export function createEventBuffer({ sdk }: CreateEventBufferArgs): EventBuffer {
    * This way we know when to buffer (only when there are no subscribers to the given event).
    */
   function unsubscribe(eventType: EventNames, callback: EventCallback) {
-    console.log("buffer unsubscribe", eventType);
     sdk.unsubscribe(eventType, callback);
 
     if (!subscribers.has(eventType) || !subscribers.get(eventType)?.length) {

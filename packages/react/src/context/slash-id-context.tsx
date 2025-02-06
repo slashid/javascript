@@ -218,6 +218,18 @@ export const SlashIDProvider = ({
     [anonymousUsersEnabled]
   );
 
+  const storeUser = useCallback(
+    (newUser: User) => {
+      if (state === "initial") {
+        return;
+      }
+
+      setUser(newUser);
+      storageRef.current?.setItem(currentOrgStorageTokenKey, newUser.token);
+    },
+    [state, currentOrgStorageTokenKey]
+  );
+
   /**
    * Restarts the React SDK lifecycle with a new
    * organizational context
@@ -245,25 +257,16 @@ export const SlashIDProvider = ({
         newToken = await user.getTokenForOrganization(newOid);
       }
 
-      await __syncExternalState({ oid: newOid, initialToken: newToken });
-
+      setToken(newToken);
+      setOid(newOid);
       setOrgSwitchingState({ state: "idle" });
+
+      const newUser = new User(newToken, sidRef.current);
+      storeUser(newUser);
 
       return new User(newToken, sidRef.current);
     },
-    [__syncExternalState, oid, user, validateToken]
-  );
-
-  const storeUser = useCallback(
-    (newUser: User) => {
-      if (state === "initial") {
-        return;
-      }
-
-      setUser(newUser);
-      storageRef.current?.setItem(currentOrgStorageTokenKey, newUser.token);
-    },
-    [state, currentOrgStorageTokenKey]
+    [oid, storeUser, user, validateToken]
   );
 
   const storeAnonymousUser = useCallback(
@@ -306,10 +309,14 @@ export const SlashIDProvider = ({
       return;
     }
 
-    Object.entries(storageRef.current!).forEach(([k, v]) => {
-      if (k.startsWith(LEGACY_STORAGE_TOKEN_KEY)) {
-        storageRef.current?.removeItem(k);
-        const tempUser = new User(v, sidRef.current);
+    // search storage for user tokens
+    Object.entries(storageRef.current!).forEach(([key, maybeToken]) => {
+      // check if the storage entry is a user token
+      if (key.startsWith(LEGACY_STORAGE_TOKEN_KEY)) {
+        // remove the entry
+        storageRef.current?.removeItem(key);
+        // revoke removed token
+        const tempUser = new User(maybeToken, sidRef.current);
         tempUser.logout();
       }
     });
@@ -430,8 +437,6 @@ export const SlashIDProvider = ({
 
   const subscribe = useCallback<Subscribe>(
     (event, handler) => {
-      console.log("context subscribe", event);
-
       if (state === "initial") {
         return;
       }
@@ -453,8 +458,6 @@ export const SlashIDProvider = ({
 
   const unsubscribe = useCallback<Unsubscribe>(
     (event, handler) => {
-      console.log("context unsubscribe", event);
-
       if (state === "initial") {
         return;
       }
