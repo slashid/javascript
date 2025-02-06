@@ -22,7 +22,7 @@ export const isValidEmail: ValidatorFn<string> = (value) => {
     return false;
   }
 
-  return EMAIL_REGEX.test(value);
+  return EMAIL_REGEX.test(value.toLowerCase());
 };
 
 export const isValidUsername: ValidatorFn<string> = (value) => {

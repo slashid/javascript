@@ -102,4 +102,9 @@ describe.concurrent("validation tests", () => {
   it("should be invalid phone number", () => {
     expect(isValidPhoneNumber("")).toBe(false);
   });
+
+  it("should allow mixed case", () => {
+    expect(isValidEmail("JEssica.e@h.com")).toBe(true);
+    expect(isValidEmail("Jessica.E@h.com")).toBe(true);
+  });
 });
