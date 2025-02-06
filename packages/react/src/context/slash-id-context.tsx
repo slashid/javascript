@@ -257,16 +257,17 @@ export const SlashIDProvider = ({
         newToken = await user.getTokenForOrganization(newOid);
       }
 
+      const newUser = new User(newToken, sidRef.current);
+      storageRef.current?.setItem(STORAGE_TOKEN_KEY(newOid), newToken);
+
+      setUser(newUser);
       setToken(newToken);
       setOid(newOid);
       setOrgSwitchingState({ state: "idle" });
 
-      const newUser = new User(newToken, sidRef.current);
-      storeUser(newUser);
-
       return new User(newToken, sidRef.current);
     },
-    [oid, storeUser, user, validateToken]
+    [oid, user, validateToken]
   );
 
   const storeAnonymousUser = useCallback(
