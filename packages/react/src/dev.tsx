@@ -226,10 +226,29 @@ const BasicForm = () => {
 };
 
 const ImmediateOrgSwitchForm = () => {
+  const [switching, setSwitching] = useState(false);
+
+  const { sid } = useSlashID();
+
+  useEffect(() => {
+    sid?.subscribe("authnContextUpdateChallengeReceivedEvent", console.log);
+
+    return () => {
+      sid?.unsubscribe("authnContextUpdateChallengeReceivedEvent", console.log);
+    };
+  }, [sid]);
+
   return (
     <ConfigurationProvider>
       <LoggedIn>
-        <OrgSwitchingForm oid={import.meta.env.VITE_ORG_SWITCHING_ORG_ID} />
+        {switching ? (
+          <OrgSwitchingForm
+            oid={import.meta.env.VITE_ORG_SWITCHING_ORG_ID}
+            onSuccess={() => setSwitching(false)}
+          />
+        ) : (
+          <button onClick={() => setSwitching(true)}>Switch</button>
+        )}
       </LoggedIn>
       <LoggedOut>
         <Form />
@@ -341,6 +360,41 @@ const LogOut = () => {
   );
 };
 
+const States = () => (
+  <div className="states">
+    {(() => {
+      const forcedEmailMagicLinkLoadingState: AuthenticatingState = {
+        status: "authenticating",
+        context: {
+          config: {
+            handle: {
+              type: "email_address",
+              value: "foo@world.com",
+            },
+            factor: {
+              method: "email_link",
+            },
+          },
+          attempt: 1,
+        },
+        retry: () => {},
+        cancel: () => {},
+        recover: () => {},
+        logIn: () => {},
+        updateContext: () => {},
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        setRecoveryCodes: (_code: string[]) => {},
+      };
+
+      return (
+        <ConfigurationProvider>
+          <Authenticating flowState={forcedEmailMagicLinkLoadingState} />
+        </ConfigurationProvider>
+      );
+    })()}
+  </div>
+);
+
 const container = document.getElementById("root") as HTMLElement;
 const root = ReactDOM.createRoot(container);
 root.render(
@@ -351,7 +405,6 @@ root.render(
       tokenStorage="localStorage"
       analyticsEnabled={false}
       environment="sandbox"
-      anonymousUsersEnabled
       // environment={{
       //   baseURL: "https://api.slashid.local",
       //   sdkURL: "https://jump.slashid.local/sdk.html",
@@ -359,7 +412,7 @@ root.render(
     >
       <LogOut />
       <div className="layout">
-        <div>
+        {/* <div>
           <div>
             <h2>Basic form</h2>
             <BasicForm />
@@ -378,7 +431,7 @@ root.render(
             <h2>Dynamic flow - factor based on handle</h2>
             <ConfiguredDynamicFlow />
           </div>
-        </div>
+        </div> */}
         <div>
           <div>
             <h2>Immediate org switch</h2>
@@ -386,39 +439,7 @@ root.render(
           </div>
         </div>
       </div>
-
-      <div className="states">
-        {(() => {
-          const forcedEmailMagicLinkLoadingState: AuthenticatingState = {
-            status: "authenticating",
-            context: {
-              config: {
-                handle: {
-                  type: "email_address",
-                  value: "foo@world.com",
-                },
-                factor: {
-                  method: "email_link",
-                },
-              },
-              attempt: 1,
-            },
-            retry: () => {},
-            cancel: () => {},
-            recover: () => {},
-            logIn: () => {},
-            updateContext: () => {},
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            setRecoveryCodes: (_code: string[]) => {},
-          };
-
-          return (
-            <ConfigurationProvider>
-              <Authenticating flowState={forcedEmailMagicLinkLoadingState} />
-            </ConfigurationProvider>
-          );
-        })()}
-      </div>
+      {/* <States /> */}
     </SlashIDProvider>
   </React.StrictMode>
 );

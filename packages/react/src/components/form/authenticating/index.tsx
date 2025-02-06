@@ -142,6 +142,14 @@ export const AuthenticatingImplementation = ({
   const [establishedAuthContext, setEstablishedAuthContext] = useState(false);
   const { subscribe, unsubscribe } = useSlashID();
 
+  console.log({
+    flowState,
+    establishedAuthContext,
+    factor,
+    attempt,
+    isLoggingIn,
+  });
+
   useEffect(() => {
     if (flowState.context.attempt > attempt.current) {
       attempt.current = flowState.context.attempt;
@@ -153,6 +161,7 @@ export const AuthenticatingImplementation = ({
     const handleAuthnContextUpdate = (
       event: AuthnContextUpdateChallengeReceivedEvent
     ) => {
+      console.log("handler - updating ctx");
       flowState.updateContext({
         attempt: flowState.context.attempt,
         options: flowState.context.options,
@@ -161,11 +170,14 @@ export const AuthenticatingImplementation = ({
           handle: flowState.context.config.handle,
         },
       });
+      console.log("handler - unsubscribe");
 
       unsubscribe(
         "authnContextUpdateChallengeReceivedEvent",
         handleAuthnContextUpdate
       );
+      console.log("handler - setEstablishedCtx");
+
       setEstablishedAuthContext(true);
     };
 

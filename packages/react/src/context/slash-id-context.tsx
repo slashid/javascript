@@ -262,12 +262,8 @@ export const SlashIDProvider = ({
 
       setUser(newUser);
       storageRef.current?.setItem(currentOrgStorageTokenKey, newUser.token);
-
-      if (newUser.oid !== oid) {
-        __switchOrganizationInContext({ oid: newUser.oid });
-      }
     },
-    [state, __switchOrganizationInContext, oid, currentOrgStorageTokenKey]
+    [state, currentOrgStorageTokenKey]
   );
 
   const storeAnonymousUser = useCallback(
@@ -310,7 +306,13 @@ export const SlashIDProvider = ({
       return;
     }
 
-    storageRef.current?.removeItem(currentOrgStorageTokenKey);
+    Object.entries(storageRef.current!).forEach(([k, v]) => {
+      if (k.startsWith(LEGACY_STORAGE_TOKEN_KEY)) {
+        storageRef.current?.removeItem(k);
+        const tempUser = new User(v, sidRef.current);
+        tempUser.logout();
+      }
+    });
 
     if (analyticsEnabled) {
       try {
@@ -320,11 +322,10 @@ export const SlashIDProvider = ({
       }
     }
 
-    user.logout();
     setUser(undefined);
     // we need to set the oid back to the root on log out
     setOid(initialOid);
-  }, [state, user, currentOrgStorageTokenKey, analyticsEnabled, initialOid]);
+  }, [state, user, analyticsEnabled, initialOid]);
 
   const logIn = useCallback<LogIn>(
     async (
@@ -429,6 +430,8 @@ export const SlashIDProvider = ({
 
   const subscribe = useCallback<Subscribe>(
     (event, handler) => {
+      console.log("context subscribe", event);
+
       if (state === "initial") {
         return;
       }
@@ -450,6 +453,8 @@ export const SlashIDProvider = ({
 
   const unsubscribe = useCallback<Unsubscribe>(
     (event, handler) => {
+      console.log("context unsubscribe", event);
+
       if (state === "initial") {
         return;
       }
