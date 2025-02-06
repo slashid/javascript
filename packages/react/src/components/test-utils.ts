@@ -59,6 +59,12 @@ const TEST_TOKEN_PAYLOAD_DECODED = {
 const TEST_TOKEN_SIGNATURE =
   "tsyUk3guY29r-jb-Xw2htT0egEO3KUErDSlJu9F9Y_QQAf6Te_DmdPgnCKjR7pTGO1uKvYT6JKit7opyntOA4y_wIhymUOkW5mtX-fgyIF0Fkxx1JjGm4BcTE9rI1tH7DWG177yTzwJ2kv5OYvTknpn_QK8s6JzD1N5Yq11_VNf2dRN_NXb-0feqDGhXU7lR-oO7wqFlt37pzENQ7-tG3JDt9uCKqSbrtXqxTHGtg80ZY3FxXYYiHNC3v0nXV5aFRhxGvIIm9LgNkZwXkEtSecIqFHWJn2-ILuOFpvcmtmlZr8AxQyNMAKMt1fARf2LJy45qITI2IyVTndtDekT6HQ";
 
+export const testToken = [
+  TEST_TOKEN_HEADER,
+  btoa(JSON.stringify({ ...TEST_TOKEN_PAYLOAD_DECODED })),
+  TEST_TOKEN_SIGNATURE,
+].join(".");
+
 type Authentication = {
   method: FactorMethod;
   handle: Handle;
@@ -71,6 +77,7 @@ type CreateTestUserOptions = {
   authentications?: Authentication[];
   token?: string;
   anonymous?: boolean;
+  sid?: SlashID;
 };
 
 /**
@@ -87,6 +94,7 @@ function createBaseTestUser({
   authentications = [],
   token,
   anonymous = false,
+  sid,
 }: CreateTestUserOptions = {}): User | AnonymousUser {
   const payload = token
     ? JSON.parse(atob(token.split(".")[1]))
@@ -123,7 +131,7 @@ function createBaseTestUser({
     return new AnonymousUser(newToken, sid);
   }
 
-  return new User(newToken, { analyticsEnabled: false });
+  return new User(newToken, sid ?? { analyticsEnabled: false });
 }
 
 export const createTestUser = (

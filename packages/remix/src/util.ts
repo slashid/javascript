@@ -43,7 +43,8 @@ export function assertCallbackResult(
 }
 
 export const getUserTokenFromCookies = (
-  cookies: string | null
+  cookies: string | null,
+  oid: string
 ): string | undefined => {
   if (!cookies) return undefined;
 
@@ -63,7 +64,7 @@ export const getUserTokenFromCookies = (
       };
     }, {});
 
-  const STORAGE_KEY = "@slashid/USER_TOKEN";
+  const STORAGE_KEY = `@slashid/USER_TOKEN/${oid}`;
 
   return all[STORAGE_KEY];
 };

@@ -54,6 +54,7 @@ function SlashIDProviderSSR({
       __syncExternalState() {
         throw new Error("Operation not possible in this state");
       },
+      __orgSwitchingState: { state: "idle" },
     };
   }, [
     props.analyticsEnabled,

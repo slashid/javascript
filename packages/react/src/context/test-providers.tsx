@@ -29,6 +29,7 @@ export const TestSlashIDProvider: React.FC<TestProviderProps> = ({
   recover,
   __switchOrganizationInContext = async () => undefined,
   __syncExternalState = async () => undefined,
+  __orgSwitchingState = { state: "idle" },
 }) => {
   const [internalUser, setInternalUser] = React.useState(user);
   const eventBufferRef = React.useRef<EventBuffer | null>(null);
@@ -86,6 +87,7 @@ export const TestSlashIDProvider: React.FC<TestProviderProps> = ({
       unsubscribe,
       __switchOrganizationInContext,
       __syncExternalState,
+      __orgSwitchingState,
     }),
     [
       sid,
@@ -99,6 +101,7 @@ export const TestSlashIDProvider: React.FC<TestProviderProps> = ({
       unsubscribe,
       __switchOrganizationInContext,
       __syncExternalState,
+      __orgSwitchingState,
     ]
   );
 
