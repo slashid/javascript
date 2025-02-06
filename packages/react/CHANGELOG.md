@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 1.31.5
+
+### Patch Changes
+
+- 0029745: Normalise the email before validation
+
 ## 1.31.4
 
 ### Patch Changes
