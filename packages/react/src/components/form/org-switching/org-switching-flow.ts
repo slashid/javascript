@@ -8,6 +8,7 @@ import {
   LoginOptions,
   Recover,
   RetryPolicy,
+  Handle,
 } from "../../../domain/types";
 import { ensureError } from "../../../domain/errors";
 import { isFactorRecoverable } from "../../../domain/handles";
@@ -263,6 +264,7 @@ export type CreateFlowOptions = {
   logInFn?: LogIn | MFA;
   recover?: Recover;
   cancelFn?: Cancel;
+  lastUserHandle?: Handle;
 };
 
 type HistoryEntry = {
@@ -315,6 +317,7 @@ export function createFlow(opts: CreateFlowOptions) {
         factor: {
           method: "email_link",
         },
+        handle: opts.lastUserHandle,
       },
       attempt: 0,
     },

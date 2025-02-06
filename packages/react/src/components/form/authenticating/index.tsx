@@ -166,7 +166,6 @@ export const AuthenticatingImplementation = ({
         "authnContextUpdateChallengeReceivedEvent",
         handleAuthnContextUpdate
       );
-
       setEstablishedAuthContext(true);
     };
 

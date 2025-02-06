@@ -228,16 +228,6 @@ const BasicForm = () => {
 const ImmediateOrgSwitchForm = () => {
   const [switching, setSwitching] = useState(false);
 
-  const { sid } = useSlashID();
-
-  useEffect(() => {
-    sid?.subscribe("authnContextUpdateChallengeReceivedEvent", console.log);
-
-    return () => {
-      sid?.unsubscribe("authnContextUpdateChallengeReceivedEvent", console.log);
-    };
-  }, [sid]);
-
   return (
     <ConfigurationProvider>
       <LoggedIn>
@@ -412,7 +402,7 @@ root.render(
     >
       <LogOut />
       <div className="layout">
-        {/* <div>
+        <div>
           <div>
             <h2>Basic form</h2>
             <BasicForm />
@@ -431,7 +421,7 @@ root.render(
             <h2>Dynamic flow - factor based on handle</h2>
             <ConfiguredDynamicFlow />
           </div>
-        </div> */}
+        </div>
         <div>
           <div>
             <h2>Immediate org switch</h2>
@@ -439,7 +429,7 @@ root.render(
           </div>
         </div>
       </div>
-      {/* <States /> */}
+      <States />
     </SlashIDProvider>
   </React.StrictMode>
 );
