@@ -130,7 +130,7 @@ export const createAuthenticatingState = (
   logInFn: LogIn | MFA,
   recoverFn: Recover,
   setRecoveryCodes: (codes: string[]) => void,
-  config: FlowConfig
+  propagateFlowCancelled: boolean
 ): AuthenticatingState => {
   function performLogin() {
     if (!logInFn) return;
@@ -155,9 +155,10 @@ export const createAuthenticatingState = (
       })
       .catch((error) => {
         if (Errors.isFlowCancelledError(error)) {
-          if (config.propagateFlowCancelled) {
+          if (propagateFlowCancelled) {
             throw error;
           }
+          return;
         }
         send({ type: "sid_login.error", error });
       });
@@ -269,11 +270,6 @@ export type CreateFlowOptions = {
   lastUserHandle?: Handle;
 };
 
-export type FlowConfig = {
-  propagateFlowCancelled: boolean;
-  resetOnCancel: boolean;
-};
-
 type AsyncDependencies = {
   getLogInFn: () => LogIn | MFA | undefined;
   getRecoverFn: () => Recover | undefined;
@@ -290,7 +286,7 @@ type StaticDependencies = {
   ) => void;
   getRecoveryCodes: () => string[] | undefined;
   setRecoveryCodes: (codes: string[]) => void;
-  config: FlowConfig;
+  propagateFlowCancelledError: boolean;
 };
 
 type FlowDependencies = AsyncDependencies & StaticDependencies;
@@ -305,141 +301,136 @@ const isSDKReady = (deps: FlowDependencies): boolean => {
   return !!(deps.getLogInFn() && deps.getRecoverFn());
 };
 
-const HANDLERS: Record<Event["type"], TransitionHandler> = {
-  sid_login: (event, state, deps) => {
-    if (!isSDKReady(deps)) return;
-    const e = event as Event & { type: "sid_login" };
-    const logInFn = deps.getLogInFn()!;
-    const recoverFn = deps.getRecoverFn()!;
+export const loginHandler: TransitionHandler = (event, state, deps) => {
+  if (!isSDKReady(deps)) return;
+  const e = event as Event & { type: "sid_login" };
+  const logInFn = deps.getLogInFn()!;
+  const recoverFn = deps.getRecoverFn()!;
 
-    const loginContext: AuthenticatingState["context"] = {
-      config: e.config,
-      options: e.options,
-      attempt: 1,
-    };
+  const loginContext: AuthenticatingState["context"] = {
+    config: e.config,
+    options: e.options,
+    attempt: 1,
+  };
 
-    deps.setState(
-      createAuthenticatingState(
-        deps.send,
-        loginContext,
-        logInFn,
-        recoverFn,
-        deps.setRecoveryCodes,
-        deps.config
-      ),
-      event
-    );
-  },
+  deps.setState(
+    createAuthenticatingState(
+      deps.send,
+      loginContext,
+      logInFn,
+      recoverFn,
+      deps.setRecoveryCodes,
+      deps.propagateFlowCancelledError
+    ),
+    event
+  );
+};
 
-  sid_storeRecoveryCodes: (event, state, deps) => {
-    const e = event as Event & { type: "sid_storeRecoveryCodes" };
-    const codes = deps.getRecoveryCodes();
+export const storeRecoveryCodesHandler: TransitionHandler = (
+  event,
+  state,
+  deps
+) => {
+  const e = event as Event & { type: "sid_storeRecoveryCodes" };
+  const codes = deps.getRecoveryCodes();
 
-    if (!codes) {
-      deps.send({ type: "sid_login.success", user: e.user });
-      return;
-    }
+  if (!codes) {
+    deps.send({ type: "sid_login.success", user: e.user });
+    return;
+  }
 
-    deps.setState(
-      createStoreRecoveryCodesState(deps.send, codes, e.user),
-      event
-    );
-  },
+  deps.setState(createStoreRecoveryCodesState(deps.send, codes, e.user), event);
+};
 
-  "sid_login.update_context": (event, state, deps) => {
-    if (!isSDKReady(deps)) return;
-    const e = event as Event & { type: "sid_login.update_context" };
-    const logInFn = deps.getLogInFn()!;
-    const recoverFn = deps.getRecoverFn()!;
+export const loginUpdateContextHandler: TransitionHandler = (
+  event,
+  state,
+  deps
+) => {
+  if (!isSDKReady(deps)) return;
+  const e = event as Event & { type: "sid_login.update_context" };
+  const logInFn = deps.getLogInFn()!;
+  const recoverFn = deps.getRecoverFn()!;
 
-    deps.setState(
-      createAuthenticatingState(
-        deps.send,
-        e.context,
-        logInFn,
-        recoverFn,
-        deps.setRecoveryCodes,
-        deps.config
-      ),
-      event
-    );
-  },
+  deps.setState(
+    createAuthenticatingState(
+      deps.send,
+      e.context,
+      logInFn,
+      recoverFn,
+      deps.setRecoveryCodes,
+      deps.propagateFlowCancelledError
+    ),
+    event
+  );
+};
 
-  "sid_login.success": (event, state, deps) => {
-    const e = event as Event & { type: "sid_login.success" };
+export const loginSuccessHandler: TransitionHandler = (event, state, deps) => {
+  const e = event as Event & { type: "sid_login.success" };
 
-    if (deps.onSuccess) {
-      deps.onSuccess(e.user);
-    }
+  if (deps.onSuccess) {
+    deps.onSuccess(e.user);
+  }
 
-    deps.setState(createSuccessState(), event);
-  },
+  deps.setState(createSuccessState(), event);
+};
 
-  "sid_login.error": (event, state, deps) => {
-    if (state.status !== "authenticating") return;
-    const e = event as Event & { type: "sid_login.error" };
+export const loginErrorHandler: TransitionHandler = (event, state, deps) => {
+  if (state.status !== "authenticating") return;
+  const e = event as Event & { type: "sid_login.error" };
 
-    const errorContext = {
-      ...state.context,
-      error: ensureError(e.error),
-    };
+  const errorContext = {
+    ...state.context,
+    error: ensureError(e.error),
+  };
 
-    if (deps.onError) {
-      deps.onError(e.error, errorContext);
-    }
+  if (deps.onError) {
+    deps.onError(e.error, errorContext);
+  }
 
-    deps.setState(createErrorState(deps.send, errorContext), event);
-  },
+  deps.setState(createErrorState(deps.send, errorContext), event);
+};
 
-  sid_retry: (event, state, deps) => {
-    if (!isSDKReady(deps)) return;
-    const e = event as Event & { type: "sid_retry" };
-    const logInFn = deps.getLogInFn()!;
-    const recoverFn = deps.getRecoverFn()!;
-    const cancelFn = deps.getCancelFn();
+export const retryHandler: TransitionHandler = (event, state, deps) => {
+  if (!isSDKReady(deps)) return;
+  const e = event as Event & { type: "sid_retry" };
+  const logInFn = deps.getLogInFn()!;
+  const recoverFn = deps.getRecoverFn()!;
+  const cancelFn = deps.getCancelFn();
 
-    if (cancelFn) {
-      cancelFn();
-    }
+  if (cancelFn) {
+    cancelFn();
+  }
 
-    if (e.policy === "reset") {
-      deps.setState(createInitialState(deps.send), event);
-      return;
-    }
+  if (e.policy === "reset") {
+    deps.setState(createInitialState(deps.send), event);
+    return;
+  }
 
-    deps.setState(
-      createAuthenticatingState(
-        deps.send,
-        {
-          ...e.context,
-          attempt: e.context.attempt + 1,
-        },
-        logInFn,
-        recoverFn,
-        deps.setRecoveryCodes,
-        deps.config
-      ),
-      event
-    );
-  },
+  deps.setState(
+    createAuthenticatingState(
+      deps.send,
+      {
+        ...e.context,
+        attempt: e.context.attempt + 1,
+      },
+      logInFn,
+      recoverFn,
+      deps.setRecoveryCodes,
+      deps.propagateFlowCancelledError
+    ),
+    event
+  );
+};
 
-  sid_cancel: (event, state, deps) => {
-    const cancelFn = deps.getCancelFn();
-    if (cancelFn) {
-      cancelFn();
-    }
+export type FlowHandlers = Partial<Record<Event["type"], TransitionHandler>>;
 
-    if (deps.config.resetOnCancel) {
-      deps.setState(createInitialState(deps.send), event);
-    }
-  },
-
-  sid_init: () => {},
-} as const;
-
-export function createTransitionFunction(deps: FlowDependencies) {
+export function createTransitionFunction(
+  deps: FlowDependencies,
+  handlers: FlowHandlers
+) {
   return function transition(event: Event, state: FlowState) {
-    const handler = HANDLERS[event.type];
+    const handler = handlers[event.type];
     if (handler) {
       handler(event, state, deps);
     }

@@ -2,18 +2,32 @@ import { NULL_FACTOR } from "../../../domain/handles";
 import { Cancel, LogIn, MFA, Recover } from "../../../domain/types";
 import {
   CreateFlowOptions,
-  FlowConfig,
   Observer,
   Event,
   createAuthenticatingState,
   HistoryEntry,
   createTransitionFunction,
   FlowState,
+  FlowHandlers,
+  storeRecoveryCodesHandler,
+  loginUpdateContextHandler,
+  loginSuccessHandler,
+  loginErrorHandler,
+  retryHandler,
 } from "./flow.common";
 
-const orgSwitchingFlowConfig: FlowConfig = {
-  propagateFlowCancelled: true,
-  resetOnCancel: false,
+const orgSwitchingFlowHandlers: FlowHandlers = {
+  sid_storeRecoveryCodes: storeRecoveryCodesHandler,
+  "sid_login.update_context": loginUpdateContextHandler,
+  "sid_login.success": loginSuccessHandler,
+  "sid_login.error": loginErrorHandler,
+  sid_retry: retryHandler,
+  sid_cancel: (event, state, deps) => {
+    const cancelFn = deps.getCancelFn();
+    if (cancelFn) {
+      cancelFn();
+    }
+  },
 };
 
 /**
@@ -68,26 +82,29 @@ export function createOrgSwitchingFlow(opts: CreateFlowOptions) {
     logInFn!,
     recoverFn!,
     setRecoveryCodes,
-    orgSwitchingFlowConfig
+    true // propagateFlowCancelledError
   );
 
   // each history entry contains a state and the event that triggered the transition to that state
   const history: HistoryEntry[] = [{ state, event: { type: "sid_init" } }];
 
-  const transition = createTransitionFunction({
-    send,
-    setState,
-    getLogInFn: () => logInFn,
-    getRecoverFn: () => recoverFn,
-    getCancelFn: () => cancelFn,
-    onSuccess: opts.onSuccess,
-    onError: opts.onError,
-    getRecoveryCodes: () => recoveryCodes,
-    setRecoveryCodes: (codes) => {
-      recoveryCodes = codes;
+  const transition = createTransitionFunction(
+    {
+      send,
+      setState,
+      getLogInFn: () => logInFn,
+      getRecoverFn: () => recoverFn,
+      getCancelFn: () => cancelFn,
+      onSuccess: opts.onSuccess,
+      onError: opts.onError,
+      getRecoveryCodes: () => recoveryCodes,
+      setRecoveryCodes: (codes) => {
+        recoveryCodes = codes;
+      },
+      propagateFlowCancelledError: true,
     },
-    config: orgSwitchingFlowConfig,
-  });
+    orgSwitchingFlowHandlers
+  );
 
   // provide the flow API - interact with the flow using the state object, subscribe and unsubscribe to state changes
   return {

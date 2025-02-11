@@ -1,18 +1,36 @@
 import { Cancel, LogIn, MFA, Recover } from "../../../domain/types";
 import {
   CreateFlowOptions,
-  FlowConfig,
   Observer,
   Event,
   createInitialState,
   HistoryEntry,
   createTransitionFunction,
   FlowState,
+  FlowHandlers,
+  loginHandler,
+  storeRecoveryCodesHandler,
+  loginUpdateContextHandler,
+  loginSuccessHandler,
+  loginErrorHandler,
+  retryHandler,
 } from "./flow.common";
 
-const authFlowConfig: FlowConfig = {
-  propagateFlowCancelled: false,
-  resetOnCancel: true,
+const authFlowHandlers: FlowHandlers = {
+  sid_login: loginHandler,
+  sid_storeRecoveryCodes: storeRecoveryCodesHandler,
+  "sid_login.update_context": loginUpdateContextHandler,
+  "sid_login.success": loginSuccessHandler,
+  "sid_login.error": loginErrorHandler,
+  sid_retry: retryHandler,
+  sid_cancel: (event, state, deps) => {
+    const cancelFn = deps.getCancelFn();
+    if (cancelFn) {
+      cancelFn();
+    }
+
+    deps.setState(createInitialState(deps.send), event);
+  },
 };
 
 /**
@@ -55,20 +73,23 @@ export function createAuthFlow(opts: CreateFlowOptions = {}) {
     observers.forEach((o) => o(state, changeEvent));
   }
 
-  const transition = createTransitionFunction({
-    send,
-    setState,
-    getLogInFn: () => logInFn,
-    getRecoverFn: () => recoverFn,
-    getCancelFn: () => cancelFn,
-    onSuccess: opts.onSuccess,
-    onError: opts.onError,
-    getRecoveryCodes: () => recoveryCodes,
-    setRecoveryCodes: (codes) => {
-      recoveryCodes = codes;
+  const transition = createTransitionFunction(
+    {
+      send,
+      setState,
+      getLogInFn: () => logInFn,
+      getRecoverFn: () => recoverFn,
+      getCancelFn: () => cancelFn,
+      onSuccess: opts.onSuccess,
+      onError: opts.onError,
+      getRecoveryCodes: () => recoveryCodes,
+      setRecoveryCodes: (codes) => {
+        recoveryCodes = codes;
+      },
+      propagateFlowCancelledError: false,
     },
-    config: authFlowConfig,
-  });
+    authFlowHandlers
+  );
 
   // provide the flow API - interact with the flow using the state object, subscribe and unsubscribe to state changes
   return {
