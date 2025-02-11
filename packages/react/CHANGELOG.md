@@ -1,5 +1,12 @@
 # @slashid/react
 
+## 1.32.0
+
+### Minor Changes
+
+- 503d904: Store user tokens for multiple organizations, suffixed with org ID
+- 503d904: Create internal components for the new org switching flow
+
 ## 1.31.5
 
 ### Patch Changes
