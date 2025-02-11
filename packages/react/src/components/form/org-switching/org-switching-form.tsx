@@ -1,6 +1,6 @@
 import { clsx } from "clsx";
 import { useOrgSwitchingFlowState } from "./useOrgSwitchingFlowState";
-import { CreateFlowOptions } from "./org-switching-flow";
+import { CreateFlowOptions } from "../flow/flow.common";
 import { Authenticating } from "../authenticating";
 import { Error } from "../error";
 import { Success } from "../success";

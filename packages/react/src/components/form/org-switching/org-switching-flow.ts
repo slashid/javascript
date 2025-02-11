@@ -1,275 +1,18 @@
-import { Utils, Errors, User, ReachablePersonHandle } from "@slashid/slashid";
+import { Cancel, LogIn, MFA, Recover } from "../../../domain/types";
 import {
-  Cancel,
-  LogIn,
-  LoginConfiguration,
-  Retry,
-  MFA,
-  LoginOptions,
-  Recover,
-  RetryPolicy,
-  Handle,
-} from "../../../domain/types";
-import { ensureError } from "../../../domain/errors";
-import { isFactorRecoverable } from "../../../domain/handles";
-import { StoreRecoveryCodesState } from "../store-recovery-codes";
+  CreateFlowOptions,
+  FlowConfig,
+  Observer,
+  Event,
+  createAuthenticatingState,
+  HistoryEntry,
+  createTransitionFunction,
+  FlowState,
+} from "../flow/flow.common";
 
-export type AuthnContext = {
-  config: LoginConfiguration;
-  options?: LoginOptions;
-  attempt: number;
-};
-export interface InitialState {
-  status: "initial";
-  logIn: (config: LoginConfiguration, options?: LoginOptions) => void;
-}
-
-export interface AuthenticatingState {
-  status: "authenticating";
-  context: AuthnContext;
-  retry: Retry;
-  cancel: Cancel;
-  updateContext: (context: AuthnContext) => void;
-  recover: () => void;
-  logIn: () => void;
-  setRecoveryCodes: (codes: string[]) => void;
-}
-
-export interface SuccessState {
-  status: "success";
-}
-
-export interface ErrorState {
-  status: "error";
-  context: AuthenticatingState["context"] & {
-    error: Error;
-  };
-  retry: Retry;
-  cancel: Cancel;
-}
-
-interface LoginEvent {
-  type: "sid_login";
-  config: LoginConfiguration;
-  options?: LoginOptions;
-}
-
-interface UpdateAuthnContextEvent {
-  type: "sid_login.update_context";
-  context: AuthnContext;
-}
-
-interface LoginSuccessEvent {
-  type: "sid_login.success";
-  user: User;
-}
-
-interface LoginErrorEvent {
-  type: "sid_login.error";
-  error: Error;
-}
-
-interface CancelEvent {
-  type: "sid_cancel";
-}
-
-interface RetryEvent {
-  type: "sid_retry";
-  context: AuthenticatingState["context"];
-  policy: RetryPolicy;
-}
-
-interface InitEvent {
-  type: "sid_init";
-}
-
-interface StoreRecoveryCodesEvent {
-  type: "sid_storeRecoveryCodes";
-  user: User;
-}
-
-type Event =
-  | InitEvent
-  | LoginEvent
-  | UpdateAuthnContextEvent
-  | LoginSuccessEvent
-  | LoginErrorEvent
-  | RetryEvent
-  | CancelEvent
-  | StoreRecoveryCodesEvent;
-
-type FlowActions = {
-  // a function that will be called when the state is entered
-  entry?: () => void;
-};
-
-export type FlowState = FlowActions &
-  (
-    | InitialState
-    | AuthenticatingState
-    | SuccessState
-    | ErrorState
-    | StoreRecoveryCodesState
-  );
-
-type Observer = (state: FlowState, event: Event) => void;
-type Send = (e: Event) => void;
-
-const createInitialState = (send: Send): InitialState => {
-  return {
-    status: "initial",
-    logIn: (config, options) => {
-      send({ type: "sid_login", config, options });
-    },
-  };
-};
-
-const createAuthenticatingState = (
-  send: Send,
-  context: AuthenticatingState["context"],
-  logInFn: LogIn | MFA,
-  recoverFn: Recover,
-  setRecoveryCodes: (codes: string[]) => void
-): AuthenticatingState => {
-  function performLogin() {
-    if (!logInFn) return;
-    return logInFn(context.config, context.options)
-      .then((user) => {
-        if (!user) {
-          send({
-            type: "sid_login.error",
-            error: new Error("User not returned from /id"),
-          });
-          return;
-        }
-
-        if (context.config.factor.method === "totp") {
-          send({
-            type: "sid_storeRecoveryCodes",
-            user,
-          });
-          return;
-        }
-        send({ type: "sid_login.success", user });
-      })
-      .catch((error) => {
-        if (Errors.isFlowCancelledError(error)) {
-          // propagate error when the flow is cancelled
-          throw error;
-        }
-        send({ type: "sid_login.error", error });
-      });
-  }
-
-  async function recover() {
-    if (
-      !context.config.handle?.type ||
-      !Utils.isReachablePersonHandleType(context.config.handle.type)
-    ) {
-      send({
-        type: "sid_login.error",
-        error: Errors.createSlashIDError({
-          name: Errors.ERROR_NAMES.recoverNonReachableHandleType,
-          message: "Recovery requires a reachable handle type.",
-          context,
-        }),
-      });
-      return;
-    }
-
-    // not possible at the moment
-    if (!isFactorRecoverable(context.config.factor)) return;
-
-    try {
-      return await recoverFn({
-        factor: context.config.factor,
-        handle: context.config.handle as ReachablePersonHandle,
-      });
-
-      // recover does not authenticate on its own
-      // we still need to wait for login to complete
-    } catch (error) {
-      send({ type: "sid_login.error", error: ensureError(error) });
-    }
-  }
-
-  return {
-    status: "authenticating",
-    context: {
-      attempt: context.attempt,
-      config: context.config,
-      options: context.options,
-    },
-    retry: (policy = "retry") => {
-      send({ type: "sid_retry", context, policy });
-    },
-    recover,
-    cancel: () => {
-      // Cancellation API needs to be exposed from the core SDK
-      send({ type: "sid_cancel" });
-    },
-    logIn: performLogin,
-    setRecoveryCodes,
-    updateContext: (newContext: AuthnContext) => {
-      send({
-        type: "sid_login.update_context",
-        context: newContext,
-      });
-    },
-  };
-};
-
-const createSuccessState = (): SuccessState => {
-  return {
-    status: "success",
-  };
-};
-
-const createErrorState = (
-  send: Send,
-  context: ErrorState["context"]
-): ErrorState => {
-  return {
-    status: "error",
-    context,
-    retry: (policy = "retry") => {
-      send({ type: "sid_retry", context, policy });
-    },
-    cancel: () => {
-      send({ type: "sid_cancel" });
-    },
-  };
-};
-
-const createStoreRecoveryCodesState = (
-  send: Send,
-  recoveryCodes: string[],
-  user: User
-): StoreRecoveryCodesState => {
-  return {
-    status: "storeRecoveryCodes",
-    context: {
-      recoveryCodes,
-    },
-    confirm: () => {
-      send({ type: "sid_login.success", user });
-    },
-  };
-};
-
-export type CreateFlowOptions = {
-  oid: string;
-  onSuccess?: (user: User) => void;
-  onError?: (error: Error, context: ErrorState["context"]) => void;
-  logInFn?: LogIn | MFA;
-  recover?: Recover;
-  cancelFn?: Cancel;
-  lastUserHandle?: Handle;
-};
-
-type HistoryEntry = {
-  state: FlowState;
-  event: Event;
+const authFlowConfig: FlowConfig = {
+  propagateFlowCancelled: true,
+  resetOnCancel: false,
 };
 
 /**
@@ -288,13 +31,14 @@ type HistoryEntry = {
  * @returns
  */
 export function createFlow(opts: CreateFlowOptions) {
+  let state: FlowState;
   let logInFn: undefined | LogIn | MFA = opts.logInFn;
   let recoverFn: undefined | Recover = opts.recover;
   let cancelFn: undefined | Cancel = opts.cancelFn;
   let recoveryCodes: undefined | string[] = undefined;
   let observers: Observer[] = [];
   const send = (event: Event) => {
-    transition(event);
+    transition(event, state);
   };
 
   const setRecoveryCodes = (codes: string[]) => {
@@ -310,7 +54,7 @@ export function createFlow(opts: CreateFlowOptions) {
     observers.forEach((o) => o(state, changeEvent));
   }
 
-  let state: FlowState = createAuthenticatingState(
+  state = createAuthenticatingState(
     send,
     {
       config: {
@@ -323,114 +67,29 @@ export function createFlow(opts: CreateFlowOptions) {
     },
     logInFn!,
     recoverFn!,
-    setRecoveryCodes
+    setRecoveryCodes,
+    authFlowConfig
   );
 
   // each history entry contains a state and the event that triggered the transition to that state
   const history: HistoryEntry[] = [{ state, event: { type: "sid_init" } }];
 
-  const { onSuccess, onError } = opts;
-
   // notify subscribers every time the state changes
 
-  async function transition(e: Event) {
-    switch (e.type) {
-      case "sid_storeRecoveryCodes":
-        // recovery codes are only stored on register authenticator
-        if (!recoveryCodes) {
-          send({ type: "sid_login.success", user: e.user });
-          break;
-        }
-
-        setState(
-          createStoreRecoveryCodesState(send, recoveryCodes!, e.user),
-          e
-        );
-        break;
-      case "sid_login.update_context":
-        // TODO replace with a check for ready state
-        if (!logInFn || !recoverFn) break;
-
-        const updatedContext: AuthnContext = {
-          config: e.context.config,
-          options: e.context.options,
-          attempt: e.context.attempt,
-        };
-
-        setState(
-          createAuthenticatingState(
-            send,
-            updatedContext,
-            logInFn,
-            recoverFn,
-            setRecoveryCodes
-          ),
-          e
-        );
-        break;
-      case "sid_login.success":
-        // call onSuccess if present
-        if (typeof onSuccess === "function") {
-          onSuccess(e.user);
-        }
-
-        setState(createSuccessState(), e);
-        break;
-      case "sid_login.error":
-        if (state.status !== "authenticating") break;
-
-        const errorContext: ErrorState["context"] = {
-          ...state.context,
-          error: ensureError(e.error),
-        };
-
-        // call onError if present
-        if (typeof onError === "function") {
-          onError(e.error, errorContext);
-        }
-
-        setState(createErrorState(send, errorContext), e);
-        break;
-      case "sid_retry":
-        // TODO replace with a check for ready state
-        if (!logInFn || !recoverFn) break;
-
-        if (typeof cancelFn === "function") {
-          cancelFn();
-        }
-
-        const retryContext: AuthenticatingState["context"] = {
-          config: e.context.config,
-          options: e.context.options,
-          attempt: e.context.attempt + 1,
-        };
-
-        if (e.policy === "reset") {
-          setState(createInitialState(send), e);
-          break;
-        }
-
-        setState(
-          createAuthenticatingState(
-            send,
-            retryContext,
-            logInFn,
-            recoverFn,
-            setRecoveryCodes
-          ),
-          e
-        );
-        break;
-      case "sid_cancel":
-        if (typeof cancelFn === "function") {
-          cancelFn();
-        }
-
-        break;
-      default:
-        break;
-    }
-  }
+  const transition = createTransitionFunction({
+    send,
+    setState,
+    getLogInFn: () => logInFn,
+    getRecoverFn: () => recoverFn,
+    getCancelFn: () => cancelFn,
+    onSuccess: opts.onSuccess,
+    onError: opts.onError,
+    getRecoveryCodes: () => recoveryCodes,
+    setRecoveryCodes: (codes) => {
+      recoveryCodes = codes;
+    },
+    config: authFlowConfig,
+  });
 
   // provide the flow API - interact with the flow using the state object, subscribe and unsubscribe to state changes
   return {
