@@ -31,7 +31,7 @@ const orgSwitchingFlowConfig: FlowConfig = {
  * @param opts
  * @returns
  */
-export function createFlow(opts: CreateFlowOptions) {
+export function createOrgSwitchingFlow(opts: CreateFlowOptions) {
   let state: FlowState;
   let logInFn: undefined | LogIn | MFA = opts.logInFn;
   let recoverFn: undefined | Recover = opts.recover;
@@ -112,4 +112,4 @@ export function createFlow(opts: CreateFlowOptions) {
   };
 }
 
-export type Flow = ReturnType<typeof createFlow>;
+export type Flow = ReturnType<typeof createOrgSwitchingFlow>;

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { useSlashID } from "../../../hooks/use-slash-id";
-import { Flow, createFlow } from "../flow/org-switching-flow";
+import { Flow, createOrgSwitchingFlow } from "../flow/org-switching-flow";
 import { Handle } from "../../../domain/types";
 import { FlowState, CreateFlowOptions } from "../flow/flow.common";
 
@@ -18,7 +18,7 @@ export function useOrgSwitchingFlowState(opts: CreateFlowOptions) {
   }, [user]);
 
   const flowRef = useRef<Flow>(
-    createFlow({
+    createOrgSwitchingFlow({
       lastUserHandle,
       ...opts,
       logInFn: async () => {
