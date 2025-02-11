@@ -1,6 +1,6 @@
 import { clsx } from "clsx";
 import { useFlowState } from "./useFlowState";
-import { CreateFlowOptions } from "./flow";
+import { CreateFlowOptions } from "./flow/flow.common";
 import { Initial } from "./initial";
 import { Authenticating } from "./authenticating";
 import { Error } from "./error";

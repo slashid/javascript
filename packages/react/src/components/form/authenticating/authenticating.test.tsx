@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { AuthenticatingImplementation as Authenticating } from "./index";
-import { AuthenticatingState } from "../flow";
+import { AuthenticatingState } from "../flow/flow.common";
 import {
   TestSlashIDProvider,
   TestTextProvider,

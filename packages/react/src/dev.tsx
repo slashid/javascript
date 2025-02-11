@@ -19,7 +19,7 @@ import {
 } from "./main";
 import { defaultOrganization } from "./middleware/default-organization";
 import { Slot } from "./components/slot";
-import { AuthenticatingState } from "./components/form/flow";
+import { AuthenticatingState } from "./components/form/flow/flow.common";
 import { Authenticating } from "./components/form";
 import { OrgSwitchingForm } from "./components/form/org-switching/org-switching-form";
 

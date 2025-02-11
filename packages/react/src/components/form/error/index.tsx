@@ -13,7 +13,7 @@ import { clsx } from "clsx";
 import { useConfiguration } from "../../../hooks/use-configuration";
 import { Text } from "../../text";
 import { TextConfigKey } from "../../text/constants";
-import { ErrorState } from "../flow";
+import { ErrorState } from "../flow/flow.common";
 import { useInternalFormContext } from "../internal-context";
 
 import * as styles from "./error.css";

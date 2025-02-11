@@ -3,7 +3,7 @@ import { clsx } from "clsx";
 import { FormProvider } from "../../context/form-context";
 import { useCallback, useRef } from "react";
 import { Handle, LoginOptions } from "../../domain/types";
-import { CreateFlowOptions } from "../form/flow";
+import { CreateFlowOptions } from "../form/flow/flow.common";
 import { useFlowState } from "../form/useFlowState";
 import { AuthenticatingImplementation as Authenticating } from "../form/authenticating";
 import { Success } from "../form/success";

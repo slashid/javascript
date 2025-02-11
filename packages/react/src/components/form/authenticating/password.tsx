@@ -21,7 +21,7 @@ import {
 } from "@slashid/react-primitives";
 import { TextConfigKey } from "../../text/constants";
 import { useConfiguration } from "../../../hooks/use-configuration";
-import { AuthenticatingState } from "../flow";
+import { AuthenticatingState } from "../flow/flow.common";
 import { HandleType } from "../../../domain/types";
 import { InvalidPasswordSubmittedEvent } from "@slashid/slashid";
 import {

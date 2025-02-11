@@ -4,15 +4,15 @@ import {
   FlowConfig,
   Observer,
   Event,
-  createAuthenticatingState,
+  createInitialState,
   HistoryEntry,
   createTransitionFunction,
   FlowState,
-} from "../flow/flow.common";
+} from "./flow.common";
 
 const authFlowConfig: FlowConfig = {
-  propagateFlowCancelled: true,
-  resetOnCancel: false,
+  propagateFlowCancelled: false,
+  resetOnCancel: true,
 };
 
 /**
@@ -30,21 +30,22 @@ const authFlowConfig: FlowConfig = {
  * @param opts
  * @returns
  */
-export function createFlow(opts: CreateFlowOptions) {
+export function createAuthFlow(opts: CreateFlowOptions = {}) {
   let state: FlowState;
-  let logInFn: undefined | LogIn | MFA = opts.logInFn;
-  let recoverFn: undefined | Recover = opts.recover;
-  let cancelFn: undefined | Cancel = opts.cancelFn;
+  let logInFn: undefined | LogIn | MFA = undefined;
+  let recoverFn: undefined | Recover = undefined;
+  let cancelFn: undefined | Cancel = undefined;
   let recoveryCodes: undefined | string[] = undefined;
   let observers: Observer[] = [];
   const send = (event: Event) => {
     transition(event, state);
   };
 
-  const setRecoveryCodes = (codes: string[]) => {
-    recoveryCodes = codes;
-  };
+  state = createInitialState(send);
+  // each history entry contains a state and the event that triggered the transition to that state
+  const history: HistoryEntry[] = [{ state, event: { type: "sid_init" } }];
 
+  // notify subscribers every time the state changes
   function setState(newState: FlowState, changeEvent: Event) {
     state = newState;
 
@@ -53,28 +54,6 @@ export function createFlow(opts: CreateFlowOptions) {
 
     observers.forEach((o) => o(state, changeEvent));
   }
-
-  state = createAuthenticatingState(
-    send,
-    {
-      config: {
-        factor: {
-          method: "email_link",
-        },
-        handle: opts.lastUserHandle,
-      },
-      attempt: 0,
-    },
-    logInFn!,
-    recoverFn!,
-    setRecoveryCodes,
-    authFlowConfig
-  );
-
-  // each history entry contains a state and the event that triggered the transition to that state
-  const history: HistoryEntry[] = [{ state, event: { type: "sid_init" } }];
-
-  // notify subscribers every time the state changes
 
   const transition = createTransitionFunction({
     send,
@@ -114,4 +93,4 @@ export function createFlow(opts: CreateFlowOptions) {
   };
 }
 
-export type Flow = ReturnType<typeof createFlow>;
+export type Flow = ReturnType<typeof createAuthFlow>;

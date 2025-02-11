@@ -10,7 +10,7 @@ import {
   LoginOptions,
 } from "../../../domain/types";
 import { useConfiguration } from "../../../hooks/use-configuration";
-import { InitialState } from "../flow";
+import { InitialState } from "../flow/flow.common";
 
 import { Controls } from "./controls";
 import { LogoSlot } from "./logo";
