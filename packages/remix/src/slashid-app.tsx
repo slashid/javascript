@@ -64,7 +64,7 @@ export const createSlashIDApp = (options: SlashIDAppOptions) => {
   const slashIDLoader =
     (loader: LoaderFunction) => (args: LoaderFunctionArgs) => {
       const cookies = args.request.headers.get("cookie");
-      const token = getUserTokenFromCookies(cookies);
+      const token = getUserTokenFromCookies(cookies, opts.oid);
 
       if (!token) return loader(args);
 

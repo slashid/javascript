@@ -4,6 +4,7 @@ import { renderHook, waitFor } from "@testing-library/react";
 import { useSlashID, SlashIDProvider } from "../main";
 import { createAnonymousTestUser } from "../components/test-utils";
 import { SlashID } from "@slashid/slashid";
+import { STORAGE_TOKEN_KEY } from "../context/slash-id-context";
 
 describe("Anonymous users", () => {
   afterEach(() => {
@@ -55,7 +56,7 @@ describe("Anonymous users", () => {
     const TEST_ROOT_OID = "oid_1";
 
     const anonUser = createAnonymousTestUser({ oid: TEST_ROOT_OID });
-    localStorage.setItem("@slashid/USER_TOKEN", anonUser.token);
+    localStorage.setItem(STORAGE_TOKEN_KEY(TEST_ROOT_OID), anonUser.token);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const wrapper = ({ children }: PropsWithChildren<any>) => (
       <SlashIDProvider oid={TEST_ROOT_OID} anonymousUsersEnabled>

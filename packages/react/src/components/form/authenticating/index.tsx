@@ -22,7 +22,7 @@ import { Children, useEffect, useRef, useState } from "react";
 import { TOTPState } from "./totp";
 import { Delayed } from "@slashid/react-primitives";
 import { useInternalFormContext } from "../internal-context";
-import { AuthenticatingState } from "../flow";
+import { AuthenticatingState } from "../flow/flow.common";
 import { TIME_MS } from "../types";
 import { Loader } from "./icons";
 import {

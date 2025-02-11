@@ -93,6 +93,11 @@ export const handlers = [
     })
   ),
   ...[route, routeProduction, routeCustom].map((r) =>
+    rest.post(r("/token/revoke"), (_, res, ctx) => {
+      return res(ctx.status(200), ctx.json({}));
+    })
+  ),
+  ...[route, routeProduction, routeCustom].map((r) =>
     rest.post(r("/actions/sdk"), (_, res, ctx) => {
       return res(ctx.status(200), ctx.json({}));
     })

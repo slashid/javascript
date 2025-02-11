@@ -85,6 +85,15 @@ type ExternalStateParams = Pick<SlashIDProviderProps, "oid" | "initialToken">;
 export type Subscribe = SlashID["subscribe"];
 export type Unsubscribe = SlashID["unsubscribe"];
 
+type OrgSwitchingState =
+  | {
+      state: "idle";
+    }
+  | {
+      state: "switching";
+      oid: string;
+    };
+
 export interface ISlashIDContext {
   sid: SlashID | undefined;
   user: User | undefined;
@@ -97,11 +106,16 @@ export interface ISlashIDContext {
   mfa: MFA;
   recover: Recover;
   validateToken: (token: string) => Promise<boolean>;
-  __switchOrganizationInContext: ({ oid }: { oid: string }) => Promise<void>;
+  __switchOrganizationInContext: ({
+    oid,
+  }: {
+    oid: string;
+  }) => Promise<User | undefined>;
   __syncExternalState: (state: ExternalStateParams) => Promise<void>;
+  __orgSwitchingState: OrgSwitchingState;
 }
 
-export const initialContextValue = {
+export const initialContextValue: ISlashIDContext = {
   sid: undefined,
   user: undefined,
   anonymousUser: undefined,
@@ -115,13 +129,17 @@ export const initialContextValue = {
   validateToken: async () => false,
   __switchOrganizationInContext: async () => undefined,
   __syncExternalState: async () => undefined,
+  __orgSwitchingState: { state: "idle" },
 };
 
 export const SlashIDContext =
   createContext<ISlashIDContext>(initialContextValue);
 SlashIDContext.displayName = "SlashIDContext";
 
-const STORAGE_TOKEN_KEY = "@slashid/USER_TOKEN";
+export const LEGACY_STORAGE_TOKEN_KEY = "@slashid/USER_TOKEN";
+
+export const STORAGE_TOKEN_KEY = (oid: string) =>
+  `${LEGACY_STORAGE_TOKEN_KEY}/${oid}`;
 
 const createStorage = (storageType: StorageOption) => {
   switch (storageType) {
@@ -158,7 +176,16 @@ export const SlashIDProvider = ({
   const storageRef = useRef<Storage | undefined>(undefined);
   const sidRef = useRef<SlashID | undefined>(undefined);
   const eventBufferRef = useRef<EventBuffer | undefined>();
+  const [orgSwitchingState, setOrgSwitchingState] = useState<OrgSwitchingState>(
+    {
+      state: "idle",
+    }
+  );
 
+  const currentOrgStorageTokenKey = useMemo(
+    () => STORAGE_TOKEN_KEY(oid),
+    [oid]
+  );
   /**
    * Restarts the React SDK lifecycle with a new
    * configuration, potentially for a different organization.
@@ -172,19 +199,23 @@ export const SlashIDProvider = ({
     []
   );
 
-  /**
-   * Restarts the React SDK lifecycle with a new
-   * organizational context
-   */
-  const __switchOrganizationInContext = useCallback(
-    async ({ oid: newOid }: { oid: string }) => {
-      if (!user) return;
+  const validateToken = useCallback(
+    async (token: string): Promise<boolean> => {
+      const tokenUser = new User(token, sidRef.current!);
 
-      const newToken = await user.getTokenForOrganization(newOid);
+      if (tokenUser?.anonymous && !anonymousUsersEnabled) {
+        return false;
+      }
 
-      __syncExternalState({ oid: newOid, initialToken: newToken });
+      try {
+        const ret = await tokenUser.validateToken();
+        return ret.valid;
+      } catch (e) {
+        console.error(e);
+        return false;
+      }
     },
-    [__syncExternalState, user]
+    [anonymousUsersEnabled]
   );
 
   const storeUser = useCallback(
@@ -194,13 +225,49 @@ export const SlashIDProvider = ({
       }
 
       setUser(newUser);
-      storageRef.current?.setItem(STORAGE_TOKEN_KEY, newUser.token);
-
-      if (newUser.oid !== oid) {
-        __switchOrganizationInContext({ oid: newUser.oid });
-      }
+      storageRef.current?.setItem(currentOrgStorageTokenKey, newUser.token);
     },
-    [state, __switchOrganizationInContext, oid]
+    [state, currentOrgStorageTokenKey]
+  );
+
+  /**
+   * Restarts the React SDK lifecycle with a new
+   * organizational context
+   */
+  const __switchOrganizationInContext = useCallback(
+    async ({ oid: newOid }: { oid: string }) => {
+      if (!user) return;
+
+      setOrgSwitchingState({
+        state: "switching",
+        oid,
+      });
+
+      let newToken: string;
+
+      // check if a valid token for new org is in storage
+      const newOidToken = storageRef.current?.getItem(
+        STORAGE_TOKEN_KEY(newOid)
+      );
+      const isNewOidTokenValid =
+        newOidToken && (await validateToken(newOidToken));
+      if (isNewOidTokenValid) {
+        newToken = newOidToken;
+      } else {
+        newToken = await user.getTokenForOrganization(newOid);
+      }
+
+      const newUser = new User(newToken, sidRef.current);
+      storageRef.current?.setItem(STORAGE_TOKEN_KEY(newOid), newToken);
+
+      setUser(newUser);
+      setToken(newToken);
+      setOid(newOid);
+      setOrgSwitchingState({ state: "idle" });
+
+      return new User(newToken, sidRef.current);
+    },
+    [oid, user, validateToken]
   );
 
   const storeAnonymousUser = useCallback(
@@ -210,7 +277,7 @@ export const SlashIDProvider = ({
       }
 
       setAnonymousUser(anonUser);
-      storageRef.current?.setItem(STORAGE_TOKEN_KEY, anonUser.token);
+      storageRef.current?.setItem(currentOrgStorageTokenKey, anonUser.token);
 
       if (analyticsEnabled) {
         try {
@@ -221,7 +288,7 @@ export const SlashIDProvider = ({
         }
       }
     },
-    [analyticsEnabled, anonymousUsersEnabled, state]
+    [currentOrgStorageTokenKey, analyticsEnabled, anonymousUsersEnabled, state]
   );
 
   const clearAnonymousUser = useCallback(() => {
@@ -229,10 +296,10 @@ export const SlashIDProvider = ({
       return;
     }
 
-    storageRef.current?.removeItem(STORAGE_TOKEN_KEY);
+    storageRef.current?.removeItem(currentOrgStorageTokenKey);
 
     setAnonymousUser(undefined);
-  }, [anonymousUsersEnabled, state]);
+  }, [currentOrgStorageTokenKey, anonymousUsersEnabled, state]);
 
   const logOut = useCallback((): undefined => {
     if (state === "initial") {
@@ -243,7 +310,17 @@ export const SlashIDProvider = ({
       return;
     }
 
-    storageRef.current?.removeItem(STORAGE_TOKEN_KEY);
+    // search storage for user tokens
+    Object.entries(storageRef.current!).forEach(([key, maybeToken]) => {
+      // check if the storage entry is a user token
+      if (key.startsWith(LEGACY_STORAGE_TOKEN_KEY)) {
+        // remove the entry
+        storageRef.current?.removeItem(key);
+        // revoke removed token
+        const tempUser = new User(maybeToken, sidRef.current);
+        tempUser.logout();
+      }
+    });
 
     if (analyticsEnabled) {
       try {
@@ -253,7 +330,6 @@ export const SlashIDProvider = ({
       }
     }
 
-    user.logout();
     setUser(undefined);
     // we need to set the oid back to the root on log out
     setOid(initialOid);
@@ -402,25 +478,6 @@ export const SlashIDProvider = ({
     [state]
   );
 
-  const validateToken = useCallback(
-    async (token: string): Promise<boolean> => {
-      const tokenUser = new User(token, sidRef.current!);
-
-      if (tokenUser?.anonymous && !anonymousUsersEnabled) {
-        return false;
-      }
-
-      try {
-        const ret = await tokenUser.validateToken();
-        return ret.valid;
-      } catch (e) {
-        console.error(e);
-        return false;
-      }
-    },
-    [anonymousUsersEnabled]
-  );
-
   useEffect(() => {
     if (state === "initial") {
       const slashId = new SlashID({
@@ -499,13 +556,13 @@ export const SlashIDProvider = ({
     };
 
     const loginWithTokenFromStorage = async () => {
-      const tokenFromStorage = storage.getItem(STORAGE_TOKEN_KEY);
+      const tokenFromStorage = storage.getItem(currentOrgStorageTokenKey);
 
       const isValidToken =
         tokenFromStorage && (await validateToken(tokenFromStorage));
 
       if (!isValidToken) {
-        storage.removeItem(STORAGE_TOKEN_KEY);
+        storage.removeItem(currentOrgStorageTokenKey);
 
         return null;
       }
@@ -526,6 +583,22 @@ export const SlashIDProvider = ({
       return user;
     };
 
+    const loginWithTokenFromStorageLegacyKey = async () => {
+      const tokenFromStorage = storage.getItem(LEGACY_STORAGE_TOKEN_KEY);
+      if (!tokenFromStorage) {
+        return null;
+      }
+
+      // always clean up the storage if the token is present
+      storage.removeItem(LEGACY_STORAGE_TOKEN_KEY);
+      const isValidToken = await validateToken(tokenFromStorage);
+      if (!isValidToken) {
+        return null;
+      }
+
+      return createAndStoreUserFromToken(tokenFromStorage);
+    };
+
     const createAnonymousUser = async () => {
       if (!anonymousUsersEnabled) return null;
 
@@ -542,6 +615,7 @@ export const SlashIDProvider = ({
       [
         loginWithInitialToken,
         loginWithDirectID,
+        loginWithTokenFromStorageLegacyKey,
         loginWithTokenFromStorage,
         createAnonymousUser,
       ],
@@ -553,6 +627,7 @@ export const SlashIDProvider = ({
       }
     );
   }, [
+    currentOrgStorageTokenKey,
     analyticsEnabled,
     anonymousUsersEnabled,
     createAndStoreUserFromToken,
@@ -563,7 +638,7 @@ export const SlashIDProvider = ({
     validateToken,
   ]);
 
-  const contextValue = useMemo(() => {
+  const contextValue = useMemo<ISlashIDContext>(() => {
     if (state === "initial") {
       return {
         sid: undefined,
@@ -579,6 +654,7 @@ export const SlashIDProvider = ({
         unsubscribe,
         __switchOrganizationInContext,
         __syncExternalState,
+        __orgSwitchingState: orgSwitchingState,
       };
     }
 
@@ -596,6 +672,7 @@ export const SlashIDProvider = ({
       validateToken,
       __switchOrganizationInContext,
       __syncExternalState,
+      __orgSwitchingState: orgSwitchingState,
     };
   }, [
     state,
@@ -610,6 +687,7 @@ export const SlashIDProvider = ({
     validateToken,
     __switchOrganizationInContext,
     __syncExternalState,
+    orgSwitchingState,
   ]);
 
   return (

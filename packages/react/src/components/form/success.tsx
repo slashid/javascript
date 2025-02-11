@@ -1,6 +1,6 @@
 import { Circle } from "@slashid/react-primitives";
 import { Text } from "../text";
-import { SuccessState } from "./flow";
+import { SuccessState } from "./flow/flow.common";
 
 const CheckIcon = () => (
   <Circle variant="primary">

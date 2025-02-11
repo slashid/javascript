@@ -3,7 +3,7 @@ import { Factor } from "@slashid/slashid";
 import { Divider } from "@slashid/react-primitives";
 
 import { FormProvider } from "../../context/form-context";
-import { InitialState } from "../form/flow";
+import { InitialState } from "../form/flow/flow.common";
 import { Logo } from "../form/initial/logo";
 import { Oidc } from "./oidc";
 import { Text } from "../text";
