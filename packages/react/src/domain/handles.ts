@@ -200,3 +200,7 @@ export function parsePhoneNumber(
     }
   }
 }
+
+export const NULL_FACTOR: Factor = {
+  method: "email_link",
+};

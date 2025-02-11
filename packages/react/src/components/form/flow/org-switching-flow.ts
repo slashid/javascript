@@ -1,3 +1,4 @@
+import { NULL_FACTOR } from "../../../domain/handles";
 import { Cancel, LogIn, MFA, Recover } from "../../../domain/types";
 import {
   CreateFlowOptions,
@@ -44,7 +45,7 @@ export function createFlow(opts: CreateFlowOptions) {
   const setRecoveryCodes = (codes: string[]) => {
     recoveryCodes = codes;
   };
-  
+
   // notify subscribers every time the state changes
   function setState(newState: FlowState, changeEvent: Event) {
     state = newState;
@@ -59,9 +60,7 @@ export function createFlow(opts: CreateFlowOptions) {
     send,
     {
       config: {
-        factor: {
-          method: "email_link",
-        },
+        factor: NULL_FACTOR, // will be replaced by authn context update
         handle: opts.lastUserHandle,
       },
       attempt: 0,
