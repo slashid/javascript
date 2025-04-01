@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 1.32.2
+
+### Patch Changes
+
+- 8bf5b15: Properly externalize deps
+
 ## 1.32.1
 
 ### Patch Changes
