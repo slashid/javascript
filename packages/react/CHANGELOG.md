@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 1.32.1
+
+### Patch Changes
+
+- 84375cf: Support React 19
+
 ## 1.32.0
 
 ### Minor Changes
