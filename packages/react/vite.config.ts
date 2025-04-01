@@ -2,8 +2,6 @@ import { resolve } from "node:path";
 import { defineConfig } from "vite";
 import { config } from "./vite.shared";
 
-import * as packageJson from "./package.json";
-
 export default defineConfig({
   ...config,
   build: {
@@ -13,7 +11,8 @@ export default defineConfig({
       fileName: `main`,
     },
     rollupOptions: {
-      external: [...Object.keys(packageJson.peerDependencies)],
+      // these must appear exactly as imported => having react here won't prevent react/jsx-runtime being bundled, so it must be explicit
+      external: ["react", "react/jsx-runtime", "react-dom", "react-dom/client"],
     },
     sourcemap: true,
   },
