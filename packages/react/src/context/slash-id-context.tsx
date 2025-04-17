@@ -141,15 +141,23 @@ export const LEGACY_STORAGE_TOKEN_KEY = "@slashid/USER_TOKEN";
 export const STORAGE_TOKEN_KEY = (oid: string) =>
   `${LEGACY_STORAGE_TOKEN_KEY}/${oid}`;
 
-const createStorage = (storageType: StorageOption) => {
+const createStorage = (storageType: StorageOption, options: { anonymousUsersEnabled: boolean }) => {
   switch (storageType) {
     case "memory":
+      if (options.anonymousUsersEnabled) {
+        console.warn("Anonymous users created with 'memory' storage will not be persisted across sessions or page refreshes")
+      }
       return new MemoryStorage();
     case "localStorage":
       return window.localStorage;
     case "cookie":
       return new CookieStorage();
     default:
+      if (options.anonymousUsersEnabled) {
+        console.warn("Defaulting to 'localStorage' storage for better compatibility with anonymous users. It is recommended that you explicitly set the 'tokenStorage' prop when using anonymous users.")
+        return window.localStorage
+      }
+
       return new MemoryStorage();
   }
 };
@@ -487,22 +495,14 @@ export const SlashIDProvider = ({
         ...(sdkUrl && { sdkURL: sdkUrl }),
         ...(typeof analyticsEnabled === "boolean" && { analyticsEnabled }),
       });
-      const storage = createStorage(tokenStorage);
+      const storage = createStorage(tokenStorage, { anonymousUsersEnabled });
 
       storageRef.current = storage;
       sidRef.current = slashId;
 
       setState("loaded");
     }
-  }, [
-    oid,
-    baseApiUrl,
-    sdkUrl,
-    state,
-    tokenStorage,
-    analyticsEnabled,
-    environment,
-  ]);
+  }, [oid, baseApiUrl, sdkUrl, state, tokenStorage, analyticsEnabled, environment, anonymousUsersEnabled]);
 
   const createAndStoreUserFromToken = useCallback(
     (token: string): User | AnonymousUser | null => {
