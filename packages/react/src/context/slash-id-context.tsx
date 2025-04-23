@@ -30,6 +30,14 @@ import {
   createEventBuffer,
   EventBuffer,
 } from "../components/form/event-buffer";
+import {
+  clearOrgSwitchingFlag,
+  getStorageKeyForOrgSwitchingUser,
+  LEGACY_STORAGE_TOKEN_KEY,
+  raiseOrgSwitchingFlag,
+  shouldResumeOrgSwitchingFlow,
+  STORAGE_TOKEN_KEY,
+} from "../domain/org";
 
 export type StorageOption = "memory" | "localStorage" | "cookie";
 
@@ -136,11 +144,6 @@ export const SlashIDContext =
   createContext<ISlashIDContext>(initialContextValue);
 SlashIDContext.displayName = "SlashIDContext";
 
-export const LEGACY_STORAGE_TOKEN_KEY = "@slashid/USER_TOKEN";
-
-export const STORAGE_TOKEN_KEY = (oid: string) =>
-  `${LEGACY_STORAGE_TOKEN_KEY}/${oid}`;
-
 const createStorage = (storageType: StorageOption) => {
   switch (storageType) {
     case "memory":
@@ -225,7 +228,11 @@ export const SlashIDProvider = ({
       }
 
       setUser(newUser);
-      storageRef.current?.setItem(currentOrgStorageTokenKey, newUser.token);
+
+      storageRef.current?.setItem(
+        getStorageKeyForOrgSwitchingUser(newUser) || currentOrgStorageTokenKey,
+        newUser.token
+      );
     },
     [state, currentOrgStorageTokenKey]
   );
@@ -254,6 +261,7 @@ export const SlashIDProvider = ({
       if (isNewOidTokenValid) {
         newToken = newOidToken;
       } else {
+        raiseOrgSwitchingFlag();
         newToken = await user.getTokenForOrganization(newOid);
       }
 
@@ -264,6 +272,7 @@ export const SlashIDProvider = ({
       setToken(newToken);
       setOid(newOid);
       setOrgSwitchingState({ state: "idle" });
+      clearOrgSwitchingFlag();
 
       return new User(newToken, sidRef.current);
     },
@@ -621,7 +630,11 @@ export const SlashIDProvider = ({
       ],
       {
         until: (value) => value !== null,
-        then: () => {
+        then: (foundUser) => {
+          if (foundUser && shouldResumeOrgSwitchingFlow(oid, foundUser)) {
+            __switchOrganizationInContext({ oid: foundUser.oid });
+          }
+
           setState("ready");
         },
       }
@@ -636,6 +649,8 @@ export const SlashIDProvider = ({
     storeUser,
     token,
     validateToken,
+    oid,
+    __switchOrganizationInContext,
   ]);
 
   const contextValue = useMemo<ISlashIDContext>(() => {
