@@ -7,11 +7,9 @@ import {
   useSlashID,
 } from "../main";
 import { createTestUser, TEST_ORG_ID } from "../components/test-utils";
-import {
-  LEGACY_STORAGE_TOKEN_KEY,
-  STORAGE_TOKEN_KEY,
-} from "../context/slash-id-context";
+
 import userEvent from "@testing-library/user-event";
+import { STORAGE_TOKEN_KEY, LEGACY_STORAGE_TOKEN_KEY } from "../domain/org";
 
 describe("token storage key with org id suffix", () => {
   const getItemSpy = vi.spyOn(Storage.prototype, "getItem");

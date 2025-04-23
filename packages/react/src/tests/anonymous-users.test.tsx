@@ -4,7 +4,7 @@ import { renderHook, waitFor } from "@testing-library/react";
 import { useSlashID, SlashIDProvider } from "../main";
 import { createAnonymousTestUser } from "../components/test-utils";
 import { SlashID } from "@slashid/slashid";
-import { STORAGE_TOKEN_KEY } from "../context/slash-id-context";
+import { STORAGE_TOKEN_KEY } from "../domain/org";
 
 describe("Anonymous users", () => {
   afterEach(() => {
