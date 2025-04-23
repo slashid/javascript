@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 1.32.3
+
+### Patch Changes
+
+- 7c5b9c5: Fix the issue with HRD and SSO in redirect mode
+
 ## 1.32.2
 
 ### Patch Changes
