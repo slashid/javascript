@@ -1,5 +1,13 @@
 # react-remix
 
+## 0.1.76
+
+### Patch Changes
+
+- Updated dependencies [0f5ce87]
+  - @slashid/react@1.32.4
+  - demo-form@0.0.89
+
 ## 0.1.75
 
 ### Patch Changes
