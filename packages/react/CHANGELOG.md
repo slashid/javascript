@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 1.32.4
+
+### Patch Changes
+
+- 0f5ce87: Fix the subscriptions logic in the OTP component
+
 ## 1.32.3
 
 ### Patch Changes
