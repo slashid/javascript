@@ -69,8 +69,14 @@ function mapFormStateToMessageState(
 export const OTPState = ({ flowState }: Props) => {
   const { text } = useConfiguration();
   const { sid, subscribe, unsubscribe } = useSlashID();
-  const { values, registerField, registerSubmit, setError, clearError } =
-    useForm();
+  const {
+    values,
+    registerField,
+    registerSubmit,
+    setError,
+    clearError,
+    resetForm,
+  } = useForm();
   const [formState, setFormState] = useState<FormState>("initial");
   const submitInputRef = useRef<HTMLInputElement>(null);
 
@@ -81,16 +87,16 @@ export const OTPState = ({ flowState }: Props) => {
     });
   }, [factor, formState, handle]);
 
-  useEffect(() => {
-    const onOtpCodeSent = () => setFormState("input");
-    const onOtpIncorrectCodeSubmitted = () => {
-      setError("otp", {
-        message: text["authenticating.otpInput.submit.error"],
-      });
-      values["otp"] = "";
-      setFormState("input");
-    };
+  const onOtpCodeSent = useCallback(() => setFormState("input"), []);
+  const onOtpIncorrectCodeSubmitted = useCallback(() => {
+    resetForm();
+    setError("otp", {
+      message: text["authenticating.otpInput.submit.error"],
+    });
+    setFormState("input");
+  }, [resetForm, setError, text]);
 
+  useEffect(() => {
     subscribe("otpCodeSent", onOtpCodeSent);
     subscribe("otpIncorrectCodeSubmitted", onOtpIncorrectCodeSubmitted);
 
@@ -98,7 +104,7 @@ export const OTPState = ({ flowState }: Props) => {
       unsubscribe("otpCodeSent", onOtpCodeSent);
       unsubscribe("otpIncorrectCodeSubmitted", onOtpIncorrectCodeSubmitted);
     };
-  }, [formState, setError, sid, subscribe, text, unsubscribe, values]);
+  }, [onOtpCodeSent, onOtpIncorrectCodeSubmitted, subscribe, unsubscribe]);
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = useCallback(
     (e) => {
