@@ -16,7 +16,7 @@ describe("<OrgSwitchingForm>", () => {
 
     // @ts-ignore
     testUser._apiClient = {
-      getTokenV2: async () => {
+      postTokenV2: async () => {
         return {
           result: {
             type: "token",
@@ -62,7 +62,7 @@ describe("<OrgSwitchingForm>", () => {
 
     // @ts-ignore
     testUser._apiClient = {
-      getTokenV2: async () => {
+      postTokenV2: async () => {
         return {
           result: {
             type: "challenge_list",

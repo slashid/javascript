@@ -39,5 +39,12 @@
   "engines": {
     "node": ">=20.9.0"
   },
-  "packageManager": "pnpm@8.15.8"
+  "packageManager": "pnpm@8.15.8",
+  "pnpm": {
+    "overrides": {
+      "prismjs": "1.30.0",
+      "@babel/runtime": "7.26.10",
+      "@babel/helpers": "7.26.10"
+    }
+  }
 }
