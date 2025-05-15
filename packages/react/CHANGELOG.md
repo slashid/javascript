@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 1.32.5
+
+### Patch Changes
+
+- 9476b6b: Update vulnerable dependencies
+
 ## 1.32.4
 
 ### Patch Changes
