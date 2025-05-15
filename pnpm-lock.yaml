@@ -353,8 +353,8 @@ importers:
         specifier: ^8.0.2
         version: 8.3.1
       '@slashid/slashid':
-        specifier: 3.29.4
-        version: 3.29.4
+        specifier: 3.29.6
+        version: 3.29.6
       '@storybook/addon-essentials':
         specifier: 7.6.19
         version: 7.6.19(@types/react-dom@18.2.15)(@types/react@18.2.37)(react-dom@18.2.0)(react@18.2.0)
@@ -603,8 +603,8 @@ importers:
         specifier: workspace:*
         version: link:../react
       '@slashid/slashid':
-        specifier: 3.29.4
-        version: 3.29.4
+        specifier: 3.29.6
+        version: 3.29.6
       jose:
         specifier: ^5.2.0
         version: 5.2.0
@@ -1966,7 +1966,7 @@ packages:
     dependencies:
       '@babel/core': 7.24.5
       '@babel/helper-plugin-utils': 7.22.5
-      '@babel/template': 7.24.0
+      '@babel/template': 7.22.15
     dev: true
 
   /@babel/plugin-transform-destructuring@7.23.3(@babel/core@7.23.3):
@@ -8760,8 +8760,8 @@ packages:
       uuid: 8.3.2
     dev: true
 
-  /@slashid/slashid@3.29.4:
-    resolution: {integrity: sha512-0vn76lt7V5ZtmrtsR8cKhAlGISrpQpBWHb88FhQ7OU6t89ANLqNIOqyx2AGtx2WLSlXjm2ukJVLWlSQQrk0YVg==}
+  /@slashid/slashid@3.29.6:
+    resolution: {integrity: sha512-7hMONd6O5TbIyIQgrEyve18e0gJ67hv7YK733Ol/xwS+idbP8l3rqxQbz0zXEX30BJVmuW3CV/VxbL71ZHz67Q==}
     dependencies:
       '@types/uuid': 8.3.4
       compare-versions: 6.1.0
