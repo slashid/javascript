@@ -1,5 +1,4 @@
-import React from "react";
-import { render, waitFor } from "@testing-library/react";
+import { render, waitFor, screen } from "@testing-library/react";
 import { SlashIDProviderImplementation } from "./slash-id-context";
 import { MockSlashID } from "../components/test-utils";
 import type { SlashIDOptions } from "@slashid/slashid";
@@ -30,6 +29,7 @@ describe("Lifecycle methods", () => {
     await waitFor(() => {
       expect(onInitError).toHaveBeenCalledWith(error);
     });
+    expect(screen.getByText("Test")).toBeInTheDocument();
   });
 
   it("calls onInitError if createAnonymousUser throws", async () => {
@@ -59,5 +59,6 @@ describe("Lifecycle methods", () => {
     await waitFor(() => {
       expect(onInitError).toHaveBeenCalledWith(error);
     });
+    expect(screen.getByText("Test")).toBeInTheDocument();
   });
 });
