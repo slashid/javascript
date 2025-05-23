@@ -13,6 +13,7 @@ import {
   PersonHandleType,
   SlashID,
   SlashIDEnvironment,
+  SlashIDOptions,
   User,
 } from "@slashid/slashid";
 import {
@@ -81,6 +82,12 @@ export interface SlashIDProviderProps {
    * pre-login data is transferred.
    */
   anonymousUsersEnabled?: boolean;
+  /**
+   * On init SlashID SDK will attempt to resolve supported query params to a user token.
+   * If this fails, the SDK will ignore the error and resume work without the initial user token.
+   * You can optionally register a callback to be able to react to this error.
+   */
+  onInitError?: (e: Error) => void;
   themeProps?: ThemeProps;
   children: ReactNode;
 }
@@ -158,6 +165,25 @@ const createStorage = (storageType: StorageOption) => {
 };
 
 export const SlashIDProvider = ({
+  children,
+  ...props
+}: SlashIDProviderProps) => {
+  const createSlashID = useCallback((options: SlashIDOptions) => {
+    return new SlashID(options);
+  }, []);
+
+  return (
+    <SlashIDProviderImplementation {...props} createSlashID={createSlashID}>
+      {children}
+    </SlashIDProviderImplementation>
+  );
+};
+
+type SlashIDProviderImplementationProps = SlashIDProviderProps & {
+  createSlashID: (options: SlashIDOptions) => SlashID;
+};
+
+export function SlashIDProviderImplementation({
   oid: initialOid,
   initialToken,
   tokenStorage = "memory",
@@ -166,9 +192,11 @@ export const SlashIDProvider = ({
   sdkUrl,
   analyticsEnabled,
   anonymousUsersEnabled = false,
+  onInitError,
   themeProps,
+  createSlashID,
   children,
-}: SlashIDProviderProps) => {
+}: SlashIDProviderImplementationProps) {
   const [oid, setOid] = useState(initialOid);
   const [token, setToken] = useState(initialToken);
   const [state, setState] = useState<SDKState>(initialContextValue.sdkState);
@@ -489,7 +517,7 @@ export const SlashIDProvider = ({
 
   useEffect(() => {
     if (state === "initial") {
-      const slashId = new SlashID({
+      const slashId = createSlashID({
         oid,
         ...(environment && { environment }),
         ...(baseApiUrl && { baseURL: baseApiUrl }),
@@ -511,6 +539,7 @@ export const SlashIDProvider = ({
     tokenStorage,
     analyticsEnabled,
     environment,
+    createSlashID,
   ]);
 
   const createAndStoreUserFromToken = useCallback(
@@ -559,7 +588,12 @@ export const SlashIDProvider = ({
 
         return createAndStoreUserFromToken(tokenFromURL);
       } catch (e) {
-        console.error(e);
+        if (typeof onInitError === "function" && e instanceof Error) {
+          onInitError(e);
+        } else {
+          console.error(e);
+        }
+
         return null;
       }
     };
@@ -611,11 +645,17 @@ export const SlashIDProvider = ({
     const createAnonymousUser = async () => {
       if (!anonymousUsersEnabled) return null;
 
-      const anonUser = await sid.createAnonymousUser();
-
-      storeAnonymousUser(anonUser);
-
-      return anonUser;
+      try {
+        const anonUser = await sid.createAnonymousUser();
+        storeAnonymousUser(anonUser);
+        return anonUser;
+      } catch (e) {
+        if (typeof onInitError === "function" && e instanceof Error) {
+          onInitError(e);
+        } else {
+          console.error(e);
+        }
+      }
     };
 
     setState("retrievingToken");
@@ -651,6 +691,7 @@ export const SlashIDProvider = ({
     validateToken,
     oid,
     __switchOrganizationInContext,
+    onInitError,
   ]);
 
   const contextValue = useMemo<ISlashIDContext>(() => {
@@ -710,4 +751,4 @@ export const SlashIDProvider = ({
       <ThemeRoot {...themeProps}>{children}</ThemeRoot>
     </SlashIDContext.Provider>
   );
-};
+}

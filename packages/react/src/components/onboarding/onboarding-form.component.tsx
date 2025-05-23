@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { useSlashID } from "../../main";
 import { Form } from "../form";
 import { useOnboarding } from "./onboarding-context.hook";
+import { useSlashID } from "../../hooks/use-slash-id";
 
 export function OnboardingForm() {
   const id = "onboarding-login-form";

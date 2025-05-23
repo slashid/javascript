@@ -1,9 +1,9 @@
 import { createContext, useEffect, useMemo, useState } from "react";
 import { OnboardingAPI, OnboardingState } from "./onboarding.types";
 import { AnonymousUser, Errors, JsonObject } from "@slashid/slashid";
-import { useSlashID } from "../../main";
 import { ensureError } from "../../domain/errors";
 import { Loading } from "@slashid/react-primitives";
+import { useSlashID } from "../../hooks/use-slash-id";
 
 const initialOnboardingState: OnboardingState = {
   currentStepId: "",
