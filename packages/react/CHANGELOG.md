@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 1.32.6
+
+### Patch Changes
+
+- d8ef67a: Add the onInitError parameter
+
 ## 1.32.5
 
 ### Patch Changes
