@@ -1,6 +1,6 @@
 {
   "name": "demo-form",
-  "version": "0.0.90",
+  "version": "0.0.91",
   "private": true,
   "type": "module",
   "module": "./dist/demo-form.es.js",
