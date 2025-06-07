@@ -564,6 +564,31 @@ export function SlashIDProviderImplementation({
     [anonymousUsersEnabled, storeAnonymousUser, storeUser]
   );
 
+  /**
+   * In most cases user identification happens in `@slashid/slashid`
+   * during authentication, the exception are when users are
+   * "re-authenticated" using a stored token.
+   *
+   * In `@slashid/react` this happens in one of two scenarios:
+   * - Token is provided as `initialToken` prop
+   * - Token is discovered in storage i.e. `storage.getItem(STORAGE_TOKEN_KEY)`
+   */
+  const identifyUser = useCallback(
+    (user: User | AnonymousUser | null) => {
+      if (user && analyticsEnabled) {
+        try {
+          // in all other cases the core SDK will handle this
+          // here we just recreate the user object based on the preexisting token
+          // no event is emitted on the SDK side because of that
+          sidRef.current?.getAnalytics().identify(user);
+        } catch {
+          // fail silently
+        }
+      }
+    },
+    [analyticsEnabled]
+  );
+
   useEffect(() => {
     if (state !== "loaded") {
       return;
@@ -576,7 +601,11 @@ export function SlashIDProviderImplementation({
       const isTokenValid = token && (await validateToken(token));
       if (!isTokenValid) return null;
 
-      return createAndStoreUserFromToken(token);
+      const user = createAndStoreUserFromToken(token);
+
+      identifyUser(user);
+
+      return user;
     };
 
     const loginWithDirectID = async () => {
@@ -612,16 +641,7 @@ export function SlashIDProviderImplementation({
 
       const user = createAndStoreUserFromToken(tokenFromStorage);
 
-      if (user && analyticsEnabled) {
-        try {
-          // in all other cases the core SDK will handle this
-          // here we just recreate the user object based on the preexisting token
-          // no event is emitted on the SDK side because of that
-          sidRef.current?.getAnalytics().identify(user);
-        } catch {
-          // fail silently
-        }
-      }
+      identifyUser(user);
 
       return user;
     };
