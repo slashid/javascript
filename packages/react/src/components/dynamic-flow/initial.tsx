@@ -5,7 +5,7 @@ import { Divider } from "@slashid/react-primitives";
 import { FormProvider } from "../../context/form-context";
 import { InitialState } from "../form/flow/flow.common";
 import { Logo } from "../form/initial/logo";
-import { Oidc } from "./oidc";
+import { SSOProviders } from "../form/initial/sso";
 import { Text } from "../text";
 import { useConfiguration } from "../../hooks/use-configuration";
 import { FactorLabeledOIDC, Handle, LoginOptions } from "../../domain/types";
@@ -173,7 +173,7 @@ function ResolvedFactors({
         </FormProvider>
       )}
       {shouldRenderDivider && <Divider>{text["initial.divider"]}</Divider>}
-      <Oidc
+      <SSOProviders
         providers={oidcFactors}
         handleClick={(factor) =>
           flowState.logIn(
