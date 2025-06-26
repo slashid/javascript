@@ -9,11 +9,16 @@ import { SSOProviders } from "../form/initial/sso";
 import { Text } from "../text";
 import { useConfiguration } from "../../hooks/use-configuration";
 import { FactorLabeledOIDC, Handle, LoginOptions } from "../../domain/types";
-import { isFactorNonOidc, isFactorOidc } from "../../domain/handles";
+import {
+  isFactorNonOidc,
+  isFactorOidc,
+  resolveLastHandleValue,
+} from "../../domain/handles";
 
 import * as styles from "./dynamic-flow.css";
 import { HandleForm } from "./handle-form";
 import { Loader } from "../form/authenticating/icons";
+import { useInternalFormContext } from "../form/internal-context";
 
 type Props = {
   flowState: InitialState;
@@ -80,6 +85,7 @@ export const Initial = ({
 };
 
 function Idle({ handleSubmit }: { handleSubmit: Props["handleSubmit"] }) {
+  const { lastHandle } = useInternalFormContext();
   return (
     <>
       <div className={styles.header}>
@@ -99,6 +105,7 @@ function Idle({ handleSubmit }: { handleSubmit: Props["handleSubmit"] }) {
           handleType="email_address"
           factors={[]}
           handleSubmit={handleSubmit}
+          defaultValue={resolveLastHandleValue(lastHandle, "email_address")}
         />
       </FormProvider>
     </>

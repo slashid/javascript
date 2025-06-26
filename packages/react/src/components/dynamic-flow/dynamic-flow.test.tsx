@@ -1,8 +1,8 @@
-import { Factor } from "@slashid/slashid";
+import { Factor, PersonHandle } from "@slashid/slashid";
 import { render, screen, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { vi, describe } from "vitest";
-import { createTestUser, inputEmail } from "../test-utils";
+import { createTestUser, inputEmail, MockSlashID } from "../test-utils";
 
 import { TestSlashIDProvider } from "../../context/test-providers";
 import { DynamicFlow } from ".";
@@ -17,6 +17,7 @@ describe("#DynamicFlow", () => {
   afterEach(() => {
     localStorage.clear();
     getItemSpy.mockClear();
+    setItemSpy.mockClear();
   });
 
   test("should render in the initial state", () => {
@@ -144,25 +145,6 @@ describe("#DynamicFlow", () => {
     expect(await screen.findByText("or")).toBeInTheDocument();
   });
 
-  test("uses stored last handle (email)", () => {
-    const testEmail = "stored@email.com";
-    localStorage.setItem(
-      "@slashid/LAST_HANDLE",
-      JSON.stringify({ type: "email_address", value: testEmail })
-    );
-    render(
-      <TestSlashIDProvider sdkState="ready">
-        <ConfigurationProvider
-          factors={[{ method: "email_link" as const }]}
-          storeLastHandle={true}
-        >
-          <DynamicFlow getFactors={() => [{ method: "email_link" as const }]} />
-        </ConfigurationProvider>
-      </TestSlashIDProvider>
-    );
-    expect(screen.getByPlaceholderText("Email address")).toHaveValue(testEmail);
-  });
-
   test("should use stored email address", async () => {
     const testEmail = "test@email.com";
 
@@ -187,29 +169,40 @@ describe("#DynamicFlow", () => {
     ).toHaveValue(testEmail);
   });
 
-  test("uses stored last handle (username)", () => {
-    const testUsername = "storedUsername";
-    localStorage.setItem(
-      "sid.last_handle",
-      JSON.stringify({ type: "username", value: testUsername })
-    );
+  test("should store last handle on successful login", async () => {
+    const TEST_HANDLE: PersonHandle = {
+      type: "email_address",
+      value: "test@email.com",
+    };
+    const sid = new MockSlashID({ oid: "test-oid" });
+    const user = userEvent.setup();
+    const testUser = createTestUser();
+    const logInMock = vi.fn(async () => testUser);
+
     render(
-      <TestSlashIDProvider sdkState="ready">
-        <ConfigurationProvider
-          factors={[
-            { method: "password" as const, allowedHandleTypes: ["username"] },
-          ]}
-          storeLastHandle={true}
-        >
-          <DynamicFlow
-            getFactors={() => [
-              { method: "password" as const, allowedHandleTypes: ["username"] },
-            ]}
-          />
+      <TestSlashIDProvider sdkState="ready" logIn={logInMock} sid={sid}>
+        <ConfigurationProvider storeLastHandle={true}>
+          <DynamicFlow getFactors={() => [{ method: "email_link" as const }]} />
         </ConfigurationProvider>
       </TestSlashIDProvider>
     );
-    expect(screen.getByPlaceholderText("Username")).toHaveValue(testUsername);
+
+    inputEmail(TEST_HANDLE.value);
+
+    user.click(screen.getByTestId("sid-form-initial-submit-button"));
+
+    await expect(
+      screen.findByTestId("sid-form-success-state")
+    ).resolves.toBeInTheDocument();
+
+    sid.mockPublish("idFlowSucceeded", {
+      handle: TEST_HANDLE,
+      token: testUser.token,
+    });
+    expect(setItemSpy).toHaveBeenCalledWith(
+      STORAGE_LAST_HANDLE_KEY,
+      JSON.stringify(TEST_HANDLE)
+    );
   });
 
   test("calls onError callback on failed login", async () => {

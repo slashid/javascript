@@ -162,7 +162,7 @@ export const HandleForm: React.FC<Props> = ({
     values,
     defaultValue,
     parsedPhoneNumber,
-    showFactorsOnly
+    showFactorsOnly,
   ]);
 
   const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
