@@ -65,7 +65,8 @@ const FormState = {
  */
 const Internal = {
   OrgSwitchingForm,
-}
+  DynamicFlow,
+};
 
 /**
  * TODO: think about code splitting
@@ -73,7 +74,6 @@ const Internal = {
 export {
   ConfigurationContext,
   ConfigurationProvider,
-  DynamicFlow,
   Onboarding,
   type OnboardingProps,
   OnboardingStep,
@@ -103,7 +103,7 @@ export {
   type CssVariableConfig,
   Customisation,
   Internal,
-  
+
   // raw states
   FormState,
 
