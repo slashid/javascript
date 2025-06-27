@@ -19,6 +19,7 @@ import * as styles from "./dynamic-flow.css";
 import { HandleForm } from "./handle-form";
 import { Loader } from "../form/authenticating/icons";
 import { useInternalFormContext } from "../form/internal-context";
+import { BackButton } from "../form/authenticating/authenticating.components";
 
 type Props = {
   flowState: InitialState;
@@ -35,7 +36,6 @@ export const Initial = ({
   middleware,
   getFactors,
 }: Props) => {
-  const { logo } = useConfiguration();
   const [handle, setHandle] = useState<Handle>();
   const [preAuthState, setPreAuthState] = useState<PreAuthState>("idle");
   const [factors, setFactors] = useState<Factor[]>();
@@ -55,12 +55,16 @@ export const Initial = ({
     })();
   }, [getFactors, handle, handleSubmit, preAuthState]);
 
+  // reset the form on back action (flow cancellation)
+  useEffect(() => {
+    setPreAuthState("idle");
+  }, [flowState]);
+
   return (
     <div
       data-testid="sid-dynamic-flow--initial-state"
       className="sid-dynamic-flow--initial-state"
     >
-      <Logo logo={logo} />
       {preAuthState === "idle" && (
         <Idle
           handleSubmit={(_, handle) => {
@@ -86,8 +90,11 @@ export const Initial = ({
 
 function Idle({ handleSubmit }: { handleSubmit: Props["handleSubmit"] }) {
   const { lastHandle } = useInternalFormContext();
+  const { logo } = useConfiguration();
+
   return (
     <>
+      <Logo logo={logo} />
       <div className={styles.header}>
         <Text
           as="h1"
@@ -157,6 +164,7 @@ function ResolvedFactors({
 
   return (
     <>
+      <BackButton onCancel={() => flowState.cancel()} />
       <div className={styles.header}>
         <Text
           as="h1"

@@ -23,6 +23,7 @@ export type AuthnContext = {
 export interface InitialState {
   status: "initial";
   logIn: (config: LoginConfiguration, options?: LoginOptions) => void;
+  cancel: Cancel;
 }
 
 export interface AuthenticatingState {
@@ -120,6 +121,9 @@ export const createInitialState = (send: Send): InitialState => {
     status: "initial",
     logIn: (config, options) => {
       send({ type: "sid_login", config, options });
+    },
+    cancel: () => {
+      send({ type: "sid_cancel" });
     },
   };
 };
