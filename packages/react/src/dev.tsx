@@ -7,7 +7,7 @@ import "./dev.css";
 import { FactorConfiguration } from "./domain/types";
 import {
   ConfigurationProvider,
-  DynamicFlow,
+  Internal,
   Form,
   LoggedIn,
   LoggedOut,
@@ -24,6 +24,8 @@ import { Authenticating } from "./components/form";
 import { OrgSwitchingForm } from "./components/form/org-switching/org-switching-form";
 
 const rootOid = "b6f94b67-d20f-7fc3-51df-bf6e3b82683e";
+
+const { DynamicFlow } = Internal;
 
 const initialFactors: Factor[] = [
   { method: "email_link" },
