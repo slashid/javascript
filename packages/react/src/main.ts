@@ -65,7 +65,6 @@ const FormState = {
  */
 const Internal = {
   OrgSwitchingForm,
-  DynamicFlow,
 };
 
 /**
@@ -74,6 +73,7 @@ const Internal = {
 export {
   ConfigurationContext,
   ConfigurationProvider,
+  DynamicFlow,
   Onboarding,
   type OnboardingProps,
   OnboardingStep,
