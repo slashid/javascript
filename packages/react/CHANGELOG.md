@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 1.33.0
+
+### Minor Changes
+
+- 7bd647e: Update `<DynamicFlow>` component
+
 ## 1.32.6
 
 ### Patch Changes
