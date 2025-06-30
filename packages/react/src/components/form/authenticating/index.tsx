@@ -58,6 +58,9 @@ const LoadingState = ({ flowState }: Props) => {
             {factor.options?.provider as unknown as string}
           </span>
         ) : undefined}
+        {factor.method === "saml" ? (
+          <span className={styles.oidcTitle}>SSO</span>
+        ) : undefined}
       </Text>
       <AuthenticatingSubtitle />
       <Text

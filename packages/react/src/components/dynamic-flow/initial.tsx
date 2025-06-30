@@ -8,10 +8,10 @@ import { Logo } from "../form/initial/logo";
 import { SSOProviders } from "../form/initial/sso";
 import { Text } from "../text";
 import { useConfiguration } from "../../hooks/use-configuration";
-import { FactorLabeledOIDC, Handle, LoginOptions } from "../../domain/types";
+import { FactorSSO, Handle, LoginOptions } from "../../domain/types";
 import {
-  isFactorNonOidc,
-  isFactorOidc,
+  hasSSOAndNonSSOFactors,
+  isFactorSSO,
   resolveLastHandleValue,
 } from "../../domain/handles";
 
@@ -150,16 +150,18 @@ function ResolvedFactors({
   factors: Factor[];
   middleware: Props["middleware"];
 }) {
-  const nonOidcFactors = useMemo(
-    () => factors.filter(isFactorNonOidc),
+  const nonSSOFactors = useMemo(
+    () => factors.filter((f) => !isFactorSSO(f)),
     [factors]
   );
-  const oidcFactors: FactorLabeledOIDC[] = useMemo(
-    () => factors.filter(isFactorOidc),
+  const ssoFactors: FactorSSO[] = useMemo(
+    () => factors.filter(isFactorSSO),
     [factors]
   );
-  const shouldRenderDivider =
-    oidcFactors.length > 0 && nonOidcFactors.length > 0;
+  const shouldRenderDivider = useMemo(
+    () => hasSSOAndNonSSOFactors(factors),
+    [factors]
+  );
   const { text } = useConfiguration();
 
   return (
@@ -177,19 +179,19 @@ function ResolvedFactors({
           variant={{ color: "contrast", weight: "semibold" }}
         />
       </div>
-      {nonOidcFactors.length > 0 && (
+      {nonSSOFactors.length > 0 && (
         <FormProvider>
           <HandleForm
             handleType="email_address"
             showFactorsOnly
-            factors={nonOidcFactors}
+            factors={nonSSOFactors}
             handleSubmit={handleSubmit}
           />
         </FormProvider>
       )}
       {shouldRenderDivider && <Divider>{text["initial.divider"]}</Divider>}
       <SSOProviders
-        providers={oidcFactors}
+        providers={ssoFactors}
         handleClick={(factor) =>
           flowState.logIn(
             {
