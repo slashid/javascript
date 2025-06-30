@@ -5,15 +5,21 @@ import { Divider } from "@slashid/react-primitives";
 import { FormProvider } from "../../context/form-context";
 import { InitialState } from "../form/flow/flow.common";
 import { Logo } from "../form/initial/logo";
-import { Oidc } from "./oidc";
+import { SSOProviders } from "../form/initial/sso";
 import { Text } from "../text";
 import { useConfiguration } from "../../hooks/use-configuration";
-import { FactorLabeledOIDC, Handle, LoginOptions } from "../../domain/types";
-import { isFactorNonOidc, isFactorOidc } from "../../domain/handles";
+import { FactorSSO, Handle, LoginOptions } from "../../domain/types";
+import {
+  hasSSOAndNonSSOFactors,
+  isFactorSSO,
+  resolveLastHandleValue,
+} from "../../domain/handles";
 
 import * as styles from "./dynamic-flow.css";
 import { HandleForm } from "./handle-form";
 import { Loader } from "../form/authenticating/icons";
+import { useInternalFormContext } from "../form/internal-context";
+import { BackButton } from "../form/authenticating/authenticating.components";
 
 type Props = {
   flowState: InitialState;
@@ -30,7 +36,6 @@ export const Initial = ({
   middleware,
   getFactors,
 }: Props) => {
-  const { logo } = useConfiguration();
   const [handle, setHandle] = useState<Handle>();
   const [preAuthState, setPreAuthState] = useState<PreAuthState>("idle");
   const [factors, setFactors] = useState<Factor[]>();
@@ -50,12 +55,16 @@ export const Initial = ({
     })();
   }, [getFactors, handle, handleSubmit, preAuthState]);
 
+  // reset the form on back action (flow cancellation)
+  useEffect(() => {
+    setPreAuthState("idle");
+  }, [flowState]);
+
   return (
     <div
       data-testid="sid-dynamic-flow--initial-state"
       className="sid-dynamic-flow--initial-state"
     >
-      <Logo logo={logo} />
       {preAuthState === "idle" && (
         <Idle
           handleSubmit={(_, handle) => {
@@ -80,8 +89,12 @@ export const Initial = ({
 };
 
 function Idle({ handleSubmit }: { handleSubmit: Props["handleSubmit"] }) {
+  const { lastHandle } = useInternalFormContext();
+  const { logo } = useConfiguration();
+
   return (
     <>
+      <Logo logo={logo} />
       <div className={styles.header}>
         <Text
           as="h1"
@@ -99,6 +112,7 @@ function Idle({ handleSubmit }: { handleSubmit: Props["handleSubmit"] }) {
           handleType="email_address"
           factors={[]}
           handleSubmit={handleSubmit}
+          defaultValue={resolveLastHandleValue(lastHandle, "email_address")}
         />
       </FormProvider>
     </>
@@ -136,20 +150,23 @@ function ResolvedFactors({
   factors: Factor[];
   middleware: Props["middleware"];
 }) {
-  const nonOidcFactors = useMemo(
-    () => factors.filter(isFactorNonOidc),
+  const nonSSOFactors = useMemo(
+    () => factors.filter((f) => !isFactorSSO(f)),
     [factors]
   );
-  const oidcFactors: FactorLabeledOIDC[] = useMemo(
-    () => factors.filter(isFactorOidc),
+  const ssoFactors: FactorSSO[] = useMemo(
+    () => factors.filter(isFactorSSO),
     [factors]
   );
-  const shouldRenderDivider =
-    oidcFactors.length > 0 && nonOidcFactors.length > 0;
+  const shouldRenderDivider = useMemo(
+    () => hasSSOAndNonSSOFactors(factors),
+    [factors]
+  );
   const { text } = useConfiguration();
 
   return (
     <>
+      <BackButton onCancel={() => flowState.cancel()} />
       <div className={styles.header}>
         <Text
           as="h1"
@@ -162,19 +179,19 @@ function ResolvedFactors({
           variant={{ color: "contrast", weight: "semibold" }}
         />
       </div>
-      {nonOidcFactors.length > 0 && (
+      {nonSSOFactors.length > 0 && (
         <FormProvider>
           <HandleForm
             handleType="email_address"
             showFactorsOnly
-            factors={nonOidcFactors}
+            factors={nonSSOFactors}
             handleSubmit={handleSubmit}
           />
         </FormProvider>
       )}
       {shouldRenderDivider && <Divider>{text["initial.divider"]}</Divider>}
-      <Oidc
-        providers={oidcFactors}
+      <SSOProviders
+        providers={ssoFactors}
         handleClick={(factor) =>
           flowState.logIn(
             {

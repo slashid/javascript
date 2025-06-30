@@ -65,7 +65,7 @@ const FormState = {
  */
 const Internal = {
   OrgSwitchingForm,
-}
+};
 
 /**
  * TODO: think about code splitting
@@ -103,7 +103,7 @@ export {
   type CssVariableConfig,
   Customisation,
   Internal,
-  
+
   // raw states
   FormState,
 

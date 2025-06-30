@@ -47,6 +47,7 @@ export function getAuthenticatingMessage(
 } {
   switch (factor.method) {
     case "oidc":
+    case "saml":
       return {
         message: "authenticating.message.oidc",
         title: "authenticating.title.oidc",

@@ -12,6 +12,7 @@ import {
 
 import {
   filterFactors,
+  isFactorNonOidc,
   isFactorOidc,
   parsePhoneNumber,
 } from "../../domain/handles";
@@ -28,6 +29,7 @@ import {
 import { TextConfigKey } from "../text/constants";
 
 import * as styles from "./dynamic-flow.css";
+import { useInternalFormContext } from "../form/internal-context";
 
 export const FACTOR_LABEL_MAP: Record<
   Exclude<Factor["method"], "webauthn_via_email" | "webauthn_via_sms">,
@@ -67,7 +69,7 @@ export const HandleForm: React.FC<Props> = ({
   const { text, defaultCountryCode } = useConfiguration();
   const { registerField, registerSubmit, values, status, resetForm } =
     useForm();
-
+  const { lastFactor } = useInternalFormContext();
   const shouldRenderFactorDropdown = filteredFactors.length > 1;
   const parsedPhoneNumber = parsePhoneNumber(defaultValue ?? "");
 
@@ -76,9 +78,21 @@ export const HandleForm: React.FC<Props> = ({
   );
   const [factor, setFactor] = useState<Factor>(filteredFactors[0]);
 
+  const defaultFactor = useMemo(() => {
+    if (
+      lastFactor &&
+      isFactorNonOidc(lastFactor) &&
+      filteredFactors.find(({ method }) => lastFactor.method === method)
+    ) {
+      return lastFactor;
+    }
+
+    return filteredFactors[0];
+  }, [filteredFactors, lastFactor]);
+
   useEffect(() => {
-    setFactor(filteredFactors[0]);
-  }, [filteredFactors]);
+    setFactor(defaultFactor);
+  }, [defaultFactor]);
 
   useEffect(() => {
     return resetForm;
@@ -162,7 +176,7 @@ export const HandleForm: React.FC<Props> = ({
     values,
     defaultValue,
     parsedPhoneNumber,
-    showFactorsOnly
+    showFactorsOnly,
   ]);
 
   const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
@@ -181,7 +195,7 @@ export const HandleForm: React.FC<Props> = ({
     <form onSubmit={registerSubmit(onSubmit)} noValidate>
       {shouldRenderFactorDropdown && (
         <Dropdown
-          defaultValue={filteredFactors[0].method}
+          defaultValue={defaultFactor.method}
           className={sprinkles({ marginBottom: "3", marginTop: "6" })}
           label={text["initial.authenticationMethod"]}
           items={filteredFactors.map((f) => ({

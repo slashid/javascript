@@ -13,10 +13,13 @@ import * as styles from "./dynamic-flow.css";
 import { Initial } from "./initial";
 import { InternalFormContext } from "../form/internal-context";
 import { PayloadOptions } from "../form/types";
+import { useLastHandle } from "../../hooks/use-last-handle";
+import { useLastFactor } from "../../hooks/use-last-factor";
 
 type Props = {
   className?: string;
   onSuccess?: CreateFlowOptions["onSuccess"];
+  onError?: CreateFlowOptions["onError"];
   getFactors: (handle?: Handle) => Promise<Factor[]> | Factor[];
   middleware?: LoginOptions["middleware"];
 };
@@ -30,9 +33,13 @@ export const DynamicFlow = ({
   getFactors,
   className,
   onSuccess,
+  onError,
   middleware,
 }: Props) => {
-  const flowState = useFlowState({ onSuccess });
+  const flowState = useFlowState({ onSuccess, onError });
+  const { lastHandle } = useLastHandle();
+  const { lastFactor } = useLastFactor();
+
   const submitPayloadRef = useRef<PayloadOptions>({
     handleType: undefined,
     handleValue: undefined,
@@ -60,6 +67,8 @@ export const DynamicFlow = ({
         handleSubmit,
         submitPayloadRef,
         setSelectedFactor: () => {},
+        lastHandle,
+        lastFactor,
       }}
     >
       <div className={clsx("sid-dynamic-flow", styles.form, className)}>
