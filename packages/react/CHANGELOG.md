@@ -1,5 +1,11 @@
 # @slashid/react
 
+## 1.34.0
+
+### Minor Changes
+
+- 8f5b5b2: Add the internal \_\_skipTokenValidation flag
+
 ## 1.33.0
 
 ### Minor Changes

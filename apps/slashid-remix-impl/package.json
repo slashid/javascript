@@ -1,7 +1,7 @@
 {
   "name": "slashid-remix-impl",
   "private": true,
-  "version": "0.0.36",
+  "version": "0.0.37",
   "sideEffects": false,
   "type": "module",
   "scripts": {
