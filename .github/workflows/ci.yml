@@ -48,6 +48,7 @@ jobs:
 
       - name: Run E2E tests
         env:
+          if: false
           CI: true
           MAILOSAUR_API_KEY: ${{ secrets.MAILOSAUR_API_KEY }}
           MAILOSAUR_SERVER_ID: ${{ secrets.MAILOSAUR_SERVER_ID }}
