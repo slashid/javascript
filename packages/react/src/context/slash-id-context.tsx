@@ -89,6 +89,12 @@ export interface SlashIDProviderProps {
    */
   onInitError?: (e: Error) => void;
   themeProps?: ThemeProps;
+  /**
+   * Undocumented & private - do not use!
+   * SDK will assume that whatever token it finds (initial token, local storage) is valid.
+   * It won't issue API calls to validate the token before using it.
+   */
+  __skipTokenValidation?: boolean;
   children: ReactNode;
 }
 
@@ -195,6 +201,7 @@ export function SlashIDProviderImplementation({
   onInitError,
   themeProps,
   createSlashID,
+  __skipTokenValidation = false,
   children,
 }: SlashIDProviderImplementationProps) {
   const [oid, setOid] = useState(initialOid);
@@ -238,6 +245,8 @@ export function SlashIDProviderImplementation({
         return false;
       }
 
+      if (__skipTokenValidation) return true;
+
       try {
         const ret = await tokenUser.validateToken();
         return ret.valid;
@@ -246,7 +255,7 @@ export function SlashIDProviderImplementation({
         return false;
       }
     },
-    [anonymousUsersEnabled]
+    [__skipTokenValidation, anonymousUsersEnabled]
   );
 
   const storeUser = useCallback(
