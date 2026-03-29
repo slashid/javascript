@@ -9,7 +9,7 @@ export const text = recipe({
     color: publicVariables.color.foreground,
     margin: 0,
     lineHeight: "100%",
-    whiteSpace: "pre-wrap"
+    whiteSpace: "pre-wrap",
   },
 
   variants: {
