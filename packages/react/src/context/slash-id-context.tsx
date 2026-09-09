@@ -134,6 +134,8 @@ export interface ISlashIDContext {
   }) => Promise<User | undefined>;
   __syncExternalState: (state: ExternalStateParams) => Promise<void>;
   __orgSwitchingState: OrgSwitchingState;
+  /** Internal. The org the provider currently authenticates and stores tokens for. */
+  __oid?: string;
 }
 
 export const initialContextValue: ISlashIDContext = {
@@ -151,6 +153,7 @@ export const initialContextValue: ISlashIDContext = {
   __switchOrganizationInContext: async () => undefined,
   __syncExternalState: async () => undefined,
   __orgSwitchingState: { state: "idle" },
+  __oid: undefined,
 };
 
 export const SlashIDContext =
@@ -720,6 +723,7 @@ export function SlashIDProviderImplementation({
         __switchOrganizationInContext,
         __syncExternalState,
         __orgSwitchingState: orgSwitchingState,
+        __oid: oid,
       };
     }
 
@@ -738,8 +742,10 @@ export function SlashIDProviderImplementation({
       __switchOrganizationInContext,
       __syncExternalState,
       __orgSwitchingState: orgSwitchingState,
+      __oid: oid,
     };
   }, [
+    oid,
     state,
     user,
     anonymousUser,

@@ -1,4 +1,4 @@
-import { Factor, PersonHandle } from "@slashid/slashid";
+import { Errors, Factor, PersonHandle, User } from "@slashid/slashid";
 import { render, screen, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { vi, describe } from "vitest";
@@ -285,5 +285,249 @@ describe("#DynamicFlow", () => {
       await screen.findByTestId("sid-form-success-state")
     ).toBeInTheDocument();
     expect(onSuccess).toHaveBeenCalledWith(testUser);
+  });
+
+  test("attempts SSO with the hook factor before resolving factors", async () => {
+    const logInMock = vi.fn(() => new Promise<User | undefined>(() => {}));
+    const getFactors = vi.fn(() => [{ method: "email_link" }] as Factor[]);
+    const user = userEvent.setup();
+
+    render(
+      <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+        <ConfigurationProvider factors={[{ method: "email_link" }]}>
+          <DynamicFlow attemptSSO getFactors={getFactors} />
+        </ConfigurationProvider>
+      </TestSlashIDProvider>
+    );
+
+    inputEmail("user@acme.test");
+    await user.click(screen.getByTestId("sid-form-initial-submit-button"));
+
+    await expect(
+      screen.findByTestId("sid-form-authenticating-state")
+    ).resolves.toBeInTheDocument();
+    expect(getFactors).not.toHaveBeenCalled();
+    expect(logInMock).toHaveBeenCalledTimes(1);
+    expect(logInMock).toHaveBeenCalledWith(
+      {
+        factor: { method: "hook" },
+        handle: { type: "email_address", value: "user@acme.test" },
+      },
+      { middleware: undefined }
+    );
+  });
+
+  const hookUnresolved = () =>
+    Errors.createSlashIDError({
+      name: Errors.ERROR_NAMES.hookFactorUnresolved,
+      message: "unresolved",
+    });
+
+  test("resolves factors with the same handle when the SSO attempt is unresolved", async () => {
+    const logInMock = vi.fn(
+      (): Promise<User | undefined> => Promise.reject(hookUnresolved())
+    );
+    const getFactors = vi.fn(
+      () => [{ method: "email_link" }, { method: "password" }] as Factor[]
+    );
+    const onError = vi.fn();
+    const user = userEvent.setup();
+
+    render(
+      <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+        <ConfigurationProvider factors={[{ method: "email_link" }]}>
+          <DynamicFlow attemptSSO onError={onError} getFactors={getFactors} />
+        </ConfigurationProvider>
+      </TestSlashIDProvider>
+    );
+
+    inputEmail("user@acme.test");
+    await user.click(screen.getByTestId("sid-form-initial-submit-button"));
+
+    await expect(
+      screen.findByTestId("sid-dynamic-flow--resolved-factors")
+    ).resolves.toBeInTheDocument();
+    expect(logInMock).toHaveBeenCalledTimes(1);
+    expect(getFactors).toHaveBeenCalledWith({
+      type: "email_address",
+      value: "user@acme.test",
+    });
+    expect(onError).not.toHaveBeenCalled();
+    expect(screen.queryByTestId("sid-form-error-state")).not.toBeInTheDocument();
+
+    // the picker submits with the handle from the first step
+    logInMock.mockImplementation(() => Promise.resolve(createTestUser()));
+    await user.click(screen.getByTestId("sid-form-initial-submit-button"));
+    await expect(
+      screen.findByTestId("sid-form-success-state")
+    ).resolves.toBeInTheDocument();
+    expect(logInMock).toHaveBeenLastCalledWith(
+      {
+        factor: { method: "email_link" },
+        handle: { type: "email_address", value: "user@acme.test" },
+      },
+      { middleware: undefined }
+    );
+  });
+
+  test("the picker's back button returns to the identifier step", async () => {
+    const logInMock = vi.fn(() => Promise.reject(hookUnresolved()));
+    const user = userEvent.setup();
+
+    render(
+      <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+        <ConfigurationProvider factors={[{ method: "email_link" }]}>
+          <DynamicFlow
+            attemptSSO
+            getFactors={() => [{ method: "email_link" }, { method: "password" }]}
+          />
+        </ConfigurationProvider>
+      </TestSlashIDProvider>
+    );
+
+    inputEmail("user@acme.test");
+    await user.click(screen.getByTestId("sid-form-initial-submit-button"));
+    await screen.findByTestId("sid-dynamic-flow--resolved-factors");
+
+    await user.click(screen.getByTestId("sid-form-authenticating-cancel-button"));
+    expect(
+      screen.getByPlaceholderText(TEXT["initial.handle.email.placeholder"])
+    ).toBeInTheDocument();
+  });
+
+  test("submits a single resolved factor directly when the SSO attempt is unresolved", async () => {
+    const testUser = createTestUser();
+    const logInMock = vi
+      .fn()
+      .mockImplementationOnce(() => Promise.reject(hookUnresolved()))
+      .mockImplementationOnce(() => Promise.resolve(testUser));
+    const onSuccess = vi.fn();
+    const user = userEvent.setup();
+
+    render(
+      <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+        <ConfigurationProvider factors={[{ method: "email_link" }]}>
+          <DynamicFlow
+            attemptSSO
+            onSuccess={onSuccess}
+            getFactors={() => [{ method: "email_link" }]}
+          />
+        </ConfigurationProvider>
+      </TestSlashIDProvider>
+    );
+
+    inputEmail("user@acme.test");
+    await user.click(screen.getByTestId("sid-form-initial-submit-button"));
+
+    await expect(
+      screen.findByTestId("sid-form-success-state")
+    ).resolves.toBeInTheDocument();
+    expect(logInMock).toHaveBeenCalledTimes(2);
+    expect(logInMock).toHaveBeenNthCalledWith(
+      2,
+      {
+        factor: { method: "email_link" },
+        handle: { type: "email_address", value: "user@acme.test" },
+      },
+      { middleware: undefined }
+    );
+    expect(onSuccess).toHaveBeenCalledWith(testUser);
+  });
+
+  test("still reports other errors of an SSO attempt", async () => {
+    const logInMock = vi.fn(() => Promise.reject(new Error("idp down")));
+    const onError = vi.fn();
+    const user = userEvent.setup();
+
+    render(
+      <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+        <ConfigurationProvider factors={[{ method: "email_link" }]}>
+          <DynamicFlow
+            attemptSSO
+            onError={onError}
+            getFactors={() => [{ method: "email_link" }]}
+          />
+        </ConfigurationProvider>
+      </TestSlashIDProvider>
+    );
+
+    inputEmail("user@acme.test");
+    await user.click(screen.getByTestId("sid-form-initial-submit-button"));
+
+    await expect(
+      screen.findByTestId("sid-form-error-state")
+    ).resolves.toBeInTheDocument();
+    expect(onError).toHaveBeenCalledTimes(1);
+  });
+
+  test("shows the resolved SSO factor and succeeds with the manager-org user", async () => {
+    const sid = new MockSlashID({ oid: "dashboard-oid" });
+    const managerUser = createTestUser({ oid: "manager-oid" });
+    const logInMock = vi.fn(async () => {
+      sid.mockPublish("authnContextUpdateChallengeReceivedEvent", {
+        targetOrgId: "dashboard-oid",
+        factor: {
+          method: "saml",
+          options: { method: "saml", provider_credentials_id: "creds" },
+        },
+      });
+      return managerUser;
+    });
+    const onSuccess = vi.fn();
+    const user = userEvent.setup();
+
+    render(
+      <TestSlashIDProvider sdkState="ready" logIn={logInMock} sid={sid}>
+        <ConfigurationProvider factors={[{ method: "email_link" }]}>
+          <DynamicFlow
+            attemptSSO
+            onSuccess={onSuccess}
+            getFactors={() => [{ method: "email_link" }]}
+          />
+        </ConfigurationProvider>
+      </TestSlashIDProvider>
+    );
+
+    inputEmail("user@acme.test");
+    await user.click(screen.getByTestId("sid-form-initial-submit-button"));
+
+    await expect(
+      screen.findByTestId("sid-form-success-state")
+    ).resolves.toBeInTheDocument();
+    expect(onSuccess).toHaveBeenCalledWith(managerUser);
+  });
+
+  test("resets to the identifier step when the resolved SSO login is refused", async () => {
+    const refused = Errors.createSlashIDError({
+      name: Errors.ERROR_NAMES.selfRegistrationNotAllowed,
+      message: "self-registration not allowed for this organization",
+    });
+    const logInMock = vi.fn(() => Promise.reject(refused));
+    const getFactors = vi.fn(
+      () => [{ method: "email_link" }, { method: "password" }] as Factor[]
+    );
+    const onError = vi.fn();
+    const user = userEvent.setup();
+
+    render(
+      <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+        <ConfigurationProvider factors={[{ method: "email_link" }]}>
+          <DynamicFlow attemptSSO onError={onError} getFactors={getFactors} />
+        </ConfigurationProvider>
+      </TestSlashIDProvider>
+    );
+
+    inputEmail("user@acme.test");
+    await user.click(screen.getByTestId("sid-form-initial-submit-button"));
+
+    await user.click(await screen.findByTestId("sid-form-error-retry-button"));
+    await expect(
+      screen.findByTestId("sid-form-initial-submit-button")
+    ).resolves.toBeInTheDocument();
+    expect(getFactors).not.toHaveBeenCalled();
+    expect(
+      screen.queryByTestId("sid-dynamic-flow--resolved-factors")
+    ).not.toBeInTheDocument();
+    expect(onError).toHaveBeenCalledTimes(1);
   });
 });

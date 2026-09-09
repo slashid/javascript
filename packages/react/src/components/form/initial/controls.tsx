@@ -45,6 +45,7 @@ export const FACTOR_LABEL_MAP: Record<
   oidc: "",
   saml: "",
   totp: "",
+  hook: "",
 };
 
 export const TAB_NAME = {
