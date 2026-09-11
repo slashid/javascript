@@ -1,13 +1,14 @@
-import { Factor } from "@slashid/slashid";
+import { Errors, Factor } from "@slashid/slashid";
 import { clsx } from "clsx";
 import { FormProvider } from "../../context/form-context";
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Handle, LoginOptions } from "../../domain/types";
 import { CreateFlowOptions } from "../form/flow/flow.common";
 import { useFlowState } from "../form/useFlowState";
 import { AuthenticatingImplementation as Authenticating } from "../form/authenticating";
 import { Success } from "../form/success";
 import { Error } from "../form/error";
+import { Loader } from "../form/authenticating/icons";
 
 import * as styles from "./dynamic-flow.css";
 import { Initial } from "./initial";
@@ -22,7 +23,15 @@ type Props = {
   onError?: CreateFlowOptions["onError"];
   getFactors: (handle?: Handle) => Promise<Factor[]> | Factor[];
   middleware?: LoginOptions["middleware"];
+  /**
+   * Submit the `hook` factor for email identifiers before calling `getFactors`, so the
+   * organization's identify_user webhook can pick the factor (one-step SSO). When the API
+   * resolves nothing the flow continues with `getFactors` for the same identifier.
+   */
+  attemptSSO?: boolean;
 };
+
+type Resume = { handle: Handle; id: number };
 
 /**
  * This is a variant of the <Form> component that allows you to dynamically change the factor based on the handle that was used.
@@ -35,8 +44,29 @@ export const DynamicFlow = ({
   onSuccess,
   onError,
   middleware,
+  attemptSSO,
 }: Props) => {
-  const flowState = useFlowState({ onSuccess, onError });
+  const onErrorRef = useRef(onError);
+  onErrorRef.current = onError;
+  const attemptedHandleRef = useRef<Handle | null>(null);
+  const resumeCounter = useRef(0);
+  const [resume, setResume] = useState<Resume | null>(null);
+
+  // useFlowState creates the flow once, so this callback must stay stable and read through refs
+  const handleError = useCallback<NonNullable<CreateFlowOptions["onError"]>>(
+    (error, context) => {
+      if (
+        attemptedHandleRef.current &&
+        Errors.isHookFactorUnresolvedError(error)
+      ) {
+        return;
+      }
+      onErrorRef.current?.(error, context);
+    },
+    []
+  );
+
+  const flowState = useFlowState({ onSuccess, onError: handleError });
   const { lastHandle } = useLastHandle();
   const { lastFactor } = useLastFactor();
 
@@ -60,6 +90,30 @@ export const DynamicFlow = ({
     [flowState, middleware]
   );
 
+  const handleSSOAttempt = useCallback((handle: Handle) => {
+    attemptedHandleRef.current = handle;
+  }, []);
+
+  const isPendingResume =
+    flowState.status === "error" &&
+    attemptedHandleRef.current !== null &&
+    Errors.isHookFactorUnresolvedError(flowState.context.error);
+
+  useEffect(() => {
+    if (!isPendingResume) return;
+
+    const handle = attemptedHandleRef.current!;
+    attemptedHandleRef.current = null;
+    resumeCounter.current += 1;
+    setResume({ handle, id: resumeCounter.current });
+    flowState.cancel();
+  }, [isPendingResume, flowState]);
+
+  // the resumed instance is for one attempt; leaving the initial state discards it
+  useEffect(() => {
+    if (resume && flowState.status !== "initial") setResume(null);
+  }, [resume, flowState.status]);
+
   return (
     <InternalFormContext.Provider
       value={{
@@ -74,9 +128,14 @@ export const DynamicFlow = ({
       <div className={clsx("sid-dynamic-flow", styles.form, className)}>
         {flowState.status === "initial" && (
           <Initial
+            key={resume?.id ?? "fresh"}
             handleSubmit={handleSubmit}
             flowState={flowState}
             getFactors={getFactors}
+            middleware={middleware}
+            attemptSSO={attemptSSO}
+            onSSOAttempt={handleSSOAttempt}
+            initialHandle={resume?.handle}
           />
         )}
         {flowState.status === "authenticating" && (
@@ -84,7 +143,8 @@ export const DynamicFlow = ({
             <Authenticating flowState={flowState} />
           </FormProvider>
         )}
-        {flowState.status === "error" && <Error />}
+        {flowState.status === "error" &&
+          (isPendingResume ? <Loader /> : <Error />)}
         {flowState.status === "success" && <Success flowState={flowState} />}
       </div>
     </InternalFormContext.Provider>

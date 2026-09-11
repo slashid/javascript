@@ -294,8 +294,8 @@ importers:
         specifier: workspace:*
         version: link:../react
       '@slashid/slashid':
-        specifier: 3.25.0
-        version: 3.25.0
+        specifier: 3.30.0-hook-beta.1
+        version: 3.30.0-hook-beta.1
       next:
         specifier: 13.0.2
         version: 13.0.2(@babel/core@7.24.5)(react-dom@18.2.0)(react@18.2.0)
@@ -353,8 +353,8 @@ importers:
         specifier: ^8.0.2
         version: 8.3.1
       '@slashid/slashid':
-        specifier: 3.29.6
-        version: 3.29.6
+        specifier: 3.30.0-hook-beta.1
+        version: 3.30.0-hook-beta.1
       '@storybook/addon-essentials':
         specifier: 7.6.19
         version: 7.6.19(@types/react-dom@18.2.15)(@types/react@18.2.37)(react-dom@18.2.0)(react@18.2.0)
@@ -603,8 +603,8 @@ importers:
         specifier: workspace:*
         version: link:../react
       '@slashid/slashid':
-        specifier: 3.29.6
-        version: 3.29.6
+        specifier: 3.30.0-hook-beta.1
+        version: 3.30.0-hook-beta.1
       jose:
         specifier: ^5.2.0
         version: 5.2.0
@@ -5084,6 +5084,12 @@ packages:
     resolution: {integrity: sha512-4JQNk+3mVzK3xh2rqd6RB4J46qUR19azEHBneZyTZM+c456qOrbbM/5xcR8huNCCcbVt7+UmizG6GuUvPvKUYg==}
     dev: true
 
+  /@jsdoc/salty@0.2.12:
+    resolution: {integrity: sha512-TuB0x50EoAvEX/UEWITd8Mkn3WhiTjSvbTMCLj0BhsQEl5iUzjXdA0bETEVpTk+5TGTLR6QktI9H4hLviVeaAQ==}
+    engines: {node: '>=v12.0.0'}
+    dependencies:
+      lodash: 4.18.1
+
   /@jspm/core@2.0.1:
     resolution: {integrity: sha512-Lg3PnLp0QXpxwLIAuuJboLeRaIhrgJjeuh797QADg3xz8wGLugQOS5DpsE8A6i6Adgzf+bacllkKZG3J0tGfDw==}
     dev: true
@@ -8727,23 +8733,6 @@ packages:
       uuid: 8.3.2
     dev: false
 
-  /@slashid/slashid@3.25.0:
-    resolution: {integrity: sha512-fjqHL0Kx6JKWSCnekYx4vD8Mw7DY46+lcTDdRcoMDugx433pJ89VtmsWFW1U9XPV/R/9kK18rrideNAO3iN4fw==}
-    dependencies:
-      '@changesets/cli': 2.26.2
-      '@types/uuid': 8.3.4
-      changeset: 0.2.6
-      compare-versions: 6.1.0
-      docdash: 1.2.0
-      jwt-decode: 3.1.2
-      qrcode: 1.5.3
-      querystring-es3: 0.2.1
-      regenerator-runtime: 0.13.11
-      ua-parser-js: 1.0.37
-      url: 0.11.3
-      uuid: 8.3.2
-    dev: false
-
   /@slashid/slashid@3.29.0:
     resolution: {integrity: sha512-kFW7dy3VIcp55U6tSIWB+t+x70HqKaI+TxQKL+/L5qQNgCLQGGXnWrj552HWlbAdiTN6h+eJbAw7HkxG/926kQ==}
     dependencies:
@@ -8760,19 +8749,18 @@ packages:
       uuid: 8.3.2
     dev: true
 
-  /@slashid/slashid@3.29.6:
-    resolution: {integrity: sha512-7hMONd6O5TbIyIQgrEyve18e0gJ67hv7YK733Ol/xwS+idbP8l3rqxQbz0zXEX30BJVmuW3CV/VxbL71ZHz67Q==}
+  /@slashid/slashid@3.30.0-hook-beta.1:
+    resolution: {integrity: sha512-wy1cDvAb8XRUe00hOzQVverFSYtH01xzFRAtvLESBfaB4AESC9ApYqRrlX006i+qEM8/xzhNvIzwAdK3nDBzoQ==}
     dependencies:
-      '@types/uuid': 8.3.4
       compare-versions: 6.1.0
-      docdash: 1.2.0
+      docdash: 2.0.2
       jwt-decode: 3.1.2
       qrcode: 1.5.3
       querystring-es3: 0.2.1
-      regenerator-runtime: 0.13.11
+      regenerator-runtime: 0.14.1
       ua-parser-js: 1.0.37
       url: 0.11.3
-      uuid: 8.3.2
+      uuid: 11.1.1
 
   /@storybook/addon-actions@7.6.19:
     resolution: {integrity: sha512-ATLrA5QKFJt7tIAScRHz5T3eBQ+RG3jaZk08L7gChvyQZhei8knWwePElZ7GaWbCr9BgznQp1lQUUXq/UUblAQ==}
@@ -13178,6 +13166,11 @@ packages:
   /docdash@1.2.0:
     resolution: {integrity: sha512-IYZbgYthPTspgqYeciRJNPhSwL51yer7HAwDXhF5p+H7mTDbPvY3PCk/QDjNxdPCpWkaJVFC4t7iCNB/t9E5Kw==}
 
+  /docdash@2.0.2:
+    resolution: {integrity: sha512-3SDDheh9ddrwjzf6dPFe1a16M6ftstqTNjik2+1fx46l24H9dD2osT2q9y+nBEC1wWz4GIqA48JmicOLQ0R8xA==}
+    dependencies:
+      '@jsdoc/salty': 0.2.12
+
   /doctrine@2.1.0:
     resolution: {integrity: sha512-35mSku4ZXK0vfCuHEDAwt55dg2jNajHZ1odvF+8SSr82EsZY4QmXfuWso8oEd8zRhVObSN18aM0CjSdoBX7zIw==}
     engines: {node: '>=0.10.0'}
@@ -16483,6 +16476,9 @@ packages:
   /lodash@4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
 
+  /lodash@4.18.1:
+    resolution: {integrity: sha512-dMInicTPVE8d1e5otfwmmjlxkZoUpiVLwyeTdUsi/Caj/gfzzblBcCE5sRHV/AsjuCmxWrte2TNGSYuCeCq+0Q==}
+
   /log-symbols@4.1.0:
     resolution: {integrity: sha512-8XPvpAA8uyhfteu8pIvQxpJZ7SYYdpUivZpGy6sFsBuKRY/7rQGavedeB8aK+Zkyq6upMFVL/9AW6vOYzfRyLg==}
     engines: {node: '>=10'}
@@ -19185,6 +19181,9 @@ packages:
   /regenerator-runtime@0.14.0:
     resolution: {integrity: sha512-srw17NI0TUWHuGa5CFGGmhfNIeja30WMBfbslPNhf6JrqQlLN5gcrvig1oqPxiVaXb0oW0XRKtH6Nngs5lKCIA==}
 
+  /regenerator-runtime@0.14.1:
+    resolution: {integrity: sha512-dYnhHh0nJoMfnkZs6GmmhFknAGRrLznOu5nc9ML+EJxGvrx6H7teuevqVqCuPcPK//3eDrrjQhehXVx9cnkGdw==}
+
   /regenerator-transform@0.15.2:
     resolution: {integrity: sha512-hfMp2BoF0qOk3uc5V20ALGDS2ddjQaLrdl7xrGXvAIow7qeWRM2VA2HuCHkUKk9slq3VwEwLNK3DFBqDfPGYtg==}
     dependencies:
@@ -20926,6 +20925,10 @@ packages:
   /utils-merge@1.0.1:
     resolution: {integrity: sha512-pMZTvIkT1d+TFGvDOqodOclx0QWkkgi6Tdoa8gC8ffGAAqz9pzPTZWAybbsHHoED/ztMtkv/VoYTYyShUn81hA==}
     engines: {node: '>= 0.4.0'}
+
+  /uuid@11.1.1:
+    resolution: {integrity: sha512-vIYxrBCC/N/K+Js3qSN88go7kIfNPssr/hHCesKCQNAjmgvYS2oqr69kIufEG+O4+PfezOH4EbIeHCfFov8ZgQ==}
+    hasBin: true
 
   /uuid@8.3.2:
     resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}

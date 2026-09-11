@@ -73,3 +73,15 @@ function App() {
 ```
 
 Once the `logIn` function resolves, your component will render again with the newly logged-in `user` object.
+
+### DynamicFlow
+
+`DynamicFlow` asks for an identifier first and then picks the factors to offer from the `getFactors` callback.
+
+#### One-step SSO (`attemptSSO`)
+
+```tsx
+<DynamicFlow attemptSSO getFactors={() => [{ method: "email_link" }, { method: "password" }]} />
+```
+
+With `attemptSSO`, `DynamicFlow` submits the `hook` factor right after the identifier step for email identifiers. The organization's `identify_user` webhook picks the factor (for example a SAML or OIDC provider), and the flow continues with it. When nothing is resolved, `getFactors` is called with the same identifier as usual: a single factor is submitted directly, otherwise the picker is shown. Other identifier types never attempt SSO.

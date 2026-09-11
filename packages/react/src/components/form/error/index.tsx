@@ -63,6 +63,7 @@ type ErrorType =
   | "selfRegistrationNotAllowed"
   | "signUpAwaitingApproval"
   | "signInAwaitingApproval"
+  | "hookFactorUnresolved"
   | "invalidEmailAddressFormat"
   | "invalidPhoneNumberFormat"
   | "unknown";
@@ -87,6 +88,8 @@ async function getErrorType(error: Error): Promise<ErrorType> {
 
   if (Errors.isInvalidPhoneNumberFormatError(error))
     return "invalidPhoneNumberFormat";
+
+  if (Errors.isHookFactorUnresolvedError(error)) return "hookFactorUnresolved";
 
   if (Errors.isAPIResponseError(error)) return "response";
 
@@ -189,6 +192,12 @@ function mapErrorTypeToText(errorType: ErrorType): TextOverrides {
         description: "error.subtitle.signInAwaitingApproval",
         retry: "error.retry.signInAwaitingApproval",
       };
+    case "hookFactorUnresolved":
+      return {
+        title: "error.title.hookFactorUnresolved",
+        description: "error.subtitle.hookFactorUnresolved",
+        retry: "error.retry.hookFactorUnresolved",
+      };
     case "invalidEmailAddressFormat":
       return {
         title: "error.title.invalidEmailAddressFormat",
@@ -217,6 +226,7 @@ function mapErrorTypeToRetryPolicy(errorType: ErrorType): RetryPolicy {
     case "selfRegistrationNotAllowed":
     case "signUpAwaitingApproval":
     case "signInAwaitingApproval":
+    case "hookFactorUnresolved":
     case "invalidEmailAddressFormat":
     case "invalidPhoneNumberFormat":
       return "reset";

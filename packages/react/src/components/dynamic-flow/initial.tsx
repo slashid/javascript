@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Factor } from "@slashid/slashid";
 import { Divider } from "@slashid/react-primitives";
 
@@ -13,6 +13,7 @@ import {
   hasSSOAndNonSSOFactors,
   isFactorSSO,
   resolveLastHandleValue,
+  shouldAttemptSSO,
 } from "../../domain/handles";
 
 import * as styles from "./dynamic-flow.css";
@@ -26,6 +27,10 @@ type Props = {
   handleSubmit: (factor: Factor, handle?: Handle) => void;
   getFactors: (handle: Handle) => Promise<Factor[]> | Factor[];
   middleware?: LoginOptions["middleware"];
+  attemptSSO?: boolean;
+  /** Start at factor resolution for this handle; no SSO attempt is made for it. */
+  initialHandle?: Handle;
+  onSSOAttempt?: (handle: Handle) => void;
 };
 
 type PreAuthState = "idle" | "resolving_factors" | "resolved_factors";
@@ -35,28 +40,51 @@ export const Initial = ({
   handleSubmit,
   middleware,
   getFactors,
+  attemptSSO,
+  initialHandle,
+  onSSOAttempt,
 }: Props) => {
-  const [handle, setHandle] = useState<Handle>();
-  const [preAuthState, setPreAuthState] = useState<PreAuthState>("idle");
+  const [handle, setHandle] = useState<Handle | undefined>(initialHandle);
+  const [preAuthState, setPreAuthState] = useState<PreAuthState>(
+    initialHandle ? "resolving_factors" : "idle"
+  );
   const [factors, setFactors] = useState<Factor[]>();
+  const previousFlowState = useRef(flowState);
 
   useEffect(() => {
     (async () => {
-      if (handle && preAuthState === "resolving_factors") {
-        const f = await getFactors(handle);
-        if (f.length === 1) {
-          handleSubmit(f[0], handle);
-          return;
-        }
+      if (!handle || preAuthState !== "resolving_factors") return;
 
-        setFactors(f);
-        setPreAuthState("resolved_factors");
+      if (shouldAttemptSSO(handle, attemptSSO, initialHandle)) {
+        onSSOAttempt?.(handle);
+        handleSubmit({ method: "hook" }, handle);
+        return;
       }
-    })();
-  }, [getFactors, handle, handleSubmit, preAuthState]);
 
-  // reset the form on back action (flow cancellation)
+      const f = await getFactors(handle);
+      if (f.length === 1) {
+        handleSubmit(f[0], handle);
+        return;
+      }
+
+      setFactors(f);
+      setPreAuthState("resolved_factors");
+    })();
+  }, [
+    attemptSSO,
+    getFactors,
+    handle,
+    handleSubmit,
+    initialHandle,
+    onSSOAttempt,
+    preAuthState,
+  ]);
+
+  // reset on back action (flow cancellation); the mount run is skipped so a
+  // resumed instance is not bounced back to idle
   useEffect(() => {
+    if (previousFlowState.current === flowState) return;
+    previousFlowState.current = flowState;
     setPreAuthState("idle");
   }, [flowState]);
 
@@ -122,7 +150,10 @@ function Idle({ handleSubmit }: { handleSubmit: Props["handleSubmit"] }) {
 function ResolvingFactors() {
   return (
     <>
-      <div className={styles.header}>
+      <div
+        className={styles.header}
+        data-testid="sid-dynamic-flow--resolving-factors"
+      >
         <Text
           as="h1"
           t="resolving_factors.title"
@@ -167,7 +198,10 @@ function ResolvedFactors({
   return (
     <>
       <BackButton onCancel={() => flowState.cancel()} />
-      <div className={styles.header}>
+      <div
+        className={styles.header}
+        data-testid="sid-dynamic-flow--resolved-factors"
+      >
         <Text
           as="h1"
           t="resolved_factors.title"

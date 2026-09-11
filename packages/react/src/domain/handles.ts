@@ -5,6 +5,7 @@ import {
 } from "country-list-with-dial-code-and-flag";
 import {
   FactorEmailLink,
+  FactorHook,
   FactorNonOIDC,
   FactorOIDC,
   FactorOTP,
@@ -160,6 +161,23 @@ export function isFactorNonOidc(factor: Factor): factor is FactorNonOIDC {
 
 export function isFactorTOTP(factor: Factor): factor is FactorTOTP {
   return factor.method === "totp";
+}
+
+export function isFactorHook(factor: Factor): factor is FactorHook {
+  return factor.method === "hook";
+}
+
+export function shouldAttemptSSO(
+  handle: Handle | undefined,
+  attemptSSO: boolean | undefined,
+  resumedHandle: Handle | undefined
+): handle is Handle {
+  return (
+    !!attemptSSO &&
+    !!handle &&
+    handle.type === "email_address" &&
+    handle !== resumedHandle
+  );
 }
 
 export function hasOidcAndNonOidcFactors(factors: Factor[]): boolean {
