@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useReducer, useRef } from "react";
 import { Factor } from "@slashid/slashid";
-import { Divider } from "@slashid/react-primitives";
+import { Button, Divider } from "@slashid/react-primitives";
 
 import { FormProvider } from "../../context/form-context";
 import { InitialState } from "../form/flow/flow.common";
@@ -20,68 +20,100 @@ import { HandleForm } from "./handle-form";
 import { Loader } from "../form/authenticating/icons";
 import { useInternalFormContext } from "../form/internal-context";
 import { BackButton } from "../form/authenticating/authenticating.components";
+import { FailureReason, init, reducer } from "./initial-state";
 
 type Props = {
   flowState: InitialState;
   handleSubmit: (factor: Factor, handle?: Handle) => void;
   getFactors: (handle: Handle) => Promise<Factor[]> | Factor[];
   middleware?: LoginOptions["middleware"];
+  attemptSSO?: boolean;
 };
-
-type PreAuthState = "idle" | "resolving_factors" | "resolved_factors";
 
 export const Initial = ({
   flowState,
   handleSubmit,
   middleware,
   getFactors,
+  attemptSSO,
 }: Props) => {
-  const [handle, setHandle] = useState<Handle>();
-  const [preAuthState, setPreAuthState] = useState<PreAuthState>("idle");
-  const [factors, setFactors] = useState<Factor[]>();
+  const [state, dispatch] = useReducer(reducer, flowState.resumedHandle, init);
+  const previousFlowState = useRef(flowState);
+
+  // a new initial state means the flow moved; the mount run is not a move
+  useEffect(() => {
+    if (previousFlowState.current === flowState) return;
+    previousFlowState.current = flowState;
+    dispatch({ type: "reset", resumedHandle: flowState.resumedHandle });
+  }, [flowState]);
 
   useEffect(() => {
-    (async () => {
-      if (handle && preAuthState === "resolving_factors") {
-        const f = await getFactors(handle);
-        if (f.length === 1) {
-          handleSubmit(f[0], handle);
-          return;
-        }
+    if (state.step !== "attempting_sso") return;
+    handleSubmit({ method: "hook" }, state.handle);
+  }, [state, handleSubmit]);
 
-        setFactors(f);
-        setPreAuthState("resolved_factors");
+  useEffect(() => {
+    if (state.step !== "resolving_factors") return;
+    const { handle } = state;
+    let cancelled = false;
+
+    (async () => {
+      try {
+        const factors = await getFactors(handle);
+        if (cancelled) return;
+
+        if (factors.length === 0) {
+          dispatch({ type: "resolve_failed", reason: "no_factors" });
+        } else if (factors.length === 1) {
+          handleSubmit(factors[0], handle);
+        } else {
+          dispatch({ type: "factors_resolved", factors });
+        }
+      } catch {
+        if (cancelled) return;
+        dispatch({ type: "resolve_failed", reason: "resolve_error" });
       }
     })();
-  }, [getFactors, handle, handleSubmit, preAuthState]);
 
-  // reset the form on back action (flow cancellation)
-  useEffect(() => {
-    setPreAuthState("idle");
-  }, [flowState]);
+    return () => {
+      cancelled = true;
+    };
+  }, [state, getFactors, handleSubmit]);
 
   return (
     <div
       data-testid="sid-dynamic-flow--initial-state"
       className="sid-dynamic-flow--initial-state"
     >
-      {preAuthState === "idle" && (
+      {state.step === "idle" && (
         <Idle
           handleSubmit={(_, handle) => {
-            setHandle(handle);
-            setPreAuthState("resolving_factors");
+            if (!handle) return;
+            dispatch({
+              type: "submit_handle",
+              handle,
+              attemptSSO: !!attemptSSO,
+            });
           }}
         />
       )}
-      {preAuthState === "resolving_factors" && <ResolvingFactors />}
-      {factors && preAuthState === "resolved_factors" && (
+      {(state.step === "attempting_sso" ||
+        state.step === "resolving_factors") && <ResolvingFactors />}
+      {state.step === "picking" && (
         <ResolvedFactors
           flowState={flowState}
           handleSubmit={(factor) => {
-            handleSubmit(factor, handle);
+            handleSubmit(factor, state.handle);
           }}
-          factors={factors}
+          factors={state.factors}
           middleware={middleware}
+        />
+      )}
+      {state.step === "failed" && (
+        <Failed
+          reason={state.reason}
+          onRetry={() => dispatch({ type: "retry_resolution" })}
+          onBack={() => flowState.cancel()}
         />
       )}
     </div>
@@ -119,10 +151,65 @@ function Idle({ handleSubmit }: { handleSubmit: Props["handleSubmit"] }) {
   );
 }
 
+const FAILURE_TEXT = {
+  no_factors: {
+    title: "error.title.hookFactorUnresolved",
+    subtitle: "error.subtitle.hookFactorUnresolved",
+    cta: "error.retry.hookFactorUnresolved",
+  },
+  resolve_error: {
+    title: "error.title",
+    subtitle: "error.subtitle",
+    cta: "error.retry",
+  },
+} as const;
+
+function Failed({
+  reason,
+  onRetry,
+  onBack,
+}: {
+  reason: FailureReason;
+  onRetry: () => void;
+  onBack: () => void;
+}) {
+  const { text } = useConfiguration();
+  const { title, subtitle, cta } = FAILURE_TEXT[reason];
+
+  return (
+    <div data-testid="sid-dynamic-flow--failed" data-reason={reason}>
+      <BackButton onCancel={onBack} />
+      <div className={styles.header}>
+        <Text
+          as="h1"
+          t={title}
+          variant={{ size: "2xl-title", weight: "bold" }}
+        />
+        <Text
+          as="h2"
+          t={subtitle}
+          variant={{ color: "contrast", weight: "semibold" }}
+        />
+      </div>
+      <Button
+        type="button"
+        variant="primary"
+        testId="sid-dynamic-flow--failed-cta"
+        onClick={reason === "no_factors" ? onBack : onRetry}
+      >
+        {text[cta]}
+      </Button>
+    </div>
+  );
+}
+
 function ResolvingFactors() {
   return (
     <>
-      <div className={styles.header}>
+      <div
+        className={styles.header}
+        data-testid="sid-dynamic-flow--resolving-factors"
+      >
         <Text
           as="h1"
           t="resolving_factors.title"
@@ -167,7 +254,10 @@ function ResolvedFactors({
   return (
     <>
       <BackButton onCancel={() => flowState.cancel()} />
-      <div className={styles.header}>
+      <div
+        className={styles.header}
+        data-testid="sid-dynamic-flow--resolved-factors"
+      >
         <Text
           as="h1"
           t="resolved_factors.title"

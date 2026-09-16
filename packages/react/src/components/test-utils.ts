@@ -222,6 +222,12 @@ export class MockSlashID extends SlashID {
     }
   }
 
+  public mockObserverCount<Key extends keyof PublicReadEvents>(
+    type: Key
+  ): number {
+    return this.observers.get(type)?.length ?? 0;
+  }
+
   public mockPublish<Key extends keyof PublicReadEvents>(
     type: Key,
     payload: PublicReadEvents[Key]

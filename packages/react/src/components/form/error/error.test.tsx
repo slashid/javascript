@@ -404,3 +404,45 @@ describe("#Form -> Error state -> Special error cases", () => {
     ).toBeInTheDocument();
   });
 });
+
+describe("#Form -> Error state -> hook factor unresolved", () => {
+  test("renders the hook unresolved copy and resets the flow on retry", async () => {
+    const logInMock = vi.fn(() =>
+      Promise.reject(
+        Errors.createSlashIDError({
+          name: Errors.ERROR_NAMES.hookFactorUnresolved,
+          message: "unresolved",
+        })
+      )
+    );
+    const user = userEvent.setup();
+    const testTitle = "No sign-in method";
+
+    render(
+      <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+        <ConfigurationProvider
+          text={{ "error.title.hookFactorUnresolved": testTitle }}
+          factors={[{ method: "password" }]}
+        >
+          <Form />
+        </ConfigurationProvider>
+      </TestSlashIDProvider>
+    );
+
+    inputEmail("valid@email.com");
+
+    user.click(screen.getByTestId("sid-form-initial-submit-button"));
+
+    await expect(
+      screen.findByTestId("sid-form-error-state")
+    ).resolves.toBeInTheDocument();
+    expect(screen.getByText(testTitle)).toBeInTheDocument();
+
+    user.click(screen.getByTestId("sid-form-error-retry-button"));
+
+    await expect(
+      screen.findByTestId("sid-form-initial-state")
+    ).resolves.toBeInTheDocument();
+    expect(logInMock).toHaveBeenCalledTimes(1);
+  });
+});

@@ -1,3 +1,4 @@
+import { StrictMode } from "react";
 import { render, screen } from "@testing-library/react";
 import { AuthenticatingImplementation as Authenticating } from "./index";
 import { AuthenticatingState } from "../flow/flow.common";
@@ -139,5 +140,145 @@ describe("Authenticating", () => {
 
     const subtitle = await screen.findByText("Authenticating subtitle");
     expect(subtitle).toBeInTheDocument();
+  });
+  describe("under StrictMode", () => {
+    const EVENT = "authnContextUpdateChallengeReceivedEvent" as const;
+
+    function renderStrict(flowState: AuthenticatingState, sid: MockSlashID) {
+      return render(
+        <StrictMode>
+          <TestSlashIDProvider sid={sid} sdkState="ready" logIn={vi.fn()}>
+            <TestTextProvider text={TEXT}>
+              <Authenticating flowState={flowState} />
+            </TestTextProvider>
+          </TestSlashIDProvider>
+        </StrictMode>
+      );
+    }
+
+    test("still renders the authenticating UI once the challenge arrives", async () => {
+      const flowState = createTestAuhenticatingState({
+        factor: { method: "email_link" },
+        handle: { type: "email_address", value: "test@mail.com" },
+      });
+      const sid = new MockSlashID({ oid: "oid", analyticsEnabled: false });
+
+      renderStrict(flowState, sid);
+      sid.mockPublish(EVENT, {
+        targetOrgId: "oid",
+        factor: { method: "email_link" },
+      });
+
+      await expect(
+        screen.findByText(/test@mail.com/)
+      ).resolves.toBeInTheDocument();
+    });
+
+    test("performs the login exactly once per attempt", () => {
+      const sid = new MockSlashID({ oid: "oid", analyticsEnabled: false });
+      const first = createTestAuhenticatingState({
+        factor: { method: "email_link" },
+        handle: { type: "email_address", value: "test@mail.com" },
+      });
+
+      const { rerender } = renderStrict(first, sid);
+      expect(first.logIn).toHaveBeenCalledTimes(1);
+
+      const sameAttempt = createTestAuhenticatingState({
+        factor: { method: "email_link" },
+        handle: { type: "email_address", value: "test@mail.com" },
+      });
+      rerender(
+        <StrictMode>
+          <TestSlashIDProvider sid={sid} sdkState="ready" logIn={vi.fn()}>
+            <TestTextProvider text={TEXT}>
+              <Authenticating flowState={sameAttempt} />
+            </TestTextProvider>
+          </TestSlashIDProvider>
+        </StrictMode>
+      );
+      expect(sameAttempt.logIn).not.toHaveBeenCalled();
+
+      const retry = createTestAuhenticatingState({
+        factor: { method: "email_link" },
+        handle: { type: "email_address", value: "test@mail.com" },
+        attempt: 2,
+      });
+      rerender(
+        <StrictMode>
+          <TestSlashIDProvider sid={sid} sdkState="ready" logIn={vi.fn()}>
+            <TestTextProvider text={TEXT}>
+              <Authenticating flowState={retry} />
+            </TestTextProvider>
+          </TestSlashIDProvider>
+        </StrictMode>
+      );
+      expect(retry.logIn).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe("event subscriptions", () => {
+    const EVENT = "authnContextUpdateChallengeReceivedEvent" as const;
+    // the event buffer keeps one internal handler per event name, always
+    const BUFFERED = 1;
+
+    test("releases the challenge subscription when it unmounts before the event", () => {
+      const flowState = createTestAuhenticatingState({
+        factor: { method: "email_link" },
+        handle: { type: "email_address", value: "test@mail.com" },
+      });
+      const mockSlashID = new MockSlashID({
+        oid: "oid",
+        analyticsEnabled: false,
+      });
+
+      const { unmount } = render(
+        <TestSlashIDProvider sid={mockSlashID} sdkState="ready" logIn={vi.fn()}>
+          <TestTextProvider text={TEXT}>
+            <Authenticating flowState={flowState} />
+          </TestTextProvider>
+        </TestSlashIDProvider>
+      );
+
+      expect(mockSlashID.mockObserverCount(EVENT)).toBe(BUFFERED + 1);
+
+      unmount();
+
+      expect(mockSlashID.mockObserverCount(EVENT)).toBe(BUFFERED);
+    });
+
+    test("does not accumulate subscriptions across attempts", () => {
+      const mockSlashID = new MockSlashID({
+        oid: "oid",
+        analyticsEnabled: false,
+      });
+      const first = createTestAuhenticatingState({
+        factor: { method: "hook" },
+        handle: { type: "email_address", value: "test@mail.com" },
+      });
+      const second = createTestAuhenticatingState({
+        factor: { method: "email_link" },
+        handle: { type: "email_address", value: "test@mail.com" },
+        attempt: 2,
+      });
+
+      const { rerender } = render(
+        <TestSlashIDProvider sid={mockSlashID} sdkState="ready" logIn={vi.fn()}>
+          <TestTextProvider text={TEXT}>
+            <Authenticating flowState={first} />
+          </TestTextProvider>
+        </TestSlashIDProvider>
+      );
+
+      rerender(
+        <TestSlashIDProvider sid={mockSlashID} sdkState="ready" logIn={vi.fn()}>
+          <TestTextProvider text={TEXT}>
+            <Authenticating flowState={second} />
+          </TestTextProvider>
+        </TestSlashIDProvider>
+      );
+
+      expect(mockSlashID.mockObserverCount(EVENT)).toBe(BUFFERED + 1);
+    });
   });
 });

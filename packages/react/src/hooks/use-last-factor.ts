@@ -45,6 +45,15 @@ export const useLastFactor = (): UseLastFactorValue => {
         return;
       }
 
+      // hook is a placeholder the API replaces with the resolved factor; never remember it
+      if (
+        authenticationFactor &&
+        "method" in authenticationFactor &&
+        authenticationFactor.method === "hook"
+      ) {
+        return;
+      }
+
       try {
         window.localStorage.setItem(
           STORAGE_LAST_FACTOR_KEY(sid?.oid ?? ""),

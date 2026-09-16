@@ -1,6 +1,8 @@
 import {
+  filterFactors,
   getHandleTypes,
   hasOidcAndNonOidcFactors,
+  isFactorHook,
   parsePhoneNumber,
   ParsedPhoneNumber,
 } from "./handles";
@@ -110,4 +112,21 @@ describe("handles", () => {
       });
     });
   });
+});
+
+describe("hook factor", () => {
+  test("isFactorHook recognises the hook method only", () => {
+    expect(isFactorHook({ method: "hook" })).toBe(true);
+    expect(isFactorHook({ method: "email_link" })).toBe(false);
+  });
+
+  test("filterFactors never lists hook as a selectable method", () => {
+    expect(
+      filterFactors(
+        [{ method: "hook" }, { method: "email_link" }],
+        "email_address"
+      )
+    ).toEqual([{ method: "email_link" }]);
+  });
+
 });

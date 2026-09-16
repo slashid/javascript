@@ -1,4 +1,6 @@
+import { Errors } from "@slashid/slashid";
 import { Cancel, LogIn, MFA, Recover } from "../../../domain/types";
+import { isFactorHook } from "../../../domain/handles";
 import {
   CreateFlowOptions,
   Observer,
@@ -8,6 +10,7 @@ import {
   createTransitionFunction,
   FlowState,
   FlowHandlers,
+  TransitionHandler,
   loginHandler,
   storeRecoveryCodesHandler,
   loginUpdateContextHandler,
@@ -16,12 +19,36 @@ import {
   retryHandler,
 } from "./flow.common";
 
+/**
+ * An SSO attempt that resolves no factor is not a failed login - it is a
+ * request to go back and pick a factor for the same handle. The hook factor
+ * check must come first: `isHookFactorUnresolvedError` does not exist below
+ * core SDK 3.30.0, and only 3.30.0 can submit a hook factor.
+ */
+const authLoginErrorHandler: TransitionHandler = (event, state, deps) => {
+  if (state.status !== "authenticating") return;
+  const e = event as Event & { type: "sid_login.error" };
+
+  if (
+    isFactorHook(state.context.config.factor) &&
+    Errors.isHookFactorUnresolvedError(e.error)
+  ) {
+    deps.setState(
+      createInitialState(deps.send, state.context.config.handle),
+      event
+    );
+    return;
+  }
+
+  loginErrorHandler(event, state, deps);
+};
+
 const authFlowHandlers: FlowHandlers = {
   sid_login: loginHandler,
   sid_storeRecoveryCodes: storeRecoveryCodesHandler,
   "sid_login.update_context": loginUpdateContextHandler,
   "sid_login.success": loginSuccessHandler,
-  "sid_login.error": loginErrorHandler,
+  "sid_login.error": authLoginErrorHandler,
   sid_retry: retryHandler,
   sid_cancel: (event, state, deps) => {
     const cancelFn = deps.getCancelFn();
@@ -95,7 +122,7 @@ export function createAuthFlow(opts: CreateFlowOptions = {}) {
   return {
     history,
     unsubscribe: (observer: Observer) => {
-      observers = observers.filter((ob) => ob === observer);
+      observers = observers.filter((ob) => ob !== observer);
     },
     subscribe: (observer: Observer) => {
       observers.push(observer);

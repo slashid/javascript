@@ -140,19 +140,15 @@ export const AuthenticatingImplementation = ({
   flowState,
 }: AuthenticatingProps) => {
   const factor = flowState.context.config.factor;
-  const attempt = useRef(1);
-  const isLoggingIn = useRef(false);
+  // null rather than 0: the org-switching flow's first attempt is numbered 0
+  const loggedInAttempt = useRef<number | null>(null);
   const [establishedAuthContext, setEstablishedAuthContext] = useState(false);
   const { subscribe, unsubscribe } = useSlashID();
 
+  // the subscription and the login have different lifecycles: every run must
+  // subscribe and every cleanup unsubscribe, while the login fires once per
+  // attempt and never again on a re-run
   useEffect(() => {
-    if (flowState.context.attempt > attempt.current) {
-      attempt.current = flowState.context.attempt;
-      isLoggingIn.current = false;
-    }
-
-    if (isLoggingIn.current) return;
-
     const handleAuthnContextUpdate = (
       event: AuthnContextUpdateChallengeReceivedEvent
     ) => {
@@ -164,11 +160,6 @@ export const AuthenticatingImplementation = ({
           handle: flowState.context.config.handle,
         },
       });
-
-      unsubscribe(
-        "authnContextUpdateChallengeReceivedEvent",
-        handleAuthnContextUpdate
-      );
       setEstablishedAuthContext(true);
     };
 
@@ -177,9 +168,18 @@ export const AuthenticatingImplementation = ({
       handleAuthnContextUpdate
     );
 
+    return () =>
+      unsubscribe(
+        "authnContextUpdateChallengeReceivedEvent",
+        handleAuthnContextUpdate
+      );
+  }, [flowState, subscribe, unsubscribe]);
+
+  useEffect(() => {
+    if (loggedInAttempt.current === flowState.context.attempt) return;
+    loggedInAttempt.current = flowState.context.attempt;
     flowState.logIn();
-    isLoggingIn.current = true;
-  }, [flowState, flowState.context.attempt, subscribe, unsubscribe]);
+  }, [flowState]);
 
   if (!establishedAuthContext) {
     // block rendering until we hear back from the core SDK

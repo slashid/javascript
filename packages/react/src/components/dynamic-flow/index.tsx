@@ -22,6 +22,12 @@ type Props = {
   onError?: CreateFlowOptions["onError"];
   getFactors: (handle?: Handle) => Promise<Factor[]> | Factor[];
   middleware?: LoginOptions["middleware"];
+  /**
+   * Submit the `hook` factor for email identifiers before calling `getFactors`, so the
+   * organization's identify_user webhook can pick the factor (one-step SSO). When the API
+   * resolves nothing the flow continues with `getFactors` for the same identifier.
+   */
+  attemptSSO?: boolean;
 };
 
 /**
@@ -35,29 +41,52 @@ export const DynamicFlow = ({
   onSuccess,
   onError,
   middleware,
+  attemptSSO,
 }: Props) => {
-  const flowState = useFlowState({ onSuccess, onError });
+  // useFlowState creates the flow once, so these callbacks must stay stable and read through refs
+  const onSuccessRef = useRef(onSuccess);
+  onSuccessRef.current = onSuccess;
+  const onErrorRef = useRef(onError);
+  onErrorRef.current = onError;
+
+  const handleSuccess = useCallback<
+    NonNullable<CreateFlowOptions["onSuccess"]>
+  >((user) => onSuccessRef.current?.(user), []);
+  const handleError = useCallback<NonNullable<CreateFlowOptions["onError"]>>(
+    (error, context) => onErrorRef.current?.(error, context),
+    []
+  );
+
+  const flowState = useFlowState({
+    onSuccess: handleSuccess,
+    onError: handleError,
+  });
   const { lastHandle } = useLastHandle();
   const { lastFactor } = useLastFactor();
+
+  const flowStateRef = useRef(flowState);
+  flowStateRef.current = flowState;
+  const middlewareRef = useRef(middleware);
+  middlewareRef.current = middleware;
 
   const submitPayloadRef = useRef<PayloadOptions>({
     handleType: undefined,
     handleValue: undefined,
     flag: undefined,
   });
-  const handleSubmit = useCallback(
-    (factor: Factor, handle?: Handle) => {
-      if (flowState.status === "initial") {
-        flowState.logIn(
-          {
-            factor,
-            handle,
-          },
-          { middleware }
-        );
-      }
-    },
-    [flowState, middleware]
+
+  // stable so that effects in <Initial> do not re-run on every flow transition
+  // or on every parent render that passes an inline getFactors
+  const handleSubmit = useCallback((factor: Factor, handle?: Handle) => {
+    const current = flowStateRef.current;
+    if (current.status !== "initial") return;
+    current.logIn({ factor, handle }, { middleware: middlewareRef.current });
+  }, []);
+  const getFactorsRef = useRef(getFactors);
+  getFactorsRef.current = getFactors;
+  const resolveFactors = useCallback(
+    (handle: Handle) => getFactorsRef.current(handle),
+    []
   );
 
   return (
@@ -76,7 +105,9 @@ export const DynamicFlow = ({
           <Initial
             handleSubmit={handleSubmit}
             flowState={flowState}
-            getFactors={getFactors}
+            getFactors={resolveFactors}
+            middleware={middleware}
+            attemptSSO={attemptSSO}
           />
         )}
         {flowState.status === "authenticating" && (

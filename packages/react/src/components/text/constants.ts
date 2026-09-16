@@ -166,6 +166,10 @@ export const TEXT = {
   "error.retry.selfRegistrationNotAllowed": "Go back to login",
   "error.retry.signUpAwaitingApproval": "Go back to login",
   "error.retry.signInAwaitingApproval": "Go back to login",
+  "error.title.hookFactorUnresolved": "No sign-in method available",
+  "error.subtitle.hookFactorUnresolved":
+    "We could not find a sign-in method for this account. Please try another way to sign in.",
+  "error.retry.hookFactorUnresolved": "Go back to login",
   "error.contactSupport.prompt": "Need help?",
   "error.contactSupport.cta": "Contact support",
   "error.divider": "or",
