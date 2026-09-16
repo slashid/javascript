@@ -78,6 +78,14 @@ Once the `logIn` function resolves, your component will render again with the ne
 
 `DynamicFlow` asks for an identifier first and then picks the factors to offer from the `getFactors` callback.
 
+`getFactors` decides what happens next:
+
+- Two or more factors show the picker.
+- A single factor is submitted directly, skipping the picker.
+- An empty array means there is no way to sign this person in. The user is told so and sent back to the identifier step.
+
+If `getFactors` throws, the user is shown a generic error with a retry button that calls it again with the same identifier. The rejection itself is not forwarded — catch it inside `getFactors` if you need to report or log it.
+
 #### One-step SSO (`attemptSSO`)
 
 ```tsx

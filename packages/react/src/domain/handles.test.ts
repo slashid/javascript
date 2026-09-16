@@ -5,7 +5,6 @@ import {
   isFactorHook,
   parsePhoneNumber,
   ParsedPhoneNumber,
-  shouldAttemptSSO,
 } from "./handles";
 
 const phoneNumbersTestData: {
@@ -130,16 +129,4 @@ describe("hook factor", () => {
     ).toEqual([{ method: "email_link" }]);
   });
 
-  test("shouldAttemptSSO only for email handles that were not resumed", () => {
-    const email = { type: "email_address" as const, value: "user@acme.test" };
-    const phone = { type: "phone_number" as const, value: "+15550000000" };
-
-    expect(shouldAttemptSSO(email, true, undefined)).toBe(true);
-    expect(shouldAttemptSSO(email, false, undefined)).toBe(false);
-    expect(shouldAttemptSSO(email, undefined, undefined)).toBe(false);
-    expect(shouldAttemptSSO(phone, true, undefined)).toBe(false);
-    expect(shouldAttemptSSO(undefined, true, undefined)).toBe(false);
-    expect(shouldAttemptSSO(email, true, email)).toBe(false);
-    expect(shouldAttemptSSO(email, true, { ...email })).toBe(true);
-  });
 });

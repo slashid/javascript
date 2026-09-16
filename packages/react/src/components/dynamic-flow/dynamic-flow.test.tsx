@@ -2,7 +2,12 @@ import { Errors, Factor, PersonHandle, User } from "@slashid/slashid";
 import { render, screen, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { vi, describe } from "vitest";
-import { createTestUser, inputEmail, MockSlashID } from "../test-utils";
+import { useState } from "react";
+import Deferred, {
+  createTestUser,
+  inputEmail,
+  MockSlashID,
+} from "../test-utils";
 
 import { TestSlashIDProvider } from "../../context/test-providers";
 import { DynamicFlow } from ".";
@@ -529,5 +534,345 @@ describe("#DynamicFlow", () => {
       screen.queryByTestId("sid-dynamic-flow--resolved-factors")
     ).not.toBeInTheDocument();
     expect(onError).toHaveBeenCalledTimes(1);
+  });
+  describe("when factor resolution produces nothing usable", () => {
+    test("shows the no-method screen when getFactors returns nothing", async () => {
+      const logInMock = vi.fn(() => Promise.reject(hookUnresolved()));
+      const onError = vi.fn();
+      const user = userEvent.setup();
+
+      render(
+        <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+          <ConfigurationProvider factors={[{ method: "email_link" }]}>
+            <DynamicFlow
+              attemptSSO
+              onError={onError}
+              getFactors={() => []}
+            />
+          </ConfigurationProvider>
+        </TestSlashIDProvider>
+      );
+
+      inputEmail("user@acme.test");
+      await user.click(screen.getByTestId("sid-form-initial-submit-button"));
+
+      const failed = await screen.findByTestId("sid-dynamic-flow--failed");
+      expect(failed).toHaveAttribute("data-reason", "no_factors");
+      expect(
+        screen.getByText(TEXT["error.title.hookFactorUnresolved"])
+      ).toBeInTheDocument();
+      expect(onError).not.toHaveBeenCalled();
+
+      await user.click(screen.getByTestId("sid-dynamic-flow--failed-cta"));
+      expect(
+        screen.getByPlaceholderText(TEXT["initial.handle.email.placeholder"])
+      ).toBeInTheDocument();
+    });
+
+    test("shows the generic error screen when getFactors throws", async () => {
+      const logInMock = vi.fn(() => Promise.reject(hookUnresolved()));
+      const getFactors = vi
+        .fn<[], Factor[]>()
+        .mockImplementationOnce(() => {
+          throw new Error("factor service down");
+        })
+        .mockImplementation(() => [
+          { method: "email_link" },
+          { method: "password" },
+        ]);
+      const onError = vi.fn();
+      const user = userEvent.setup();
+
+      render(
+        <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+          <ConfigurationProvider factors={[{ method: "email_link" }]}>
+            <DynamicFlow attemptSSO onError={onError} getFactors={getFactors} />
+          </ConfigurationProvider>
+        </TestSlashIDProvider>
+      );
+
+      inputEmail("user@acme.test");
+      await user.click(screen.getByTestId("sid-form-initial-submit-button"));
+
+      const failed = await screen.findByTestId("sid-dynamic-flow--failed");
+      expect(failed).toHaveAttribute("data-reason", "resolve_error");
+      expect(
+        screen.queryByTestId("sid-dynamic-flow--resolving-factors")
+      ).not.toBeInTheDocument();
+      expect(onError).not.toHaveBeenCalled();
+
+      await user.click(screen.getByTestId("sid-dynamic-flow--failed-cta"));
+      await expect(
+        screen.findByTestId("sid-dynamic-flow--resolved-factors")
+      ).resolves.toBeInTheDocument();
+      expect(getFactors).toHaveBeenCalledTimes(2);
+    });
+
+    test("handles an empty getFactors result without attemptSSO", async () => {
+      const logInMock = vi.fn(() => Promise.resolve(createTestUser()));
+      const user = userEvent.setup();
+
+      render(
+        <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+          <ConfigurationProvider factors={[{ method: "email_link" }]}>
+            <DynamicFlow getFactors={() => []} />
+          </ConfigurationProvider>
+        </TestSlashIDProvider>
+      );
+
+      inputEmail("user@acme.test");
+      await user.click(screen.getByTestId("sid-form-initial-submit-button"));
+
+      const failed = await screen.findByTestId("sid-dynamic-flow--failed");
+      expect(failed).toHaveAttribute("data-reason", "no_factors");
+      expect(logInMock).not.toHaveBeenCalled();
+    });
+
+    test("handles getFactors throwing without attemptSSO", async () => {
+      const logInMock = vi.fn(() => Promise.resolve(createTestUser()));
+      const user = userEvent.setup();
+
+      render(
+        <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+          <ConfigurationProvider factors={[{ method: "email_link" }]}>
+            <DynamicFlow
+              getFactors={() => Promise.reject(new Error("boom"))}
+            />
+          </ConfigurationProvider>
+        </TestSlashIDProvider>
+      );
+
+      inputEmail("user@acme.test");
+      await user.click(screen.getByTestId("sid-form-initial-submit-button"));
+
+      const failed = await screen.findByTestId("sid-dynamic-flow--failed");
+      expect(failed).toHaveAttribute("data-reason", "resolve_error");
+      expect(logInMock).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("an SSO attempt that fails for another reason", () => {
+    test("retrying re-submits the hook factor", async () => {
+      const logInMock = vi.fn(() => Promise.reject(new Error("network down")));
+      const getFactors = vi.fn(() => [] as Factor[]);
+      const user = userEvent.setup();
+
+      render(
+        <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+          <ConfigurationProvider factors={[{ method: "email_link" }]}>
+            <DynamicFlow attemptSSO getFactors={getFactors} />
+          </ConfigurationProvider>
+        </TestSlashIDProvider>
+      );
+
+      inputEmail("user@acme.test");
+      await user.click(screen.getByTestId("sid-form-initial-submit-button"));
+
+      await user.click(await screen.findByTestId("sid-form-error-retry-button"));
+
+      await vi.waitFor(() => expect(logInMock).toHaveBeenCalledTimes(2));
+      expect(logInMock).toHaveBeenLastCalledWith(
+        {
+          factor: { method: "hook" },
+          handle: { type: "email_address", value: "user@acme.test" },
+        },
+        { middleware: undefined }
+      );
+      expect(getFactors).not.toHaveBeenCalled();
+    });
+
+    test("a retry that comes back unresolved falls through to the picker", async () => {
+      const logInMock = vi
+        .fn()
+        .mockImplementationOnce(() => Promise.reject(new Error("network down")))
+        .mockImplementation(() => Promise.reject(hookUnresolved()));
+      const getFactors = vi.fn(
+        () => [{ method: "email_link" }, { method: "password" }] as Factor[]
+      );
+      const user = userEvent.setup();
+
+      render(
+        <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+          <ConfigurationProvider factors={[{ method: "email_link" }]}>
+            <DynamicFlow attemptSSO getFactors={getFactors} />
+          </ConfigurationProvider>
+        </TestSlashIDProvider>
+      );
+
+      inputEmail("user@acme.test");
+      await user.click(screen.getByTestId("sid-form-initial-submit-button"));
+
+      await user.click(await screen.findByTestId("sid-form-error-retry-button"));
+
+      await expect(
+        screen.findByTestId("sid-dynamic-flow--resolved-factors")
+      ).resolves.toBeInTheDocument();
+      expect(getFactors).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe("attempt bookkeeping", () => {
+    test("submits the hook factor exactly once and resolves factors once", async () => {
+      const logInMock = vi.fn(() => Promise.reject(hookUnresolved()));
+      const getFactors = vi.fn(
+        () => [{ method: "email_link" }, { method: "password" }] as Factor[]
+      );
+      const user = userEvent.setup();
+
+      render(
+        <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+          <ConfigurationProvider factors={[{ method: "email_link" }]}>
+            <DynamicFlow attemptSSO getFactors={getFactors} />
+          </ConfigurationProvider>
+        </TestSlashIDProvider>
+      );
+
+      inputEmail("user@acme.test");
+      await user.click(screen.getByTestId("sid-form-initial-submit-button"));
+      await screen.findByTestId("sid-dynamic-flow--resolved-factors");
+
+      expect(logInMock).toHaveBeenCalledTimes(1);
+      expect(getFactors).toHaveBeenCalledTimes(1);
+    });
+
+    test("going back and resubmitting the same handle attempts SSO again", async () => {
+      const logInMock = vi.fn(() => Promise.reject(hookUnresolved()));
+      const user = userEvent.setup();
+
+      render(
+        <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+          <ConfigurationProvider factors={[{ method: "email_link" }]}>
+            <DynamicFlow
+              attemptSSO
+              getFactors={() => [
+                { method: "email_link" },
+                { method: "password" },
+              ]}
+            />
+          </ConfigurationProvider>
+        </TestSlashIDProvider>
+      );
+
+      inputEmail("user@acme.test");
+      await user.click(screen.getByTestId("sid-form-initial-submit-button"));
+      await screen.findByTestId("sid-dynamic-flow--resolved-factors");
+
+      await user.click(
+        screen.getByTestId("sid-form-authenticating-cancel-button")
+      );
+      inputEmail("user@acme.test");
+      await user.click(screen.getByTestId("sid-form-initial-submit-button"));
+
+      await vi.waitFor(() => expect(logInMock).toHaveBeenCalledTimes(2));
+      expect(logInMock).toHaveBeenLastCalledWith(
+        expect.objectContaining({ factor: { method: "hook" } }),
+        { middleware: undefined }
+      );
+    });
+
+    test("never submits the hook factor when attemptSSO is off", async () => {
+      const logInMock = vi.fn(() => Promise.resolve(createTestUser()));
+      const user = userEvent.setup();
+
+      render(
+        <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+          <ConfigurationProvider factors={[{ method: "email_link" }]}>
+            <DynamicFlow getFactors={() => [{ method: "email_link" }]} />
+          </ConfigurationProvider>
+        </TestSlashIDProvider>
+      );
+
+      inputEmail("user@acme.test");
+      await user.click(screen.getByTestId("sid-form-initial-submit-button"));
+
+      await vi.waitFor(() => expect(logInMock).toHaveBeenCalled());
+      expect(logInMock).not.toHaveBeenCalledWith(
+        expect.objectContaining({ factor: { method: "hook" } }),
+        expect.anything()
+      );
+    });
+  });
+  describe("regressions caught by the second review", () => {
+    test("the resolve_error screen can always go back to the identifier step", async () => {
+      const logInMock = vi.fn(() => Promise.reject(hookUnresolved()));
+      const getFactors = vi.fn(() => Promise.reject(new Error("always down")));
+      const user = userEvent.setup();
+
+      render(
+        <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+          <ConfigurationProvider factors={[{ method: "email_link" }]}>
+            <DynamicFlow attemptSSO getFactors={getFactors} />
+          </ConfigurationProvider>
+        </TestSlashIDProvider>
+      );
+
+      inputEmail("user@acme.test");
+      await user.click(screen.getByTestId("sid-form-initial-submit-button"));
+
+      const failed = await screen.findByTestId("sid-dynamic-flow--failed");
+      expect(failed).toHaveAttribute("data-reason", "resolve_error");
+
+      await user.click(screen.getByTestId("sid-dynamic-flow--failed-cta"));
+      await expect(
+        screen.findByTestId("sid-dynamic-flow--failed")
+      ).resolves.toHaveAttribute("data-reason", "resolve_error");
+
+      await user.click(
+        screen.getByTestId("sid-form-authenticating-cancel-button")
+      );
+      expect(
+        screen.getByPlaceholderText(TEXT["initial.handle.email.placeholder"])
+      ).toBeInTheDocument();
+    });
+
+    test("a parent re-render with an inline getFactors does not discard the in-flight result", async () => {
+      const deferreds: Deferred<Factor[]>[] = [];
+      const getFactors = vi.fn(() => {
+        const d = new Deferred<Factor[]>();
+        deferreds.push(d);
+        return d;
+      });
+      const user = userEvent.setup();
+
+      function Host() {
+        const [, bump] = useState(0);
+        return (
+          <>
+            <button
+              type="button"
+              data-testid="bump"
+              onClick={() => bump((n) => n + 1)}
+            />
+            <DynamicFlow getFactors={() => getFactors()} />
+          </>
+        );
+      }
+
+      render(
+        <TestSlashIDProvider
+          sdkState="ready"
+          logIn={vi.fn(() => Promise.resolve(createTestUser()))}
+        >
+          <ConfigurationProvider factors={[{ method: "email_link" }]}>
+            <Host />
+          </ConfigurationProvider>
+        </TestSlashIDProvider>
+      );
+
+      inputEmail("user@acme.test");
+      await user.click(screen.getByTestId("sid-form-initial-submit-button"));
+      await screen.findByTestId("sid-dynamic-flow--resolving-factors");
+
+      await user.click(screen.getByTestId("bump"));
+
+      await act(async () => {
+        deferreds[0].resolve([{ method: "email_link" }, { method: "password" }]);
+      });
+
+      await expect(
+        screen.findByTestId("sid-dynamic-flow--resolved-factors")
+      ).resolves.toBeInTheDocument();
+      expect(getFactors).toHaveBeenCalledTimes(1);
+    });
   });
 });

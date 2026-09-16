@@ -110,7 +110,7 @@ export function createOrgSwitchingFlow(opts: CreateFlowOptions) {
   return {
     history,
     unsubscribe: (observer: Observer) => {
-      observers = observers.filter((ob) => ob === observer);
+      observers = observers.filter((ob) => ob !== observer);
     },
     subscribe: (observer: Observer) => {
       observers.push(observer);

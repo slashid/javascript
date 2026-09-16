@@ -24,6 +24,11 @@ export interface InitialState {
   status: "initial";
   logIn: (config: LoginConfiguration, options?: LoginOptions) => void;
   cancel: Cancel;
+  /**
+   * Set when an SSO attempt for this handle resolved no factor, so the
+   * identifier step resumes at factor resolution instead of asking again.
+   */
+  resumedHandle?: Handle;
 }
 
 export interface AuthenticatingState {
@@ -116,7 +121,10 @@ export type FlowState = FlowActions &
 export type Observer = (state: FlowState, event: Event) => void;
 export type Send = (e: Event) => void;
 
-export const createInitialState = (send: Send): InitialState => {
+export const createInitialState = (
+  send: Send,
+  resumedHandle?: Handle
+): InitialState => {
   return {
     status: "initial",
     logIn: (config, options) => {
@@ -125,6 +133,7 @@ export const createInitialState = (send: Send): InitialState => {
     cancel: () => {
       send({ type: "sid_cancel" });
     },
+    resumedHandle,
   };
 };
 
@@ -295,7 +304,7 @@ type StaticDependencies = {
 
 type FlowDependencies = AsyncDependencies & StaticDependencies;
 
-type TransitionHandler = (
+export type TransitionHandler = (
   event: Event,
   state: FlowState,
   deps: FlowDependencies

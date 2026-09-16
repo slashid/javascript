@@ -1,14 +1,13 @@
-import { Errors, Factor } from "@slashid/slashid";
+import { Factor } from "@slashid/slashid";
 import { clsx } from "clsx";
 import { FormProvider } from "../../context/form-context";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef } from "react";
 import { Handle, LoginOptions } from "../../domain/types";
 import { CreateFlowOptions } from "../form/flow/flow.common";
 import { useFlowState } from "../form/useFlowState";
 import { AuthenticatingImplementation as Authenticating } from "../form/authenticating";
 import { Success } from "../form/success";
 import { Error } from "../form/error";
-import { Loader } from "../form/authenticating/icons";
 
 import * as styles from "./dynamic-flow.css";
 import { Initial } from "./initial";
@@ -31,8 +30,6 @@ type Props = {
   attemptSSO?: boolean;
 };
 
-type Resume = { handle: Handle; id: number };
-
 /**
  * This is a variant of the <Form> component that allows you to dynamically change the factor based on the handle that was used.
  * The initial form will ask for a handle, and then the factor will be determined based on the handle that was entered.
@@ -46,73 +43,51 @@ export const DynamicFlow = ({
   middleware,
   attemptSSO,
 }: Props) => {
+  // useFlowState creates the flow once, so these callbacks must stay stable and read through refs
+  const onSuccessRef = useRef(onSuccess);
+  onSuccessRef.current = onSuccess;
   const onErrorRef = useRef(onError);
   onErrorRef.current = onError;
-  const attemptedHandleRef = useRef<Handle | null>(null);
-  const resumeCounter = useRef(0);
-  const [resume, setResume] = useState<Resume | null>(null);
 
-  // useFlowState creates the flow once, so this callback must stay stable and read through refs
+  const handleSuccess = useCallback<
+    NonNullable<CreateFlowOptions["onSuccess"]>
+  >((user) => onSuccessRef.current?.(user), []);
   const handleError = useCallback<NonNullable<CreateFlowOptions["onError"]>>(
-    (error, context) => {
-      if (
-        attemptedHandleRef.current &&
-        Errors.isHookFactorUnresolvedError(error)
-      ) {
-        return;
-      }
-      onErrorRef.current?.(error, context);
-    },
+    (error, context) => onErrorRef.current?.(error, context),
     []
   );
 
-  const flowState = useFlowState({ onSuccess, onError: handleError });
+  const flowState = useFlowState({
+    onSuccess: handleSuccess,
+    onError: handleError,
+  });
   const { lastHandle } = useLastHandle();
   const { lastFactor } = useLastFactor();
+
+  const flowStateRef = useRef(flowState);
+  flowStateRef.current = flowState;
+  const middlewareRef = useRef(middleware);
+  middlewareRef.current = middleware;
 
   const submitPayloadRef = useRef<PayloadOptions>({
     handleType: undefined,
     handleValue: undefined,
     flag: undefined,
   });
-  const handleSubmit = useCallback(
-    (factor: Factor, handle?: Handle) => {
-      if (flowState.status === "initial") {
-        flowState.logIn(
-          {
-            factor,
-            handle,
-          },
-          { middleware }
-        );
-      }
-    },
-    [flowState, middleware]
-  );
 
-  const handleSSOAttempt = useCallback((handle: Handle) => {
-    attemptedHandleRef.current = handle;
+  // stable so that effects in <Initial> do not re-run on every flow transition
+  // or on every parent render that passes an inline getFactors
+  const handleSubmit = useCallback((factor: Factor, handle?: Handle) => {
+    const current = flowStateRef.current;
+    if (current.status !== "initial") return;
+    current.logIn({ factor, handle }, { middleware: middlewareRef.current });
   }, []);
-
-  const isPendingResume =
-    flowState.status === "error" &&
-    attemptedHandleRef.current !== null &&
-    Errors.isHookFactorUnresolvedError(flowState.context.error);
-
-  useEffect(() => {
-    if (!isPendingResume) return;
-
-    const handle = attemptedHandleRef.current!;
-    attemptedHandleRef.current = null;
-    resumeCounter.current += 1;
-    setResume({ handle, id: resumeCounter.current });
-    flowState.cancel();
-  }, [isPendingResume, flowState]);
-
-  // the resumed instance is for one attempt; leaving the initial state discards it
-  useEffect(() => {
-    if (resume && flowState.status !== "initial") setResume(null);
-  }, [resume, flowState.status]);
+  const getFactorsRef = useRef(getFactors);
+  getFactorsRef.current = getFactors;
+  const resolveFactors = useCallback(
+    (handle: Handle) => getFactorsRef.current(handle),
+    []
+  );
 
   return (
     <InternalFormContext.Provider
@@ -128,14 +103,11 @@ export const DynamicFlow = ({
       <div className={clsx("sid-dynamic-flow", styles.form, className)}>
         {flowState.status === "initial" && (
           <Initial
-            key={resume?.id ?? "fresh"}
             handleSubmit={handleSubmit}
             flowState={flowState}
-            getFactors={getFactors}
+            getFactors={resolveFactors}
             middleware={middleware}
             attemptSSO={attemptSSO}
-            onSSOAttempt={handleSSOAttempt}
-            initialHandle={resume?.handle}
           />
         )}
         {flowState.status === "authenticating" && (
@@ -143,8 +115,7 @@ export const DynamicFlow = ({
             <Authenticating flowState={flowState} />
           </FormProvider>
         )}
-        {flowState.status === "error" &&
-          (isPendingResume ? <Loader /> : <Error />)}
+        {flowState.status === "error" && <Error />}
         {flowState.status === "success" && <Success flowState={flowState} />}
       </div>
     </InternalFormContext.Provider>
