@@ -1,5 +1,17 @@
 # @slashid/react
 
+## 1.35.0
+
+### Minor Changes
+
+- a5bd363: Add the internal `attemptSSO` prop to `<DynamicFlow>` for one-step SSO. Requires `@slashid/slashid` 3.30.0 or later.
+
+### Patch Changes
+
+- a5bd363: Tell the user when `<DynamicFlow>` cannot resolve any factor, always offer a way back to the identifier step, and keep an in-flight `getFactors` result when the parent re-renders
+- a5bd363: Apply `middleware` to the SSO provider buttons in `<DynamicFlow>`
+- a5bd363: Keep the authenticating step's challenge listener alive across React StrictMode re-runs, release it on unmount, and fix the inverted observer filter in the login flows
+
 ## 1.34.0
 
 ### Minor Changes
