@@ -17,10 +17,6 @@ export const promptResend = style({
   gap: "4px",
 });
 
-export const oidcTitle = style({
-  textTransform: "capitalize",
-});
-
 export const otpForm = style({
   margin: "16px 0",
 });
