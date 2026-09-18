@@ -91,7 +91,7 @@ export type FactorWithAllowedHandleTypes<TF extends Factor = Factor> = TF & {
 
 /**
  * This makes it possible to add a label to the configured OIDC factors.
- * This is useful when you want to change the default display (capitalized provider name).
+ * This is useful when you want to change the default display (the matching "provider.*" text key).
  */
 export type FactorLabeledOIDC = FactorOIDC & { label?: string };
 

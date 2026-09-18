@@ -1,9 +1,12 @@
 import {
   isFactorOTP,
   isFactorPassword,
+  isFactorSSO,
   isFactorTOTP,
 } from "../../../domain/handles";
 import { Text } from "../../text";
+import { getProviderName } from "../../text/provider-name";
+import { useConfiguration } from "../../../hooks/use-configuration";
 
 import { getAuthenticatingMessage } from "./messages";
 import { OTPState } from "./otp";
@@ -35,6 +38,7 @@ const DELAY_BEFORE_RETRY = TIME_MS.second * 30;
 
 const LoadingState = ({ flowState }: Props) => {
   const { factor, handle } = flowState.context.config;
+  const { text } = useConfiguration();
   const { title, message, tokens } = getAuthenticatingMessage(factor, handle);
   const [showPrompt, setShowPrompt] = useState(true);
 
@@ -53,13 +57,8 @@ const LoadingState = ({ flowState }: Props) => {
         t={title}
         variant={{ size: "2xl-title", weight: "bold" }}
       >
-        {factor.method === "oidc" ? (
-          <span className={styles.oidcTitle}>
-            {factor.options?.provider as unknown as string}
-          </span>
-        ) : undefined}
-        {factor.method === "saml" ? (
-          <span className={styles.oidcTitle}>SSO</span>
+        {isFactorSSO(factor) ? (
+          <span>{getProviderName(text, factor)}</span>
         ) : undefined}
       </Text>
       <AuthenticatingSubtitle />

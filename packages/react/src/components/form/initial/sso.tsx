@@ -19,6 +19,7 @@ import {
   FactorLabeledOIDC,
 } from "../../../domain/types";
 import { useConfiguration } from "../../../hooks/use-configuration";
+import { getProviderName } from "../../text/provider-name";
 
 import * as styles from "./initial.css";
 
@@ -32,18 +33,6 @@ const PROVIDER_TO_ICON: Record<OAuthProvider, React.ReactNode> = {
   azuread: <AzureAD />,
   okta: <Okta />,
   apple: <Apple />,
-};
-
-const PROVIDER_TO_PRETTY_NAME: Record<OAuthProvider, string> = {
-  google: "Google",
-  facebook: "Facebook",
-  github: "GitHub",
-  gitlab: "GitLab",
-  line: "LINE",
-  bitbucket: "Bitbucket",
-  azuread: "Azure AD",
-  okta: "Okta",
-  apple: "Apple",
 };
 
 export type SAMLProviderProps = {
@@ -66,7 +55,7 @@ export function SAMLProvider({ provider: p, handleClick }: SAMLProviderProps) {
       className={clsx("sid-saml--button")}
     >
       {text["initial.sso"]}
-      <span className={styles.ssoProvider}>{p.label || "SAML"}</span>
+      <span className={styles.ssoProvider}>{getProviderName(text, p)}</span>
     </Button>
   );
 }
@@ -118,9 +107,7 @@ export function OIDCProvider({ provider: p, handleClick }: OIDCProviderProps) {
       className={clsx("sid-oidc--button")}
     >
       {text["initial.oidc"]}
-      <span className={styles.oidcProvider}>
-        {p.label || PROVIDER_TO_PRETTY_NAME[p.options?.provider]}
-      </span>
+      <span className={styles.oidcProvider}>{getProviderName(text, p)}</span>
     </Button>
   );
 }
