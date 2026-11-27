@@ -1,5 +1,13 @@
 # @slashid/remix
 
+## 0.2.36
+
+### Patch Changes
+
+- 0f6ef6f: Depend on `@slashid/slashid` 3.32.0, the version `@slashid/react` now builds against.
+- Updated dependencies [0f6ef6f]
+  - @slashid/react@1.37.0
+
 ## 0.2.35
 
 ### Patch Changes
