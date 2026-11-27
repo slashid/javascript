@@ -170,6 +170,14 @@ export const TEXT = {
   "error.subtitle.hookFactorUnresolved":
     "We could not find a sign-in method for this account. Please try another way to sign in.",
   "error.retry.hookFactorUnresolved": "Go back to login",
+  "error.title.emailDomainRoutedNotMember": "No account for this email",
+  "error.subtitle.emailDomainRoutedNotMember":
+    "There is no account for this email address here. Contact your administrator, or try another way to sign in.",
+  "error.retry.emailDomainRoutedNotMember": "Go back to login",
+  "error.title.consoleSSOSignInRequired": "Sign in through your organization",
+  "error.subtitle.consoleSSOSignInRequired":
+    "Sign in through your organization's identity provider.",
+  "error.retry.consoleSSOSignInRequired": "Go back to login",
   "error.contactSupport.prompt": "Need help?",
   "error.contactSupport.cta": "Contact support",
   "error.divider": "or",

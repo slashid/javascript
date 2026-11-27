@@ -446,3 +446,131 @@ describe("#Form -> Error state -> hook factor unresolved", () => {
     expect(logInMock).toHaveBeenCalledTimes(1);
   });
 });
+
+describe("#Form -> Error state -> API error codes", () => {
+  test("renders the routed-not-member copy and resets the flow on retry", async () => {
+    const logInMock = vi.fn(() =>
+      Promise.reject(
+        Errors.createSlashIDError({
+          name: Errors.ERROR_NAMES.emailDomainRoutedNotMember,
+          message: "x",
+        })
+      )
+    );
+    const user = userEvent.setup();
+
+    render(
+      <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+        <ConfigurationProvider
+          factors={[{ method: "password" }]}
+          alternativeAuthURL="https://www.example.com"
+        >
+          <Form />
+        </ConfigurationProvider>
+      </TestSlashIDProvider>
+    );
+
+    inputEmail("person@example.com");
+
+    user.click(screen.getByTestId("sid-form-initial-submit-button"));
+
+    await expect(
+      screen.findByTestId("sid-form-error-state")
+    ).resolves.toBeInTheDocument();
+    expect(
+      screen.getByText(TEXT["error.subtitle.emailDomainRoutedNotMember"])
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByText(TEXT["error.title.selfRegistrationNotAllowed"])
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId("sid-form-error-alternative-auth-prompt")
+    ).not.toBeInTheDocument();
+
+    user.click(screen.getByTestId("sid-form-error-retry-button"));
+
+    await expect(
+      screen.findByTestId("sid-form-initial-state")
+    ).resolves.toBeInTheDocument();
+    expect(logInMock).toHaveBeenCalledTimes(1);
+  });
+
+  test("renders the Console SSO copy and resets the flow on retry", async () => {
+    const logInMock = vi.fn(() =>
+      Promise.reject(
+        Errors.createSlashIDError({
+          name: Errors.ERROR_NAMES.consoleSSOSignInRequired,
+          message: "x",
+        })
+      )
+    );
+    const user = userEvent.setup();
+
+    render(
+      <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+        <ConfigurationProvider
+          factors={[{ method: "password" }]}
+          alternativeAuthURL="https://www.example.com"
+        >
+          <Form />
+        </ConfigurationProvider>
+      </TestSlashIDProvider>
+    );
+
+    inputEmail("person@example.com");
+
+    user.click(screen.getByTestId("sid-form-initial-submit-button"));
+
+    await expect(
+      screen.findByTestId("sid-form-error-state")
+    ).resolves.toBeInTheDocument();
+    expect(
+      screen.getByText(TEXT["error.subtitle.consoleSSOSignInRequired"])
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByText(TEXT["error.title.selfRegistrationNotAllowed"])
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId("sid-form-error-alternative-auth-prompt")
+    ).not.toBeInTheDocument();
+
+    user.click(screen.getByTestId("sid-form-error-retry-button"));
+
+    await expect(
+      screen.findByTestId("sid-form-initial-state")
+    ).resolves.toBeInTheDocument();
+    expect(logInMock).toHaveBeenCalledTimes(1);
+  });
+
+  test("a text override replaces the routed title", async () => {
+    const logInMock = vi.fn(() =>
+      Promise.reject(
+        Errors.createSlashIDError({
+          name: Errors.ERROR_NAMES.emailDomainRoutedNotMember,
+          message: "x",
+        })
+      )
+    );
+    const user = userEvent.setup();
+
+    render(
+      <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
+        <ConfigurationProvider
+          text={{ "error.title.emailDomainRoutedNotMember": "T" }}
+          factors={[{ method: "password" }]}
+        >
+          <Form />
+        </ConfigurationProvider>
+      </TestSlashIDProvider>
+    );
+
+    inputEmail("person@example.com");
+
+    user.click(screen.getByTestId("sid-form-initial-submit-button"));
+
+    await expect(
+      screen.findByTestId("sid-form-error-state")
+    ).resolves.toBeInTheDocument();
+    expect(screen.getByText("T")).toBeInTheDocument();
+  });
+});
