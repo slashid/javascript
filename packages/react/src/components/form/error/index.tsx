@@ -95,13 +95,12 @@ async function getErrorType(error: Error): Promise<ErrorType> {
 
   if (Errors.isHookFactorUnresolvedError(error)) return "hookFactorUnresolved";
 
-  // The peer range (>= 3.30.0) admits SDKs that lack these guards, so call them
-  // optionally. The routed check must precede isSelfRegistrationNotAllowedError,
-  // which is also true for the routed-not-member error.
-  if (Errors.isEmailDomainRoutedNotMemberError?.(error))
+  // The routed check must precede isSelfRegistrationNotAllowedError, which is
+  // also true for the routed-not-member error.
+  if (Errors.isEmailDomainRoutedNotMemberError(error))
     return "emailDomainRoutedNotMember";
 
-  if (Errors.isConsoleSSOSignInRequiredError?.(error))
+  if (Errors.isConsoleSSOSignInRequiredError(error))
     return "consoleSSOSignInRequired";
 
   if (Errors.isAPIResponseError(error)) return "response";
