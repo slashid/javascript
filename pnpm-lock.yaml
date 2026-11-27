@@ -353,8 +353,8 @@ importers:
         specifier: ^8.0.2
         version: 8.3.1
       '@slashid/slashid':
-        specifier: 3.30.0
-        version: 3.30.0
+        specifier: 3.32.0
+        version: 3.32.0
       '@storybook/addon-essentials':
         specifier: 7.6.19
         version: 7.6.19(@types/react-dom@18.2.15)(@types/react@18.2.37)(react-dom@18.2.0)(react@18.2.0)
@@ -8557,6 +8557,16 @@ packages:
       url: 0.11.3
       uuid: 11.1.1
 
+  /@slashid/slashid@3.32.0:
+    resolution: {integrity: sha512-vdt0PuUpDisJUn4VyN0GhUqgg2sZMfXX6tcXt/1JAlZ2GVfNxQu7f3HEP9nfKbsp27E+ngOMIJCjom7RlfYb5Q==}
+    dependencies:
+      compare-versions: 6.1.0
+      jwt-decode: 4.0.0
+      qrcode: 1.5.3
+      ua-parser-js: 1.0.37
+      uuid: 11.1.1
+    dev: true
+
   /@storybook/addon-actions@7.6.19:
     resolution: {integrity: sha512-ATLrA5QKFJt7tIAScRHz5T3eBQ+RG3jaZk08L7gChvyQZhei8knWwePElZ7GaWbCr9BgznQp1lQUUXq/UUblAQ==}
     dependencies:
@@ -16070,6 +16080,11 @@ packages:
 
   /jwt-decode@3.1.2:
     resolution: {integrity: sha512-UfpWE/VZn0iP50d8cz9NrZLM9lSWhcJ+0Gt/nm4by88UL+J1SiKN8/5dkjMmbEzwL2CAe+67GsegCbIKtbp75A==}
+
+  /jwt-decode@4.0.0:
+    resolution: {integrity: sha512-+KJGIyHgkGuIq3IEBNftfhW/LfWhXUIY6OmyVWjliu5KH1y0fw7VQ8YndE2O4qZdMSd9SqbnC8GOcZEy0Om7sA==}
+    engines: {node: '>=18'}
+    dev: true
 
   /keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}

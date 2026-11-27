@@ -64,6 +64,8 @@ type ErrorType =
   | "signUpAwaitingApproval"
   | "signInAwaitingApproval"
   | "hookFactorUnresolved"
+  | "emailDomainRoutedNotMember"
+  | "consoleSSOSignInRequired"
   | "invalidEmailAddressFormat"
   | "invalidPhoneNumberFormat"
   | "unknown";
@@ -76,6 +78,8 @@ const NEUTRAL_ERRORS: ErrorType[] = [
   "selfRegistrationNotAllowed",
   "signUpAwaitingApproval",
   "signInAwaitingApproval",
+  "emailDomainRoutedNotMember",
+  "consoleSSOSignInRequired",
 ];
 
 async function getErrorType(error: Error): Promise<ErrorType> {
@@ -90,6 +94,15 @@ async function getErrorType(error: Error): Promise<ErrorType> {
     return "invalidPhoneNumberFormat";
 
   if (Errors.isHookFactorUnresolvedError(error)) return "hookFactorUnresolved";
+
+  // The peer range (>= 3.30.0) admits SDKs that lack these guards, so call them
+  // optionally. The routed check must precede isSelfRegistrationNotAllowedError,
+  // which is also true for the routed-not-member error.
+  if (Errors.isEmailDomainRoutedNotMemberError?.(error))
+    return "emailDomainRoutedNotMember";
+
+  if (Errors.isConsoleSSOSignInRequiredError?.(error))
+    return "consoleSSOSignInRequired";
 
   if (Errors.isAPIResponseError(error)) return "response";
 
@@ -198,6 +211,18 @@ function mapErrorTypeToText(errorType: ErrorType): TextOverrides {
         description: "error.subtitle.hookFactorUnresolved",
         retry: "error.retry.hookFactorUnresolved",
       };
+    case "emailDomainRoutedNotMember":
+      return {
+        title: "error.title.emailDomainRoutedNotMember",
+        description: "error.subtitle.emailDomainRoutedNotMember",
+        retry: "error.retry.emailDomainRoutedNotMember",
+      };
+    case "consoleSSOSignInRequired":
+      return {
+        title: "error.title.consoleSSOSignInRequired",
+        description: "error.subtitle.consoleSSOSignInRequired",
+        retry: "error.retry.consoleSSOSignInRequired",
+      };
     case "invalidEmailAddressFormat":
       return {
         title: "error.title.invalidEmailAddressFormat",
@@ -227,6 +252,8 @@ function mapErrorTypeToRetryPolicy(errorType: ErrorType): RetryPolicy {
     case "signUpAwaitingApproval":
     case "signInAwaitingApproval":
     case "hookFactorUnresolved":
+    case "emailDomainRoutedNotMember":
+    case "consoleSSOSignInRequired":
     case "invalidEmailAddressFormat":
     case "invalidPhoneNumberFormat":
       return "reset";
