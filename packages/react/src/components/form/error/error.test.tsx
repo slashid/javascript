@@ -461,7 +461,10 @@ describe("#Form -> Error state -> API error codes", () => {
 
     render(
       <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
-        <ConfigurationProvider factors={[{ method: "password" }]}>
+        <ConfigurationProvider
+          factors={[{ method: "password" }]}
+          alternativeAuthURL="https://www.example.com"
+        >
           <Form />
         </ConfigurationProvider>
       </TestSlashIDProvider>
@@ -479,6 +482,9 @@ describe("#Form -> Error state -> API error codes", () => {
     ).toBeInTheDocument();
     expect(
       screen.queryByText(TEXT["error.title.selfRegistrationNotAllowed"])
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId("sid-form-error-alternative-auth-prompt")
     ).not.toBeInTheDocument();
 
     user.click(screen.getByTestId("sid-form-error-retry-button"));
@@ -502,7 +508,10 @@ describe("#Form -> Error state -> API error codes", () => {
 
     render(
       <TestSlashIDProvider sdkState="ready" logIn={logInMock}>
-        <ConfigurationProvider factors={[{ method: "password" }]}>
+        <ConfigurationProvider
+          factors={[{ method: "password" }]}
+          alternativeAuthURL="https://www.example.com"
+        >
           <Form />
         </ConfigurationProvider>
       </TestSlashIDProvider>
@@ -520,6 +529,9 @@ describe("#Form -> Error state -> API error codes", () => {
     ).toBeInTheDocument();
     expect(
       screen.queryByText(TEXT["error.title.selfRegistrationNotAllowed"])
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId("sid-form-error-alternative-auth-prompt")
     ).not.toBeInTheDocument();
 
     user.click(screen.getByTestId("sid-form-error-retry-button"));
